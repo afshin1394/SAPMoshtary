@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/altdlg_bg"
+    android:layoutDirection="rtl">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lblUserVersion"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="@dimen/FontSize18"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lblNewestVersion"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="@dimen/FontSize18"
+        android:gravity="center"
+        android:layout_margin="@dimen/altdlgLblMargin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lblLastStableVersion"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="@dimen/FontSize18"
+        android:gravity="center"
+        android:layout_margin="@dimen/altdlgLblMargin"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorDivider"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lblNewFeaturesTitle"
+        android:text="@string/newFeaturesTitle"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="@dimen/FontSize18"
+        android:gravity="center"
+        android:layout_margin="@dimen/altdlgLblMargin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lblNewFeatures"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="@dimen/FontSize18"
+        android:gravity="center"
+        android:layout_margin="@dimen/altdlgLblMargin"/>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnClose"
+        android:gravity="center"
+        android:textSize="@dimen/btnFontMain"
+        android:textColor="@color/colorWhite"
+        android:padding="@dimen/altdlgButtonPadding"
+        android:layout_margin="2dp"
+        android:background="@drawable/alert_btn_bg_accent"/>
+
+</LinearLayout>

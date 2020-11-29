@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MVP.View.LogsActivity"
+    android:layoutDirection="rtl"
+    android:background="@color/colorWhite">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layTitle"
+        android:layoutDirection="rtl"
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/paddingTitle"
+        android:elevation="@dimen/elevationActivityTitle"
+        android:layout_alignParentTop="true">
+        <ImageView
+            android:layout_width="@dimen/imgActivityTitle"
+            android:layout_height="@dimen/imgActivityTitle"
+            android:id="@+id/imgBack"
+            android:src="@drawable/ic_back"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lblActivityTitle"
+            android:text="@string/logList"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/lblActivityTitle"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recview_Logs"
+        android:scrollbars="vertical"
+        android:layoutDirection="rtl"
+        android:layout_above="@+id/btnSendLogs"
+        android:layout_below="@+id/layTitle"
+        android:layout_marginBottom="10dp">
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/lblEmptyView"
+        android:text="@string/emptyList"
+        android:textSize="@dimen/lblEmptyList"
+        android:textColor="@color/colorTextPrimary"
+        android:gravity="center"
+        android:layout_above="@+id/btnSendLogs"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnSendLogs"
+        android:text="@string/send"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/btnFontMain"
+        android:gravity="center"
+        android:padding="@dimen/btnPaddingMain"
+        android:background="@drawable/btn_bg"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

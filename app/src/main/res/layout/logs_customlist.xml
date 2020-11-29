@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="rtl">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/altdlg_bg"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layoutDirection="rtl">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lblLogMessageTitle"
+                    android:text="@string/textColon"
+                    android:textSize="@dimen/lblTitleRowList"
+                    android:textColor="@color/colorTextPrimary"
+                    android:layout_margin="10dp"
+                    android:layout_alignParentStart="true"
+                    android:gravity="right"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lblLogMessageContent"
+                    android:textSize="@dimen/lblContentRowList"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/colorTextPrimary"
+                    android:layout_margin="10dp"
+                    android:layoutDirection="ltr"
+                    android:textDirection="ltr"
+                    android:layout_toLeftOf="@id/lblLogMessageTitle"
+                    android:gravity="left"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layoutDirection="rtl">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lblLogDateTitle"
+                    android:text="@string/dateColon"
+                    android:textSize="@dimen/lblTitleRowList"
+                    android:textColor="@color/colorTextPrimary"
+                    android:layout_margin="10dp"
+                    android:layout_alignParentStart="true"
+                    android:gravity="right"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lblLogDateContent"
+                    android:textSize="@dimen/lblContentRowList"
+                    android:textColor="@color/colorTextPrimary"
+                    android:layout_margin="10dp"
+                    android:layout_toLeftOf="@id/lblLogDateTitle"
+                    android:gravity="left"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+</LinearLayout>

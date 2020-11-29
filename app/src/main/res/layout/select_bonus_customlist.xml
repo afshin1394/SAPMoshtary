@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="rtl"
+    android:id="@+id/layRoot">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/crdviewRoot"
+        android:background="@drawable/altdlg_bg"
+        android:layout_margin="5dp"
+        app:cardCornerRadius="10dp"
+        android:layoutDirection="rtl">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:gravity="center">
+<!--            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imgSelect"
+                android:src="@drawable/circle_tick_gray"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"/>-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/txtinputCount">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lblCodeNameKala"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="@dimen/FontSize12"
+                    android:gravity="center_vertical|right" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/lblCount"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/FontSize12"
+                        android:gravity="center_vertical|right" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/lblCost"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/FontSize12"
+                        android:gravity="center_vertical|left" />
+                </LinearLayout>
+            </LinearLayout>
+            <com.saphamrah.CustomView.CustomTextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtinputCount"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layoutDirection="rtl"
+                android:textDirection="rtl"
+                android:theme="@style/TextInputLayoutTheme"
+                android:layout_alignParentLeft="true">
+                <EditText
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txtCount"
+                    android:hint="@string/tedadAghlam"
+                    android:textColorHint="@color/colorDivider"
+                    android:textSize="@dimen/FontSize12"
+                    android:textColor="@color/colorTextPrimary"
+                    android:inputType="number"
+                    android:maxLines="1" />
+            </com.saphamrah.CustomView.CustomTextInputLayout>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/itemHome"
+        android:icon="@drawable/ic_success"
+        android:title="@string/home"
+        android:color="@color/colorTextPrimary"/>
+    <item
+        android:id="@+id/itemSell"
+        android:icon="@drawable/ic_warning"
+        android:title="@string/sell"
+        android:color="@color/colorPrimary"/>
+    <item
+        android:id="@+id/itemVosol"
+        android:icon="@drawable/ic_error"
+        android:title="@string/vosol"
+        android:color="@color/colorRed"/>
+    <item
+        android:id="@+id/itemReport"
+        android:icon="@drawable/ic_search"
+        android:title="@string/report"
+        android:color="@color/colorFabMap"/>
+    <item
+        android:id="@+id/itemSystem"
+        android:icon="@drawable/ic_location"
+        android:title="@string/system"
+        android:color="@color/colorBackAddCustomerDocSwipe" />
+</menu>
+

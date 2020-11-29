@@ -1,0 +1,17 @@
+<vector android:height="100dp" android:viewportHeight="486"
+    android:viewportWidth="486" android:width="100dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#F2F2F2" android:pathData="M68,7.5h350v471h-350z"/>
+    <path android:fillColor="#FF000000" android:pathData="M425.5,486h-365V0h365V486zM75.5,471h335V15h-335V471z"/>
+    <path android:fillColor="#FF000000" android:pathData="M238,95h100v15h-100z"/>
+    <path android:fillColor="#FF000000" android:pathData="M238,135h140v15h-140z"/>
+    <path android:fillColor="#FF000000" android:pathData="M238,215h100v15h-100z"/>
+    <path android:fillColor="#FF000000" android:pathData="M238,255h140v15h-140z"/>
+    <path android:fillColor="#FF000000" android:pathData="M238,335h100v15h-100z"/>
+    <path android:fillColor="#FF000000" android:pathData="M238,375h140v15h-140z"/>
+    <path android:fillColor="#AFB6BB" android:pathData="M153,332.5c16.6,0 30,13.4 30,30s-13.4,30 -30,30s-30,-13.4 -30,-30S136.4,332.5 153,332.5z"/>
+    <path android:fillColor="#AFB6BB" android:pathData="M153,212.5c16.6,0 30,13.4 30,30s-13.4,30 -30,30s-30,-13.4 -30,-30S136.4,212.5 153,212.5z"/>
+    <path android:fillColor="#AFB6BB" android:pathData="M153,92.5c16.6,0 30,13.4 30,30s-13.4,30 -30,30s-30,-13.4 -30,-30S136.4,92.5 153,92.5z"/>
+    <path android:fillColor="#FF000000" android:pathData="M153,160c-20.678,0 -37.5,-16.822 -37.5,-37.5S132.322,85 153,85s37.5,16.822 37.5,37.5S173.678,160 153,160zM153,100c-12.407,0 -22.5,10.093 -22.5,22.5S140.593,145 153,145s22.5,-10.093 22.5,-22.5S165.407,100 153,100z"/>
+    <path android:fillColor="#FF000000" android:pathData="M153,280c-20.678,0 -37.5,-16.822 -37.5,-37.5S132.322,205 153,205s37.5,16.822 37.5,37.5S173.678,280 153,280zM153,220c-12.407,0 -22.5,10.093 -22.5,22.5S140.593,265 153,265s22.5,-10.093 22.5,-22.5S165.407,220 153,220z"/>
+    <path android:fillColor="#FF000000" android:pathData="M153,400c-20.678,0 -37.5,-16.822 -37.5,-37.5S132.322,325 153,325s37.5,16.822 37.5,37.5S173.678,400 153,400zM153,340c-12.407,0 -22.5,10.093 -22.5,22.5S140.593,385 153,385s22.5,-10.093 22.5,-22.5S165.407,340 153,340z"/>
+</vector>

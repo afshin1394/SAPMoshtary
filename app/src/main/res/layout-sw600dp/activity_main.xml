@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MVP.View.MainActivity"
+    android:layoutDirection="rtl">
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/appbarlayout"
+        app:elevation="0dp"
+        android:layoutDirection="rtl">
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar"
+            android:layoutDirection="rtl">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/layMenu"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="@dimen/toolbarContentHeight"
+                        android:layout_height="@dimen/toolbarContentHeight"
+                        android:id="@+id/imgMenu"
+                        android:src="@drawable/ic_menu"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name_fa"
+                        android:textSize="@dimen/toolbarContentHeight"
+                        android:textColor="@color/colorWhite"
+                        android:layout_toLeftOf="@+id/imgMenu"
+                        android:layout_centerVertical="true"/>
+                </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/layMessageBox"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true">
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="36dp"
+                        android:src="@drawable/ic_message"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="7dp"/>
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:id="@+id/imgviewUnreadCount"
+                        android:src="@drawable/red_circle"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="3dp"
+                        android:visibility="invisible"/>
+                    <TextView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:id="@+id/lblUnreadMessageCount"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/colorWhite"
+                        android:gravity="center"
+                        android:layout_marginRight="3dp"
+                        android:visibility="invisible"/>
+                </RelativeLayout>
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/imgCustomerSupport"
+                    android:src="@drawable/ic_customer_support"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/layMessageBox"
+                    android:layout_marginLeft="15dp"/>
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/imgHelp"
+                    android:src="@drawable/ic_question"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/imgCustomerSupport"
+                    android:layout_marginLeft="20dp" />
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+<!--    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/appbarlayout" />-->
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/viewpager"
+        android:layoutDirection="rtl" />
+
+
+    <!--<it.sephiroth.android.library.bottomnavigation.BottomNavigation
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:id="@+id/bottomNavigation"
+        android:layout_alignParentBottom="true"
+        app:bbn_entries="@menu/main_menu"
+        app:bbn_scrollEnabled="true"
+        app:bbn_badgeProvider="@string/bbn_badgeProvider"
+        app:layout_behavior="@string/bbn_tablet_view_behavior" />-->
+
+
+    <devlight.io.library.ntb.NavigationTabBar
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:id="@+id/navigationTabBar"
+        android:layout_gravity="bottom"
+        app:ntb_animation_duration="200"
+        app:ntb_preview_colors="@array/addCustomerNavigationTabBarColors"
+        app:ntb_corners_radius="0dp"
+        app:ntb_active_color="@color/colorWhite"
+        app:ntb_inactive_color="@color/colorDivider"
+        app:ntb_titled="true"
+        app:ntb_scaled="true"
+        app:ntb_tinted="true"
+        app:ntb_title_mode="all"
+        app:ntb_badge_position="right"
+        app:ntb_badge_gravity="top"
+        app:ntb_badge_bg_color="#ffff0000"
+        app:ntb_badge_title_color="@color/colorWhite"
+        app:ntb_badge_use_typeface="true"
+        app:ntb_swiped="true"
+        app:ntb_bg_color="#000000"
+        app:ntb_icon_size_fraction="0.5"
+        app:ntb_title_size="15dp"
+        android:layoutDirection="rtl"/>
+
+</LinearLayout>

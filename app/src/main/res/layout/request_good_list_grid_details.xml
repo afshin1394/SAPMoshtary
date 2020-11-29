@@ -1,0 +1,1033 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:divider="@drawable/table_content_cell_bg_black"
+    android:gravity="right"
+    android:orientation="vertical"
+    android:showDividers="middle">
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+
+        android:id="@+id/firstCap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+
+        <TextView
+            android:id="@+id/MarkCodeKala"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+
+            android:layout_weight="1"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right"
+            android:text="@string/codeKala"
+            android:textColor="@color/colorTextPrimary"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblCodeKala"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            android:layout_weight="5"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right"
+            android:text="lfepwlfpewqlfwpfl"
+            android:textColor="@color/colorTextPrimary"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack"
+
+        android:divider="@drawable/table_content_cell_bg_black" />
+
+    <LinearLayout
+        android:id="@+id/SecondCap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/MarkNameKala"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+
+            android:layout_weight="1"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right"
+            android:text="@string/nameKala"
+            android:textColor="@color/colorTextPrimary"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblNameKala"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            android:layout_weight="5"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right"
+            android:text="lfepwlfpewqlfwpfl"
+            android:textColor="@color/colorTextPrimary"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:id="@+id/ThirdCap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/MarkNameBrand"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+
+            android:layout_weight="1"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="@string/nameBrand"
+            android:textColor="@color/colorTextPrimary"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblNameBrand"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            android:layout_weight="5"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="lfepwlfpewqlfwpfl"
+
+            android:textColor="@color/colorTextPrimary"
+
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:id="@+id/ForthCap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/MarkZaribForoshDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+
+            android:layout_weight="1"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="@string/zaribForosh"
+            android:textColor="@color/colorTextPrimary"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblZaribForoshDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            android:layout_weight="5"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="lfepwlfpewqlfwpfl"
+            android:textColor="@color/colorTextPrimary"
+
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:id="@+id/FifthCap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/firstCap"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:layoutDirection="rtl"
+        android:orientation="horizontal"
+        android:text="lfepwlfpewqlfwpfl"
+        android:weightSum="6">
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/markBarcode"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_column="1"
+            android:layout_alignParentRight="true"
+
+            android:layout_weight="1"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="@string/barcode"
+            android:textColor="@color/colorTextPrimary"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblBarcode"
+
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_alignParentRight="true"
+            android:layout_weight="5"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="lfepwlfpewqlfwpfl"
+            android:textColor="@color/colorTextPrimary"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:id="@+id/secondCap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/firstCap"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:layoutDirection="rtl"
+
+        android:orientation="horizontal"
+        android:text="lfepwlfpewqlfwpfl"
+        android:weightSum="6">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/markShomareBach"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_alignParentLeft="true"
+
+
+            android:layout_weight="1"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="@string/shomareBach"
+            android:textColor="@color/colorTextPrimary" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblShomareBach"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+            android:layout_alignParentLeft="true"
+
+            android:layout_weight="5"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="lfepwlfpewqlfwpfl"
+            android:textColor="@color/colorTextPrimary" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:id="@+id/SixthCap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/secondCap"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:layoutDirection="rtl"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/markTarikhTolid"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:layout_alignParentRight="true"
+
+            android:layout_weight="1"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:layoutDirection="rtl"
+            android:text="@string/tarikhTolid"
+            android:textColor="@color/colorTextPrimary"
+            android:textDirection="rtl" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblTarikhTolid"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_alignParentRight="true"
+
+            android:layout_weight="5"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:layoutDirection="rtl"
+            android:text="lfepwlfpewqlfwpfl"
+            android:textColor="@color/colorTextPrimary"
+            android:textDirection="rtl" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:id="@+id/thirdCap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/secondCap"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:layoutDirection="rtl"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/markTarikhEngheza"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:layout_alignParentLeft="true"
+
+            android:layout_weight="1"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:layoutDirection="rtl"
+            android:text="@string/tarikhEngheza"
+            android:textColor="@color/colorTextPrimary"
+            android:textDirection="rtl" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblTarikhEngheza"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            android:layout_alignParentLeft="true"
+
+
+            android:layout_weight="5"
+
+
+            android:divider="@drawable/table_content_cell_bg_black"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:layoutDirection="rtl"
+            android:text="lfepwlfpewqlfwpfl"
+            android:textColor="@color/colorTextPrimary"
+            android:textDirection="rtl" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:id="@+id/forthCap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/thirdCap"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblHaveMaliatAvarez"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_15sdp"
+            android:layout_column="1"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="1"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:layoutDirection="rtl"
+            android:text="@string/mashmolMaliatAvarez"
+            android:textColor="@color/colorTextPrimary"
+            android:textDirection="rtl" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <ImageView
+            android:id="@+id/imgHaveMaliatAvarez"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_15sdp"
+
+
+            android:layout_alignParentLeft="true"
+
+            android:layout_weight="5"
+            android:divider="@drawable/table_content_cell_bg_black"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:layoutDirection="rtl"
+            android:scaleType="centerInside"
+            android:src="@drawable/cell_border_tablelayout"
+            android:text="lfepwlfpewqlfwpfl"
+            android:textColor="@color/colorTextPrimary"
+            android:textDirection="rtl" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="@color/colorBlack" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:id="@+id/SeventhCap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/forthCap"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:layoutDirection="rtl"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/markGheymatForosh"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:layout_alignParentLeft="true"
+
+            android:layout_weight="1"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:layoutDirection="rtl"
+            android:text="@string/mablaghForosh"
+            android:textColor="@color/colorTextPrimary"
+            android:textDirection="rtl" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblGheymatForosh"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            android:layout_alignParentLeft="true"
+
+
+            android:layout_weight="5"
+
+
+            android:divider="@drawable/table_content_cell_bg_black"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:layoutDirection="rtl"
+            android:text="lfepwlfpewqlfwpfl"
+            android:textColor="@color/colorTextPrimary"
+            android:textDirection="rtl" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:id="@+id/fifthCap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/forthCap"
+        android:layout_weight="6"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/markGheymatMasrafKonande"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:layout_alignParentLeft="true"
+
+            android:layout_weight="1"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:layoutDirection="rtl"
+            android:text="@string/gheymatMasrafKonande"
+            android:textColor="@color/colorTextPrimary"
+            android:textDirection="rtl" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblGheymatMasrafKonande"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            android:layout_alignParentLeft="true"
+
+
+            android:layout_weight="5"
+
+
+            android:divider="@drawable/table_content_cell_bg_black"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:layoutDirection="rtl"
+            android:text="lfepwlfpewqlfwpfl"
+            android:textColor="@color/colorTextPrimary"
+            android:textDirection="rtl" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:id="@+id/EightCap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fifthCap"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:layoutDirection="rtl"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/markVaznKhales"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:layout_alignParentRight="true"
+
+
+            android:layout_weight="1"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="@string/vaznKhales"
+            android:textColor="@color/colorTextPrimary" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblVaznKhales"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_alignParentRight="true"
+
+
+            android:layout_weight="5"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="lfepwlfpewqlfwpfl"
+            android:textColor="@color/colorTextPrimary" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:id="@+id/ninthCap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fifthCap"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:layoutDirection="rtl"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/markVaznCarton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:layout_alignParentLeft="true"
+
+            android:layout_weight="1"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="@string/vaznCarton"
+            android:textColor="@color/colorTextPrimary" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblVaznCarton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_alignParentLeft="true"
+
+
+            android:layout_weight="5"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="lfepwlfpewqlfwpfl"
+            android:textColor="@color/colorTextPrimary" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:id="@+id/tenthCap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fifthCap"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:layoutDirection="rtl"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/markTedadDarCarton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:layout_alignParentRight="true"
+
+            android:layout_weight="1"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="@string/tedadDarCarton"
+            android:textColor="@color/colorTextPrimary" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblTedadDarCarton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_alignParentRight="true"
+
+            android:layout_weight="5"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="lfepwlfpewqlfwpfl"
+            android:textColor="@color/colorTextPrimary" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:id="@+id/sixthCap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fifthCap"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:layoutDirection="rtl"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/markTedadDarBaste"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:layout_alignParentLeft="true"
+
+            android:layout_weight="1"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="@string/tedadDarBaste"
+            android:textColor="@color/colorTextPrimary" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblTedadDarBaste"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_alignParentLeft="true"
+
+            android:layout_weight="5"
+
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="lfepwlfpewqlfwpfl"
+            android:textColor="@color/colorTextPrimary" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:id="@+id/sixthCapDivider"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:id="@+id/seventhCap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sixthCap"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/markDimen"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+
+            android:layout_weight="2"
+            android:fontFamily="IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="@string/dimens"
+            android:textColor="@color/colorTextPrimary"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="4sp"
+            app:autoSizeStepGranularity="1sp"
+            app:autoSizeTextType="uniform"/>
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblDimen"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            android:layout_weight="8"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="4sp"
+            app:autoSizeStepGranularity="1sp"
+            app:autoSizeTextType="uniform"
+            android:fontFamily="IRANSans.ttf"
+            android:gravity="right|center_vertical"
+            android:text="lfepwlfpewqlfwpflsadefwefwfwefwefwef"
+            android:textColor="@color/colorTextPrimary" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack" />
+</LinearLayout>

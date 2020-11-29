@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    tools:context=".MVP.View.MojodiGiriActivity"
+    android:layoutDirection="rtl"
+    android:background="@color/colorWhite">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layTitle"
+        android:layoutDirection="rtl"
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/paddingTitle"
+        android:elevation="@dimen/elevationActivityTitle"
+        android:layout_alignParentTop="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lblActivityTitle"
+            android:text="@string/mojodiGiri"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/lblActivityTitle"
+            android:layout_centerInParent="true"/>
+
+        <!-- Must be last for right layering display -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="ltr"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true">
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:id="@+id/toolbar"
+                android:layoutDirection="ltr"/>
+            <com.miguelcatalan.materialsearchview.MaterialSearchView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/searchView"
+                style="@style/MaterialSearchViewStyle"
+                android:layoutDirection="ltr"
+                android:layout_alignParentRight="true"
+                android:hint="@string/nameKala"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerView"
+        android:scrollbars="vertical"
+        android:layoutDirection="rtl"
+        android:layout_below="@+id/layTitle"
+        android:layout_above="@+id/layBottomBar"
+        android:paddingBottom="20dp"
+        android:paddingTop="10dp">
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fabMenu"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@+id/layBottomBar"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        fab:menu_fab_size="normal"
+        fab:menu_showShadow="true"
+        fab:menu_shadowColor="#66000000"
+        fab:menu_shadowRadius="4dp"
+        fab:menu_shadowXOffset="1dp"
+        fab:menu_shadowYOffset="3dp"
+        fab:menu_colorNormal="@color/colorFabMenu"
+        fab:menu_colorPressed="@color/colorFabMenuClick"
+        fab:menu_colorRipple="#99FFFFFF"
+        fab:menu_animationDelayPerItem="50"
+        fab:menu_icon="@drawable/ic_menu"
+        fab:menu_buttonSpacing="0dp"
+        fab:menu_labels_margin="0dp"
+        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        fab:menu_labels_paddingTop="4dp"
+        fab:menu_labels_paddingRight="8dp"
+        fab:menu_labels_paddingBottom="4dp"
+        fab:menu_labels_paddingLeft="8dp"
+        fab:menu_labels_textColor="@color/colorTextPrimary"
+        fab:menu_labels_textSize="14sp"
+        fab:menu_labels_colorNormal="@color/colorWhite"
+        fab:menu_labels_colorPressed="@color/colorWhite"
+        fab:menu_labels_colorRipple="@color/colorWhite"
+        fab:menu_labels_singleLine="false"
+        fab:menu_labels_ellipsize="none"
+        fab:menu_labels_maxLines="-1"
+        fab:menu_labels_position="right"
+        fab:menu_openDirection="up"
+        fab:menu_labels_customFont="@string/fontPath"
+        fab:menu_backgroundColor="@android:color/transparent">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabShowCustomerInfo"
+            android:src="@drawable/ic_user_info"
+            fab:fab_size="normal"
+            fab:fab_label="@string/customerInfo"
+            fab:fab_colorNormal="@color/colorBackSendDataSwipe"
+            fab:fab_colorPressed="@color/colorBackSendDataSwipe"
+            android:layout_margin="15dp"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabAdamDarkhast"
+            android:src="@drawable/ic_no_request"
+            fab:fab_size="normal"
+            fab:fab_label="@string/adamDarkhast"
+            fab:fab_colorNormal="@color/colorFabSort"
+            fab:fab_colorPressed="@color/colorFabSortClick"
+            android:layout_margin="15dp"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabSearch"
+            android:src="@drawable/ic_search"
+            fab:fab_size="normal"
+            fab:fab_label="@string/searchKalaName"
+            fab:fab_colorNormal="@color/colorFabSearch"
+            fab:fab_colorPressed="@color/colorFabSearchClick"
+            android:layout_margin="15dp"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabAdd"
+            android:src="@drawable/ic_fab_add"
+            fab:fab_size="normal"
+            fab:fab_label="@string/add"
+            fab:fab_colorNormal="@color/colorFabAdd"
+            fab:fab_colorPressed="@color/colorFabAddClick"
+            android:layout_margin="15dp"/>
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:orientation="horizontal"
+        android:id="@+id/layBottomBar"
+        android:background="@color/colorBlack"
+        android:layout_alignParentBottom="true"
+        android:layoutDirection="rtl">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/layBottomBarBarkhordAvalie"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:layout_marginTop="5dp">
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_barkhord" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:text="@string/bazkhord"
+                android:textSize="@dimen/FontSize14"
+                android:textColor="@color/colorWhite"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/layBottomBarMojodiGiri"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:layout_marginTop="5dp">
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_mojodgiri" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:text="@string/mojodi"
+                android:textSize="@dimen/FontSize14"
+                android:textColor="@color/colorWhite"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/layBottomBarDarkhast"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:layout_marginTop="5dp">
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_darkhastkala" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:text="@string/darkhast"
+                android:textSize="@dimen/FontSize14"
+                android:textColor="@color/colorWhite"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/layBottomBarTaeedDarkhast"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:layout_marginTop="5dp">
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_taeeddarkhast" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:text="@string/apply"
+                android:textSize="@dimen/FontSize14"
+                android:textColor="@color/colorWhite"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/layBottomBarTasvieDarkhast"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:layout_marginTop="5dp">
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_tasviehfaktor" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:text="@string/tasvie"
+                android:textSize="@dimen/FontSize14"
+                android:textColor="@color/colorWhite"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/layBottomBarEmzaMoshtary"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_marginTop="5dp">
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_emza" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:text="@string/emza"
+                android:textSize="@dimen/FontSize14"
+                android:textColor="@color/colorWhite"
+                android:gravity="center"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

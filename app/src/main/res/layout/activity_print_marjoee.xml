@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MVP.View.PrintMarjoeeActivity"
+    android:layoutDirection="rtl"
+    android:background="@color/colorWhite">
+
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Main"
+            android:background="@color/colorWhite"
+            android:gravity="center|center_vertical|center_horizontal"
+            android:orientation="vertical" >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblMarjoeeListTitle"
+                android:text="@string/marjoeeList"
+                android:textSize="@dimen/FontSize10"
+                android:textColor="@color/colorTextPrimary"
+                android:gravity="center"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblDate"
+                android:textSize="@dimen/FontSize9"
+                android:textColor="@color/colorTextPrimary"
+                android:gravity="center"
+                android:layout_marginTop="5dp" />
+
+<!--            <ExpandableListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/expandableListView"
+                android:layoutDirection="rtl"
+                android:dividerHeight="0dp"
+                android:divider="@color/colorWhite"
+                android:childDivider="@color/colorWhite"
+                android:groupIndicator="@null"
+                android:layout_marginTop="15dp">
+            </ExpandableListView>-->
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recyclerView">
+            </androidx.recyclerview.widget.RecyclerView>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/layBottomInfo"
+                android:paddingBottom="50dp"
+                android:layoutDirection="rtl">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:id="@+id/lblPrintDate"
+                    android:textSize="@dimen/FontSize8dp"
+                    android:textColor="@color/colorTextPrimary"
+                    android:gravity="left"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/lblAddressSite"
+                    android:text="@string/websiteAddress"
+                    android:textSize="@dimen/FontSize8dp"
+                    android:textColor="@color/colorTextPrimary"
+                    android:gravity="right"
+                    android:layout_marginTop="10dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fabMenu"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        fab:menu_fab_size="normal"
+        fab:menu_showShadow="true"
+        fab:menu_shadowColor="#66000000"
+        fab:menu_shadowRadius="4dp"
+        fab:menu_shadowXOffset="1dp"
+        fab:menu_shadowYOffset="3dp"
+        fab:menu_colorNormal="@color/colorFabMenu"
+        fab:menu_colorPressed="@color/colorFabMenuClick"
+        fab:menu_colorRipple="#99FFFFFF"
+        fab:menu_animationDelayPerItem="50"
+        fab:menu_icon="@drawable/ic_menu"
+        fab:menu_buttonSpacing="0dp"
+        fab:menu_labels_margin="0dp"
+        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        fab:menu_labels_paddingTop="4dp"
+        fab:menu_labels_paddingRight="8dp"
+        fab:menu_labels_paddingBottom="4dp"
+        fab:menu_labels_paddingLeft="8dp"
+        fab:menu_labels_padding="8dp"
+        fab:menu_labels_textColor="@color/colorTextPrimary"
+        fab:menu_labels_textSize="14sp"
+        fab:menu_labels_colorNormal="@color/colorWhite"
+        fab:menu_labels_colorPressed="@color/colorWhite"
+        fab:menu_labels_colorRipple="@color/colorWhite"
+        fab:menu_labels_singleLine="false"
+        fab:menu_labels_ellipsize="none"
+        fab:menu_labels_maxLines="-1"
+        fab:menu_labels_position="right"
+        fab:menu_openDirection="up"
+        fab:menu_labels_customFont="@string/fontPath"
+        fab:menu_backgroundColor="@android:color/transparent">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabSearch"
+            android:src="@drawable/ic_bluetooth"
+            fab:fab_size="normal"
+            fab:fab_label="@string/searchPrinter"
+            fab:fab_colorNormal="@color/colorFabSearchPrinter"
+            fab:fab_colorPressed="@color/colorFabSearchPrinter"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabPrint"
+            android:src="@drawable/ic_print"
+            fab:fab_size="normal"
+            fab:fab_label="@string/print"
+            fab:fab_colorNormal="@color/colorFabPrint"
+            fab:fab_colorPressed="@color/colorFabPrint"/>
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+
+</RelativeLayout>

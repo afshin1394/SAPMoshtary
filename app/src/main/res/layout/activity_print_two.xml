@@ -1,0 +1,990 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Main"
+            android:background="@color/colorWhite"
+            android:gravity="center|center_vertical|center_horizontal"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|center_vertical|center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imgLogoPrint"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_margin="5dp"
+                    android:contentDescription="@string/app_name"
+                    android:drawingCacheQuality="low" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:gravity="center|center_vertical|center_horizontal"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/txtTitr"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold"
+                        android:text="درخواست کالا"
+                        android:textSize="@dimen/FontSize40" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:gravity="center|center_vertical|center_horizontal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/txtMarkaz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize30"
+                    android:textColor="@color/colorBlack"/>
+
+                <TextView
+                    android:id="@+id/lblMarkaz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:text="مرکز توزیع : "
+                    android:textSize="@dimen/FontSize30"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/txtSazman"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize30"
+                    android:textColor="@color/colorBlack"/>
+
+                <TextView
+                    android:id="@+id/lblSazman"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:text="سازمان : "
+                    android:textSize="@dimen/FontSize30"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:gravity="center|center_vertical|center_horizontal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/txtTarikhFaktor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize32"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"/>
+
+                <TextView
+                    android:id="@+id/lblTarikhFaktor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:text="تاریخ : "
+                    android:textSize="@dimen/FontSize30"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/txtShomareFaktor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize32"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"/>
+
+                <TextView
+                    android:id="@+id/lblShomareFaktor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:text="شماره : "
+                    android:textSize="@dimen/FontSize30"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:gravity="end|center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/txtNameForoshandeh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize30"
+                    android:textColor="@color/colorBlack"/>
+                <TextView
+                    android:id="@+id/lblNameForoshandeh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize30"
+                    android:textStyle="bold"
+                    android:text="نام فروشنده : "
+                    android:textColor="@color/colorBlack"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:gravity="end|center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/txtCodeMoshtary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize32"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"/>
+                <TextView
+                    android:id="@+id/lblCodeMoshtary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize30"
+                    android:textStyle="bold"
+                    android:text="کد مشتری : "
+                    android:textColor="@color/colorBlack"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:gravity="end|center_vertical"
+                android:orientation="horizontal" >
+
+
+                <TextView
+                    android:id="@+id/txtNameMoshtary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize30"
+                    android:textColor="@color/colorBlack"/>
+
+                <TextView
+                    android:id="@+id/lblNameMoshtary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:text="نام مشتری : "
+                    android:textSize="@dimen/FontSize30"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:gravity="end|center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/txtNameTablo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize30"
+                    android:textColor="@color/colorBlack"/>
+                <TextView
+                    android:id="@+id/lblNameTablo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize30"
+                    android:textStyle="bold"
+                    android:text="نام فروشگاه : "
+                    android:textColor="@color/colorBlack"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="end|center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/txtAddress"
+                    android:layout_width="500dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right|center_horizontal|center_vertical"
+                    android:lines="2"
+                    android:textSize="@dimen/FontSize30"
+                    android:textColor="@color/colorBlack"/>
+
+                <TextView
+                    android:id="@+id/lblAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end|center_horizontal|center_vertical"
+                    android:text="آدرس : "
+                    android:textSize="@dimen/FontSize30"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:gravity="center|center_vertical|center_horizontal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/txtCodePosty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize32"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"/>
+                <TextView
+                    android:id="@+id/lblCodePosty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize30"
+                    android:textStyle="bold"
+                    android:text="کدپستی : "
+                    android:textColor="@color/colorBlack"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/txtTel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize32"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"/>
+                <TextView
+                    android:id="@+id/lblTel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize30"
+                    android:textStyle="bold"
+                    android:text="تلفن : "
+                    android:textColor="@color/colorBlack"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="vertical" >
+                <TextView
+                    android:id="@+id/lblAghlamFaktor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize36"
+                    android:textStyle="bold"
+                    android:text="اقلام درخواست"
+                    android:textColor="@color/colorWhite"
+                    android:background="@drawable/table_content_cell_bg_blue"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/lstKalaInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical">
+                </androidx.recyclerview.widget.RecyclerView>
+                <!--                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/layKalaPartTwo"
+                    android:orientation="vertical"
+                    android:layout_below="@+id/layKalaPartOne">
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorBlack"/>
+                    <include
+                        layout="@layout/activity_rpt_faktorprint_listview_kala_footer_two"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorBlack"/>
+                </LinearLayout>-->
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/lyTakhfif"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+                    <TextView
+                        android:id="@+id/lblTakhfif"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:text="تخفیفات فروش"
+                        android:textSize="@dimen/FontSize36"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorWhite"
+                        android:background="@drawable/table_content_cell_bg_blue"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/lstTakhfif"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scrollbars="vertical">
+                    </androidx.recyclerview.widget.RecyclerView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyMarjoee"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_marginTop="15dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+                    <TextView
+                        android:id="@+id/lblAghlamMarjoee"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:text="@string/marjoee"
+                        android:textSize="@dimen/FontSize36"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorWhite"
+                        android:background="@drawable/table_content_cell_bg_blue"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/lstKalaMarjoee"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scrollbars="vertical">
+                    </androidx.recyclerview.widget.RecyclerView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyJayezeh"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_marginTop="15dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+                    <TextView
+                        android:id="@+id/lblAghlamJayezeh"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:text="جایزه"
+                        android:textSize="@dimen/FontSize36"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorWhite"
+                        android:background="@drawable/table_content_cell_bg_blue"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center|center_vertical|center_horizontal"
+                    android:orientation="vertical"
+                    android:background="@drawable/table_content_cell_bg_black">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/lstKalaJayezeh"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scrollbars="vertical">
+                    </androidx.recyclerview.widget.RecyclerView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_margin="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp">
+                    <TextView
+                        android:id="@+id/RialMablaghNakhalesFaktor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:layout_marginEnd="5dp"
+                        android:text="ریال"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/txtMablaghNakhalesFaktor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize32"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/lblMablaghNakhalesFaktor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:textStyle="bold"
+                        android:text="جمع درخواست : "
+                        android:textColor="@color/colorBlack"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp">
+                    <TextView
+                        android:id="@+id/RialMablaghTakhfif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:layout_marginEnd="5dp"
+                        android:text="ریال"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/txtMablaghTakhfif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize32"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/lblMablaghTakhfif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:textStyle="bold"
+                        android:text="مبلغ تخفیف درخواست : "
+                        android:textColor="@color/colorBlack"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp">
+                    <TextView
+                        android:id="@+id/RialMablaghMarjoee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:layout_marginEnd="5dp"
+                        android:text="ریال"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/txtMablaghMarjoee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize32"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/lblMablaghMarjoee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:textStyle="bold"
+                        android:text="مبلغ مرجوعی درخواست : "
+                        android:textColor="@color/colorBlack"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/layArzeshAfzoode"
+                    android:gravity="end|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp">
+                    <TextView
+                        android:id="@+id/RialMablaghArzeshAfzoode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:layout_marginEnd="5dp"
+                        android:text="ریال"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/txtMablaghArzeshAfzoode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize32"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/lblMablaghArzeshAfzoode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:textStyle="bold"
+                        android:text="مبلغ مالیات ارزش افزوده درخواست : "
+                        android:textColor="@color/colorBlack"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp">
+                    <TextView
+                        android:id="@+id/RialMablaghFaktor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:layout_marginEnd="5dp"
+                        android:text="ریال"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/txtMablaghFaktor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize32"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/lblMablaghFaktor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:textStyle="bold"
+                        android:text="مبلغ قابل پرداخت : "
+                        android:textColor="@color/colorBlack"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp">
+                    <TextView
+                        android:id="@+id/RialMablaghPardakht"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:layout_marginEnd="5dp"
+                        android:text="ریال"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/txtMablaghPardakht"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize32"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/lblMablaghPardakht"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:textStyle="bold"
+                        android:text="مبلغ پرداخت شده : "
+                        android:textColor="@color/colorBlack"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp">
+                    <TextView
+                        android:id="@+id/RialMablaghMandehFaktor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:layout_marginEnd="5dp"
+                        android:text="ریال"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/txtMablaghMandehFaktor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize32"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/lblMablaghMandehFaktor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:textStyle="bold"
+                        android:text="مبلغ مانده درخواست : "
+                        android:textColor="@color/colorBlack"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp">
+                    <TextView
+                        android:id="@+id/RialMablaghMandehKol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:layout_marginEnd="5dp"
+                        android:text="ریال"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/txtMablaghMandehKol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize32"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/lblMablaghMandehKol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize30"
+                        android:textStyle="bold"
+                        android:text="مبلغ کل مانده : "
+                        android:textColor="@color/colorBlack"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorBlack"
+                    android:layout_marginBottom="5dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_margin="1dp">
+                <TextView
+                    android:id="@+id/txtEmza"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:textSize="@dimen/FontSize30"
+                    android:layout_margin="5dp"
+                    android:textColor="@color/colorBlack"/>
+
+                <ImageView
+                    android:id="@+id/imgEmza"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="امضا مشتری"
+                    android:drawingCacheQuality="low" />
+            </LinearLayout>
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorBlack"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".25"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/lblTelForoshandeh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:text="تلفن فروشنده"
+                        android:textSize="@dimen/FontSize30"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+
+                    <TextView
+                        android:id="@+id/txtTelForoshandeh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize28"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".25"
+                    android:id="@+id/layTelBazresi"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/lblTelBazresi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:text="تلفن بازرسی"
+                        android:textSize="@dimen/FontSize30"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/txtTelBazresi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize28"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".25"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/lblTelMarkaz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize28"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+
+                    <TextView
+                        android:id="@+id/txtTelMarkaz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize28"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_margin="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_margin="10dp">
+
+                    <TextView
+                        android:id="@+id/lblWebsite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="40dp"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:text="@string/websiteAddress"
+                        android:textSize="@dimen/FontSize30"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+
+                    <TextView
+                        android:id="@+id/txtTimePrint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize28"
+                        android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/lblTimePrint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:textSize="@dimen/FontSize28"
+                        android:textStyle="bold"
+                        android:text="زمان چاپ : "
+                        android:textColor="@color/colorBlack"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="25dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fabMenu"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        fab:menu_fab_size="normal"
+        fab:menu_showShadow="true"
+        fab:menu_shadowColor="#66000000"
+        fab:menu_shadowRadius="4dp"
+        fab:menu_shadowXOffset="1dp"
+        fab:menu_shadowYOffset="3dp"
+        fab:menu_colorNormal="@color/colorFabMenu"
+        fab:menu_colorPressed="@color/colorFabMenuClick"
+        fab:menu_colorRipple="#99FFFFFF"
+        fab:menu_animationDelayPerItem="50"
+        fab:menu_icon="@drawable/ic_menu"
+        fab:menu_buttonSpacing="0dp"
+        fab:menu_labels_margin="0dp"
+        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        fab:menu_labels_paddingTop="4dp"
+        fab:menu_labels_paddingRight="8dp"
+        fab:menu_labels_paddingBottom="4dp"
+        fab:menu_labels_paddingLeft="8dp"
+        fab:menu_labels_padding="8dp"
+        fab:menu_labels_textColor="@color/colorTextPrimary"
+        fab:menu_labels_textSize="14sp"
+        fab:menu_labels_colorNormal="@color/colorWhite"
+        fab:menu_labels_colorPressed="@color/colorWhite"
+        fab:menu_labels_colorRipple="@color/colorWhite"
+        fab:menu_labels_singleLine="false"
+        fab:menu_labels_ellipsize="none"
+        fab:menu_labels_maxLines="-1"
+        fab:menu_labels_position="right"
+        fab:menu_openDirection="up"
+        fab:menu_labels_customFont="@string/fontPath"
+        fab:menu_backgroundColor="@android:color/transparent">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabPrint"
+            android:src="@drawable/ic_print"
+            fab:fab_size="normal"
+            fab:fab_label="@string/print"
+            fab:fab_colorNormal="@color/colorFabPrint"
+            fab:fab_colorPressed="@color/colorFabPrint"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabSearch"
+            android:src="@drawable/ic_bluetooth"
+            fab:fab_size="normal"
+            fab:fab_label="@string/searchPrinter"
+            fab:fab_colorNormal="@color/colorFabSearchPrinter"
+            fab:fab_colorPressed="@color/colorFabSearchPrinter"/>
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+</RelativeLayout>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:layoutDirection="rtl">
+
+
+    <LinearLayout
+        android:layout_width="@dimen/drawerMenuWidth"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingTop="@dimen/menuPaddingTopProfile"
+        android:paddingBottom="@dimen/menuPaddingBottomProfile"
+        android:background="@color/colorIcons"
+        android:layoutDirection="rtl">
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/imgProfile"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/ic_account"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/colorDivider"
+            android:layout_marginBottom="20dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/layForoshandehInfo"
+            android:gravity="center_horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblForoshandehName"
+                android:textSize="@dimen/menuFontSizeHeader"
+                android:textColor="@color/colorWhite"
+                android:gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblNoeForoshandeh"
+                android:textSize="@dimen/menuFontSizeHeader"
+                android:textColor="@color/colorWhite"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblForoshandehSazmanForosh"
+                android:textSize="@dimen/menuFontSizeHeader"
+                android:textColor="@color/colorWhite"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblForoshandehMarkazForosh"
+                android:textSize="@dimen/menuFontSizeHeader"
+                android:textColor="@color/colorWhite"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblIMEI"
+                android:textSize="@dimen/menuFontSizeHeader"
+                android:textColor="@color/colorWhite"
+                android:layout_toLeftOf="@+id/imgCopyIMEI"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:visibility="gone"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ExpandableListView
+        android:layout_width="@dimen/drawerMenuWidth"
+        android:layout_height="match_parent"
+        android:id="@+id/listMenu"
+        android:layoutDirection="rtl"
+        android:divider="@null"
+        android:background="@color/colorDivider"
+        android:groupIndicator="@null">
+    </ExpandableListView>
+
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="40dp" />
+
+</LinearLayout>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="horizontal"
+	android:gravity="right|center_vertical|center_horizontal">
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight = "2"
+		android:gravity="center_horizontal|center_vertical"
+		android:textSize="@dimen/FontSize14"
+		android:text="مبلغ کل"
+		android:textColor="@color/colorBlack">
+	</TextView >
+	<View
+		android:layout_width="1dp"
+		android:layout_height="match_parent"
+		android:background="@color/colorBlack"/>
+	<TextView
+		android:gravity="center_horizontal|center_vertical"
+		android:textSize="@dimen/FontSize14"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight = "1"
+		android:text="عدد"
+		android:textColor="@color/colorBlack">
+	</TextView >
+	<View
+		android:layout_width="1dp"
+		android:layout_height="match_parent"
+		android:background="@color/colorBlack"/>
+	<TextView
+		android:gravity="center_horizontal|center_vertical"
+		android:textSize="@dimen/FontSize14"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight = "1"
+		android:text="بسته"
+		android:textColor="@color/colorBlack">
+	</TextView >
+	<View
+		android:layout_width="1dp"
+		android:layout_height="match_parent"
+		android:background="@color/colorBlack"/>
+	<TextView
+		android:gravity="center_horizontal|center_vertical"
+		android:textSize="@dimen/FontSize14"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight = "1"
+		android:text="کارتن"
+		android:textColor="@color/colorBlack">
+	</TextView >
+	<View
+		android:layout_width="1dp"
+		android:layout_height="match_parent"
+		android:background="@color/colorBlack"/>
+	<TextView
+		android:gravity="center_horizontal|center_vertical"
+		android:textSize="@dimen/FontSize14"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight = "1"
+		android:text="مبلغ فروش"
+		android:textColor="@color/colorBlack">
+	</TextView >
+	<View
+		android:layout_width="1dp"
+		android:layout_height="match_parent"
+		android:background="@color/colorBlack"/>
+	<TextView
+		android:gravity="center_horizontal|center_vertical"
+		android:textSize="@dimen/FontSize14"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight = "3"
+		android:text="شرح کالا"
+		android:textColor="@color/colorBlack">
+	</TextView >
+	<View
+		android:layout_width="1dp"
+		android:layout_height="match_parent"
+		android:background="@color/colorBlack"/>
+	<TextView
+		android:gravity="center_horizontal|center_vertical"
+		android:textSize="@dimen/FontSize14"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight = "1"
+		android:text="ردیف"
+		android:textColor="@color/colorBlack">
+	</TextView >
+
+</LinearLayout>

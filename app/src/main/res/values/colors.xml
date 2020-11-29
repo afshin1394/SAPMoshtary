@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1f3a93</color>
+    <color name="colorPrimaryDark">#152763</color>
+    <color name="colorAccent">#29f1c3</color>
+    <color name="colorTextPrimary">#4d5a6a</color>
+    <color name="colorTextSecondary">#757575</color>
+    <color name="colorIcons">#2C3E50</color>
+    <color name="colorDivider">#BDBDBD</color>
+    <color name="colorListHeaderBackground">#DDDCDC</color>
+    <color name="colorTitleExpandable">#E9E9E9</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorChart">#4d5a6a</color>
+    <color name="colorRed">#FF0000</color>
+    <color name="colorRedCardBackground">#30FF0000</color>
+    <color name="colorBackground">#F1F1F1</color>
+    <color name="colorBorderChart">#08DEFA</color>
+    <color name="colorGreen">#43a047</color>
+    <color name="colorLightGreen">#C8E6C9</color>
+    <color name="colorYellow">#ffb200</color>
+    <color name="colorPurple">#5e438d</color>
+    <color name="colorGray">#CFCFCF</color>
+    <color name="colorGetProgram">#F5F5F5</color>
+    <color name="colorTableHeader">#1f3a93</color>
+    <color name="colorHeaderPrint">#2979FF</color>
+    <color name="colorPolyline">#1565C0</color>
+
+
+    <color name="mdtp_accent_color">#1f3a93</color>
+    <color name="mdtp_accent_color_dark">#152763</color>
+
+    
+    <!--Colors Of Get Program Slider-->
+    <color name="colorSliderForoshandeh">#ffb200</color>
+    <color name="colorSliderKalaModatVosol">#7e563b</color>
+    <color name="colorSliderJayezehTakhfif">#5e438d</color>
+    <color name="colorSliderCustomers">#ea1e63</color>
+    <color name="colorSliderParameters">#1DE9B6</color>
+    <color name="colorSliderEtebarForoshandeh">#2979FF</color>
+    <color name="colorForoshandehInfoSection">#E0E7EB</color>
+    <color name="colorGetProgramSection">#cfd8dd</color>
+    <color name="colorBackSideFolding">#b0bfc6</color>
+
+
+    <!--Colors Of Shine Button-->
+    <color name="colorBtnFillColorFailed">#F30017</color>
+    <color name="colorBigShineFailed">#F30017</color>
+    <color name="colorSmallShineFailed">#e9969e</color>
+    <color name="colorBtnFillColorSuccess">#16B100</color>
+    <color name="colorSmallShineWarning">#F4C500</color>
+    <color name="colorBigShineWarning">#F78700</color>
+    <color name="colorBtnFillColorWarning">#FFCC00</color>
+
+
+    <!--Colors Of Swipe -->
+    <color name="colorBackAddCustomerDocSwipe">#94d4fb</color>
+    <color name="colorBackSendDataSwipe">#94d4fb</color>
+    <color name="colorBackDeleteCustomerSwipe">#ffc9ce</color>
+    <color name="colorBackShowCustomerLocationSwipe">#fcc46c</color>
+    <color name="colorBackUpdateEtebar">#2979FF</color>
+    <color name="colorBackRoute">#009688</color>
+
+
+
+    <!--Colors Of Status -->
+    <color name="colorGoodStatus">#4CAF50</color>
+    <color name="colorMediumStatus">#FFFF00</color>
+    <color name="colorBadStatus">#B61826</color>
+
+    <!--Colors Of Chart -->
+    <color name="colorForoshChart">#1DE9B6</color>
+    <color name="colorMarjoeeChart">#F50057</color>
+
+
+
+    <!--Colors Of Floating Action Button -->
+    <color name="colorFabMenu">#455A64</color>
+    <color name="colorFabMenuClick">#37474F</color>
+    <color name="colorFabHelp">#2196F3</color>
+    <color name="colorFabHelpClick">#1565C0</color>
+    <color name="colorFabRefresh">#795548</color>
+    <color name="colorFabRefreshClick">#4E342E</color>
+    <color name="colorFabSearch">#3F51B5</color>
+    <color name="colorFabSearchClick">#283593</color>
+    <color name="colorFabList">#D500F9</color>
+    <color name="colorFabListClick">#6A1B9A</color>
+    <color name="colorFabSort">#ff1744</color>
+    <color name="colorFabSortClick">#c62828</color>
+    <color name="colorFabAdd">#00E676</color>
+    <color name="colorFabAddColorfulIcon">#4CAF50</color>
+    <color name="colorFabAddClick">#2E7D32</color>
+    <color name="colorFabMap">#FF9100</color>
+    <color name="colorFabMapClick">#EF6C00</color>
+    <color name="colorFabPrint">#ECEDEE</color>
+    <color name="colorFabSearchPrinter">#2196F3</color>
+    <color name="colorFabUpdateGallery">#009DAD</color>
+
+</resources>

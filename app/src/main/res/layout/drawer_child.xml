@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="rtl">
+
+    <ImageView
+        android:layout_width="@dimen/drawerMenuItemImageSize"
+        android:layout_height="@dimen/drawerMenuItemImageSize"
+        android:id="@+id/imgIcon"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lbldrawerChild"
+        android:textSize="@dimen/menuFontSize"
+        android:textColor="@color/colorTextPrimary"
+        android:layout_margin="10dp"
+        android:layout_toLeftOf="@+id/imgIcon"/>
+
+</RelativeLayout>

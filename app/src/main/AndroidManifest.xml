@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.saphamrah">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <application
+        android:name=".Application.BaseApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_logo"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@drawable/ic_logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:icon"
+        android:hardwareAccelerated="false"
+        android:requestLegacyExternalStorage="true">
+        <activity android:name=".MVP.View.PorseshnameAdamActivity"></activity>
+        <activity android:name=".MVP.View.AmargarCustomersMapActivity" />
+        <activity android:name=".MVP.View.KalaAmargarActivity" />
+        <activity android:name=".MVP.View.AmargarCustomerListActivity" />
+        <activity android:name=".MVP.View.AddPorseshnameInfoActivity" />
+        <activity android:name=".MVP.View.AddDepositCashToBankActivity" />
+        <activity android:name=".MVP.View.DepositCashListToBankActivity" />
+        <activity
+            android:name=".MVP.View.BanksInfoActivity"
+            android:label="@string/title_activity_banks_info" />
+        <activity android:name=".MVP.View.InquirySayyadCheckActivity" />
+        <activity android:name=".MVP.View.BarcodeScannerActivity" />
+        <activity android:name=".MVP.View.GoodsInfoActivity" />
+        <activity android:name=".MVP.View.RouteActivity" />
+        <activity android:name=".MVP.View.TreasuryListMapActivity" />
+        <activity android:name=".MVP.View.NavigationMapActivity" />
+        <activity android:name=".MVP.View.SettingActivity" />
+        <activity android:name=".MVP.View.MessageDetailActivity" />
+        <activity android:name=".MVP.View.MessageBoxActivity" />
+        <activity android:name=".MVP.View.PrintMarjoeeActivity" />
+        <activity android:name=".MVP.View.RptMarjoeeActivity" />
+        <activity android:name=".MVP.View.RptThreeMonthPurchase.RptThreeMonthPurchaseActivity" />
+        <activity android:name=".MVP.View.RptCustomersListByDistanceActivity" />
+        <activity
+            android:name=".MVP.View.RptForoshandehVisitActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".MVP.View.RptForoshandehRouteActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity android:name=".MVP.View.RptKharidKalaActivity" />
+        <activity android:name=".MVP.View.ForoshandehRouteMapActivity" />
+        <activity
+            android:name=".MVP.View.RptFaktorTozieNashodeActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".MVP.View.RptCheckBargashtyActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".MVP.View.RptFaktorMandehDarActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".MVP.View.RptListVosolActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".MVP.View.RptDarkhastFaktorVazeiatActivity"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".MVP.View.TreasuryListActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".MVP.View.TreasuryListOfflineActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity android:name=".MVP.View.FaktorDetailsActivity" />
+        <activity android:name=".MVP.View.PrintActivity" />
+        <activity
+            android:name=".MVP.View.SelectBonusActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan" />
+        <activity
+            android:name=".MVP.View.MarjoeeKalaActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity android:name=".MVP.View.BixolonDeviceListActivity" />
+        <activity
+            android:name=".MVP.View.EditNationalCodeActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity android:name=".MVP.View.EditCustomerActivity" />
+        <activity android:name=".MVP.View.CustomersListActivity" />
+        <activity
+            android:name=".MVP.View.TemporaryRequestsListActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".MVP.View.InvoiceSettlementActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".MVP.View.VerifyRequestActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".MVP.View.VerifyCustomerRequestActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".MVP.View.DarkhastKalaActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".MVP.View.RptSaleGoalActivity"
+            android:screenOrientation="sensorPortrait"/>
+        <activity
+            android:name=".MVP.View.RptMoshtarianKharidNakardeActivity"
+            android:screenOrientation="sensorPortrait"/>
+
+        <activity
+            android:name=".MVP.View.MojodiGiriActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".MVP.View.BarkhordAvalieForoshandehActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity android:name=".MVP.View.CustomerInfoActivity" />
+        <activity
+            android:name=".MVP.View.RequestCustomerListActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".MVP.View.RptSanad.RptSanadActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity android:name=".MVP.View.SaleReportActivity" />
+        <activity
+            android:name=".MVP.View.RptMojodiAnbarakActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity android:name=".MVP.View.Tizer.TizerActivity" />
+        <activity android:name=".Utils.VideoPlayerActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".MVP.View.RptEtebarActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity android:name=".MVP.View.AddCustomerDocsActivity" />
+        <activity android:name=".MVP.View.AddCustomerMapActivity" />
+        <activity android:name=".MVP.View.AddCustomerListActivity" />
+        <activity
+            android:name=".MVP.View.AddCustomerActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan" />
+        <activity
+            android:name=".MVP.View.GetProgramActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity android:name=".MVP.View.OnlineSupportActivity" />
+        <activity android:name=".MVP.View.LogsActivity" />
+        <activity android:name=".MVP.View.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MVP.View.MapActivity" />
+        <activity android:name=".MVP.View.SpeedTestActivity" />
+        <activity android:name=".MVP.View.MainActivity" />
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.saphamrah.imagefileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/image_provider_path" />
+        </provider>
+
+        <receiver android:name=".Receiver.LocationReceiver">
+            <intent-filter>
+                <action android:name="com.sap.gpstracker" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".Service.GpsTracker" />
+    </application>
+
+</manifest>

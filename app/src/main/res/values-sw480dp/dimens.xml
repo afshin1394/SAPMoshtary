@@ -1,0 +1,35 @@
+<resources>
+    <dimen name="btnFontMain">22dp</dimen>
+    <dimen name="twoColumnFontSize">13dp</dimen>
+    <dimen name="imgActivityTitle">32dp</dimen>
+    <dimen name="lblActivityTitle">24dp</dimen>
+    <dimen name="lblActivitySubTitle">17sp</dimen>
+    <dimen name="paddingTitle">20dp</dimen>
+    <dimen name="btnPaddingMain">18dp</dimen>
+    <dimen name="lblTitleRowList">20dp</dimen>
+    <dimen name="FontListLbl">14dp</dimen>
+    <dimen name="lblContentRowList">20dp</dimen>
+    <dimen name="lblEmptyList">30dp</dimen>
+    <dimen name="SplashLogo">230dp</dimen>
+    <dimen name="toolbarContentHeight">36dp</dimen>
+    <dimen name="drawerMenuWidth">280dp</dimen>
+    <dimen name="drawerMenuItemTextSize">22dp</dimen>
+    <dimen name="drawerMenuItemImageSize">22dp</dimen>
+    <dimen name="toastImageviewSize">28dp</dimen>
+    <dimen name="toastTextviewSize">20dp</dimen>
+    <dimen name="speedTestChartHeight">130dp</dimen>
+    <dimen name="picmain">10dp</dimen>
+    <dimen name="chartTitleMain">13dp</dimen>
+    <dimen name="mainFragmentDateTimeWeatherFontSize">14dp</dimen>
+    <dimen name="toastFontSize">12dp</dimen>
+    <dimen name="menuFontSizeTitle">14dp</dimen>
+    <dimen name="menuFontSize">12dp</dimen>          <!--font size for menu items that show in Drawer-->
+    <dimen name="mainMenuItemsFontSize">10dp</dimen> <!--font size for menu items that show in MainActivity-->
+    <dimen name="menuFontSizeHeader">16dp</dimen>
+    <dimen name="menuPaddingTopProfile">25dp</dimen>
+    <dimen name="menuPaddingBottomProfile">13dp</dimen>
+    <dimen name="fontSizeSelectBonus">12dp</dimen>
+    <dimen name="fontSizeBottomNavRequest">12dp</dimen>
+    <dimen name="imagSizeBottomNavRequest">48dp</dimen>
+    <dimen name="imageSizeRequestProcess">100dp</dimen>
+</resources>

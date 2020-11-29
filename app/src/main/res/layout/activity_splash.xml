@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MVP.View.MainActivity"
+    android:background="@color/colorPrimary">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_network"
+        android:alpha="0.05"
+        android:scaleType="fitXY"
+        android:layout_marginLeft="-400dp"/>
+
+    <ImageView
+        android:layout_width="@dimen/SplashLogo"
+        android:layout_height="@dimen/SplashLogo"
+        android:layout_centerInParent="true"
+        android:src="@drawable/logo"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lblVersion"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/FontSize18"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="45dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lblImei"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/FontSize18"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnOffline"
+        android:text="@string/offlineView"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/btnFontMain"
+        android:gravity="center"
+        android:padding="@dimen/btnPaddingMain"
+        android:background="@drawable/btn_bg"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"/>
+
+</RelativeLayout>

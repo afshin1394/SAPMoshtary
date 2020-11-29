@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MVP.View.MapActivity">
+
+    <org.osmdroid.views.MapView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/mapView"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/layBtns">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/btnDeleteAll"
+            android:text="delete all"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/btnShow"
+            android:text="show"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/btnShowAllLocation"
+            android:text="show all"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lblAllDataCount"
+        android:textSize="@dimen/FontSize22"
+        android:textColor="@color/colorAccent"
+        android:layout_below="@+id/layBtns"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lblFilterDataCount"
+        android:textSize="@dimen/FontSize22"
+        android:textColor="@color/colorAccent"
+        android:layout_below="@+id/lblAllDataCount"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/layTimer"
+        android:layout_below="@+id/lblFilterDataCount">
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtTimer"
+            android:hint="timer(+3000) milisecond"
+            android:textSize="@dimen/FontSize22"
+            android:textColor="@color/colorBlack"
+            android:padding="@dimen/paddingTitle"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/btnRestart"
+            android:text="restart service"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/showDistance"
+        android:layout_below="@+id/layTimer"
+        android:layout_marginTop="20dp">
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtDistance"
+            android:hint="distance"
+            android:textSize="@dimen/FontSize22"
+            android:textColor="@color/colorBlack"
+            android:padding="10dp"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/btnSetShowDistance"
+            android:text="set show distance"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/layFilters"
+        android:layout_below="@+id/showDistance"
+        android:layout_marginTop="20dp">
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/txtSpeed"
+            android:hint="speed"
+            android:textSize="@dimen/FontSize22"
+            android:textColor="@color/colorBlack"
+            android:padding="10dp"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/txtAltitude"
+            android:hint="altitude"
+            android:textSize="@dimen/FontSize22"
+            android:textColor="@color/colorBlack"
+            android:padding="10dp"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/btnSetFilters"
+            android:text="set filters"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/laySetAccuracy"
+        android:layout_below="@+id/layFilters"
+        android:layout_marginTop="20dp">
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtAccuracy"
+            android:hint="accuracy"
+            android:textSize="@dimen/FontSize22"
+            android:textColor="@color/colorBlack"
+            android:padding="10dp"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/btnSetAccuracy"
+            android:text="set accuracy"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

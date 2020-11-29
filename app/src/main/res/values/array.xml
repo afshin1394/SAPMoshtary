@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="speedTestRangeValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>12</item>
+        <item>14</item>
+        <item>16</item>
+        <item>18</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+        <item>35</item>
+        <item>40</item>
+        <item>45</item>
+        <item>50</item>
+        <item>75</item>
+        <item>100</item>
+    </string-array>
+
+
+    <string-array name="getProgramItems">
+        <!--<item>برخورد فروشنده با مشتری</item>-->
+        <item>{\"name\":\"بانک\" , \"function\":\"getBank\"}</item>
+        <item>{\"name\":\"برند\" , \"function\":\"getBrand\"}</item>
+        <item>{\"name\":\"علت عدم درخواست\" , \"function\":\"getElatAdamDarkhast\"}</item>
+        <item>{\"name\":\"علت مرجوعی کالا\" , \"function\":\"getElatMarjoeeKala\"}</item>
+        <item>{\"name\":\"کالای مرجوعی\" , \"function\":\"getListKalaForMarjoee\"}</item>
+        <item>{\"name\":\"گروه\" , \"function\":\"getGoroh\"}</item>
+        <item>{\"name\":\"اطلاعات GPS\" , \"function\":\"getGPSData\"}</item>
+        <item>{\"name\":\"مناطق جغرافیایی\" , \"function\":\"getMahal\"}</item>
+        <item>{\"name\":\"مرکز پخش\" , \"function\":\"getMarkazPakhsh,getMarkazAnbar\"}</item>
+        <item>{\"name\":\"شماره حساب مرکز پخش\" , \"function\":\"getMarkazPakhshShomareHesab\"}</item>
+        <item>{\"name\":\"اطلاعات POS\" , \"function\":\"getPOSInfo\"}</item>
+        <item>{\"name\":\"اطلاعات مسیر\" , \"function\":\"getMasir\"}</item>
+        <item>{\"name\":\" محدوده فروشنده\" , \"function\":\"getForoshandehPolygon\"}</item>
+        <item>{\"name\":\"اطلاعات مسیر\" , \"function\":\"getMasirVaznHajmMashin\"}</item>
+        <item>{\"name\":\" فروشنده مشتری\" , \"function\":\"getFoshandehMoshtary\"}</item>
+        <item>{\"name\":\"موجودی گیری\" , \"function\":\"deleteMojodiGiri\"}</item>
+        <item>{\"name\":\"مشتری\" , \"function\":\"getMoshtary\"}</item>
+        <item>{\"name\":\"آدرس پرنت\" , \"function\":\"getMoshtaryParent\"}</item>
+        <item>{\"name\":\" مشتری آمارگر\" , \"function\":\"deleteMoshtaryAmargarImage\"}</item>
+        <item>{\"name\":\"آدرس مشتری\" , \"function\":\"getMoshtaryAddress\"}</item>
+        <item>{\"name\":\"مشتری افراد\" , \"function\":\"getMoshtaryAfrad\"}</item>
+        <item>{\"name\":\"اعتبار مشتری\" , \"function\":\"getMoshtaryEtebarSazmanForosh\"}</item>
+        <item>{\"name\":\"گروه مشتری\" , \"function\":\"getMoshtaryGoroh\"}</item>
+        <item>{\"name\":\"محدوده مشتری\" , \"function\":\"getMoshtaryPolygon\"}</item>
+        <item>{\"name\":\"شماره حساب های مشتری\" , \"function\":\"getMoshtaryShomareHesab\"}</item>
+        <item>{\"name\":\"مشتری تغییرات\" , \"function\":\"deleteMoshtaryTaghirat\"}</item>
+        <item>{\"name\":\" فاکتور\" , \"function\":\"getDarkhastFaktor\"}</item>
+        <item>{\"name\":\"درخواست فاکتور سطر\" , \"function\":\"getDarkhastFaktorSatr\"}</item>
+        <item>{\"name\":\"فروشنده ها - پخش\" , \"function\":\"getForoshandehs\"}</item>
+        <item>{\"name\":\"کالای پیشنهادی \" , \"function\":\"getdarkhastFaktorKalaPishnahadi\"}</item>
+        <item>{\"name\":\"گزارش برگشتی\" , \"function\":\"getBargashty\"}</item>
+        <item>{\"name\":\"مشتری - پخش\" , \"function\":\"getMoshtaryPakhsh\"}</item>
+        <item>{\"name\":\"مشتری مراجعه شده\" , \"function\":\"getMoshtaryMorajeShodehRooz\"}</item>
+        <item>{\"name\":\"آدرس مشتری - پخش\" , \"function\":\"getMoshtaryAddressPakhsh\"}</item>
+        <item>{\"name\":\"گروه مشتری - پخش\" , \"function\":\"getMoshtaryGorohPakhsh\"}</item>
+        <item>{\"name\":\"مشتری افراد - پخش\" , \"function\":\"getMoshtaryAfradPakhsh\"}</item>
+        <item>{\"name\":\"شماره حساب مشتری - پخش\" , \"function\":\"getMoshtaryShomareHesabPakhsh\"}</item>
+        <item>{\"name\":\"اعتبار مشتری - پخش\" , \"function\":\"getMoshtaryEtebarPakhsh\"}</item>
+        <item>{\"name\":\"دریافت پرداخت\" , \"function\":\"getDariaftPardakht\"}</item>
+        <item>{\"name\":\"دریافت پرداخت - درخواست فاکتور\" , \"function\":\"getDariaftPardakhtDarkhastFaktor\"}</item>
+        <item>{\"name\":\"دریافت تخفیفات اقلام فاکتور\" , \"function\":\"getDarkhastFaktorSatrTakhfif\"}</item>
+        <item>{\"name\":\"دریافت تخفیفات فاکتور\" , \"function\":\"getDarkhastFaktorTakhfif\"}</item>
+        <item>{\"name\":\"مدت وصول\" , \"function\":\"getModatVosol\"}</item>
+        <item>{\"name\":\"گروه مدت وصول\" , \"function\":\"getModatVosolGoroh\"}</item>
+        <item>{\"name\":\"مدت وصول مرکز\" , \"function\":\"getModatVosolMarkaz\"}</item>
+        <item>{\"name\":\"انبارک\" , \"function\":\"getAnbarakInfo\"}</item>
+        <item>{\"name\":\"اعتبارات\" , \"functdion\":\"getEtebar\"}</item>
+        <item>{\"name\":\"اعتبار فروشنده\" , \"functdion\":\"getEtebarForoshandeh\"}</item>
+        <item>{\"name\":\"کالا\" , \"function\":\"getKala\"}</item>
+        <item>{\"name\":\"اولویت کالا\" , \"function\":\"getKalaolaviat\"}</item>
+        <item>{\"name\":\"موجودی انبارک\" , \"function\":\"getAnbarakMojodi\"}</item>
+        <item>{\"name\":\"کالا موجودی\" , \"function\":\"getKalaMojodi\"}</item>
+        <item>{\"name\":\"گروه کالا\" , \"function\":\"getKalaGoroh\"}</item>
+        <item>{\"name\":\"ضریب فروش کالا\" , \"function\":\"getZaribForoshKala\"}</item>
+        <item>{\"name\":\"جوایز\" , \"function\":\"getJayezeh\"}</item>
+        <item>{\"name\":\"اقلام جوایز\" , \"function\":\"getJayezehSatr\"}</item>
+        <item>{\"name\":\"اقلام جوایز - جایزه انتخابی\" , \"function\":\"getJayezehSatr\"}</item>
+        <item>{\"name\":\"نوع حساب\" , \"function\":\"getNoeHesab\"}</item>
+        <item>{\"name\":\"نوع مالکیت مشتری\" , \"function\":\"getNoeMalekiatMoshtary\"}</item>
+        <item>{\"name\":\"تعداد فاکتور مشتری\" , \"function\":\"getTedadFaktorMoshtary\"}</item>
+        <item>{\"name\":\"تخفیفات حجمی\" , \"function\":\"getTakhfifHajmi\"}</item>
+        <item>{\"name\":\"اقلام تخفیفات حجمی\" , \"function\":\"getTakhfifHajmiSatr\"}</item>
+        <item>{\"name\":\"تخفیف نقدی\" , \"function\":\"getTakhfifNaghdi\"}</item>
+        <item>{\"name\":\"تخفیف صنفی\" , \"function\":\"getTakhfifSenfi\"}</item>
+        <item>{\"name\":\"اقلام تخفیف صنفی\" , \"function\":\"getTakhfifSenfiSatr\"}</item>
+        <item>{\"name\":\"تقویم تعطیلی\" , \"function\":\"getTaghvimTatil\"}</item>
+        <item>{\"name\":\"نوع وصول\" , \"function\":\"getCodeNoeVosol\"}</item>
+        <item>{\"name\":\"کاردکس\" , \"function\":\"deleteKardex\"}</item>
+        <item>{\"name\":\"کاردکس - سطر\" , \"function\":\"deleteKardexSatr\"}</item>
+        <item>{\"name\":\"عکس مرجوعی کامل\" , \"function\":\"deleteMarjoeeKamelImage\"}</item>
+        <item>{\"name\":\"گزارش موجودی انبار\" , \"function\":\"getRptMojodyAnbar\"}</item>
+        <item>{\"name\":\"گزارش وضعیت فاکتور\" , \"function\":\"getRptFaktorVazeiat\"}</item>
+        <item>{\"name\":\"گزارش کالا\" , \"function\":\"getRptKalaInfo\"}</item>
+        <item>{\"name\":\"گزارش فاکتورهای توزیع نشده\" , \"functdion\":\"getRptFaktorTozieNashode\"}</item>
+        <item>{\"name\":\"گزارش ویزیت فروشنده\" , \"functdion\":\"getRptForoshandehVisit\"}</item>
+        <item>{\"name\":\"ورژن\" , \"functdion\":\"getRptVersionInfo\"}</item>
+        <item>{\"name\":\"تبلیغات\" , \"functdion\":\"getTizerTablighat\"}</item>
+        <item>{\"name\":\"مشتری چیدمان\" , \"functdion\":\"getMoshtaryChidman\"}</item>
+        <item>{\"name\":\"تنظیمات سیستم\" , \"functdion\":\"getSystemConfigTablet\"}</item>
+        <item>{\"name\":\"لیست مشتریان فروشنده\" , \"functdion\":\"getAllMoshtaryForoshandeh\"}</item>
+        <item>{\"name\":\"گزارش فروش\" , \"functdion\":\"getRptForosh\"}</item>
+        <item>{\"name\":\"گزارش مانده دار\" , \"functdion\":\"getRptMandehDar\"}</item>
+        <item>{\"name\":\"گزارش اسناد\" , \"functdion\":\"getRptAsnad\"}</item>
+        <item>{\"name\":\"گزارش هدف فروش\" , \"functdion\":\"getRptHadaf\"}</item>
+        <item>{\"name\":\"گزارش لیست وصول\" , \"functdion\":\"getRptListVosol\"}</item>
+        <item>{\"name\":\"گزارش خرید کالا\" , \"functdion\":\"getRptKharidKala\"}</item>
+        <item>{\"name\":\"گزارش مسیر فروشنده\" , \"functdion\":\"getRptMasir\"}</item>
+        <item>{\"name\":\"اعلام مرجوعی\" , \"function\":\"getElamMarjoee\"}</item>
+        <item>{\"name\":\"اعلام مرجوعی سطر\" , \"function\":\"getElamMarjoeeSatr\"}</item>
+        <item>{\"name\":\"اقلام اعلام مرجوعی\" , \"function\":\"deleteElamMarjoeeTedad\"}</item>
+        <item>{\"name\":\"اعتبار پیشفرض\" , \"functdion\":\"getMoshtaryEtebarPishfarz\"}</item>
+        <item>{\"name\":\"صنف و فعالیت\" , \"functdion\":\"getNoeFaaliatForMoarefiMoshtaryJadid\"}</item>
+        <item>{\"name\":\"کالا اساسی\" , \"functdion\":\"getMoshtaryJadidDarkhast\"}</item>
+        <item>{\"name\":\"تفکیک جز\" , \"functdion\":\"getTafkikJozePakhsh\"}</item>
+        <item>{\"name\":\"گروه کالا نوع صنف\" , \"functdion\":\"getGorohKalaNoeSenf\"}</item>
+        <item>{\"name\":\"مشتری برند\" , \"functdion\":\"getMoshtaryBrand\"}</item>
+        <item>{\"name\":\"شهر\" , \"functdion\":\"getAllMarkazShahrMarkazi\"}</item>
+        <item>{\"name\":\"حداقل ریال خرید\" , \"functdion\":\"getAllNoeMoshtaryRialKharid\"}</item>
+        <item>{\"name\":\"کدپستی\" , \"functdion\":\"getAllcodePosti\"}</item>
+        <item>{\"name\":\"پشتیبانی آنلاین\" , \"functdion\":\"getSupportCrisp\"}</item>
+        <item>{\"name\":\"نوع وصول\" , \"functdion\":\"getNoeVosolMoshtary\"}</item>
+        <item>{\"name\":\"دریافت تنظیمات\" , \"functdion\":\"getParameter\"}</item>
+        <item>{\"name\":\"برخورد فروشنده با مشتری\" , \"function\":\"getBarkhordForoshandehBaMoshtary\"}</item>
+    </string-array>
+
+
+    <string-array name="getProgramAmargarItems">
+        <item>{\"name\":\"برند\" , \"function\":\"getBrandAmargar\"}</item>
+        <item>{\"name\":\"گروه\" , \"function\":\"getAmargarGoroh\"}</item>
+        <item>{\"name\":\"کالا\" , \"function\":\"getKalaAmargar\"}</item>
+        <item>{\"name\":\"کالا گروه\" , \"function\":\"getKalaGorohAmargar\"}</item>
+        <item>{\"name\":\"نوع تبلیغات\" , \"function\":\"getNoeTablighat\"}</item>
+        <item>{\"name\":\"مرکز فروش\" , \"function\":\"getAmargarMarkazForosh\"}</item>
+        <item>{\"name\":\"محل\" , \"function\":\"getMahalAmargar\"}</item>
+        <item>{\"name\":\"رتبه\" , \"function\":\"getRotbehAmargar\"}</item>
+        <item>{\"name\":\"پرسشنامه\" , \"function\":\"getPorseshnameTozihatAmargar\"}</item>
+        <item>{\"name\":\"مرکز فروش\" , \"function\":\"getMarkazForoshAmargar\"}</item>
+        <item>{\"name\":\"فروشنده\" , \"function\":\"getAllForoshandehAmargar\"}</item>
+        <item>{\"name\":\"مسیر\" , \"function\":\"getMasirFaalForoshandehAmargar\"}</item>
+        <item>{\"name\":\"نوع فعالیت\" , \"function\":\"getNoeFaaliatSenfAmargar\"}</item>
+        <item>{\"name\":\"گروه\" , \"function\":\"getGorohAmargar\"}</item>
+        <item>{\"name\":\"علت عدم معرفی مشتری\" , \"function\":\"getElatAdamMoarefiMoshtaryAmargar\"}</item>
+    </string-array>
+
+    <string-array name="updateKalaModatVosol">
+        <item>{\"name\":\"مدت وصول\" , \"function\":\"getModatVosol\"}</item>
+        <item>{\"name\":\"گروه مدت وصول\" , \"function\":\"getModatVosolGoroh\"}</item>
+        <item>{\"name\":\"مدت وصول مرکز\" , \"function\":\"getModatVosolMarkaz\"}</item>
+        <item>{\"name\":\"اطلاعات انبارک\" , \"function\":\"getAnbarakInfo\"}</item>
+        <item>{\"name\":\"اطلاعات کالا\" , \"function\":\"getKala\"}</item>
+        <item>{\"name\":\"اولویت کالا\" , \"function\":\"getKalaolaviat\"}</item>
+        <item>{\"name\":\"موجودی انبارک\" , \"function\":\"getAnbarakMojodi\"}</item>
+        <item>{\"name\":\"کالا موجودی\" , \"function\":\"getKalaMojodi\"}</item>
+        <item>{\"name\":\"گروه کالا\" , \"function\":\"getKalaGoroh\"}</item>
+        <item>{\"name\":\"ضریب فروش کالا\" , \"function\":\"getZaribForoshKala\"}</item>
+        <item>{\"name\":\"اطلاعات جوایز\" , \"function\":\"getJayezeh\"}</item>
+        <item>{\"name\":\"اقلام جوایز\" , \"function\":\"getJayezehSatr\"}</item>
+        <item>{\"name\":\"اقلام جوایز - جایزه انتخابی\" , \"function\":\"getJayezehSatr\"}</item>
+        <item>{\"name\":\"تخفیفات حجمی\" , \"function\":\"getTakhfifHajmi\"}</item>
+        <item>{\"name\":\"اقلام تخفیفات حجمی\" , \"function\":\"getTakhfifHajmiSatr\"}</item>
+        <item>{\"name\":\"تخفیف نقدی\" , \"function\":\"getTakhfifNaghdi\"}</item>
+        <item>{\"name\":\"تخفیف صنفی\" , \"function\":\"getTakhfifSenfi\"}</item>
+        <item>{\"name\":\"اقلام تخفیف صنفی\" , \"function\":\"getTakhfifSenfiSatr\"}</item>
+        <item>{\"name\":\"گزارش کالا\" , \"function\":\"getRptKalaInfo\"}</item>
+    </string-array>
+
+    <string-array name="updateJayezehTakhfif">
+        <item>{\"name\":\"اطلاعات جوایز\" , \"function\":\"getJayezeh\"}</item>
+        <item>{\"name\":\"اقلام جوایز\" , \"function\":\"getJayezehSatr\"}</item>
+        <item>{\"name\":\"اقلام جوایز - جایزه انتخابی\" , \"function\":\"getJayezehSatr\"}</item>
+        <item>{\"name\":\"تخفیفات حجمی\" , \"function\":\"getTakhfifHajmi\"}</item>
+        <item>{\"name\":\"اقلام تخفیفات حجمی\" , \"function\":\"getTakhfifHajmiSatr\"}</item>
+        <item>{\"name\":\"تخفیف نقدی\" , \"function\":\"getTakhfifNaghdi\"}</item>
+        <item>{\"name\":\"تخفیف صنفی\" , \"function\":\"getTakhfifSenfi\"}</item>
+        <item>{\"name\":\"اقلام تخفیف صنفی\" , \"function\":\"getTakhfifSenfiSatr\"}</item>
+    </string-array>
+
+
+    <!--this array use for update customer info in get program-->
+    <string-array name="updateCustomers">
+        <item>{\"name\":\"اطلاعات مسیر\" , \"function\":\"getMasir\"}</item>
+        <item>{\"name\":\"اطلاعات مشتری\" , \"function\":\"getMoshtary\"}</item>
+        <item>{\"name\":\"آدرس پرنت\" , \"function\":\"getMoshtaryParent\"}</item>
+        <item>{\"name\":\"اطلاعات مشتری آمارگر\" , \"function\":\"deleteMoshtaryAmargarImage\"}</item>
+        <item>{\"name\":\"آدرس مشتری\" , \"function\":\"getMoshtaryAddress\"}</item>
+        <item>{\"name\":\"افراد مشتری\" , \"function\":\"getMoshtaryAfrad\"}</item>
+        <item>{\"name\":\"اعتبار مشتری\" , \"function\":\"getMoshtaryEtebarSazmanForosh\"}</item>
+        <item>{\"name\":\"گروه مشتری\" , \"function\":\"getMoshtaryGoroh\"}</item>
+        <item>{\"name\":\"گزارش برگشتی\" , \"function\":\"getBargashty\"}</item>
+        <item>{\"name\":\"مشتری چیدمان\" , \"functdion\":\"getMoshtaryChidman\"}</item>
+        <item>{\"name\":\"گزارش مانده دار\" , \"functdion\":\"getRptMandehDar\"}</item>
+    </string-array>
+
+
+    <string-array name="updateParameters">
+        <item>{\"name\":\"دریافت تنظیمات\" , \"functdion\":\"getParameter\"}</item>
+    </string-array>
+
+
+    <string-array name="updateEtebarForoshandeh">
+        <item>{\"name\":\"دریافت اعتبار فروشنده\" , \"functdion\":\"getEtebar\"}</item>
+    </string-array>
+
+
+    <!--this array use in list of customers and user can add customer to today route-->
+    <string-array name="getCustomerInfo">
+        <item>{\"name\":\"اطلاعات مسیر\" , \"function\":\"getMasir\"}</item>
+        <item>{\"name\":\"اعتبار مشتری\" , \"function\":\"getMoshtaryEtebarSazmanForosh\"}</item>
+        <item>{\"name\":\"گروه مشتری\" , \"function\":\"getMoshtaryGoroh\"}</item>
+        <item>{\"name\":\"گزارش برگشتی\" , \"function\":\"getBargashty\"}</item>
+        <item>{\"name\":\"آدرس پرنت\" , \"function\":\"getMoshtaryParent\"}</item>
+        <item>{\"name\":\"آدرس مشتری\" , \"function\":\"getMoshtaryAddress\"}</item>
+        <item>{\"name\":\"مشتری افراد\" , \"function\":\"getMoshtaryAfrad\"}</item>
+        <item>{\"name\":\"مدت وصول\" , \"function\":\"getModatVosol\"}</item>
+        <item>{\"name\":\"گروه مدت وصول\" , \"function\":\"getModatVosolGoroh\"}</item>
+        <item>{\"name\":\"مدت وصول مرکز\" , \"function\":\"getModatVosolMarkaz\"}</item>
+        <item>{\"name\":\"اطلاعات مسیر\" , \"function\":\"getMasirVaznHajmMashin\"}</item>
+        <item>{\"name\":\"مشتری مراجعه شده\" , \"function\":\"getMoshtaryMorajeShodehRooz\"}</item>
+    </string-array>
+
+
+    <string-array name="addCustomerNavigationTabBarColors">
+        <item>#df5a55</item>
+        <item>#f9bb72</item>
+        <item>#76afcf</item>
+        <item>#dd6495</item>
+        <item>#72d3b4</item>
+    </string-array>
+
+
+    <string-array name="mainMenuNavigationTabBarColors">
+        <item>#E65100</item>
+        <item>#b71c1c</item>
+        <item>#4A148C</item>
+        <item>#1B5E20</item>
+        <item>#1A237E</item>
+    </string-array>
+
+
+    <string-array name="anbarItems">
+        <item>دارد</item>
+        <item>ندارد</item>
+    </string-array>
+
+
+    <string-array name="printerPaperSizeItems">
+        <item>{\"title\":\"2 inch (5 cm)\" , \"value\":\"384\"}</item>
+        <item>{\"title\":\"3 inch (7.5 cm)\" , \"value\":\"576\"}</item>
+        <item>{\"title\":\"4 inch (10 cm)\" , \"value\":\"832\"}</item>
+    </string-array>
+
+
+    <string-array name="printerTypeItems">
+        <item>{\"title\":\"Bixolon\" , \"value\":\"0\"}</item>
+        <item>{\"title\":\"Woosim\" , \"value\":\"1\"}</item>
+        <item>{\"title\":\"Urovo\" , \"value\":\"2\"}</item>
+    </string-array>
+
+    <string-array name="printTypeItems">
+        <item>{\"title\":\"نوع یک\" , \"value\":\"1\"}</item>
+        <item>{\"title\":\"نوع دو\" , \"value\":\"2\"}</item>
+    </string-array>
+
+
+<!--    <string-array name="noeShakhsiatItems">
+        <item>حقیقی</item>
+        <item>حقوقی</item>
+    </string-array>-->
+
+<!--    <string-array name="noeDarajehItems">
+        <item>{\"name\":\"درجه E\" , \"value\":\"5\"}</item>
+    </string-array>-->
+
+<!--    <string-array name="noeHamlItems">
+        <item>حمل از مرکز پخش</item>
+        <item>حمل مستقیم</item>
+        &lt;!&ndash;<item>هر دو</item>&ndash;&gt;
+    </string-array>-->
+
+
+    <string-array name="noeVosolItems">
+        <item>{\"name\":\"وجه نقد\" , \"value\":\"3\"}</item>
+        <item>{\"name\":\"چک\" , \"value\":\"2\"}</item>
+        <item>{\"name\":\"رسید\" , \"value\":\"1\"}</item>
+<!--        <item>وجه نقد**</item>
+        <item>وجه نقد*</item>
+        <item>رسید نقد</item>-->
+    </string-array>
+
+
+    <string-array name="noeAddressItems">
+        <item>درخواست</item>
+        <item>درخواست و تحویل</item>
+        <item>تحویل</item>
+    </string-array>
+
+
+    <string-array name="shartBardashtItems">
+        <item>یک امضا</item>
+        <item>بیش از یک امضا</item>
+    </string-array>
+
+
+    <string-array name="sellPolygonColors">
+        <item>{\"fill\":\"#302196F3\",\"stroke\":\"#2196F3\"}</item>
+        <item>{\"fill\":\"#30002ac2\",\"stroke\":\"#03A9F4\"}</item>
+        <item>{\"fill\":\"#3000BCD4\",\"stroke\":\"#00BCD4\"}</item>
+        <item>{\"fill\":\"#30009688\",\"stroke\":\"#009688\"}</item>
+        <item>{\"fill\":\"#304CAF50\",\"stroke\":\"#4CAF50\"}</item>
+        <item>{\"fill\":\"#308BC34A\",\"stroke\":\"#8BC34A\"}</item>
+        <item>{\"fill\":\"#30CDDC39\",\"stroke\":\"#CDDC39\"}</item>
+        <item>{\"fill\":\"#30FFEB3B\",\"stroke\":\"#FFEB3B\"}</item>
+        <item>{\"fill\":\"#30FFC107\",\"stroke\":\"#FFC107\"}</item>
+        <item>{\"fill\":\"#30FF9800\",\"stroke\":\"#FF9800\"}</item>
+        <item>{\"fill\":\"#30FF5722\",\"stroke\":\"#FF5722\"}</item>
+        <item>{\"fill\":\"#30f44336\",\"stroke\":\"#f44336\"}</item>
+        <item>{\"fill\":\"#30E91E63\",\"stroke\":\"#E91E63\"}</item>
+        <item>{\"fill\":\"#309C27B0\",\"stroke\":\"#9C27B0\"}</item>
+    </string-array>
+
+    <string-array name="mapServiceTypeItems">
+        <item>{\"title\":\"Map.ir\" , \"value\":\"2\"}</item>
+        <item>{\"title\":\"Valhala\" , \"value\":\"1\"}</item>
+    </string-array>
+
+
+    <string-array name="GoodsNumberItems">
+        <item>{\"title\":\"تکی\" , \"value\":\"1\",\"image\":\"ic_1section\"}</item>
+        <item>{\"title\":\"دوتایی\" , \"value\":\"2\",\"image\":\"ic_2section\"}</item>
+        <item>{\"title\":\"چهار تایی\" , \"value\":\"3\",\"image\":\"ic_4section\"}</item>
+
+    </string-array>
+</resources>
