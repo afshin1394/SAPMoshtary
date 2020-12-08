@@ -153,7 +153,7 @@ public class PubFunc
 
     public class LocationProvider extends Service implements LocationListener
     {
-        private Context context;
+        private final Context context;
         boolean isGPSEnabled = false;
         boolean isNetworkEnabled = false;
         boolean canGetLocation = false;
@@ -310,14 +310,7 @@ public class PubFunc
             boolean hasAccess = false;
             if (Build.VERSION.SDK_INT >= 23)
             {
-                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-                {
-                    hasAccess = true;
-                }
-                else
-                {
-                    hasAccess = false;
-                }
+                hasAccess = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
             }
             else
             {
@@ -392,6 +385,7 @@ public class PubFunc
         }
 
 
+        @SuppressLint("MissingPermission")
         private void getLocation(final Context context)
         {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
@@ -656,14 +650,7 @@ public class PubFunc
                             Log.d("deviceTime" , deviceDate.toString());
                             Log.d("serverTime" , serverDate.toString());
                             Log.d("diffTime" , String.valueOf(diff));
-                            if (diff > Constants.ALLOWABLE_SERVER_LOCAL_TIME_DIFF())
-                            {
-                                callback.onSuccess(false, sdf.format(serverDate), sdf.format(deviceDate), diff);
-                            }
-                            else
-                            {
-                                callback.onSuccess(true, sdf.format(serverDate), sdf.format(deviceDate), diff);
-                            }
+                            callback.onSuccess(diff <= Constants.ALLOWABLE_SERVER_LOCAL_TIME_DIFF(), sdf.format(serverDate), sdf.format(deviceDate), diff);
                         }
                         catch (Exception exception)
                         {
@@ -984,6 +971,29 @@ public class PubFunc
             calendar.setTime(date);
             calendar.add(Calendar.DAY_OF_MONTH , days);
             return calendar.getTime();
+        }
+
+        public Date diffDateMinModatHozor(int minModatHozor){
+
+            int milliSecondsMinModatHozor = minModatHozor * 60000;
+            long diff = getCurrentDate().getTime() - milliSecondsMinModatHozor;
+            return new Date(diff);
+        }
+
+        public Date getCurrentDate()
+        {
+            Date currentDate = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
+            String date = sdf.format(new Date());
+            try
+            {
+                currentDate = sdf.parse(date);
+            }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
+            return currentDate;
         }
 
     }
@@ -1643,16 +1653,9 @@ get mac address in android 10
             int modBy11 = sum % 11;
             if (modBy11 < 2)
             {
-                if (modBy11 == Integer.parseInt(controlDigit))
-                {
-                    return true;
-                }
+                return modBy11 == Integer.parseInt(controlDigit);
             }
-            else if (11 - modBy11 == Integer.parseInt(controlDigit))
-            {
-                return true;
-            }
-            return false;
+            else return 11 - modBy11 == Integer.parseInt(controlDigit);
         }
 
         public boolean checkNationalEconomicalCode(String nationalCode)
@@ -1692,12 +1695,7 @@ get mac address in android 10
                 modBy11 = 0;
             }
 
-            if (modBy11 == Integer.parseInt(controlDigit))
-            {
-                return true;
-            }
-
-            return false;
+            return modBy11 == Integer.parseInt(controlDigit);
         }
 
     }
@@ -1707,7 +1705,7 @@ get mac address in android 10
     {
         public String convertFaNumberToEN(String strNumber)
         {
-            String[] persianNumber = new String[]{"۰","۱","۲","۳","۴","۵","۶","۷","۸","۹","ي","ئ","ة","ك","ؤ"};
+            String[] persianNumber = new String[]{"۰","۱","۲","۳","۴","۵","۶","۷","۸","۹","ي","ئ","یٰ","ة","ك","ؤ","ء","أ","ٱ","إ","اً","هٔ"};
             strNumber = strNumber.replace(persianNumber[0] , "0");
             strNumber = strNumber.replace(persianNumber[1] , "1");
             strNumber = strNumber.replace(persianNumber[2] , "2");
@@ -1720,9 +1718,16 @@ get mac address in android 10
             strNumber = strNumber.replace(persianNumber[9] , "9");
             strNumber = strNumber.replace(persianNumber[10] , "ی");
             strNumber = strNumber.replace(persianNumber[11] , "ی");
-            strNumber = strNumber.replace(persianNumber[12] , "ه");
-            strNumber = strNumber.replace(persianNumber[13] , "ک");
-            strNumber = strNumber.replace(persianNumber[14] , "و");
+            strNumber = strNumber.replace(persianNumber[12] , "ی");
+            strNumber = strNumber.replace(persianNumber[13] , "ه");
+            strNumber = strNumber.replace(persianNumber[14] , "ک");
+            strNumber = strNumber.replace(persianNumber[15] , "و");
+            strNumber = strNumber.replace(persianNumber[16] , "ی");
+            strNumber = strNumber.replace(persianNumber[17] , "ا");
+            strNumber = strNumber.replace(persianNumber[18] , "ا");
+            strNumber = strNumber.replace(persianNumber[19] , "ا");
+            strNumber = strNumber.replace(persianNumber[20] , "ا");
+            strNumber = strNumber.replace(persianNumber[21] , "ه");
             return strNumber;
         }
     }
@@ -1989,7 +1994,7 @@ get mac address in android 10
                 if (i==0) {
                     strInteger += String.valueOf(IntegerArray.get(i));
                 }else {
-                    strInteger+="," + String.valueOf(IntegerArray.get(i));
+                    strInteger+="," + IntegerArray.get(i);
 
 
                 }
@@ -2444,7 +2449,7 @@ get mac address in android 10
                     set1 = (BarDataSet) barChart.getData().getDataSetByIndex(0);
                     set2 = (BarDataSet) barChart.getData().getDataSetByIndex(1);
                     for (int i = 0; i < barChart.getData().getDataSetCount(); i++)
-                        Log.i("PubFunc", "drawBarChartNumerical: " + (BarDataSet) barChart.getData().getDataSetByIndex(i));
+                        Log.i("PubFunc", "drawBarChartNumerical: " + barChart.getData().getDataSetByIndex(i));
 
                     set1.setValues(values1);
                     set2.setValues(values2);
