@@ -1638,8 +1638,8 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             //------------------------- Masir_VaznHajmMashin --------------------------------
             MasirVaznHajmMashinDAO masirVaznHajmMashinDAO = new MasirVaznHajmMashinDAO(mPresenter.getAppContext());
             MasirVaznHajmMashinModel masirVaznHajmMashinModel = masirVaznHajmMashinDAO.getByccMoshtary(ccMoshtary);
-            shared.putFloat(shared.getVaznMashin() , masirVaznHajmMashinModel.getVaznMashin() == 0 ? 4000 : masirVaznHajmMashinModel.getVaznMashin());
-            shared.putFloat(shared.getHajmMashin() , masirVaznHajmMashinModel.getHajmMashin() == 0 ? 19.73f : Float.parseFloat(String.valueOf(masirVaznHajmMashinModel.getHajmMashin())));
+            shared.putFloat(shared.getVaznMashin() , masirVaznHajmMashinModel.getVaznMashin() == 0 ? 99999 : masirVaznHajmMashinModel.getVaznMashin());
+            shared.putFloat(shared.getHajmMashin() , masirVaznHajmMashinModel.getHajmMashin() == 0 ? 999 : Float.parseFloat(String.valueOf(masirVaznHajmMashinModel.getHajmMashin())));
             //----------------------------MoshtaryPolygon------------------------------------
             /*MoshtaryPolygonDAO moshtaryPolygonDAO = new MoshtaryPolygonDAO(mPresenter.getAppContext());
             CanVisitKharejAzMahal_Polygon = moshtaryPolygonDAO.GetByccMoshtary(SelectFaktor.getccMoshtary());*/
