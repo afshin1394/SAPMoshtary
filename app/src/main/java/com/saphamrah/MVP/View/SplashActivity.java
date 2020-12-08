@@ -62,6 +62,7 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
     private String downloadUrl = "";
     private int invalidPackageUninstalledCounter;
     private int countInvalidPackage;
+    private boolean isNotOpenMain = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -508,9 +509,14 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
         }
         else
         {
-            Intent intent = new Intent(SplashActivity.this , MainActivity.class);
-            startActivity(intent);
-            SplashActivity.this.finish();
+            if (isNotOpenMain){
+                isNotOpenMain = false;
+                Intent intent = new Intent(SplashActivity.this , MainActivity.class);
+                startActivity(intent);
+                Log.i("TestSplash" , "Start MainActvity");
+                SplashActivity.this.finish();
+            }
+
         }
     }
 
