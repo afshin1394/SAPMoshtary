@@ -820,7 +820,7 @@
     <string name="errorDisableThisItem">این گزینه غیرفعال می باشد.</string>
     <string name="errorCantSelectThisItem">امکان انتخاب این گزینه وجود ندارد.</string>
     <string name="noInternetConnection">عدم دسترسی به اینترنت</string>
-    <string name="searchingBestServer">در حال جستجوی بهترین سرور...</string>
+    <string name="searchingBestServer">در حال جستجوی بهترین سرور…</string>
     <string name="cantFindServer">خطا در یافتن سرور، لطفا ابتدا از اتصال خود به اینترنت مطمئن شده و دوباره تلاش نمایید.</string>
     <string name="Mbps">مگابیت</string>
     <string name="ms">میلی ثانیه</string>
@@ -842,7 +842,7 @@
     <string name="barcodeScanner">بارکدخوان</string>
     <string name="doubleClickForClose">برای خروج دکمه بازگشت را دوباره بزنید</string>
     <string name="exitWarning">برای خروج از برنامه مطمئن هستید؟</string>
-    <string name="pleaseWait">لطفا صبر کنید...</string>
+    <string name="pleaseWait">لطفا صبر کنید…</string>
     <string name="pick">انتخاب کنید</string>
     <string name="goodMorning">صبح بخیر</string>
     <string name="goodDay">روز بخیر</string>
