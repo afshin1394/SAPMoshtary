@@ -2,7 +2,9 @@ package com.saphamrah.MVP.View;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +21,7 @@ import com.saphamrah.BaseMVP.GoodsInfoMVP;
 import com.saphamrah.CustomView.CustomProgressBar;
 import com.saphamrah.CustomView.CustomSpinner;
 import com.saphamrah.MVP.Presenter.GoodsInfoPresenter;
+import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.Model.RptKalaInfoModel;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
@@ -44,10 +47,11 @@ public class GoodsInfoActivity extends AppCompatActivity implements GoodsInfoMVP
     private CustomAlertDialog customAlertDialog;
     private CustomProgressBar customProgressBar;
     private CustomSpinner customSpinner;
-    private ArrayList<RptKalaInfoModel> kalaInfoByCcBrand ;
-    private ArrayList<RptKalaInfoModel> kalaInfoByCcGoroh ;
+    private ArrayList<RptKalaInfoModel> kalaInfoByCcBrand;
+    private ArrayList<RptKalaInfoModel> kalaInfoByCcGoroh;
     private String ccBrands = "";
     private String ccGoroh = "";
+    private RptKalaInfoAdapter adapter;
 
 
     // find view
@@ -57,6 +61,9 @@ public class GoodsInfoActivity extends AppCompatActivity implements GoodsInfoMVP
     RecyclerView recyclerView;
     @BindView(R.id.fabMenu)
     FloatingActionMenu fabMenu;
+
+    @BindView(R.id.fabUpdateGallery)
+    FloatingActionButton fabUpdateGallery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,9 +111,14 @@ public class GoodsInfoActivity extends AppCompatActivity implements GoodsInfoMVP
 
     @OnClick(R.id.fabUpdateGallery)
     public void fabUpdateGallery() {
+        fabUpdateGallery.setClickable(false);
         fabMenu.close(true);
-        showProgressBar();
-        mPresenter.updateGallery();
+        if (adapter != null) {
+            adapter.getKalaPhoto().clear();
+            mPresenter.updateGallery();
+        } else {
+            showToast(R.string.updateKalaInfoWarning, Constants.INFO_MESSAGE());
+        }
     }
 
     @OnClick(R.id.fabRefresh)
@@ -143,6 +155,24 @@ public class GoodsInfoActivity extends AppCompatActivity implements GoodsInfoMVP
     }
 
     @Override
+    public void onStartProgressBar() {
+        showProgressBar();
+    }
+
+    @Override
+    public void onUpdateGallery(ArrayList<KalaPhotoModel> kalaPhotoModels) {
+        fabUpdateGallery.setClickable(true);
+        Log.i("onUpdateGallery", "onUpdateGallery: "+kalaPhotoModels.size());
+        adapter.setKalaPhoto(kalaPhotoModels);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onGetGallery(ArrayList<KalaPhotoModel> kalaPhotoModels) {
+        adapter.setKalaPhoto(kalaPhotoModels);
+    }
+
+    @Override
     public void closeProgressBar() {
         customProgressBar.closeProgress();
     }
@@ -174,11 +204,12 @@ public class GoodsInfoActivity extends AppCompatActivity implements GoodsInfoMVP
    */
     @Override
     public void onGetListOfGoods(ArrayList<RptKalaInfoModel> rptKalaInfoModels) {
-        RptKalaInfoAdapter adapter = new RptKalaInfoAdapter(GoodsInfoActivity.this, rptKalaInfoModels);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(GoodsInfoActivity.this, RecyclerView.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+            adapter = new RptKalaInfoAdapter(GoodsInfoActivity.this, rptKalaInfoModels);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(GoodsInfoActivity.this, RecyclerView.HORIZONTAL, false);
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(adapter);
+            mPresenter.getGallery();
     }
 
     /*

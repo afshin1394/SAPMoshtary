@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.BaseMVP.RptMojodiAnbrakMVP;
 import com.saphamrah.MVP.Model.RptMojodiAnbarakModel;
+import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.Model.RptMojodiAnbarModel;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
@@ -114,6 +115,10 @@ public class RptMojodiAnbarakPresenter implements RptMojodiAnbrakMVP.PresenterOp
             mModel.setLogToDB(logType, message, logClass, logActivity, functionParent, functionChild);
         }
     }
+    @Override
+    public void getGallery() {
+        mModel.getGallery();
+    }
 
     @Override
     public void onDestroy(boolean isChangingConfig)
@@ -128,6 +133,11 @@ public class RptMojodiAnbarakPresenter implements RptMojodiAnbrakMVP.PresenterOp
     public Context getAppContext()
     {
         return mView.get().getAppContext();
+    }
+
+    @Override
+    public void onGetGallery(ArrayList<KalaPhotoModel> kalaPhotoModels) {
+          mView.get().onGetGallery(kalaPhotoModels);
     }
 
     @Override

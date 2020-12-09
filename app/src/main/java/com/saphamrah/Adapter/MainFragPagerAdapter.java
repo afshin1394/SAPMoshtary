@@ -48,16 +48,6 @@ public class MainFragPagerAdapter extends FragmentStatePagerAdapter implements V
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         int virtualPosition = position % frgList.size();
-        Log.i("instantiateItem", "instantiateItem: "+container);
-        //identifies onLongClick on the viewPagerContainer
-        container.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Log.i("onLongClick", "onLongClick: ");
-                mainPagerAdapterEvents.onFragmentPagerLongClick();
-                return true;
-            }
-        });
         return super.instantiateItem(container, virtualPosition);
 
     }
@@ -72,8 +62,5 @@ public class MainFragPagerAdapter extends FragmentStatePagerAdapter implements V
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
      return true;
-    }
-    public void setPagingEnabled(boolean isEnabled){
-        this.isPagingEnabled=isEnabled;
     }
 }

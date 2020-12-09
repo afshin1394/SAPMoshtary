@@ -23,6 +23,7 @@ import com.saphamrah.Adapter.RptMojodiAnbarakAdapter;
 import com.saphamrah.Adapter.RptMojodiAnbarakTableAdapter;
 import com.saphamrah.BaseMVP.RptMojodiAnbrakMVP;
 import com.saphamrah.MVP.Presenter.RptMojodiAnbarakPresenter;
+import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.Model.RptMojodiAnbarModel;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
@@ -172,6 +173,7 @@ public class RptMojodiAnbarakActivity extends AppCompatActivity implements RptMo
         startMVPOps();
 
         mPresenter.getMojodiAnbar();
+        mPresenter.getGallery();
 
 
         fabSort.setOnClickListener(new View.OnClickListener() {
@@ -402,6 +404,11 @@ public class RptMojodiAnbarakActivity extends AppCompatActivity implements RptMo
         sortedType = SORT_BY_COUNT;
         fabSort.setLabelText(getResources().getString(R.string.sortByCodeKala));
         fabSort.setImageResource(R.drawable.ic_sort_by_numeric);
+    }
+
+    @Override
+    public void onGetGallery(ArrayList<KalaPhotoModel> kalaPhotoModels) {
+        adapter.setKalaImages(kalaPhotoModels);
     }
 
     @Override

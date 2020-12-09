@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Environment;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.RptMojodiAnbarModel;
 import com.saphamrah.PubFunc.PubFunc;
@@ -33,6 +37,7 @@ public class RptMojodiAnbarakAdapter extends RecyclerView.Adapter<RptMojodiAnbar
     private Context context;
     private ArrayList<RptMojodiAnbarModel> mojodiAnbarakModels;
     private int lastPosition = -1;
+    private SparseArray allKalaPhoto=new SparseArray();
 
     public RptMojodiAnbarakAdapter(Context context, ArrayList<RptMojodiAnbarModel> mojodiAnbarakModels)
     {
@@ -97,18 +102,11 @@ public class RptMojodiAnbarakAdapter extends RecyclerView.Adapter<RptMojodiAnbar
 		
         try
         {
-            File file = new File(Environment.getExternalStorageDirectory() + "/SapHamrah/Album/" , mojodiAnbarakModels.get(position).getCodeKala() + ".jpg");
-            if (file.exists())
-            {
-                Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/SapHamrah/Album/" + mojodiAnbarakModels.get(position).getCodeKala() + ".jpg");
-                holder.imgKalaImage.setImageBitmap(bitmap);
-                holder.imgKalaImage.setImageBitmap(bitmap);
-            }
-            else
-            {
-                holder.imgKalaImage.setImageResource(R.drawable.nopic_whit);
-                holder.imgKalaImage.setImageResource(R.drawable.nopic_whit);
-            }
+            //Todo
+            Glide.with(context)
+                    .load(allKalaPhoto.get(mojodiAnbarakModels.get(position).getCcKalaCode()))
+                    .placeholder(R.drawable.nopic_whit)
+                    .into(holder.imgKalaImage);
         }
         catch (Exception exception)
         {
@@ -177,5 +175,15 @@ public class RptMojodiAnbarakAdapter extends RecyclerView.Adapter<RptMojodiAnbar
     }
 
 
+
+
+    public void setKalaImages(ArrayList<KalaPhotoModel> kalaPhotoModels) {
+        for (KalaPhotoModel kalaPhotoModel : kalaPhotoModels)
+        {
+            allKalaPhoto.put(kalaPhotoModel.getCcKalaCodeDb(), kalaPhotoModel.getImageDb());
+        }
+
+
+    }
 
 }

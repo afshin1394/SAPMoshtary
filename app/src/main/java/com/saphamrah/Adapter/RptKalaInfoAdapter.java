@@ -1,11 +1,10 @@
 package com.saphamrah.Adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Environment;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +15,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
+import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.Model.RptKalaInfoModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 
-import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -33,6 +34,9 @@ public class RptKalaInfoAdapter extends RecyclerSwipeAdapter<RptKalaInfoAdapter.
     private Context context;
     private ArrayList<RptKalaInfoModel> rptKalaInfoModels;
     private int lastSelectedItem;
+    private SparseArray AllKalaPhoto =new SparseArray();
+    private static ArrayList<KalaPhotoModel> kalaPhotoModels=new ArrayList<>();
+
 
     public RptKalaInfoAdapter(Context context, ArrayList<RptKalaInfoModel> rptKalaInfoModels)
     {
@@ -65,7 +69,7 @@ public class RptKalaInfoAdapter extends RecyclerSwipeAdapter<RptKalaInfoAdapter.
 
         holder.lblKalaNameCode.setText(String.format("%1$s - %2$s", model.getCodeKala(), model.getNameKala()));
         holder.lblGheymatForoshMain.setText(String.format("%1$s \n %2$s %3$s", context.getResources().getString(R.string.mablaghVahed), gheymatForosh, context.getResources().getString(R.string.rial)));
-        holder.lblGheymatMasrafKonandeMain.setText(String.format("%1$s \n %2$s %3$s", context.getResources().getString(R.string.gheymatMasrafKonande), gheymatMasrafKonande, context.getResources().getString(R.string.rial)));
+        holder.lblGheymatMasrafKonandeMain.setText(String.format("%1$s \n %2$s %3$s", context.getResources().getString(R.string.mablaghVahed), gheymatForosh, context.getResources().getString(R.string.rial)));
         holder.lblCodeNameKala.setText(String.format("%1$s - %2$s", model.getCodeKala(), model.getNameKala()));
         holder.lblNameBrand.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.nameBrand), model.getNameBrand()));
         holder.lblBarcode.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.barcode), model.getBarCode()));
@@ -97,25 +101,39 @@ public class RptKalaInfoAdapter extends RecyclerSwipeAdapter<RptKalaInfoAdapter.
 
         try
         {
-            File file = new File(Environment.getExternalStorageDirectory() + "/SapHamrah/Album/" , model.getCodeKala() + ".jpg");
-            if (file.exists())
-            {
-                Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/SapHamrah/Album/" + model.getCodeKala() + ".jpg");
-                holder.imgKala.setImageBitmap(bitmap);
-                holder.imgKalaFull.setImageBitmap(bitmap);
-            }
-            else
-            {
-                holder.imgKala.setImageResource(R.drawable.nopic_whit);
-                holder.imgKalaFull.setImageResource(R.drawable.nopic_whit);
-            }
+            Log.i("imageHashSize", "onBindViewHolder: "+ AllKalaPhoto.size());
+
+            Glide.with(context)
+                    .load(AllKalaPhoto.get(model.getCcKalaCode()))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.nopic_whit)
+                    .into(holder.imgKala);
+
+            Glide.with(context)
+                    .load(AllKalaPhoto.get(model.getCcKalaCode()))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.nopic_whit)
+                    .into(holder.imgKalaFull);
+
+//            File file = new File(Environment.getExternalStorageDirectory() + "/SapHamrah/Album/" , model.getCodeKala() + ".jpg");
+//            if (file.exists())
+//            {
+//                Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/SapHamrah/Album/" + model.getCodeKala() + ".jpg");
+//                holder.imgKala.setImageBitmap(bitmap);
+//                holder.imgKalaFull.setImageBitmap(bitmap);
+//            }
+//            else
+//            {
+//                holder.imgKala.setImageResource(R.drawable.nopic_whit);
+//                holder.imgKalaFull.setImageResource(R.drawable.nopic_whit);
+//            }
         }
         catch (Exception exception)
         {
             exception.printStackTrace();
             holder.imgKala.setImageResource(R.drawable.nopic_whit);
             holder.imgKalaFull.setImageResource(R.drawable.nopic_whit);
-            PubFunc.Logger logger = new PubFunc().new Logger();
+            PubFunc.Logger logger = new PubFunc().new Logger ();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), "RptKalaInfoAdapter" , "" , "onBindViewHolder" , "");
         }
     }
@@ -207,4 +225,24 @@ public class RptKalaInfoAdapter extends RecyclerSwipeAdapter<RptKalaInfoAdapter.
 
 
 
+    public void setKalaPhoto(ArrayList<KalaPhotoModel> kalaPhotoModels){
+        this.kalaPhotoModels=kalaPhotoModels;
+        this.AllKalaPhoto.clear();
+        for(KalaPhotoModel kalaPhotoModel:kalaPhotoModels){
+            this.AllKalaPhoto.put(kalaPhotoModel.getCcKalaCodeDb(),kalaPhotoModel.getImageDb());
+        }
+
+    }
+
+    public SparseArray getKalaPhoto(){
+        return AllKalaPhoto;
+    }
+    public ArrayList<KalaPhotoModel> getKalaPhotos(){
+        return kalaPhotoModels;
+    }
+
+
+    public ArrayList<RptKalaInfoModel> getRptKalaInfoModels() {
+        return rptKalaInfoModels;
+    }
 }

@@ -26,7 +26,9 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.format.DateFormat;
@@ -153,7 +155,7 @@ public class PubFunc
 
     public class LocationProvider extends Service implements LocationListener
     {
-        private final Context context;
+        private Context context;
         boolean isGPSEnabled = false;
         boolean isNetworkEnabled = false;
         boolean canGetLocation = false;
@@ -310,7 +312,14 @@ public class PubFunc
             boolean hasAccess = false;
             if (Build.VERSION.SDK_INT >= 23)
             {
-                hasAccess = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                {
+                    hasAccess = true;
+                }
+                else
+                {
+                    hasAccess = false;
+                }
             }
             else
             {
@@ -385,7 +394,6 @@ public class PubFunc
         }
 
 
-        @SuppressLint("MissingPermission")
         private void getLocation(final Context context)
         {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
@@ -650,7 +658,14 @@ public class PubFunc
                             Log.d("deviceTime" , deviceDate.toString());
                             Log.d("serverTime" , serverDate.toString());
                             Log.d("diffTime" , String.valueOf(diff));
-                            callback.onSuccess(diff <= Constants.ALLOWABLE_SERVER_LOCAL_TIME_DIFF(), sdf.format(serverDate), sdf.format(deviceDate), diff);
+                            if (diff > Constants.ALLOWABLE_SERVER_LOCAL_TIME_DIFF())
+                            {
+                                callback.onSuccess(false, sdf.format(serverDate), sdf.format(deviceDate), diff);
+                            }
+                            else
+                            {
+                                callback.onSuccess(true, sdf.format(serverDate), sdf.format(deviceDate), diff);
+                            }
                         }
                         catch (Exception exception)
                         {
@@ -1653,9 +1668,16 @@ get mac address in android 10
             int modBy11 = sum % 11;
             if (modBy11 < 2)
             {
-                return modBy11 == Integer.parseInt(controlDigit);
+                if (modBy11 == Integer.parseInt(controlDigit))
+                {
+                    return true;
+                }
             }
-            else return 11 - modBy11 == Integer.parseInt(controlDigit);
+            else if (11 - modBy11 == Integer.parseInt(controlDigit))
+            {
+                return true;
+            }
+            return false;
         }
 
         public boolean checkNationalEconomicalCode(String nationalCode)
@@ -1695,7 +1717,12 @@ get mac address in android 10
                 modBy11 = 0;
             }
 
-            return modBy11 == Integer.parseInt(controlDigit);
+            if (modBy11 == Integer.parseInt(controlDigit))
+            {
+                return true;
+            }
+
+            return false;
         }
 
     }
@@ -1731,6 +1758,8 @@ get mac address in android 10
             return strNumber;
         }
     }
+
+
 
 
     public class RequestBottomBarConfig
@@ -1994,7 +2023,7 @@ get mac address in android 10
                 if (i==0) {
                     strInteger += String.valueOf(IntegerArray.get(i));
                 }else {
-                    strInteger+="," + IntegerArray.get(i);
+                    strInteger+="," + String.valueOf(IntegerArray.get(i));
 
 
                 }
@@ -2530,6 +2559,41 @@ get mac address in android 10
             return  percentArray;
 
         }
+    }
+
+
+
+    public static class ConcurrencyUtils {
+
+        private ConcurrencyUtils() {
+        }
+
+        static ConcurrencyUtils instance = null;
+
+        // Factory method to provide the users with instances
+        public static ConcurrencyUtils getInstance() {
+            if (instance == null)
+                instance = new ConcurrencyUtils();
+
+            return instance;
+
+        }
+
+
+        public void runOnUiThread(ConcurrencyEvents concurrencyEvents) {
+            Handler mainHandler = new Handler(Looper.getMainLooper());
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    concurrencyEvents.uiThreadIsReady();
+                }
+            };
+            mainHandler.post(runnable);
+        }
+    }
+
+    public interface ConcurrencyEvents {
+        void uiThreadIsReady();
     }
 
 

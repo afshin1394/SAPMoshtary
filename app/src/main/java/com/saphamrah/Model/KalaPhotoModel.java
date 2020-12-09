@@ -7,6 +7,8 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.sun.mail.iap.ByteArray;
 
+import java.util.Arrays;
+
 public class KalaPhotoModel {
     private static final String TABLE_NAME = "KalaPhoto";
     private static final String COLUMN_ccKalaPhoto = "ccKalaPhoto";
@@ -74,4 +76,13 @@ public class KalaPhotoModel {
     }
 
 
+    @Override
+    public String toString() {
+        return "KalaPhotoModel{" +
+                "ccKalaPhotoDb=" + ccKalaPhotoDb +
+                ", ccKalaCodeDb=" + ccKalaCodeDb +
+                ", imageDb=" + Arrays.toString(imageDb) +
+                ", ccKalaPhoto=" + ccKalaPhoto +
+                '}';
+    }
 }

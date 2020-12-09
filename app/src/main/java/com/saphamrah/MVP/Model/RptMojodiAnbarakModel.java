@@ -3,14 +3,17 @@ package com.saphamrah.MVP.Model;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.RptMojodiAnbrakMVP;
 import com.saphamrah.DAO.AnbarakAfradDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
+import com.saphamrah.DAO.KalaPhotoDAO;
 import com.saphamrah.DAO.RptMojodiAnbarDAO;
 import com.saphamrah.Model.AnbarakAfradModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
+import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.Model.RptMojodiAnbarModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
@@ -32,6 +35,13 @@ public class RptMojodiAnbarakModel implements RptMojodiAnbrakMVP.ModelOps
         successfullRequest = 0;
     }
 
+
+    @Override
+    public void getGallery() {
+        KalaPhotoDAO kalaPhotoDAO=new KalaPhotoDAO(mPresenter.getAppContext());
+        ArrayList<KalaPhotoModel> kalaPhotoModels=kalaPhotoDAO.getAll();
+        mPresenter.onGetGallery(kalaPhotoModels);
+    }
 
     @Override
     public void getMojodiAnbar()

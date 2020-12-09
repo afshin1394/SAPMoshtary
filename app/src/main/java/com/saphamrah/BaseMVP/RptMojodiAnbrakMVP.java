@@ -1,6 +1,8 @@
 package com.saphamrah.BaseMVP;
 
 import android.content.Context;
+
+import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.Model.RptMojodiAnbarModel;
 import java.util.ArrayList;
 
@@ -18,6 +20,8 @@ public interface RptMojodiAnbrakMVP
         void onSortByCodeKala(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels , boolean viewAsTable);
         void onSortByNameKala(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels , boolean viewAsTable);
         void onSortByCount(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels , boolean viewAsTable);
+        //Todo
+        void onGetGallery(ArrayList<KalaPhotoModel> kalaPhotoModels);
         void showToast(int resId, int messageType , int duration);
     }
 
@@ -25,6 +29,8 @@ public interface RptMojodiAnbrakMVP
     interface PresenterOps
     {
         void onConfigurationChanged(RptMojodiAnbrakMVP.RequiredViewOps view);
+        //Todo
+        void getGallery();
         void getMojodiAnbar();
         void updateMojodiAnbar();
         void checkSearchNameKala(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels , String searchWord , boolean viewAsTable);
@@ -39,6 +45,7 @@ public interface RptMojodiAnbrakMVP
     interface RequiredPresenterOps
     {
         Context getAppContext();
+        void onGetGallery(ArrayList<KalaPhotoModel> kalaPhotoModels);
         void onGetMojodiAnbar(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels);
         void onGetMojodiAnbarOrderByNameKala(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels  , boolean viewAsTable);
         void onGetMojodiAnbarOrderByCount(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels  , boolean viewAsTable);
@@ -49,6 +56,7 @@ public interface RptMojodiAnbrakMVP
 
     interface ModelOps
     {
+        void getGallery();
         void getMojodiAnbar();
         void updateMojodiAnbar();
         void getMojodiAnbarOrderByNameKala(boolean viewAsTable);
