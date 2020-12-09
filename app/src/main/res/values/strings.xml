@@ -48,6 +48,7 @@
     <string name="errorGetDataTitle">خطا در دریافت اطلاعات</string>
     <string name="errorGetData">خطا در دریافت اطلاعات، لطفا دوباره تلاش کنید.</string>
     <string name="errorGetDataChart">اطلاعات موجود نمی باشد.</string>
+    <string name="errorGetDataEmpty">اطلاعات موجود نمی باشد.</string>
     <string name="errorGetDataAndGetProgram">خطا در دریافت اطلاعات، لطفا دریافت برنامه نمایید.</string>
     <string name="errorGetProductItems">خطا در دریافت اطلاعات محصول</string>
     <string name="errorGetAnbarItems">خطا در دریافت اطلاعات انبار</string>
@@ -955,4 +956,34 @@
     <string name="GoodsShowType">نوع نمایش لیست کالا</string>
     <string name="ChooseNumberOfGoodsInEachPage">در صورت تمایل میتوانید تعداد کالای نمایش داده شده در هر صفحه  در صفحه ی ثبت در خواست را از اینجا مشخص نمایید. </string>
     <string name="invalidNumberOfItems">تعداد انتخاب شده نامعتبر می باشد.</string>
+    <string name="updateNotComplete">بروزرسانی به طور کامل انجام نشد!</string>
+    <string name="updateKalaInfoWarning">برای نمایش گزارش لطفا اطلاعات کالا را بروز رسانی نمایید</string>
+    <string name="gpsTrackerTitle">موقعیت یاب</string>
+    <string name="gpsTrackerDescription">موقعیت یاب دستگاه شما در حال اجرا است</string>
+    <string name="pishDaryaft">پیش دریافت</string>
+    <string name="varizBeBank">واریز به بانک</string>
+    <string name="numberFish">شماره فیش</string>
+    <string name="dateFish">تاریخ فیش</string>
+    <string name="ShomarehHesab">شماره حساب</string>
+    <string name="errorFishBanki">" شماره فیش را وارد نمایید"</string>
+    <string name="errorDateBiggerTodat">تاریخ نمی تواند از تاریخ روز بزرگتر باشد</string>
+    <string name="errorDifferenceDatesWithToday">تاریخ وارد شده مجاز نمی باشد</string>
+    <string name="errorDateSet">تاریخ را انتخاب نمایید</string>
+    <string name="errorNameBanki">شعبه بانک را انتخاب نمایید</string>
+    <string name="checkBargashti">چک برگشتی</string>
+    <string name="shomareSanad">شماره سند</string>
+    <string name="taakhirSanad">تاریخ سند</string>
+    <string name="mandeMandeh">مبلغ مانده</string>
+    <string name="tedadJayezeh">تعداد جایزه :</string>
+    <string name="beEza">"به ازای : "</string>
+    <string name="haventGift">هیچ جایزه ای به این کالا تعلق نگرفته است</string>
+    <string name="marjoeeForoshandeh">مرجوعی فروشنده</string>
+    <string name="marjoeeMoredi">مرجوعی موردی</string>
+    <string name="marjoeeKoli">مرجوعی کلی</string>
+    <string name="searchMostaryName">جستجوی نام مشتری</string>
+    <string name="sabtMarjoee">ثبت مرجوعی</string>
+    <string name="isValidDataSabtMarjoeeKol">به علت ثبت وصول برای این درخواست امکان ثبت مرجوعی کامل وجود ندارد</string>
+    <string name="errorGetMarjoee">کالای مرجوعی ثبت نشده است</string>
+    <string name="errorSabtJayezeh">خطا در ثبت جایزه تکراری، لطفا درخواست را حدف و دوباره ثبت نمایید.</string>
+
 </resources>
