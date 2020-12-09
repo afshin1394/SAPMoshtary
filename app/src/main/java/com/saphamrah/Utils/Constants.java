@@ -25,12 +25,14 @@ public class Constants
     ///////////////////////////// ERROR TYPE /////////////////////////////
     private static final String RETROFIT_HTTP_ERROR = "HTTP_ERROR";
     private static final String RETROFIT_RESULT_IS_NULL = "RESULT_IS_NULL";
+    private static final String RETROFIT_RESULT_IS_EMPTY = "RESULT_IS_EMPTY";
     private static final String RETROFIT_NOT_SUCCESS_MESSAGE = "RESPONSE_NOT_SUCCESS";
     private static final String RETROFIT_EXCEPTION = "EXCEPTION";
     private static final String RETROFIT_THROWABLE = "THROWABLE";
 
     public static String RETROFIT_HTTP_ERROR(){return RETROFIT_HTTP_ERROR;}
     public static String RETROFIT_RESULT_IS_NULL(){return RETROFIT_RESULT_IS_NULL;}
+    public static String RETROFIT_RESULT_IS_EMPTY(){return RETROFIT_RESULT_IS_EMPTY;}
     public static String RETROFIT_NOT_SUCCESS_MESSAGE(){return RETROFIT_NOT_SUCCESS_MESSAGE;}
     public static String RETROFIT_EXCEPTION(){return RETROFIT_EXCEPTION;}
     public static String RETROFIT_THROWABLE(){return RETROFIT_THROWABLE;}
@@ -42,6 +44,7 @@ public class Constants
     private static final int CHANGE_WIFI_STATE = 103;
     private static final int ACCESS_NETWORK_STATE = 104;
     private static final int WRITE_EXTERNAL_STORAGE = 105;
+    private static final int GET_ALL_PERMISSION = 106;
 
 
     public static int READ_PHONE_STATE() {
@@ -51,6 +54,7 @@ public class Constants
     public static int CHANGE_WIFI_STATE() { return CHANGE_WIFI_STATE; }
     public static int ACCESS_NETWORK_STATE() { return ACCESS_NETWORK_STATE; }
     public static int WRITE_EXTERNAL_STORAGE() { return WRITE_EXTERNAL_STORAGE; }
+    public static int GET_ALL_PERMISSION() { return GET_ALL_PERMISSION; }
 
 
     ///////////////////////////// OPEN ACTIVITY FOR RESULT CODE /////////////////////////////
@@ -140,6 +144,7 @@ public class Constants
     private static final int FAILED_MESSAGE = -1;
     private static final int NONE_MESSAGE = 0;
     private static final int SUCCESS_MESSAGE = 1;
+    private static final int RESPONSE_NOT_COMPLETE = -2;
     private static final int INFO_MESSAGE = 2;
     private static final int DURATION_SHORT = Toast.LENGTH_SHORT; //using this durations(DURATION_SHORT , DURATION_LONG) in presenter,
     private static final int DURATION_LONG = Toast.LENGTH_LONG;   //because we can't use android class in presenter
@@ -154,6 +159,7 @@ public class Constants
     public static int SUCCESS_MESSAGE() {
         return SUCCESS_MESSAGE;
     }
+    public static int RESPONSE_NOT_COMPLETE(){return RESPONSE_NOT_COMPLETE;}
     public static int INFO_MESSAGE() {
         return INFO_MESSAGE;
     }
@@ -335,6 +341,7 @@ public class Constants
     private static final int SHOW_LOCATION = 7;
     private static final int EDIT_DARKHAST = 8;
     private static final int SHOW_FAKTOR_DETAIL = 9;
+    public static final int MARJOEE = 10;
 
 
     public static int DELETE() {
@@ -1177,6 +1184,15 @@ public class Constants
     }
 
 
+    ///////////////////////////// PishDaryaft /////////////////////////////
+    public static int FROM_TREASURYLIST = 1;
+    public static int FROM_PISH_DARYAFT = 2;
+    public static int FROM_CHECK_BARGASHTI = 3;
+
+    //////////////////////////// marjoee foroshandeh /////////////////////////
+    // set Selected fragment in from fragment
+    // 1 = MarjoeeForoshandeh  2 = marjoeeMoredi   3 = marjoeeKoli
+    public static int SELECTED_FRAGMENT = 0;
 
 
 
@@ -1196,4 +1212,19 @@ public class Constants
     public static final int DOUBLE_ITEM=2;
     public static final int FOUR_ITEM=3;
 
+
+    //////////////////////////// For Type WebService ///////////////////////
+    public static final int GET_REQUESTS = 1;
+    public static final int POST_REQUEST = 2;
+    public static final int MULTI_REQUEST = 3;
+
+    //////////////////////////// For GPS Service Notification ///////////////////////
+    private static final String GPS_CHANNEL_ID ="GPS_CHANNEL_ID";
+    private static final String MAIN_CHANNEL_ID ="MAIN_CHANNEL_ID";
+    public static final String  GPS_CHANNEL_ID() {
+        return GPS_CHANNEL_ID;
+    }
+    public static final String MAIN_CHANNEL_ID(){
+        return MAIN_CHANNEL_ID;
+    }
 }

@@ -97,10 +97,15 @@ public class RptMoshtarianKharidNakardehDAO {
                             {
                                 if (result.getSuccess())
                                 {
-                                    Log.i("nameMoshtary", "onResponse: "+response.body().getData().get(0).getNameMoshtary());
+                                    if (result.getData()!=null) {
+                                        if (result.getData().size() > 0)
+                                            retrofitResponse.onSuccess(result.getData());
+                                        else
+                                            retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_EMPTY(), context.getResources().getString(R.string.resultIsNull));
+                                    }else{
+                                        retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_EMPTY(), context.getResources().getString(R.string.resultIsNull));
 
-                                    Log.i("successss", "onResponse: "+result.getData());
-                                    retrofitResponse.onSuccess(result.getData());
+                                    }
                                 }
                                 else
                                 {

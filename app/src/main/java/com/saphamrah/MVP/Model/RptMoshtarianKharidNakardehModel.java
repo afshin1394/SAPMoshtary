@@ -58,7 +58,7 @@ public class RptMoshtarianKharidNakardehModel implements RptMoshtarianKharidNaka
                 else if (msg.arg1 == -1)
                 {
                     Log.i(TAG, "handleMessage: errorUpdate");
-                    mPresenter.onErrorUpdateListMandehDar();
+                    mPresenter.onErrorUpdateListMandehDar("");
                 }
                 return false;
             }
@@ -98,7 +98,7 @@ public class RptMoshtarianKharidNakardehModel implements RptMoshtarianKharidNaka
             @Override
             public void onFailed(String type, String error)
             {
-                mPresenter.onErrorUpdateListMandehDar();
+                mPresenter.onErrorUpdateListMandehDar(type);
                 setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptListVosolModel", "RptListVosolActivity", "updateListVosol", "onFailed");
             }
         });

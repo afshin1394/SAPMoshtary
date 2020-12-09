@@ -71,8 +71,15 @@ public class RptMoshtarianKharidNakardePresenter implements RptMoshtarianKharidN
     }
 
     @Override
-    public void onErrorUpdateListMandehDar() {
-        mView.get().showToast(R.string.errorGetData, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+    public void onErrorUpdateListMandehDar(String  type) {
+        if (type.equals(Constants.RETROFIT_RESULT_IS_EMPTY())){
+            mView.get().closeLoadingDialog();
+            mView.get().showToast(R.string.errorGetDataEmpty, Constants.INFO_MESSAGE(), Constants.DURATION_LONG());
+        }else {
+
+            mView.get().closeLoadingDialog();
+            mView.get().showToast(R.string.errorGetData, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }
 
     }
 }

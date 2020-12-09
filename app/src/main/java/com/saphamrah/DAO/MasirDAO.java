@@ -425,7 +425,7 @@ public class MasirDAO
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "MasirDAO" , "" , "getccMasirha" , "");
         }
         Log.i("MasirhaaaByForoshande", "getccMasirByForoshandeh: "+Masirs);
-        strCcMasirs += new PubFunc().new DAOUtil().convertIntegerArrayToString(Masirs);
+        strCcMasirs +=","+ new PubFunc().new DAOUtil().convertIntegerArrayToString(Masirs);
 
         return strCcMasirs;
 

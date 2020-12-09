@@ -34,7 +34,7 @@ public interface RptMoshtarianKharidNakardeMVP {
         void onConfigurationChanged(RequiredViewOps view);
         void onGetListMoshtarianKharidNakarde(ArrayList<RptMoshtaryKharidNakardeModel> rptMoshtaryKharidNakardeModels);
         void onSuccessUpdateListMandehDar();
-        void onErrorUpdateListMandehDar();
+        void onErrorUpdateListMandehDar(String Type);
     }
 
 
