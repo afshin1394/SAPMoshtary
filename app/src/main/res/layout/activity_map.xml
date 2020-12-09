@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/layBtns">
+        android:id="@+id/layBtns"
+        android:visibility="gone">
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -41,7 +42,8 @@
         android:id="@+id/lblAllDataCount"
         android:textSize="@dimen/FontSize22"
         android:textColor="@color/colorAccent"
-        android:layout_below="@+id/layBtns"/>
+        android:layout_below="@+id/layBtns"
+        android:visibility="gone"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,14 +51,16 @@
         android:id="@+id/lblFilterDataCount"
         android:textSize="@dimen/FontSize22"
         android:textColor="@color/colorAccent"
-        android:layout_below="@+id/lblAllDataCount"/>
+        android:layout_below="@+id/lblAllDataCount"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/layTimer"
-        android:layout_below="@+id/lblFilterDataCount">
+        android:layout_below="@+id/lblFilterDataCount"
+        android:visibility="gone">
         <EditText
             android:layout_width="300dp"
             android:layout_height="wrap_content"
@@ -80,7 +84,8 @@
         android:orientation="horizontal"
         android:id="@+id/showDistance"
         android:layout_below="@+id/layTimer"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:visibility="gone">
         <EditText
             android:layout_width="300dp"
             android:layout_height="wrap_content"
@@ -103,7 +108,8 @@
         android:orientation="horizontal"
         android:id="@+id/layFilters"
         android:layout_below="@+id/showDistance"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:visibility="gone">
         <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -137,7 +143,8 @@
         android:orientation="horizontal"
         android:id="@+id/laySetAccuracy"
         android:layout_below="@+id/layFilters"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:visibility="gone">
         <EditText
             android:layout_width="300dp"
             android:layout_height="wrap_content"

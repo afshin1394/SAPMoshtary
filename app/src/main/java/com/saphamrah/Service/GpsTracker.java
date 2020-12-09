@@ -12,6 +12,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +28,8 @@ import com.saphamrah.MVP.View.MapActivity;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+
+import static com.saphamrah.Utils.Constants.GPS_CHANNEL_ID;
 
 public class GpsTracker extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener
 {
@@ -197,39 +200,49 @@ public class GpsTracker extends Service implements GoogleApiClient.ConnectionCal
 
     public void initializeNotification()
     {
-        if (Build.VERSION.SDK_INT >= 26)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
             try
             {
-                final String CHANNEL_ID = "20";
+                /**
+                 * custom push-notification view
+                 */
+                RemoteViews contentViewLocation = new RemoteViews(getPackageName(), R.layout.custom_push_gps_tracker);
+                contentViewLocation.setTextViewText(R.id.titleNotif, getString(R.string.gpsTrackerTitle));
+                contentViewLocation.setTextViewText(R.id.textNotif,getString(R.string.gpsTrackerDescription));
+                contentViewLocation.setImageViewResource(R.id.image, R.drawable.ic_launcher_icon);
+
+
                 CharSequence name = getString(R.string.notifChannelName);
                 String description = getString(R.string.notifChannelDesc);
-                int importance = NotificationManager.IMPORTANCE_NONE;
-                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+                NotificationChannel channel = new NotificationChannel(GPS_CHANNEL_ID(), name,NotificationManager.IMPORTANCE_MIN);
                 channel.setDescription(description);
+                channel.setShowBadge(false);
+
                 // Register the channel with the system; you can't change the importance
                 // or other notification behaviors after this
                 NotificationManager notificationManager = getSystemService(NotificationManager.class);
                 notificationManager.createNotificationChannel(channel);
 
-                Notification.Builder notifi = new Notification.Builder(getApplicationContext(), CHANNEL_ID);
-                notifi.setSmallIcon(R.drawable.ic_warning);
-                notifi.setContentTitle("");
-                notifi.setContentText("");
+                Notification.Builder notifi = new Notification.Builder(getApplicationContext(), GPS_CHANNEL_ID());
+                notifi.setSmallIcon(R.drawable.ic_location);
+                notifi.setCustomContentView(contentViewLocation);
+
 
                 PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MapActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
                 notifi.setContentIntent(contentIntent);
                 //getting notification object from notification builder.
-                Notification n = notifi.build();
+                Notification gpsNotification = notifi.build();
 
                 int mNotificationId = 001;
 
                 NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.notify(mNotificationId, n);
+                mNotificationManager.notify(mNotificationId, gpsNotification);
 
-                //  startting foreground
-                startForeground(1, n);
+                //  starting foreground
+                startForeground(1, gpsNotification);
+
             }
             catch (Exception exception)
             {

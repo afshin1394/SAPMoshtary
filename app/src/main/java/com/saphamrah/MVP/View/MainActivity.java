@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -21,14 +23,17 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -113,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements MainMVP.RequiredV
     private int ccMasir;
     private boolean isTestNewVersion;
     private String downloadUrl = "";
-    //private int notificationId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -475,11 +479,12 @@ public class MainActivity extends AppCompatActivity implements MainMVP.RequiredV
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void showNotifForMessages(ArrayList<MessageBoxModel> messageBoxModels)
     {
         //removeAllNotification();
-        createNotification(messageBoxModels);
+        sendPushNotification(messageBoxModels);
     }
 
     final String CHANNEL_ID = "21";
@@ -489,17 +494,6 @@ public class MainActivity extends AppCompatActivity implements MainMVP.RequiredV
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
-            /*String CHANNEL_ID = "25";
-            CharSequence name = getString(R.string.notificationChannelName);
-            String description = getString(R.string.notificationChannelDesc);
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);*/
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            //NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            //notificationManager.createNotificationChannel(channel);
-
             CharSequence name = getString(R.string.notificationChannelName);
             String description = getString(R.string.notificationChannelDesc);
             int importance = NotificationManager.IMPORTANCE_HIGH;
@@ -512,157 +506,113 @@ public class MainActivity extends AppCompatActivity implements MainMVP.RequiredV
         }
     }
 
-    private void removeAllNotification()
-    {
-        try
-        {
-            if (Build.VERSION.SDK_INT >= 26)
-            {
-                NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.cancelAll();
-                /*for (int i=0; i<notificationId ; i++)
-                {
-                    NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-                    mNotificationManager.cancel(i);
-                }*/
-            }
-            else
-            {
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-                notificationManager.cancelAll();
-                /*for (int i=0; i<notificationId ; i++)
-                {
-                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-                    notificationManager.cancel(i);
-                }*/
-            }
+
+
+public static final String SEND_PUSH_NOTIFICATION="SEND_PUSH_NOTIFICATION";
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void sendPushNotification(ArrayList<MessageBoxModel> messageBoxModels) {
+        for (MessageBoxModel messageBoxModel:messageBoxModels){
+            Log.i(SEND_PUSH_NOTIFICATION, "sendPushNotification: "+messageBoxModel.getCcMessage());
         }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
+        String ccMessagesNewNofit = "-1";
+        int ccForoshandeh = 0;
+        int ccMamorPakhsh = 0;
+        Log.i(SEND_PUSH_NOTIFICATION, "sdk version"+Build.VERSION.SDK_INT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-    private void createNotification(ArrayList<MessageBoxModel> messageBoxModels)
-    {
-        try
-        {
-            String ccMessagesNewNofit = "-1";
-            int ccForoshandeh = 0;
-            int ccMamorPakhsh = 0;
-            if (Build.VERSION.SDK_INT >= 26)
-            {
-                NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-                Notification.Builder notification = new Notification.Builder(getApplicationContext(), CHANNEL_ID);
 
-                for (MessageBoxModel message : messageBoxModels)
-                {
-                    ccForoshandeh = message.getCcForoshandeh();
-                    ccMamorPakhsh = message.getCcMamorPakhsh();
-                    Intent notificationIntent = new Intent(this, MessageDetailActivity.class);
-                    notificationIntent.putExtra("ccMessage" , message.getCcMessage());
-                    PendingIntent notificationPendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+            NotificationChannel channelFinal = new NotificationChannel(Constants.MAIN_CHANNEL_ID(), "HighPriorityChannel", NotificationManager.IMPORTANCE_HIGH);
+            channelFinal.setDescription("highPriority");
+            channelFinal.setImportance(NotificationManager.IMPORTANCE_HIGH);
 
-                    if (message.getNoeMessage() == 1)
-                    {
-                        notification.setSmallIcon(R.drawable.ic_message);
-                    }
-                    else
-                    {
-                        notification.setSmallIcon(R.drawable.ic_show_faktor_detail);
-                    }
-                    notification.setContentTitle(message.getTitle());
-                    notification.setContentText(message.getMessage());
-                    notification.setAutoCancel(true);
-                    notification.setTimeoutAfter(150000);
-                    notification.setContentIntent(notificationPendingIntent);
+            NotificationManager manager=getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channelFinal);
 
-                    mNotificationManager.notify(message.getCcMessage(), notification.build());
-                    ccMessagesNewNofit += "," + message.getCcMessage();
-                    //notificationId++;
-                }
+            Log.i(SEND_PUSH_NOTIFICATION, "messageBoxSize" + messageBoxModels.size());
+            for (MessageBoxModel message : messageBoxModels) {
+
+                ccMessagesNewNofit += "," + message.getCcMessage();
+                ccForoshandeh = message.getCcForoshandeh();
+                ccMamorPakhsh = message.getCcMamorPakhsh();
+                Log.i(SEND_PUSH_NOTIFICATION, "CcMessage: " + message.getCcMessage() + "MessageNoeNewFit: " + ccMessagesNewNofit);
+                manager.notify(message.getCcMessage(), BuildNotification(message.getMessage(), message.getTitle(), message.getCcMessage(), message.getNoeMessage()));
+                ccMessagesNewNofit = "-1";
             }
-            else
-            {
-                NotificationCompat.Builder notification = new NotificationCompat.Builder(this , CHANNEL_ID);
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
-                for (MessageBoxModel message : messageBoxModels)
-                {
-                    ccForoshandeh = message.getCcForoshandeh();
-                    ccMamorPakhsh = message.getCcMamorPakhsh();
+        } else {
 
-                    Intent notificationIntent = new Intent(this, MessageDetailActivity.class);
-                    notificationIntent.putExtra("ccMessage" , message.getCcMessage());
-                    PendingIntent notificationPendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            Log.i(SEND_PUSH_NOTIFICATION, "sendPushNotification: ");
+            for (MessageBoxModel message : messageBoxModels) {
+                ccMessagesNewNofit += "," + message.getCcMessage();
+                ccForoshandeh = message.getCcForoshandeh();
+                ccMamorPakhsh = message.getCcMamorPakhsh();
+                Log.i(SEND_PUSH_NOTIFICATION, "sendPushNotification: "+message.getCcMessage());
+                notificationManager.notify(message.getCcMessage()+4, BuildNotification(message.getMessage(), message.getTitle(), message.getCcMessage(), message.getNoeMessage()));
 
-                    if (message.getNoeMessage() == 1)
-                    {
-                        notification.setSmallIcon(R.drawable.ic_message);
-                    }
-                    else
-                    {
-                        notification.setSmallIcon(R.drawable.ic_show_faktor_detail);
-                    }
-                    notification.setContentTitle(message.getTitle());
-                    notification.setContentText(message.getMessage());
-                    //.setColor(getResources().getColor(R.color.colorAccent))
-                    notification.setVibrate(new long[]{0, 300, 300, 400});
-                        //.setLights(Color.WHITE, 1000, 5000)
-                        //.setDefaults(Notification.DEFAULT_ALL)
-                    notification.setContentIntent(notificationPendingIntent);
-                    notification.setAutoCancel(true);
-                        //.setCustomHeadsUpContentView(notificationLayout)
-                        //.setCustomBigContentView(notificationLayoutExpanded)
-                        //.setShowWhen(true)
-                    notification.setTimeoutAfter(150000);
-                    notification.setPriority(NotificationCompat.PRIORITY_HIGH);
+                ccMessagesNewNofit = "-1";
 
-                    notificationManager.notify(message.getCcMessage(), notification.build());
-                    ccMessagesNewNofit += "," + message.getCcMessage();
-                    //notificationId++;
-                }
             }
+            Log.i(SEND_PUSH_NOTIFICATION, "sendPushNotification: "+ccForoshandeh+"ccMamoorPakhsh:"+ccMamorPakhsh+"ccMessagesNewNotif:"+ccMessagesNewNofit);
             mPresenter.checkccMessagesForUpdateNotifStatus(ccForoshandeh, ccMamorPakhsh, ccMessagesNewNofit);
+
+
         }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), e.toString(), "", "MainActivity", "createNotification", "");
-        }
-
-
-
-        /*Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent notificationPendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);*/
-
-        /*RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.notification_small);
-        RemoteViews notificationLayoutExpanded = new RemoteViews(getPackageName(), R.layout.notification_large);*/
-
-        /*NotificationCompat.Builder builder = new NotificationCompat.Builder(this , "25")
-                .setSmallIcon(R.drawable.red_circle)
-                .setContentTitle("new Request")
-                .setContentText("new request has received")
-                //.setColor(getResources().getColor(R.color.colorAccent))
-                .setVibrate(new long[]{300, 300, 300})
-                //.setLights(Color.WHITE, 1000, 5000)
-                //.setDefaults(Notification.DEFAULT_ALL)
-                //.setContentIntent(notificationPendingIntent)
-                .setAutoCancel(true)
-                //.setCustomHeadsUpContentView(notificationLayout)
-                //.setCustomBigContentView(notificationLayoutExpanded)
-                //.setShowWhen(true)
-                .setPriority(NotificationCompat.PRIORITY_LOW);
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-// notificationId is a unique int for each notification that you must define
-        notificationManager.notify(notificationId, builder.build());
-        notificationId++;*/
-
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public Notification BuildNotification(String message, String title, int ccMessage, int noeMessage) {
+
+        Intent notificationIntent = new Intent(this, MessageDetailActivity.class);
+        notificationIntent.putExtra("ccMessage", ccMessage);
+        PendingIntent notificationPendingIntent = PendingIntent.getActivity(this, ccMessage, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+
+
+
+
+
+        RemoteViews contentViewCollapsed = new RemoteViews(getPackageName(), R.layout.custom_push_collapsed);
+        contentViewCollapsed.setImageViewResource(R.id.image, R.drawable.ic_launcher_icon);
+        contentViewCollapsed.setTextViewText(R.id.titleNotif, title);
+        contentViewCollapsed.setTextViewText(R.id.textNotif, message);
+        NotificationCompat.Builder notificationBuilder=new NotificationCompat.Builder(this,Constants.MAIN_CHANNEL_ID());
+        int smallIconId = this.getResources().getIdentifier("right_icon", "id", android.R.class.getPackage().getName());
+        Bitmap icon = BitmapFactory.decodeResource(MainActivity.this.getResources(),
+                R.drawable.logo);
+        notificationBuilder
+                .setContentTitle(title)
+                .setContentText(message)
+                .setChannelId(Constants.MAIN_CHANNEL_ID())
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .setCustomContentView(contentViewCollapsed)
+                .setLargeIcon(icon)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(message))
+                .setAutoCancel(true)
+                .setContentIntent(notificationPendingIntent);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            notificationBuilder.setSmallIcon(R.drawable.ic_launcher_icon);
+
+        } else {
+            notificationBuilder.setSmallIcon(R.drawable.ic_launcher_icon);
+        }
+
+        Notification notification=notificationBuilder.build();
+
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+            if (smallIconId != 0) {
+                if (notification.contentView != null)
+                    notification.contentView.setViewVisibility(smallIconId, View.GONE);
+            }
+        }
+
+
+        return notification;
+    }
 
     @Override
     public void startGPSService(int minDistance, int timeInterval, int fastestTimeInterval, int maxAccurancy)
