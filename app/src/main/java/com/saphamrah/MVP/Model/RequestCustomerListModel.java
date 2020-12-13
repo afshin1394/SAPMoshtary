@@ -1693,6 +1693,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 shared.putBoolean(shared.getVerifiedMarjoee() , false);
                 shared.putString(shared.getCcKalaCodesOfKalaAsasi(), "");
 
+                //-----------------
                 return true;
             }
             catch (Exception exception)

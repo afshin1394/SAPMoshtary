@@ -506,7 +506,43 @@ public class MainActivity extends AppCompatActivity implements MainMVP.RequiredV
         }
     }
 
-
+    private void removeAllNotification()
+    {
+        try
+        {
+            if (Build.VERSION.SDK_INT >= 26)
+            {
+                NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.cancelAll();
+                /*for (int i=0; i<notificationId ; i++)
+                {
+                    NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                    mNotificationManager.cancel(i);
+                }*/
+            }
+            else
+            {
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+                notificationManager.cancelAll();
+                /*for (int i=0; i<notificationId ; i++)
+                {
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+                    notificationManager.cancel(i);
+                }*/
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+/**
+ *
+ * TODO
+ * NEW SEND PUSH NOTIFICATION METHODS
+ * TODO
+ *
+ */
 
 public static final String SEND_PUSH_NOTIFICATION="SEND_PUSH_NOTIFICATION";
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -572,10 +608,10 @@ public static final String SEND_PUSH_NOTIFICATION="SEND_PUSH_NOTIFICATION";
 
 
 
-        RemoteViews contentViewCollapsed = new RemoteViews(getPackageName(), R.layout.custom_push_collapsed);
-        contentViewCollapsed.setImageViewResource(R.id.image, R.drawable.ic_launcher_icon);
-        contentViewCollapsed.setTextViewText(R.id.titleNotif, title);
-        contentViewCollapsed.setTextViewText(R.id.textNotif, message);
+        RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custom_push_collapsed);
+        contentView.setImageViewResource(R.id.image, R.drawable.ic_launcher_icon);
+        contentView.setTextViewText(R.id.titleNotif, title);
+        contentView.setTextViewText(R.id.textNotif, message);
         NotificationCompat.Builder notificationBuilder=new NotificationCompat.Builder(this,Constants.MAIN_CHANNEL_ID());
         int smallIconId = this.getResources().getIdentifier("right_icon", "id", android.R.class.getPackage().getName());
         Bitmap icon = BitmapFactory.decodeResource(MainActivity.this.getResources(),
@@ -585,7 +621,9 @@ public static final String SEND_PUSH_NOTIFICATION="SEND_PUSH_NOTIFICATION";
                 .setContentText(message)
                 .setChannelId(Constants.MAIN_CHANNEL_ID())
                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                .setCustomContentView(contentViewCollapsed)
+                .setCustomHeadsUpContentView(contentView)
+                .setCustomContentView(contentView)
+                .setCustomBigContentView(contentView)
                 .setLargeIcon(icon)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
@@ -613,6 +651,134 @@ public static final String SEND_PUSH_NOTIFICATION="SEND_PUSH_NOTIFICATION";
 
         return notification;
     }
+    /**
+     *
+     * TODO
+     * NEW SEND PUSH NOTIFICATION METHODS
+     * TODO
+     *
+     */
+
+    private void createNotification(ArrayList<MessageBoxModel> messageBoxModels)
+    {
+        try
+        {
+            String ccMessagesNewNofit = "-1";
+            int ccForoshandeh = 0;
+            int ccMamorPakhsh = 0;
+            if (Build.VERSION.SDK_INT >= 26)
+            {
+                NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                Notification.Builder notification = new Notification.Builder(getApplicationContext(), CHANNEL_ID);
+
+                for (MessageBoxModel message : messageBoxModels)
+                {
+                    ccForoshandeh = message.getCcForoshandeh();
+                    ccMamorPakhsh = message.getCcMamorPakhsh();
+                    Intent notificationIntent = new Intent(this, MessageDetailActivity.class);
+                    notificationIntent.putExtra("ccMessage" , message.getCcMessage());
+                    PendingIntent notificationPendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+                    if (message.getNoeMessage() == 1)
+                    {
+                        notification.setSmallIcon(R.drawable.ic_message);
+                    }
+                    else
+                    {
+                        notification.setSmallIcon(R.drawable.ic_show_faktor_detail);
+                    }
+                    notification.setContentTitle(message.getTitle());
+                    notification.setContentText(message.getMessage());
+                    notification.setAutoCancel(true);
+                    notification.setTimeoutAfter(150000);
+                    notification.setContentIntent(notificationPendingIntent);
+
+                    mNotificationManager.notify(message.getCcMessage(), notification.build());
+                    ccMessagesNewNofit += "," + message.getCcMessage();
+                    //notificationId++;
+                }
+            }
+            else
+            {
+                NotificationCompat.Builder notification = new NotificationCompat.Builder(this , CHANNEL_ID);
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+                for (MessageBoxModel message : messageBoxModels)
+                {
+                    ccForoshandeh = message.getCcForoshandeh();
+                    ccMamorPakhsh = message.getCcMamorPakhsh();
+
+                    Intent notificationIntent = new Intent(this, MessageDetailActivity.class);
+                    notificationIntent.putExtra("ccMessage" , message.getCcMessage());
+                    PendingIntent notificationPendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+                    if (message.getNoeMessage() == 1)
+                    {
+                        notification.setSmallIcon(R.drawable.ic_message);
+                    }
+                    else
+                    {
+                        notification.setSmallIcon(R.drawable.ic_show_faktor_detail);
+                    }
+                    notification.setContentTitle(message.getTitle());
+                    notification.setContentText(message.getMessage());
+                    //.setColor(getResources().getColor(R.color.colorAccent))
+                    notification.setVibrate(new long[]{0, 300, 300, 400});
+                        //.setLights(Color.WHITE, 1000, 5000)
+                        //.setDefaults(Notification.DEFAULT_ALL)
+                    notification.setContentIntent(notificationPendingIntent);
+                    notification.setAutoCancel(true);
+                        //.setCustomHeadsUpContentView(notificationLayout)
+                        //.setCustomBigContentView(notificationLayoutExpanded)
+                        //.setShowWhen(true)
+                    notification.setTimeoutAfter(150000);
+                    notification.setPriority(NotificationCompat.PRIORITY_HIGH);
+
+                    notificationManager.notify(message.getCcMessage(), notification.build());
+                    ccMessagesNewNofit += "," + message.getCcMessage();
+                    //notificationId++;
+                }
+            }
+            mPresenter.checkccMessagesForUpdateNotifStatus(ccForoshandeh, ccMamorPakhsh, ccMessagesNewNofit);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), e.toString(), "", "MainActivity", "createNotification", "");
+        }
+
+
+
+        /*Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent notificationPendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);*/
+
+        /*RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.notification_small);
+        RemoteViews notificationLayoutExpanded = new RemoteViews(getPackageName(), R.layout.notification_large);*/
+
+        /*NotificationCompat.Builder builder = new NotificationCompat.Builder(this , "25")
+                .setSmallIcon(R.drawable.red_circle)
+                .setContentTitle("new Request")
+                .setContentText("new request has received")
+                //.setColor(getResources().getColor(R.color.colorAccent))
+                .setVibrate(new long[]{300, 300, 300})
+                //.setLights(Color.WHITE, 1000, 5000)
+                //.setDefaults(Notification.DEFAULT_ALL)
+                //.setContentIntent(notificationPendingIntent)
+                .setAutoCancel(true)
+                //.setCustomHeadsUpContentView(notificationLayout)
+                //.setCustomBigContentView(notificationLayoutExpanded)
+                //.setShowWhen(true)
+                .setPriority(NotificationCompat.PRIORITY_LOW);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+// notificationId is a unique int for each notification that you must define
+        notificationManager.notify(notificationId, builder.build());
+        notificationId++;*/
+
+
+    }
+
 
     @Override
     public void startGPSService(int minDistance, int timeInterval, int fastestTimeInterval, int maxAccurancy)

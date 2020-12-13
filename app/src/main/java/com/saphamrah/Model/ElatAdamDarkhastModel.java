@@ -16,6 +16,7 @@ public class ElatAdamDarkhastModel
     private static final String COLUMN_MoshtaryGheyreFaal = "MoshtaryGheyreFaal";
     private static final String COLUMN_GetImage = "GetImage";
     private static final String COLUMN_ccNoeMoshtary = "ccNoeMoshtary";
+    private static final String COLUMN_GetCondition = "GetCondition";
 
 
     public static String TableName() {
@@ -47,6 +48,9 @@ public class ElatAdamDarkhastModel
     }
     public static String COLUMN_ccNoeMoshtary() {
         return COLUMN_ccNoeMoshtary;
+    }
+    public static String COLUMN_GetCondition() {
+        return COLUMN_GetCondition;
     }
 
 
@@ -82,6 +86,9 @@ public class ElatAdamDarkhastModel
     @SerializedName("ccNoeMoshtary")
     @Expose
     private Integer ccNoeMoshtary;
+    @SerializedName("GetCondition")
+    @Expose
+    private int GetCondition;
 
 
     public Integer getCcElatAdamDarkhast_NoeMoshtary() {
@@ -164,13 +171,20 @@ public class ElatAdamDarkhastModel
         this.ccNoeMoshtary = ccNoeMoshtary;
     }
 
+    public int getGetCondition() {
+        return GetCondition;
+    }
+
+    public void setGetCondition(int getCondition) {
+        GetCondition = getCondition;
+    }
 
     @Override
     public String toString() {
         return "ccElatAdamDarkhast_NoeMoshtary : " + ccElatAdamDarkhast_NoeMoshtary + " , ccElatAdamDarkhast : " + ccElatAdamDarkhast +
                 " , NameElatAdamDarkhast : " + NameElatAdamDarkhast + " , CodeNoe : " + CodeNoe + " , CodeSort : " + CodeSort +
                 " , GhabelEstefadeh : " + GhabelEstefadeh + " , MoshtaryFaal : " + MoshtaryFaal +
-                " , MoshtaryGheyreFaal : " + MoshtaryGheyreFaal + " , GetImage : " + GetImage + " , ccNoeMoshtary : " + ccNoeMoshtary;
+                " , MoshtaryGheyreFaal : " + MoshtaryGheyreFaal + " , GetImage : " + GetImage + " , ccNoeMoshtary : " + ccNoeMoshtary + " , GetCondition : " + GetCondition;
     }
 
 

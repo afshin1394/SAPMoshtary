@@ -12,6 +12,7 @@ import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.UIModel.JayezehByccKalaCodeModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIService;
 import com.saphamrah.WebService.ApiClient;
@@ -472,6 +473,184 @@ public class JayezehDAO
         return jayezehModels;
     }
 
+    public ArrayList<JayezehByccKalaCodeModel> getByccKalaCodeParent(int ccKalaCode , int tedadKala , int CcnoeMoshtary , int CcNoeSenf , int darajeh )
+    {
+        ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeModels = new ArrayList<>();
+
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String StrSQL="SELECT DISTINCT j.ccJayezeh, j.sharhJayezeh, j.NoeTedadRial \n" +
+                    "FROM jayezeh j\n" +
+                    "     LEFT JOIN jayezehSatr js ON js.ccJayezeh = j.ccJayezeh\n" +
+                    "     LEFT JOIN Kala k ON k.ccKalaCode = js.ccNoeField\n" +
+                    "WHERE js.NameNoeField=1 AND js.ccNoeField= "+ ccKalaCode +"  --cckalacode\n" +
+                    "      AND ccNoeFieldMoshtary = "+ CcnoeMoshtary +" AND ccNoeSenf  IN ( 0 , " + CcNoeSenf +") AND darajeh IN (0, " + darajeh +") \n" +
+                    "      AND  js.tedadJayezeh > 0\n" +
+                    "UNION ALL\n" +
+                    "SELECT DISTINCT j.ccJayezeh, j.sharhJayezeh, j.NoeTedadRial  \n" +
+                    "FROM jayezeh j\n" +
+                    "     LEFT JOIN jayezehSatr js ON js.ccJayezeh = j.ccJayezeh\n" +
+                    "     LEFT JOIN KalaGoroh kg ON kg.ccGoroh = js.ccNoeField \n" +
+                    "     LEFT JOIN Kala k ON k.ccKalaCode = js.ccNoeField\n" +
+                    "WHERE js.NameNoeField=2 AND kg.ccKalaCode= "+ ccKalaCode +" --cckalacode\n" +
+                    "      AND ccNoeFieldMoshtary = "+ CcnoeMoshtary +" AND ccNoeSenf  IN ( 0 , " + CcNoeSenf +") AND darajeh IN (0, " + darajeh +") \n" +
+                    "      AND  js.tedadJayezeh > 0\n" +
+                    "UNION ALL\n" +
+                    "SELECT DISTINCT j.ccJayezeh, j.sharhJayezeh, j.NoeTedadRial \n" +
+                    "FROM jayezeh j\n" +
+                    "     LEFT JOIN jayezehSatr js ON js.ccJayezeh = j.ccJayezeh\n" +
+                    "     LEFT JOIN Kala k ON k.ccBrand = js.ccNoeField \n" +
+                    "WHERE js.NameNoeField=3 AND k.ccKalaCode= "+ ccKalaCode +" --cckalacode\n" +
+                    "      AND ccNoeFieldMoshtary = "+ CcnoeMoshtary +" AND ccNoeSenf  IN ( 0 , " + CcNoeSenf +") AND darajeh IN (0, " + darajeh + ") \n" +
+                    "      AND js.tedadJayezeh > 0\n" +
+                    "UNION ALL\n" +
+                    "SELECT DISTINCT j.ccJayezeh, j.sharhjayezeh, j.NoeTedadRial \n" +
+                    "From jayezeh j \n" +
+                    "     LEFT JOIN JayezehSatr js ON js.ccJayezeh = j.ccJayezeh\n" +
+                    "     LEFT JOIN Kala k ON k.ccTaminKonandeh = js.ccNoeField \n" +
+                    "WHERE js.NameNoeField=4 AND k.ccKalaCode= "+ ccKalaCode +" --cckalacode\n" +
+                    "      AND ccNoeFieldMoshtary = "+ CcnoeMoshtary +" AND ccNoeSenf  IN ( 0 , " + CcNoeSenf +" ) AND Darajeh IN (0, " + darajeh +" ) \n" +
+                    "      AND js.TedadJayezeh > 0";
+            Log.i("query" , StrSQL);
+
+
+            Cursor cursor = db.rawQuery(StrSQL, null);
+            Log.i("query" , db.rawQuery(StrSQL, null).toString());
+
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast())
+                    {
+                        JayezehByccKalaCodeModel model = new JayezehByccKalaCodeModel();
+                        model.setSharhJayezeh(cursor.getString(cursor.getColumnIndex(JayezehModel.COLUMN_SharhJayezeh())));
+                        model.setCcJayezeh(cursor.getInt(cursor.getColumnIndex(JayezehModel.COLUMN_ccJayezeh())));
+                        jayezehByccKalaCodeModels.add(model);
+
+                        cursor.moveToNext();
+                    }
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , JayezehModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "JayezehDAO" , "" , "getByMoshtary" , "");
+        }
+        return jayezehByccKalaCodeModels;
+    }
+
+    public ArrayList<JayezehByccKalaCodeModel> getByccKalaCode(int ccKalaCode , int tedadKala ,  int CcnoeMoshtary ,  int CcNoeSenf , int darajeh , int ccJayezeh )
+    {
+        ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeModels = new ArrayList<>();
+
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String StrSQL= "SELECT DISTINCT j.ccJayezeh, j.sharhJayezeh, j.NoeTedadRial, js.ccJayezehsatr, \n" +
+                    "                CASE WHEN js.CodeNoeBastehBandy=1 THEN  (js.Az * k.TedadDarKarton)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=2 THEN  (js.Az * k.TedadDarBasteh)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=3 OR js.CodeNoeBastehBandy=4 THEN  js.Az END AS Az,\n" +
+                    "                CASE WHEN js.CodeNoeBastehBandy=1 THEN  (js.Ta * k.TedadDarKarton)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=2 THEN  (js.Ta * k.TedadDarBasteh)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=3 OR js.CodeNoeBastehBandy=4 THEN  js.Ta END AS Ta,\n" +
+                    "                CASE WHEN js.CodeNoeBastehBandyBeEza=1 THEN  js.BeEza\n" +
+                    "                     WHEN js.CodeNoeBastehBandyBeEza=2 THEN  js.BeEza\n" +
+                    "                     WHEN js.CodeNoeBastehBandyBeEza=3 OR js.CodeNoeBastehBandyBeEza=4 THEN  js.BeEza END AS BeEza,\n" +
+                    "                js.TedadJayezeh , js.codeNoeBastehbandy\n" +
+                    "FROM jayezeh j\n" +
+                    "     LEFT JOIN jayezehSatr js ON js.ccJayezeh = j.ccJayezeh\n" +
+                    "     LEFT JOIN Kala k ON k.ccKalaCode = js.ccNoeField\n" +
+                    "WHERE js.NameNoeField=1 AND js.ccNoeField= "+ ccKalaCode +"  --cckalacode\n" +
+                    "      AND ccNoeFieldMoshtary = "+ CcnoeMoshtary +" AND ccNoeSenf  IN ( 0 , " + CcNoeSenf +") AND darajeh IN (0, " + darajeh +") \n" +
+                    "      AND  js.tedadJayezeh > 0 AND j.ccJayezeh = "+ ccJayezeh +" \n" +
+                    "UNION ALL\n" +
+                    "SELECT DISTINCT j.ccJayezeh, j.sharhJayezeh, j.NoeTedadRial, js.ccJayezehSatr,  \n" +
+                    "                CASE WHEN js.CodeNoeBastehBandy=1 THEN  (js.Az * k.TedadDarKarton)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=2 THEN  (js.Az * k.TedadDarBasteh)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=3 OR js.CodeNoeBastehBandy=4 THEN  js.Az END AS Az,\n" +
+                    "                CASE WHEN js.CodeNoeBastehBandy=1 THEN  (js.Ta * k.TedadDarKarton)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=2 THEN  (js.Ta * k.TedadDarBasteh)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=3 OR js.CodeNoeBastehBandy=4 THEN  js.Ta END AS Ta,\n" +
+                    "                CASE WHEN js.CodeNoeBastehBandyBeEza=1 THEN  js.BeEza\n" +
+                    "                     WHEN js.CodeNoeBastehBandyBeEza=2 THEN  js.BeEza\n" +
+                    "                     WHEN js.CodeNoeBastehBandyBeEza=3 OR js.CodeNoeBastehBandyBeEza=4 THEN  js.BeEza END AS BeEza, \n" +
+                    "                js.TedadJayezeh , js.codeNoeBastehbandy\n" +
+                    "FROM jayezeh j\n" +
+                    "     LEFT JOIN jayezehSatr js ON js.ccJayezeh = j.ccJayezeh\n" +
+                    "     LEFT JOIN KalaGoroh kg ON kg.ccGoroh = js.ccNoeField \n" +
+                    "     LEFT JOIN Kala k ON k.ccKalaCode = js.ccNoeField\n" +
+                    "WHERE js.NameNoeField=2 AND kg.ccKalaCode= "+ ccKalaCode +" --cckalacode\n" +
+                    "      AND ccNoeFieldMoshtary = "+ CcnoeMoshtary +" AND ccNoeSenf  IN ( 0 , " + CcNoeSenf +") AND darajeh IN (0, " + darajeh +") \n" +
+                    "      AND  js.tedadJayezeh > 0 AND j.ccJayezeh = "+ ccJayezeh +" \n" +
+                    "UNION ALL\n" +
+                    "SELECT DISTINCT j.ccJayezeh, j.sharhJayezeh, j.NoeTedadRial, js.ccJayezehSatr, \n" +
+                    "                CASE WHEN js.CodeNoeBastehBandy=1 THEN  (js.Az * k.TedadDarKarton)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=2 THEN  (js.Az * k.TedadDarBasteh)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=3 OR js.CodeNoeBastehBandy=4 THEN  js.Az END AS Az,\n" +
+                    "                CASE WHEN js.CodeNoeBastehBandy=1 THEN  (js.Ta * k.TedadDarKarton)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=2 THEN  (js.Ta * k.TedadDarBasteh)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=3 OR js.CodeNoeBastehBandy=4 THEN  js.Ta END AS Ta,\n" +
+                    "                CASE WHEN js.CodeNoeBastehBandyBeEza=1 THEN  js.BeEza\n" +
+                    "                     WHEN js.CodeNoeBastehBandyBeEza=2 THEN  js.BeEza\n" +
+                    "                     WHEN js.CodeNoeBastehBandyBeEza=3 OR js.CodeNoeBastehBandyBeEza=4 THEN  js.BeEza END AS BeEza, \n" +
+                    "                js.TedadJayezeh , js.codeNoeBastehbandy\n" +
+                    "FROM jayezeh j\n" +
+                    "     LEFT JOIN jayezehSatr js ON js.ccJayezeh = j.ccJayezeh\n" +
+                    "     LEFT JOIN Kala k ON k.ccBrand = js.ccNoeField \n" +
+                    "WHERE js.NameNoeField=3 AND k.ccKalaCode= "+ ccKalaCode +" --cckalacode\n" +
+                    "      AND ccNoeFieldMoshtary = "+ CcnoeMoshtary +" AND ccNoeSenf  IN ( 0 , " + CcNoeSenf +") AND darajeh IN (0, " + darajeh + ") \n" +
+                    "      AND js.tedadJayezeh > 0 AND j.ccJayezeh = "+ ccJayezeh +" \n" +
+                    "UNION ALL\n" +
+                    "SELECT DISTINCT j.ccJayezeh, j.sharhjayezeh, j.NoeTedadRial, js.ccJayezehSatr, \n" +
+                    "                CASE WHEN js.CodeNoeBastehBandy=1 THEN  (js.Az * k.TedadDarKarton)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=2 THEN  (js.Az * k.TedadDarBasteh)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=3 OR js.CodeNoeBastehBandy=4 THEN  js.Az END AS Az,\n" +
+                    "                CASE WHEN js.CodeNoeBastehBandy=1 THEN  (js.Ta * k.TedadDarKarton)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=2 THEN  (js.Ta * k.TedadDarBasteh)\n" +
+                    "                     WHEN js.CodeNoeBastehBandy=3 OR js.CodeNoeBastehBandy=4 THEN  js.Ta END AS Ta,\n" +
+                    "                CASE WHEN js.CodeNoeBastehBandyBeEza=1 THEN  js.BeEza\n" +
+                    "                     WHEN js.CodeNoeBastehBandyBeEza=2 THEN  js.BeEza\n" +
+                    "                     WHEN js.CodeNoeBastehBandyBeEza=3 OR js.CodeNoeBastehBandyBeEza=4 THEN  js.BeEza END AS BeEza, \n" +
+                    "                js.TedadJayezeh , js.codeNoeBastehbandy\n" +
+                    "From jayezeh j\n" +
+                    "     LEFT JOIN JayezehSatr js ON js.ccJayezeh = j.ccJayezeh\n" +
+                    "     LEFT JOIN Kala k ON k.ccTaminKonandeh = js.ccNoeField \n" +
+                    "WHERE js.NameNoeField=4 AND k.ccKalaCode= "+ ccKalaCode +" --cckalacode\n" +
+                    "      AND ccNoeFieldMoshtary = "+ CcnoeMoshtary +" AND ccNoeSenf  IN ( 0 , " + CcNoeSenf +" ) AND Darajeh IN (0, " + darajeh +" ) \n" +
+                    "      AND js.TedadJayezeh > 0 AND j.ccJayezeh = "+ ccJayezeh +" ";
+
+
+            Cursor cursor = db.rawQuery(StrSQL, null);
+
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    jayezehByccKalaCodeModels = cursorToModelJayezehByccKalaCode(cursor);
+                    Log.d("JayezehDAO","jayezehModels:" + jayezehByccKalaCodeModels.toString());
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , JayezehModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "JayezehDAO" , "" , "getByMoshtary" , "");
+        }
+        return jayezehByccKalaCodeModels;
+    }
+
     public boolean deleteAll()
     {
         try
@@ -547,5 +726,30 @@ public class JayezehDAO
     }
 
 
+    private ArrayList<JayezehByccKalaCodeModel> cursorToModelJayezehByccKalaCode(Cursor cursor)
+    {
+        ArrayList<JayezehByccKalaCodeModel> jayezehModels = new ArrayList<>();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast())
+        {
+            JayezehByccKalaCodeModel jayezehModel = new JayezehByccKalaCodeModel();
+
+            jayezehModel.setCcJayezeh(cursor.getInt(cursor.getColumnIndex(jayezehModel.getCOLUMN_ccJayezeh())));
+            jayezehModel.setSharhJayezeh(cursor.getString(cursor.getColumnIndex(jayezehModel.getCOLUMN_SharhJayezeh())));
+            jayezehModel.setCcJayezehSatr(cursor.getInt(cursor.getColumnIndex(jayezehModel.getCOLUMN_ccJayezehSatr())));
+            jayezehModel.setAz(cursor.getInt(cursor.getColumnIndex(jayezehModel.getCOLUMN_Az())));
+            jayezehModel.setTa(cursor.getInt(cursor.getColumnIndex(jayezehModel.getCOLUMN_Ta())));
+            jayezehModel.setTedadJayezeh(cursor.getInt(cursor.getColumnIndex(jayezehModel.getCOLUMN_TedadJayezeh())));
+            jayezehModel.setBeEza(cursor.getInt(cursor.getColumnIndex(jayezehModel.getCOLUMN_BeEza())));
+            jayezehModel.setNoeTedadRial(cursor.getInt(cursor.getColumnIndex(jayezehModel.getCOLUMN_NoeTedadRial())));
+            jayezehModel.setCodeNoeBastehBandy(cursor.getInt(cursor.getColumnIndex(jayezehModel.getCOLUMN_CodeNoeBastehBandy())));
+
+
+            jayezehModels.add(jayezehModel);
+            cursor.moveToNext();
+        }
+        return jayezehModels;
+    }
 
 }

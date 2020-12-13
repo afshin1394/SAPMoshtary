@@ -477,6 +477,11 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
                 public void onItemClick(KalaDarkhastFaktorSatrModel kalaDarkhastFaktorModel, int position) {
 
                 }
+
+                @Override
+                public void onItemClickJayezeh(int CcKalaCode, int tedadKala, Long ccDarkhastFaktor, double mablaghForosh) {
+
+                }
             });
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(VerifyRequestActivity.this);
             recyclerViewRequestedGoods.setLayoutManager(mLayoutManager);

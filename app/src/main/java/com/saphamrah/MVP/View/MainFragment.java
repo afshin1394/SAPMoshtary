@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -129,21 +130,27 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
 
 
 
-    /*private String[] times = new String[]{"06:17:50" , "07:16:06" , "08:16:06" , "10:16:06" , "13:16:06" ,"13:16:06", "14:16:06" , "15:18:50",
-                                  "16:16:06" , "17:16:06" ,"18:16:06" , "19:24:07" , "20:00:07" ,
-                                  "20:24:07" , "21:00:07" , "21:24:07" , "23:24:07" , "00:00:00" , "04:00:00"};
-    private int counter = 0;*/
 
     @Override
     public void onAttach(Context context)
     {
         super.onAttach(context);
         this.context = context;
-        startTimer();
+        //TODO
+//        startTimer();
     }
-
-
-
+//todo
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        Log.i("FRAGMENT_VISIBLE", "setUserVisibleHint: ");
+        if (isVisibleToUser)
+        startTimer();
+        else {
+            if (timer!=null)
+            stopTimer();
+        }
+    }
 
     @Nullable
     @Override
@@ -177,12 +184,7 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
             screenHeight = screenHeight - appBarSize - navigationBarSize - getStatusBarHeight();
             child2Constraint.getLayoutParams().height = screenHeight / 2;
             child1Constraint.getLayoutParams().height = screenHeight / 2;
-
-
         }
-
-
-
         return view;
     }
 
@@ -199,22 +201,7 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
         lblTemperature = view.findViewById(R.id.lblTemperature);
         lblCurrentTime = view.findViewById(R.id.lblCurrentTime);
         lblCurrentDate = view.findViewById(R.id.lblCurrentDate);
-//        barChartCountFaktor = view.findViewById(R.id.barChartCountFaktor);
-//        barChartMablaghFaktor = view.findViewById(R.id.barChartMablaghFaktor);
-//        barChartHadafForoshTedady=view.findViewById(R.id.barChartHadafForoshTedady);
-//        barChartDarsadHadafForoshTedady=view.findViewById(R.id.barChartDarsadHadafForoshTedady);
-//        layCharts = view.findViewById(R.id.layCharts);
 
-//        barChartCountFaktor.setNoDataText(context.getResources().getString(R.string.errorGetData));
-//        barChartCountFaktor.setNoDataTextColor(Color.RED);
-//        barChartCountFaktor.setNoDataTextTypeface(font);
-
-//        barChartMablaghFaktor.setNoDataText(context.getResources().getString(R.string.errorGetData));
-//        barChartMablaghFaktor.setNoDataTextColor(Color.RED);
-//        barChartMablaghFaktor.setNoDataTextTypeface(font);
-
-//        setNoDataText(barChartHadafForoshTedady,font);
-//        setNoDataText(barChartDarsadHadafForoshTedady,font);
 
         stateMaintainer = new StateMaintainer(getFragmentManager() , TAG , context);
         startMVPOps();
@@ -566,115 +553,6 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
         lblTemperature.setVisibility(View.GONE);
     }
 
-    public void startMVPOps()
-    {
-        try
-        {
-            if ( stateMaintainer.firstTimeIn() )
-            {
-                initialize(this);
-            }
-            else
-            {
-                reinitialize(this);
-            }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace();
-            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "MainFragment", "startMVPOps", "");
-        }
-    }
-
-
-    private void initialize(MainFirstFragmentMVP.RequiredViewOps view )
-    {
-        try
-        {
-            mPresenter = new MainFirstFragmentPresenter(view);
-            stateMaintainer.put(MainFirstFragmentMVP.PresenterOps.class.getSimpleName(), mPresenter);
-        }
-        catch (Exception exception)
-        {
-            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "MainFragment", "initialize", "");
-        }
-    }
-
-
-    private void reinitialize(MainFirstFragmentMVP.RequiredViewOps view)
-    {
-        try
-        {
-            mPresenter = stateMaintainer.get(MainFirstFragmentMVP.PresenterOps.class.getSimpleName());
-            if ( mPresenter == null )
-            {
-                initialize( view );
-            }
-            else
-            {
-                mPresenter.onConfigurationChanged(view);
-            }
-        }
-        catch (Exception exception)
-        {
-            if (mPresenter != null)
-            {
-                mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "MainFragment", "reinitialize", "");
-            }
-        }
-    }
-
-
-
-
-    private class DayAxisValueFormatter extends ValueFormatter
-    {
-        private final BarLineChartBase<?> chart;
-        private final String[] values = new String[]{context.getResources().getString(R.string.today) , context.getResources().getString(R.string.untilToday)};
-
-        public DayAxisValueFormatter(BarLineChartBase<?> chart)
-        {
-            this.chart = chart;
-        }
-
-        @Override
-        public String getFormattedValue(float value)
-        {
-            return values[((int) value) - 1];
-        }
-
-    }
-
-
-
-
-    private class MyValueFormatter extends ValueFormatter
-    {
-        private final DecimalFormat mFormat;
-        private String suffix;
-
-        public MyValueFormatter(String suffix) {
-            mFormat = new DecimalFormat("###,###,###,##0.0");
-            this.suffix = suffix;
-        }
-
-        @Override
-        public String getFormattedValue(float value) {
-            return mFormat.format(value) + suffix;
-        }
-
-        @Override
-        public String getAxisLabel(float value, AxisBase axis) {
-            if (axis instanceof XAxis) {
-                return mFormat.format(value);
-            } else if (value > 0) {
-                return mFormat.format(value) + suffix;
-            } else {
-                return mFormat.format(value);
-            }
-        }
-    }
-
 
     public int getStatusBarHeight() {
         int result = 0;
@@ -695,27 +573,33 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
     }
 
     //handles action up and down touch events
-    private void handleFragmentStatePagerTouchEvents() {
-        viewPagerMainFrag.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                final int action = MotionEventCompat.getActionMasked(motionEvent);
-                if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_BUTTON_PRESS) {
-                    if (motionEvent.getDownTime() >= LONG_CLICK_DURATION) {
-                        isLongClick = true;
-                        stopTimer();
-                    }
-                }
-                if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+       View.OnTouchListener onTouchListener= new View.OnTouchListener() {
+           @Override
+           public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                    if (isLongClick) {
+                   final int action = MotionEventCompat.getActionMasked(motionEvent);
+                   if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_BUTTON_PRESS) {
+                       if (motionEvent.getDownTime() >= LONG_CLICK_DURATION) {
+                           isLongClick = true;
+                        stopTimer();
+                       }
+                   }
+                   if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+
+                       if (isLongClick) {
                         startTimer();
-                        Log.i("touchEvent", "onReleaseClick: ");
-                    }
-                }
-                return false;
-            }
-        });
-    }
+                           Log.i("touchEvent", "onReleaseClick: ");
+                       }
+                   }
+                   return false;
+               }
+
+       };
+
+
+
+
+
 
 
 
@@ -778,9 +662,9 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
 
         viewPagerMainFrag.setAdapter(viewPagerAdapter);
         viewPagerMainFrag.setPageTransformer(false, new ZoomOutPageTransformer());
-        viewPagerMainFrag.setOffscreenPageLimit(1);
-        viewPagerMainFrag.setCurrentItem(Integer.MAX_VALUE / 2);
-        handleFragmentStatePagerTouchEvents();
+        viewPagerMainFrag.setCurrentItem(Integer.MAX_VALUE/2);
+        viewPagerMainFrag.setOnTouchListener(onTouchListener);
+
 
 
     }
@@ -830,15 +714,7 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
         }
     }
 
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (fragList.size() >= 4) {
-            Log.i(TAG, "onViewStateRestored: ");
-        } else {
-            initFragments();
-        }
-    }
+
 
 
     //implement container onLongClickListenerEvent that contains the fragments
@@ -852,5 +728,65 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
     public  float convertPixelsToDp(float px, Context context) {
         return px / ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
+
+
+    public void startMVPOps()
+    {
+        try
+        {
+            if ( stateMaintainer.firstTimeIn() )
+            {
+                initialize(this);
+            }
+            else
+            {
+                reinitialize(this);
+            }
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "MainFragment", "startMVPOps", "");
+        }
+    }
+
+
+    private void initialize(MainFirstFragmentMVP.RequiredViewOps view )
+    {
+        try
+        {
+            mPresenter = new MainFirstFragmentPresenter(view);
+            stateMaintainer.put(MainFirstFragmentMVP.PresenterOps.class.getSimpleName(), mPresenter);
+        }
+        catch (Exception exception)
+        {
+            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "MainFragment", "initialize", "");
+        }
+    }
+
+
+    private void reinitialize(MainFirstFragmentMVP.RequiredViewOps view)
+    {
+        try
+        {
+            mPresenter = stateMaintainer.get(MainFirstFragmentMVP.PresenterOps.class.getSimpleName());
+            if ( mPresenter == null )
+            {
+                initialize( view );
+            }
+            else
+            {
+                mPresenter.onConfigurationChanged(view);
+            }
+        }
+        catch (Exception exception)
+        {
+            if (mPresenter != null)
+            {
+                mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "MainFragment", "reinitialize", "");
+            }
+        }
+    }
+
 
 }

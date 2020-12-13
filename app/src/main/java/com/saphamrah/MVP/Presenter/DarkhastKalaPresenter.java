@@ -10,6 +10,7 @@ import com.saphamrah.Model.KalaModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.SelectFaktorShared;
+import com.saphamrah.UIModel.JayezehByccKalaCodeModel;
 import com.saphamrah.UIModel.KalaDarkhastFaktorSatrModel;
 import com.saphamrah.UIModel.KalaMojodiZaribModel;
 import com.saphamrah.Utils.Constants;
@@ -290,6 +291,16 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
         mView.get().onGetSavedRecyclerViewPics(kalaMojodiZaribModels);
     }
 
+    @Override
+    public void checkJayezehParent(int ccKalaCode , int tedadKala , Long ccDarkhastFaktor, double mablaghForosh) {
+        mModel.checkJayezehParent(ccKalaCode ,  tedadKala , ccDarkhastFaktor,mablaghForosh);
+    }
+
+    @Override
+    public void checkJayezeh(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor,int position) {
+        mModel.checkJayezeh(ccJayezeh,tedadKala,mablaghForosh,ccKalaCode,ccDarkhastFaktor ,position);
+    }
+
 
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
@@ -424,4 +435,15 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
         }
         mView.get().onGetElatAdamDarkhast(elatAdamDarkhastModels , elatAdamDarkhastIds , elatAdamDarkhastTitles);
     }
+
+    @Override
+    public void onCheckJayezehParent(ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels, int tedadKala, double mablaghForosh , int ccKalaCode , Long ccDarkhastFaktor) {
+        mView.get().onCheckJayezehParent(jayezehByccKalaCodeParentModels  , tedadKala,mablaghForosh,ccKalaCode,ccDarkhastFaktor);
+    }
+
+    @Override
+    public void onCheckJayezeh(int position) {
+        mView.get().onCheckJayezeh(position);
+    }
+
 }

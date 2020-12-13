@@ -7,6 +7,7 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.DarkhastKalaMVP;
 import com.saphamrah.DAO.AdamDarkhastDAO;
 import com.saphamrah.DAO.CodeTypeDAO;
@@ -17,6 +18,7 @@ import com.saphamrah.DAO.ElatAdamDarkhastDAO;
 import com.saphamrah.DAO.ForoshandehDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.GPSDataPpcDAO;
+import com.saphamrah.DAO.JayezehDAO;
 import com.saphamrah.DAO.KalaDarkhastFaktorSatrDAO;
 import com.saphamrah.DAO.KalaMojodiDAO;
 import com.saphamrah.DAO.KalaMojodiGiriDAO;
@@ -36,6 +38,7 @@ import com.saphamrah.Model.GPSDataModel;
 import com.saphamrah.Model.KalaDarkhastFaktorModel;
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.KalaMojodiModel;
+import com.saphamrah.Model.MojoodiGiriModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.PubFunc.DateUtils;
@@ -43,6 +46,7 @@ import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.SelectFaktorShared;
+import com.saphamrah.UIModel.JayezehByccKalaCodeModel;
 import com.saphamrah.UIModel.KalaDarkhastFaktorSatrModel;
 import com.saphamrah.UIModel.KalaMojodiZaribModel;
 import com.saphamrah.Utils.Constants;
@@ -60,7 +64,10 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
 
     private DarkhastKalaMVP.RequiredPresenterOps mPresenter;
     private boolean enableKalaAsasi = true;
-
+    MoshtaryDAO moshtaryDAO = new MoshtaryDAO(BaseApplication.getContext());
+    JayezehDAO jayezehDAO = new JayezehDAO(BaseApplication.getContext());
+    DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
+    private ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels;
     public DarkhastKalaModel(DarkhastKalaMVP.RequiredPresenterOps mPresenter)
     {
         this.mPresenter = mPresenter;
@@ -797,7 +804,45 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
         ElatAdamDarkhastDAO elatAdamDarkhastDAO = new ElatAdamDarkhastDAO(mPresenter.getAppContext());
         ArrayList<ElatAdamDarkhastModel> elatAdamDarkhastModels = elatAdamDarkhastDAO.getElatAdamSefaresh(moshtaryModel.getCodeVazeiat() , moshtaryModel.getCcNoeMoshtary());
 
-        mPresenter.onGetElatAdamSefaresh(elatAdamDarkhastModels);
+        DarkhastFaktorKalaPishnahadiDAO darkhastFaktorKalaPishnahadiDAO = new DarkhastFaktorKalaPishnahadiDAO(BaseApplication.getContext());
+        int tedadAghlam3Mag = darkhastFaktorKalaPishnahadiDAO.getTedadKharid3Mah(ccMoshtary);
+        KalaMojodiGiriDAO kalaMojodiGiriDAO = new KalaMojodiGiriDAO(BaseApplication.getContext());
+        ArrayList<MojoodiGiriModel> mojodiGiriModels = kalaMojodiGiriDAO.getTedadMojodiGiri(ccMoshtary);
+        ArrayList<ElatAdamDarkhastModel> elatAdamDarkhastModelsForShow = new ArrayList<>();
+        /**
+         * if we have GetCondition is 1 in list check this condition
+         * if we have GetCondition is 0 add in list without condition
+         * add it from list for show Adam Darkhast When the condition was met
+         * getGetCondition() == 0  :  show
+         * getGetCondition() == 1  :  do not show
+         * CcElatAdamDarkhast = 1 : have mojodi
+         * CcElatAdamDarkhast = 2 : There was no customer
+         */
+        for (int i = 0 ; i < elatAdamDarkhastModels.size() ; i++){
+            if (elatAdamDarkhastModels.get(i).getCcElatAdamDarkhast() == 1){
+                if (elatAdamDarkhastModels.get(i).getGetCondition() == 1){
+                    if(tedadAghlam3Mag >= 15  && mojodiGiriModels.size() > 0)
+                    {
+                        elatAdamDarkhastModelsForShow.add(elatAdamDarkhastModels.get(i));
+                    }
+                } else if (elatAdamDarkhastModels.get(i).getGetCondition() == 0){
+                    elatAdamDarkhastModelsForShow.add(elatAdamDarkhastModels.get(i));
+                }
+            } else if (elatAdamDarkhastModels.get(i).getCcElatAdamDarkhast() == 2) {
+                if (elatAdamDarkhastModels.get(i).getGetCondition() == 1){
+                    if (tedadAghlam3Mag > 0){
+                        elatAdamDarkhastModelsForShow.add(elatAdamDarkhastModels.get(i));
+                    }
+                } else if (elatAdamDarkhastModels.get(i).getGetCondition() == 0){
+                    elatAdamDarkhastModelsForShow.add(elatAdamDarkhastModels.get(i));
+                }
+            } else if (elatAdamDarkhastModels.get(i).getCcElatAdamDarkhast() > 2){
+                elatAdamDarkhastModelsForShow.add(elatAdamDarkhastModels.get(i));
+            }
+
+        }
+
+        mPresenter.onGetElatAdamSefaresh(elatAdamDarkhastModelsForShow);
     }
 
     @Override
@@ -934,6 +979,51 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
     public void onDestroy()
     {
 
+    }
+
+
+    /**
+     * get list Jayezeh from DB for show recycler
+     * @param ccKalaCode
+     * @param tedadKala
+     * @param ccDarkhastFaktor
+     * @param mablaghForosh
+     */
+    @Override
+    public void checkJayezehParent(int ccKalaCode, int tedadKala, Long ccDarkhastFaktor, double mablaghForosh) {
+
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(darkhastFaktorModel.getCcMoshtary());
+        jayezehByccKalaCodeParentModels = jayezehDAO.getByccKalaCodeParent(ccKalaCode, tedadKala, moshtaryModel.getCcNoeMoshtary(), moshtaryModel.getCcNoeSenf(), moshtaryModel.getDarajeh());
+        mPresenter.onCheckJayezehParent(jayezehByccKalaCodeParentModels, tedadKala, mablaghForosh, ccKalaCode, ccDarkhastFaktor);
+    }
+
+    /**
+     * get jayezeh details from DB
+     * set jayezehByccKalaCodeModels in jayezehByccKalaCodeParentModels for show item recycler
+     * @param ccJayezeh
+     * @param tedadKala
+     * @param mablaghForosh
+     * @param ccKalaCode
+     * @param ccDarkhastFaktor
+     * @param position
+     */
+
+    @Override
+    public void checkJayezeh(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor, int position) {
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(darkhastFaktorModel.getCcMoshtary());
+
+        double mablaghKol = mablaghForosh * tedadKala;
+        ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeModels = jayezehDAO.getByccKalaCode(ccKalaCode, tedadKala, moshtaryModel.getCcNoeMoshtary(), moshtaryModel.getCcNoeSenf(), moshtaryModel.getDarajeh(), ccJayezeh);
+        jayezehByccKalaCodeParentModels.get(position).setJayezehByccKalaCodeModels(jayezehByccKalaCodeModels);
+        jayezehByccKalaCodeParentModels.get(position).setCcJayezehDetails(ccJayezeh);
+        jayezehByccKalaCodeParentModels.get(position).setTedadKalaDetails(tedadKala);
+        jayezehByccKalaCodeParentModels.get(position).setMablaghForoshDetails(mablaghForosh);
+        jayezehByccKalaCodeParentModels.get(position).setCcKalaCodeDetails(ccKalaCode);
+        jayezehByccKalaCodeParentModels.get(position).setCcDarkhastFaktorDetails(ccDarkhastFaktor);
+        jayezehByccKalaCodeParentModels.get(position).setMablaghKol(mablaghKol);
+        mPresenter.onCheckJayezeh(position);
     }
 
 }

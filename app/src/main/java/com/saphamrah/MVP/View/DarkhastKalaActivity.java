@@ -22,6 +22,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,6 +41,7 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.saphamrah.Adapter.JayezehParentAlertAdapter;
 import com.saphamrah.Adapter.RequestGoodsAdapter;
 import com.saphamrah.Adapter.RequestGoodsListAdapter;
 import com.saphamrah.Adapter.RequestedGoodAdapter;
@@ -57,6 +59,7 @@ import com.saphamrah.Model.ElatAdamDarkhastModel;
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.UIModel.JayezehByccKalaCodeModel;
 import com.saphamrah.UIModel.KalaDarkhastFaktorSatrModel;
 import com.saphamrah.UIModel.KalaMojodiZaribModel;
 import com.saphamrah.Utils.Constants;
@@ -79,7 +82,7 @@ import me.anwarshahriar.calligrapher.Calligrapher;
 
 import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
 
-public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastKalaMVP.RequiredViewOps
+public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastKalaMVP.RequiredViewOps,JayezehParentAlertAdapter.OnItemClickListener
 {
 
     private final String TAG = this.getClass().getSimpleName();
@@ -101,7 +104,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     private ElatAdamDarkhastModel elatAdamDarkhastModel;
     private final int READ_EXTERNAL_STORAGE_PERMISSION = 100;
     private final int TAKE_IMAGE = 101;
-
+    private JayezehParentAlertAdapter jayezehAlertAdapter;
 
     public int heightOfRecycler = 0;
     public int widthOfRecycler = 0;
@@ -112,11 +115,11 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     private EditText edttxtCountCarton;
     private EditText edttxtCountBaste;
     private EditText edttxtCountAdad;
-	private FloatingActionButton fabAdamSefaresh;
-	private RecyclerView recyclerViewNew;
-	private ImageView btnChooseShowType;
+    private FloatingActionButton fabAdamSefaresh;
+    private RecyclerView recyclerViewNew;
+    private ImageView btnChooseShowType;
 
-	private RequestedGridGoodAdapter requestedGridGoodAdapter;
+    private RequestedGridGoodAdapter requestedGridGoodAdapter;
     public static Map<Integer, Bitmap> imageHash = new HashMap<>();
     public int numberOfDisplayItems = 4;
     private int SpanCount =2;
@@ -187,6 +190,12 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
                     }
                 });
             }
+            @Override
+            public void onItemClickJayezeh(int CcKalaCode, int tedadKala, Long ccDarkhastFaktor , double mablaghForosh) {
+                Log.i("DarkhastKala", "CcKalaCode : " + String.valueOf(CcKalaCode) + " , tedadKala  :" + tedadKala + "  ,  ccDarkhastFaktor : " + ccDarkhastFaktor);
+                mPresenter.checkJayezehParent(CcKalaCode, tedadKala, ccDarkhastFaktor,mablaghForosh);
+            }
+
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(DarkhastKalaActivity.this);
         recyclerViewRequestedGoods.setLayoutManager(mLayoutManager);
@@ -223,7 +232,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         ccSazmanForosh = getIntent.getIntExtra("ccSazmanForosh" , -1);
         tedadKalaAsasi = 0;
         tedadKalaAsasiWithTedad = 0;
-		mPresenter.getNoeMasouliat();
+        mPresenter.getNoeMasouliat();
         mPresenter.getNameListOfKalaAdamForosh();
 
         if (Build.VERSION.SDK_INT >= 23)
@@ -1289,6 +1298,97 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
             imageHash.put(kalaMojodiModel.getCcKalaCode(), bitmap);
 
 
+        }
+
+    }
+
+    /**
+     * click item recycler jayezeh for get details jayezeh in jayezeh alert dialog
+     * @param ccJayezeh
+     * @param tedadKala
+     * @param mablaghForosh
+     * @param ccKalaCode
+     * @param ccDarkhastFaktor
+     * @param position
+     */
+    @Override
+    public void onItemClick(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor , int position) {
+        mPresenter.checkJayezeh(ccJayezeh,tedadKala,mablaghForosh,ccKalaCode,ccDarkhastFaktor,position);
+    }
+
+    /**
+     * get jayezeh kala by ccKalaCode
+     * @param jayezehByccKalaCodeParentModels
+     * @param tedadKala
+     * @param mablaghForosh
+     * @param ccKalaCode
+     * @param ccDarkhastFaktor
+     */
+    @Override
+    public void onCheckJayezehParent(ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels, int tedadKala, double mablaghForosh , int ccKalaCode , Long ccDarkhastFaktor) {
+        showJayezehAlert(jayezehByccKalaCodeParentModels, tedadKala, mablaghForosh , ccKalaCode , ccDarkhastFaktor);
+    }
+
+    /**
+     * get response for DB for Show details Jayezeh
+     * @param position
+     */
+    @Override
+    public void onCheckJayezeh(int position) {
+        Log.i("jayezehAdapter" , "onCheckJayezeh");
+    }
+
+    /**
+     *  show Jayezeh Alert dialog
+     * @param jayezehByccKalaCodeParentModels
+     * @param tedadKala
+     * @param mablaghForosh
+     * @param ccKalaCode
+     * @param ccDarkhastFaktor
+     */
+    private void showJayezehAlert(ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels, int tedadKala,double mablaghForosh ,int ccKalaCode ,Long ccDarkhastFaktor) {
+        //local list for using in adapter
+        AlertDialog.Builder builder = new AlertDialog.Builder(DarkhastKalaActivity.this);
+        alertView = getLayoutInflater().inflate(R.layout.alert_jayezeh, null);
+        RecyclerView recyclerView = alertView.findViewById(R.id.recyclerView);
+        jayezehAlertAdapter = new JayezehParentAlertAdapter(this, jayezehByccKalaCodeParentModels, tedadKala, mablaghForosh, ccKalaCode, ccDarkhastFaktor, this);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setAdapter(jayezehAlertAdapter);
+        Button btnOK = alertView.findViewById(R.id.btnApply);
+        LinearLayout lay_haventGift = alertView.findViewById(R.id.lay_haventGift);
+        TextView txt_haventGift = alertView.findViewById(R.id.txt_haventGift);
+        Typeface font = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fontPath));
+        edttxtCountCarton.setTypeface(font);
+        edttxtCountBaste.setTypeface(font);
+        edttxtCountAdad.setTypeface(font);
+        txt_haventGift .setTypeface(font);
+
+        btnOK.setTypeface(font);
+        builder.setCancelable(true);
+        builder.setView(alertView);
+        builder.create();
+
+        // show have not jayezeh Image
+        if (jayezehByccKalaCodeParentModels.size() < 1){
+            lay_haventGift.setVisibility(View.VISIBLE);
+        }
+
+        btnOK.setOnClickListener(v -> {
+            show.dismiss();
+        });
+
+        if (!(DarkhastKalaActivity.this).isFinishing()) {
+            show = builder.show();
+            try {
+                if (show.getWindow() != null) {
+                    show.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(DarkhastKalaActivity.this, Constants.LOG_EXCEPTION(), exception.toString(), "", "DarkhastKalaActivity", "showAddItemAlert", "");
+            }
         }
 
     }

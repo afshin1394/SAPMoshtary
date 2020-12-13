@@ -76,10 +76,12 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
         if (showSwipe)
         {
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right , holder.layDelete);
+            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left , holder.layJayezeh);
         }
         else
         {
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right , null);
+            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left , null);
         }
         holder.bind(kalaDarkhastFaktorSatrModels.get(position), position, listener);
     }
@@ -105,6 +107,7 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
         private ImageView imgStatusKala;
         private ImageView imgDelete;
         private LinearLayout layDelete;
+        private LinearLayout layJayezeh;
 
         private MyViewHolder(View view)
         {
@@ -121,6 +124,7 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
             imgStatusKala = view.findViewById(R.id.imgKalaAsasi);
             imgDelete = view.findViewById(R.id.imgDelete);
             layDelete = view.findViewById(R.id.layDelete);
+            layJayezeh = view.findViewById(R.id.layJayezeh);
 
             lblCodeNameKala.setTypeface(font);
             lblShomareBach.setTypeface(font);
@@ -138,6 +142,13 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
                     listener.onItemClick(kalaDarkhastFaktorSatrModels , position);
                 }
             });
+            layJayezeh.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    swipeLayout.close(true);
+                    Log.d("DarkhastKala" , kalaDarkhastFaktorSatrModels.toString());
+                    listener.onItemClickJayezeh(kalaDarkhastFaktorSatrModels.getCcKalaCode() , kalaDarkhastFaktorSatrModels.getTedad3() , kalaDarkhastFaktorSatrModels.getCcDarkhastFaktor() ,kalaDarkhastFaktorSatrModels.getMablaghForosh());
+                }
+            });
         }
 
     }
@@ -147,6 +158,8 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
     public interface OnItemClickListener
     {
         void onItemClick(KalaDarkhastFaktorSatrModel kalaDarkhastFaktorSatrModels , int position);
+        void onItemClickJayezeh(int CcKalaCode , int tedadKala , Long ccDarkhastFaktor , double  mablaghForosh );
+
     }
 
 

@@ -145,6 +145,48 @@ public class KalaMojodiGiriDAO
         return map;
     }
 
+    /**
+     * کالاهای موجودی گیری شده با تعداد را بر میگرداند
+     * @param ccMoshtary شناسه مشتری
+     */
+    public ArrayList<MojoodiGiriModel> getTedadMojodiGiri(int ccMoshtary)
+    {
+        ArrayList<MojoodiGiriModel> mojoodiGiriModels = new ArrayList<>();
+        String query = "select ccKalaCode, TedadMojoodiGiri from MojoodiGiri "+
+                " where ccMoshtary = " + ccMoshtary +
+                " group by ccKalaCode";
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast())
+                    {
+                        MojoodiGiriModel model = new MojoodiGiriModel();
+                        model.setCcKalaCode(cursor.getInt(cursor.getColumnIndex(MojoodiGiriModel.COLUMN_ccKalaCode())));
+                        model.setCcMojoodiGiri(cursor.getInt(cursor.getColumnIndex(MojoodiGiriModel.COLUMN_TedadMojoodiGiri())));
+                        mojoodiGiriModels.add(model);
+                        cursor.moveToNext();
+                    }
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , "KalaMojodiGiriModel") + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaMojodiGiriDAO" , "" , "getccKalaCodeAndTedad" , "");
+        }
+        return mojoodiGiriModels;
+    }
+
 
     /**
      * همه رکوردهایی که در جدول موجودی گیری برای مشتری و فروشنده موردنظر در تاریخ امروز ثبت شده است را برمیگرداند
