@@ -68,7 +68,7 @@ public class KalaPhotoDAO {
             retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
         } else {
             Log.i("fetchKalaPhoto", "fetchKalaPhoto: " + serverIpModel.getServerIp() + " " + serverIpModel.getPort());
-            APIService apiService = ApiClientMultiRequests.getClient(serverIpModel.getServerIp(), "8030").create(APIService.class);
+            APIService apiService = ApiClientMultiRequests.getClient(serverIpModel.getServerIp(), "8060").create(APIService.class);
             Call<GetImageKalaResult> call = apiService.getImageKala((String.valueOf(ccKalaCode)));
 
             try {
