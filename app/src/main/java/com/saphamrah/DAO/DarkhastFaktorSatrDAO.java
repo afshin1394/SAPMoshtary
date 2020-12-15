@@ -724,6 +724,33 @@ public class DarkhastFaktorSatrDAO
         return darkhastFaktorSatrModels;
     }
 
+    public ArrayList<DarkhastFaktorSatrModel> getByccDarkhastFaktorAndNoeKala(long ccDarkhastFaktor , int codeNoeKala)
+    {
+        ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(DarkhastFaktorSatrModel.TableName(), allColumns(), DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " and " + DarkhastFaktorSatrModel.COLUMN_CodeNoeKala() + " = " + codeNoeKala, null, null, null, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    darkhastFaktorSatrModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "getByccDarkhastFaktor" , "");
+        }
+        return darkhastFaktorSatrModels;
+    }
+
     public int getTedadKharid3Mah(int ccMoshtary)
     {
         int TedadKharid3Mah=0;
@@ -1371,6 +1398,35 @@ public class DarkhastFaktorSatrDAO
         return sumMablagh;
     }
 
+    public long getSumMablaghFaktorWithMaliatByccDarkhast(long ccDarkhastFaktor)
+    {
+        long sumMablagh = 0;
+        try
+        {
+            //select sum(MablaghForosh * Tedad3) from DarkhastFaktorSatr where ccDarkhastFaktor = ?
+            String query = " SELECT SUM(MablaghForoshKhalesKala * Tedad3) FROM DarkhastFaktorSatr  WHERE ccDarkhastFaktor = " + ccDarkhastFaktor;
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    sumMablagh = cursor.getLong(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorSatrModel.TableName()) + "\n" + e.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "getSumMablaghFaktorByccDarkhast" , "");
+        }
+        return sumMablagh;
+    }
 
     public ArrayList<DataTableModel> getRowsBeTafkikGorohKalaAndTakhfifSenfi(long ccDarkhastFaktor, int ccTakhfifSenfi)
     {

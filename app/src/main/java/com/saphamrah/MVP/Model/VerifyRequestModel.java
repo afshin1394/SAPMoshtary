@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.VerifyRequestMVP;
 import com.saphamrah.DAO.DariaftPardakhtDarkhastFaktorPPCDAO;
 import com.saphamrah.DAO.DariaftPardakhtPPCDAO;
@@ -700,65 +701,73 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
     @Override
     public void checkData(int clickedBottomBarposition ,double mablaghKol, float sumTakhfifat, double mablaghFaktor , long sumMablaghBaArzeshAfzoode , int ccAddress , int modatVosol , int codeNoeVosol, String nameNoeVosol , int modatRoozRaasGiri , double vaznFaktor , double hajmFaktor, Date tarikhPishbiniTahvil, int tedadAghlam)
     {
-        ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
-        String codeNoeVosolResid = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_RESID());
-        String codeNoeVosolNaghd = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD());
-        ArrayList<ParameterChildModel> childParameterModelsGorohMoshtary = childParameterDAO.getAllByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_KHORDE() + " , " + Constants.CC_CHILD_GOROH_MOSHTARY_OMDE());
-        SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
-        int ccGorohKhorde = 0;
-        int ccGorohOmde = 0;
-        int ccMoshtary = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary(), -1);
-        long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(), -1);
-        int ccForoshandeh = selectFaktorShared.getInt(selectFaktorShared.getCcForoshandeh(), -1);
-        for (ParameterChildModel model : childParameterModelsGorohMoshtary)
-        {
-            if (model.getCcParameterChild() == Constants.CC_CHILD_GOROH_MOSHTARY_KHORDE())
-            {
-                ccGorohKhorde = Integer.parseInt(model.getValue());
-            }
-            else if (model.getCcParameterChild() == Constants.CC_CHILD_GOROH_MOSHTARY_OMDE())
-            {
-                ccGorohOmde = Integer.parseInt(model.getValue());
-            }
-        }
         boolean hasError = false;
-        if (ccAddress == 0)
-        {
-            hasError = true;
-            mPresenter.onErrorCheck(R.string.errorSelectAddress, "");
-            return;
-        }
-        if (mablaghFaktor == 0)
-        {
-            hasError = true;
-            mPresenter.onErrorCheck(R.string.errorMablaghKhalesWasZero, "");
-            return;
-        }
-        if (modatVosol > modatRoozRaasGiri)
-        {
-            hasError = true;
-            Log.d("checkData", "modat Vosol : " + modatVosol + " , modat rooz raas giri : " + modatRoozRaasGiri);
-            mPresenter.onErrorCheck(R.string.errorModatVosolBiggerThanRaasGiri, "");
-            return;
-        }
-        if(modatVosol>0 && String.valueOf(codeNoeVosol).equals(codeNoeVosolNaghd) )
-        {
-            Log.d("checkData" , " modat rooz raas giri : " + modatRoozRaasGiri + " , modatvosol:" + modatVosol + " ,codenoevosol:" + codeNoeVosolNaghd);
-            mPresenter.onErrorCheck(R.string.errorModatVosolNaghdBiggerThanZero , "");
-            return;
-        }
-        /*if (modatRoozRaasGiri <= 0)
-        {
-            Log.d("modatvosol" , "modat rooz raas giri : " + modatRoozRaasGiri);
-            mPresenter.onErrorCheck(R.string.errorModatRoozRaasGiri , "");
-            return;
-        }*/
-        /*if (modatVosol == 0 && String.valueOf(codeNoeVosol).equals(codeNoeVosolResid))
-        {
-            hasError = true;
-            mPresenter.onErrorCheck(R.string.errorModatVosol , "");
-            return;
-        }*/
+        SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
+        long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(), -1);
+        DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(BaseApplication.getContext());
+        ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels = darkhastFaktorSatrDAO.getByccDarkhastFaktorAndNoeKala(ccDarkhastFaktor , 2);
+       /*
+       چک کردن لیست جایزه برای زمانی که از یک جایزه دوبار ثبت شود
+        */
+        int checkJayezeh = 0;
+       if (darkhastFaktorSatrModels.size() > 0){
+           for (int i = 0 ; i < darkhastFaktorSatrModels.size() ; i++){
+               for (int j = 0 ; j < darkhastFaktorSatrModels.size() ; j++){
+                   if (darkhastFaktorSatrModels.get(i).getShomarehBach().equals(darkhastFaktorSatrModels.get(j).getShomarehBach()) &&
+                   darkhastFaktorSatrModels.get(i).getGheymatMasrafKonandeh() == darkhastFaktorSatrModels.get(j).getGheymatMasrafKonandeh() &&
+                   darkhastFaktorSatrModels.get(i).getMablaghForosh() == darkhastFaktorSatrModels.get(j).getMablaghForosh() &&
+                   darkhastFaktorSatrModels.get(i).getCcTaminKonandeh() == darkhastFaktorSatrModels.get(j).getCcTaminKonandeh()
+                   ){
+                       checkJayezeh++;
+                   }
+               }
+           }
+       }
+
+       if (checkJayezeh > 1)
+       {
+           hasError = true;
+           mPresenter.onErrorCheck(R.string.errorSabtJayezeh,"");
+           return;
+       }
+       ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
+       String codeNoeVosolResid = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_RESID());
+       String codeNoeVosolNaghd = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD());
+       ArrayList<ParameterChildModel> childParameterModelsGorohMoshtary = childParameterDAO.getAllByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_KHORDE() + " , " + Constants.CC_CHILD_GOROH_MOSHTARY_OMDE());
+       int ccGorohKhorde = 0;
+       int ccGorohOmde = 0;
+       int ccMoshtary = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary(), -1);
+       int ccForoshandeh = selectFaktorShared.getInt(selectFaktorShared.getCcForoshandeh(), -1);
+       for (ParameterChildModel model : childParameterModelsGorohMoshtary) {
+           if (model.getCcParameterChild() == Constants.CC_CHILD_GOROH_MOSHTARY_KHORDE()) {
+               ccGorohKhorde = Integer.parseInt(model.getValue());
+           } else if (model.getCcParameterChild() == Constants.CC_CHILD_GOROH_MOSHTARY_OMDE()) {
+               ccGorohOmde = Integer.parseInt(model.getValue());
+           }
+       }
+
+       if (ccAddress == 0) {
+           hasError = true;
+           mPresenter.onErrorCheck(R.string.errorSelectAddress, "");
+           return;
+       }
+       if (mablaghFaktor == 0) {
+           hasError = true;
+           mPresenter.onErrorCheck(R.string.errorMablaghKhalesWasZero, "");
+           return;
+       }
+       if (modatVosol > modatRoozRaasGiri) {
+           hasError = true;
+           Log.d("checkData", "modat Vosol : " + modatVosol + " , modat rooz raas giri : " + modatRoozRaasGiri);
+           mPresenter.onErrorCheck(R.string.errorModatVosolBiggerThanRaasGiri, "");
+           return;
+       }
+       if (modatVosol > 0 && String.valueOf(codeNoeVosol).equals(codeNoeVosolNaghd)) {
+           Log.d("checkData", " modat rooz raas giri : " + modatRoozRaasGiri + " , modatvosol:" + modatVosol + " ,codenoevosol:" + codeNoeVosolNaghd);
+           mPresenter.onErrorCheck(R.string.errorModatVosolNaghdBiggerThanZero, "");
+           return;
+       }
+
         if (selectFaktorShared.getFloat(selectFaktorShared.getVaznMashin(), -1) < vaznFaktor && clickedBottomBarposition!=2)
         {
             Log.d("checkData", "vazn mashin : " + selectFaktorShared.getFloat(selectFaktorShared.getHajmMashin(), -1) + " , vazn faktor : " + vaznFaktor);
@@ -886,7 +895,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         //-------------------------- Check Noe Vosol ------------------------------------
         DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
         DarkhastFaktorJayezehDAO darkhastFaktorJayezehDAO = new DarkhastFaktorJayezehDAO(mPresenter.getAppContext());
-																														 
+
         String ccTakhfifs = selectFaktorShared.getString(selectFaktorShared.getCcTakhfifJayezes() , "");
         ArrayList<DarkhastFaktorJayezehModel> darkhastFaktorJayezehModels = darkhastFaktorJayezehDAO.getByccDarkhastFaktorAndCodeNoe(ccDarkhastFaktor , DarkhastFaktorJayezehModel.CodeNoeJayezehEntekhabi());
         Log.d("takhfif" , "ccTakhfifs : " + ccTakhfifs);
@@ -934,7 +943,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             entity.setMablaghKolFaktor(mablaghKol);
             entity.setMablaghKhalesFaktor(mablaghFaktor);
             Log.d("verifyRequest" , "sumMablaghKol in checkData : " + mablaghKol + " , mablaghKol in entity : " + entity.getMablaghKolFaktor());
-			   
+
             entity.setCodeVazeiat(Constants.CODE_VAZEIAT_FAKTOR_TAEED());
             if (noeMasouliat == 4 || noeMasouliat == 5) //4-MamorPakhsh-Sard //5-MamorPakhsh-Smart
             {
@@ -1151,13 +1160,13 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 ForoshandehEtebarDAO foroshandehEtebarDAO =new ForoshandehEtebarDAO(mPresenter.getAppContext());
                 ForoshandehEtebarModel foroshandehEtebarModel = foroshandehEtebarDAO.getByccForoshandeh(ccForoshandeh);
 
-
+                long MablaghHavalehSatr=0;
                 //EtebarBargashty
                 long rialBargahstyForoshandeh = foroshandehEtebarModel.getRialBargashty();
                 int tedadBargahstyForoshandeh = foroshandehEtebarModel.getTedadBargashty();
                 int modatBargashtyForoshandeh = foroshandehEtebarModel.getModatBargashty();
 
-                Long EtebarMandehRialBargashtiForoshandeh = foroshandehEtebarModel.getEtebarRialBargashty() - rialBargahstyForoshandeh;
+                long EtebarMandehRialBargashtiForoshandeh = foroshandehEtebarModel.getEtebarRialBargashty() - rialBargahstyForoshandeh;
                 int EtebarMandehTedadBargashtyForoshandeh = foroshandehEtebarModel.getEtebarTedadBargashty() - tedadBargahstyForoshandeh;
                 int EtabarMandehModatBargashtyForoshandeh = foroshandehEtebarModel.getEtebarModatBargashty() - modatBargashtyForoshandeh;
 
@@ -1169,7 +1178,9 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 long etebarRialAsnadForoshandeh = foroshandehEtebarModel.getEtebarRialAsnadMoshtary() + foroshandehEtebarModel.getEtebarRialAsnadShakhsi();
                 int etebarTedadAsnadForoshandeh = foroshandehEtebarModel.getEtebarTedadAsnadMoshtary() + foroshandehEtebarModel.getEtebarTedadAsnadShakhsi();
 
-                Long EtebarMandehRialAsnadForoshandeh;
+                long EtebarMandehRialAsnadForoshandeh;
+                DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
+                MablaghHavalehSatr = darkhastFaktorSatrDAO.getSumMablaghFaktorWithMaliatByccDarkhast(selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(),-1));
                 if(noeMasouliat == 4 || noeMasouliat == 5)
                 {
                     EtebarMandehRialAsnadForoshandeh= etebarRialAsnadForoshandeh - rialAsnadForoshandeh + selectFaktorShared.getLong(selectFaktorShared.getMablaghHavaleh(),0);
@@ -1185,7 +1196,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 int tedadMoavaghForoshandeh = foroshandehEtebarModel.getTedadMoavagh();
                 int modatMoavaghForoshandeh = foroshandehEtebarModel.getModatMoavagh();
 
-                Long EtebarMandehRialMoavaghForoshandeh;
+                long EtebarMandehRialMoavaghForoshandeh;
                 if(noeMasouliat == 4 || noeMasouliat == 5)
                 {
                     EtebarMandehRialMoavaghForoshandeh = foroshandehEtebarModel.getEtebarRialMoavagh() - rialMoavaghForoshandeh + selectFaktorShared.getLong(selectFaktorShared.getMablaghHavaleh(),0);
@@ -1211,7 +1222,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                                 " , EtebarMandehRialMoavaghForoshandeh : " + EtebarMandehRialMoavaghForoshandeh + " , EtebarMandehTedadMoavaghForoshandeh : " + EtebarMandehTedadMoavaghForoshandeh + " , EtabarMandehModatMoavaghForoshandeh : " + EtabarMandehModatMoavaghForoshandeh +
                         " , saghfEtebarRialiForoshandeh: " + saghfEtebarRialiForoshandeh +
                         "saghfEtebarTedadiForoshandeh:" + saghfEtebarTedadiForoshandeh +
-                        "saghfEtebarModatForoshandeh:" + saghfEtebarModatForoshandeh);
+                        "saghfEtebarModatForoshandeh:" + saghfEtebarModatForoshandeh +
+                        ", MablaghHavalehSatr" + MablaghHavalehSatr);
 
                 //-----------------------------------
                 //Etebar Moshtary
