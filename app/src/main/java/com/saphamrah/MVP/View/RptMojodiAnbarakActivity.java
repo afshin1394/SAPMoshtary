@@ -3,6 +3,7 @@ package com.saphamrah.MVP.View;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -173,7 +174,7 @@ public class RptMojodiAnbarakActivity extends AppCompatActivity implements RptMo
         startMVPOps();
 
         mPresenter.getMojodiAnbar();
-        mPresenter.getGallery();
+        //mPresenter.getGallery();
 
 
         fabSort.setOnClickListener(new View.OnClickListener() {
@@ -242,6 +243,7 @@ public class RptMojodiAnbarakActivity extends AppCompatActivity implements RptMo
             public void onClick(View v) {
                 fabMenu.close(true);
                 mPresenter.updateMojodiAnbar();
+
             }
         });
 
@@ -295,6 +297,7 @@ public class RptMojodiAnbarakActivity extends AppCompatActivity implements RptMo
         fabChangeView.setLabelText(getResources().getString(R.string.showAsTable));
         fabChangeView.setImageResource(R.drawable.ic_table_list);
         viewAsTable = false;
+        mPresenter.getGallery();
     }
 
     @Override
@@ -409,6 +412,7 @@ public class RptMojodiAnbarakActivity extends AppCompatActivity implements RptMo
     @Override
     public void onGetGallery(ArrayList<KalaPhotoModel> kalaPhotoModels) {
         adapter.setKalaImages(kalaPhotoModels);
+
     }
 
     @Override

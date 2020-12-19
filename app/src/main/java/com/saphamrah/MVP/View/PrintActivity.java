@@ -318,7 +318,7 @@ public class PrintActivity extends AppCompatActivity
 
             //---------------------------Company--------------------------
 
-            if (Constants.CURRENT_VERSION_TYPE() == 3)
+            if (Constants.CURRENT_VERSION_TYPE() == 3 || Constants.CURRENT_VERSION_TYPE() == 6)
             {
                 imgLogoPrint.setImageResource(R.drawable.logo_print);
             }

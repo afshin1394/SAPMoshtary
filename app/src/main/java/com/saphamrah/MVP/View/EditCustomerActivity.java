@@ -165,6 +165,8 @@ public class EditCustomerActivity extends AppCompatActivity implements EditCusto
                 try
                 {
                     String masahateMaghaze = editTextMasahateMaghaze.getText().toString().trim();
+                    hasAnbar = editTextAnbar.getText().toString().trim().equals("دارد")?1:0;
+                    Log.d("Edit","hasAnbar: " + hasAnbar + " , editTextAnbar: " + editTextAnbar.getText().toString().trim());
                     if (masahateMaghaze.length() > 0)
                     {
                         int intMasahateMaghaze = Integer.parseInt(masahateMaghaze);

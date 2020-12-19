@@ -7,6 +7,7 @@ import com.saphamrah.BaseMVP.DarkhastKalaMVP;
 import com.saphamrah.MVP.Model.DarkhastKalaModel;
 import com.saphamrah.Model.ElatAdamDarkhastModel;
 import com.saphamrah.Model.KalaModel;
+import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.SelectFaktorShared;
@@ -286,14 +287,16 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
     public void onDestroy(boolean isChangingConfig)
     {}
 
-    @Override
-    public void getSavedRecyclerViewImages(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels) {
-        mView.get().onGetSavedRecyclerViewPics(kalaMojodiZaribModels);
-    }
+
 
     @Override
     public void checkJayezehParent(int ccKalaCode , int tedadKala , Long ccDarkhastFaktor, double mablaghForosh) {
         mModel.checkJayezehParent(ccKalaCode ,  tedadKala , ccDarkhastFaktor,mablaghForosh);
+    }
+
+    @Override
+    public void getRecyclerDetails() {
+        mModel.getRecyclerDetails();
     }
 
     @Override
@@ -417,11 +420,7 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
         mView.get().showToast(R.string.errorOperation, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
     }
 
-    @Override
-    public void onGetSavedRecyclerViewImages(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels) {
-        mView.get().onGetSavedRecyclerViewPics(kalaMojodiZaribModels);
 
-    }
 
     @Override
     public void onGetElatAdamSefaresh(ArrayList<ElatAdamDarkhastModel> elatAdamDarkhastModels)
@@ -444,6 +443,10 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
     @Override
     public void onCheckJayezeh(int position) {
         mView.get().onCheckJayezeh(position);
+    }
+    @Override
+    public void onGetRecyclerDetails(int ItemCountPerScreen, ArrayList<KalaPhotoModel> kalaPhotoModels) {
+        mView.get().onGetGridRecyclerDetails(ItemCountPerScreen,kalaPhotoModels);
     }
 
 }

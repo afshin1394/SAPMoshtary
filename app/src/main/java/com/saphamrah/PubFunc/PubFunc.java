@@ -2035,14 +2035,17 @@ get mac address in android 10
 
     }
 
-    public static class FontUtils{
-        static FontUtils instance = null;
-        // Factory method to provide the users with instances
-        public static FontUtils getInstance() {
-            if (instance == null)
-                instance = new FontUtils();
+    public class FontUtils {
+        //        static FontUtils instance = null;
+//        // Factory method to provide the users with instances
+//        public static FontUtils getInstance() {
+//            if (instance == null)
+//                instance = new FontUtils();
+//
+//            return instance;
+//        }
+        public FontUtils() {
 
-            return instance;
         }
 
         public void setFont(ViewGroup group, Typeface font) {

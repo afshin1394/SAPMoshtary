@@ -118,7 +118,8 @@
                             android:textSize="@dimen/FontSize16"
                             android:textColor="@color/colorTextPrimary"
                             android:inputType="none"
-                            android:maxLines="1"/>
+                            android:maxLines="1"
+                            android:focusable="true"/>
                     </com.saphamrah.CustomView.CustomTextInputLayout>
                     <com.saphamrah.CustomView.CustomTextInputLayout
                         android:layout_width="0dp"

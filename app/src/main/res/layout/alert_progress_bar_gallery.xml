@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layRootAltdlg"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@drawable/altdlg_bg"
+    android:orientation="vertical"
+    android:layout_gravity="center_vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/progress"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_2sdp"
+        android:elevation="@dimen/_2sdp"
+        android:background="@drawable/ic_goods_images_download"
+        android:visibility="gone"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Downloading_Gallery"
+        android:text="@string/updateGallery"
+        android:layout_gravity="center"
+        android:fontFamily="IRANSans.ttf"
+        ></TextView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/progressBarHeight"
+            android:id="@+id/progress"
+
+            android:max="100"
+            style="@style/CustomProgressBarHorizontal"
+            android:progress="0"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/progressBarHeight"
+            android:id="@+id/lblProgressPercentage"
+            android:gravity="center"
+            android:layout_above="@+id/lblProgressValue"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/FontSize16"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lblProgressValue"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/FontSize14"
+            android:gravity="center_vertical|right"
+            android:layout_below="@+id/progress"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
+    </RelativeLayout>
+
+
+
+</LinearLayout>

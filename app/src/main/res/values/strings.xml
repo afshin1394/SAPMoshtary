@@ -985,5 +985,5 @@
     <string name="isValidDataSabtMarjoeeKol">به علت ثبت وصول برای این درخواست امکان ثبت مرجوعی کامل وجود ندارد</string>
     <string name="errorGetMarjoee">کالای مرجوعی ثبت نشده است</string>
     <string name="errorSabtJayezeh">خطا در ثبت جایزه تکراری، لطفا درخواست را حدف و دوباره ثبت نمایید.</string>
-
+    <string name="wantUpdateGallery">آیا مایل به دریافت تصاویر هستید؟</string>
 </resources>

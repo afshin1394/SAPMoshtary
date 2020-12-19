@@ -256,8 +256,9 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             Log.d("vosol" , "model NoeVosolsDarkhasts: " + model.toString());
         }
 
-
-        mPresenter.onGetInfo(ccDarkhastFaktor , modatVosol , NoeVosolsDarkhasts);
+//todo shanbeh
+       mPresenter.onGetInfo(ccDarkhastFaktor , modatVosol , NoeVosolsDarkhasts);
+        //mPresenter.onGetInfo(ccDarkhastFaktor , modatVosol , childParameterModelsVosols);
     }
 
     private int calculateModatVosol(long ccDarkhastFaktor , int ccMoshtary)
@@ -1469,7 +1470,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             {
                 ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_RESID());
             }
-
+            Log.d("darkhastfaktor","ccChildParametersOfTakhfif:"+ccChildParametersOfTakhfif);
             String[] seperatedccChildParameterOfTakhfif = ccChildParametersOfTakhfif.split(",");
             Log.d("darkhastfaktor", "seperatedccChildParameterOfTakhfif : " + seperatedccChildParameterOfTakhfif.toString());
             if (seperatedccChildParameterOfTakhfif.length > 0)

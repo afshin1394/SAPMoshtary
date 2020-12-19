@@ -5,6 +5,7 @@ import android.util.SparseIntArray;
 
 import com.saphamrah.Model.ElatAdamDarkhastModel;
 import com.saphamrah.Model.KalaModel;
+import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.UIModel.JayezehByccKalaCodeModel;
 import com.saphamrah.UIModel.KalaDarkhastFaktorSatrModel;
 import com.saphamrah.UIModel.KalaMojodiZaribModel;
@@ -39,10 +40,9 @@ public interface DarkhastKalaMVP
         void showErrorAlertLoadingMaxMojodi(List<KalaModel> kalaModels);
         void showAlertLoading();
         void closeAlertLoading();
-        void onGetSavedRecyclerViewPics(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels);
         void onCheckJayezeh(int position);
         void onCheckJayezehParent(ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels, int tedadKala,double mablaghForosh ,int ccKalaCode ,Long ccDarkhastFaktor);
-
+        void onGetGridRecyclerDetails(int goodsNumberEachSection, ArrayList<KalaPhotoModel> kalaPhotoModels);
     }
 
 
@@ -62,10 +62,9 @@ public interface DarkhastKalaMVP
         void checkOnBackPress();
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
-        void getSavedRecyclerViewImages(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels);
         void checkJayezeh(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor,int position);
         void checkJayezehParent(int ccKalaCode , int tedadKala , Long ccDarkhastFaktor, double mablaghForosh);
-
+        void getRecyclerDetails();
     }
 
 
@@ -88,10 +87,9 @@ public interface DarkhastKalaMVP
         void onErrorNotSelectKalaAsasi();
         void onErrorBiggerThanMaxKalaMojodi(List<KalaModel> kalaModels);
         void onError();
-        void onGetSavedRecyclerViewImages(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels);
         void onCheckJayezeh(int position);
         void onCheckJayezehParent(ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels, int tedadKala, double mablaghForosh , int ccKalaCode , Long ccDarkhastFaktor);
-
+        void onGetRecyclerDetails(int ItemCountPerScreen,ArrayList<KalaPhotoModel> kalaPhotoModels);
     }
 
 
@@ -111,6 +109,10 @@ public interface DarkhastKalaMVP
         void checkJayezeh(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor,int position);
         void checkJayezehParent(int ccKalaCode , int tedadKala , Long ccDarkhastFaktor, double mablaghForosh);
 
+        //Todo
+        void getRecyclerDetails();
+        int getItemCountPerScreen();
+        ArrayList<KalaPhotoModel> getGallery();
     }
 
 }

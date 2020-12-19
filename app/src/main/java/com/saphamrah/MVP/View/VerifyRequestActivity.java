@@ -78,8 +78,8 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     private final int OPEN_MARJOEE_KALA = 100;
     private final int OPEN_BONUS = 101;
     private DecimalFormat costFormatter;
-
     private TextView lblBonusTitle;
+
     private TextView lblRequestedGoodsTitle;
     private TextView lblMarjoeeTitle;
     private TextView lblTakhfifTitle;

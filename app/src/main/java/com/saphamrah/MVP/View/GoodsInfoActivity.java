@@ -26,6 +26,7 @@ import com.saphamrah.Model.RptKalaInfoModel;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
+import com.saphamrah.Utils.CustomAlertDialogResponse;
 import com.saphamrah.Utils.CustomLoadingDialog;
 import com.saphamrah.Utils.CustomSpinnerResponse;
 import com.saphamrah.Utils.StateMaintainer;
@@ -111,12 +112,25 @@ public class GoodsInfoActivity extends AppCompatActivity implements GoodsInfoMVP
 
     @OnClick(R.id.fabUpdateGallery)
     public void fabUpdateGallery() {
-        fabUpdateGallery.setClickable(false);
+//        fabUpdateGallery.setClickable(false);
         fabMenu.close(true);
-        if (adapter != null) {
-            adapter.getKalaPhoto().clear();
-            mPresenter.updateGallery();
-        } else {
+        if (adapter!=null){
+            customAlertDialog.showLogMessageAlert(GoodsInfoActivity.this, false, "", getResources().getString(R.string.wantUpdateGallery), Constants.INFO_MESSAGE(), getResources().getString(R.string.no), getResources().getString(R.string.yes), new CustomAlertDialogResponse()
+            {
+                @Override
+                public void setOnCancelClick()
+                {
+
+                }
+
+                @Override
+                public void setOnApplyClick()
+                {
+                    adapter.getKalaPhoto().clear();
+                    mPresenter.updateGallery();
+                }
+            });
+        }else{
             showToast(R.string.updateKalaInfoWarning, Constants.INFO_MESSAGE());
         }
     }
@@ -138,7 +152,7 @@ public class GoodsInfoActivity extends AppCompatActivity implements GoodsInfoMVP
 
 
     private void showProgressBar() {
-        customProgressBar.showProgressBar(GoodsInfoActivity.this);
+        customProgressBar.showGalleryProgressBar(GoodsInfoActivity.this);
     }
 
     @Override
@@ -163,8 +177,10 @@ public class GoodsInfoActivity extends AppCompatActivity implements GoodsInfoMVP
     public void onUpdateGallery(ArrayList<KalaPhotoModel> kalaPhotoModels) {
         fabUpdateGallery.setClickable(true);
         Log.i("onUpdateGallery", "onUpdateGallery: "+kalaPhotoModels.size());
+        if (adapter!=null){
         adapter.setKalaPhoto(kalaPhotoModels);
         adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -197,6 +213,8 @@ public class GoodsInfoActivity extends AppCompatActivity implements GoodsInfoMVP
     public void showToast(int resId, int messageType) {
         customAlertDialog.showToast(GoodsInfoActivity.this, getString(resId), messageType, Constants.DURATION_LONG());
     }
+
+
 
 
     /*

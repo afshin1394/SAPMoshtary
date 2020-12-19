@@ -53,12 +53,13 @@ import com.saphamrah.CustomView.CustomSpinner;
 import com.saphamrah.CustomView.CustomTextInputLayout;
 import com.saphamrah.CustomView.MyBounceInterpolator;
 import com.saphamrah.CustomView.SnapToBlock;
-import com.saphamrah.DAO.SystemConfigTabletDAO;
 import com.saphamrah.MVP.Presenter.DarkhastKalaPresenter;
 import com.saphamrah.Model.ElatAdamDarkhastModel;
 import com.saphamrah.Model.KalaModel;
+import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.UIModel.JayezehByccKalaCodeModel;
 import com.saphamrah.UIModel.KalaDarkhastFaktorSatrModel;
 import com.saphamrah.UIModel.KalaMojodiZaribModel;
@@ -69,9 +70,6 @@ import com.saphamrah.Utils.CustomLoadingDialog;
 import com.saphamrah.Utils.CustomSpinnerResponse;
 import com.saphamrah.Utils.StateMaintainer;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,34 +78,37 @@ import java.util.Map;
 
 import me.anwarshahriar.calligrapher.Calligrapher;
 
+
 import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastKalaMVP.RequiredViewOps,JayezehParentAlertAdapter.OnItemClickListener
 {
 
     private final String TAG = this.getClass().getSimpleName();
-    private StateMaintainer stateMaintainer = new StateMaintainer(this.getSupportFragmentManager() , TAG , DarkhastKalaActivity.this);
-    private DarkhastKalaMVP.PresenterOps mPresenter;
 
+    private StateMaintainer stateMaintainer = new StateMaintainer(this.getSupportFragmentManager(), TAG, DarkhastKalaActivity.this);
+    private DarkhastKalaMVP.PresenterOps mPresenter;
+    //    public int heightOfRecycler = 0;
+//    public int widthOfRecycler = 0;
+    int firstVisibleItemPosition = 0;
     private int tedadKalaAsasi;
+
+
     private int tedadKalaAsasiWithTedad;
     private int ccMoshtary;
-    private int ccSazmanForosh;
     private CustomAlertDialog customAlertDialog;
     private CustomLoadingDialog customLoadingDialog;
     private AlertDialog alertDialog;
     private ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels;
     private ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorModels; // goods that user added (customer request this goods)
-    private RequestedGoodAdapter adapter;
+    private RequestedGoodAdapter adapter;// goods that user added (customer request this goods)
     private RequestGoodsAdapter adapterRequestKala;
+
     private RequestGoodsListAdapter adapterRequestKalaList;
     private ElatAdamDarkhastModel elatAdamDarkhastModel;
     private final int READ_EXTERNAL_STORAGE_PERMISSION = 100;
     private final int TAKE_IMAGE = 101;
     private JayezehParentAlertAdapter jayezehAlertAdapter;
-
-    public int heightOfRecycler = 0;
-    public int widthOfRecycler = 0;
 
 
     private View alertView;
@@ -116,55 +117,39 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     private EditText edttxtCountBaste;
     private EditText edttxtCountAdad;
     private FloatingActionButton fabAdamSefaresh;
-    private RecyclerView recyclerViewNew;
-    private ImageView btnChooseShowType;
+    //TODO
+    private RequestedGridGoodAdapter adapterRequestKalaListGrid;
 
-    private RequestedGridGoodAdapter requestedGridGoodAdapter;
-    public static Map<Integer, Bitmap> imageHash = new HashMap<>();
-    public int numberOfDisplayItems = 4;
-    private int SpanCount =2;
 
     //New GridView listItems
-    ArrayList<Integer> selectedPosition = new ArrayList<>();
-    ArrayList<KalaMojodiZaribModel> selectedItem = new ArrayList<>();
-    GridLayoutManager mLayoutManager;
+    private ArrayList<Integer> selectedPosition = new ArrayList<>();
+    private ArrayList<KalaMojodiZaribModel> selectedItem = new ArrayList<>();
+    private RecyclerView recyclerViewNew;
+    private GridLayoutManager mLayoutManager;
 
-    public static int show_goods_count_type;
-    SystemConfigTabletDAO systemconfig_tabletDAO;
-    ArrayList<String> arrayListImages;
-    SnapHelper snapHelperGridAlert;
-    SnapToBlock snapToBlock;
-    MyBounceInterpolator interpolator;
-    Animation myBounceAnimation;
-    Animation slideAnimation;
 
-    int firstVisibleItemPosition=0;
+    public int numberOfDisplayItems = 4;
+    private int SpanCount = 2;
+
+
+    private ImageView btnChooseShowType;
+    private int goodsNumberItemEachSection;
+
+    //
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_darkhast_kala);
 
         Calligrapher calligrapher = new Calligrapher(this);
         calligrapher.setFont(this, getResources().getString(R.string.fontPath), true);
 
-        kalaDarkhastFaktorModels = new ArrayList<>();
-        kalaMojodiZaribModels = new ArrayList<>();
 
-        myBounceAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce);
-        slideAnimation=AnimationUtils.loadAnimation(this,R.anim.fade_in);
-        interpolator = new MyBounceInterpolator(0.2, 15);
-        myBounceAnimation.setInterpolator(interpolator);
-
-        snapToBlock = new SnapToBlock(1);
-        snapHelperGridAlert = new PagerSnapHelper();
         kalaDarkhastFaktorModels = new ArrayList<>();
         kalaMojodiZaribModels = new ArrayList<>();
         //TODO
-        systemconfig_tabletDAO = new SystemConfigTabletDAO(DarkhastKalaActivity.this);
-        show_goods_count_type = systemconfig_tabletDAO.getAll().get(0).getGoodsShowNumberEachPage();
-        Log.i("showitemCount", "onCreate: " + show_goods_count_type);
 
 
         final FloatingActionMenu fabMenu = findViewById(R.id.fabMenu);
@@ -172,8 +157,8 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         FloatingActionButton fabAddList = findViewById(R.id.fabAddAsList);
         FloatingActionButton fabSearch = findViewById(R.id.fabSearch);
         FloatingActionButton fabShowCustomerInfo = findViewById(R.id.fabShowCustomerInfo);
-
-
+        //New Floating Action Button
+        //TODO
 
         fabAdamSefaresh = findViewById(R.id.fabAdamSefaresh);
         RecyclerView recyclerViewRequestedGoods = findViewById(R.id.recyclerView);
@@ -184,12 +169,14 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
                     @Override
                     public void setOnCancelClick() {
                     }
+
                     @Override
                     public void setOnApplyClick() {
-                        mPresenter.checkRemoveKala(kalaDarkhastFaktorSatrModel , position , ccMoshtary);
+                        mPresenter.checkRemoveKala(kalaDarkhastFaktorSatrModel, position, ccMoshtary);
                     }
                 });
             }
+
             @Override
             public void onItemClickJayezeh(int CcKalaCode, int tedadKala, Long ccDarkhastFaktor , double mablaghForosh) {
                 Log.i("DarkhastKala", "CcKalaCode : " + String.valueOf(CcKalaCode) + " , tedadKala  :" + tedadKala + "  ,  ccDarkhastFaktor : " + ccDarkhastFaktor);
@@ -200,19 +187,34 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(DarkhastKalaActivity.this);
         recyclerViewRequestedGoods.setLayoutManager(mLayoutManager);
         recyclerViewRequestedGoods.setItemAnimator(new DefaultItemAnimator());
-        recyclerViewRequestedGoods.addItemDecoration(new DividerItemDecoration(DarkhastKalaActivity.this , 0));
+        recyclerViewRequestedGoods.addItemDecoration(new DividerItemDecoration(DarkhastKalaActivity.this, 0));
         recyclerViewRequestedGoods.setAdapter(adapter);
 
 
         adapterRequestKala = new RequestGoodsAdapter(DarkhastKalaActivity.this, this.kalaMojodiZaribModels, new RequestGoodsAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(KalaMojodiZaribModel kalaMojodiZaribModel, int position) {}
+            public void onItemClick(KalaMojodiZaribModel kalaMojodiZaribModel, int position) {
+            }
         });
         adapterRequestKalaList = new RequestGoodsListAdapter(DarkhastKalaActivity.this, this.kalaMojodiZaribModels, false, new RequestGoodsListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(KalaMojodiZaribModel kalaMojodiZaribModel, int position) {
 
             }
+        });
+
+        adapterRequestKalaListGrid = new RequestedGridGoodAdapter(DarkhastKalaActivity.this, this.kalaMojodiZaribModels, new RequestedGridGoodAdapter.OnItemEventListener() {
+            @Override
+            public void onItemClick(KalaMojodiZaribModel kalaMojodiZaribModel, int position) {
+
+            }
+
+            @Override
+            public void onLeftSwipeItemScroll(CustomScrollView view) {
+
+            }
+
+
         });
 
         customAlertDialog = new CustomAlertDialog(DarkhastKalaActivity.this);
@@ -223,44 +225,34 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
             @Override
             public void onClick(int position) {
                 //mPresenter.checkBottomBarClick(position);
-                mPresenter.checkBottomBarClick(position , kalaDarkhastFaktorModels.size());
+                mPresenter.checkBottomBarClick(position, kalaDarkhastFaktorModels.size());
             }
         });
 
         Intent getIntent = getIntent();
-        ccMoshtary = getIntent.getIntExtra("ccMoshtary" , -1);
-        ccSazmanForosh = getIntent.getIntExtra("ccSazmanForosh" , -1);
+        ccMoshtary = getIntent.getIntExtra("ccMoshtary", -1);
         tedadKalaAsasi = 0;
         tedadKalaAsasiWithTedad = 0;
         mPresenter.getNoeMasouliat();
         mPresenter.getNameListOfKalaAdamForosh();
 
-        if (Build.VERSION.SDK_INT >= 23)
-        {
+        if (Build.VERSION.SDK_INT >= 23) {
             ArrayList<String> permissions = new ArrayList<>();
-            if (ContextCompat.checkSelfPermission(DarkhastKalaActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-            {
+            if (ContextCompat.checkSelfPermission(DarkhastKalaActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
             }
-            if (ContextCompat.checkSelfPermission(DarkhastKalaActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            {
+            if (ContextCompat.checkSelfPermission(DarkhastKalaActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
             }
-            if (ContextCompat.checkSelfPermission(DarkhastKalaActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            {
+            if (ContextCompat.checkSelfPermission(DarkhastKalaActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
             }
-            if (permissions.size() > 0)
-            {
+            if (permissions.size() > 0) {
                 ActivityCompat.requestPermissions(DarkhastKalaActivity.this, permissions.toArray(new String[permissions.size()]), READ_EXTERNAL_STORAGE_PERMISSION);
-            }
-            else
-            {
+            } else {
                 mPresenter.getAllKalaWithMojodiZarib(ccMoshtary);
             }
-        }
-        else
-        {
+        } else {
             mPresenter.getAllKalaWithMojodiZarib(ccMoshtary);
         }
         mPresenter.getAllRequestedGoods();
@@ -269,9 +261,11 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         fabAddCatalog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                fabMenu.close(true);
+//                showAddItemAlert(true);
                 fabMenu.close(true);
-                //showAddItemAlert(true);
                 showGridItemAlert();
+                Log.i("fabNewAddList", "onClick: ");
             }
         });
 
@@ -283,6 +277,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
             }
         });
 
+
         fabSearch.setVisibility(View.GONE);
 
         fabAdamSefaresh.setOnClickListener(new View.OnClickListener() {
@@ -293,17 +288,20 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         });
 
 
-        fabShowCustomerInfo.setOnClickListener(new View.OnClickListener()
-        {
+        //TODO
+//        fabNewAddList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
 
+
+        fabShowCustomerInfo.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                fabMenu.close(true);
-                Intent intent = new Intent(DarkhastKalaActivity.this , CustomerInfoActivity.class);
-                Log.d("fabShowCustomerInfo","ccMoshtary:"+ ccMoshtary + " ccSazmanForosh:" + ccSazmanForosh);
-                intent.putExtra(CustomerInfoActivity.CCMOSHTARY_KEY , ccMoshtary);
-                intent.putExtra(CustomerInfoActivity.CCSAZMANFOROSH_KEY , ccSazmanForosh);
+            public void onClick(View v) {
+                Intent intent = new Intent(DarkhastKalaActivity.this, CustomerInfoActivity.class);
+                intent.putExtra(CustomerInfoActivity.CCMOSHTARY_KEY, ccMoshtary);
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
             }
@@ -312,36 +310,29 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == READ_EXTERNAL_STORAGE_PERMISSION)
-        {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
+        if (requestCode == READ_EXTERNAL_STORAGE_PERMISSION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mPresenter.getAllKalaWithMojodiZarib(ccMoshtary);
             }
         }
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (elatAdamDarkhastModel != null && elatAdamDarkhastModel.getNameElatAdamDarkhast() != null)
-        {
-            outState.putInt("ccElatAdamDarkhast" , elatAdamDarkhastModel.getCcElatAdamDarkhast());
-            outState.putString("nameElatAdamDarkhast" , elatAdamDarkhastModel.getNameElatAdamDarkhast());
-            outState.putInt("getImageElatAdamDarkhast" , elatAdamDarkhastModel.getGetImage());
+        if (elatAdamDarkhastModel != null && elatAdamDarkhastModel.getNameElatAdamDarkhast() != null) {
+            outState.putInt("ccElatAdamDarkhast", elatAdamDarkhastModel.getCcElatAdamDarkhast());
+            outState.putString("nameElatAdamDarkhast", elatAdamDarkhastModel.getNameElatAdamDarkhast());
+            outState.putInt("getImageElatAdamDarkhast", elatAdamDarkhastModel.getGetImage());
         }
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
-    {
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             elatAdamDarkhastModel.setCcElatAdamDarkhast(savedInstanceState.getInt("ccElatAdamDarkhast"));
             elatAdamDarkhastModel.setNameElatAdamDarkhast(savedInstanceState.getString("nameElatAdamDarkhast"));
             elatAdamDarkhastModel.setGetImage(savedInstanceState.getInt("getImageElatAdamDarkhast"));
@@ -349,27 +340,18 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == TAKE_IMAGE)
-        {
-            if (resultCode == RESULT_OK)
-            {
-                try
-                {
-                    if (data != null && data.getExtras() != null)
-                    {
+        if (requestCode == TAKE_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    if (data != null && data.getExtras() != null) {
                         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                         mPresenter.checkAdamSefareshForInsert(ccMoshtary, elatAdamDarkhastModel, new PubFunc().new ImageUtils().convertBitmapToByteArray(DarkhastKalaActivity.this, bitmap, Constants.BITMAP_TO_BYTE_QUALITY()), "");
-                    }
-                    else
-                    {
+                    } else {
                         showToast(R.string.errorSelectImage, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
                     }
-                }
-                catch (Exception exception)
-                {
+                } catch (Exception exception) {
                     exception.printStackTrace();
                     mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "DarkhastKalaActivity", "onActivityResult", "");
                 }
@@ -378,146 +360,116 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     }
 
     @Override
-    public Context getAppContext()
-    {
+    public Context getAppContext() {
         return DarkhastKalaActivity.this;
     }
 
-	@Override
-    public void hideNoRequestButton()
-    {
+    @Override
+    public void hideNoRequestButton() {
         fabAdamSefaresh.setVisibility(View.GONE);
     }
-	
+
     @Override
-    public void prepareDataForCheckInsertFaktor()
-    {
-        Intent intent = new Intent(DarkhastKalaActivity.this , VerifyRequestActivity.class);
-        intent.putExtra("ccMoshtary" , ccMoshtary);
+    public void prepareDataForCheckInsertFaktor() {
+        Intent intent = new Intent(DarkhastKalaActivity.this, VerifyRequestActivity.class);
+        intent.putExtra("ccMoshtary", ccMoshtary);
         startActivity(intent);
         DarkhastKalaActivity.this.finish();
         //mPresenter.checkInsertFaktor(ccMoshtary , tedadKalaAsasi , tedadKalaAsasiWithTedad);
     }
 
     @Override
-    public void openBarkhordAvalieActivity()
-    {
-        Intent intent = new Intent(DarkhastKalaActivity.this , BarkhordAvalieForoshandehActivity.class);
-        intent.putExtra("ccMoshtary" , ccMoshtary);
+    public void openBarkhordAvalieActivity() {
+        Intent intent = new Intent(DarkhastKalaActivity.this, BarkhordAvalieForoshandehActivity.class);
+        intent.putExtra("ccMoshtary", ccMoshtary);
         startActivity(intent);
         DarkhastKalaActivity.this.finish();
     }
 
     @Override
-    public void onGetRequestedGoods(ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels)
-    {
+    public void onGetRequestedGoods(ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels) {
         this.kalaDarkhastFaktorModels.clear();
         this.kalaDarkhastFaktorModels.addAll(kalaDarkhastFaktorSatrModels);
         adapter.notifyDataSetChanged();
+        adapterRequestKalaListGrid.notifyDataSetChanged();
     }
 
     @Override
-    public void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels)
-    {
+    public void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels) {
         this.kalaMojodiZaribModels.clear();
         this.kalaMojodiZaribModels.addAll(kalaMojodiZaribModels);
-        mPresenter.getSavedRecyclerViewImages(kalaMojodiZaribModels);
-        /*for(KalaMojodiZaribModel model : kalaMojodiZaribModels)
-        {
-            Log.d("kalazarib" , "activity : " + model.toString());
-        }*/
 
+        //TODO
+
+
+        adapterRequestKalaListGrid.notifyDataSetChanged();
         adapterRequestKala.notifyDataSetChanged();
         adapterRequestKalaList.notifyDataSetChanged();
     }
 
     @Override
-    public void onErrorAddNewRequestedKala(int errorResId)
-    {
-        try
-        {
+    public void onErrorAddNewRequestedKala(int errorResId) {
+        try {
             TextView lblError = alertView.findViewById(R.id.lblError);
             lblError.setVisibility(View.VISIBLE);
             lblError.setText(errorResId);
-        }
-        catch (Exception exception)
-        {
+        } catch (Exception exception) {
             exception.printStackTrace();
-            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "DarkhastKalaActivity", "onErrorAddNewRequestedKala" , "");
+            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "DarkhastKalaActivity", "onErrorAddNewRequestedKala", "");
         }
     }
 
     @Override
-    public void onErrorAddNewRequestedKala(int resId, String parameter)
-    {
-        try
-        {
+    public void onErrorAddNewRequestedKala(int resId, String parameter) {
+        try {
             TextView lblError = alertView.findViewById(R.id.lblError);
             lblError.setVisibility(View.VISIBLE);
             String errorMessage = String.format(getString(resId), parameter);
             lblError.setText(errorMessage);
-        }
-        catch (Exception exception)
-        {
+        } catch (Exception exception) {
             exception.printStackTrace();
-            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "DarkhastKalaActivity", "onErrorAddNewRequestedKala" , "");
+            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "DarkhastKalaActivity", "onErrorAddNewRequestedKala", "");
         }
     }
 
     @Override
-    public void onSuccessAddNewRequestedKala(boolean isTedadKalaAsasi , boolean isTedadKalaAsasiWithTedad)
-    {
-        /*try
-        {
-            show.dismiss();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }*/
-        if (isTedadKalaAsasi)
-        {
+    public void onSuccessAddNewRequestedKala(boolean isTedadKalaAsasi, boolean isTedadKalaAsasiWithTedad) {
+
+        if (isTedadKalaAsasi) {
             tedadKalaAsasi++;
         }
-        if (isTedadKalaAsasiWithTedad)
-        {
+        if (isTedadKalaAsasiWithTedad) {
             tedadKalaAsasiWithTedad++;
         }
     }
 
+
     @Override
-    public void closeSelectNewGoodAlert(int position , int count)
-    {
-        if (count == 0)
-        {
+    public void closeSelectNewGoodAlert(int position, int count) {
+        if (count == 0) {
             this.kalaMojodiZaribModels.remove(position);
         }
         adapterRequestKala.notifyDataSetChanged();
         adapterRequestKalaList.notifyDataSetChanged();
-        try
-        {
+        try {
             edttxtCountAdad.setText("");
             edttxtCountBaste.setText("");
             edttxtCountCarton.setText("");
-        }
-        catch (Exception exception)
-        {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
         //show.dismiss();
     }
 
     @Override
-    public void onSuccessRemoveKala(int position)
-    {
+    public void onSuccessRemoveKala(int position) {
         Log.d("DarkhastKala", "remove kala position : " + position);
         this.kalaDarkhastFaktorModels.remove(position);
         adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onGetElatAdamDarkhast(final ArrayList<ElatAdamDarkhastModel> elatAdamSefareshModels , final ArrayList<Integer> elatAdamDarkhastIds, final ArrayList<String> elatAdamDarkhastTitles)
-    {
+    public void onGetElatAdamDarkhast(final ArrayList<ElatAdamDarkhastModel> elatAdamSefareshModels, final ArrayList<Integer> elatAdamDarkhastIds, final ArrayList<String> elatAdamDarkhastTitles) {
         CustomSpinner customSpinner = new CustomSpinner();
         customSpinner.showSpinner(DarkhastKalaActivity.this, elatAdamDarkhastTitles, new CustomSpinnerResponse() {
             @Override
@@ -533,8 +485,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     }
 
     @Override
-    public void showTakeImageAlert(ElatAdamDarkhastModel elatAdamDarkhastModel)
-    {
+    public void showTakeImageAlert(ElatAdamDarkhastModel elatAdamDarkhastModel) {
         this.elatAdamDarkhastModel = elatAdamDarkhastModel;
         customAlertDialog.showMessageAlert(DarkhastKalaActivity.this, "", getResources().getString(R.string.needTakeImage), Constants.INFO_MESSAGE(), getResources().getString(R.string.takeImage), new CustomAlertDialogResponse() {
             @Override
@@ -550,10 +501,9 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     }
 
     @Override
-    public void showDuplicatedCustomerCodeAlert(final ElatAdamDarkhastModel elatAdamDarkhastModel)
-    {
+    public void showDuplicatedCustomerCodeAlert(final ElatAdamDarkhastModel elatAdamDarkhastModel) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(DarkhastKalaActivity.this);
-        View myview = getLayoutInflater().inflate(R.layout.alert_duplicated_customer_code , null);
+        View myview = getLayoutInflater().inflate(R.layout.alert_duplicated_customer_code, null);
         final CustomTextInputLayout txtinputCode = myview.findViewById(R.id.txtinputLay);
         final EditText edttxt = myview.findViewById(R.id.txt);
         Button btnOK = myview.findViewById(R.id.btnApply);
@@ -564,35 +514,25 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         builder.setCancelable(true);
         builder.setView(myview);
         builder.create();
-        if (!(DarkhastKalaActivity.this).isFinishing())
-        {
+        if (!(DarkhastKalaActivity.this).isFinishing()) {
             final AlertDialog show = builder.show();
-            try
-            {
-                if (show.getWindow() != null)
-                {
+            try {
+                if (show.getWindow() != null) {
                     show.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 }
-            }
-            catch (Exception exception)
-            {
+            } catch (Exception exception) {
                 exception.printStackTrace();
                 PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(DarkhastKalaActivity.this,Constants.LOG_EXCEPTION(), exception.toString(), "", "MojodiGiriActivity", "showDuplicatedCustomerCodeAlert", "");
+                logger.insertLogToDB(DarkhastKalaActivity.this, Constants.LOG_EXCEPTION(), exception.toString(), "", "MojodiGiriActivity", "showDuplicatedCustomerCodeAlert", "");
             }
 
-            btnOK.setOnClickListener(new View.OnClickListener()
-            {
+            btnOK.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     txtinputCode.setError(null);
-                    if (edttxt.getText().toString().length() > 0)
-                    {
+                    if (edttxt.getText().toString().length() > 0) {
                         mPresenter.checkAdamSefareshForInsert(ccMoshtary, elatAdamDarkhastModel, null, edttxt.getText().toString());
-                    }
-                    else
-                    {
+                    } else {
                         txtinputCode.setError(getResources().getString(R.string.errorCustomerDuplicatedCode));
                     }
                 }
@@ -601,8 +541,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     }
 
     @Override
-    public void onSuccessInsertAdamDarkhast()
-    {
+    public void onSuccessInsertAdamDarkhast() {
         customAlertDialog.showMessageAlert(DarkhastKalaActivity.this, getResources().getString(R.string.success), getResources().getString(R.string.successfullyDoneOps), Constants.SUCCESS_MESSAGE(), getResources().getString(R.string.apply), new CustomAlertDialogResponse() {
             @Override
             public void setOnCancelClick() {
@@ -611,8 +550,8 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
 
             @Override
             public void setOnApplyClick() {
-                Intent intent = new Intent(DarkhastKalaActivity.this , TemporaryRequestsListActivity.class);
-                intent.putExtra("requests" , false);
+                Intent intent = new Intent(DarkhastKalaActivity.this, TemporaryRequestsListActivity.class);
+                intent.putExtra("requests", false);
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
                 DarkhastKalaActivity.this.finish();
@@ -621,76 +560,76 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     }
 
     @Override
-    public void showNameListOfKalaAdamForosh(String kalaNames)
-    {
+    public void showNameListOfKalaAdamForosh(String kalaNames) {
         customAlertDialog.showMessageAlert(DarkhastKalaActivity.this, false, "", kalaNames, Constants.INFO_MESSAGE(), getString(R.string.apply));
     }
 
     @Override
-    public void closeActivity()
-    {
+    public void closeActivity() {
         DarkhastKalaActivity.this.finish();
     }
 
     @Override
-    public void showToast(int resId, int messageType, int duration)
-    {
-        customAlertDialog.showToast(DarkhastKalaActivity.this , getResources().getString(resId) , messageType , duration);
+    public void showToast(int resId, int messageType, int duration) {
+        customAlertDialog.showToast(DarkhastKalaActivity.this, getResources().getString(resId), messageType, duration);
     }
 
     @Override
-    public void showAlertDialog(int resId, int messageType, boolean closeActivity)
-    {
+    public void showAlertDialog(int resId, int messageType, boolean closeActivity) {
         customAlertDialog.showMessageAlert(DarkhastKalaActivity.this, closeActivity, "", getString(resId), messageType, getString(R.string.apply));
     }
 
     @Override
-    public void showErrorAlertLoadingMaxMojodi(List<KalaModel> kalaModels)
-    {
+    public void showErrorAlertLoadingMaxMojodi(List<KalaModel> kalaModels) {
         String errorMessage = getString(R.string.errorBiggerThanMaxMojodi) + "\n";
-        for (KalaModel kalaModel : kalaModels)
-        {
+        for (KalaModel kalaModel : kalaModels) {
             errorMessage += kalaModel.getCodeKala() + " - " + kalaModel.getNameKala() + " - " + getString(R.string.mojodiKol) + " " + kalaModel.getTedadMojodyGhabelForosh() + " " + getString(R.string.adad) + "\n";
         }
         customAlertDialog.showMessageAlert(DarkhastKalaActivity.this, false, "", errorMessage, Constants.FAILED_MESSAGE(), getString(R.string.apply));
     }
 
-    private void showAddItemAlert(final boolean showCatalog)
-    {
+    private void handleKalaIndices(int i) {
+
+        edttxtCountCarton.setText("");
+        edttxtCountBaste.setText("");
+        edttxtCountAdad.setText("");
+        if (kalaMojodiZaribModels.get(i).getTedadPishnahadi() > 0) {
+            Log.i("tedadPishnahadi", "onItemClick: " + String.valueOf(kalaMojodiZaribModels.get(i).getTedadPishnahadi()));
+            edttxtCountAdad.setText(String.valueOf(kalaMojodiZaribModels.get(i).getTedadPishnahadi()));
+        }
+    }
+
+
+    private void showAddItemAlert(final boolean showCatalog) {
+
         final ArrayList<Integer> selectedPosition = new ArrayList<>();
         final ArrayList<KalaMojodiZaribModel> selectedItem = new ArrayList<>();
         final ArrayList<KalaMojodiZaribModel> arrayListKalaModel = new ArrayList<>(kalaMojodiZaribModels); //local list for using in adapter
         final AlertDialog.Builder builder = new AlertDialog.Builder(DarkhastKalaActivity.this);
-        alertView = getLayoutInflater().inflate(R.layout.alert_goodslist_for_request , null);
-		final CustomTextInputLayout txtinputCountCarton = alertView.findViewById(R.id.txtinputCartonCount);
+        alertView = getLayoutInflater().inflate(R.layout.alert_goodslist_for_request, null);
+        final CustomTextInputLayout txtinputCountCarton = alertView.findViewById(R.id.txtinputCartonCount);
         final CustomTextInputLayout txtinputCountBaste = alertView.findViewById(R.id.txtinputBastehCount);
         final CustomTextInputLayout txtinputCountAdad = alertView.findViewById(R.id.txtinputAdadCount);
-
         edttxtCountCarton = alertView.findViewById(R.id.txtCartonCount);
         edttxtCountBaste = alertView.findViewById(R.id.txtBastehCount);
         edttxtCountAdad = alertView.findViewById(R.id.txtAdadCount);
 
+
         final RecyclerView recyclerView = alertView.findViewById(R.id.recyclerView);
-        if (showCatalog)
-        {
+        if (showCatalog) {
             adapterRequestKala = new RequestGoodsAdapter(DarkhastKalaActivity.this, arrayListKalaModel, new RequestGoodsAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(KalaMojodiZaribModel kalaMojodiZaribModel, int position) {
-//                    edttxtCountCarton.setText("");
-//                    edttxtCountBaste.setText("");
-//                    edttxtCountAdad.setText("");
-//                    if (kalaMojodiZaribModel.getTedadPishnahadi() > 0)
-//                    {
-//                        edttxtCountAdad.setText(String.valueOf(kalaMojodiZaribModel.getTedadPishnahadi()));
-//                    }
+
                 }
             });
-        }
-        else
-        {
+
+
+        } else {
             adapterRequestKalaList = new RequestGoodsListAdapter(DarkhastKalaActivity.this, arrayListKalaModel, false, new RequestGoodsListAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(KalaMojodiZaribModel kalaMojodiZaribModel, int position) {
+                    Log.i("positionvisible", "onItemClick: " + position);
                     selectedItem.clear();
                     selectedItem.add(arrayListKalaModel.get(position));
                     selectedPosition.clear();
@@ -698,30 +637,30 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
                     edttxtCountCarton.setText("");
                     edttxtCountBaste.setText("");
                     edttxtCountAdad.setText("");
-					if (kalaMojodiZaribModel.getTedadPishnahadi() > 0)
-                    {
+                    if (kalaMojodiZaribModel.getTedadPishnahadi() > 0) {
                         edttxtCountAdad.setText(String.valueOf(kalaMojodiZaribModel.getTedadPishnahadi()));
                     }
                 }
             });
         }
-        if (showCatalog)
-        {
+        if (showCatalog) {
             SnapHelper snapHelper = new PagerSnapHelper();
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(DarkhastKalaActivity.this , RecyclerView.HORIZONTAL , false);
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(DarkhastKalaActivity.this, RecyclerView.HORIZONTAL, false);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             snapHelper.attachToRecyclerView(recyclerView);
             recyclerView.setAdapter(adapterRequestKala);
 
             handleKalaIndices(firstVisibleItemPosition);
+            Log.i("firstOne", "showAddItemAlert: " + firstVisibleItemPosition);
+
 
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
-                    if(recyclerView.getScrollState() == SCROLL_STATE_IDLE){
-                        firstVisibleItemPosition =mLayoutManager.findFirstVisibleItemPosition();
+                    if (recyclerView.getScrollState() == SCROLL_STATE_IDLE) {
+                        firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
                         Log.i("firstVisibleItemCount", "onScrolled: " + firstVisibleItemPosition);
                         handleKalaIndices(firstVisibleItemPosition);
                     }
@@ -733,17 +672,16 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
                 }
             });
 
-        }
-        else
-        {
+        } else {
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(DarkhastKalaActivity.this);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.addItemDecoration(new DividerItemDecoration(DarkhastKalaActivity.this , 0));
+            recyclerView.addItemDecoration(new DividerItemDecoration(DarkhastKalaActivity.this, 0));
             recyclerView.setAdapter(adapterRequestKalaList);
         }
         CustomTextInputLayout txtinputSearch = alertView.findViewById(R.id.txtinputSearchKalaName);
         EditText edttxtSearch = alertView.findViewById(R.id.txtSearchKalaName);
+
         final TextView lblError = alertView.findViewById(R.id.lblError);
         Button btnCancel = alertView.findViewById(R.id.btnCancel);
         Button btnOK = alertView.findViewById(R.id.btnApply);
@@ -764,21 +702,16 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         builder.setView(alertView);
         builder.create();
 
-        if (!(DarkhastKalaActivity.this).isFinishing())
-        {
+        if (!(DarkhastKalaActivity.this).isFinishing()) {
             show = builder.show();
-            try
-            {
-                if (show.getWindow() != null)
-                {
+            try {
+                if (show.getWindow() != null) {
                     show.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 }
-            }
-            catch (Exception exception)
-            {
+            } catch (Exception exception) {
                 exception.printStackTrace();
                 PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(DarkhastKalaActivity.this,Constants.LOG_EXCEPTION(), exception.toString(), "", "DarkhastKalaActivity", "showAddItemAlert", "");
+                logger.insertLogToDB(DarkhastKalaActivity.this, Constants.LOG_EXCEPTION(), exception.toString(), "", "DarkhastKalaActivity", "showAddItemAlert", "");
             }
 
             edttxtSearch.addTextChangedListener(new TextWatcher() {
@@ -789,27 +722,25 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (s.length() != 0)
-                    {
+                    if (s.length() != 0) {
                         String searchWord = new PubFunc().new LanguageUtil().convertFaNumberToEN(s.toString());
                         arrayListKalaModel.clear();
+                        adapterRequestKalaListGrid.notifyDataSetChanged();
                         adapterRequestKala.notifyDataSetChanged();
                         adapterRequestKalaList.notifyDataSetChanged();
                         selectedItem.clear();
                         selectedPosition.clear();
                         //adapterRequestKala.clearSelecedItem();
-                        for (int i=0 ; i<kalaMojodiZaribModels.size()  ; i++)
-                        {
+                        for (int i = 0; i < kalaMojodiZaribModels.size(); i++) {
                             String nameKala = new PubFunc().new LanguageUtil().convertFaNumberToEN(kalaMojodiZaribModels.get(i).getNameKala());
-                            if (nameKala.contains(searchWord))
-                            {
+                            if (nameKala.contains(searchWord)) {
                                 arrayListKalaModel.add(kalaMojodiZaribModels.get(i));
+                                adapterRequestKalaListGrid.notifyDataSetChanged();
                                 adapterRequestKala.notifyDataSetChanged();
                                 adapterRequestKalaList.notifyDataSetChanged();
                             }
                         }
-                    }
-                    else //if (s.length() == 0)
+                    } else //if (s.length() == 0)
                     {
                         arrayListKalaModel.clear();
                         //adapterRequestKala.clearSelecedItem();
@@ -823,61 +754,49 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
                 }
             });
 
-            btnCancel.setOnClickListener(new View.OnClickListener()
-            {
+            btnCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     show.dismiss();
                 }
             });
 
-            btnOK.setOnClickListener(new View.OnClickListener()
-            {
+            btnOK.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     lblError.setVisibility(View.GONE);
                     lblError.setText("");
 
-                    if (showCatalog)
-                    {
-                        if (((LinearLayoutManager)recyclerView.getLayoutManager()) != null)
-                        {
-                            try
-                            {
-                                int position = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                                if (position >= 0)
-                                {
+                    if (showCatalog) {
+                        if (((LinearLayoutManager) recyclerView.getLayoutManager()) != null) {
+                            try {
+                                int position = firstVisibleItemPosition;
+                                Log.i("TAG", "onClick: " + position);
+                                if (position >= 0) {
                                     selectedItem.clear();
                                     selectedPosition.clear();
                                     selectedItem.add(arrayListKalaModel.get(position));
                                     selectedPosition.add(position);
+
                                 }
-                            }
-                            catch (Exception exception)
-                            {
+                            } catch (Exception exception) {
                                 exception.printStackTrace();
                             }
                         }
-                    }
-                    else
-                    {
+                    } else {
+
                         selectedItem.clear();
-                        if (selectedPosition.size() > 0)
-                        {
+                        if (selectedPosition.size() > 0) {
                             selectedItem.add(arrayListKalaModel.get(selectedPosition.get(0)));
                         }
                     }
 
-                    if (selectedPosition.size() == 0 || selectedItem.size() == 0)
-                    {
+                    if (selectedPosition.size() == 0 || selectedItem.size() == 0) {
                         lblError.setVisibility(View.VISIBLE);
                         lblError.setText(getResources().getString(R.string.errorSelectItem));
-                    }
-                    else
-                    {
-                        mPresenter.checkAddKala(ccMoshtary , selectedPosition.get(0) , selectedItem.get(0), edttxtCountCarton.getText().toString().trim(), edttxtCountBaste.getText().toString().trim(), edttxtCountAdad.getText().toString().trim());
+                    } else {
+
+                        mPresenter.checkAddKala(ccMoshtary, selectedPosition.get(0), selectedItem.get(0), edttxtCountCarton.getText().toString().trim(), edttxtCountBaste.getText().toString().trim(), edttxtCountAdad.getText().toString().trim());
                     }
                 }
             });
@@ -886,33 +805,25 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     }
 
 
-    private void openCamera(int requestCode)
-    {
+    private void openCamera(int requestCode) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null)
-        {
-            startActivityForResult(intent , requestCode);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, requestCode);
         }
     }
 
 
     @Override
-    public void showAlertLoading()
-    {
+    public void showAlertLoading() {
         alertDialog = customLoadingDialog.showLoadingDialog(DarkhastKalaActivity.this);
     }
 
     @Override
-    public void closeAlertLoading()
-    {
-        if (alertDialog != null)
-        {
-            try
-            {
+    public void closeAlertLoading() {
+        if (alertDialog != null) {
+            try {
                 alertDialog.dismiss();
-            }
-            catch (Exception exception)
-            {
+            } catch (Exception exception) {
                 exception.printStackTrace();
                 PubFunc.Logger logger = new PubFunc().new Logger();
                 logger.insertLogToDB(DarkhastKalaActivity.this, Constants.LOG_EXCEPTION(), exception.toString(), TAG, "", "closeLoadingDialog", "");
@@ -920,71 +831,41 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         }
     }
 
-    private void  handleKalaIndices(int i){
 
-        edttxtCountCarton.setText("");
-        edttxtCountBaste.setText("");
-        edttxtCountAdad.setText("");
-        if (kalaMojodiZaribModels.get(i).getTedadPishnahadi() > 0) {
-            Log.i("tedadPishnahadi", "onItemClick: "+String.valueOf(kalaMojodiZaribModels.get(i).getTedadPishnahadi()));
-            edttxtCountAdad.setText(String.valueOf(kalaMojodiZaribModels.get(i).getTedadPishnahadi()));
-        }
-    }
-
-
-    public void startMVPOps()
-    {
-        try
-        {
-            if ( stateMaintainer.firstTimeIn() )
-            {
+    public void startMVPOps() {
+        try {
+            if (stateMaintainer.firstTimeIn()) {
                 initialize(this);
-            }
-            else
-            {
+            } else {
                 reinitialize(this);
             }
-        }
-        catch (Exception exception)
-        {
+        } catch (Exception exception) {
             exception.printStackTrace();
             mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", DarkhastKalaActivity.class.getSimpleName(), "startMVPOps", "");
         }
     }
 
 
-    private void initialize(DarkhastKalaMVP.RequiredViewOps view )
-    {
-        try
-        {
+    private void initialize(DarkhastKalaMVP.RequiredViewOps view) {
+        try {
             mPresenter = new DarkhastKalaPresenter(view);
             stateMaintainer.put(DarkhastKalaMVP.PresenterOps.class.getSimpleName(), mPresenter);
-        }
-        catch (Exception exception)
-        {
+        } catch (Exception exception) {
             mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", DarkhastKalaActivity.class.getSimpleName(), "initialize", "");
         }
     }
 
 
-    private void reinitialize(DarkhastKalaMVP.RequiredViewOps view)
-    {
-        try
-        {
+    private void reinitialize(DarkhastKalaMVP.RequiredViewOps view) {
+        try {
             mPresenter = stateMaintainer.get(DarkhastKalaMVP.PresenterOps.class.getSimpleName());
-            if ( mPresenter == null )
-            {
-                initialize( view );
-            }
-            else
-            {
+            if (mPresenter == null) {
+                initialize(view);
+            } else {
                 mPresenter.onConfigurationChanged(view);
             }
-        }
-        catch (Exception exception)
-        {
-            if (mPresenter != null)
-            {
+        } catch (Exception exception) {
+            if (mPresenter != null) {
                 mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", DarkhastKalaActivity.class.getSimpleName(), "reinitialize", "");
             }
         }
@@ -992,14 +873,16 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
 
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         //super.onBackPressed();
+
     }
 
-    //TODO
+
+    /*
+    show graphical requestGoods
+     */
     private void showGridItemAlert() {
-        String[] showGoodsItemCount = getResources().getStringArray(R.array.GoodsNumberItems);
 
 
         alertView = getLayoutInflater().inflate(R.layout.alert_grid_goodlist_for_request, null);
@@ -1008,7 +891,6 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         final CustomTextInputLayout txtinputCountAdadNew = alertView.findViewById(R.id.txtinputAdadCount);
         recyclerViewNew = alertView.findViewById(R.id.recyclerViewGrid);
         final ArrayList<KalaMojodiZaribModel> arrayListKalaModel = new ArrayList<>(kalaMojodiZaribModels); //local list for using in adapter
-//        progressBar=alertView.findViewById(R.id.layProgress);
 
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(DarkhastKalaActivity.this);
@@ -1054,11 +936,11 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
             }
 
 
-            requestedGridGoodAdapter = new RequestedGridGoodAdapter(DarkhastKalaActivity.this, arrayListKalaModel, new RequestedGridGoodAdapter.OnItemClickListener() {
+            adapterRequestKalaListGrid = new RequestedGridGoodAdapter(DarkhastKalaActivity.this, arrayListKalaModel, new RequestedGridGoodAdapter.OnItemEventListener() {
                 @Override
                 public void onItemClick(KalaMojodiZaribModel kalaMojodiZaribModel, int position) {
                     selectedItem.clear();
-                    selectedItem.add(arrayListKalaModel.get(position));
+                    selectedItem.add(kalaMojodiZaribModel);
                     selectedPosition.clear();
                     selectedPosition.add(position);
                     edttxtCountCarton.setText("");
@@ -1069,7 +951,6 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
                     }
                 }
 
-
                 @Override
                 public void onLeftSwipeItemScroll(CustomScrollView view) {
                     if (mLayoutManager != null) {
@@ -1079,30 +960,17 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
                     }
                 }
 
-                @Override
-                public void onOtherItemsScroll(CustomScrollView view) {
-                    if (mLayoutManager != null) {
-                        view.getParent().requestDisallowInterceptTouchEvent(false);
-                        recyclerViewNew.requestDisallowInterceptTouchEvent(false);
-                    }
-                }
-
 
             });
+
+
             setGridLayoutManager(SpanCount);
             recyclerViewNew.post(new Runnable() {
                 public void run() {
-                    heightOfRecycler = recyclerViewNew.getHeight();
-                    widthOfRecycler = recyclerViewNew.getWidth();
-                    setViewPackages(show_goods_count_type);
-//                    snapHelperGridAlert.attachToRecyclerView(recyclerViewNew);
-
-
-//                    recyclerViewNew.setLayoutManager(mLayoutManager);
-//                    recyclerViewNew.setAdapter(adapterRequestKalaListGrid);
-//                    SnapToBlock snapToBlock = new SnapToBlock(1);
-//                    snapToBlock.attachToRecyclerView(recyclerViewNew);
-
+                    int heightOfRecycler = recyclerViewNew.getHeight();
+                    int widthOfRecycler = recyclerViewNew.getWidth();
+                    adapterRequestKalaListGrid.setMeasurements(heightOfRecycler, widthOfRecycler);
+                    mPresenter.getRecyclerDetails();
                 }
             });
 
@@ -1115,19 +983,25 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    adapterRequestKalaListGrid.resetLastSelectedPosition();
+                    adapterRequestKalaListGrid.notifyDataSetChanged();
+
+
                     if (s.length() != 0) {
                         String searchWord = new PubFunc().new LanguageUtil().convertFaNumberToEN(s.toString());
                         arrayListKalaModel.clear();
-                        requestedGridGoodAdapter.notifyDataSetChanged();
+                        adapterRequestKalaListGrid.notifyDataSetChanged();
                         adapterRequestKala.notifyDataSetChanged();
                         adapterRequestKalaList.notifyDataSetChanged();
                         selectedItem.clear();
                         selectedPosition.clear();
                         //adapterRequestKala.clearSelecedItem();
                         for (int i = 0; i < kalaMojodiZaribModels.size(); i++) {
-                            if (kalaMojodiZaribModels.get(i).getNameKala().contains(searchWord)) {
+                            String nameKala = new PubFunc().new LanguageUtil().convertFaNumberToEN(kalaMojodiZaribModels.get(i).getNameKala());
+                            if (nameKala.contains(searchWord)) {
                                 arrayListKalaModel.add(kalaMojodiZaribModels.get(i));
-                                requestedGridGoodAdapter.notifyDataSetChanged();
+                                adapterRequestKalaListGrid.notifyDataSetChanged();
                                 adapterRequestKala.notifyDataSetChanged();
                                 adapterRequestKalaList.notifyDataSetChanged();
                             }
@@ -1182,84 +1056,92 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         }
 
 
-        arrayListImages = new ArrayList<>();
-        for (String string : showGoodsItemCount) {
-            try
-            {
-                JSONObject jsonObject = new JSONObject(string);
-                arrayListImages.add(jsonObject.getString("image"));
-            }
-            catch (Exception e)
-            {
-
-            }
-        }
-
-
         btnChooseShowType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("clickeonchange", "onClick: " + show_goods_count_type);
-                setViewPackages(show_goods_count_type);
+                if (adapterRequestKalaListGrid != null) {
+                    //get height and width for measuring the recycler view in tablet screen
+                    edttxtSearch.setText("");
+                    adapterRequestKalaListGrid.updateStatus();
+                    setViewPackages(adapterRequestKalaListGrid.getStatus());
+
+                }
             }
         });
 
 
-
-
-
     }
 
-    private void setViewPackages(int type) {
-        switch (type) {
+
+    private void refreshRecyclerView(int spanCount, boolean hasCache) {
+        recyclerViewNew.setAdapter(null);
+        recyclerViewNew.setLayoutManager(null);
+        if (recyclerViewNew.getOnFlingListener() != null) {
+            recyclerViewNew.clearOnScrollListeners();
+            recyclerViewNew.setOnFlingListener(null);
+        }
+        if (hasCache)
+            recyclerViewNew.setItemViewCacheSize(adapterRequestKalaListGrid.getItemCount());
+
+
+        recyclerViewNew.setLayoutManager(setGridLayoutManager(spanCount));
+        recyclerViewNew.setAdapter(adapterRequestKalaListGrid);
+        adapterRequestKalaListGrid.notifyDataSetChanged();
+    }
+
+
+
+    private void setViewPackages(int status) {
+        Animation myBounceAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce);
+        Animation slideAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        MyBounceInterpolator interpolator = new MyBounceInterpolator(0.05, 15);
+        myBounceAnimation.setInterpolator(interpolator);
+        Log.i("goodsShowItemNumber", "setViewPackages: " + adapterRequestKalaListGrid.getStatus());
+        SnapToBlock snapToBlock = new SnapToBlock(1);
+        switch (status) {
             case Constants.SINGLE_ITEM:
-                Log.i("clickeonchange", "onClick: " + show_goods_count_type + "insingle");
-                numberOfDisplayItems = 2;
+                Log.i("clickeonchange", "onClick: " + adapterRequestKalaListGrid.getStatus());
                 btnChooseShowType.setImageDrawable(getResources().getDrawable(R.drawable.ic_2section));
                 btnChooseShowType.startAnimation(myBounceAnimation);
-                refreshRecyclerView(1);
+                refreshRecyclerView(1, false);
                 recyclerViewNew.startAnimation(slideAnimation);
-                SnapHelper snapHelper = new PagerSnapHelper();
-                snapHelper.attachToRecyclerView(recyclerViewNew);
+                snapToBlock.attachToRecyclerView(recyclerViewNew);
+//                adapterRequestKalaListGrid.updateStatus();
 
 
                 break;
 
 
             case Constants.DOUBLE_ITEM:
-                Log.i("clickeonchange", "onClick: " + show_goods_count_type + "indouble");
-                numberOfDisplayItems = 2;
-
+                Log.i("clickeonchange", "onClick: " + goodsNumberItemEachSection + "indouble");
+//                adapterRequestKalaListGrid.updateStatus();
                 btnChooseShowType.setImageDrawable(getResources().getDrawable(R.drawable.ic_4section));
-//                btnChooseShowType.startAnimation(anim_in);
                 btnChooseShowType.startAnimation(myBounceAnimation);
-                refreshRecyclerView(2);
+                refreshRecyclerView(1, false);
                 recyclerViewNew.startAnimation(slideAnimation);
-                SnapHelper snapHelper2 = new PagerSnapHelper();
-                snapHelper2.attachToRecyclerView(recyclerViewNew);
+                snapToBlock.attachToRecyclerView(recyclerViewNew);
+//                adapterRequestKalaListGrid.updateStatus();
 
                 break;
 
 
             case Constants.FOUR_ITEM:
-                Log.i("clickeonchange", "onClick: " + show_goods_count_type + "inFour");
-                numberOfDisplayItems = 4;
+                Log.i("clickeonchange", "onClick: " + goodsNumberItemEachSection + "inFour");
+
+
                 btnChooseShowType.setImageDrawable(getResources().getDrawable(R.drawable.ic_1section));
-//                btnChooseShowType.startAnimation(anim_in);
                 btnChooseShowType.startAnimation(myBounceAnimation);
-                refreshRecyclerView(2);
+                refreshRecyclerView(2, false);
                 recyclerViewNew.startAnimation(slideAnimation);
-                SnapToBlock snapToBlock = new SnapToBlock(1);
-                snapToBlock.attachToRecyclerView(recyclerViewNew);
+
+                //TODO for pagination in listView
+//                SnapToBlock snapToBlock = new
+//                (1);
+//                snapToBlock.attachToRecyclerView(recyclerViewNew);
 
                 break;
 
 
-        }
-        if (show_goods_count_type < 3) {
-            show_goods_count_type += 1;
-        } else {
-            show_goods_count_type = 1;
         }
 
 
@@ -1279,28 +1161,12 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
             recyclerViewNew.setOnFlingListener(null);
         }
         recyclerViewNew.setLayoutManager(setGridLayoutManager(spanCount));
-        recyclerViewNew.setAdapter(requestedGridGoodAdapter);
-        requestedGridGoodAdapter.notifyDataSetChanged();
+        recyclerViewNew.setAdapter(adapterRequestKalaListGrid);
+        adapterRequestKalaListGrid.notifyDataSetChanged();
     }
 
 
-    @Override
-    public void onGetSavedRecyclerViewPics(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels) {
 
-        //TODO Getting images From external SD
-        for (KalaMojodiZaribModel kalaMojodiModel : kalaMojodiZaribModels) {
-            File file = new File(Environment.getExternalStorageDirectory() + "/SapHamrah/Album/", kalaMojodiModel.getCodeKala() + ".jpg");
-            Log.i("fileImages", "onBindViewHolder: " + file.exists());
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 2;
-            Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/SapHamrah/Album/" + kalaMojodiModel.getCodeKala() + ".jpg",options);
-
-            imageHash.put(kalaMojodiModel.getCcKalaCode(), bitmap);
-
-
-        }
-
-    }
 
     /**
      * click item recycler jayezeh for get details jayezeh in jayezeh alert dialog
@@ -1329,6 +1195,15 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         showJayezehAlert(jayezehByccKalaCodeParentModels, tedadKala, mablaghForosh , ccKalaCode , ccDarkhastFaktor);
     }
 
+    @Override
+    public void onGetGridRecyclerDetails(int status, ArrayList<KalaPhotoModel> kalaPhotoModels) {
+
+        Log.i("ITEMNUMBERPER", "onGetGridRecyclerDetails: "+status);
+        adapterRequestKalaListGrid.setStatus(status);
+        adapterRequestKalaListGrid.setKalaImages(kalaPhotoModels);
+        setViewPackages(adapterRequestKalaListGrid.getStatus());
+    }
+
     /**
      * get response for DB for Show details Jayezeh
      * @param position
@@ -1346,7 +1221,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
      * @param ccKalaCode
      * @param ccDarkhastFaktor
      */
-    private void showJayezehAlert(ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels, int tedadKala,double mablaghForosh ,int ccKalaCode ,Long ccDarkhastFaktor) {
+    private void showJayezehAlert(ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels, int tedadKala, double mablaghForosh , int ccKalaCode , Long ccDarkhastFaktor) {
         //local list for using in adapter
         AlertDialog.Builder builder = new AlertDialog.Builder(DarkhastKalaActivity.this);
         alertView = getLayoutInflater().inflate(R.layout.alert_jayezeh, null);

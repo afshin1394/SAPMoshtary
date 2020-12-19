@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE = 2  ; // 0- main  1- Learn  2- Test  3- Demo 4-pegah 5-pegahtest 6-Demo
+    private static final int CURRENT_VERSION_TYPE = 4  ; // 0- main  1- Learn  2- Test  3- Demo 4-pegah 5-pegahtest 6-Demo
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 

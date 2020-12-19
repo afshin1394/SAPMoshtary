@@ -23,10 +23,12 @@ import com.saphamrah.DAO.KalaDarkhastFaktorSatrDAO;
 import com.saphamrah.DAO.KalaMojodiDAO;
 import com.saphamrah.DAO.KalaMojodiGiriDAO;
 import com.saphamrah.DAO.KalaMojodiZaribForoshDAO;
+import com.saphamrah.DAO.KalaPhotoDAO;
 import com.saphamrah.DAO.MoshtaryBrandDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.DAO.MoshtaryJadidDarkhastDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
+import com.saphamrah.DAO.SystemConfigTabletDAO;
 import com.saphamrah.Model.AdamDarkhastModel;
 import com.saphamrah.Model.CodeTypeModel;
 import com.saphamrah.Model.DarkhastFaktorModel;
@@ -38,6 +40,7 @@ import com.saphamrah.Model.GPSDataModel;
 import com.saphamrah.Model.KalaDarkhastFaktorModel;
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.KalaMojodiModel;
+import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.Model.MojoodiGiriModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.ParameterChildModel;
@@ -1024,6 +1027,28 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
         jayezehByccKalaCodeParentModels.get(position).setCcDarkhastFaktorDetails(ccDarkhastFaktor);
         jayezehByccKalaCodeParentModels.get(position).setMablaghKol(mablaghKol);
         mPresenter.onCheckJayezeh(position);
+    }
+    @Override
+    public void getRecyclerDetails() {
+        int itemCountPerScreen = getItemCountPerScreen();
+        ArrayList<KalaPhotoModel> kalaPhotoModels = getGallery();
+        mPresenter.onGetRecyclerDetails( itemCountPerScreen , kalaPhotoModels );
+
+    }
+    @Override
+    public int getItemCountPerScreen() {
+        SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(mPresenter.getAppContext());
+        int itemCountPerScreen = systemConfigTabletDAO.getAll().get(0).getGoodsShowNumberEachPage();
+        return itemCountPerScreen;
+//        mPresenter.onGetItemCountPerScreen(itemCountPerScreen);
+    }
+
+    @Override
+    public ArrayList<KalaPhotoModel> getGallery() {
+        KalaPhotoDAO kalaPhotoDAO = new KalaPhotoDAO(mPresenter.getAppContext());
+        ArrayList<KalaPhotoModel> kalaPhotoModels = kalaPhotoDAO.getAll();
+        return kalaPhotoModels;
+//        mPresenter.onGetGallery(kalaPhotoModels);
     }
 
 }

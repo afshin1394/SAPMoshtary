@@ -5,12 +5,13 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,8 +25,9 @@ import com.bumptech.glide.Glide;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.saphamrah.CustomView.CustomScrollView;
-import com.saphamrah.MVP.View.DarkhastKalaActivity;
 
+import com.saphamrah.CustomView.MyBounceInterpolator;
+import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.KalaMojodiZaribModel;
@@ -37,34 +39,39 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-
 public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGridGoodAdapter.ViewHolder> {
 
     //TODO statistics
     public static final int SHOW_DETAILS = 1;
     public static final int DONT_SHOW_DETAILS = 0;
     public static final String TAG = RequestedGridGoodAdapter.class.getSimpleName();
+    public static final int UNSELECTED=-1;
 
 
     private Context context;
-
-    private final OnItemClickListener listener;
+    private final OnItemEventListener listener;
     private ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels;
-    private int lastSelectedItem;
+    private ArrayList<KalaMojodiZaribModel> filteredData;
+    private int lastSelectedPosition;
+    private int itemPerRow;
+    private int status;
+    private int heightOfRecycler;
+    private int widthOfRecycler;
+    private SparseArray allKalaPhoto = new SparseArray();
 
 
-    public RequestedGridGoodAdapter(Context context, ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels, OnItemClickListener listener) {
+    public RequestedGridGoodAdapter(Context context, ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels, OnItemEventListener listener) {
         this.context = context;
         this.listener = listener;
         this.kalaMojodiZaribModels = kalaMojodiZaribModels;
-        lastSelectedItem = -1;
-
+        lastSelectedPosition = UNSELECTED;
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RequestedGridGoodAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
         View mainView = LayoutInflater.from(parent.getContext()).inflate(R.layout.request_good_list_grid_item, parent, false);
@@ -72,24 +79,23 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
         switch (viewType) {
             case SHOW_DETAILS:
                 CustomScrollView customScrollView = mainView.findViewById(R.id.layLeftGrid);
-                LinearLayout linearLayout=mainView.findViewById(R.id.layRightGrid);
-                View viewFullImage=LayoutInflater.from(parent.getContext()).inflate(R.layout.request_good_list_grid_full_image, parent, false);
+                LinearLayout linearLayout = mainView.findViewById(R.id.layRightGrid);
+                View viewFullImage = LayoutInflater.from(parent.getContext()).inflate(R.layout.request_good_list_grid_full_image, parent, false);
                 View viewDetails = LayoutInflater.from(parent.getContext()).inflate(R.layout.request_good_list_grid_details, parent, false);
                 customScrollView.addView(viewDetails);
                 linearLayout.addView(viewFullImage);
-                PubFunc.FontUtils.getInstance().setFont(parent,font);
-                mainView.getLayoutParams().height = ((DarkhastKalaActivity) context).heightOfRecycler / (((DarkhastKalaActivity)context).numberOfDisplayItems/2);
-                return new ViewHolder(mainView, SHOW_DETAILS);
+                new PubFunc().new FontUtils().setFont(parent, font);
+                mainView.getLayoutParams().height = heightOfRecycler / itemPerRow;
+                return new RequestedGridGoodAdapter.ViewHolder(mainView, SHOW_DETAILS, listener);
 
             case DONT_SHOW_DETAILS:
-
-                mainView.getLayoutParams().height = ((DarkhastKalaActivity) context).heightOfRecycler /(((DarkhastKalaActivity)context).numberOfDisplayItems/2);
-                PubFunc.FontUtils.getInstance().setFont(parent,font);
-                return new ViewHolder(mainView, DONT_SHOW_DETAILS);
+                mainView.getLayoutParams().height = heightOfRecycler / itemPerRow;
+                new PubFunc().new FontUtils().setFont(parent, font);
+                return new RequestedGridGoodAdapter.ViewHolder(mainView, DONT_SHOW_DETAILS, listener);
 
             default:
 
-                return new ViewHolder(mainView, DONT_SHOW_DETAILS);
+                return new RequestedGridGoodAdapter.ViewHolder(mainView, DONT_SHOW_DETAILS, listener);
 
         }
 
@@ -99,11 +105,11 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
     @Override
     public int getItemViewType(int position) {
 
-        if (position == lastSelectedItem) {
-
+        if (position == lastSelectedPosition)
+        {
             return SHOW_DETAILS;
-        } else {
-
+        } else
+        {
             return DONT_SHOW_DETAILS;
         }
     }
@@ -111,9 +117,40 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Animation myBounceAnimation = AnimationUtils.loadAnimation(context, R.anim.bounce);
+        MyBounceInterpolator interpolator = new MyBounceInterpolator(0.2, 15);
+        myBounceAnimation.setInterpolator(interpolator);
+
 
         KalaMojodiZaribModel model = kalaMojodiZaribModels.get(position);
 
+
+         //set kala status asasi
+            if (model.getKalaAsasi())
+            {
+                Log.d("RequestGoodsAdaptor t","KalaAsasi:"+ model.getKalaAsasi() );
+                holder.imgStatusKala.setImageResource(R.drawable.ic_kalaasasi);
+                holder.imgStatusKala.setVisibility(View.VISIBLE);
+            }
+
+            //set kala status pishnahadi
+            else if (model.getTedadPishnahadi()>0)
+            {
+                Log.d("RequestGoodsAdaptor t","KalaPishnahadi:"+ model.getTedadPishnahadi() );
+                holder.imgStatusKala.setImageResource(R.drawable.ic_kalapishnahadi);
+                holder.imgStatusKala.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                holder.imgStatusKala.setVisibility(View.GONE);
+            }
+
+        //TODO set Selection
+        if (position == lastSelectedPosition) {
+            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorLightGreen));
+        } else {
+            holder.itemView.setBackgroundColor(Color.WHITE);
+        }
 
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         String gheymatForosh = formatter.format(model.getGheymatForosh());
@@ -127,13 +164,11 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
             Date tolidDate = sdf.parse(model.getTarikhTolid());
             Date enghezaDate = sdf.parse(model.getTarikhEngheza());
 
-            tarikhTolid = new PubFunc (). new DateUtils().gregorianToPersianDateTime(tolidDate);
+            tarikhTolid = new PubFunc().new DateUtils().gregorianToPersianDateTime(tolidDate);
             tarikhTolid = tarikhTolid.substring(0, 9);
-            //Log.d("tarikh" , "tolid : " + tarikhTolid);
 
-            tarikhEngheza = new PubFunc (). new DateUtils().gregorianToPersianDateTime(enghezaDate);
+            tarikhEngheza = new PubFunc().new DateUtils().gregorianToPersianDateTime(enghezaDate);
             tarikhEngheza = tarikhEngheza.substring(0, 9);
-            //Log.d("tarikh" , "engheza : " + tarikhEngheza);
         } catch (Exception exception) {
             exception.printStackTrace();
             PubFunc.Logger logger = new PubFunc().new Logger();
@@ -141,14 +176,25 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
         }
 
 
-//if selected
+        /**if item is selected**/
+
         if (holder.getItemViewType() == SHOW_DETAILS) {
+
+            /**make arrows visible to show scrollable item**/
+            holder.rightArrow.setVisibility(View.VISIBLE);
+            holder.leftArrow.setVisibility(View.VISIBLE);
+
+            /**setAnimations for arrows**/
+            holder.leftArrow.startAnimation(myBounceAnimation);
+            holder.rightArrow.startAnimation(myBounceAnimation);
+
+
 
             holder.swipeLayout.setLeftSwipeEnabled(true);
             holder.lblTedadMojodi.setText(String.format(" %1$s %2$s", model.getTedad(), context.getResources().getString(R.string.adad)));
 
 
-            //NameCodeKala
+            /**NameCodeKala**/
             holder.lblCodeKala.setText(String.format(" %1$s", model.getCodeKala()));
             holder.lblNameKala.setText(String.format(" %1$s", model.getNameKala()));
 
@@ -175,15 +221,42 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
             holder.lblDimen.setText(String.format("%1$s * %2$s * %3$s %4$s", kalaMojodiZaribModels.get(position).getErtefa(), kalaMojodiZaribModels.get(position).getArz(), kalaMojodiZaribModels.get(position).getTol(), kalaMojodiZaribModels.get(position).getNameVahedSize()));
             holder.NameCodeFullImage.setText(String.format("%1$s - %2$s", model.getCodeKala(), model.getNameKala()));
 
-            holder.lblMainNameCodeKala.setText(String.format("%1$s - %2$s", model.getCodeKala(),model.getNameKala()));
+            holder.lblMainNameCodeKala.setText(String.format("%1$s - %2$s", model.getCodeKala(), model.getNameKala()));
             holder.lblMainGheymatForosh.setText(String.format(" %1$s %2$s", gheymatForosh, context.getResources().getString(R.string.rial)));
             holder.lblMainBatchNumber.setText(model.getShomarehBach());
-
 //            if (model.getKalaAsasi()) {
-//                holder.imgKalaAsasi.setVisibility(View.VISIBLE);
+//                holder.imgStatusKala.setVisibility(View.VISIBLE);
 //            } else {
-//                holder.imgKalaAsasi.setVisibility(View.GONE);
+//                holder.imgStatusKala.setVisibility(View.GONE);
 //            }
+            try {
+
+                Glide.with(context)
+                        .load(allKalaPhoto.get(model.getCcKalaCode()))
+                        .placeholder(R.drawable.nopic_whit)
+                        .into(holder.imgKalaFull);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.toString(), "RequestedGridGoodAdapter", "", "onBindViewHolder", "");
+            }
+
+
+            //View has not been selected yet
+        } else {
+            holder.rightArrow.setVisibility(View.INVISIBLE);
+            holder.leftArrow.setVisibility(View.INVISIBLE);
+
+
+            holder.lblTedadMojodi.setText(String.format(" %1$s %2$s", model.getTedad(), context.getResources().getString(R.string.adad)));
+            holder.lblMainBatchNumber.setText(String.format(" %1$s %2$s", model.getShomarehBach(), ""));
+
+            //set  Main New lbl Texts
+            holder.lblMainNameCodeKala.setText(String.format("%1$s - %2$s", String.valueOf(model.getCodeKala()), model.getNameKala()));
+            holder.lblMainGheymatForosh.setText(String.format(" %1$s %2$s", gheymatForosh, context.getResources().getString(R.string.rial)));
+
             //set kala status asasi
             if (model.getKalaAsasi())
             {
@@ -205,75 +278,14 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
             }
 
 
-
-            try {
-
-
-                Glide.with(context)
-                        .load(DarkhastKalaActivity.imageHash.get(model.getCcKalaCode()))
-                        .placeholder(R.drawable.nopic_whit)
-                        .into(holder.imgKalaFull);
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.toString(), "RequestedGridGoodAdapter", "", "onBindViewHolder", "");
-            }
-
-
-
-            //View has not been selected yet
-        } else {
-
-
-            holder.lblTedadMojodi.setText(String.format(" %1$s %2$s", model.getTedad(), context.getResources().getString(R.string.adad)));
-            holder.lblMainBatchNumber.setText(String.format(" %1$s", model.getShomarehBach()));
-
-            //set  Main New lbl Texts
-            holder.lblMainNameCodeKala.setText(String.format("%1$s - %2$s", String.valueOf(model.getCodeKala()), model.getNameKala()));
-            holder.lblMainGheymatForosh.setText(String.format(" %1$s %2$s", gheymatForosh, context.getResources().getString(R.string.rial)));
-//            if (model.getKalaAsasi()) {
-//                holder.imgStatusKala.setVisibility(View.VISIBLE);
-//            } else {
-//                holder.imgStatusKala.setVisibility(View.GONE);
-//            }
-
-
-            if (model.getKalaAsasi())
-            {
-                Log.d("RequestGoodsAdaptor t","KalaAsasi:"+ model.getKalaAsasi() );
-                holder.imgStatusKala.setImageResource(R.drawable.ic_kalaasasi);
-                holder.imgStatusKala.setVisibility(View.VISIBLE);
-            }
-
-            //set kala status pishnahadi
-            else if (model.getTedadPishnahadi()>0)
-            {
-                Log.d("RequestGoodsAdaptor t","KalaPishnahadi:"+ model.getTedadPishnahadi() );
-                holder.imgStatusKala.setImageResource(R.drawable.ic_kalapishnahadi);
-                holder.imgStatusKala.setVisibility(View.VISIBLE);
-            }
-            else
-            {
-                holder.imgStatusKala.setVisibility(View.GONE);
-            }
-
-
         }
 
 
-        if (position == lastSelectedItem) {
-            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorLightGreen));
-        } else {
-            holder.itemView.setBackgroundColor(Color.WHITE);
-        }
-
-        //TODO Glide library automatically use viewPools to load images
-
+        /*****load images for central layout*****/
+        Log.i("getImageHash", "onBindViewHolder: " + allKalaPhoto.get(model.getCcKalaCode()) + model.getCcKalaCode());
         try {
             Glide.with(context)
-                    .load(DarkhastKalaActivity.imageHash.get(model.getCcKalaCode()))
+                    .load(allKalaPhoto.get(model.getCcKalaCode()))
                     .placeholder(R.drawable.nopic_whit)
                     .into(holder.imgKalaGrid);
 
@@ -285,7 +297,8 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
         }
 
 
-        holder.bind(model, position, listener);
+        /***setEventListeners***/
+        holder.setEventListeners(model, position, listener);
     }
 
 
@@ -295,17 +308,18 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder  {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         Typeface font = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fontPath));
-
-        //TODO global views
+        OnItemEventListener onItemEventListener;
+        /** global views**/
         private SwipeLayout swipeLayout;
         private CardView cardview;
         private LinearLayout layStatus;
         private TextView lblKalaNameCode;
         private TextView lblTedadMojodi;
         private ImageView imgStatusKala;
-        //TODO details of left swipView
+
+        /***left side layout views***/
         private TextView lblCodeKala;
         private TextView lblNameKala;
         private TextView lblNameBrand;
@@ -326,28 +340,40 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
         private ImageView imgHaveMaliatAvarez;
         private ImageView imgKalaGrid;
         private ImageView imgKalaFull;
-        private TextView  NameCodeFullImage;
+        private TextView NameCodeFullImage;
+
         private LinearLayout rootView;
-        private OnItemClickListener mListener;
+        private OnItemEventListener mListener;
 
 
-        //TODO mainSwipe views
+        /****central layout views****/
+
+
         private TextView lblMainNameCodeKala;
         private TextView lblMainGheymatForosh;
         private TextView lblMainBatchNumber;
-        private TextView markCodeKal, markNameKala, markNameBrand, markZaribForosh, markBarcode, markBatchNumber, markTarikhTolid, markTarihkEngheza, markTarikhMashmooleMaliat, markMablaghForosh, markGheymatMasrafKonande, markVaznKhales, markVaznCarton, markTedadDarCarton, markTedadDarBaste, markDimens;
+        private TextView markCodeKala, markNameKala, markNameBrand, markZaribForosh, markBarcode, markBatchNumber, markTarikhTolid, markTarihkEngheza, markTarikhMashmooleMaliat, markMablaghForosh, markGheymatMasrafKonande, markVaznKhales, markVaznCarton, markTedadDarCarton, markTedadDarBaste, markDimens;
         private LinearLayout LinTedadDarBaste;
         private View sixthCapDivider;
+        private ImageView leftArrow;
+        private ImageView rightArrow;
+
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        public ViewHolder(View view, int viewType) {
+        public ViewHolder(View view, int viewType, OnItemEventListener onItemEventListener) {
             super(view);
-
-            //TODO integrating SWIPEVIEWS AND DRAGS
+            /***left and right arrow images***/
+            leftArrow = view.findViewById(R.id.arrow_left_side);
+            rightArrow = view.findViewById(R.id.arrow_right_side);
+            /***integrating swipe layout and drags***/
             swipeLayout = view.findViewById(R.id.swipeGrid);
             swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
             swipeLayout.addDrag(SwipeLayout.DragEdge.Left, itemView.findViewById(R.id.layLeftGrid));
             swipeLayout.addDrag(SwipeLayout.DragEdge.Right, itemView.findViewById(R.id.layRightGrid));
+            /*
+            event listeners
+             */
+            this.onItemEventListener = onItemEventListener;
 
 
             //TODO integrating DEFAULT
@@ -355,6 +381,8 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
             switch (viewType) {
 
                 case DONT_SHOW_DETAILS:
+
+
                     swipeLayout.setLeftSwipeEnabled(false);
                     swipeLayout.setRightSwipeEnabled(false);
                     cardview = view.findViewById(R.id.crdviewRoot);
@@ -367,18 +395,16 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
                     rootView = view.findViewById(R.id.rootView);
                     imgKalaGrid = view.findViewById(R.id.imgKalaGrid);
                     //TODO set All Fonts
-                    PubFunc.FontUtils.getInstance().setFont(((ViewGroup) view),font);
-
-
+                    new PubFunc().new FontUtils().setFont(((ViewGroup) view), font);
 
 
                     break;
-                //TODO integrating DETAILS
 
+                /***integrating DETAILS***/
                 case SHOW_DETAILS:
 
 
-                    sixthCapDivider=view.findViewById(R.id.sixthCapDivider);
+                    sixthCapDivider = view.findViewById(R.id.sixthCapDivider);
                     swipeLayout.setLeftSwipeEnabled(true);
 
                     cardview = view.findViewById(R.id.crdviewRoot);
@@ -414,7 +440,7 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
                     imgKalaGrid = view.findViewById(R.id.imgKalaGrid);
 
 
-                    markCodeKal = view.findViewById(R.id.MarkCodeKala);
+                    markCodeKala = view.findViewById(R.id.MarkCodeKala);
                     markNameKala = view.findViewById(R.id.MarkNameKala);
                     markNameBrand = view.findViewById(R.id.MarkNameBrand);
                     markZaribForosh = view.findViewById(R.id.MarkZaribForoshDetail);
@@ -430,10 +456,10 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
                     markTedadDarBaste = view.findViewById(R.id.markTedadDarBaste);
                     markDimens = view.findViewById(R.id.markDimen);
                     LinTedadDarBaste = view.findViewById(R.id.sixthCap);
+
+
                     //TODO setAllFonts
-                    PubFunc.FontUtils.getInstance().setFont(((ViewGroup) view),font);
-
-
+                    new PubFunc().new FontUtils().setFont(((ViewGroup) view), font);
 
 
                     swipeLayout.setLeftSwipeEnabled(true);
@@ -445,72 +471,48 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
             }
 
 
-
-
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        void bind(final KalaMojodiZaribModel model, final int position, final OnItemClickListener listener) {
 
-
-            swipeLayout.addRevealListener(R.id.layLeftGrid, new SwipeLayout.OnRevealListener() {
-                @Override
-                public void onReveal(View child, SwipeLayout.DragEdge edge, float fraction, int distance) {
-                    //TODO onReveal left view
-                }
-            });
-
-
+        private void setEventListeners(KalaMojodiZaribModel model, int position, OnItemEventListener onItemEventListener) {
             itemView.findViewById(R.id.layLeftGrid).setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    Log.i("ON_TOUCH", "--ON--ITEM--TOUCH--LEFT--GRID--LAY_LEFT" + getAdapterPosition() + " " + lastSelectedPosition);
 
-                public boolean onTouch(View v, MotionEvent event) {
-// TODO   Disallow the touch request for parent scroll on touch of child view
-                    listener.onLeftSwipeItemScroll(v.findViewById(R.id.layLeftGrid));
+                    listener.onLeftSwipeItemScroll(view.findViewById(R.id.layLeftGrid));
 
                     return false;
                 }
             });
 
 
-//enable and disable scrolling events in customScrollView
-            itemView.setOnTouchListener(new View.OnTouchListener() {
 
-                public boolean onTouch(View v, MotionEvent event) {
-                    //TODO Disallow the touch request for parent scroll on touch of child view
-                    if (v != v.findViewById(R.id.layLeftGrid)) {
-                        listener.onOtherItemsScroll(v.findViewById(R.id.layLeftGrid));
-                        return true;
-                    } else {
-                        return true;
-                    }
 
-                }
-            });
-
-            //TODO on item select
             swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    lastSelectedItem = position;
-                    notifyDataSetChanged();
-                    listener.onItemClick(model, position);
+                public void onClick(View view) {
+                         lastSelectedPosition = position;
+                         notifyDataSetChanged();
+                         listener.onItemClick(model, position);
+
                 }
             });
+
 
         }
 
 
-
     }
 
-    //TODO adapter interface
-    public interface OnItemClickListener {
+    /****adapter events handler****/
+
+
+    public interface OnItemEventListener {
 
         void onItemClick(KalaMojodiZaribModel kalaMojodiZaribModel, int position);
 
         void onLeftSwipeItemScroll(CustomScrollView view);
-
-        void onOtherItemsScroll(CustomScrollView view);
 
     }
 
@@ -521,4 +523,54 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
     }
 
 
+    public void setMeasurements(int heightOfRecycler, int widthOfRecycler) {
+        this.heightOfRecycler = heightOfRecycler;
+        this.widthOfRecycler = widthOfRecycler;
+    }
+
+
+    public void setKalaImages(ArrayList<KalaPhotoModel> kalaPhotoModels) {
+        for (KalaPhotoModel kalaPhotoModel : kalaPhotoModels)
+            allKalaPhoto.put(kalaPhotoModel.getCcKalaCodeDb(), kalaPhotoModel.getImageDb());
+
+    }
+
+
+    public void setStatus(int status) {
+        this.status = status;
+        switch (status) {
+            case Constants.SINGLE_ITEM:
+                this.itemPerRow = 1;
+                break;
+            case Constants.DOUBLE_ITEM:
+            case Constants.FOUR_ITEM:
+                this.itemPerRow = 2;
+                break;
+        }
+
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void updateStatus() {
+        switch (status) {
+            case Constants.SINGLE_ITEM:
+                setStatus(Constants.DOUBLE_ITEM);
+                break;
+            case Constants.DOUBLE_ITEM:
+
+                setStatus(Constants.FOUR_ITEM);
+                break;
+            case Constants.FOUR_ITEM:
+                setStatus(Constants.SINGLE_ITEM);
+                break;
+        }
+
+    }
+
+    public void resetLastSelectedPosition(){
+        this.lastSelectedPosition=UNSELECTED;
+    }
 }
