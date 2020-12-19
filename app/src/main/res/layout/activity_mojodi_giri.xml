@@ -58,7 +58,8 @@
         android:layout_below="@+id/layTitle"
         android:layout_above="@+id/layBottomBar"
         android:paddingBottom="20dp"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:background="@color/colorDarkhast">
     </androidx.recyclerview.widget.RecyclerView>
 
 

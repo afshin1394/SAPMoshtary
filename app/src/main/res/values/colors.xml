@@ -25,6 +25,7 @@
     <color name="colorTableHeader">#1f3a93</color>
     <color name="colorHeaderPrint">#2979FF</color>
     <color name="colorPolyline">#1565C0</color>
+    <color name="colorDarkhast">#ECEFF1</color>
 
 
     <color name="mdtp_accent_color">#1f3a93</color>

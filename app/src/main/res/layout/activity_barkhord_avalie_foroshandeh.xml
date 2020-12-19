@@ -41,7 +41,8 @@
         android:id="@+id/recyclerView"
         android:scrollbars="vertical"
         android:layoutDirection="rtl"
-        android:layout_below="@+id/layTitle">
+        android:layout_below="@+id/layTitle"
+        android:background="@color/colorDarkhast">
     </androidx.recyclerview.widget.RecyclerView>
 
 
