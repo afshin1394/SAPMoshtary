@@ -1061,7 +1061,6 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
             public void onClick(View view) {
                 if (adapterRequestKalaListGrid != null) {
                     //get height and width for measuring the recycler view in tablet screen
-                    edttxtSearch.setText("");
                     adapterRequestKalaListGrid.updateStatus();
                     setViewPackages(adapterRequestKalaListGrid.getStatus());
 

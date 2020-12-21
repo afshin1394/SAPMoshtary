@@ -522,7 +522,7 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
                         }
                         else
                         {
-                            if (selectedCount > 0)
+                            if (selectedCount > 0 && selectedCount <= itemCount)
                             {
                                 show.dismiss();
                                 mPresenter.checkUpdateCountOfMarjoee(ccDarkhastFaktor, ccElamMarjoeeSatr, itemCount, selectedCount);
@@ -530,7 +530,7 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
                             else
                             {
                                 lblError.setVisibility(View.VISIBLE);
-                                lblError.setText(getResources().getString(R.string.errorZeroCount));
+                                lblError.setText(getResources().getString(R.string.invalidRangeForEditMarjoee));
                             }
                         }
                     }
