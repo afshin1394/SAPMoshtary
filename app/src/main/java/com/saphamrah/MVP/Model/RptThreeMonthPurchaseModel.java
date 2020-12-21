@@ -2,48 +2,73 @@ package com.saphamrah.MVP.Model;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.saphamrah.Application.BaseApplication;
-import com.saphamrah.BaseMVP.RptThreeMonthPurchaseMVP;
+import com.saphamrah.BaseMVP.RptThreeMonth.RptThreeMonthMVP;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 
 import com.saphamrah.DAO.Rpt3MonthPurchaseDAO;
 import com.saphamrah.Model.Rpt3MonthGetSumModel;
-import com.saphamrah.Model.Rpt3MonthPurchaseModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
-import com.saphamrah.Utils.Constants;
 
 import java.util.ArrayList;
 
-public class RptThreeMonthPurchaseModel implements RptThreeMonthPurchaseMVP.ModelOps
+public class RptThreeMonthPurchaseModel implements RptThreeMonthMVP.ModelOps
 {
 
-    private RptThreeMonthPurchaseMVP.RequiredPresenterOps mPresenter;
+
+    private RptThreeMonthMVP.RequiredPresenterOps mPresenter;
 
 
-    public RptThreeMonthPurchaseModel(RptThreeMonthPurchaseMVP.RequiredPresenterOps mPresenter)
+    public RptThreeMonthPurchaseModel(RptThreeMonthMVP.RequiredPresenterOps mPresenter)
     {
         this.mPresenter = mPresenter;
     }
 
 
     @Override
-    public void getList()
-    {
+    public void getListFilteredByName(ArrayList<Rpt3MonthGetSumModel> rpt3MonthGetSumModels,String filter) {
+        ArrayList<Rpt3MonthGetSumModel> moshtaryFactorModels=new ArrayList<>();
 
-        Rpt3MonthPurchaseDAO rptThreeMonthPurchaseDAO = new Rpt3MonthPurchaseDAO(BaseApplication.getContext());
-        ArrayList<Rpt3MonthGetSumModel> rptThreeMonthPurchaseModels = rptThreeMonthPurchaseDAO.getSumByMoshtary();
-//        ArrayList<Rpt3MonthPurchaseModel> rptThreeMonthPurchaseModels = rptThreeMonthPurchaseDAO.getAll();
-        mPresenter.onGetList(rptThreeMonthPurchaseModels);
+        for (int i = 0; i < rpt3MonthGetSumModels.size(); i++) {
+            String nameMoshtary = new PubFunc().new LanguageUtil().convertFaNumberToEN(rpt3MonthGetSumModels.get(i).getNameMoshtary());
+            if (nameMoshtary.contains(filter)) {
+                moshtaryFactorModels.add(rpt3MonthGetSumModels.get(i));
+
+            }
+        }
+
+        mPresenter.onGetFilteredList(moshtaryFactorModels,filter);
+
     }
 
     @Override
-    public void getRizFaktor(int ccMoshtary) {
-        Rpt3MonthPurchaseDAO rptThreeMonthPurchaseDAO = new Rpt3MonthPurchaseDAO(BaseApplication.getContext());
-        ArrayList<Rpt3MonthPurchaseModel> rpt3MonthPurchaseModels = rptThreeMonthPurchaseDAO.getAllByCcMoshtary(ccMoshtary);
-        mPresenter.onGetRizFaktor(rpt3MonthPurchaseModels);
+    public void getListFilteredByCode(ArrayList<Rpt3MonthGetSumModel> rpt3MonthGetSumModels,String filter) {
+
+        ArrayList<Rpt3MonthGetSumModel> moshtaryFactorModels=new ArrayList<>();
+
+        for (int i = 0; i < rpt3MonthGetSumModels.size(); i++) {
+            String codeMoshtary = new PubFunc().new LanguageUtil().convertFaNumberToEN(rpt3MonthGetSumModels.get(i).getCodeMoshtary());
+            if (codeMoshtary.contains(filter)) {
+                moshtaryFactorModels.add(rpt3MonthGetSumModels.get(i));
+
+            }
+        }
+        mPresenter.onGetFilteredList(moshtaryFactorModels,filter);
+
     }
+
+    @Override
+    public void getList()
+    {
+        Rpt3MonthPurchaseDAO rptThreeMonthPurchaseDAO = new Rpt3MonthPurchaseDAO(BaseApplication.getContext());
+        ArrayList<Rpt3MonthGetSumModel> rptThreeMonthPurchaseModels = rptThreeMonthPurchaseDAO.getSumByMoshtary();
+        mPresenter.onGetList(rptThreeMonthPurchaseModels);
+    }
+
+
 
 
     @Override

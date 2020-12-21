@@ -121,4 +121,11 @@ public class RptThreeMonthPurchaseAdapter extends RecyclerView.Adapter<RptThreeM
         void onItemClick(int ccMoshtary , int position);
     }
 
+    public ArrayList<Rpt3MonthGetSumModel> getModels() {
+        return models;
+    }
+
+    public void setModels(ArrayList<Rpt3MonthGetSumModel> models) {
+        this.models = models;
+    }
 }

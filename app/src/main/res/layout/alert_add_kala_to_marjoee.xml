@@ -83,8 +83,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerSelectElatMarjoee"
                 android:prompt="@string/elatMarjoee"
-                android:layoutDirection="rtl"
-                android:textDirection="rtl"
+                android:layoutDirection="ltr"
+                android:textDirection="ltr"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="10dp">

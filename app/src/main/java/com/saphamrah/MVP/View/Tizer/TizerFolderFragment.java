@@ -21,7 +21,6 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.saphamrah.Adapter.tizerAdapter.TizerFolderNameAdapter;
 import com.saphamrah.Application.BaseApplication;
-import com.saphamrah.BaseMVP.RptThreeMonthPurchaseMVP;
 import com.saphamrah.BaseMVP.TizerMVP;
 import com.saphamrah.MVP.Presenter.TizerPresenter;
 import com.saphamrah.Model.TizerModel;
@@ -163,7 +162,7 @@ public class TizerFolderFragment extends Fragment implements TizerMVP.RequiredVi
             }
         } catch (Exception exception) {
             exception.printStackTrace();
-            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "RptThreeMonthPurchaseActivity", "startMVPOps", "");
+            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "TizerFolderFragment", "startMVPOps", "");
         }
     }
 
@@ -171,9 +170,9 @@ public class TizerFolderFragment extends Fragment implements TizerMVP.RequiredVi
     private void initialize(TizerMVP.RequiredViewOps view) {
         try {
             mPresenter = new TizerPresenter(view);
-            stateMaintainer.put(RptThreeMonthPurchaseMVP.PresenterOps.class.getSimpleName(), mPresenter);
+            stateMaintainer.put(TizerMVP.PresenterOps.class.getSimpleName(), mPresenter);
         } catch (Exception exception) {
-            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "RptThreeMonthPurchaseActivity", "initialize", "");
+            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "TizerFolderFragment", "initialize", "");
         }
     }
 
@@ -188,7 +187,7 @@ public class TizerFolderFragment extends Fragment implements TizerMVP.RequiredVi
             }
         } catch (Exception exception) {
             if (mPresenter != null) {
-                mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "RptThreeMonthPurchaseActivity", "reinitialize", "");
+                mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "TizerFolderFragment", "reinitialize", "");
             }
         }
     }

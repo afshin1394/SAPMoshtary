@@ -31,6 +31,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Rpt3MonthPurchaseDAO {
+    private static final String TAG = Rpt3MonthPurchaseDAO.class.getSimpleName() ;
     Rpt3MonthPurchaseModel modelGetTABLE_NAME = new Rpt3MonthPurchaseModel();
     private DBHelper dbHelper;
 
@@ -215,15 +216,163 @@ public class Rpt3MonthPurchaseDAO {
     }
 
 
+    public ArrayList<Rpt3MonthPurchaseModel> getFilteredListByFactorNu(int ccMoshtary,String filter) {
+        Log.i(TAG, "getAllByCcMoshtaryFilterByNameMoshtary: "+ccMoshtary +"filter:"+filter);
+
+        ArrayList<Rpt3MonthPurchaseModel> rptThreeMonthPurchaseModels = new ArrayList<>();
+        try {
+            String strSql="select * from RptThreeMonthPurchase  " +"\n"+
+                    " where ccMoshtary = " + ccMoshtary +"\n"+
+                    " AND ShomarehFaktor like '%"+ filter+"%'";
+
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor=db.rawQuery(strSql,null);
+
+            if (cursor != null) {
+                Log.i(TAG, "getAllByCcMoshtaryFilterByNameMoshtary: "+cursor);
+                if (cursor.getCount() > 0) {
+                    Log.i(TAG, "getAllByCcMoshtaryFilterByNameMoshtary: "+cursor.getCount());
+
+                    rptThreeMonthPurchaseModels = cursorToModelGetAll(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = BaseApplication.getContext().getResources().getString(R.string.errorSelectAll, MahalCodePostiModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), message, "Rpt3MonthPurchaseDAO", "", "getAll", "");
+        }
+        return rptThreeMonthPurchaseModels;
+    }
+
+
+
+//    public ArrayList<Rpt3MonthPurchaseModel> getAllByCcMoshtaryFilterByNameMoshtary(int ccMoshtary,String filter) {
+//        Log.i(TAG, "getAllByCcMoshtaryFilterByNameMoshtary: "+ccMoshtary +"filter:"+filter);
+//
+//        ArrayList<Rpt3MonthPurchaseModel> rptThreeMonthPurchaseModels = new ArrayList<>();
+//        try {
+//            String strSql="select * from RptThreeMonthPurchase  where ccMoshtary = "+ccMoshtary+"AND NameMoshtary like '%"+filter+"%'";
+//            SQLiteDatabase db = dbHelper.getReadableDatabase();
+//            Cursor cursor=db.rawQuery(strSql,null);
+//
+//            if (cursor != null) {
+//                Log.i(TAG, "getAllByCcMoshtaryFilterByNameMoshtary: "+cursor);
+//                if (cursor.getCount() > 0) {
+//                    Log.i(TAG, "getAllByCcMoshtaryFilterByNameMoshtary: "+cursor.getCount());
+//
+//                    rptThreeMonthPurchaseModels = cursorToModelGetAll(cursor);
+//                }
+//                cursor.close();
+//            }
+//            db.close();
+//        } catch (Exception exception) {
+//            exception.printStackTrace();
+//            PubFunc.Logger logger = new PubFunc().new Logger();
+//            String message = BaseApplication.getContext().getResources().getString(R.string.errorSelectAll, MahalCodePostiModel.TableName()) + "\n" + exception.toString();
+//            logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), message, "Rpt3MonthPurchaseDAO", "", "getAll", "");
+//        }
+//        return rptThreeMonthPurchaseModels;
+//    }
+//
+//    public ArrayList<Rpt3MonthPurchaseModel> getAllByCcMoshtaryFilterByCodeMoshtary(int ccMoshtary,String filter) {
+//        Log.i(TAG, "getAllByCcMoshtaryFilterByCodeMoshtary: "+ccMoshtary +"filter:"+filter);
+//        ArrayList<Rpt3MonthPurchaseModel> rptThreeMonthPurchaseModels = new ArrayList<>();
+//        try {
+//            String strSql="select * from RptThreeMonthPurchase  where ccMoshtary = "+ccMoshtary+"AND CodeMoshtary like '%"+filter+"%'";
+//            SQLiteDatabase db = dbHelper.getReadableDatabase();
+//            Cursor cursor=db.rawQuery(strSql,null);
+//
+//            if (cursor != null) {
+//                Log.i(TAG, "getAllByCcMoshtaryFilterByCodeMoshtary: "+cursor);
+//                if (cursor.getCount() > 0) {
+//                    Log.i(TAG, "getAllByCcMoshtaryFilterByCodeMoshtary: "+cursor.getCount());
+//                    rptThreeMonthPurchaseModels = cursorToModelGetAll(cursor);
+//                }
+//                cursor.close();
+//            }
+//            db.close();
+//        } catch (Exception exception) {
+//            exception.printStackTrace();
+//            PubFunc.Logger logger = new PubFunc().new Logger();
+//            String message = BaseApplication.getContext().getResources().getString(R.string.errorSelectAll, MahalCodePostiModel.TableName()) + "\n" + exception.toString();
+//            logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), message, "Rpt3MonthPurchaseDAO", "", "getAll", "");
+//        }
+//        return rptThreeMonthPurchaseModels;
+//    }
+
+
     public ArrayList<Rpt3MonthGetSumModel> getSumByMoshtary() {
         ArrayList<Rpt3MonthGetSumModel> rtp3MonthGetSumModels = new ArrayList<Rpt3MonthGetSumModel>();
         try {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query = " select ccmoshtary , codemoshtary , namemoshtary , count(ccdarkhastfaktor) as tedad , sum(mablaghkhalesfaktor) as summablagh \n" +
+            String query = " select distinct ccmoshtary , codemoshtary , namemoshtary , count(ccdarkhastfaktor) as tedad , sum(mablaghkhalesfaktor) as summablagh \n" +
                     " from RptThreeMonthPurchase \n" +
                     " group by ccmoshtary , codemoshtary , namemoshtary";
             Cursor cursor = db.rawQuery(query, null);
             if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    rtp3MonthGetSumModels = cursorToModelSum(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = BaseApplication.getContext().getResources().getString(R.string.errorSelectAll, MahalCodePostiModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), message, "Rpt3MonthPurchaseDAO", "", "getSumByMoshtary", "");
+        }
+        return rtp3MonthGetSumModels;
+    }
+
+
+    public ArrayList<Rpt3MonthGetSumModel> getSumByMoshtaryFilteredByCodeMoshtary(String filter) {
+
+        ArrayList<Rpt3MonthGetSumModel> rtp3MonthGetSumModels = new ArrayList<Rpt3MonthGetSumModel>();
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+            String query =  " select ccmoshtary , codemoshtary , namemoshtary , count(ccdarkhastfaktor) as tedad , sum(mablaghkhalesfaktor) as summablagh  " +
+                    "                     from RptThreeMonthPurchase  where CodeMoshtary like '%"+ filter +"%' " +
+                    "                     group by ccmoshtary , codemoshtary , namemoshtary ";
+//            String query =  "select ccmoshtary , codemoshtary , namemoshtary , count(ccdarkhastfaktor) as tedad , sum(mablaghkhalesfaktor) as summablagh"+
+//            "from RptThreeMonthPurchase  where codemoshtary like '%"+filter+"%'"+
+//            "group by ccmoshtary , codemoshtary , namemoshtary " ;
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    rtp3MonthGetSumModels = cursorToModelSum(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = BaseApplication.getContext().getResources().getString(R.string.errorSelectAll, MahalCodePostiModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), message, "Rpt3MonthPurchaseDAO", "", "getSumByMoshtary", "");
+        }
+        return rtp3MonthGetSumModels;
+    }
+
+
+    public ArrayList<Rpt3MonthGetSumModel> getSumByMoshtaryFilteredByNameMoshtary(String filter) {
+        ArrayList<Rpt3MonthGetSumModel> rtp3MonthGetSumModels = new ArrayList<Rpt3MonthGetSumModel>();
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query =  " select ccmoshtary , codemoshtary , namemoshtary , count(ccdarkhastfaktor) as tedad , sum(mablaghkhalesfaktor) as summablagh  " +
+                    "                     from RptThreeMonthPurchase  where namemoshtary like '%"+ filter +"%' " +
+                    "                     group by ccmoshtary , codemoshtary , namemoshtary ";
+
+//            String query =  " select ccmoshtary , codemoshtary , namemoshtary , count(ccdarkhastfaktor) as tedad , sum(mablaghkhalesfaktor) as summablagh"+
+//                    "from RptThreeMonthPurchase  where namemoshtary like '%"+filter+"%'"+
+//                    "group by ccmoshtary , codemoshtary , namemoshtary " ;
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null) {
+                Log.i("cursurSize", "getSumByMoshtaryFilteredByCodeMoshtary: "+cursor.getCount());
                 if (cursor.getCount() > 0) {
                     rtp3MonthGetSumModels = cursorToModelSum(cursor);
                 }

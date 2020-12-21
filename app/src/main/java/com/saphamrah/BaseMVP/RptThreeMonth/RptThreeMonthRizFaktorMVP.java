@@ -1,4 +1,4 @@
-package com.saphamrah.BaseMVP;
+package com.saphamrah.BaseMVP.RptThreeMonth;
 
 import android.content.Context;
 
@@ -7,28 +7,26 @@ import com.saphamrah.Model.Rpt3MonthPurchaseModel;
 
 import java.util.ArrayList;
 
-public interface RptThreeMonthPurchaseMVP
-{
-
+public interface RptThreeMonthRizFaktorMVP {
     interface RequiredViewOps
     {
         Context getAppContext();
-        void setListAdapter(ArrayList<Rpt3MonthGetSumModel> rtp3MonthGetSumModels , int sumTedad , long sumMablaghFaktor);
         void hideFooter();
         void showToast(int resId, int messageType , int duration);
         void closeLoadingDialog();
         void failedUpdate(String type, String error);
         void onGetRizFaktor(ArrayList<Rpt3MonthPurchaseModel> rpt3MonthPurchaseModels , int sumTedad, long sumMablaghFaktor);
+        void onGetFilteredRizFaktor(ArrayList<Rpt3MonthPurchaseModel> rpt3MonthPurchaseModels , int sumTedad, long sumMablaghFaktor);
     }
 
 
     interface PresenterOps
     {
-        void getList();
+
         void getRizFaktor(int ccMoshtary);
-        void onConfigurationChanged(RptThreeMonthPurchaseMVP.RequiredViewOps view);
+        void getFilteredListByFactorNu(int ccMoshtary,String filter);
+        void onConfigurationChanged(RptThreeMonthRizFaktorMVP.RequiredViewOps view);
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
-        void updateData(String activityNameForLog);
         void onDestroy(boolean isChangingConfig);
     }
 
@@ -36,20 +34,17 @@ public interface RptThreeMonthPurchaseMVP
     interface RequiredPresenterOps
     {
         Context getAppContext();
-        void onConfigurationChanged(RptThreeMonthPurchaseMVP.RequiredViewOps view);
-        void onGetList(ArrayList<Rpt3MonthGetSumModel> moshtaryFaktorModels);
+        void onConfigurationChanged(RptThreeMonthRizFaktorMVP.RequiredViewOps view);
         void onGetRizFaktor(ArrayList<Rpt3MonthPurchaseModel> rpt3MonthPurchaseModels);
-        void onUpdateData();
-        void failedUpdate();
+        void onGetFilteredRizFaktor(ArrayList<Rpt3MonthPurchaseModel> rpt3MonthPurchaseModels,String filter);
     }
 
 
     interface ModelOps
     {
-        void getList();
+        void getFilteredListByFactorNu(int ccMoshtary,String filter);
         void getRizFaktor(int ccMoshtary);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
-        void updateData(String activityNameForLog);
         void onDestroy();
     }
 

@@ -152,4 +152,11 @@ public class RptThreeMonthPurchaseRizFaktorAdapter extends RecyclerView.Adapter<
         void onItemClick(int ccMoshtary, int position);
     }
 
+    public ArrayList<Rpt3MonthPurchaseModel> getModels() {
+        return models;
+    }
+
+    public void setModels(ArrayList<Rpt3MonthPurchaseModel> models) {
+        this.models = models;
+    }
 }

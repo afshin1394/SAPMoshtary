@@ -88,6 +88,7 @@
     <string name="searchKalaName">جستجو نام کالا</string>
     <string name="searchCustomerName">جستجو نام مشتری</string>
     <string name="searchCustomerCode">جستجو کد مشتری</string>
+    <string name="searchFactorNumber">جستجو شماره فاکتور</string>
     <string name="refresh">بروزرسانی</string>
     <string name="selectRadius">انتخاب شعاع</string>
     <string name="install">نصب</string>

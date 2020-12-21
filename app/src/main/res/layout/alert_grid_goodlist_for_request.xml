@@ -6,50 +6,50 @@
     android:layout_height="match_parent"
     android:background="@drawable/altdlg_bg"
     android:layoutDirection="rtl">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:weightSum="12"
-    android:id="@+id/linTopLevel">
-
-    <com.saphamrah.CustomView.CustomTextInputLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtinputSearchKalaName"
-        android:layout_weight
-            ="10"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:layoutDirection="rtl"
-        android:textDirection="rtl"
-        android:theme="@style/TextInputLayoutTheme"
-        android:layout_alignParentTop="true">
-        <EditText
-            android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="16"
+        android:id="@+id/linTopLevel">
+
+        <com.saphamrah.CustomView.CustomTextInputLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/txtSearchKalaNameGridView"
-            android:hint="@string/searchKalaName"
-            android:textSize="@dimen/FontSize16"
-            android:textColor="@color/colorTextPrimary"
-            android:inputType="text"
-            android:maxLines="1" />
-    </com.saphamrah.CustomView.CustomTextInputLayout>
-    <ImageView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:id="@+id/btnChooseShowType"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:layout_marginLeft="@dimen/_2sdp"
-        android:layout_weight="2"
-        android:gravity="center"
-        android:src="@drawable/ic_2section"
-        android:text="@string/chooseItemShowType"
-        android:textColor="@color/colorWhite"
+            android:id="@+id/txtinputSearchKalaName"
+            android:layout_weight
+                ="14"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layoutDirection="rtl"
+            android:textDirection="rtl"
+            android:theme="@style/TextInputLayoutTheme"
+            android:layout_alignParentTop="true">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtSearchKalaNameGridView"
+                android:hint="@string/searchKalaName"
+                android:textSize="@dimen/FontSize16"
+                android:textColor="@color/colorTextPrimary"
+                android:inputType="text"
+                android:maxLines="1" />
+        </com.saphamrah.CustomView.CustomTextInputLayout>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/btnChooseShowType"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginLeft="@dimen/_2sdp"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:scaleType="fitCenter"
+            android:text="@string/chooseItemShowType"
+            android:textColor="@color/colorWhite"
 
-        />
+            />
 
-</LinearLayout>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

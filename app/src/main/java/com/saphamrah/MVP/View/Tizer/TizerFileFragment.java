@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.saphamrah.Adapter.tizerAdapter.TizerFileAdapter;
 import com.saphamrah.Application.BaseApplication;
-import com.saphamrah.BaseMVP.RptThreeMonthPurchaseMVP;
 import com.saphamrah.BaseMVP.TizerMVP;
 import com.saphamrah.MVP.Presenter.TizerPresenter;
 import com.saphamrah.Model.TizerModel;
@@ -187,7 +186,7 @@ public class TizerFileFragment extends Fragment implements TizerMVP.RequiredView
             }
         } catch (Exception exception) {
             exception.printStackTrace();
-            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "RptThreeMonthPurchaseActivity", "startMVPOps", "");
+            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "TizerFileFragment", "startMVPOps", "");
         }
     }
 
@@ -195,9 +194,9 @@ public class TizerFileFragment extends Fragment implements TizerMVP.RequiredView
     private void initialize(TizerMVP.RequiredViewOps view) {
         try {
             mPresenter = new TizerPresenter(view);
-            stateMaintainer.put(RptThreeMonthPurchaseMVP.PresenterOps.class.getSimpleName(), mPresenter);
+            stateMaintainer.put(TizerMVP.PresenterOps.class.getSimpleName(), mPresenter);
         } catch (Exception exception) {
-            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "RptThreeMonthPurchaseActivity", "initialize", "");
+            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "TizerFileFragment", "initialize", "");
         }
     }
 
@@ -212,7 +211,7 @@ public class TizerFileFragment extends Fragment implements TizerMVP.RequiredView
             }
         } catch (Exception exception) {
             if (mPresenter != null) {
-                mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "RptThreeMonthPurchaseActivity", "reinitialize", "");
+                mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "TizerFileFragment", "reinitialize", "");
             }
         }
     }

@@ -94,33 +94,6 @@
         >
     </androidx.recyclerview.widget.RecyclerView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/layTableFooter"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/colorListHeaderBackground"
-        android:layout_alignParentBottom="true"
-        android:layoutDirection="rtl">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:id="@+id/lblSumMablaghFaktor"
-            android:textColor="@color/colorTextPrimary"
-            android:textSize="@dimen/FontSize14"
-            android:gravity="center"
-            android:padding="5dp"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/lblSumTedadFaktor"
-            android:textColor="@color/colorTextPrimary"
-            android:textSize="@dimen/FontSize14"
-            android:gravity="center"
-            android:padding="5dp"/>
-    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
