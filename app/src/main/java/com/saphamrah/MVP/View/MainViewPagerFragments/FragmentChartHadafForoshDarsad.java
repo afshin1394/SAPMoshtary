@@ -64,11 +64,20 @@ public class FragmentChartHadafForoshDarsad extends Fragment implements HadafFor
     agmentChartHadafForoshDarsad.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentChartHadafForoshDarsad newInstance() {
-        FragmentChartHadafForoshDarsad fragment = new FragmentChartHadafForoshDarsad();
+    private static FragmentChartHadafForoshDarsad instance=null;
+    public static FragmentChartHadafForoshDarsad getInstance(){
+        if (instance==null)
+            instance=new FragmentChartHadafForoshDarsad();
 
+        return instance;
+    }
+
+    public FragmentChartHadafForoshDarsad newInstance() {
+        FragmentChartHadafForoshDarsad fragment = new FragmentChartHadafForoshDarsad();
         return fragment;
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,32 +117,15 @@ public class FragmentChartHadafForoshDarsad extends Fragment implements HadafFor
         super.onDetach();
     }
 
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onMessageEvent(MainViewPager event) {
-//        String legendLabel1,legendLabel2;
-//      BaseHadafForoshModel baseHadafForoshModel=event.getBaseHadafForoshModel();
-//        legendLabel1=getString(R.string.goalLegendLabel);
-//        legendLabel2=getString(R.string.saleLegendLable);
-//        ArrayList<String> xAxisLables=new ArrayList<>();
-//        ArrayList<String> legendLables=new ArrayList<>();
-//
-//        xAxisLables.add(getResources().getString(R.string.untilToday));
-//        xAxisLables.add(getResources().getString(R.string.today));
-//
-//        legendLables.add(legendLabel1);
-//        legendLables.add(legendLabel2);
-////
-////        new PubFunc().new ChartUtils().drawBarChartNumerical(context,barChartHadafForoshTedady,rptBrandHadafForoshModel.getTedadForoshMah(),rptBrandHadafForoshModel.getTedadHadafMah(),rptBrandHadafForoshModel.getTedadForoshRooz(),rptBrandHadafForoshModel.getTedadHadafRooz(),rptBrandHadafForoshModel.getNameBrand(),xAxisLables,legendLables,limitLineNumerical);
-//        new PubFunc().new ChartUtils().drawPercentageBarChart(context,barChartHadaForoshDarsad, baseHadafForoshModel.getTedadForoshMah(), baseHadafForoshModel.getTedadHadafMah(), baseHadafForoshModel.getTedadForoshRooz(), baseHadafForoshModel.getTedadHadafRooz(), baseHadafForoshModel.getNameBrand(),xAxisLables,limitLinePercentage);
-//    };
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         stateMaintainer = new StateMaintainer(getChildFragmentManager(), TAG, context);
 
         super.onViewCreated(view, savedInstanceState);
-        startMVPOps();
-        mPresenter.getHadafForoshTedady();
+//        startMVPOps();
+        mPresenter=new HadafForoshDarsadFragmentPresenter(this);
+//        mPresenter.getHadafForoshTedady();
 //        EventBus.getDefault().register(this);
 //        startMVPOps();
 //        mPresenter.getHadafForoshTedady();
@@ -151,13 +143,13 @@ public class FragmentChartHadafForoshDarsad extends Fragment implements HadafFor
             }
         }
     }
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState)
-    {
-        super.onViewStateRestored(savedInstanceState);
-        Log.d("fragment" , "onview restored");
-        mPresenter.getHadafForoshTedady();
-    }
+//    @Override
+//    public void onViewStateRestored(@Nullable Bundle savedInstanceState)
+//    {
+//        super.onViewStateRestored(savedInstanceState);
+//        Log.d("fragment" , "onview restored");
+//        mPresenter.getHadafForoshTedady();
+//    }
 
 
 
@@ -240,5 +232,11 @@ public class FragmentChartHadafForoshDarsad extends Fragment implements HadafFor
         new PubFunc().new ChartUtils().drawSingleBarBarChart(context,barChartHadaForoshDarsad, percentValues.get(0), percentValues.get(1), baseHadafForoshModel.getNameBrand(),xAxisLables,limitLinePercentage,true);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        view=null;
+//        getChildFragmentManager().beginTransaction().remove(FragmentChartHadafForoshDarsad.this).commit();
 
+    }
 }

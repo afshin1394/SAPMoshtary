@@ -2,11 +2,9 @@ package com.saphamrah.MVP.View;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,43 +16,21 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.BarLineChartBase;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.LimitLine;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.saphamrah.Adapter.Interfaces.MainPagerAdapterEvents;
-import com.saphamrah.Adapter.MainFragPagerAdapter;
 import com.saphamrah.BaseMVP.MainFirstFragmentMVP;
 import com.saphamrah.CustomView.ZoomOutPageTransformer;
 import com.saphamrah.DAO.DBHelper;
-import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.MVP.Presenter.MainFirstFragmentPresenter;
-import com.saphamrah.MVP.View.MainViewPagerFragments.FragmentChartHadafForoshDarsad;
-import com.saphamrah.MVP.View.MainViewPagerFragments.FragmentChartHadafForoshTedad;
-import com.saphamrah.MVP.View.MainViewPagerFragments.FragmentChartMablaghForosh;
-import com.saphamrah.MVP.View.MainViewPagerFragments.FragmentChartTedadFactorForosh;
-import com.saphamrah.Model.HadafForosh.BaseHadafForoshModel;
+import com.saphamrah.SliderPagerMainFrag;
 import com.saphamrah.Model.OwghatModel;
-import com.saphamrah.Model.RptForoshModel;
 import com.saphamrah.Model.WeatherDataModel;
 import com.saphamrah.Model.WeatherModel;
 import com.saphamrah.Model.WindModel;
-import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.WeatherShared;
 import com.saphamrah.Utils.Constants;
@@ -68,7 +44,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.FileChannel;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Timer;
@@ -118,9 +93,8 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
     ConstraintLayout child2Constraint;
     NestedScrollView nestedScrollView;
     private ViewPager viewPagerMainFrag;
-    private MainFragPagerAdapter mainFragmentViewPagerAdapter;
     ArrayList<Fragment> fragList = new ArrayList<>();
-    private MainFragPagerAdapter viewPagerAdapter;
+    private SliderPagerMainFrag viewPagerAdapter;
     TimerTask timerTask;
     Timer timer;
     Runnable update;
@@ -174,7 +148,6 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
             screenHeight = screenHeight - appBarSize - navigationBarSize - getStatusBarHeight();
 
             child1Constraint.getLayoutParams().height = screenHeight;
-
 
         } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             int navigationBarSize = getActivity().findViewById(R.id.navigationTabBar).getLayoutParams().height;
@@ -572,6 +545,7 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
 
     }
 
+//TODO
     //handles action up and down touch events
        View.OnTouchListener onTouchListener= new View.OnTouchListener() {
            @Override
@@ -643,20 +617,21 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
 
     public void initFragments() {
 
-        if (fragList.size() >= 4) {
-            fragList.clear();
-            Log.i(TAG, "initFragments: " + fragList.size());
-        }
-        FragmentChartHadafForoshDarsad fragmentChartHadafForoshDarsad = FragmentChartHadafForoshDarsad.newInstance();
-        FragmentChartMablaghForosh fragmentChartMablaghForosh = FragmentChartMablaghForosh.newInstance();
-        FragmentChartTedadFactorForosh fragmentChartTedadFactorForosh = FragmentChartTedadFactorForosh.newInstance();
-        FragmentChartHadafForoshTedad fragmentChartHadafForoshTedad = FragmentChartHadafForoshTedad.newInstance();
-        fragList.add(fragmentChartHadafForoshDarsad);
-        fragList.add(fragmentChartHadafForoshTedad);
-        fragList.add(fragmentChartMablaghForosh);
-        fragList.add(fragmentChartTedadFactorForosh);
-
-        viewPagerAdapter = new MainFragPagerAdapter(getFragmentManager(), fragList, MainFragment.this);
+//        if (fragList.size() >= 4) {
+//            fragList.clear();
+//            Log.i(TAG, "initFragments: " + fragList.size());
+//        }
+//        FragmentChartHadafForoshDarsad fragmentChartHadafForoshDarsad = FragmentChartHadafForoshDarsad.newInstance();
+//        FragmentChartMablaghForosh fragmentChartMablaghForosh = FragmentChartMablaghForosh.newInstance();
+//        FragmentChartTedadFactorForosh fragmentChartTedadFactorForosh = FragmentChartTedadFactorForosh.newInstance();
+//        FragmentChartHadafForoshTedad fragmentChartHadafForoshTedad = FragmentChartHadafForoshTedad.newInstance();
+//        fragList.add(fragmentChartHadafForoshDarsad);
+//        fragList.add(fragmentChartHadafForoshTedad);
+//        fragList.add(fragmentChartMablaghForosh);
+//        fragList.add(fragmentChartTedadFactorForosh);
+//
+//        viewPagerAdapter = new MainFragPagerAdapter(getFragmentManager(), fragList, MainFragment.this);
+        viewPagerAdapter=new SliderPagerMainFrag(getFragmentManager());
         Log.i("frgListSize", "initFragments: " + fragList.size());
         // actually an InfiniteViewPager
 
@@ -787,6 +762,9 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
             }
         }
     }
+
+
+
 
 
 }

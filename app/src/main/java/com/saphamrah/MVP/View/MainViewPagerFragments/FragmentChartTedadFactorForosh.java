@@ -65,6 +65,15 @@ public class FragmentChartTedadFactorForosh extends Fragment implements CountFak
         // Required empty public constructor
     }
 
+
+    private static FragmentChartTedadFactorForosh instance=null;
+
+    public static FragmentChartTedadFactorForosh getInstance(){
+        if (instance==null)
+            instance = new FragmentChartTedadFactorForosh();
+        return instance;
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -106,8 +115,11 @@ public class FragmentChartTedadFactorForosh extends Fragment implements CountFak
         super.onViewCreated(view, savedInstanceState);
         stateMaintainer = new StateMaintainer(getChildFragmentManager(), TAG, context);
 
-        startMVPOps();
-        mPresenter.getAmarForosh();
+
+//        startMVPOps();
+        mPresenter = new CountFaktorForoshFragmentPresenter(this);
+
+//        mPresenter.getAmarForosh();
     }
 
     @Override
@@ -127,13 +139,13 @@ public class FragmentChartTedadFactorForosh extends Fragment implements CountFak
             }
         }
     }
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState)
-    {
-        super.onViewStateRestored(savedInstanceState);
-        Log.d("fragment" , "onview restored");
-        mPresenter.getAmarForosh();
-    }
+//    @Override
+//    public void onViewStateRestored(@Nullable Bundle savedInstanceState)
+//    {
+//        super.onViewStateRestored(savedInstanceState);
+//        Log.d("fragment" , "onview restored");
+//        mPresenter.getAmarForosh();
+//    }
 
     private void findViews(View view) {
         Calligrapher calligrapher = new Calligrapher(context);
@@ -208,20 +220,11 @@ public class FragmentChartTedadFactorForosh extends Fragment implements CountFak
 
     }
 
-
-
-    public class DayAxisValueFormatter extends ValueFormatter {
-        private final BarLineChartBase<?> chart;
-        private final String[] values = new String[]{context.getResources().getString(R.string.untilToday), context.getResources().getString(R.string.today)};
-
-        public DayAxisValueFormatter(BarLineChartBase<?> chart) {
-            this.chart = chart;
-        }
-
-        @Override
-        public String getFormattedValue(float value) {
-            return values[((int) value) - 1];
-        }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        view=null;
+//        getChildFragmentManager().beginTransaction().remove(FragmentChartTedadFactorForosh.this).commit();
 
     }
 

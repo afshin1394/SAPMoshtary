@@ -28,6 +28,8 @@ import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.MainViewPagerMVP.MablaghTedadForoshFragmentsBaseMVP;
 import com.saphamrah.BaseMVP.MainFirstFragmentMVP;
 import com.saphamrah.MVP.Presenter.MainFragmentViewPagerPresenter.MablaghTedadForoshFragmentsPresenter;
+import com.saphamrah.MVP.View.RptThreeMonthPurchase.RptThreeMonthPurchaseActivity;
+import com.saphamrah.MVP.View.RptThreeMonthPurchase.RptThreeMonthPurchaseRizFaktorFragment;
 import com.saphamrah.Model.RptForoshModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -50,7 +52,7 @@ public class FragmentChartMablaghForosh extends Fragment implements MablaghTedad
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String TAG =  FragmentChartMablaghForosh.class.getClass().getSimpleName();
-    View view;
+    private View view;
     private BarChart barChartMablaghForosh;
     Context context;
     StateMaintainer stateMaintainer;
@@ -71,13 +73,19 @@ public class FragmentChartMablaghForosh extends Fragment implements MablaghTedad
 
      * @return A new instance of fragment FragmentChartMablaghForosh.
      */
+
+
+    private static FragmentChartMablaghForosh instance=null;
+    public static FragmentChartMablaghForosh getInstance(){
+        if (instance==null)
+            instance=new FragmentChartMablaghForosh();
+
+        return instance;
+    }
+
     // TODO: Rename and change types and number of parameters
     public static FragmentChartMablaghForosh newInstance() {
         FragmentChartMablaghForosh fragment = new FragmentChartMablaghForosh();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -107,9 +115,9 @@ public class FragmentChartMablaghForosh extends Fragment implements MablaghTedad
         super.onViewCreated(view, savedInstanceState);
         stateMaintainer = new StateMaintainer(getChildFragmentManager(), TAG, context);
 
-        startMVPOps();
-
-        mPresenter.getAmarForosh();
+//        startMVPOps();
+        mPresenter=new MablaghTedadForoshFragmentsPresenter(this);
+//        mPresenter.getAmarForosh();
     }
 
     @Override
@@ -117,13 +125,17 @@ public class FragmentChartMablaghForosh extends Fragment implements MablaghTedad
         super.onAttach(context);
         this.context=context;
     }
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState)
-    {
-        super.onViewStateRestored(savedInstanceState);
-        Log.d("fragment" , "onview restored");
-        mPresenter.getAmarForosh();
-    }
+//    @Override
+//    public void onViewStateRestored(@Nullable Bundle savedInstanceState)
+//    {
+//        super.onViewStateRestored(savedInstanceState);
+//        Log.d("fragment" , "onview restored");
+//        mPresenter.getAmarForosh();
+//    }
+
+
+
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser)
     {
@@ -169,20 +181,7 @@ public class FragmentChartMablaghForosh extends Fragment implements MablaghTedad
         }
     }
 
-    private class DayAxisValueFormatter extends ValueFormatter {
-        private final BarLineChartBase<?> chart;
-        private final String[] values = new String[]{context.getResources().getString(R.string.untilToday), context.getResources().getString(R.string.today)};
 
-        public DayAxisValueFormatter(BarLineChartBase<?> chart) {
-            this.chart = chart;
-        }
-
-        @Override
-        public String getFormattedValue(float value) {
-            return values[((int) value) - 1];
-        }
-
-    }
 
 
     public void startMVPOps() {
@@ -224,6 +223,12 @@ public class FragmentChartMablaghForosh extends Fragment implements MablaghTedad
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        view=null;
+//        getChildFragmentManager().beginTransaction().remove(FragmentChartMablaghForosh.this).commit();
 
+    }
 
 }
