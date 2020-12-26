@@ -28,6 +28,7 @@ public class ForoshandehMamorPakhshModel
     private static final String COLUMN_NoeForoshandehMamorPakhsh = "NoeForoshandehMamorPakhsh";
     private static final String COLUMN_ccMarkazForosh = "ccMarkazForosh";
     private static final String COLUMN_ccMarkazAnbar = "ccMarkazAnbar";
+    private static final String COLUMN_ccMarkazAnbarVosol = "ccMarkazAnbarVosol";
     private static final String COLUMN_NameMarkazForosh = "NameMarkazForosh";
     private static final String COLUMN_NameMarkazAnbar = "NameMarkazAnbar";
     private static final String COLUMN_MaxTedadCheckBargashty = "MaxTedadCheckBargashty";
@@ -113,6 +114,9 @@ public class ForoshandehMamorPakhshModel
     }
     public static String COLUMN_ccMarkazAnbar() {
         return COLUMN_ccMarkazAnbar;
+    }
+    public static String COLUMN_ccMarkazAnbarVosol() {
+        return COLUMN_ccMarkazAnbarVosol;
     }
     public static String COLUMN_NameMarkazForosh() {
         return COLUMN_NameMarkazForosh;
@@ -256,6 +260,9 @@ public class ForoshandehMamorPakhshModel
     @SerializedName("ccMarkazAnbar")
     @Expose
     private Integer ccMarkazAnbar;
+    @SerializedName("ccMarkazAnbarVosol")
+    @Expose
+    private Integer ccMarkazAnbarVosol;
     @SerializedName("NameMarkazForosh")
     @Expose
     private String nameMarkazForosh;
@@ -488,6 +495,14 @@ public class ForoshandehMamorPakhshModel
 
     public void setCcMarkazAnbar(Integer ccMarkazAnbar) {
         this.ccMarkazAnbar = ccMarkazAnbar;
+    }
+
+    public Integer getCcMarkazAnbarVosol() {
+        return ccMarkazAnbarVosol;
+    }
+
+    public void setCcMarkazAnbarVosol(Integer ccMarkazAnbarVosol) {
+        this.ccMarkazAnbarVosol = ccMarkazAnbarVosol;
     }
 
     public String getNameMarkazForosh() {
@@ -844,6 +859,7 @@ public class ForoshandehMamorPakhshModel
                 ", nameNoeForoshandehMamorPakhsh='" + nameNoeForoshandehMamorPakhsh + '\'' +
                 ", ccMarkazForosh=" + ccMarkazForosh +
                 ", ccMarkazAnbar=" + ccMarkazAnbar +
+                ", ccMarkazAnbarVosol=" + ccMarkazAnbarVosol +
                 ", nameMarkazForosh='" + nameMarkazForosh + '\'' +
                 ", nameMarkazAnbar='" + nameMarkazAnbar + '\'' +
                 ", maxTedadCheckBargashty=" + maxTedadCheckBargashty +

@@ -67,6 +67,7 @@ public class ForoshandehMamorPakhshDAO
             ForoshandehMamorPakhshModel.COLUMN_NoeForoshandehMamorPakhsh(),
             ForoshandehMamorPakhshModel.COLUMN_ccMarkazForosh(),
             ForoshandehMamorPakhshModel.COLUMN_ccMarkazAnbar(),
+            ForoshandehMamorPakhshModel.COLUMN_ccMarkazAnbarVosol(),
             ForoshandehMamorPakhshModel.COLUMN_NameMarkazForosh(),
             ForoshandehMamorPakhshModel.COLUMN_NameMarkazAnbar(),
             ForoshandehMamorPakhshModel.COLUMN_MaxTedadCheckBargashty(),
@@ -500,6 +501,7 @@ public class ForoshandehMamorPakhshDAO
                 foroshandehMamorPakhshModel.setNoeForoshandehMamorPakhsh(cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_NoeForoshandehMamorPakhsh())));
                 foroshandehMamorPakhshModel.setCcMarkazForosh(cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_ccMarkazForosh())));
                 foroshandehMamorPakhshModel.setCcMarkazAnbar(cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_ccMarkazAnbar())));
+                foroshandehMamorPakhshModel.setCcMarkazAnbarVosol(cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_ccMarkazAnbarVosol())));
                 foroshandehMamorPakhshModel.setNameMarkazForosh(cursor.getString(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_NameMarkazForosh())));
                 foroshandehMamorPakhshModel.setNameMarkazAnbar(cursor.getString(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_NameMarkazAnbar())));
                 foroshandehMamorPakhshModel.setMaxTedadCheckBargashty(cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_MaxTedadCheckBargashty())));
@@ -560,6 +562,7 @@ public class ForoshandehMamorPakhshDAO
         contentValues.put(ForoshandehMamorPakhshModel.COLUMN_NoeForoshandehMamorPakhsh() , model.getNoeForoshandehMamorPakhsh());
         contentValues.put(ForoshandehMamorPakhshModel.COLUMN_ccMarkazForosh() , model.getCcMarkazForosh());
         contentValues.put(ForoshandehMamorPakhshModel.COLUMN_ccMarkazAnbar() , model.getCcMarkazAnbar());
+        contentValues.put(ForoshandehMamorPakhshModel.COLUMN_ccMarkazAnbarVosol() , model.getCcMarkazAnbarVosol());
         contentValues.put(ForoshandehMamorPakhshModel.COLUMN_NameMarkazForosh() , model.getNameMarkazForosh());
         contentValues.put(ForoshandehMamorPakhshModel.COLUMN_NameMarkazAnbar() , model.getNameMarkazAnbar());
         contentValues.put(ForoshandehMamorPakhshModel.COLUMN_MaxTedadCheckBargashty() , model.getMaxTedadCheckBargashty());
