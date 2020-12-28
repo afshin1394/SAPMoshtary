@@ -657,10 +657,76 @@
             android:background="@color/colorBlack" />
     </LinearLayout>
 
+
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/colorBlack" />
+
+    <LinearLayout
+
+        android:id="@+id/eightCap"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/table_content_cell_bg_black"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+
+        <TextView
+            android:id="@+id/markMablaghForoshBaArzeshAfzoodeh"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:layout_weight="1"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right"
+            android:text="@string/mablaghForoshBaArzeshAfzoodeh"
+            android:textColor="@color/colorTextPrimary"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/lblMablaghForoshBaArzeshAfzoodeh"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:fontFamily="font/IRANSans.ttf"
+            android:gravity="right"
+            android:text=""
+            android:textColor="@color/colorTextPrimary"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/eightCapDivider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBlack"
+        android:divider="@drawable/table_content_cell_bg_black" />
 
     <LinearLayout
         android:id="@+id/fifthCap"
@@ -1030,4 +1096,5 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/colorBlack" />
+
 </LinearLayout>
