@@ -200,7 +200,7 @@ public class MarjoeeKalaModel implements MarjoeeKalaMVP.ModelOps
                 //insertKardexAnbarakForoshandeh(ccAfradForoshandeh, ccMoshtary);
                 //ccDariaftPardakht = dariaftPardakhtDAO.getMarjoeeByccMoshtary(ccMoshtary , codeNoeVosolMarjoee);
 
-                dariaftPardakhtPPC.setCcMarkazAnbar(foroshandehMamorPakhshModel.getCcMarkazAnbar());
+                dariaftPardakhtPPC.setCcMarkazAnbar(foroshandehMamorPakhshModel.getCcMarkazAnbarVosol());
                 dariaftPardakhtPPC.setCcMarkazForosh(foroshandehMamorPakhshModel.getCcMarkazForosh());
                 dariaftPardakhtPPC.setCcMarkazSazmanForoshSakhtarForosh(foroshandehMamorPakhshModel.getCcMarkazSazmanForoshSakhtarForosh());
                 dariaftPardakhtPPC.setCodeNoeVosol(Integer.parseInt(codeNoeVosolMarjoee));
@@ -300,7 +300,7 @@ public class MarjoeeKalaModel implements MarjoeeKalaMVP.ModelOps
             dariaftPardakhtDarkhastFaktorPPC.setZamaneTakhsiseFaktor(new SimpleDateFormat(Constants.DATE_SHORT_FORMAT()).format(new Date()));
             dariaftPardakhtDarkhastFaktorPPC.setZamaneTakhsiseFaktorShamsi(new PubFunc().new DateUtils().todayDateWithSlash(mPresenter.getAppContext()));
             dariaftPardakhtDarkhastFaktorPPC.setCcAfradErsalKonandeh(foroshandehMamorPakhshModel.getCcAfrad());
-            dariaftPardakhtDarkhastFaktorPPC.setCcMarkazAnbar(foroshandehMamorPakhshModel.getCcMarkazAnbar());
+            dariaftPardakhtDarkhastFaktorPPC.setCcMarkazAnbar(foroshandehMamorPakhshModel.getCcMarkazAnbarVosol());
             dariaftPardakhtDarkhastFaktorPPC.setCcMarkazForosh(foroshandehMamorPakhshModel.getCcMarkazForosh());
             dariaftPardakhtDarkhastFaktorPPC.setCcMarkazSazmanForoshSakhtarForosh(foroshandehMamorPakhshModel.getCcMarkazSazmanForoshSakhtarForosh());
             dariaftPardakhtDarkhastFaktorPPC.setTabdil_NaghdBeFish(0);

@@ -8,7 +8,7 @@ android {
         targetSdkVersion 29
         versionCode 63
         //versionName "2.2.3.0"
-        versionName "2.2.5.9"
+        versionName "2.2.5.11"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -182,7 +182,7 @@ dependencies {
 
 
     //map.ir
-    implementation 'ir.map:map-sdk:4.0.0'
+     'ir.map:map-sdk:4.0.2'
 
 
     //leak canary
