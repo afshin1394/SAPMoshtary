@@ -429,7 +429,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
     @Override
     public void updateParameter(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel)
     {
-        ccMarkazAnbar = foroshandehMamorPakhshModel.getCcMarkazAnbar();
+        ccMarkazAnbar = foroshandehMamorPakhshModel.getCcMarkazAnbarVosol();
         ccMarkazSazmanForosh = foroshandehMamorPakhshModel.getCcMarkazSazmanForosh();
         itemCounter = -1;
         getProgramItemCount = mPresenter.getAppContext().getResources().getStringArray(R.array.updateParameters).length;

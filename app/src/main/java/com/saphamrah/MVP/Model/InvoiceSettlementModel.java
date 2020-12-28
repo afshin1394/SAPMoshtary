@@ -458,7 +458,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps
 
             Log.d("invoice" , "mablagh dariaftpardakhat : " + dariaftPardakhtPPCModel.getMablagh());
 
-            dariaftPardakhtPPCModel.setCcMarkazAnbar(foroshandehMamorPakhshModel.getCcMarkazAnbar());
+            dariaftPardakhtPPCModel.setCcMarkazAnbar(foroshandehMamorPakhshModel.getCcMarkazAnbarVosol());
             dariaftPardakhtPPCModel.setCcMarkazForosh(foroshandehMamorPakhshModel.getCcMarkazForosh());
             dariaftPardakhtPPCModel.setCcMarkazSazmanForoshSakhtarForosh(foroshandehMamorPakhshModel.getCcMarkazSazmanForoshSakhtarForosh());
             dariaftPardakhtPPCModel.setCodeNoeVosol(codeNoeVosolMoshtary);
@@ -585,7 +585,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps
             dariaftPardakhtDarkhastFaktorPPC.setZamaneTakhsiseFaktor(currentDate);
             dariaftPardakhtDarkhastFaktorPPC.setZamaneTakhsiseFaktorShamsi(new PubFunc().new DateUtils().gregorianToPersianDateTime(sdf.parse(currentDate)));
             dariaftPardakhtDarkhastFaktorPPC.setCcAfradErsalKonandeh(foroshandehMamorPakhshModel.getCcAfrad());
-            dariaftPardakhtDarkhastFaktorPPC.setCcMarkazAnbar(foroshandehMamorPakhshModel.getCcMarkazAnbar());
+            dariaftPardakhtDarkhastFaktorPPC.setCcMarkazAnbar(foroshandehMamorPakhshModel.getCcMarkazAnbarVosol());
             dariaftPardakhtDarkhastFaktorPPC.setCcMarkazForosh(foroshandehMamorPakhshModel.getCcMarkazForosh());
             dariaftPardakhtDarkhastFaktorPPC.setCcMarkazSazmanForoshSakhtarForosh(foroshandehMamorPakhshModel.getCcMarkazSazmanForoshSakhtarForosh());
             dariaftPardakhtDarkhastFaktorPPC.setTabdil_NaghdBeFish(0);
