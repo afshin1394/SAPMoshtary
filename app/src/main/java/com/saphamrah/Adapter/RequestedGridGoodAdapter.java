@@ -76,6 +76,7 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
 
         View mainView = LayoutInflater.from(parent.getContext()).inflate(R.layout.request_good_list_grid_item, parent, false);
         Typeface font = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fontPath));
+        new PubFunc().new FontUtils().setFont(((ViewGroup) mainView), font);
         switch (viewType) {
             case SHOW_DETAILS:
                 CustomScrollView customScrollView = mainView.findViewById(R.id.layLeftGrid);
@@ -84,7 +85,8 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
                 View viewDetails = LayoutInflater.from(parent.getContext()).inflate(R.layout.request_good_list_grid_details, parent, false);
                 customScrollView.addView(viewDetails);
                 linearLayout.addView(viewFullImage);
-                new PubFunc().new FontUtils().setFont(parent, font);
+                new PubFunc().new FontUtils().setFont(((ViewGroup) viewDetails), font);
+                new PubFunc().new FontUtils().setFont(((ViewGroup) viewFullImage), font);
                 mainView.getLayoutParams().height = heightOfRecycler / itemPerRow;
                 return new RequestedGridGoodAdapter.ViewHolder(mainView, SHOW_DETAILS, listener);
 
@@ -154,6 +156,9 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
 
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         String gheymatForosh = formatter.format(model.getGheymatForosh());
+        /**Zarib Arzesh Afzoodeh=0.1**/
+        //Todo
+        String gheymatForoshBaArzeshAfzoodeh = formatter.format(model.getGheymatForosh() * 1.09 );
         String gheymatMasrafKonande = formatter.format(model.getMablaghMasrafKonandeh());
         int haveMaliatAvarezResId = model.getMashmolMaliatAvarez() == 0 ? R.drawable.ic_error : R.drawable.ic_success;
         String tarikhTolid = model.getTarikhTolid().substring(0, 10);
@@ -189,6 +194,12 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
             holder.rightArrow.startAnimation(myBounceAnimation);
 
 
+            //TODO
+            int gheymatBaArzeshAfzoodehvisibility = model.getMashmolMaliatAvarez() == 0 ? View.GONE : View.VISIBLE;
+            holder.linEightCap.setVisibility(gheymatBaArzeshAfzoodehvisibility);
+            holder.dividerEightCap.setVisibility(gheymatBaArzeshAfzoodehvisibility);
+            holder.lblGheymatForoshBaArzeshAfzoodeh.setText(String.format(" %1$s %2$s", gheymatForoshBaArzeshAfzoodeh, context.getResources().getString(R.string.rial)));
+
 
             holder.swipeLayout.setLeftSwipeEnabled(true);
             holder.lblTedadMojodi.setText(String.format(" %1$s %2$s", model.getTedad(), context.getResources().getString(R.string.adad)));
@@ -211,13 +222,16 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
             holder.lblTedadDarCarton.setText(String.format(" %1$s", model.getTedadDarKarton()));
             holder.lblShomareBach.setText(String.format("%1$s", model.getShomarehBach()));
 
-            if (model.getTedadDarKarton() == model.getTedadDarBasteh()) {
-//                holder.lblTedadDarBaste.setVisibility(View.GONE);
-                holder.LinTedadDarBaste.setVisibility(View.GONE);
-                holder.sixthCapDivider.setVisibility(View.GONE);
-            } else {
-                holder.lblTedadDarBaste.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.tedadDarBaste), model.getTedadDarBasteh()));
-            }
+
+            //Todo
+            holder.lblTedadDarBaste.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.tedadDarBaste), model.getTedadDarBasteh()));
+
+
+            int linTedadDarBasteVisibility = model.getTedadDarKarton() == model.getTedadDarBasteh() ? View.GONE : View.VISIBLE;
+            holder.LinTedadDarBaste.setVisibility(linTedadDarBasteVisibility);
+            holder.dividerSixthCap.setVisibility(linTedadDarBasteVisibility);
+
+
             holder.lblDimen.setText(String.format("%1$s * %2$s * %3$s %4$s", kalaMojodiZaribModels.get(position).getErtefa(), kalaMojodiZaribModels.get(position).getArz(), kalaMojodiZaribModels.get(position).getTol(), kalaMojodiZaribModels.get(position).getNameVahedSize()));
             holder.NameCodeFullImage.setText(String.format("%1$s - %2$s", model.getCodeKala(), model.getNameKala()));
 
@@ -336,6 +350,7 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
         private TextView lblTedadDarCarton;
         private TextView lblTedadDarBaste;
         private TextView lblDimen;
+        private TextView lblGheymatForoshBaArzeshAfzoodeh;
 
         private ImageView imgHaveMaliatAvarez;
         private ImageView imgKalaGrid;
@@ -343,6 +358,7 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
         private TextView NameCodeFullImage;
 
         private LinearLayout rootView;
+        private LinearLayout linEightCap;
         private OnItemEventListener mListener;
 
 
@@ -354,9 +370,10 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
         private TextView lblMainBatchNumber;
         private TextView markCodeKala, markNameKala, markNameBrand, markZaribForosh, markBarcode, markBatchNumber, markTarikhTolid, markTarihkEngheza, markTarikhMashmooleMaliat, markMablaghForosh, markGheymatMasrafKonande, markVaznKhales, markVaznCarton, markTedadDarCarton, markTedadDarBaste, markDimens;
         private LinearLayout LinTedadDarBaste;
-        private View sixthCapDivider;
-        private ImageView leftArrow;
-        private ImageView rightArrow;
+        private View dividerSixthCap;
+        private View dividerEightCap;
+        private final ImageView leftArrow;
+        private final ImageView rightArrow;
 
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -404,7 +421,9 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
                 case SHOW_DETAILS:
 
 
-                    sixthCapDivider = view.findViewById(R.id.sixthCapDivider);
+                    dividerSixthCap = view.findViewById(R.id.sixthCapDivider);
+                    dividerEightCap = view.findViewById(R.id.eightCapDivider);
+
                     swipeLayout.setLeftSwipeEnabled(true);
 
                     cardview = view.findViewById(R.id.crdviewRoot);
@@ -426,6 +445,8 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
                     lblTarikhEngheza = view.findViewById(R.id.lblTarikhEngheza);
                     lblHaveMaliatAvarez = view.findViewById(R.id.lblHaveMaliatAvarez);
                     lblGheymatForoshDetail = view.findViewById(R.id.lblGheymatForosh);
+
+                    lblGheymatForoshBaArzeshAfzoodeh = view.findViewById(R.id.lblMablaghForoshBaArzeshAfzoodeh);
                     lblGheymatMasrafKonande = view.findViewById(R.id.lblGheymatMasrafKonande);
                     lblVaznKhales = view.findViewById(R.id.lblVaznKhales);
                     lblVaznCarton = view.findViewById(R.id.lblVaznCarton);
@@ -456,11 +477,7 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
                     markTedadDarBaste = view.findViewById(R.id.markTedadDarBaste);
                     markDimens = view.findViewById(R.id.markDimen);
                     LinTedadDarBaste = view.findViewById(R.id.sixthCap);
-
-
-                    //TODO setAllFonts
-                    new PubFunc().new FontUtils().setFont(((ViewGroup) view), font);
-
+                    linEightCap = view.findViewById(R.id.eightCap);
 
                     swipeLayout.setLeftSwipeEnabled(true);
                     swipeLayout.setRightSwipeEnabled(true);
