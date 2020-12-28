@@ -26,7 +26,7 @@ import com.saphamrah.BaseMVP.MainFirstFragmentMVP;
 import com.saphamrah.CustomView.ZoomOutPageTransformer;
 import com.saphamrah.DAO.DBHelper;
 import com.saphamrah.MVP.Presenter.MainFirstFragmentPresenter;
-import com.saphamrah.SliderPagerMainFrag;
+import com.saphamrah.Adapter.SliderPagerMainFrag;
 import com.saphamrah.Model.OwghatModel;
 import com.saphamrah.Model.WeatherDataModel;
 import com.saphamrah.Model.WeatherModel;
