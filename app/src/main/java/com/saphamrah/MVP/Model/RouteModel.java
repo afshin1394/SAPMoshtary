@@ -18,7 +18,7 @@ import com.saphamrah.Shared.RoutingServerShared;
 import com.saphamrah.Valhalla.Location;
 import com.saphamrah.Valhalla.SourcesToTargetsFailedResult;
 import com.saphamrah.WebService.APIServiceValhalla;
-import com.saphamrah.WebService.ApiClientValhalla;
+import com.saphamrah.WebService.ApiClientGlobal;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -67,7 +67,7 @@ public class RouteModel implements RouteMVP.ModelOps
         String routingServerIP = new RoutingServerShared(mPresenter.getAppContext()).getString(RoutingServerShared.IP , "");
         if (routingServerIP.length() > 0)
         {
-            APIServiceValhalla apiServiceValhalla = ApiClientValhalla.getClient(routingServerIP).create(APIServiceValhalla.class);
+            APIServiceValhalla apiServiceValhalla = ApiClientGlobal.getInstance().getClientServiceValhalla();
             Call<Object> call = apiServiceValhalla.getOptimizedRoute(jsonObjectAllData.toString());
             call.enqueue(new Callback<Object>()
             {

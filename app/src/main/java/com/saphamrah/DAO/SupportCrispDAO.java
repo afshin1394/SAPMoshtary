@@ -8,14 +8,13 @@ import android.util.Log;
 
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.SupportCrispModel;
-import com.saphamrah.Model.TakhfifSenfiSatrModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
-import com.saphamrah.WebService.ServiceResponse.GetAllvTakhfifSenfiSatrResult;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.SupportCrispResult;
 
 import java.util.ArrayList;
@@ -81,8 +80,8 @@ public class SupportCrispDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<SupportCrispResult> call = apiService.getSupportCrisp(ccsazmanforosh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<SupportCrispResult> call = apiServiceGet.getSupportCrisp(ccsazmanforosh);
             call.enqueue(new Callback<SupportCrispResult>()
             {
                 @Override

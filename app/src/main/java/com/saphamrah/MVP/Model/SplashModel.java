@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.location.LocationManager;
+import android.os.Build;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -22,6 +23,7 @@ import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.AsyncFindServerTask;
+import com.saphamrah.Network.AsyncTaskFindWebServices;
 import com.saphamrah.Network.AsyncTaskResponse;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
@@ -31,8 +33,9 @@ import com.saphamrah.Shared.RoutingServerShared;
 import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Shared.UserTypeShared;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetForoshandehAmoozeshiResult;
 import com.saphamrah.WebService.ServiceResponse.GetForoshandehMamorPakhshResult;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
@@ -47,8 +50,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SplashModel implements SplashMVP.ModelOps , AsyncTaskResponse
-{
+public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices {
 
     private SplashMVP.RequiredPresenterOps mPresenter;
 
@@ -273,66 +275,121 @@ public class SplashModel implements SplashMVP.ModelOps , AsyncTaskResponse
     }
 
     @Override
-    public void getServerIP()
-    {
+    public void getServerIP() {
+        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+        serverIPShared.removeAll();
         ServerIPDAO serverIPDAO = new ServerIPDAO(mPresenter.getAppContext());
-        ArrayList<ServerIpModel> arrayListServerIPs = new ArrayList<>();
-        arrayListServerIPs = serverIPDAO.getServerIPwithIsTestFilter(Constants.CURRENT_VERSION_TYPE());
-        if (arrayListServerIPs.size() > 0)
-        {
+        ArrayList<ServerIpModel> arrayListServerIPs = serverIPDAO.getServerIPwithIsTestFilter(Constants.CURRENT_VERSION_TYPE());
+
+        if (arrayListServerIPs.size() > 0) {
             AsyncFindServerTask asyncFindServerTask = new AsyncFindServerTask((Activity) mPresenter.getAppContext());
             asyncFindServerTask.delegate = SplashModel.this;
             asyncFindServerTask.execute(arrayListServerIPs);
-        }
-        else
-        {
+        } else {
             mPresenter.onGetServerIP(null);
         }
     }
 
     @Override
-    public void processFinished(Object object)
-    {
-        if (object.getClass() == ServerIpModel.class)
-        {
-            ServerIpModel serverIpModel = (ServerIpModel) object;
-            ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-
-            serverIPShared.removeAll();
-            serverIPShared.putString(serverIPShared.IP() , serverIpModel.getServerIp());
-            serverIPShared.putString(serverIPShared.PORT() , serverIpModel.getPort());
+    public void processFinished(ArrayList<Object> objects) {
 
 
-            /*serverIPShared.removeAll();
-            serverIPShared.putString(serverIPShared.IP() , "94.182.202.82");
-            serverIPShared.putString(serverIPShared.PORT() , "8040");*/
+        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+        serverIPShared.removeAll();
 
-            /*serverIPShared.removeAll();
-            serverIPShared.putString(serverIPShared.IP() , "192.168.11.18");
-            serverIPShared.putString(serverIPShared.PORT() , "8040");*/
 
-            mPresenter.onGetServerIP(serverIpModel);
+        for (Object object : objects) {
+            if (object.getClass() == ServerIpModel.class) {
+
+                ServerIpModel serverIpModel = (ServerIpModel) object;
+
+                Log.i("serverType", "processFinished: " + serverIpModel.getServerType());
+/***********************************************************   X server has divided webservice base URls for get post and multi *******************************************************/
+
+
+          if (objects.size()==3) {
+                    switch (serverIpModel.getServerType()) {
+                        case Constants.POST_REQUEST:
+                            serverIPShared.putString(serverIPShared.IP_POST_REQUEST(), serverIpModel.getServerIp());
+                            serverIPShared.putString(serverIPShared.PORT_POST_REQUEST(), serverIpModel.getPort());
+
+                            break;
+
+                        case Constants.MULTI_REQUEST:
+                            serverIPShared.putString(serverIPShared.IP_MULTI_REQUEST(), serverIpModel.getServerIp());
+                            serverIPShared.putString(serverIPShared.PORT_MULTI_REQUEST(), serverIpModel.getPort());
+
+                            break;
+
+                        case Constants.GET_REQUESTS:
+                            serverIPShared.putString(serverIPShared.IP_GET_REQUEST(), serverIpModel.getServerIp());
+                            serverIPShared.putString(serverIPShared.PORT_GET_REQUEST(), serverIpModel.getPort());
+                            break;
+
+                    }
+
+/***********************************************************   M server has divided webservice base URls for get  and (post,multi) *******************************************************/
+
+                } else if (objects.size()==2){
+                    switch (serverIpModel.getServerType()) {
+
+                        case Constants.MULTI_REQUEST:
+                            serverIPShared.putString(serverIPShared.IP_MULTI_REQUEST(), serverIpModel.getServerIp());
+                            serverIPShared.putString(serverIPShared.PORT_MULTI_REQUEST(), serverIpModel.getPort());
+
+                            serverIPShared.putString(serverIPShared.IP_POST_REQUEST(), serverIpModel.getServerIp());
+                            serverIPShared.putString(serverIPShared.PORT_POST_REQUEST(), serverIpModel.getPort());
+                            break;
+
+                        case Constants.GET_REQUESTS:
+                            serverIPShared.putString(serverIPShared.IP_GET_REQUEST(), serverIpModel.getServerIp());
+                            serverIPShared.putString(serverIPShared.PORT_GET_REQUEST(), serverIpModel.getPort());
+                            break;
+
+                    }
+
+                }
+/************************************************************ Z server doesn't have divided webservice base URls  for get post and multi***********************************************/
+
+
+                else{
+                    serverIPShared.putString(serverIPShared.IP_POST_REQUEST(), serverIpModel.getServerIp());
+                    serverIPShared.putString(serverIPShared.PORT_POST_REQUEST(), serverIpModel.getPort());
+
+                    serverIPShared.putString(serverIPShared.IP_MULTI_REQUEST(), serverIpModel.getServerIp());
+                    serverIPShared.putString(serverIPShared.PORT_MULTI_REQUEST(), serverIpModel.getPort());
+
+                    serverIPShared.putString(serverIPShared.IP_GET_REQUEST(), serverIpModel.getServerIp());
+                    serverIPShared.putString(serverIPShared.PORT_GET_REQUEST(), serverIpModel.getPort());
+                }
+            }
         }
+        //////////////////////////////////////////////////////getting Ip and port for all requests\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        ServerIpModel serverIpModelGet = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        ServerIpModel serverIpModelPost = new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+        ServerIpModel serverIpModelMulti=new PubFunc().new NetworkUtils().multiServerFromShared(mPresenter.getAppContext());
+
+        //////////////////////////////////////////////////////getting Ip and port for splash\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        mPresenter.onGetServerIP(serverIpModelGet);
+
     }
 
+
+
     @Override
-    public void getServerTime()
-    {
+    public void getServerTime() {
         ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-        String port = serverIPShared.getString(serverIPShared.PORT() , "");
-        if (serverIP.equals("") || port.equals(""))
-        {
+        String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+                , "");
+        String port = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+                , "");
+        if (serverIP.equals("") || port.equals("")) {
             mPresenter.notFoundServerIP();
-        }
-        else
-        {
+        } else {
             PubFunc.LoginInfo loginInfo = new PubFunc().new LoginInfo();
-            loginInfo.callLoginInfoService(mPresenter.getAppContext(), serverIP, port, new GetLoginInfoCallback()
-            {
+            loginInfo.callLoginInfoService(mPresenter.getAppContext(), serverIP, port, new GetLoginInfoCallback() {
                 @Override
-                public void onSuccess(boolean validDiffTime, String serverDateTime, String deviceDateTime, long diff)
-                {
+                public void onSuccess(boolean validDiffTime, String serverDateTime, String deviceDateTime, long diff) {
                     String message = String.format("%1$s \n %2$s : %3$s \n %4$s : %5$s \n %6$s ( %7$s %8$s) : %9$s %10$s", mPresenter.getAppContext().getString(R.string.errorLocalDateTime),
                             mPresenter.getAppContext().getString(R.string.serverTime), serverDateTime, mPresenter.getAppContext().getString(R.string.deviceTime), deviceDateTime,
                             mPresenter.getAppContext().getString(R.string.timeDiff), Constants.ALLOWABLE_SERVER_LOCAL_TIME_DIFF(),
@@ -341,68 +398,63 @@ public class SplashModel implements SplashMVP.ModelOps , AsyncTaskResponse
                 }
 
                 @Override
-                public void onFailure(String error)
-                {
+                public void onFailure(String error) {
 
                     setLogToDB(error, SplashModel.class.getSimpleName(), "", "getServerTime", "onFailure");
                     mPresenter.onGetServerTime(false, mPresenter.getAppContext().getString(R.string.errorGetDateTimeData));
                 }
             });
         }
+        Log.d("test",Build.getRadioVersion());
+        Log.d("test",Build.BOARD);
+        Log.d("test",Build.DEVICE);
+        Log.d("test",Build.HOST);
+        Log.d("test",Build.ID);
+        Log.d("test",Build.CPU_ABI);
+        Log.d("test",Build.CPU_ABI2);
+        Log.d("test",Build.SERIAL);
+
+
     }
 
     @Override
-    public void getServerVersion()
-    {
-        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-        String port = serverIPShared.getString(serverIPShared.PORT() , "");
+    public void getServerVersion() {
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+
         final ArrayList<ParameterChildModel> childParameterModelsDownloadUrls = new ParameterChildDAO(mPresenter.getAppContext()).getAllByccParameter(String.valueOf(Constants.CC_DOWNLOAD_URL()));
 
-        if (serverIP.equals("") || port.equals(""))
-        {
+        if (serverIpModel.getServerIp().equals("") || serverIpModel.getPort().equals("")) {
             mPresenter.notFoundServerIP();
-        }
-        else
-        {
-            APIService apiService = ApiClient.getClient(serverIP , port).create(APIService.class);
-            Call<GetVersionResult> call = apiService.getVersionInfo();
+        } else {
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);//ApiClient.getClient(serverIP, port).create(APIServiceGet.class);
+            Call<GetVersionResult> call = apiServiceGet.getVersionInfo();
             call.enqueue(new Callback<GetVersionResult>() {
                 @Override
-                public void onResponse(Call<GetVersionResult> call, Response<GetVersionResult> response)
-                {
-                    if (response.raw().body() != null)
-                    {
-                        Log.d("intercept" , "in on response SplashModel.getServerVersion and response : " + response.raw().body().contentLength());
+                public void onResponse(Call<GetVersionResult> call, Response<GetVersionResult> response) {
+                    if (response.raw().body() != null) {
+                        Log.d("intercept", "in on response SplashModel.getServerVersion and response : " + response.raw().body().contentLength());
                         long contentLength = response.raw().body().contentLength();
                         PubFunc.Logger logger = new PubFunc().new Logger();
-                        logger.insertLogToDB(mPresenter.getAppContext(),Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, SplashModel.class.getSimpleName(), "", "getServerVersion", "onResponse");
+                        logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, SplashModel.class.getSimpleName(), "", "getServerVersion", "onResponse");
                     }
-                    try
-                    {
-                        if (response.isSuccessful())
-                        {
+                    try {
+                        if (response.isSuccessful()) {
                             GetVersionResult result = response.body();
                             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
                             ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
                             int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
                             RoutingServerShared routingServerShared = new RoutingServerShared(mPresenter.getAppContext());
-                            if (result != null && result.getURLOSRM() != null)
-                            {
-                                routingServerShared.putString(RoutingServerShared.IP , result.getURLOSRM());
+                            if (result != null && result.getURLOSRM() != null) {
+                                routingServerShared.putString(RoutingServerShared.IP, result.getURLOSRM());
                             }
                             {
-                                routingServerShared.putString(RoutingServerShared.IP , "http://192.168.80.38/");
+                                routingServerShared.putString(RoutingServerShared.IP, "http://192.168.80.38/");
                             }
-                            mPresenter.onGetServerVersion(result , foroshandehMamorPakhshModel , noeMasouliat , childParameterModelsDownloadUrls);
-                        }
-                        else
-                        {
+                            mPresenter.onGetServerVersion(result, foroshandehMamorPakhshModel, noeMasouliat, childParameterModelsDownloadUrls);
+                        } else {
                             mPresenter.onNetworkError(false);
                         }
-                    }
-                    catch (Exception exception)
-                    {
+                    } catch (Exception exception) {
                         setLogToDB(exception.toString(), SplashModel.class.getSimpleName(), "", "getServerVersion", "onResponse");
                         exception.printStackTrace();
                         mPresenter.onNetworkError(false);
@@ -410,9 +462,8 @@ public class SplashModel implements SplashMVP.ModelOps , AsyncTaskResponse
                 }
 
                 @Override
-                public void onFailure(Call<GetVersionResult> call, Throwable t)
-                {
-                    Log.d("fail" , t.getMessage());
+                public void onFailure(Call<GetVersionResult> call, Throwable t) {
+                    Log.d("fail", t.getMessage());
                     setLogToDB(t.getMessage(), SplashModel.class.getSimpleName(), "", "getServerVersion", "onFailure");
                     mPresenter.onNetworkError(false);
                 }
@@ -422,8 +473,7 @@ public class SplashModel implements SplashMVP.ModelOps , AsyncTaskResponse
     }
 
     @Override
-    public void getInvalidPackages()
-    {
+    public void getInvalidPackages() {
         ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
         String invalidPackageNames = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_UNINSTALL_INVALID_PACKAGE());
         mPresenter.onGetInvalidPackages(invalidPackageNames);
@@ -431,75 +481,57 @@ public class SplashModel implements SplashMVP.ModelOps , AsyncTaskResponse
 
 
     @Override
-    public void getForoshandehAmoozeshi()
-    {
+    public void getForoshandehAmoozeshi(ServerIpModel serverIpModel) {
         PubFunc.DeviceInfo deviceInfo = new PubFunc().new DeviceInfo();
         final String IMEI = deviceInfo.getIMEI(mPresenter.getAppContext());
-        Log.d("SplashModel","getForoshandehAmoozeshi Imei:" + IMEI);
-        if (IMEI.equals(""))
-        {
-            mPresenter.onGetForoshandehAmoozeshi(false , true);
-        }
-        else
-        {
-            ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-            String ip = serverIPShared.getString(serverIPShared.IP() , "");
-            String port = serverIPShared.getString(serverIPShared.PORT() , "");
+        Log.d("SplashModel", "getForoshandehAmoozeshi Imei:" + IMEI);
+        if (IMEI.equals("")) {
+            mPresenter.onGetForoshandehAmoozeshi(false, true);
+        } else {
+            String ip = serverIpModel.getServerIp();
+            String port = serverIpModel.getPort();
 
-            if (ip.equals("") || port.equals(""))
-            {
+            if (ip.equals("") || port.equals("")) {
                 mPresenter.onNetworkError(true);
-            }
-            else
-            {
-                final APIService apiService = ApiClient.getClient(ip , port).create(APIService.class);
-                Call<GetForoshandehAmoozeshiResult> call = apiService.getForoshandehAmoozeshi();
+            } else {
+                APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);//ApiClient.getClient(serverIP, port).create(APIServiceGet.class);
+                Call<GetForoshandehAmoozeshiResult> call = apiServiceGet.getForoshandehAmoozeshi();
                 call.enqueue(new Callback<GetForoshandehAmoozeshiResult>() {
                     @Override
-                    public void onResponse(Call<GetForoshandehAmoozeshiResult> call, Response<GetForoshandehAmoozeshiResult> response)
-                    {
-                        if (response.raw().body() != null)
-                        {
-                            Log.d("intercept" , "in on response SplashModel.getForoshandehAmoozeshi and response : " + response.raw().body().contentLength());
+                    public void onResponse(Call<GetForoshandehAmoozeshiResult> call, Response<GetForoshandehAmoozeshiResult> response) {
+                        if (response.raw().body() != null) {
+                            Log.d("intercept", "in on response SplashModel.getForoshandehAmoozeshi and response : " + response.raw().body().contentLength());
                             long contentLength = response.raw().body().contentLength();
                             PubFunc.Logger logger = new PubFunc().new Logger();
                             logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, SplashModel.class.getSimpleName(), "", "getForoshandehAmoozeshi", "onResponse");
                         }
-                        if (response.isSuccessful())
-                        {
-                            try
-                            {
+                        if (response.isSuccessful()) {
+                            try {
                                 List<ForoshandehAmoozeshiModel> foroshandehAmoozeshiModelList = response.body().getData();
-                                if (foroshandehAmoozeshiModelList.size() > 0)
-                                {
+                                if (foroshandehAmoozeshiModelList.size() > 0) {
                                     ForoshandehAmoozeshiDeviceNumberDAO foroshandehAmoozeshiDAO = new ForoshandehAmoozeshiDeviceNumberDAO(mPresenter.getAppContext());
                                     foroshandehAmoozeshiDAO.deleteAll();
                                     foroshandehAmoozeshiDAO.insertGroup(foroshandehAmoozeshiModelList);
                                 }
 
                                 PubFunc.UserType userType = new PubFunc().new UserType();
-                                Log.d("SplashModel","foroshandehAmoozeshiModelList:"+foroshandehAmoozeshiModelList.toString() + " , IMEI: " + IMEI);
-                                userType.checkUserType(mPresenter.getAppContext() , foroshandehAmoozeshiModelList , IMEI);
+                                Log.d("SplashModel", "foroshandehAmoozeshiModelList:" + foroshandehAmoozeshiModelList.toString() + " , IMEI: " + IMEI);
+                                userType.checkUserType(mPresenter.getAppContext(), foroshandehAmoozeshiModelList, IMEI);
 
-                                mPresenter.onGetForoshandehAmoozeshi(true , false);
-                            }
-                            catch (Exception exception)
-                            {
+                                mPresenter.onGetForoshandehAmoozeshi(true, false);
+                            } catch (Exception exception) {
                                 exception.printStackTrace();
                                 setLogToDB(exception.getMessage(), SplashModel.class.getSimpleName(), "", "getForoshandehAmoozeshi", "onResponse");
                                 mPresenter.onNetworkError(true);
                             }
-                        }
-                        else
-                        {
+                        } else {
                             mPresenter.onNetworkError(true);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<GetForoshandehAmoozeshiResult> call, Throwable t)
-                    {
-                        Log.d("fail" , "error message : " + t.getMessage());
+                    public void onFailure(Call<GetForoshandehAmoozeshiResult> call, Throwable t) {
+                        Log.d("fail", "error message : " + t.getMessage());
                         setLogToDB(t.getMessage(), SplashModel.class.getSimpleName(), "", "getForoshandehAmoozeshi", "onFailure");
                         mPresenter.onNetworkError(true);
                     }
@@ -510,79 +542,59 @@ public class SplashModel implements SplashMVP.ModelOps , AsyncTaskResponse
 
 
     @Override
-    public void getForoshandehMamorPakhsh()
-    {
+    public void getForoshandehMamorPakhsh() {
         PubFunc.DeviceInfo deviceInfo = new PubFunc().new DeviceInfo();
         final String deviceIMEI = deviceInfo.getIMEI(mPresenter.getAppContext());
-        Log.d("SplashModel","deviceIMEI:" + deviceIMEI);
+        Log.d("SplashModel", "deviceIMEI:" + deviceIMEI);
         UserTypeShared userTypeShared = new UserTypeShared(mPresenter.getAppContext());
         //int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0); //0-Main , 1-Test
-        String usingIMEI = userTypeShared.getString(userTypeShared.USING_IMEI() , deviceIMEI);
+        String usingIMEI = userTypeShared.getString(userTypeShared.USING_IMEI(), deviceIMEI);
 
-        if (usingIMEI.equals(""))
-        {
-            mPresenter.onGetForoshandehMamorPakhsh(false , true);
-        }
-        else
-        {
-            ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-            String ip = serverIPShared.getString(serverIPShared.IP() , "");
-            String port = serverIPShared.getString(serverIPShared.PORT() , "");
-            if (ip.equals("") || port.equals(""))
-            {
+        if (usingIMEI.equals("")) {
+            mPresenter.onGetForoshandehMamorPakhsh(false, true);
+        } else {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+
+            if (serverIpModel.getServerIp().equals("") || serverIpModel.getPort().equals("")) {
                 mPresenter.onNetworkError(true);
-            }
-            else
-            {
-                APIService apiService = ApiClient.getClient(ip , port).create(APIService.class);
-                Call<GetForoshandehMamorPakhshResult> call = apiService.getForoshandehMamorPakhsh(usingIMEI);
+            } else {
+                APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);//ApiClient.getClient(serverIP, port).create(APIServiceGet.class);
+                Call<GetForoshandehMamorPakhshResult> call = apiServiceGet.getForoshandehMamorPakhsh(usingIMEI);
                 call.enqueue(new Callback<GetForoshandehMamorPakhshResult>() {
                     @Override
-                    public void onResponse(Call<GetForoshandehMamorPakhshResult> call, Response<GetForoshandehMamorPakhshResult> response)
-                    {
-                        if (response.raw().body() != null)
-                        {
-                            Log.d("intercept" , "in on response SplashModel.getForoshandehMamorPakhsh and response : " + response.raw().body().contentLength());
+                    public void onResponse(Call<GetForoshandehMamorPakhshResult> call, Response<GetForoshandehMamorPakhshResult> response) {
+                        if (response.raw().body() != null) {
+                            Log.d("intercept", "in on response SplashModel.getForoshandehMamorPakhsh and response : " + response.raw().body().contentLength());
                             long contentLength = response.raw().body().contentLength();
                             PubFunc.Logger logger = new PubFunc().new Logger();
                             logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, SplashModel.class.getSimpleName(), "", "getForoshandehMamorPakhsh", "onResponse");
                         }
-                        if (response.isSuccessful())
-                        {
-                            try
-                            {
+                        if (response.isSuccessful()) {
+                            try {
                                 List<ForoshandehMamorPakhshModel> listForoshandehMamorPakhsh = response.body().getData();
-                                Log.d("SplashModel","listForoshandehMamorPakhsh:" + listForoshandehMamorPakhsh.toString());
-                                if (listForoshandehMamorPakhsh.size() > 0)
-                                {
+                                Log.d("SplashModel", "listForoshandehMamorPakhsh:" + listForoshandehMamorPakhsh.toString());
+                                if (listForoshandehMamorPakhsh.size() > 0) {
                                     ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
                                     foroshandehMamorPakhshDAO.deleteAll();
                                     ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = listForoshandehMamorPakhsh.get(0);
                                     foroshandehMamorPakhshModel.setExtraPropIsSelect(0);
                                     foroshandehMamorPakhshDAO.insert(foroshandehMamorPakhshModel);
-                                    mPresenter.onGetForoshandehMamorPakhsh(true , false);
-                                }
-                                else
-                                {
+                                    mPresenter.onGetForoshandehMamorPakhsh(true, false);
+                                } else {
                                     mPresenter.onGetEmptyForoshandehMamorPakhsh();
                                 }
-                            }
-                            catch (Exception exception)
-                            {
+                            } catch (Exception exception) {
                                 setLogToDB(exception.getMessage(), SplashModel.class.getSimpleName(), "", "getForoshandehMamorPakhsh", "onResponse");
                                 exception.printStackTrace();
                                 mPresenter.onNetworkError(true);
                             }
-                        }
-                        else
-                        {
+                        } else {
                             mPresenter.onNetworkError(true);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<GetForoshandehMamorPakhshResult> call, Throwable t)
-                    {
+                    public void onFailure(Call<GetForoshandehMamorPakhshResult> call, Throwable t) {
                         setLogToDB(t.getMessage(), SplashModel.class.getSimpleName(), "", "getForoshandehMamorPakhsh", "onFailure");
                         mPresenter.onNetworkError(true);
                     }
@@ -592,12 +604,13 @@ public class SplashModel implements SplashMVP.ModelOps , AsyncTaskResponse
     }
 
     @Override
-    public void getSystemConfig()
-    {
+    public void getSystemConfig() {
         mPresenter.onGetSystemConfig(true);
         /*ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String ip = serverIPShared.getString(serverIPShared.IP() , "");
-        String port = serverIPShared.getString(serverIPShared.PORT() , "");
+        String ip = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+ , "");
+        String port = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+ , "");
 
         if (ip.equals("") || port.equals(""))
         {
@@ -660,16 +673,14 @@ public class SplashModel implements SplashMVP.ModelOps , AsyncTaskResponse
 
 
     @Override
-    public void getUserType()
-    {
+    public void getUserType() {
         UserTypeShared userTypeShared = new UserTypeShared(mPresenter.getAppContext());
-        int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0); //0-Main , 1-Test
+        int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE(), 0); //0-Main , 1-Test
         mPresenter.onGetUserType(isTest);
     }
 
     @Override
-    public void setLogToDB(String message, String logClass, String logActivity, String functionParent, String functionChild)
-    {
+    public void setLogToDB(String message, String logClass, String logActivity, String functionParent, String functionChild) {
         PubFunc.Logger logger = new PubFunc().new Logger();
         logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_RESPONSE_CONTENT_LENGTH(), message, logClass, logActivity, functionParent, functionChild);
     }

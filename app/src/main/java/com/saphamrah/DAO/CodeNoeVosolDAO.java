@@ -11,8 +11,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetCodeNoeVosolResult;
 
 import java.util.ArrayList;
@@ -67,8 +68,8 @@ public class CodeNoeVosolDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetCodeNoeVosolResult> call = apiService.getCodeNoeVosol();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetCodeNoeVosolResult> call = apiServiceGet.getCodeNoeVosol();
             call.enqueue(new Callback<GetCodeNoeVosolResult>() {
                 @Override
                 public void onResponse(Call<GetCodeNoeVosolResult> call, Response<GetCodeNoeVosolResult> response)

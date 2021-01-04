@@ -11,8 +11,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetListBargashtyForoshandehResult;
 
 import java.text.SimpleDateFormat;
@@ -86,8 +87,8 @@ public class BargashtyDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetListBargashtyForoshandehResult> call = apiService.getListBargashtyForoshandeh(ccForoshandeh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetListBargashtyForoshandehResult> call = apiServiceGet.getListBargashtyForoshandeh(ccForoshandeh);
             call.enqueue(new Callback<GetListBargashtyForoshandehResult>()
             {
                 @Override

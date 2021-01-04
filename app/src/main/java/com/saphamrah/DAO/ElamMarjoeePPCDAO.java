@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.saphamrah.Model.ElamMarjoeePPCModel;
 import com.saphamrah.Model.ServerIpModel;
@@ -12,8 +11,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetMarjoeeForoshandehByDarkhastFaktorTitrResult;
 
 import java.util.ArrayList;
@@ -72,8 +72,8 @@ public class ElamMarjoeePPCDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetMarjoeeForoshandehByDarkhastFaktorTitrResult> call = apiService.getMarjoeeForoshandehByDarkhastFaktorTitr("1" , ccDarkhastHavaleh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetMarjoeeForoshandehByDarkhastFaktorTitrResult> call = apiServiceGet.getMarjoeeForoshandehByDarkhastFaktorTitr("1" , ccDarkhastHavaleh);
             call.enqueue(new Callback<GetMarjoeeForoshandehByDarkhastFaktorTitrResult>() {
                 @Override
                 public void onResponse(Call<GetMarjoeeForoshandehByDarkhastFaktorTitrResult> call, Response<GetMarjoeeForoshandehByDarkhastFaktorTitrResult> response)

@@ -13,8 +13,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllBrandResult;
 
 import java.util.ArrayList;
@@ -68,8 +69,8 @@ public class BrandDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllBrandResult> call = apiService.getAllBrand();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllBrandResult> call = apiServiceGet.getAllBrand();
             call.enqueue(new Callback<GetAllBrandResult>() {
                 @Override
                 public void onResponse(Call<GetAllBrandResult> call, Response<GetAllBrandResult> response)
@@ -153,8 +154,8 @@ public class BrandDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllBrandResult> call = apiService.getAllAmargarBrand();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllBrandResult> call = apiServiceGet.getAllAmargarBrand();
             call.enqueue(new Callback<GetAllBrandResult>() {
                 @Override
                 public void onResponse(Call<GetAllBrandResult> call, Response<GetAllBrandResult> response)

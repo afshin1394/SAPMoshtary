@@ -12,8 +12,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetDariaftPardakhtDarkhastFaktorHavalehPPCResult;
 
 import java.text.SimpleDateFormat;
@@ -93,8 +94,8 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetDariaftPardakhtDarkhastFaktorHavalehPPCResult> call = apiService.getDariaftPardakhtDarkhastFaktorHavalehPPC(noeFaktorHavale , ccDarkhastFaktor);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetDariaftPardakhtDarkhastFaktorHavalehPPCResult> call = apiServiceGet.getDariaftPardakhtDarkhastFaktorHavalehPPC(noeFaktorHavale , ccDarkhastFaktor);
             call.enqueue(new Callback<GetDariaftPardakhtDarkhastFaktorHavalehPPCResult>() {
                 @Override
                 public void onResponse(Call<GetDariaftPardakhtDarkhastFaktorHavalehPPCResult> call, Response<GetDariaftPardakhtDarkhastFaktorHavalehPPCResult> response)
@@ -664,8 +665,8 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
             dariaftPardakhtDarkhastFaktorPPCModel.setShomarehSanad(cursor.getString(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ShomarehSanad())));
             dariaftPardakhtDarkhastFaktorPPCModel.setTarikhSanad(cursor.getString(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_TarikhSanad())));
             dariaftPardakhtDarkhastFaktorPPCModel.setTarikhSanadShamsi(cursor.getString(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_TarikhSanadShamsi())));
-            dariaftPardakhtDarkhastFaktorPPCModel.setMablaghDariaftPardakht(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_MablaghDariaftPardakht())));
-            dariaftPardakhtDarkhastFaktorPPCModel.setMablagh(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_Mablagh())));
+            dariaftPardakhtDarkhastFaktorPPCModel.setMablaghDariaftPardakht(cursor.getLong(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_MablaghDariaftPardakht())));
+            dariaftPardakhtDarkhastFaktorPPCModel.setMablagh(cursor.getLong(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_Mablagh())));
             dariaftPardakhtDarkhastFaktorPPCModel.setCodeVazeiat(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_CodeVazeiat())));
             dariaftPardakhtDarkhastFaktorPPCModel.setZamaneTakhsiseFaktor(cursor.getString(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ZamaneTakhsiseFaktor())));
             dariaftPardakhtDarkhastFaktorPPCModel.setCcAfradErsalKonandeh(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ccAfradErsalKonandeh())));

@@ -9,7 +9,7 @@ import com.saphamrah.DAO.GPSDataPpcDAO;
 import com.saphamrah.Model.GPSDataModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
+import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientNominatim;
 import com.saphamrah.WebService.ServiceResponse.LocationToAddressResult;
 
@@ -79,8 +79,8 @@ public class LocationReceiver extends BroadcastReceiver
 
     public void getPreciseLocation(final Context context, final GPSDataModel newGpsDataModel,final int minDistance)
     {
-        APIService apiService = ApiClientNominatim.getClient().create(APIService.class);
-        Call<LocationToAddressResult> call = apiService.reverseLocationToAddress(Constants.RESPONSE_TYPE(), String.valueOf(newGpsDataModel.getLatitude()) , String.valueOf(newGpsDataModel.getLongitude()) , Constants.ZOOM());
+        APIServiceGet apiServiceGet = ApiClientNominatim.getClient().create(APIServiceGet.class);
+        Call<LocationToAddressResult> call = apiServiceGet.reverseLocationToAddress(Constants.RESPONSE_TYPE(), String.valueOf(newGpsDataModel.getLatitude()) , String.valueOf(newGpsDataModel.getLongitude()) , Constants.ZOOM());
         call.enqueue(new Callback<LocationToAddressResult>() {
             @Override
             public void onResponse(Call<LocationToAddressResult> call, Response<LocationToAddressResult> response)

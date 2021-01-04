@@ -13,6 +13,7 @@ import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.PubFunc.NetworkUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.ServiceResponse.GetVersionResult;
 
@@ -129,8 +130,8 @@ public class SplashPresenter implements SplashMVP.PresenterOps , SplashMVP.Requi
     }*/
 
     @Override
-    public void checkForoshandehAmoozeshi() {
-        mModel.getForoshandehAmoozeshi();
+    public void checkForoshandehAmoozeshi(ServerIpModel serverIpModel) {
+        mModel.getForoshandehAmoozeshi(serverIpModel);
     }
 
     @Override
@@ -328,8 +329,8 @@ public class SplashPresenter implements SplashMVP.PresenterOps , SplashMVP.Requi
     {
         if (serverIpModel != null && serverIpModel.getServerIp() != null && serverIpModel.getPort() != null)
         {
-            Log.d("serverip" , "server ip not null");
-            checkForoshandehAmoozeshi();
+            Log.d("serverIp" , "server ip not null"+serverIpModel.getServerIp()+"port: "+serverIpModel.getPort());
+            checkForoshandehAmoozeshi(serverIpModel);
         }
         else
         {

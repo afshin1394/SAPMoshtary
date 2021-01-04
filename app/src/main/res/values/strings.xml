@@ -988,5 +988,6 @@
     <string name="errorSabtJayezeh">خطا در ثبت جایزه تکراری، لطفا درخواست را حدف و دوباره ثبت نمایید.</string>
     <string name="wantUpdateGallery">آیا مایل به دریافت تصاویر هستید؟</string>
     <string name="mablaghForoshBaArzeshAfzoodeh">مبلغ فروش باارزش افزوده</string>
+    <string name="errorIPConnected">خطا در اتصال به وب سرویس</string>
 
 </resources>

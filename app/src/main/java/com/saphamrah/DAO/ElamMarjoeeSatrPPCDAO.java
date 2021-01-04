@@ -11,8 +11,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetMarjoeeForoshandehByDarkhastFaktorSatrResult;
 
 import java.util.ArrayList;
@@ -77,8 +78,8 @@ public class ElamMarjoeeSatrPPCDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetMarjoeeForoshandehByDarkhastFaktorSatrResult> call = apiService.getMarjoeeForoshandehByDarkhastFaktorSatr("2" , ccDarkhastHavaleh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetMarjoeeForoshandehByDarkhastFaktorSatrResult> call = apiServiceGet.getMarjoeeForoshandehByDarkhastFaktorSatr("2" , ccDarkhastHavaleh);
             call.enqueue(new Callback<GetMarjoeeForoshandehByDarkhastFaktorSatrResult>() {
                 @Override
                 public void onResponse(Call<GetMarjoeeForoshandehByDarkhastFaktorSatrResult> call, Response<GetMarjoeeForoshandehByDarkhastFaktorSatrResult> response)

@@ -12,8 +12,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetMessageBoxResult;
 
 import java.util.ArrayList;
@@ -77,8 +78,8 @@ public class MessageBoxDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetMessageBoxResult> call = apiService.getMessageBoxResult(ccForoshandeh, ccMamorPakhsh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetMessageBoxResult> call = apiServiceGet.getMessageBoxResult(ccForoshandeh, ccMamorPakhsh);
             call.enqueue(new Callback<GetMessageBoxResult>() {
                 @Override
                 public void onResponse(Call<GetMessageBoxResult> call, Response<GetMessageBoxResult> response)

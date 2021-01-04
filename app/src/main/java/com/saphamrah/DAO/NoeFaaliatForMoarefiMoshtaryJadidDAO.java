@@ -11,8 +11,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetNoeFaaliatForMoarefiMoshtaryJadidResult;
 
 import java.util.ArrayList;
@@ -67,8 +68,8 @@ public class NoeFaaliatForMoarefiMoshtaryJadidDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetNoeFaaliatForMoarefiMoshtaryJadidResult> call = apiService.getNoeFaaliatForMoarefiMoshtaryJadid(ccForoshandeh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetNoeFaaliatForMoarefiMoshtaryJadidResult> call = apiServiceGet.getNoeFaaliatForMoarefiMoshtaryJadid(ccForoshandeh);
             call.enqueue(new Callback<GetNoeFaaliatForMoarefiMoshtaryJadidResult>() {
                 @Override
                 public void onResponse(Call<GetNoeFaaliatForMoarefiMoshtaryJadidResult> call, Response<GetNoeFaaliatForMoarefiMoshtaryJadidResult> response)

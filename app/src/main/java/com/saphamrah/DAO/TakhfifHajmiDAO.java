@@ -15,8 +15,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllvTakhfifHajmiByccMarkazForoshResult;
 
 import java.util.ArrayList;
@@ -88,8 +89,8 @@ public class TakhfifHajmiDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiService.getAllvTakhfifHajmiByccMarkazForosh(ccMarkazForosh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiServiceGet.getAllvTakhfifHajmiByccMarkazForosh(ccMarkazForosh);
             call.enqueue(new Callback<GetAllvTakhfifHajmiByccMarkazForoshResult>() {
                 @Override
                 public void onResponse(Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call, Response<GetAllvTakhfifHajmiByccMarkazForoshResult> response)
@@ -173,8 +174,8 @@ public class TakhfifHajmiDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiService.getAllvTakhfifHajmiByccMarkazForoshForPakhsh(ccMarkazForoshPakhsh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiServiceGet.getAllvTakhfifHajmiByccMarkazForoshForPakhsh(ccMarkazForoshPakhsh);
             call.enqueue(new Callback<GetAllvTakhfifHajmiByccMarkazForoshResult>() {
                 @Override
                 public void onResponse(Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call, Response<GetAllvTakhfifHajmiByccMarkazForoshResult> response)
@@ -258,8 +259,8 @@ public class TakhfifHajmiDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiService.getTakhfifHajmiTitr("1", ccMarkazSazmanForosh, ccTakhfifHajmi);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiServiceGet.getTakhfifHajmiTitr("1", ccMarkazSazmanForosh, ccTakhfifHajmi);
             call.enqueue(new Callback<GetAllvTakhfifHajmiByccMarkazForoshResult>() {
                 @Override
                 public void onResponse(Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call, Response<GetAllvTakhfifHajmiByccMarkazForoshResult> response)

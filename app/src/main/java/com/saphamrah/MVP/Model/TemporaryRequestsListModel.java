@@ -68,9 +68,10 @@ import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.UIModel.CustomerAdamDarkhastModel;
 import com.saphamrah.UIModel.CustomerDarkhastFaktorModel;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
+import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.APIServicePost;
-import com.saphamrah.WebService.ApiClient;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.ControlInsertFaktorResult;
 import com.saphamrah.WebService.ServiceResponse.CreateAdamDarkhastResult;
 import com.saphamrah.WebService.ServiceResponse.CreateBarkhordForoshandehBaMoshtaryResult;
@@ -356,16 +357,23 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         final AdamDarkhastModel adamDarkhastModel = adamDarkhastDAO.getByccAdamDarkhast(customerAdamDarkhastModel.getCcAdamDarkhast()).get(0);
         String jsonString = adamDarkhastModel.toJsonString(0 , foroshandehMamorPakhshModel.getCcMarkazForosh());
         saveToFile("noRequest.txt" , jsonString);
-        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-        String serverPort = serverIPShared.getString(serverIPShared.PORT() , "");
+//        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+//        String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+// , "");
+//        String serverPort = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+// , "");
+
+        ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+        String serverIP=serverIpModel.getServerIp();
+        String serverPort=serverIpModel.getPort();
         if (serverIP.trim().equals("") || serverPort.trim().equals(""))
         {
             mPresenter.onErrorSendRequest(R.string.errorFindServerIP);
         }
         else
         {
-            final APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+            //final APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+            final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
             Call<CreateAdamDarkhastResult> call = apiServicePost.createAdamDarkhast(jsonString);
             call.enqueue(new Callback<CreateAdamDarkhastResult>()
             {
@@ -376,7 +384,6 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                     {
                         if (response.isSuccessful() && response.body() != null)
                         {
-                            Log.d("noTemp" , "in if success and body not null");
                             CreateAdamDarkhastResult result = response.body();
                             if (result.getSuccess())
                             {
@@ -389,7 +396,6 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             }
                             else
                             {
-                                Log.d("noTemp" , "in else not success");
                                 setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "" , "sendTempNoRequest" , "onResponse");
                                 mPresenter.onErrorSendRequest(R.string.errorOperation);
                             }
@@ -402,13 +408,11 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                                 errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string() ;//+ "\n" + "can't send this log : " + logMessage;
                             }
                             setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "" , "sendTempNoRequest" , "onResponse");
-                            Log.d("tempRequest" , "message : " + errorMessage);
                             mPresenter.onErrorSendRequest(R.string.errorOperation);
                         }
                     }
                     catch (Exception exception)
                     {
-                        Log.d("noTemp" , "in exception");
                         exception.printStackTrace();
                         setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "" , "sendTempNoRequest" , "onResponse");
                         mPresenter.onErrorSendRequest(R.string.errorOperation);
@@ -418,7 +422,6 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                 @Override
                 public void onFailure(Call<CreateAdamDarkhastResult> call, Throwable t)
                 {
-                    Log.d("noTemp" , "in onFailure");
                     setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "" , "sendTempNoRequest" , "onFailure");
                     mPresenter.onErrorSendRequest(R.string.errorOperation);
                 }
@@ -446,7 +449,6 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         catch (Exception e)
         {
             e.printStackTrace();
-            Log.e("Exception", "File write failed: " + e.toString());
         }
     }
 
@@ -1037,9 +1039,14 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         ElamMarjoeePPCDAO elamMarjoeePPCDAO = new ElamMarjoeePPCDAO(mPresenter.getAppContext());
         final ArrayList<ElamMarjoeePPCModel> elamMarjoeePPCModels = elamMarjoeePPCDAO.getByccDarkhastFaktor(ccDarkhastFaktorOld);
 
-        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-        String serverPort = serverIPShared.getString(serverIPShared.PORT() , "");
+//        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+//        String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+// , "");
+//        String serverPort = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+// , "");
+        ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+        String serverIP=serverIpModel.getServerIp();
+        String serverPort=serverIpModel.getPort();
         if (serverIP.trim().equals("") || serverPort.trim().equals(""))
         {
             //sendRequestResponse.onError(R.string.errorFindServerIP);
@@ -1047,7 +1054,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         }
         else
         {
-            final APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+            final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);//ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
             Call<CreateDarkhastFaktorWithVosol> call = apiServicePost.createDarkhastFaktorWithVosol(jsonStringData);
             call.enqueue(new Callback<CreateDarkhastFaktorWithVosol>()
             {
@@ -1428,8 +1435,8 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<ControlInsertFaktorResult> call = apiService.controlInsertFaktor(uniqID_Tablet, ccMoshtary, ccForoshandeh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_Tablet, ccMoshtary, ccForoshandeh);
             call.enqueue(new Callback<ControlInsertFaktorResult>() {
                 @Override
                 public void onResponse(Call<ControlInsertFaktorResult> call, Response<ControlInsertFaktorResult> response)
@@ -1832,9 +1839,16 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
 
         private void sendDarkhastFaktorToServer(final int ccMoshtary, final long ccDarkhastFaktorOld, String jsonStringData ,final int position , final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel)
         {
-            ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-            String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-            String serverPort = serverIPShared.getString(serverIPShared.PORT() , "");
+//            ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+//            String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+// , "");
+//            String serverPort = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+// , "");
+
+            ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+            String serverIP=serverIpModel.getServerIp();
+            String serverPort=serverIpModel.getPort();
+
             if (serverIP.trim().equals("") || serverPort.trim().equals(""))
             {
                 sendRequestResponse.onError(R.string.errorFindServerIP);
@@ -1842,7 +1856,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
             }
             else
             {
-                final APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+                final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);//ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
                 Call<CreateDarkhastFaktorWithVosol> call = apiServicePost.createDarkhastFaktorWithJson(jsonStringData);
                 call.enqueue(new Callback<CreateDarkhastFaktorWithVosol>()
                 {
@@ -1927,9 +1941,14 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
 
         private void sendTempRequestMamorPakhshSmart(final int ccMoshtary, final long ccDarkhastFaktorOld, String jsonStringData , final int position, final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel)
         {
-            ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-            String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-            String serverPort = serverIPShared.getString(serverIPShared.PORT() , "");
+//            ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+//            String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+// , "");
+//            String serverPort = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+// , "");
+            ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+            String serverIP=serverIpModel.getServerIp();
+            String serverPort=serverIpModel.getPort();
             if (serverIP.trim().equals("") || serverPort.trim().equals(""))
             {
                 sendRequestResponse.onError(R.string.errorFindServerIP);
@@ -1937,7 +1956,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
             }
             else
             {
-                final APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+                final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);//ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
                 Call<UpdateDarkhastFaktorWithJSONResult> call = apiServicePost.updateDarkhastFaktorWithJSON(jsonStringData);
                 call.enqueue(new Callback<UpdateDarkhastFaktorWithJSONResult>()
                 {
@@ -2017,9 +2036,14 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
             ElamMarjoeePPCDAO elamMarjoeePPCDAO = new ElamMarjoeePPCDAO(mPresenter.getAppContext());
             final ArrayList<ElamMarjoeePPCModel> elamMarjoeePPCModels = elamMarjoeePPCDAO.getByccDarkhastFaktor(ccDarkhastFaktorOld);
 
-            ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-            String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-            String serverPort = serverIPShared.getString(serverIPShared.PORT() , "");
+//            ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+//            String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+// , "");
+//            String serverPort = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+// , "");
+            ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+            String serverIP=serverIpModel.getServerIp();
+            String serverPort=serverIpModel.getPort();
             if (serverIP.trim().equals("") || serverPort.trim().equals(""))
             {
                 sendRequestResponse.onError(R.string.errorFindServerIP);
@@ -2027,7 +2051,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
             }
             else
             {
-                final APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+                final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);//ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
                 Call<CreateDarkhastFaktorWithVosol> call = apiServicePost.createDarkhastFaktorWithVosolSard(jsonStringData);
                 call.enqueue(new Callback<CreateDarkhastFaktorWithVosol>()
                 {

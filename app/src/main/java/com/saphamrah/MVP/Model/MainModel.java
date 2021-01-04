@@ -22,6 +22,7 @@ import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.MessageBoxModel;
 import com.saphamrah.Model.ParameterChildModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.SystemMenuModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
@@ -32,9 +33,9 @@ import com.saphamrah.Shared.GetProgramShared;
 import com.saphamrah.Shared.LocalConfigShared;
 import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
+import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.APIServicePost;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
 import com.saphamrah.WebService.ServiceResponse.GetVersionResult;
 import com.saphamrah.WebService.ServiceResponse.UpdateNotificationMessageBoxResult;
@@ -62,57 +63,15 @@ public class MainModel implements MainMVP.ModelOps
         mPresenter = presenterOps;
     }
 
-    /*@Override
-    public void getOwghat()
-    {
-        PubFunc.GPSTracker gpsTracker = new PubFunc().new GPSTracker(mPresenter.getAppContext());
-        APIServiceOwghat apiService = ApiClientOwghat.getClient().create(APIServiceOwghat.class);
-        Call<OwghatResult> call = apiService.getOwghatByLatLong(gpsTracker.getLatitude() , gpsTracker.getLongitude());
-        call.enqueue(new Callback<OwghatResult>() {
-            @Override
-            public void onResponse(Call<OwghatResult> call, Response<OwghatResult> response)
-            {
-                if (response.isSuccessful())
-                {
-                    OwghatResult result = response.body();
-                    if (result != null)
-                    {
-                        if (result.getOk())
-                        {
-                            mPresenter.onGetOwghat(result.getResult());
-                        }
-                        else
-                        {
-                            mPresenter.onGetOwghat(null);
-                        }
-                    }
-                    else
-                    {
-                        mPresenter.onGetOwghat(null);
-                    }
-                }
-                else
-                {
-                    mPresenter.onGetOwghat(null);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<OwghatResult> call, Throwable t)
-            {
-                PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), t.toString(), "MainModel", "", "getOwghat", "onFailure");
-                mPresenter.onGetOwghat(null);
-            }
-        });
-    }*/
 
     @Override
     public void getServerTime()
     {
         ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-        String port = serverIPShared.getString(serverIPShared.PORT() , "");
+        String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+ , "");
+        String port = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+ , "");
         if (serverIP.equals("") || port.equals(""))
         {
             mPresenter.notFoundServerIP();
@@ -215,19 +174,18 @@ public class MainModel implements MainMVP.ModelOps
     @Override
     public void getServerVersion()
     {
-        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-        String port = serverIPShared.getString(serverIPShared.PORT() , "");
+        ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+
         final ArrayList<ParameterChildModel> childParameterModelsDownloadUrls = new ParameterChildDAO(mPresenter.getAppContext()).getAllByccParameter(String.valueOf(Constants.CC_DOWNLOAD_URL()));
 
-        if (serverIP.equals("") || port.equals(""))
+        if (serverIpModel.getServerIp().equals("") || serverIpModel.getPort().equals(""))
         {
             mPresenter.notFoundServerIP();
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIP , port).create(APIService.class);
-            Call<GetVersionResult> call = apiService.getVersionInfo();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetVersionResult> call = apiServiceGet.getVersionInfo();
             call.enqueue(new Callback<GetVersionResult>() {
                 @Override
                 public void onResponse(Call<GetVersionResult> call, Response<GetVersionResult> response)
@@ -416,12 +374,19 @@ public class MainModel implements MainMVP.ModelOps
         String jsonString = jsonStringForUpdateNotifStatus(ccForoshandeh, ccMamorPakhsh, ccMessages);
         if (!jsonString.trim().equals(""))
         {
-            ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-            String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-            String serverPort = serverIPShared.getString(serverIPShared.PORT() , "");
+//            ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+//            String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+// , "");
+//            String serverPort = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+// , "");
+            ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+            String serverIP=serverIpModel.getServerIp();
+            String serverPort=serverIpModel.getPort();
             if (!serverIP.trim().equals("") && !serverPort.trim().equals(""))
             {
-                final APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+                //final APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+                final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+
                 Call<UpdateNotificationMessageBoxResult> call = apiServicePost.updateNotificationMessage(jsonString);
                 call.enqueue(new Callback<UpdateNotificationMessageBoxResult>()
                 {
@@ -505,18 +470,17 @@ public class MainModel implements MainMVP.ModelOps
     @Override
     public void getAlertAboutData()
     {
-        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-        String port = serverIPShared.getString(serverIPShared.PORT() , "");
+        ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+
 
         final String currentVersion = new PubFunc().new DeviceInfo().getCurrentVersion(mPresenter.getAppContext());
         TaghiratVersionPPCDAO taghiratVersionPPCDAO = new TaghiratVersionPPCDAO(mPresenter.getAppContext());
         final String newFeatures = taghiratVersionPPCDAO.getNewFeaturesDesc().replace("#" , "\n");
 
-        if (!currentVersion.trim().equals("") && !serverIP.equals("") && !port.equals(""))
+        if (!currentVersion.trim().equals("") && !serverIpModel.getServerIp().equals("") && !serverIpModel.getPort().equals(""))
         {
-            APIService apiService = ApiClient.getClient(serverIP , port).create(APIService.class);
-            Call<GetVersionResult> call = apiService.getVersionInfo();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetVersionResult> call = apiServiceGet.getVersionInfo();
             call.enqueue(new Callback<GetVersionResult>() {
                 @Override
                 public void onResponse(Call<GetVersionResult> call, Response<GetVersionResult> response)

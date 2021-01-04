@@ -1001,8 +1001,10 @@ public static final String SEND_PUSH_NOTIFICATION="SEND_PUSH_NOTIFICATION";
     private void downloadNewVersion()
     {
         ServerIPShared shared = new ServerIPShared(MainActivity.this);
-        String ip = shared.getString(shared.IP() , "");
-        String port = shared.getString(shared.PORT() , "");
+        String ip = shared.getString(shared.IP_GET_REQUEST()
+ , "");
+        String port = shared.getString(shared.PORT_GET_REQUEST()
+ , "");
         if (ip.trim().equals("") || port.trim().equals(""))
         {
             customAlertDialog.showMessageAlert(MainActivity.this, true, getResources().getString(R.string.error), getResources().getString(R.string.errorFindServerIP), Constants.FAILED_MESSAGE(), getResources().getString(R.string.apply));

@@ -10,6 +10,7 @@ import com.saphamrah.DAO.VisitMoshtaryDAO;
 import com.saphamrah.Model.PorseshnamehModel;
 import com.saphamrah.Model.PorseshnamehShomareshModel;
 import com.saphamrah.Model.PorseshnamehTablighatModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.VisitMoshtaryModel;
 import com.saphamrah.PubFunc.DeviceInfo;
 import com.saphamrah.PubFunc.FileUtils;
@@ -19,7 +20,8 @@ import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.UIModel.CustomerVisitModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServicePost;
-import com.saphamrah.WebService.ApiClient;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.CreateAmargarResult;
 import com.saphamrah.WebService.ServiceResponse.CreateVisitMoshtaryResult;
 
@@ -173,13 +175,20 @@ public class PorseshnameAdamModel implements PorseshnameAdamMVP.ModelOps
 
     private void postDataToServer(final int ccPorseshnameh, final int ccVisitMoshtary, String strJsonData)
     {
-        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-        String serverPort = serverIPShared.getString(serverIPShared.PORT() , "");
+//        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+//        String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+// , "");
+//        String serverPort = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+// , "");
+        ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+        String serverIP=serverIpModel.getServerIp();
+        String serverPort=serverIpModel.getPort();
 
         if (!serverIP.trim().equals("") || !serverPort.trim().equals(""))
         {
-            APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+            //APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+            final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+
             Call<CreateAmargarResult> call = apiServicePost.createAmargarJson(strJsonData);
             call.enqueue(new Callback<CreateAmargarResult>()
             {
@@ -288,12 +297,19 @@ public class PorseshnameAdamModel implements PorseshnameAdamMVP.ModelOps
 
     private void postAdamToServer(final int ccVisitMoshtary, String strJsonData)
     {
-        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-        String serverPort = serverIPShared.getString(serverIPShared.PORT() , "");
+//        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+//        String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+// , "");
+//        String serverPort = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+// , "");
+        ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+        String serverIP=serverIpModel.getServerIp();
+        String serverPort=serverIpModel.getPort();
         if (!serverIP.trim().equals("") || !serverPort.trim().equals(""))
         {
-            APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+            //APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+            final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+
             Call<CreateVisitMoshtaryResult> call = apiServicePost.createVisitMoshtary(strJsonData);
             call.enqueue(new Callback<CreateVisitMoshtaryResult>()
             {

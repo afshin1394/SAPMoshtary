@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.LogPPCModel;
@@ -13,8 +12,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetMojodyAnbarResult;
 
 import java.util.ArrayList;
@@ -97,8 +97,8 @@ public class KalaDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetMojodyAnbarResult> call = apiService.getMojodyAnbar(ccAfrad);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetMojodyAnbarResult> call = apiServiceGet.getMojodyAnbar(ccAfrad);
             call.enqueue(new Callback<GetMojodyAnbarResult>() {
                 @Override
                 public void onResponse(Call<GetMojodyAnbarResult> call, Response<GetMojodyAnbarResult> response)
@@ -182,8 +182,8 @@ public class KalaDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetMojodyAnbarResult> call = apiService.getAllKalaAmargar();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetMojodyAnbarResult> call = apiServiceGet.getAllKalaAmargar();
             call.enqueue(new Callback<GetMojodyAnbarResult>() {
                 @Override
                 public void onResponse(Call<GetMojodyAnbarResult> call, Response<GetMojodyAnbarResult> response)

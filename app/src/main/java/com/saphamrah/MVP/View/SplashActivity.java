@@ -62,7 +62,6 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
     private String downloadUrl = "";
     private int invalidPackageUninstalledCounter;
     private int countInvalidPackage;
-    private boolean isNotOpenMain = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -75,7 +74,7 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
 
         startMVPOps();
 
-        checkReadPhoneStatePermission();
+        //checkReadPhoneStatePermission();
 
         isTestNewVersion = false;
         invalidPackageUninstalledCounter = 0;
@@ -372,8 +371,10 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
     private void downloadNewVersion()
     {
         ServerIPShared shared = new ServerIPShared(SplashActivity.this);
-        String ip = shared.getString(shared.IP() , "");
-        String port = shared.getString(shared.PORT() , "");
+        String ip = shared.getString(shared.IP_GET_REQUEST()
+ , "");
+        String port = shared.getString(shared.PORT_GET_REQUEST()
+ , "");
         if (ip.trim().equals("") || port.trim().equals(""))
         {
             customAlertDialog.showMessageAlert(SplashActivity.this, true, getResources().getString(R.string.error), getResources().getString(R.string.errorFindServerIP), Constants.FAILED_MESSAGE(), getResources().getString(R.string.apply));
@@ -509,14 +510,9 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
         }
         else
         {
-            if (isNotOpenMain){
-                isNotOpenMain = false;
-                Intent intent = new Intent(SplashActivity.this , MainActivity.class);
-                startActivity(intent);
-                Log.i("TestSplash" , "Start MainActvity");
-                SplashActivity.this.finish();
-            }
-
+            Intent intent = new Intent(SplashActivity.this , MainActivity.class);
+            startActivity(intent);
+            SplashActivity.this.finish();
         }
     }
 

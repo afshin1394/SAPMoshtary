@@ -4,8 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
-import android.util.Log;
 
 import com.saphamrah.Model.MahalModel;
 import com.saphamrah.Model.ServerIpModel;
@@ -13,8 +11,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllMahalByccMarkazForoshResult;
 
 import java.util.ArrayList;
@@ -71,8 +70,8 @@ public class MahalDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllMahalByccMarkazForoshResult> call = apiService.getAllMahalByccMarkazForosh(ccMarkazSazmanForosh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllMahalByccMarkazForoshResult> call = apiServiceGet.getAllMahalByccMarkazForosh(ccMarkazSazmanForosh);
             call.enqueue(new Callback<GetAllMahalByccMarkazForoshResult>() {
                 @Override
                 public void onResponse(Call<GetAllMahalByccMarkazForoshResult> call, Response<GetAllMahalByccMarkazForoshResult> response)
@@ -155,8 +154,8 @@ public class MahalDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllMahalByccMarkazForoshResult> call = apiService.getAllMahalByccMarkazForoshAmargar(ccMarkazSazmanForosh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetAllMahalByccMarkazForoshResult> call = apiServiceGet.getAllMahalByccMarkazForoshAmargar(ccMarkazSazmanForosh);
             call.enqueue(new Callback<GetAllMahalByccMarkazForoshResult>() {
                 @Override
                 public void onResponse(Call<GetAllMahalByccMarkazForoshResult> call, Response<GetAllMahalByccMarkazForoshResult> response)

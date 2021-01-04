@@ -5,15 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.MoshtaryMorajehShodehRoozModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.MoshtaryMorajehShodehRoozResult;
 
 import java.util.ArrayList;
@@ -70,8 +70,8 @@ public class MoshtaryMorajehShodehRoozDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<MoshtaryMorajehShodehRoozResult> call = apiService.getMoshtaryMorajehShodehRooz(ccForoshandeh , ccMasir);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<MoshtaryMorajehShodehRoozResult> call = apiServiceGet.getMoshtaryMorajehShodehRooz(ccForoshandeh , ccMasir);
             call.enqueue(new Callback<MoshtaryMorajehShodehRoozResult>() {
                 @Override
                 public void onResponse(Call<MoshtaryMorajehShodehRoozResult> call, Response<MoshtaryMorajehShodehRoozResult> response)

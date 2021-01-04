@@ -4,8 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
-import android.util.Log;
 
 import com.saphamrah.Model.RptListVosolModel;
 import com.saphamrah.Model.ServerIpModel;
@@ -13,8 +11,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetrptListVosolResult;
 
 import java.util.ArrayList;
@@ -80,8 +79,8 @@ public class RptListVosolDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetrptListVosolResult> call = apiService.getrptListVosol(ccAfradForoshandehMamorPakhsh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetrptListVosolResult> call = apiServiceGet.getrptListVosol(ccAfradForoshandehMamorPakhsh);
             call.enqueue(new Callback<GetrptListVosolResult>() {
                 @Override
                 public void onResponse(Call<GetrptListVosolResult> call, Response<GetrptListVosolResult> response)

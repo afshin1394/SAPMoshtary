@@ -12,8 +12,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetGPSDataResult;
 
 import java.util.ArrayList;
@@ -83,8 +84,8 @@ public class GPSDataPpcDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetGPSDataResult> call = apiService.getGPSDataByccForoshandeh(ccForoshandeh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetGPSDataResult> call = apiServiceGet.getGPSDataByccForoshandeh(ccForoshandeh);
             call.enqueue(new Callback<GetGPSDataResult>() {
                 @Override
                 public void onResponse(Call<GetGPSDataResult> call, Response<GetGPSDataResult> response)
@@ -168,8 +169,8 @@ public class GPSDataPpcDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetGPSDataResult> call = apiService.getGPSDataByccMamorPakhsh(ccMamorPakhsh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetGPSDataResult> call = apiServiceGet.getGPSDataByccMamorPakhsh(ccMamorPakhsh);
             call.enqueue(new Callback<GetGPSDataResult>() {
                 @Override
                 public void onResponse(Call<GetGPSDataResult> call, Response<GetGPSDataResult> response)

@@ -1093,7 +1093,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             dariaftPardakhtDarkhastFaktorPPC.setTarikhSanad(new SimpleDateFormat(Constants.DATE_SHORT_FORMAT()).format(new Date()));
             dariaftPardakhtDarkhastFaktorPPC.setTarikhSanadShamsi("");
             dariaftPardakhtDarkhastFaktorPPC.setMablaghDariaftPardakht(MablaghKolMarjoeeMoshtary);
-            dariaftPardakhtDarkhastFaktorPPC.setMablagh(Double.valueOf(MablaghDariaftPardakhtDarkhastFaktor));
+            dariaftPardakhtDarkhastFaktorPPC.setMablagh(MablaghDariaftPardakhtDarkhastFaktor);
             dariaftPardakhtDarkhastFaktorPPC.setCodeVazeiat(0);
             dariaftPardakhtDarkhastFaktorPPC.setZamaneTakhsiseFaktor(new SimpleDateFormat(Constants.DATE_SHORT_FORMAT()).format(new Date()));
             dariaftPardakhtDarkhastFaktorPPC.setZamaneTakhsiseFaktorShamsi(new PubFunc().new DateUtils().todayDateWithSlash(mPresenter.getAppContext()));

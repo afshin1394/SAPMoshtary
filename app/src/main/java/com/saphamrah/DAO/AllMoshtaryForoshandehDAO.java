@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.saphamrah.Model.AllMoshtaryForoshandehModel;
 import com.saphamrah.Model.MasirModel;
@@ -13,8 +12,8 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllMoshtaryForoshandehResult;
 
 import java.util.ArrayList;
@@ -74,8 +73,8 @@ public class AllMoshtaryForoshandehDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllMoshtaryForoshandehResult> call = apiService.getAllMoshtaryForoshandeh(ccForoshandeh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllMoshtaryForoshandehResult> call = apiServiceGet.getAllMoshtaryForoshandeh(ccForoshandeh);
             call.enqueue(new Callback<GetAllMoshtaryForoshandehResult>() {
                 @Override
                 public void onResponse(Call<GetAllMoshtaryForoshandehResult> call, Response<GetAllMoshtaryForoshandehResult> response)

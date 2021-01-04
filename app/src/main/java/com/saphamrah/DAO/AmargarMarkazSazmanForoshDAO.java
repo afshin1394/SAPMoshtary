@@ -6,14 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.saphamrah.Model.AmargarMarkazSazmanForoshModel;
-import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAmargarMarkazForoshResult;
 
 import java.util.ArrayList;
@@ -73,8 +72,8 @@ public class AmargarMarkazSazmanForoshDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAmargarMarkazForoshResult> call = apiService.getAmargarMarkazForosh(ccAmargar);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAmargarMarkazForoshResult> call = apiServiceGet.getAmargarMarkazForosh(ccAmargar);
             call.enqueue(new Callback<GetAmargarMarkazForoshResult>() {
                 @Override
                 public void onResponse(Call<GetAmargarMarkazForoshResult> call, Response<GetAmargarMarkazForoshResult> response)

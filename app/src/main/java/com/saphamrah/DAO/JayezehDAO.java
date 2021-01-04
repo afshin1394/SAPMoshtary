@@ -14,8 +14,9 @@ import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.JayezehByccKalaCodeModel;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllvJayezehByccMarkazForoshResult;
 
 import java.util.ArrayList;
@@ -87,8 +88,8 @@ public class JayezehDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvJayezehByccMarkazForoshResult> call = apiService.getAllvJayezehByccMarkazForosh(ccMarkazForosh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllvJayezehByccMarkazForoshResult> call = apiServiceGet.getAllvJayezehByccMarkazForosh(ccMarkazForosh);
             call.enqueue(new Callback<GetAllvJayezehByccMarkazForoshResult>() {
                 @Override
                 public void onResponse(Call<GetAllvJayezehByccMarkazForoshResult> call, Response<GetAllvJayezehByccMarkazForoshResult> response)
@@ -179,8 +180,8 @@ public class JayezehDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvJayezehByccMarkazForoshResult> call = apiService.getAllvJayezehByccMarkazForoshForPakhsh(ccMarkazForoshPakhsh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetAllvJayezehByccMarkazForoshResult> call = apiServiceGet.getAllvJayezehByccMarkazForoshForPakhsh(ccMarkazForoshPakhsh);
             call.enqueue(new Callback<GetAllvJayezehByccMarkazForoshResult>() {
                 @Override
                 public void onResponse(Call<GetAllvJayezehByccMarkazForoshResult> call, Response<GetAllvJayezehByccMarkazForoshResult> response)
@@ -272,8 +273,8 @@ public class JayezehDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvJayezehByccMarkazForoshResult> call = apiService.getJayezeh("1", ccMarkazSazmanForosh, "-1");
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetAllvJayezehByccMarkazForoshResult> call = apiServiceGet.getJayezeh("1", ccMarkazSazmanForosh, "-1");
             call.enqueue(new Callback<GetAllvJayezehByccMarkazForoshResult>() {
                 @Override
                 public void onResponse(Call<GetAllvJayezehByccMarkazForoshResult> call, Response<GetAllvJayezehByccMarkazForoshResult> response)

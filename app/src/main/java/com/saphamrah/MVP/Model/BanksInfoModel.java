@@ -4,11 +4,13 @@ import com.saphamrah.BaseMVP.BanksInfoMVP;
 import com.saphamrah.DAO.BankDAO;
 import com.saphamrah.Model.BankModel;
 import com.saphamrah.Model.LogPPCModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.ServerIPShared;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetBankByMamorPakhshPositionResult;
 
 import java.util.ArrayList;
@@ -38,17 +40,16 @@ public class BanksInfoModel implements BanksInfoMVP.ModelOps
     @Override
     public void getBranchOfBank(String noeBank, String lat, String lng)
     {
-        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String ip = serverIPShared.getString(serverIPShared.IP() , "");
-        String port = serverIPShared.getString(serverIPShared.PORT() , "");
-        if (ip.trim().equals("") || port.trim().equals(""))
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+
+        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
         {
             mPresenter.onError(R.string.errorFindServerIP);
         }
         else
         {
-            APIService apiService = ApiClient.getClient(ip, port).create(APIService.class);
-            Call<GetBankByMamorPakhshPositionResult> call = apiService.getBankByMamorPakhshPosition(noeBank, lat, lng);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetBankByMamorPakhshPositionResult> call = apiServiceGet.getBankByMamorPakhshPosition(noeBank, lat, lng);
             call.enqueue(new Callback<GetBankByMamorPakhshPositionResult>()
             {
                 @Override

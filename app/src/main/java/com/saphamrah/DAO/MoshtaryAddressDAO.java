@@ -12,8 +12,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllvMoshtaryAddressResult;
 
 import java.util.ArrayList;
@@ -93,8 +94,8 @@ public class MoshtaryAddressDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvMoshtaryAddressResult> call = apiService.getAllvMoshtaryAddress(ccMoshtarys , ccMarkazSazmanForosh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllvMoshtaryAddressResult> call = apiServiceGet.getAllvMoshtaryAddress(ccMoshtarys , ccMarkazSazmanForosh);
             call.enqueue(new Callback<GetAllvMoshtaryAddressResult>() {
                 @Override
                 public void onResponse(Call<GetAllvMoshtaryAddressResult> call, Response<GetAllvMoshtaryAddressResult> response)
@@ -183,8 +184,8 @@ public class MoshtaryAddressDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvMoshtaryAddressResult> call = apiService.getAllvMoshtaryAddressForPakhsh(ccMoshtarys , ccMarkazSazmanForosh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetAllvMoshtaryAddressResult> call = apiServiceGet.getAllvMoshtaryAddressForPakhsh(ccMoshtarys , ccMarkazSazmanForosh);
             call.enqueue(new Callback<GetAllvMoshtaryAddressResult>() {
                 @Override
                 public void onResponse(Call<GetAllvMoshtaryAddressResult> call, Response<GetAllvMoshtaryAddressResult> response)
@@ -267,8 +268,8 @@ public class MoshtaryAddressDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvMoshtaryAddressResult> call = apiService.getMoshtaryAddressByNoeMasouliat(ccForoshandeh, ccMasirs, ccMoshtarys);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetAllvMoshtaryAddressResult> call = apiServiceGet.getMoshtaryAddressByNoeMasouliat(ccForoshandeh, ccMasirs, ccMoshtarys);
             call.enqueue(new Callback<GetAllvMoshtaryAddressResult>() {
                 @Override
                 public void onResponse(Call<GetAllvMoshtaryAddressResult> call, Response<GetAllvMoshtaryAddressResult> response)

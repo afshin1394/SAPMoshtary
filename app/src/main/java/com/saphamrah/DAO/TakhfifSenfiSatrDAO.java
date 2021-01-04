@@ -11,8 +11,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllvTakhfifSenfiSatrResult;
 
 import java.util.ArrayList;
@@ -74,8 +75,8 @@ public class TakhfifSenfiSatrDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvTakhfifSenfiSatrResult> call = apiService.getTakhfifSenfiSatr("2", ccMarkazForosh, ccTakhfifSenfi);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllvTakhfifSenfiSatrResult> call = apiServiceGet.getTakhfifSenfiSatr("2", ccMarkazForosh, ccTakhfifSenfi);
             call.enqueue(new Callback<GetAllvTakhfifSenfiSatrResult>()
             {
                 @Override
@@ -157,8 +158,8 @@ public class TakhfifSenfiSatrDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvTakhfifSenfiSatrResult> call = apiService.getAllvTakhfifSenfiSatr();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetAllvTakhfifSenfiSatrResult> call = apiServiceGet.getAllvTakhfifSenfiSatr();
             call.enqueue(new Callback<GetAllvTakhfifSenfiSatrResult>()
             {
                 @Override

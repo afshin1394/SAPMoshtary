@@ -1,6 +1,5 @@
 package com.saphamrah.DAO;
 
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
@@ -9,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Base64;
 import android.util.Log;
 
 import com.saphamrah.Application.BaseApplication;
@@ -19,8 +17,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetTizeriResult;
 
 import java.io.ByteArrayOutputStream;
@@ -73,8 +72,8 @@ public class TizerDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetTizeriResult> call = apiService.getAllTizer();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetTizeriResult> call = apiServiceGet.getAllTizer();
             call.enqueue(new Callback<GetTizeriResult>()
             {
                 @Override

@@ -20,12 +20,14 @@ import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.ParameterChildModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServicePost;
-import com.saphamrah.WebService.ApiClient;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.CreateMoshtaryWithJSONResult;
 import com.saphamrah.WebService.ServiceResponse.GetUpdateMoshtaryResult;
 import com.saphamrah.WebService.ServiceResponse.UpdateNotificationMessageBoxResult;
@@ -298,9 +300,14 @@ public class EditCustomerModel implements EditCustomerMVP.ModelOps {
      */
     private void sendJsonToServer(String jsonString, int tag) {
 
-        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String serverIP = serverIPShared.getString(serverIPShared.IP(), "");
-        String serverPort = serverIPShared.getString(serverIPShared.PORT(), "");
+//        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+//        String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+//, "");
+//        String serverPort = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+//, "");
+        ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+        String serverIP=serverIpModel.getServerIp();
+        String serverPort=serverIpModel.getPort();
         if (!serverIP.trim().equals("") && !serverPort.trim().equals("")) {
             final Handler handler = new Handler(new Handler.Callback() {
                 @Override
@@ -353,7 +360,9 @@ public class EditCustomerModel implements EditCustomerMVP.ModelOps {
                     return false;
                 }
             });
-            final APIServicePost apiServicePost = ApiClient.getClient(serverIP, serverPort).create(APIServicePost.class);
+            //final APIServicePost apiServicePost = ApiClient.getClient(serverIP, serverPort).create(APIServicePost.class);
+            final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+
             Call<GetUpdateMoshtaryResult> call = apiServicePost.getUpdateMoshtaryResult(jsonString);
             call.enqueue(new Callback<GetUpdateMoshtaryResult>() {
                 @Override

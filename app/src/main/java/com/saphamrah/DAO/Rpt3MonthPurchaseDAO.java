@@ -9,8 +9,6 @@ import android.util.Log;
 
 import com.saphamrah.Application.BaseApplication;
 
-import com.saphamrah.Model.DarkhastFaktorAfradForoshModel;
-import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.MahalCodePostiModel;
 
 import com.saphamrah.Model.Rpt3MonthGetSumModel;
@@ -20,8 +18,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetRtpThreeMonthPurchaseResult;
 
 import java.util.ArrayList;
@@ -54,8 +53,8 @@ public class Rpt3MonthPurchaseDAO {
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, Rpt3MonthPurchaseDAO.class.getSimpleName(), activityNameForLog, "fetchRptThreeMonthPurchas", "");
             retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
         } else {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp(), serverIpModel.getPort()).create(APIService.class);
-            Call<GetRtpThreeMonthPurchaseResult> call = apiService.getRtpThreeMonthPurchaseResult(String.valueOf(ccForoshandeh));
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetRtpThreeMonthPurchaseResult> call = apiServiceGet.getRtpThreeMonthPurchaseResult(String.valueOf(ccForoshandeh));
             call.enqueue(new Callback<GetRtpThreeMonthPurchaseResult>() {
                 @Override
                 public void onResponse(Call<GetRtpThreeMonthPurchaseResult> call, Response<GetRtpThreeMonthPurchaseResult> response) {

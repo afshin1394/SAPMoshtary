@@ -11,8 +11,8 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllAmargarGorohResult;
 
 import java.util.ArrayList;
@@ -68,8 +68,8 @@ public class AmargarGorohDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllAmargarGorohResult> call = apiService.getAllAmargarGoroh();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllAmargarGorohResult> call = apiServiceGet.getAllAmargarGoroh();
             call.enqueue(new Callback<GetAllAmargarGorohResult>() {
                 @Override
                 public void onResponse(Call<GetAllAmargarGorohResult> call, Response<GetAllAmargarGorohResult> response)

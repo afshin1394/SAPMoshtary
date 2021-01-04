@@ -39,7 +39,7 @@ import com.saphamrah.Utils.CustomAlertDialogResponse;
 import com.saphamrah.Utils.StateMaintainer;
 import com.saphamrah.Valhalla.SourcesToTargetsFailedResult;
 import com.saphamrah.WebService.APIServiceValhalla;
-import com.saphamrah.WebService.ApiClientValhalla;
+import com.saphamrah.WebService.ApiClientGlobal;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -239,7 +239,7 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         String routingServerIP = routingServerShared.getString(RoutingServerShared.IP , "");
         if (routingServerIP.length() > 0)
         {
-            APIServiceValhalla apiServiceValhalla = ApiClientValhalla.getClient(routingServerIP).create(APIServiceValhalla.class);
+            APIServiceValhalla apiServiceValhalla = ApiClientGlobal.getInstance().getClientServiceValhalla();
             Call<Object> call = apiServiceValhalla.getOptimizedRoute(jsonObjectAllData.toString());
             call.enqueue(new Callback<Object>()
             {

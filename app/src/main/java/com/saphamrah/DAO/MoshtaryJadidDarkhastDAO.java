@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.MoshtaryJadidDarkhastModel;
@@ -13,8 +12,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllMoshtaryJadidDarkhastPPCResult;
 
 import java.util.ArrayList;
@@ -59,8 +59,8 @@ public class MoshtaryJadidDarkhastDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllMoshtaryJadidDarkhastPPCResult> call = apiService.getAllMoshtaryJadidDarkhastPPC();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllMoshtaryJadidDarkhastPPCResult> call = apiServiceGet.getAllMoshtaryJadidDarkhastPPC();
             call.enqueue(new Callback<GetAllMoshtaryJadidDarkhastPPCResult>() {
                 @Override
                 public void onResponse(Call<GetAllMoshtaryJadidDarkhastPPCResult> call, Response<GetAllMoshtaryJadidDarkhastPPCResult> response)

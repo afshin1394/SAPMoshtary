@@ -579,8 +579,8 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps
             dariaftPardakhtDarkhastFaktorPPC.setShomarehSanad(dariaftPardakhtPPCModel.getShomarehSanad());
             dariaftPardakhtDarkhastFaktorPPC.setTarikhSanad(dariaftPardakhtPPCModel.getTarikhSanad());
             dariaftPardakhtDarkhastFaktorPPC.setTarikhSanadShamsi(dariaftPardakhtPPCModel.getTarikhSanadShamsi());
-            dariaftPardakhtDarkhastFaktorPPC.setMablaghDariaftPardakht(dariaftPardakhtPPCModel.getMablagh());
-            dariaftPardakhtDarkhastFaktorPPC.setMablagh(mablaghTakhsis);
+            dariaftPardakhtDarkhastFaktorPPC.setMablaghDariaftPardakht((long)dariaftPardakhtPPCModel.getMablagh());
+            dariaftPardakhtDarkhastFaktorPPC.setMablagh((long)mablaghTakhsis);
             dariaftPardakhtDarkhastFaktorPPC.setCodeVazeiat(0);
             dariaftPardakhtDarkhastFaktorPPC.setZamaneTakhsiseFaktor(currentDate);
             dariaftPardakhtDarkhastFaktorPPC.setZamaneTakhsiseFaktorShamsi(new PubFunc().new DateUtils().gregorianToPersianDateTime(sdf.parse(currentDate)));

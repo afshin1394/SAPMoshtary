@@ -63,6 +63,7 @@ import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.RptForoshModel;
 import com.saphamrah.Model.RptMandehdarModel;
 import com.saphamrah.Model.RptSanadModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
@@ -78,9 +79,9 @@ import com.saphamrah.Valhalla.SourceToTargetSuccessResult;
 import com.saphamrah.Valhalla.SourcesToTargetData;
 import com.saphamrah.Valhalla.SourcesToTargetsFailedResult;
 import com.saphamrah.WebService.APIServicePost;
+
 import com.saphamrah.WebService.APIServiceValhalla;
-import com.saphamrah.WebService.ApiClient;
-import com.saphamrah.WebService.ApiClientValhalla;
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.CreateDariaftPardakhtPPCJSONResult;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
 
@@ -133,8 +134,10 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             }
 
             ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-            String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-            String port = serverIPShared.getString(serverIPShared.PORT() , "");
+            String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+ , "");
+            String port = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+ , "");
             if (serverIP.equals("") || port.equals(""))
             {
                 mPresenter.onCheckServerTime(false, mPresenter.getAppContext().getString(R.string.errorGetDateTimeData));
@@ -270,8 +273,8 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             String routingServerIP = new RoutingServerShared(mPresenter.getAppContext()).getString(RoutingServerShared.IP , "");
             if (routingServerIP.length() > 0)
             {
-                APIServiceValhalla apiService = ApiClientValhalla.getClient(routingServerIP).create(APIServiceValhalla.class);
-                Call<Object> call = apiService.getSourcesToTargets(jsonObjectAllData.toString(), requestId);
+                APIServiceValhalla apiServiceValhalla = ApiClientGlobal.getInstance().getClientServiceValhalla();
+                Call<Object> call = apiServiceValhalla.getSourcesToTargets(jsonObjectAllData.toString(), requestId);
                 call.enqueue(new Callback<Object>()
                 {
                     @Override
@@ -443,8 +446,10 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             else
             {
                 ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-                String ip = serverIPShared.getString(serverIPShared.IP() , "");
-                String port = serverIPShared.getString(serverIPShared.PORT() , "");
+                String ip = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+ , "");
+                String port = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+ , "");
                 if (ip.equals("") || port.equals(""))
                 {
                     mPresenter.onErrorSend(R.string.errorFindServerIP);
@@ -469,9 +474,10 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
     private void sendDariaftPardakhtToServer(final int position , String ip , String port , final ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, final DarkhastFaktorModel darkhastFaktorModel, int codeNoeVosolVajhNaghd, String currentVersionNumber)
     {
+        ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
         CodeNoeVosolDAO codeNoeVosolDAO = new CodeNoeVosolDAO(mPresenter.getAppContext());
         final DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(mPresenter.getAppContext());
-        APIServicePost apiServicePost = ApiClient.getClient(ip , port).create(APIServicePost.class);
+        APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
 
         String ccDpdfs = "-1";
         JSONArray jsonArrayDariaftPardakht = new JSONArray();

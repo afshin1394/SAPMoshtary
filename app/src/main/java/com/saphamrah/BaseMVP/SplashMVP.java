@@ -48,7 +48,7 @@ public interface SplashMVP
         void checkWifiStatus();
         void checkInternetType();
         void checkServerIp();
-        void checkForoshandehAmoozeshi();
+        void checkForoshandehAmoozeshi(ServerIpModel serverIpModel);
         void checkForoshandehMamorPakhsh();
         void checkSystemConfig();
         void checkIsRoot();
@@ -107,7 +107,7 @@ public interface SplashMVP
         void getWifiStatus();
         void getInternetType();
         void getServerIP();
-        void getForoshandehAmoozeshi();
+        void getForoshandehAmoozeshi(ServerIpModel serverIpModel);
         void getForoshandehMamorPakhsh();
         void getSystemConfig();
         void getUserType();

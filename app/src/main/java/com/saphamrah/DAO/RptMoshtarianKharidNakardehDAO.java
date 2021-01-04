@@ -15,8 +15,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllMoshtarianKharidNakardeResult;
 
 import java.util.ArrayList;
@@ -68,8 +69,8 @@ public class RptMoshtarianKharidNakardehDAO {
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllMoshtarianKharidNakardeResult> call = apiService.getAllMoshtarianeKharidNakarde(ccForoshandeh,ccMasirs);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllMoshtarianKharidNakardeResult> call = apiServiceGet.getAllMoshtarianeKharidNakarde(ccForoshandeh,ccMasirs);
             call.enqueue(new Callback<GetAllMoshtarianKharidNakardeResult>() {
                 @Override
                 public void onResponse(Call<GetAllMoshtarianKharidNakardeResult> call, Response<GetAllMoshtarianKharidNakardeResult> response)

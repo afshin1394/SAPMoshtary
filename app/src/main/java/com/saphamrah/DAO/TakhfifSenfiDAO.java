@@ -13,8 +13,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllvTakhfifSenfiByccMarkazForoshResult;
 
 import java.util.ArrayList;
@@ -77,8 +78,8 @@ public class TakhfifSenfiDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvTakhfifSenfiByccMarkazForoshResult> call = apiService.getTakhfifSenfiTitr("1", ccMarkazSazmanForosh, ccTakhfifSenfi);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllvTakhfifSenfiByccMarkazForoshResult> call = apiServiceGet.getTakhfifSenfiTitr("1", ccMarkazSazmanForosh, ccTakhfifSenfi);
             call.enqueue(new Callback<GetAllvTakhfifSenfiByccMarkazForoshResult>()
             {
                 @Override
@@ -160,8 +161,8 @@ public class TakhfifSenfiDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvTakhfifSenfiByccMarkazForoshResult> call = apiService.getAllvTakhfifSenfiByccMarkazForosh(ccMarkazForosh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetAllvTakhfifSenfiByccMarkazForoshResult> call = apiServiceGet.getAllvTakhfifSenfiByccMarkazForosh(ccMarkazForosh);
             call.enqueue(new Callback<GetAllvTakhfifSenfiByccMarkazForoshResult>()
             {
                 @Override
@@ -253,8 +254,8 @@ public class TakhfifSenfiDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvTakhfifSenfiByccMarkazForoshResult> call = apiService.getAllvTakhfifSenfiByccMarkazForoshForPakhsh(ccMarkazForosh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetAllvTakhfifSenfiByccMarkazForoshResult> call = apiServiceGet.getAllvTakhfifSenfiByccMarkazForoshForPakhsh(ccMarkazForosh);
             call.enqueue(new Callback<GetAllvTakhfifSenfiByccMarkazForoshResult>()
             {
                 @Override

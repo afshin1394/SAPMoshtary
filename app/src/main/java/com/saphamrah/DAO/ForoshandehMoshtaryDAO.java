@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.text.format.DateFormat;
 import android.util.Log;
 
@@ -14,8 +13,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllForoshandehMoshtaryByccMasirResult;
 
 import java.text.SimpleDateFormat;
@@ -74,8 +74,8 @@ public class ForoshandehMoshtaryDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllForoshandehMoshtaryByccMasirResult> call = apiService.getAllForoshandehMoshtaryByccMasir(ccMasir);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllForoshandehMoshtaryByccMasirResult> call = apiServiceGet.getAllForoshandehMoshtaryByccMasir(ccMasir);
             call.enqueue(new Callback<GetAllForoshandehMoshtaryByccMasirResult>() {
                 @Override
                 public void onResponse(Call<GetAllForoshandehMoshtaryByccMasirResult> call, Response<GetAllForoshandehMoshtaryByccMasirResult> response)

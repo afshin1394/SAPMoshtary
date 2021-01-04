@@ -1,104 +1,29 @@
 package com.saphamrah.MVP.Model;
 
 
-import android.location.Location;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.saphamrah.BaseMVP.TreasuryListMVP;
 import com.saphamrah.BaseMVP.TreasuryListOfflineMVP;
-import com.saphamrah.DAO.AdamDarkhastDAO;
-import com.saphamrah.DAO.AnbarakAfradDAO;
-import com.saphamrah.DAO.BargashtyDAO;
-import com.saphamrah.DAO.CodeNoeVosolDAO;
-import com.saphamrah.DAO.DariaftPardakhtDarkhastFaktorPPCDAO;
-import com.saphamrah.DAO.DariaftPardakhtPPCDAO;
-import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.DAO.DarkhastFaktorEmzaMoshtaryDAO;
 import com.saphamrah.DAO.DarkhastFaktorMoshtaryForoshandeDAO;
 import com.saphamrah.DAO.DarkhastFaktorRoozSortDAO;
-import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
-import com.saphamrah.DAO.EtebarDAO;
 import com.saphamrah.DAO.ForoshandehAmoozeshiDeviceNumberDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
-import com.saphamrah.DAO.KalaMojodiDAO;
-import com.saphamrah.DAO.MandehMojodyMashinDAO;
-import com.saphamrah.DAO.MasirDAO;
-import com.saphamrah.DAO.MasirVaznHajmMashinDAO;
-import com.saphamrah.DAO.MaxFaktorMandehDarDAO;
-import com.saphamrah.DAO.MojoodiGiriDAO;
 import com.saphamrah.DAO.MoshtaryAddressDAO;
-import com.saphamrah.DAO.MoshtaryAfradDAO;
-import com.saphamrah.DAO.MoshtaryDAO;
-import com.saphamrah.DAO.MoshtaryEtebarSazmanForoshDAO;
-import com.saphamrah.DAO.MoshtaryMorajehShodehRoozDAO;
-import com.saphamrah.DAO.MoshtaryRotbehDAO;
-import com.saphamrah.DAO.NoeMoshtaryRialKharidDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
-import com.saphamrah.DAO.RptForoshDAO;
-import com.saphamrah.DAO.RptMandehdarDAO;
-import com.saphamrah.DAO.RptSanadDAO;
-import com.saphamrah.Model.BargashtyModel;
-import com.saphamrah.Model.CodeNoeVosolModel;
-import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
-import com.saphamrah.Model.DariaftPardakhtPPCModel;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
-import com.saphamrah.Model.DarkhastFaktorModel;
-import com.saphamrah.Model.DarkhastFaktorRoozSortModel;
-import com.saphamrah.Model.EtebarModel;
 import com.saphamrah.Model.ForoshandehAmoozeshiModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
-import com.saphamrah.Model.KalaMojodiModel;
-import com.saphamrah.Model.LogPPCModel;
-import com.saphamrah.Model.MandehMojodyMashinModel;
-import com.saphamrah.Model.MasirModel;
-import com.saphamrah.Model.MasirVaznHajmMashinModel;
-import com.saphamrah.Model.MaxFaktorMandehDarModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
-import com.saphamrah.Model.MoshtaryAfradModel;
-import com.saphamrah.Model.MoshtaryEtebarSazmanForoshModel;
-import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.ParameterChildModel;
-import com.saphamrah.Model.RptForoshModel;
-import com.saphamrah.Model.RptMandehdarModel;
-import com.saphamrah.Model.RptSanadModel;
-import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
-import com.saphamrah.Shared.GetProgramShared;
-import com.saphamrah.Shared.RoutingServerShared;
-import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.Shared.ServerIPShared;
-import com.saphamrah.Shared.UserTypeShared;
 import com.saphamrah.UIModel.DarkhastFaktorMoshtaryForoshandeModel;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.Valhalla.SourceToTargetSuccessResult;
-import com.saphamrah.Valhalla.SourcesToTargetData;
-import com.saphamrah.Valhalla.SourcesToTargetsFailedResult;
-import com.saphamrah.WebService.APIServicePost;
-import com.saphamrah.WebService.APIServiceValhalla;
-import com.saphamrah.WebService.ApiClient;
-import com.saphamrah.WebService.ApiClientValhalla;
-import com.saphamrah.WebService.ServiceResponse.CreateDariaftPardakhtPPCJSONResult;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class TreasuryListOfflineModel implements TreasuryListOfflineMVP.ModelOps
 {
@@ -134,8 +59,10 @@ public class TreasuryListOfflineModel implements TreasuryListOfflineMVP.ModelOps
             }
 
             ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-            String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-            String port = serverIPShared.getString(serverIPShared.PORT() , "");
+            String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+ , "");
+            String port = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+ , "");
             if (serverIP.equals("") || port.equals(""))
             {
                 mPresenter.onCheckServerTime(false, mPresenter.getAppContext().getString(R.string.errorGetDateTimeData));

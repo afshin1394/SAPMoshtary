@@ -4,8 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
-import com.google.android.gms.tasks.Task;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -44,7 +42,8 @@ public class ServerIPDAO
             ServerIpModel.COLUMN_ServerIP(),
             ServerIpModel.COLUMN_PortServerIP(),
             ServerIpModel.COLUMN_NameServerIP(),
-            ServerIpModel.COLUMN_IsTest()
+            ServerIpModel.COLUMN_IsTest(),
+            ServerIpModel.COLUMN_Server_Type()
         };
     }
 
@@ -120,6 +119,36 @@ public class ServerIPDAO
             logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), message, "ServerIPDAO" , "" , "getAllServerIPOrderByPort" , "");
         }
         return arrayListServerIPs;
+    }
+
+    public int getCountServerType(int server)
+    {
+        int count=0;
+        String query = "select count(distinct servertype) from serverip where istest= " + server;
+
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    count = cursor.getInt(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , ServerIpModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), message, "ServerIPDAO" , "" , "getCountServerType" , "");
+        }
+        return count;
     }
 
 
@@ -200,6 +229,7 @@ public class ServerIPDAO
         contentValues.put(ServerIpModel.COLUMN_PortServerIP() , model.getPort());
         contentValues.put(ServerIpModel.COLUMN_NameServerIP() , model.getLocal());
         contentValues.put(ServerIpModel.COLUMN_IsTest() , model.getTest());
+        contentValues.put(ServerIpModel.COLUMN_Server_Type() , model.getServerType());
 
         return contentValues;
     }
@@ -216,6 +246,7 @@ public class ServerIPDAO
             serverIpModel.setPort(cursor.getString(cursor.getColumnIndex(ServerIpModel.COLUMN_PortServerIP())));
             serverIpModel.setLocal(cursor.getString(cursor.getColumnIndex(ServerIpModel.COLUMN_NameServerIP())));
             serverIpModel.setTest(cursor.getInt(cursor.getColumnIndex(ServerIpModel.COLUMN_IsTest())));
+            serverIpModel.setServerType(cursor.getInt(cursor.getColumnIndex(ServerIpModel.COLUMN_Server_Type())));
 
             arrayListServerIPs.add(serverIpModel);
             cursor.moveToNext();

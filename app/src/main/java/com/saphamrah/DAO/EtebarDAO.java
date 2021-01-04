@@ -11,8 +11,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetEtebarResult;
 
 import java.util.ArrayList;
@@ -68,8 +69,8 @@ public class EtebarDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetEtebarResult> call = apiService.getEtebar(ccForoshandeh , ccAnbarak, flagUpdateEtebar);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetEtebarResult> call = apiServiceGet.getEtebar(ccForoshandeh , ccAnbarak, flagUpdateEtebar);
             call.enqueue(new Callback<GetEtebarResult>() {
                 @Override
                 public void onResponse(Call<GetEtebarResult> call, Response<GetEtebarResult> response)

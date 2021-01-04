@@ -12,8 +12,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllvMoshtaryEtebarSazmanForoshResult;
 
 import java.util.ArrayList;
@@ -92,8 +93,8 @@ public class MoshtaryEtebarSazmanForoshDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvMoshtaryEtebarSazmanForoshResult> call = apiService.getAllvMoshtaryEtebarSazmanForosh(ccMoshtarys , ccSazmanForosh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllvMoshtaryEtebarSazmanForoshResult> call = apiServiceGet.getAllvMoshtaryEtebarSazmanForosh(ccMoshtarys , ccSazmanForosh);
             call.enqueue(new Callback<GetAllvMoshtaryEtebarSazmanForoshResult>() {
                 @Override
                 public void onResponse(Call<GetAllvMoshtaryEtebarSazmanForoshResult> call, Response<GetAllvMoshtaryEtebarSazmanForoshResult> response)
@@ -174,8 +175,8 @@ public class MoshtaryEtebarSazmanForoshDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvMoshtaryEtebarSazmanForoshResult> call = apiService.getAllvMoshtaryEtebarSazmanForoshForPakhsh(ccMoshtarys , ccSazmanForosh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetAllvMoshtaryEtebarSazmanForoshResult> call = apiServiceGet.getAllvMoshtaryEtebarSazmanForoshForPakhsh(ccMoshtarys , ccSazmanForosh);
             call.enqueue(new Callback<GetAllvMoshtaryEtebarSazmanForoshResult>() {
                 @Override
                 public void onResponse(Call<GetAllvMoshtaryEtebarSazmanForoshResult> call, Response<GetAllvMoshtaryEtebarSazmanForoshResult> response)

@@ -5,17 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.saphamrah.Model.DariaftPardakhtPPCModel;
-import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.RptKalaInfoModel;
-import com.saphamrah.Model.RptMojodiAnbarModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllrptKalaInfoResult;
 
 import java.util.ArrayList;
@@ -79,8 +77,8 @@ public class RptKalaInfoDAO {
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RptKalaInfoDAO.class.getSimpleName(), activityNameForLog, "fetchRptKalaInfo", "");
             retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
         } else {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp(), serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllrptKalaInfoResult> call = apiService.getAllrptKalaInfo(ccMarkazSazmanSakhtarForosh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllrptKalaInfoResult> call = apiServiceGet.getAllrptKalaInfo(ccMarkazSazmanSakhtarForosh);
             call.enqueue(new Callback<GetAllrptKalaInfoResult>() {
                 @Override
                 public void onResponse(Call<GetAllrptKalaInfoResult> call, Response<GetAllrptKalaInfoResult> response) {

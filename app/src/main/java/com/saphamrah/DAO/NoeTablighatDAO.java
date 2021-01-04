@@ -5,15 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.NoeTablighatModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllNoeTablighatResult;
 
 import java.util.ArrayList;
@@ -66,8 +66,8 @@ public class NoeTablighatDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllNoeTablighatResult> call = apiService.getAllNoeTablighat();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllNoeTablighatResult> call = apiServiceGet.getAllNoeTablighat();
             call.enqueue(new Callback<GetAllNoeTablighatResult>() {
                 @Override
                 public void onResponse(Call<GetAllNoeTablighatResult> call, Response<GetAllNoeTablighatResult> response)

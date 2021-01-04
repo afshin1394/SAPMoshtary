@@ -5,13 +5,15 @@ import android.util.Log;
 import com.saphamrah.BaseMVP.MainMenuMVP;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.SystemMenuDAO;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.SystemMenuModel;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetVersionResult;
 
 import java.util.ArrayList;
@@ -55,16 +57,15 @@ public class MainMenuModel implements MainMenuMVP.ModelOps
     @Override
     public void getAlertAboutData()
     {
-        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-        String port = serverIPShared.getString(serverIPShared.PORT() , "");
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+
 
         final String currentVersion = new PubFunc().new DeviceInfo().getCurrentVersion(mPresenter.getAppContext());
 
-        if (!currentVersion.trim().equals("") && !serverIP.equals("") && !port.equals(""))
+        if (!currentVersion.trim().equals("") && !serverIpModel.getServerIp().equals("") && !serverIpModel.getPort().equals(""))
         {
-            APIService apiService = ApiClient.getClient(serverIP , port).create(APIService.class);
-            Call<GetVersionResult> call = apiService.getVersionInfo();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);//ApiClient.getClient(serverIP , port).create(APIServiceGet.class);
+            Call<GetVersionResult> call = apiServiceGet.getVersionInfo();
             call.enqueue(new Callback<GetVersionResult>() {
                 @Override
                 public void onResponse(Call<GetVersionResult> call, Response<GetVersionResult> response)

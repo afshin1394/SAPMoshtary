@@ -5,12 +5,14 @@ import android.util.Log;
 import com.saphamrah.BaseMVP.MessageDetailMVP;
 import com.saphamrah.DAO.MessageBoxDAO;
 import com.saphamrah.Model.MessageBoxModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServicePost;
-import com.saphamrah.WebService.ApiClient;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.UpdateStatusMessageBoxResult;
 
 import retrofit2.Call;
@@ -45,12 +47,19 @@ public class MessageDetailModel implements MessageDetailMVP.ModelOps
 
         Log.d("message" , "json : " + jsonString);
 
-        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-        String serverPort = serverIPShared.getString(serverIPShared.PORT() , "");
+//        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+//        String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+// , "");
+//        String serverPort = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+// , "");
+        ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+        String serverIP=serverIpModel.getServerIp();
+        String serverPort=serverIpModel.getPort();
         if (!serverIP.trim().equals("") && !serverPort.trim().equals(""))
         {
-            final APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+            //final APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+            final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+
             Call<UpdateStatusMessageBoxResult> call = apiServicePost.updateStatusMessageBox(jsonString);
             call.enqueue(new Callback<UpdateStatusMessageBoxResult>()
             {

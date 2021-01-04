@@ -11,8 +11,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllMarkazShahrMarkaziResult;
 
 import java.util.ArrayList;
@@ -67,8 +68,8 @@ public class MarkazShahrMarkaziDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllMarkazShahrMarkaziResult> call = apiService.getAllMarkazShahrMarkazi();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllMarkazShahrMarkaziResult> call = apiServiceGet.getAllMarkazShahrMarkazi();
             call.enqueue(new Callback<GetAllMarkazShahrMarkaziResult>() {
                 @Override
                 public void onResponse(Call<GetAllMarkazShahrMarkaziResult> call, Response<GetAllMarkazShahrMarkaziResult> response)

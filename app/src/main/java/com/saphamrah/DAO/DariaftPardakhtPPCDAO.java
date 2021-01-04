@@ -12,8 +12,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetDariaftPardakhtHavalePPCResult;
 
 import java.util.ArrayList;
@@ -101,8 +102,8 @@ public class DariaftPardakhtPPCDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetDariaftPardakhtHavalePPCResult> call = apiService.getDariaftPardakhtHavalePPC(noeFaktorHavale , ccDarkhastFaktors);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetDariaftPardakhtHavalePPCResult> call = apiServiceGet.getDariaftPardakhtHavalePPC(noeFaktorHavale , ccDarkhastFaktors);
             call.enqueue(new Callback<GetDariaftPardakhtHavalePPCResult>() {
                 @Override
                 public void onResponse(Call<GetDariaftPardakhtHavalePPCResult> call, Response<GetDariaftPardakhtHavalePPCResult> response)

@@ -13,8 +13,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllMasirResult;
 
 import java.text.SimpleDateFormat;
@@ -72,8 +73,8 @@ public class MasirDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllMasirResult> call = apiService.getAllMasir(ccForoshandeh , ccMarkazForosh , azTarikh , taTarikh , codeNoe);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllMasirResult> call = apiServiceGet.getAllMasir(ccForoshandeh , ccMarkazForosh , azTarikh , taTarikh , codeNoe);
             call.enqueue(new Callback<GetAllMasirResult>() {
                 @Override
                 public void onResponse(Call<GetAllMasirResult> call, Response<GetAllMasirResult> response)
@@ -156,8 +157,8 @@ public class MasirDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllMasirResult> call = apiService.getAllMasirFaalForoshandeh();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetAllMasirResult> call = apiServiceGet.getAllMasirFaalForoshandeh();
             call.enqueue(new Callback<GetAllMasirResult>() {
                 @Override
                 public void onResponse(Call<GetAllMasirResult> call, Response<GetAllMasirResult> response)

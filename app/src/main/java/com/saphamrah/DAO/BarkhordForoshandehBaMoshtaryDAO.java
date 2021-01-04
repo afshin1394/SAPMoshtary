@@ -12,8 +12,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.BarkhordForoshandehBaMoshtaryResult;
 
 import java.text.SimpleDateFormat;
@@ -73,8 +74,8 @@ public class BarkhordForoshandehBaMoshtaryDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<BarkhordForoshandehBaMoshtaryResult> call = apiService.getBarkhordForoshandehBaMoshtary(ccForoshandeh, ccMoshtarys, tedadMah);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<BarkhordForoshandehBaMoshtaryResult> call = apiServiceGet.getBarkhordForoshandehBaMoshtary(ccForoshandeh, ccMoshtarys, tedadMah);
             call.enqueue(new Callback<BarkhordForoshandehBaMoshtaryResult>() {
                 @Override
                 public void onResponse(Call<BarkhordForoshandehBaMoshtaryResult> call, Response<BarkhordForoshandehBaMoshtaryResult> response)

@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.util.Log;
 import com.saphamrah.Model.KalaMojodiModel;
 import com.saphamrah.Model.KalaOlaviatModel;
@@ -13,19 +12,15 @@ import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
-import com.saphamrah.UIModel.KalaMojodiZaribModel;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientMultiRequests;
 import com.saphamrah.WebService.ServiceResponse.GetImageKalaResult;
-import com.saphamrah.WebService.ServiceResponse.GetKalaOlaviatResult;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class KalaPhotoDAO {
@@ -60,7 +55,7 @@ public class KalaPhotoDAO {
 
     public void fetchKalaPhoto(final Context context, final String activityNameForLog, int ccKalaCode, final RetrofitResponse retrofitResponse) {
 
-        ServerIpModel serverIpModel =new PubFunc().new  NetworkUtils().getServerFromShared(context);
+        ServerIpModel serverIpModel =new PubFunc().new  NetworkUtils().multiServerFromShared(context);
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
             String message = "can't find server";
             PubFunc.Logger logger = new PubFunc().new Logger();
@@ -68,8 +63,8 @@ public class KalaPhotoDAO {
             retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
         } else {
             Log.i("fetchKalaPhoto", "fetchKalaPhoto: " + serverIpModel.getServerIp() + " " + serverIpModel.getPort());
-            APIService apiService = ApiClientMultiRequests.getClient(serverIpModel.getServerIp(), "8060").create(APIService.class);
-            Call<GetImageKalaResult> call = apiService.getImageKala((String.valueOf(ccKalaCode)));
+            APIServiceGet apiServiceGet = ApiClientMultiRequests.getClient(serverIpModel.getServerIp(), serverIpModel.getPort()).create(APIServiceGet.class);
+            Call<GetImageKalaResult> call = apiServiceGet.getImageKala((String.valueOf(ccKalaCode)));
 
             try {
                 Response<GetImageKalaResult> response = call.execute();

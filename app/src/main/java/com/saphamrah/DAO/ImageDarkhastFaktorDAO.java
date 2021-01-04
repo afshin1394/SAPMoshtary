@@ -11,8 +11,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetImageJsonResult;
 import com.saphamrah.WebService.ServiceResponse.GetImageStringResult;
 
@@ -64,8 +65,8 @@ public class ImageDarkhastFaktorDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetImageStringResult> call = apiService.getImageString(ccDarkhastFaktor);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetImageStringResult> call = apiServiceGet.getImageString(ccDarkhastFaktor);
             call.enqueue(new Callback<GetImageStringResult>() {
                 @Override
                 public void onResponse(Call<GetImageStringResult> call, Response<GetImageStringResult> response)
@@ -148,8 +149,8 @@ public class ImageDarkhastFaktorDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetImageStringResult> call = apiService.getImageStringForMamorPakhsh(ccDarkhastFaktor);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetImageStringResult> call = apiServiceGet.getImageStringForMamorPakhsh(ccDarkhastFaktor);
             call.enqueue(new Callback<GetImageStringResult>() {
                 @Override
                 public void onResponse(Call<GetImageStringResult> call, Response<GetImageStringResult> response)
@@ -233,8 +234,8 @@ public class ImageDarkhastFaktorDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetImageJsonResult> call = apiService.getImageJSON(ccDarkhastFaktor , ccDarkhastHavaleh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetImageJsonResult> call = apiServiceGet.getImageJSON(ccDarkhastFaktor , ccDarkhastHavaleh);
             call.enqueue(new Callback<GetImageJsonResult>() {
                 @Override
                 public void onResponse(Call<GetImageJsonResult> call, Response<GetImageJsonResult> response)

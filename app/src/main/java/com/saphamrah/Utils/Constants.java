@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE = 4  ; // 0- main  1- Learn  2- Test  3- Demo 4-pegah 5-pegahtest 6-Demo
+    private static final int CURRENT_VERSION_TYPE = 0  ; // 0- main  1- Learn  2- Test 4-pegah 5-pegahtest 6-Demo
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 
@@ -44,7 +44,6 @@ public class Constants
     private static final int CHANGE_WIFI_STATE = 103;
     private static final int ACCESS_NETWORK_STATE = 104;
     private static final int WRITE_EXTERNAL_STORAGE = 105;
-    private static final int GET_ALL_PERMISSION = 106;
 
 
     public static int READ_PHONE_STATE() {
@@ -54,7 +53,6 @@ public class Constants
     public static int CHANGE_WIFI_STATE() { return CHANGE_WIFI_STATE; }
     public static int ACCESS_NETWORK_STATE() { return ACCESS_NETWORK_STATE; }
     public static int WRITE_EXTERNAL_STORAGE() { return WRITE_EXTERNAL_STORAGE; }
-    public static int GET_ALL_PERMISSION() { return GET_ALL_PERMISSION; }
 
 
     ///////////////////////////// OPEN ACTIVITY FOR RESULT CODE /////////////////////////////

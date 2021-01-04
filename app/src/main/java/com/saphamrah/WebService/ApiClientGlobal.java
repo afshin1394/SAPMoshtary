@@ -1,5 +1,11 @@
 package com.saphamrah.WebService;
 
+import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.WebService.APIServiceGet;
+import com.saphamrah.WebService.APIServiceOwghat;
+import com.saphamrah.WebService.APIServicePost;
+import com.saphamrah.WebService.APIServiceValhalla;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -10,7 +16,24 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClientGlobal {
     private static final int TIME_OUT = 90;
 
-    public static <S> S createService(Class<S> serviceClass,String baseURL) {
+
+    private static ApiClientGlobal instance;
+
+    private static APIServiceGet apiServiceGetInstance = null;
+    private static APIServicePost apiServicePostInstance = null;
+ //   private static APIServiceRxjava apiServiceRxjavaInstance = null;
+    private static APIServiceOwghat apiServiceOwghatInstance = null;
+    private static APIServiceValhalla apiServiceValhallaInstance = null;
+
+
+
+    public static ApiClientGlobal getInstance(){
+        if (instance==null)
+            instance=new ApiClientGlobal();
+        return instance;
+    }
+
+    private static <S> S createService(Class<S> serviceClass, String baseURL) {
 
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -23,14 +46,12 @@ public class ApiClientGlobal {
                 .build();
 
 
-
-
         Retrofit.Builder builder = new Retrofit
                 .Builder()
                 .client(client)
                 .baseUrl(baseURL)
+                //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create());
-
 
 
         Retrofit retrofit = builder.build();
@@ -38,12 +59,48 @@ public class ApiClientGlobal {
         return retrofit.create(serviceClass);
     }
 
-    public APIServicePost getClientServicePOST(String serverIP, String port){
-        String baseURL = "http://" + serverIP + ":" + port + "/";
-        APIServicePost apiServicePost = createService(APIServicePost.class,baseURL);
-        return apiServicePost;
+    public APIServiceGet getClientServiceGet(ServerIpModel serverIpModel) {
+        String baseUrl = "http://" + serverIpModel.getServerIp() + ":" + serverIpModel.getPort() + "/";
+        if (apiServiceGetInstance == null)
+            apiServiceGetInstance = createService(APIServiceGet.class, baseUrl);
+
+
+        return apiServiceGetInstance;
     }
 
+
+    public APIServicePost getClientServicePost(ServerIpModel serverIpModel) {
+        String baseUrl = "http://" + serverIpModel.getServerIp() + ":" + serverIpModel.getPort() + "/";
+        if (apiServicePostInstance == null)
+            apiServicePostInstance = createService(APIServicePost.class, baseUrl);
+
+
+        return apiServicePostInstance;
+    }
+
+//    public APIServiceRxjava getApiServiceRxjava(ServerIpModel serverIpModel) {
+//        String baseUrl = "http://" + serverIpModel.getServerIp() + ":" + serverIpModel.getPort() + "/";
+//        if (apiServiceRxjavaInstance == null)
+//            apiServiceRxjavaInstance = createService(APIServiceRxjava.class, baseUrl);
+//        return apiServiceRxjavaInstance;
+//
+//    }
+
+    public APIServiceOwghat getClientServiceOwghat() {
+        String baseUrl = "https://api.keybit.ir/";
+        if (apiServiceOwghatInstance == null)
+            apiServiceOwghatInstance = createService(APIServiceOwghat.class, baseUrl);
+
+
+        return apiServiceOwghatInstance;
+    }
+
+    public APIServiceValhalla getClientServiceValhalla() {
+        String baseUrl = "http://192.168.80.38:8002/";
+        if (apiServiceValhallaInstance == null)
+            apiServiceValhallaInstance = createService(APIServiceValhalla.class, baseUrl);
+        return apiServiceValhallaInstance;
+    }
+
+
 }
-
-

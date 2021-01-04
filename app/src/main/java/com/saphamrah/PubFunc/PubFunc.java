@@ -45,7 +45,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
@@ -78,8 +77,8 @@ import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Shared.UserTypeShared;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoResult;
 
@@ -613,14 +612,47 @@ public class PubFunc
             }
         }
 
-        public ServerIpModel getServerFromShared(Context context)
-        {
+        public ServerIpModel getServerFromShared(Context context) {
             ServerIPShared serverIPShared = new ServerIPShared(context);
-            Log.d("server" , "ip : " + serverIPShared.getString(serverIPShared.IP() , ""));
-            Log.d("server" , "post : " + serverIPShared.getString(serverIPShared.PORT() , ""));
+            Log.d("server", "ip : " + serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+                    , "").substring(0, 4));
+            Log.d("server", "get : " + serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+                    , ""));
             ServerIpModel serverIpModel = new ServerIpModel();
-            serverIpModel.setServerIp(serverIPShared.getString(serverIPShared.IP() , ""));
-            serverIpModel.setPort(serverIPShared.getString(serverIPShared.PORT() , ""));
+            serverIpModel.setServerIp(serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+                    , ""));
+            serverIpModel.setPort(serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+                    , ""));
+            return serverIpModel;
+        }
+
+
+        public ServerIpModel postServerFromShared(Context context) {
+            ServerIPShared serverIPShared = new ServerIPShared(context);
+            Log.d("server", "ip : " + serverIPShared.getString(serverIPShared.IP_POST_REQUEST()
+                    , "").substring(0, 4));
+            Log.d("server", "post : " + serverIPShared.getString(serverIPShared.PORT_POST_REQUEST()
+                    , ""));
+            ServerIpModel serverIpModel = new ServerIpModel();
+            serverIpModel.setServerIp(serverIPShared.getString(serverIPShared.IP_POST_REQUEST()
+                    , ""));
+            serverIpModel.setPort(serverIPShared.getString(serverIPShared.PORT_POST_REQUEST()
+                    , ""));
+            return serverIpModel;
+        }
+
+
+        public ServerIpModel multiServerFromShared(Context context){
+            ServerIPShared serverIPShared = new ServerIPShared(context);
+            Log.d("server", "ip : " + serverIPShared.getString(serverIPShared.IP_MULTI_REQUEST()
+                    , "").substring(0, 4));
+            Log.d("server", "multi : " + serverIPShared.getString(serverIPShared.PORT_MULTI_REQUEST()
+                    , ""));
+            ServerIpModel serverIpModel = new ServerIpModel();
+            serverIpModel.setServerIp(serverIPShared.getString(serverIPShared.IP_MULTI_REQUEST()
+                    , ""));
+            serverIpModel.setPort(serverIPShared.getString(serverIPShared.PORT_MULTI_REQUEST()
+                    , ""));
             return serverIpModel;
         }
     }
@@ -630,8 +662,10 @@ public class PubFunc
     {
         public void callLoginInfoService(final Context context , String serverIP , String port , final GetLoginInfoCallback callback)
         {
-            APIService apiService = ApiClient.getClient(serverIP , port).create(APIService.class);
-            Call<GetLoginInfoResult> call = apiService.getLoginInfo();
+            ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().getServerFromShared(context);
+
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetLoginInfoResult> call = apiServiceGet.getLoginInfo();
             call.enqueue(new Callback<GetLoginInfoResult>()
             {
                 @Override

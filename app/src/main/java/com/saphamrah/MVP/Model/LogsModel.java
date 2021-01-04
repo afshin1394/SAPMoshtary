@@ -4,6 +4,7 @@ import com.saphamrah.BaseMVP.LogsMVP;
 import com.saphamrah.DAO.LogPPCDAO;
 import com.saphamrah.Model.EmailLogPPCModel;
 import com.saphamrah.Model.LogPPCModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.AsyncTaskResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -11,7 +12,8 @@ import com.saphamrah.Shared.EmailLogPPCShared;
 import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServicePost;
-import com.saphamrah.WebService.ApiClient;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.CreateLogPPCResult;
 
 import org.json.JSONArray;
@@ -48,9 +50,14 @@ public class LogsModel implements LogsMVP.ModelOps
     public void sendLogsToServer()
     {
         ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-        String serverPort = serverIPShared.getString(serverIPShared.PORT() , "");
-		String deviceIP = serverIPShared.getString(serverIPShared.DEVICE_IP() , "");																			
+//        String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+// , "");
+//        String serverPort = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+// , "");
+        ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+        String serverIP=serverIpModel.getServerIp();
+        String serverPort=serverIpModel.getPort();
+		String deviceIP = serverIPShared.getString(serverIPShared.DEVICE_IP() , "");
         if (!serverIP.trim().equals("") || !serverPort.trim().equals(""))
         {
             LogPPCDAO logPPCDAO = new LogPPCDAO(mPresenter.getAppContext());
@@ -68,7 +75,7 @@ public class LogsModel implements LogsMVP.ModelOps
                         ccLogs += "," + logPPCModel.getCcLogPPC();
                     }
                 }
-                postLogPPC(serverIP, serverPort, jsonArrayLogs.toString(), ccLogs);
+                postLogPPC(serverIpModel, jsonArrayLogs.toString(), ccLogs);
             }
             else
             {
@@ -81,9 +88,11 @@ public class LogsModel implements LogsMVP.ModelOps
         }
     }
 
-    private void postLogPPC(String serverIP , String serverPort , String jsonArrayStringLogs , final String ccLogs)
+    private void postLogPPC(ServerIpModel serverIpModel , String jsonArrayStringLogs , final String ccLogs)
     {
-        APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+        //APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+        final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+
         Call<CreateLogPPCResult> call = apiServicePost.createLogPPC(jsonArrayStringLogs);
         call.enqueue(new Callback<CreateLogPPCResult>()
         {

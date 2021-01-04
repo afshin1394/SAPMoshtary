@@ -1,30 +1,20 @@
 package com.saphamrah.MVP.Model;
 
-import android.util.Log;
-
 import com.saphamrah.BaseMVP.MainFirstFragmentMVP;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
-import com.saphamrah.DAO.ForoshandehMoshtaryDAO;
-import com.saphamrah.DAO.RptForoshDAO;
-import com.saphamrah.DAO.RptHadafForoshDAO;
-import com.saphamrah.Model.HadafForosh.BaseHadafForoshModel;
-import com.saphamrah.Model.RptForoshModel;
 import com.saphamrah.Model.WeatherDataModel;
 import com.saphamrah.Model.WeatherModel;
 import com.saphamrah.Model.WindModel;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
-import com.saphamrah.R;
 import com.saphamrah.Shared.WeatherShared;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServiceOwghat;
 import com.saphamrah.WebService.APIServiceWeather;
-import com.saphamrah.WebService.ApiClientOwghat;
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.ApiClientWeather;
 import com.saphamrah.WebService.ServiceResponse.OwghatResult;
 import com.saphamrah.WebService.ServiceResponse.WeatherResult;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,7 +41,7 @@ public class MainFirstFragmentModel implements MainFirstFragmentMVP.ModelOps
     public void getOwghat(final String currentTime)
     {
         PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
-        APIServiceOwghat apiService = ApiClientOwghat.getClient().create(APIServiceOwghat.class);
+        APIServiceOwghat apiService = ApiClientGlobal.getInstance().getClientServiceOwghat();
         Call<OwghatResult> call = apiService.getOwghatByLatLong(googleLocationProvider.getLatitude() , googleLocationProvider.getLongitude());
         call.enqueue(new Callback<OwghatResult>() {
             @Override

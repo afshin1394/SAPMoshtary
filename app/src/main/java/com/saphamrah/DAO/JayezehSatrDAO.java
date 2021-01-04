@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.saphamrah.Model.JayezehSatrModel;
@@ -13,8 +12,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllvJayezehSatrResult;
 
 import java.util.ArrayList;
@@ -92,8 +92,8 @@ public class JayezehSatrDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvJayezehSatrResult> call = apiService.getJayezehSatr("2", ccMarkazSazmanForosh, ccJayezehs);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllvJayezehSatrResult> call = apiServiceGet.getJayezehSatr("2", ccMarkazSazmanForosh, ccJayezehs);
             call.enqueue(new Callback<GetAllvJayezehSatrResult>()
             {
                 @Override
@@ -180,8 +180,8 @@ public class JayezehSatrDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvJayezehSatrResult> call = apiService.getAllvJayezehSatr();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetAllvJayezehSatrResult> call = apiServiceGet.getAllvJayezehSatr();
             call.enqueue(new Callback<GetAllvJayezehSatrResult>() {
                 @Override
                 public void onResponse(Call<GetAllvJayezehSatrResult> call, Response<GetAllvJayezehSatrResult> response)

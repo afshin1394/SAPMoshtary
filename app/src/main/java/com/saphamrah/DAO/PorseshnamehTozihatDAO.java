@@ -11,8 +11,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetPorseshnamehTozihatResult;
 
 import java.util.ArrayList;
@@ -66,8 +67,8 @@ public class PorseshnamehTozihatDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetPorseshnamehTozihatResult> call = apiService.getPorseshnamehTozihat();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetPorseshnamehTozihatResult> call = apiServiceGet.getPorseshnamehTozihat();
             call.enqueue(new Callback<GetPorseshnamehTozihatResult>() {
                 @Override
                 public void onResponse(Call<GetPorseshnamehTozihatResult> call, Response<GetPorseshnamehTozihatResult> response)

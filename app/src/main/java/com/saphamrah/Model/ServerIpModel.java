@@ -9,6 +9,7 @@ public class ServerIpModel
     private static final String COLUMN_PortServerIP = "PortServerIP";
     private static final String COLUMN_NameServerIP = "NameServerIP";
     private static final String COLUMN_IsTest = "IsTest";
+    private static final String COLUMN_Server_Type = "ServerType";
 
 
     public static String TableName() {
@@ -29,7 +30,7 @@ public class ServerIpModel
     public static String COLUMN_IsTest() {
         return COLUMN_IsTest;
     }
-
+    public static String COLUMN_Server_Type(){return COLUMN_Server_Type;}
 
 
     private int id;
@@ -37,6 +38,7 @@ public class ServerIpModel
     private String port;
     private String local;
     private int test;
+    private int serverType;
 
     public int getId() {
         return id;
@@ -78,4 +80,11 @@ public class ServerIpModel
         this.test = test;
     }
 
+    public int getServerType() {
+        return serverType;
+    }
+
+    public void setServerType(int serverType) {
+        this.serverType = serverType;
+    }
 }

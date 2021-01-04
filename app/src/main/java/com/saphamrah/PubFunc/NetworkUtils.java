@@ -123,11 +123,11 @@ public class NetworkUtils
     public ServerIpModel getServerFromShared(Context context)
     {
         ServerIPShared serverIPShared = new ServerIPShared(context);
-        Log.d("server" , "ip : " + serverIPShared.getString(serverIPShared.IP() , ""));
-        Log.d("server" , "post : " + serverIPShared.getString(serverIPShared.PORT() , ""));
         ServerIpModel serverIpModel = new ServerIpModel();
-        serverIpModel.setServerIp(serverIPShared.getString(serverIPShared.IP() , ""));
-        serverIpModel.setPort(serverIPShared.getString(serverIPShared.IP() , ""));
+        serverIpModel.setServerIp(serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+ , ""));
+        serverIpModel.setPort(serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+ , ""));
         return serverIpModel;
     }
 

@@ -16,8 +16,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllMoshtaryByccMasirResult;
 import com.saphamrah.WebService.ServiceResponse.GetMoshtaryPakhshResult;
 import com.saphamrah.WebService.ServiceResponse.GetMoshtarysFirstParentPPCResult;
@@ -109,8 +110,8 @@ public class MoshtaryDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllMoshtaryByccMasirResult> call = apiService.getAllMoshtaryByccMasir(ccForoshandeh , ccMasirs , codeMoshtary); //codeMoshtary = -1
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllMoshtaryByccMasirResult> call = apiServiceGet.getAllMoshtaryByccMasir(ccForoshandeh , ccMasirs , codeMoshtary); //codeMoshtary = -1
             call.enqueue(new Callback<GetAllMoshtaryByccMasirResult>() {
                 @Override
                 public void onResponse(Call<GetAllMoshtaryByccMasirResult> call, Response<GetAllMoshtaryByccMasirResult> response)
@@ -193,8 +194,8 @@ public class MoshtaryDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetMoshtarysFirstParentPPCResult> call = apiService.getMoshtaryFirstParentPPC(ccMoshtarys);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetMoshtarysFirstParentPPCResult> call = apiServiceGet.getMoshtaryFirstParentPPC(ccMoshtarys);
             call.enqueue(new Callback<GetMoshtarysFirstParentPPCResult>() {
                 @Override
                 public void onResponse(Call<GetMoshtarysFirstParentPPCResult> call, Response<GetMoshtarysFirstParentPPCResult> response)
@@ -278,8 +279,8 @@ public class MoshtaryDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetMoshtaryPakhshResult> call = apiService.getMoshtaryPakhsh(ccMoshtaryPakhsh);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryPakhsh);
             call.enqueue(new Callback<GetMoshtaryPakhshResult>() {
                 @Override
                 public void onResponse(Call<GetMoshtaryPakhshResult> call, Response<GetMoshtaryPakhshResult> response)

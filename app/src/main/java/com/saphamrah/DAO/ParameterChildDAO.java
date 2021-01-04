@@ -13,8 +13,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetParameterChildResult;
 
 import java.util.ArrayList;
@@ -80,8 +81,8 @@ public class ParameterChildDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetParameterChildResult> call = apiService.getParameterChild(noeTitrSatr , ccMarkazSazmanForosh, ccMarkazAnbar , dateProgram);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetParameterChildResult> call = apiServiceGet.getParameterChild(noeTitrSatr , ccMarkazSazmanForosh, ccMarkazAnbar , dateProgram);
             call.enqueue(new Callback<GetParameterChildResult>() {
                 @Override
                 public void onResponse(Call<GetParameterChildResult> call, Response<GetParameterChildResult> response)

@@ -12,8 +12,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllvTakhfifHajmiSatrResult;
 
 import java.util.ArrayList;
@@ -85,8 +86,8 @@ public class TakhfifHajmiSatrDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvTakhfifHajmiSatrResult> call = apiService.getAllvTakhfifHajmiSatr();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllvTakhfifHajmiSatrResult> call = apiServiceGet.getAllvTakhfifHajmiSatr();
             call.enqueue(new Callback<GetAllvTakhfifHajmiSatrResult>() {
                 @Override
                 public void onResponse(Call<GetAllvTakhfifHajmiSatrResult> call, Response<GetAllvTakhfifHajmiSatrResult> response)
@@ -170,8 +171,8 @@ public class TakhfifHajmiSatrDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetAllvTakhfifHajmiSatrResult> call = apiService.getTakhfifHajmiSatr("2", ccMarkazSazmanForosh, ccTakhfifHajmis);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetAllvTakhfifHajmiSatrResult> call = apiServiceGet.getTakhfifHajmiSatr("2", ccMarkazSazmanForosh, ccTakhfifHajmis);
             call.enqueue(new Callback<GetAllvTakhfifHajmiSatrResult>() {
                 @Override
                 public void onResponse(Call<GetAllvTakhfifHajmiSatrResult> call, Response<GetAllvTakhfifHajmiSatrResult> response)

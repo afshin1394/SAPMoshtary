@@ -11,8 +11,9 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIService;
-import com.saphamrah.WebService.ApiClient;
+import com.saphamrah.WebService.APIServiceGet;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetMoshtaryByRadiusResult;
 
 import java.util.ArrayList;
@@ -97,8 +98,8 @@ public class ListMoshtarianDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetMoshtaryByRadiusResult> call = apiService.getMoshtaryByRadius(radius , latitude , longitude);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetMoshtaryByRadiusResult> call = apiServiceGet.getMoshtaryByRadius(radius , latitude , longitude);
             call.enqueue(new Callback<GetMoshtaryByRadiusResult>() {
                 @Override
                 public void onResponse(Call<GetMoshtaryByRadiusResult> call, Response<GetMoshtaryByRadiusResult> response)
@@ -181,8 +182,8 @@ public class ListMoshtarianDAO
         }
         else
         {
-            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp() , serverIpModel.getPort()).create(APIService.class);
-            Call<GetMoshtaryByRadiusResult> call = apiService.getListMoshtarianByMasir(noe, ccMasir);
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+Call<GetMoshtaryByRadiusResult> call = apiServiceGet.getListMoshtarianByMasir(noe, ccMasir);
             call.enqueue(new Callback<GetMoshtaryByRadiusResult>() {
                 @Override
                 public void onResponse(Call<GetMoshtaryByRadiusResult> call, Response<GetMoshtaryByRadiusResult> response)

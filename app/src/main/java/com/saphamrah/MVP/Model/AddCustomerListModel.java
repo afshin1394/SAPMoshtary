@@ -25,6 +25,7 @@ import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.MoshtaryPhotoPPCModel;
 import com.saphamrah.Model.MoshtaryShomarehHesabModel;
 import com.saphamrah.Model.PolygonForoshSatrModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.AddCustomerShared;
@@ -32,7 +33,8 @@ import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Shared.UserTypeShared;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServicePost;
-import com.saphamrah.WebService.ApiClient;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.CreateAddressResult;
 import com.saphamrah.WebService.ServiceResponse.CreateAfradResult;
 import com.saphamrah.WebService.ServiceResponse.CreateMoshtaryWithJSONResult;
@@ -473,16 +475,23 @@ public class AddCustomerListModel implements AddCustomerListMVP.ModelOps
     {
         saveToFile(jsonAllData, ccMoshtaryOld);
 
-        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-        String serverPort = serverIPShared.getString(serverIPShared.PORT() , "");
+//        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+//        String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+// , "");
+//        String serverPort = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+// , "");
+        ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+        String serverIP=serverIpModel.getServerIp();
+        String serverPort=serverIpModel.getPort();
         if (serverIP.trim().equals("") || serverPort.trim().equals(""))
         {
             mPresenter.onErrorSendToServer(R.string.errorFindServerIP);
         }
         else
         {
-            final APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+            //final APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+            final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+
             Call<CreateMoshtaryWithJSONResult> call = apiServicePost.createMoshtaryWithJSON(jsonAllData);
             call.enqueue(new Callback<CreateMoshtaryWithJSONResult>()
             {
@@ -600,9 +609,15 @@ public class AddCustomerListModel implements AddCustomerListMVP.ModelOps
 
     private void sendMoshtaryAddress(final int ccMoshtary)
     {
-        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-        String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-        String serverPort = serverIPShared.getString(serverIPShared.PORT() , "");
+//        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+//        String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+// , "");
+//        String serverPort = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+// , "");
+
+        ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+        String serverIP=serverIpModel.getServerIp();
+        String serverPort=serverIpModel.getPort();
         MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
         final MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
         if (serverIP.trim().equals("") || serverPort.trim().equals(""))
@@ -616,7 +631,9 @@ public class AddCustomerListModel implements AddCustomerListMVP.ModelOps
             if (moshtaryAddressModels.size() > 0)
             {
                 sendedItemCounter = 0;
-                final APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+                //final APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
+                final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+
                 for (final MoshtaryAddressModel model : moshtaryAddressModels)
                 {
                     String jsonString = model.toJsonString();

@@ -64,6 +64,7 @@ import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.RptForoshModel;
 import com.saphamrah.Model.RptMandehdarModel;
 import com.saphamrah.Model.RptSanadModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
@@ -83,8 +84,8 @@ import com.saphamrah.Valhalla.SourcesToTargetsFailedResult;
 import com.saphamrah.Valhalla.Trip;
 import com.saphamrah.WebService.APIServicePost;
 import com.saphamrah.WebService.APIServiceValhalla;
-import com.saphamrah.WebService.ApiClient;
-import com.saphamrah.WebService.ApiClientValhalla;
+
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.CreateDariaftPardakhtPPCJSONResult;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
 
@@ -165,8 +166,10 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             }
 
             ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-            String serverIP = serverIPShared.getString(serverIPShared.IP() , "");
-            String port = serverIPShared.getString(serverIPShared.PORT() , "");
+            String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+ , "");
+            String port = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+ , "");
             if (serverIP.equals("") || port.equals(""))
             {
                 mPresenter.onCheckServerTime(false, mPresenter.getAppContext().getString(R.string.errorGetDateTimeData));
@@ -715,9 +718,14 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             }
             else
             {
-                ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-                String ip = serverIPShared.getString(serverIPShared.IP() , "");
-                String port = serverIPShared.getString(serverIPShared.PORT() , "");
+//                ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+//                String ip = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+// , "");
+//                String port = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+// , "");
+                ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+                String ip=serverIpModel.getServerIp();
+                String port=serverIpModel.getPort();
                 if (ip.equals("") || port.equals(""))
                 {
                     mPresenter.onError(R.string.errorFindServerIP);
@@ -730,7 +738,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
                     ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
                     int codeNoeVosolVajhNaghd = Integer.parseInt(childParameterDAO.getAllByccChildParameter(String.valueOf(Constants.CC_CHILD_CODE_NOE_VOSOL_VAJH_NAGHD())).get(0).getValue());
                     String currentVersionNumber = new PubFunc().new DeviceInfo().getCurrentVersion(mPresenter.getAppContext());
-                    sendDariaftPardakhtToServer(ip, port, dariaftPardakhtPPCModels, foroshandehMamorPakhshModel, noeMasouliat, darkhastFaktorModel, codeNoeVosolVajhNaghd, currentVersionNumber);
+                    sendDariaftPardakhtToServer(serverIpModel, dariaftPardakhtPPCModels, foroshandehMamorPakhshModel, noeMasouliat, darkhastFaktorModel, codeNoeVosolVajhNaghd, currentVersionNumber);
                 }
             }
         }
@@ -741,11 +749,13 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
     }
 
 
-    private void sendDariaftPardakhtToServer(String ip , String port , final ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, final DarkhastFaktorModel darkhastFaktorModel, int codeNoeVosolVajhNaghd, String currentVersionNumber)
+    private void sendDariaftPardakhtToServer(ServerIpModel serverIpModel , final ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, final DarkhastFaktorModel darkhastFaktorModel, int codeNoeVosolVajhNaghd, String currentVersionNumber)
     {
         CodeNoeVosolDAO codeNoeVosolDAO = new CodeNoeVosolDAO(mPresenter.getAppContext());
         final DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(mPresenter.getAppContext());
-        APIServicePost apiServicePost = ApiClient.getClient(ip , port).create(APIServicePost.class);
+        //APIServicePost apiServicePost = ApiClient.getClient(ip , port).create(APIServicePost.class);
+        final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+
 
         String ccDpdfs = "-1";
         JSONArray jsonArrayDariaftPardakht = new JSONArray();
@@ -904,8 +914,8 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             String routingServerIP = routingServerShared.getString(RoutingServerShared.IP , "");
             if (routingServerIP.length() > 0)
             {
-                APIServiceValhalla apiService = ApiClientValhalla.getClient(routingServerIP).create(APIServiceValhalla.class);
-                Call<Object> call = apiService.getOptimizedRoute(jsonData);
+                APIServiceValhalla apiServiceValhalla = ApiClientGlobal.getInstance().getClientServiceValhalla();
+                Call<Object> call = apiServiceValhalla.getOptimizedRoute(jsonData);
                 call.enqueue(new Callback<Object>()
                 {
                     @Override
@@ -1729,8 +1739,8 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             String routingServerIP = new RoutingServerShared(mPresenter.getAppContext()).getString(RoutingServerShared.IP , "");
             if (routingServerIP.length() > 0)
             {
-                APIServiceValhalla apiService = ApiClientValhalla.getClient(routingServerIP).create(APIServiceValhalla.class);
-                Call<Object> call = apiService.getSourcesToTargets(jsonObjectAllData.toString(), requestId);
+                APIServiceValhalla apiServiceValhalla = ApiClientGlobal.getInstance().getClientServiceValhalla();
+                Call<Object> call = apiServiceValhalla.getSourcesToTargets(jsonObjectAllData.toString(), requestId);
                 call.enqueue(new Callback<Object>()
                 {
                     @Override

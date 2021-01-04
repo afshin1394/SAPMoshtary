@@ -11,9 +11,24 @@ public class ServerIPShared
 
     private SharedPreferences sharedPreferences;
     private Context context;
-    private final String IP = "NoeoibNw";
-    private final String PORT = "vhIjVtPwt";
+
+    //IP && PORT GET REQUESTS
+    private final String IP_GET = "IP_GET";
+    private final String PORT_GET = "PORT_GET";
+
+    //IP && PORT POST REQUESTS
+    private final String IP_POST = "IP_POST";
+    private final String PORT_POST = "PORT_POST";
+
+
+    //IP && PORT MULTI REQUESTS
+    private final String IP_MULTI = "IP_MULTI";
+    private final String PORT_MULTI = "PORT_MULTI";
+
     private final String DEVICE_IP = "6cBqwh1YxUH0O33l";
+    private final String SERVER_TYPE ="serverType";
+
+
 
     public ServerIPShared(Context context)
     {
@@ -108,9 +123,14 @@ public class ServerIPShared
         try
         {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.remove(IP);
-            editor.remove(PORT);
-			editor.remove(DEVICE_IP);						 
+            editor.remove(IP_GET);
+            editor.remove(IP_POST);
+            editor.remove(IP_MULTI);
+            editor.remove(PORT_GET);
+            editor.remove(PORT_POST);
+            editor.remove(PORT_MULTI);
+            editor.remove(DEVICE_IP);
+            editor.remove(SERVER_TYPE);
             editor.apply();
         }
         catch (Exception exception)
@@ -122,15 +142,34 @@ public class ServerIPShared
     }
 
 
-    public String IP() {
-        return IP;
+
+
+    public String IP_GET_REQUEST() {
+        return IP_GET;
     }
 
-    public String PORT() {
-        return PORT;
+    public String PORT_GET_REQUEST() {
+        return PORT_GET;
     }
 	
     public String DEVICE_IP() {
         return DEVICE_IP;
+    }
+
+
+    public String IP_POST_REQUEST() {
+        return IP_POST;
+    }
+
+    public String PORT_POST_REQUEST() {
+        return PORT_POST;
+    }
+
+    public String IP_MULTI_REQUEST() {
+        return IP_MULTI;
+    }
+
+    public String PORT_MULTI_REQUEST() {
+        return PORT_MULTI;
     }
 }
