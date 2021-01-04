@@ -333,7 +333,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:orientation="vertical" >
@@ -341,7 +341,7 @@
                     android:id="@+id/lblAghlamFaktor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center|center_horizontal|center_vertical"
+                    android:gravity="center"
                     android:textSize="@dimen/FontSize36"
                     android:textStyle="bold"
                     android:text="اقلام درخواست"
@@ -353,44 +353,19 @@
                     android:layout_height="match_parent"
                     android:scrollbars="vertical">
                 </androidx.recyclerview.widget.RecyclerView>
-                <!--                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/layKalaPartTwo"
-                    android:orientation="vertical"
-                    android:layout_below="@+id/layKalaPartOne">
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBlack"/>
-                    <include
-                        layout="@layout/activity_rpt_faktorprint_listview_kala_footer_two"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorBlack"/>
-                </LinearLayout>-->
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/lyTakhfif"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:layout_marginTop="15dp"
                 android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical" >
                     <TextView
                         android:id="@+id/lblTakhfif"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center|center_horizontal|center_vertical"
+                        android:gravity="center"
                         android:text="تخفیفات فروش"
                         android:textSize="@dimen/FontSize36"
                         android:textStyle="bold"
@@ -402,27 +377,20 @@
                         android:layout_height="match_parent"
                         android:scrollbars="vertical">
                     </androidx.recyclerview.widget.RecyclerView>
-                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/lyMarjoee"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:layout_marginTop="15dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical" >
+                android:orientation="vertical">
                     <TextView
                         android:id="@+id/lblAghlamMarjoee"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center|center_horizontal|center_vertical"
+                        android:gravity="center"
                         android:text="@string/marjoee"
                         android:textSize="@dimen/FontSize36"
                         android:textStyle="bold"
@@ -434,49 +402,42 @@
                         android:layout_height="match_parent"
                         android:scrollbars="vertical">
                     </androidx.recyclerview.widget.RecyclerView>
-                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/lyJayezeh"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:layout_marginTop="15dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical" >
+                android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/lblAghlamJayezeh"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center|center_horizontal|center_vertical"
+                        android:gravity="center"
                         android:text="جایزه"
                         android:textSize="@dimen/FontSize36"
                         android:textStyle="bold"
                         android:textColor="@color/colorWhite"
                         android:background="@drawable/table_content_cell_bg_blue"/>
-                </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center|center_vertical|center_horizontal"
-                    android:orientation="vertical"
-                    android:background="@drawable/table_content_cell_bg_black">
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/lstKalaJayezeh"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scrollbars="vertical">
                     </androidx.recyclerview.widget.RecyclerView>
-                </LinearLayout>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_marginTop="15dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -754,6 +715,7 @@
                     android:background="@color/colorBlack"
                     android:layout_marginBottom="5dp"/>
             </LinearLayout>
+        </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -855,6 +817,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
+                        android:text="تلفن مرکز"
                         android:textSize="@dimen/FontSize28"
                         android:textStyle="bold"
                         android:textColor="@color/colorBlack"/>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layoutDirection="rtl"
@@ -12,10 +13,7 @@
         android:layout_height="match_parent"
         android:id="@+id/layBorderRight"
         android:orientation="vertical"
-        android:background="@color/colorBlack"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        android:background="@color/colorBlack">
     </LinearLayout>
 
     <LinearLayout
@@ -23,10 +21,7 @@
         android:layout_height="match_parent"
         android:id="@+id/layBorderLeft"
         android:orientation="vertical"
-        android:background="@color/colorBlack"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent">
+        android:background="@color/colorBlack">
     </LinearLayout>
 
     <LinearLayout
@@ -34,73 +29,68 @@
         android:layout_height="1dp"
         android:id="@+id/layBorderTop"
         android:background="@color/colorBlack"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent">
+        android:orientation="horizontal">
     </LinearLayout>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="4"
         android:id="@+id/lblNameKala"
         android:textColor="@color/colorBlack"
         android:textSize="@dimen/FontSize30"
         android:gravity="center"
-        android:background="@drawable/table_content_cell_bg"
-        app:layout_constraintTop_toBottomOf="@id/layBorderTop"
-        app:layout_constraintRight_toLeftOf="@id/layBorderRight"
-        app:layout_constraintLeft_toRightOf="@id/layBorderLeft"/>
+        android:background="@drawable/table_content_cell_bg"/>
+</LinearLayout>
 
+<LinearLayout
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="horizontal">
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        app:layout_constraintHorizontal_weight="1"
+        android:layout_weight="1"
         android:id="@+id/lblShomarehBach"
         android:textColor="@color/colorBlack"
         android:textSize="@dimen/FontSize30"
         android:gravity="center"
-        android:background="@drawable/table_content_cell_bg"
-        app:layout_constraintTop_toBottomOf="@id/lblNameKala"
-        app:layout_constraintRight_toLeftOf="@id/layBorderRight"
-        app:layout_constraintLeft_toRightOf="@id/lblTedad"/>
+        android:background="@drawable/table_content_cell_bg"/>
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        app:layout_constraintHorizontal_weight="1"
+        android:layout_weight="1"
         android:id="@+id/lblTedad"
         android:textColor="@color/colorBlack"
         android:textSize="@dimen/FontSize30"
         android:gravity="center"
-        android:background="@drawable/table_content_cell_bg"
-        app:layout_constraintTop_toBottomOf="@id/lblNameKala"
-        app:layout_constraintRight_toLeftOf="@id/lblShomarehBach"
-        app:layout_constraintLeft_toRightOf="@id/lblFee"/>
+        android:background="@drawable/table_content_cell_bg"/>
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        app:layout_constraintHorizontal_weight="1"
+        android:layout_weight="1"
         android:id="@+id/lblFee"
         android:textColor="@color/colorBlack"
         android:textSize="@dimen/FontSize30"
         android:gravity="center"
-        android:background="@drawable/table_content_cell_bg"
-        app:layout_constraintTop_toBottomOf="@id/lblNameKala"
-        app:layout_constraintRight_toLeftOf="@id/lblTedad"
-        app:layout_constraintLeft_toRightOf="@id/layBorderLeft"/>
-
+        android:background="@drawable/table_content_cell_bg"/>
+</LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:id="@+id/layBorderBottom"
         android:background="@color/colorBlack"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/lblFee"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent">
+        android:orientation="horizontal">
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
