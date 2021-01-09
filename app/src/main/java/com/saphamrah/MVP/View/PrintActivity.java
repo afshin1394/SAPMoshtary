@@ -247,7 +247,7 @@ public class PrintActivity extends AppCompatActivity
         }
 
         //--------------Noe Masouliat---------------------------
-        NoeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(PrintActivity.this).getForoshandehMamorPakhsh());
+        NoeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(PrintActivity.this).getIsSelect());
 
         setPrinter();
         try
@@ -377,7 +377,7 @@ public class PrintActivity extends AppCompatActivity
             }
 
             //---------------------------ForoshandehMamorPakhsh----------------------------
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModelMamorPakhsh = foroshandehmamorpakhshDAO.getForoshandehMamorPakhsh();
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModelMamorPakhsh = foroshandehmamorpakhshDAO.getIsSelect();
             if (foroshandehMamorPakhshModelMamorPakhsh != null)
             {
                 txtTelForoshandeh.setText(foroshandehMamorPakhshModelMamorPakhsh.getTelephoneForoshandehMamorPakhsh());

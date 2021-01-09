@@ -414,7 +414,7 @@ public class EditCustomerModel implements EditCustomerMVP.ModelOps {
         try {
 
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
 
 
             jsonObject.put("ccForoshandeh", foroshandehMamorPakhshModel.getCcForoshandeh());

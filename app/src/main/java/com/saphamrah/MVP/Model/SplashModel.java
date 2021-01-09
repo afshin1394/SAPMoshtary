@@ -12,23 +12,31 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.saphamrah.BaseMVP.SplashMVP;
 import com.saphamrah.DAO.EmailLogPPCDAO;
 import com.saphamrah.DAO.ForoshandehAmoozeshiDeviceNumberDAO;
+import com.saphamrah.DAO.ForoshandehDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.LogPPCDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.DAO.ServerIPDAO;
+import com.saphamrah.MVP.View.SplashActivity;
 import com.saphamrah.Model.EmailLogPPCModel;
 import com.saphamrah.Model.ForoshandehAmoozeshiModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
+import com.saphamrah.Model.ForoshandehModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.AsyncFindServerTask;
 import com.saphamrah.Network.AsyncTaskFindWebServices;
 import com.saphamrah.Network.AsyncTaskResponse;
+import com.saphamrah.Network.RxNetwork.RxCallback;
+import com.saphamrah.Network.RxNetwork.RxHttpRequest;
+import com.saphamrah.Network.RxNetwork.RxResponseHandler;
+import com.saphamrah.PubFunc.Authentication;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.EmailLogPPCShared;
+import com.saphamrah.Shared.GetProgramShared;
 import com.saphamrah.Shared.RoutingServerShared;
 import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Shared.UserTypeShared;
@@ -36,6 +44,8 @@ import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.RxService.APIServiceRxjava;
+import com.saphamrah.WebService.RxService.Response.DataResponse.CodeMelyResponse;
 import com.saphamrah.WebService.ServiceResponse.GetForoshandehAmoozeshiResult;
 import com.saphamrah.WebService.ServiceResponse.GetForoshandehMamorPakhshResult;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
@@ -46,6 +56,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.disposables.Disposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -441,7 +452,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
                         if (response.isSuccessful()) {
                             GetVersionResult result = response.body();
                             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-                            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+                            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
                             int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
                             RoutingServerShared routingServerShared = new RoutingServerShared(mPresenter.getAppContext());
                             if (result != null && result.getURLOSRM() != null) {
@@ -479,6 +490,12 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
         mPresenter.onGetInvalidPackages(invalidPackageNames);
     }
 
+
+    /**
+     * define using IMEI
+     * {@test 1 foroshandehAmoozeshi}
+     * {@test 0 foroshandehAsli}
+     */
 
     @Override
     public void getForoshandehAmoozeshi(ServerIpModel serverIpModel) {
@@ -541,6 +558,10 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
     }
 
 
+    /**
+     * now we get the info of foroshandeh mamoor pakhsh
+     **/
+
     @Override
     public void getForoshandehMamorPakhsh() {
         PubFunc.DeviceInfo deviceInfo = new PubFunc().new DeviceInfo();
@@ -576,12 +597,19 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
                                 if (listForoshandehMamorPakhsh.size() > 0) {
                                     ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
                                     foroshandehMamorPakhshDAO.deleteAll();
-                                    ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = listForoshandehMamorPakhsh.get(0);
-                                    foroshandehMamorPakhshModel.setExtraPropIsSelect(0);
-                                    foroshandehMamorPakhshDAO.insert(foroshandehMamorPakhshModel);
+//                                    ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = listForoshandehMamorPakhsh.get(0);
+//                                    foroshandehMamorPakhshModel.setExtraPropIsSelect(0);
+//                                    foroshandehMamorPakhshDAO.insert(foroshandehMamorPakhshModel);
+                                    foroshandehMamorPakhshDAO.insertGroup(listForoshandehMamorPakhsh);
+                                    GetProgramShared getProgramShared = new GetProgramShared(mPresenter.getAppContext());
+                                    int selectCcforoshandeh = Integer.valueOf(getProgramShared.getString(getProgramShared.SELECT_FOROSHANDEH() , "0"));
+                                    if(selectCcforoshandeh!=0 && foroshandehMamorPakhshDAO.getByccForoshandeh(selectCcforoshandeh)!=null)
+                                        foroshandehMamorPakhshDAO.updateIsSelect(selectCcforoshandeh);
+                                    else
+                                        foroshandehMamorPakhshDAO.updateIsSelect(foroshandehMamorPakhshDAO.getOne().getCcForoshandeh());
                                     mPresenter.onGetForoshandehMamorPakhsh(true, false);
                                 } else {
-                                    mPresenter.onGetEmptyForoshandehMamorPakhsh();
+                                    mPresenter.onGetEmptyForoshandehMamorPakhsh(usingIMEI);
                                 }
                             } catch (Exception exception) {
                                 setLogToDB(exception.getMessage(), SplashModel.class.getSimpleName(), "", "getForoshandehMamorPakhsh", "onResponse");
@@ -690,4 +718,117 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
 
     }
 
+
+    @Override
+    public void checkAuthentication() {
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            boolean authFileExist = Authentication.getInstance().checkIfFileExists();
+            Log.i("checkAuthentication", "checkAuthentication: " + authFileExist);
+            if (authFileExist) {
+                String identityCodeWithHashKey = Authentication.getInstance().getIdentityCodeWithHashKey();
+                Log.i("checkAuthentication", "checkAuthentication, getHashKey:" + identityCodeWithHashKey.isEmpty());
+                if (identityCodeWithHashKey.isEmpty()) {
+                    Log.i("checkAuthentication", "checkAuthentication, not empty :" + identityCodeWithHashKey);
+                    mPresenter.onGetForoshandehMamorPakhsh(false, true);
+                } else {
+                    Log.i("checkAuthentication", "checkAuthentication, done :" + identityCodeWithHashKey);
+                    getForoshandehAmoozeshi(serverIpModel);
+                }
+
+            } else {
+                mPresenter.onStartAuthenticationProcess();
+            }
+        } else {
+            getForoshandehAmoozeshi(serverIpModel);
+        }
+    }
+
+    @Override
+    public void authenticateUser(String identityCode) {
+
+        fetchUserHashKey(identityCode, new RxResponseHandler() {
+
+            @Override
+            public void onStart(Disposable disposable) {
+                super.onStart(disposable);
+                mPresenter.startLoading();
+            }
+
+
+            @Override
+            public void onSuccess(ArrayList response) {
+                mPresenter.finishLoading();
+                String hashKey = response.toString();
+                Log.i("fetchUserHashKey", "onSuccess: " + hashKey + "+" + identityCode);
+                Authentication.getInstance().encrypt(identityCode, hashKey);
+                checkAuthentication();
+            }
+
+            @Override
+            public void onFailed(String message, String type) {
+                mPresenter.finishLoading();
+                mPresenter.onGetInvalidIdentityCode(message,type);
+
+            }
+
+            @Override
+            public void onComplete() {
+                super.onComplete();
+
+            }
+        });
+
+
+    }
+
+    private void fetchUserHashKey(String identityCode, RxResponseHandler rxResponseHandler) {
+
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        Log.i("fetchUserHashKey", "fetchUserHashKey: " + serverIpModel.getPort() + " " + serverIpModel.getServerIp());
+        APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
+        RxHttpRequest.getInstance().execute(apiServiceRxjava.checkAfrad(identityCode), SplashActivity.class.getSimpleName(), SplashModel.class.getSimpleName(), "authenticateUser", new RxCallback<CodeMelyResponse>() {
+            @Override
+            public void onStart(Disposable disposable) {
+                rxResponseHandler.onStart(disposable);
+            }
+
+            @Override
+            public void onSuccess(CodeMelyResponse response) {
+                Log.i("fetchUserHashKey", "onSuccess: " + response.getMessage());
+                if (response != null) {
+                    if (response.getMessage() != null) {
+                        switch (response.getMessage()) {
+                            /**INVALID_IDENTITY_CODE**/
+                            case "-1":
+                                onError(mPresenter.getAppContext().getString(R.string.invalidIdentityCodeLength), "INVALID_IDENTITY_CODE_LENGTH");
+
+                                break;
+                            /**INVALID_IDENTITY_CODE_LENGTH**/
+                            case "-2":
+                                onError(mPresenter.getAppContext().getString(R.string.invalidIdentityCode), "INVALID_IDENTITY_CODE");
+
+                                break;
+                            /**VALID_IDENTITY_CODE**/
+                            case "1":
+                                ArrayList hashCode = new ArrayList();
+                                hashCode.add(response.getHashCode());
+                                rxResponseHandler.onSuccess(hashCode);
+                                break;
+
+                        }
+                    } else {
+                        onError(mPresenter.getAppContext().getString(R.string.invalidIdentityCodeLength), "INVALID_IDENTITY_CODE_LENGTH");
+                    }
+                }
+
+            }
+
+            @Override
+            public void onError(String message, String type) {
+                rxResponseHandler.onFailed(message, type);
+            }
+        });
+    }
 }
+

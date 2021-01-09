@@ -18,6 +18,7 @@ import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetForoshandehMamorPakhshResult;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -262,6 +263,39 @@ public class ForoshandehMamorPakhshDAO
             return false;
         }
     }
+    public boolean insertGroup(List<ForoshandehMamorPakhshModel> foroshandehMamorPakhshModels)
+    {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try
+        {
+            db.beginTransaction();
+            for (ForoshandehMamorPakhshModel foroshandehMamorPakhshModel : foroshandehMamorPakhshModels)
+            {
+                ContentValues contentValues = modelToContentValue(foroshandehMamorPakhshModel);
+                db.insertOrThrow(ForoshandehMamorPakhshModel.TableName() , null , contentValues);
+            }
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            if (db.inTransaction())
+            {
+                db.endTransaction();
+            }
+            if (db.isOpen())
+            {
+                db.close();
+            }
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorGroupInsert , ForoshandehMamorPakhshModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, ForoshandehMamorPakhshDAO.class.getSimpleName() , "" , "insertGroup" , "");
+            return false;
+        }
+    }
 
     public ArrayList<ForoshandehMamorPakhshModel> getAll()
     {
@@ -329,32 +363,32 @@ public class ForoshandehMamorPakhshDAO
         }
     }
 
-    public ForoshandehMamorPakhshModel getForoshandehMamorPakhsh()
-    {
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = null;
-        String query = "select * from " + ForoshandehMamorPakhshModel.TableName() + " limit 1";
-        try
-        {
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.rawQuery(query , null);
-            if (cursor != null)
-            {
-                if (cursor.getCount() > 0)
-                {
-                    foroshandehMamorPakhshModel = cursorToModel(cursor).get(0);
-                }
-                cursor.close();
-            }
-            db.close();
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace();
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), exception.toString(), "ForoshandehMamorPakhshDAO" , "" , "getForoshandehMamorPakhsh" , "");
-        }
-        return foroshandehMamorPakhshModel;
-    }
+//    public ForoshandehMamorPakhshModel getForoshandehMamorPakhsh()
+//    {
+//        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = null;
+//        String query = "select * from " + ForoshandehMamorPakhshModel.TableName() + " limit 1";
+//        try
+//        {
+//            SQLiteDatabase db = dbHelper.getReadableDatabase();
+//            Cursor cursor = db.rawQuery(query , null);
+//            if (cursor != null)
+//            {
+//                if (cursor.getCount() > 0)
+//                {
+//                    foroshandehMamorPakhshModel = cursorToModel(cursor).get(0);
+//                }
+//                cursor.close();
+//            }
+//            db.close();
+//        }
+//        catch (Exception exception)
+//        {
+//            exception.printStackTrace();
+//            PubFunc.Logger logger = new PubFunc().new Logger();
+//            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), exception.toString(), "ForoshandehMamorPakhshDAO" , "" , "getForoshandehMamorPakhsh" , "");
+//        }
+//        return foroshandehMamorPakhshModel;
+//    }
 
     public ForoshandehMamorPakhshModel getOne()
     {
@@ -407,21 +441,18 @@ public class ForoshandehMamorPakhshDAO
         return foroshandehMamorPakhshModel;
     }
 
-    /*public int getNoeForoshandehMamorPakhsh()
+    public ForoshandehMamorPakhshModel getIsSelect()
     {
-        int noeForoshandehMamorPakhsh = -1;
-        //String query = "select " + COLUMN_NoeForoshandehMamorPakhsh + " from " + ForoshandehMamorPakhshModel.TableName() + " limit 1";
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = null;
+        String query = "select * from " + ForoshandehMamorPakhshModel.TableName() + " where " + ForoshandehMamorPakhshModel.COLUMN_ExtraProp_IsSelect() + " = 1 " ;
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            //Cursor cursor = db.rawQuery(query , null);
-            Cursor cursor = db.query(ForoshandehMamorPakhshModel.TableName(),allColumns(),null,null,null,null,null,"1");
+            Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
-                cursor.moveToFirst();
-                noeForoshandehMamorPakhsh = cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_NoeForoshandehMamorPakhsh()));
+                foroshandehMamorPakhshModel = cursorToModel(cursor).get(0);
                 cursor.close();
-                return noeForoshandehMamorPakhsh;
             }
             db.close();
         }
@@ -429,10 +460,12 @@ public class ForoshandehMamorPakhshDAO
         {
             exception.printStackTrace();
             PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), exception.toString(), "ForoshandehMamorPakhshDAO" , "" , "getNoeForoshandehMamorPakhsh" , "");
+            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), exception.toString(), "ForoshandehMamorPakhshDAO" , "" , "getByccForoshandeh" , "");
         }
-        return noeForoshandehMamorPakhsh;
-    }*/
+        return foroshandehMamorPakhshModel;
+    }
+
+
 
 
     public void updateCanSetFaktorKharejAzMahal(int ccForoshandeh)
@@ -442,6 +475,24 @@ public class ForoshandehMamorPakhshDAO
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(ForoshandehMamorPakhshModel.COLUMN_CanSetFaktorKharejAzMahal(), 1);
+            db.update(ForoshandehMamorPakhshModel.TableName(), values, ForoshandehMamorPakhshModel.COLUMN_ccForoshandeh() + " = " + ccForoshandeh, null);
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), exception.toString(), "ForoshandehMamorPakhshDAO" , "" , "updateCanSetFaktorKharejAzMahal" , "");
+        }
+    }
+
+    public void updateIsSelect(int ccForoshandeh)
+    {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(ForoshandehMamorPakhshModel.COLUMN_ExtraProp_IsSelect(), 1);
             db.update(ForoshandehMamorPakhshModel.TableName(), values, ForoshandehMamorPakhshModel.COLUMN_ccForoshandeh() + " = " + ccForoshandeh, null);
             db.close();
         }

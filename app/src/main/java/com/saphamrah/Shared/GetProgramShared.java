@@ -14,6 +14,8 @@ public class GetProgramShared
     private final String PERSIAN_DATE_OF_GET_PROGRAM = "QBqwFB83rQyr";
     private final String GREGORIAN_DATE_OF_GET_PROGRAM = "kOPQzDujFyfs";
     private final String GREGORIAN_DATE_TIME_OF_GET_CONFIG = "J6WTpzw9JX"; // تاریخ و ساعت آخرین دریافت تنظیمات
+    private final String SELECT_FOROSHANDEH = "J6WTpzdfd"; // فروشنده انتخاب شده جهت دریافت برنامه
+
 
     public GetProgramShared(Context context)
     {
@@ -82,21 +84,8 @@ public class GetProgramShared
     }
 
 
-    public void removeDateOfGetConfig()
-    {
-        try
-        {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.remove(GREGORIAN_DATE_TIME_OF_GET_CONFIG);
-            editor.apply();
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace();
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), exception.toString(), "GetProgramShared", "", "removeAll", "");
-        }
-    }
+
+
 
 
     public String PERSIAN_DATE_OF_GET_PROGRAM() {
@@ -107,6 +96,9 @@ public class GetProgramShared
     }
     public String GREGORIAN_DATE_TIME_OF_GET_CONFIG() {
         return GREGORIAN_DATE_TIME_OF_GET_CONFIG;
+    }
+    public String SELECT_FOROSHANDEH() {
+        return SELECT_FOROSHANDEH;
     }
 
 

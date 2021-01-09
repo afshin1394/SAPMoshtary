@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.ForoshandehModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
@@ -306,6 +307,33 @@ Call<GetAllvForoshandehByccForoshandehResult> call = apiServiceGet.getAllForosha
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "ForoshandehDAO" , "" , "getAll" , "");
         }
         return foroshandehModels;
+    }
+
+    public ForoshandehModel getOne()
+    {
+        ForoshandehModel foroshandehModel = null;
+        String query = "select * from " + ForoshandehModel.TableName() + " limit 1";
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    foroshandehModel = cursorToModel(cursor).get(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), exception.toString(), "ForoshandehDAO" , "" , "getOne" , "");
+        }
+        return foroshandehModel;
     }
 
     public ArrayList<String> getDistinctccForoshandeh()

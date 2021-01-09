@@ -51,7 +51,7 @@ public class MarjoeeKalaModel implements MarjoeeKalaMVP.ModelOps
     public void getForoshandehMamorPakhshInfo()
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         if (foroshandehMamorPakhshModel != null)
         {
             int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
@@ -187,7 +187,7 @@ public class MarjoeeKalaModel implements MarjoeeKalaMVP.ModelOps
             MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
             MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
 
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             //ccAfradForoshandeh = foroshandehMamorPakhshModel.getCcAfrad();
             ElamMarjoeeSatrPPCDAO elammarjoeesatrDAO = new ElamMarjoeeSatrPPCDAO(mPresenter.getAppContext());
             MablaghKolMarjoeeMoshtary = elammarjoeesatrDAO.getSumMablaghMarjoeeByccDarkhastFaktor(ccDarkhastFaktor);

@@ -1,10 +1,12 @@
 package com.saphamrah.WebService;
 
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.APIServiceOwghat;
 import com.saphamrah.WebService.APIServicePost;
 import com.saphamrah.WebService.APIServiceValhalla;
+import com.saphamrah.WebService.RxService.APIServiceRxjava;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,7 +23,7 @@ public class ApiClientGlobal {
 
     private static APIServiceGet apiServiceGetInstance = null;
     private static APIServicePost apiServicePostInstance = null;
- //   private static APIServiceRxjava apiServiceRxjavaInstance = null;
+    private static APIServiceRxjava apiServiceRxjavaInstance = null;
     private static APIServiceOwghat apiServiceOwghatInstance = null;
     private static APIServiceValhalla apiServiceValhallaInstance = null;
 
@@ -50,7 +52,7 @@ public class ApiClientGlobal {
                 .Builder()
                 .client(client)
                 .baseUrl(baseURL)
-                //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create());
 
 
@@ -78,13 +80,13 @@ public class ApiClientGlobal {
         return apiServicePostInstance;
     }
 
-//    public APIServiceRxjava getApiServiceRxjava(ServerIpModel serverIpModel) {
-//        String baseUrl = "http://" + serverIpModel.getServerIp() + ":" + serverIpModel.getPort() + "/";
-//        if (apiServiceRxjavaInstance == null)
-//            apiServiceRxjavaInstance = createService(APIServiceRxjava.class, baseUrl);
-//        return apiServiceRxjavaInstance;
-//
-//    }
+    public APIServiceRxjava getApiServiceRxjava(ServerIpModel serverIpModel) {
+        String baseUrl = "http://" + serverIpModel.getServerIp() + ":" + serverIpModel.getPort() + "/";
+        if (apiServiceRxjavaInstance == null)
+            apiServiceRxjavaInstance = createService(APIServiceRxjava.class, baseUrl);
+        return apiServiceRxjavaInstance;
+
+    }
 
     public APIServiceOwghat getClientServiceOwghat() {
         String baseUrl = "https://api.keybit.ir/";

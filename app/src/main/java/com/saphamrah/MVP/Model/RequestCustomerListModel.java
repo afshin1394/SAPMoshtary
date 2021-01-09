@@ -295,7 +295,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
     public void updateEtebarMoshtary(final MoshtaryModel moshtaryModel)
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         Log.d("updateEtebarMoshtary","moshtaryModel: " + moshtaryModel);
         getMoshtaryEtebarSazmanForosh(moshtaryModel, foroshandehMamorPakhshModel, noeMasouliat);
@@ -372,7 +372,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             String getEtebarForoshandehOnline = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GET_ETEBAR_FOROSHANDEH_ONLINE);
             if (getEtebarForoshandehOnline != null && getEtebarForoshandehOnline.trim().equals("1"))
             {
-                final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getForoshandehMamorPakhsh();
+                final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
                 Log.d("updateEtebarForoshandeh","foroshandehMamorPakhshModel:" + foroshandehMamorPakhshModel.toString());
                 if (foroshandehMamorPakhshModel != null)
                 {
@@ -553,7 +553,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
 
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(weakReferenceContext.get());
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
             boolean isMojazForDarkhast = foroshandehMamorPakhshModel.getIsMojazForSabtDarkhast() == 1;
             boolean isEtebarCheckBargashty = true;
@@ -1120,7 +1120,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             String getEtebarForoshandehOnline = new ParameterChildDAO(weakReferenceContext.get()).getValueByccChildParameter(Constants.CC_CHILD_GET_ETEBAR_FOROSHANDEH_ONLINE);
             if (getEtebarForoshandehOnline != null && getEtebarForoshandehOnline.trim().equals("1"))
             {
-                final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(weakReferenceContext.get()).getForoshandehMamorPakhsh();
+                final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(weakReferenceContext.get()).getIsSelect();
                 Log.d("updateEtebarForoshandeh","foroshandehMamorPakhshModel:" + foroshandehMamorPakhshModel.toString());
                 if (foroshandehMamorPakhshModel != null)
                 {
@@ -1173,7 +1173,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
         private void updateEtebarMoshtary(final MoshtaryModel moshtaryModel)
         {
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(weakReferenceContext.get());
-            final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+            final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             final int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
 
 
@@ -1345,7 +1345,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 Date minTarikhSanadBargashty = null;
                 Date tarikh = new Date();
                 ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(weakReferenceContext.get());
-                ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+                ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
                 SelectFaktorShared shared = new SelectFaktorShared(weakReferenceContext.get());
 
                 shared.removeAll();

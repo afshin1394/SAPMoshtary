@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements MainMVP.RequiredV
         ccAfrad = 0;
         ccMasir = 0;
 
-        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(this).getOne());
+        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(this).getIsSelect());
 
         customAlertDialog = new CustomAlertDialog(MainActivity.this);
         slidingRootNav = new SlidingRootNavBuilder(this)

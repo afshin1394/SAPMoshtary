@@ -39,7 +39,7 @@ public class RptFaktorMandehDarModel implements RptFaktorMandehDarMVP.ModelOps
     public void updateListMandehDar()
     {
         final RptMandehdarDAO rptMandehdarDAO = new RptMandehdarDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
 
         final Handler handler = new Handler(new Handler.Callback() {
             @Override

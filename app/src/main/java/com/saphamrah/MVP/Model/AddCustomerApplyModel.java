@@ -544,7 +544,7 @@ public class AddCustomerApplyModel implements AddCustomerApplyMVP.ModelOps
     private ForoshandehMamorPakhshModel getForoshandehMamorPakhsh()
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        return foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+        return foroshandehMamorPakhshDAO.getIsSelect();
     }
 
     private int getOlaviatMoshtary(int ccPorseshnameh)

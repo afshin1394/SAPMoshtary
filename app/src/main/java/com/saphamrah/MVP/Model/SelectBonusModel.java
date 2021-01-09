@@ -108,7 +108,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor() , -1);
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        int FinalCCAfrad = foroshandehMamorPakhshDAO.getOne().getCcAfrad();
+        int FinalCCAfrad = foroshandehMamorPakhshDAO.getIsSelect().getCcAfrad();
         Log.d("bonus" , "takhfifNaghdi : " + insertTakhfifNaghdi);
         Log.d("bonus" , "ccDarkhastFaktor : " + ccDarkhastFaktor);
         Log.d("bonus" , "FinalCCAfrad : " + FinalCCAfrad);

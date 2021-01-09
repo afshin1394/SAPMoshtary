@@ -206,7 +206,7 @@ public class AddPorseshnameInfoModel implements AddPorseshnameInfoMVP.ModelOps
     @Override
     public void insertPorseshname(PorseshnamehModel porseshnamehModel, List<Integer> selectedAdsId, boolean changedPhone)
     {
-        int ccAmargar = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne().getCcAmargar();
+        int ccAmargar = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect().getCcAmargar();
         PorseshnamehDAO porseshnamehDAO = new PorseshnamehDAO(mPresenter.getAppContext());
         ArrayList<PorseshnamehModel> porseshnamehModels = new ArrayList<>();
         PorseshnamehInfoShared shared = new PorseshnamehInfoShared(mPresenter.getAppContext());

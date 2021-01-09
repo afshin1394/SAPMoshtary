@@ -31,10 +31,15 @@ public interface SplashMVP
         void newVersionReleased(String downloadUrl);
         void newVersionAvailable(String date);
         void onGetInvalidPackages(String[] packageNames);
-		void showErrorAlert(boolean closeActivity, int titleResId, String message, int messageType, int buttonTextResId);																												 
+		void showErrorAlert(boolean closeActivity, int titleResId, String message, int messageType, int buttonTextResId);
+        void copyClipBoard(String usingIMEI);
         void showResourceError(boolean closeActivity, int titleResId, int messageResId, int messageType, int buttonTextResId);
         void showResourceErrorTwoButton(boolean closeActivity, int titleResId, int messageResId, int messageType, int buttonOneResId, int buttonTwoResId);
         void showToast(int resId, String param , int messageType , int duration);
+        void showAuthenticationProcess();
+        void startLoadingDialog();
+        void stopLoadingDialog();
+        void clearInvalidIdentityCode();
     }
 
 
@@ -62,6 +67,8 @@ public interface SplashMVP
         //void downloadNewVersion();
         void checkInsertLogToDB(String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
+        void checkAuthentication();
+        void authenticateUser(String identityCode);
     }
 
 
@@ -78,7 +85,7 @@ public interface SplashMVP
         void onGetServerIP(ServerIpModel serverIpModel);
         void onGetForoshandehAmoozeshi(boolean setIMEI , boolean errorIMEI);
         void onGetForoshandehMamorPakhsh(boolean serviceResult , boolean emptyIMEI);
-        void onGetEmptyForoshandehMamorPakhsh();
+        void onGetEmptyForoshandehMamorPakhsh(String usingIMEI);
         void onGetSystemConfig(boolean result);
         void onGetUserType(int userType);
         void onGetIsRoot(boolean isRoot);
@@ -94,6 +101,11 @@ public interface SplashMVP
         void notFoundServerIP();
         //void onDownloadProgress(int progress);
         void onNetworkError(boolean closeActivity);
+        void checkAuthentication();
+        void onStartAuthenticationProcess();
+        void onGetInvalidIdentityCode(String message, String type);
+        void startLoading();
+        void finishLoading();
     }
 
 
@@ -122,6 +134,8 @@ public interface SplashMVP
         void getInvalidPackages();
         void setLogToDB(String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
+        void checkAuthentication();
+        void authenticateUser(String identityCode);
     }
 
 

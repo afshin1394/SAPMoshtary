@@ -28,7 +28,7 @@ public class RptEtebarModel implements RptEtebarMVP.ModelOps {
     public int getCcForoshandeForRptEtebar() {
         int ccForoshande = -1;
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         if (foroshandehMamorPakhshModel != null) {
             ccForoshande = foroshandehMamorPakhshModel.getCcForoshandeh();
         }

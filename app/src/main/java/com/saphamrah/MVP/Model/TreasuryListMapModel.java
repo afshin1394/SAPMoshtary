@@ -128,7 +128,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
     {
         int noeMasouliat = -1;
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         if (foroshandehMamorPakhshModel != null)
         {
             ForoshandehMamorPakhshUtils foroshandehMamorPakhshUtils = new ForoshandehMamorPakhshUtils();
@@ -422,7 +422,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
         }
 
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         boolean isMojazForDarkhast = foroshandehMamorPakhshModel.getIsMojazForSabtDarkhast() == 1;
         boolean isEtebarCheckBargashty = true;
@@ -711,7 +711,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
         if (dariaftPardakhtPPCModels.size() > 0)
         {
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             if (foroshandehMamorPakhshModel == null)
             {
                 mPresenter.onError(R.string.errorFindForoshandehMamorPakhsh);
@@ -1349,7 +1349,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             Date tarikh = new Date();
             String currentDateTime = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
 
             shared.removeAll();
@@ -1685,7 +1685,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
     {
         try
         {
-            final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+            final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
             final int noeMasouliat = getNoeMasouliatWithReturnData();
             String requestId = "";
             if (foroshandehMamorPakhshModel != null)

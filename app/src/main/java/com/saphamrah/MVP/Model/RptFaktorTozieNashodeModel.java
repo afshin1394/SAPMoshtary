@@ -38,7 +38,7 @@ public class RptFaktorTozieNashodeModel implements RptFaktorTozieNashodeMVP.Mode
     public void updateFaktorTozeieNashode()
     {
         final RptFaktorTozieNashodehDAO rptFaktorTozieNashodehDAO = new RptFaktorTozieNashodehDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
 
         final Handler handler = new Handler(new Handler.Callback() {
             @Override

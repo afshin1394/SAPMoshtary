@@ -148,7 +148,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
     public void getTemporaryRequests()
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         int noeForoshandeh = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
 
         CustomerDarkhastFaktorDAO customerDarkhastFaktorDAO = new CustomerDarkhastFaktorDAO(mPresenter.getAppContext());
@@ -204,7 +204,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
     {
         if (checkDateTime())
         {
-            /*ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+            /*ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
             int noeMasouliat = new PubFunc().new ForoshandehMamorPakhsh().getNoeMasouliat(foroshandehMamorPakhshModel);*/
             /*if (noeMasouliat != 5)
             {*/
@@ -352,7 +352,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
     public void sendTempNoRequest(final int position , final CustomerAdamDarkhastModel customerAdamDarkhastModel)
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         final AdamDarkhastDAO adamDarkhastDAO = new AdamDarkhastDAO(mPresenter.getAppContext());
         final AdamDarkhastModel adamDarkhastModel = adamDarkhastDAO.getByccAdamDarkhast(customerAdamDarkhastModel.getCcAdamDarkhast()).get(0);
         String jsonString = adamDarkhastModel.toJsonString(0 , foroshandehMamorPakhshModel.getCcMarkazForosh());
@@ -1535,7 +1535,7 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
         {
             Log.d("time" , "start send temp : " + System.currentTimeMillis());
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             final int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
 
             SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
@@ -2404,7 +2404,7 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
                 {
                     Log.d("time" , "start send temp : " + System.currentTimeMillis());
                     ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-                    ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+                    ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
                     int noeMasouliat = new PubFunc().new ForoshandehMamorPakhsh().getNoeMasouliat(foroshandehMamorPakhshModel);
 
                     SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());

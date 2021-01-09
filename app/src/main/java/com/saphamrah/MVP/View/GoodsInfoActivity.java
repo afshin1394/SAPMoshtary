@@ -115,7 +115,7 @@ public class GoodsInfoActivity extends AppCompatActivity implements GoodsInfoMVP
 //        fabUpdateGallery.setClickable(false);
         fabMenu.close(true);
         if (adapter!=null){
-            customAlertDialog.showLogMessageAlert(GoodsInfoActivity.this, false, "", getResources().getString(R.string.wantUpdateGallery), Constants.INFO_MESSAGE(), getResources().getString(R.string.no), getResources().getString(R.string.yes), new CustomAlertDialogResponse()
+            customAlertDialog.showLogMessageAlert(GoodsInfoActivity.this, false, "", getResources().getString(R.string.error), Constants.INFO_MESSAGE(), getResources().getString(R.string.no), getResources().getString(R.string.yes), new CustomAlertDialogResponse()
             {
                 @Override
                 public void setOnCancelClick()
@@ -131,7 +131,7 @@ public class GoodsInfoActivity extends AppCompatActivity implements GoodsInfoMVP
                 }
             });
         }else{
-            showToast(R.string.updateKalaInfoWarning, Constants.INFO_MESSAGE());
+            showToast(getAppContext().getString(R.string.updateKalaInfoWarning), Constants.INFO_MESSAGE());
         }
     }
 
@@ -205,13 +205,18 @@ public class GoodsInfoActivity extends AppCompatActivity implements GoodsInfoMVP
     }
 
     @Override
-    public void showAlert(int resId, int messageType) {
-        customAlertDialog.showMessageAlert(GoodsInfoActivity.this, false, "", getString(resId), messageType, getString(R.string.apply));
+    public void showAlert(String message, int messageType) {
+        customAlertDialog.showMessageAlert(GoodsInfoActivity.this, false, "", message, messageType, getString(R.string.apply));
     }
 
     @Override
-    public void showToast(int resId, int messageType) {
-        customAlertDialog.showToast(GoodsInfoActivity.this, getString(resId), messageType, Constants.DURATION_LONG());
+    public void showToast(String message, int messageType) {
+        customAlertDialog.showToast(GoodsInfoActivity.this, message, messageType, Constants.DURATION_LONG());
+    }
+
+    @Override
+    public void onFinishProgress() {
+        customProgressBar.closeProgress();
     }
 
 
@@ -363,5 +368,8 @@ public class GoodsInfoActivity extends AppCompatActivity implements GoodsInfoMVP
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

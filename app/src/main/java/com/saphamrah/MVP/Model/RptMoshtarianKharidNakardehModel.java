@@ -41,7 +41,7 @@ public class RptMoshtarianKharidNakardehModel implements RptMoshtarianKharidNaka
     public void updateListMoshtarianKharidNakarde() {
         String strCcmasir=null;
         final RptMoshtarianKharidNakardehDAO rptMoshtarianKharidNakardehDAO = new RptMoshtarianKharidNakardehDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
         strCcmasir = new MasirDAO((mPresenter.getAppContext())).getstrCcMasir();
 
         Log.i(TAG, "updateListMoshtarianKharidNakarde: "+strCcmasir);

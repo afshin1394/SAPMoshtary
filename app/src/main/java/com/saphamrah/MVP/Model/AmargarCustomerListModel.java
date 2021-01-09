@@ -259,7 +259,7 @@ public class AmargarCustomerListModel implements AmargarCustomerListMVP.ModelOps
         VisitMoshtaryDAO visitMoshtaryDAO = new VisitMoshtaryDAO(mPresenter.getAppContext());
         VisitMoshtaryModel visitMoshtaryModel = new VisitMoshtaryModel();
 
-        visitMoshtaryModel.setCcAmargar(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne().getCcAmargar());
+        visitMoshtaryModel.setCcAmargar(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect().getCcAmargar());
         visitMoshtaryModel.setCcMoshtary(ccMoshtary);
         visitMoshtaryModel.setCcPorseshnameh(0);
         visitMoshtaryModel.setTarikhVisitMoshtary(currentDate);

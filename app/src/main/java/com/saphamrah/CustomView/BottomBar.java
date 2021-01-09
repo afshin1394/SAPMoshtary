@@ -161,7 +161,7 @@ public class BottomBar
         //layBottomBarTasvieDarkhast.setEnabled(false);
 
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(context);
-        ForoshandehMamorPakhshModel model = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+        ForoshandehMamorPakhshModel model = foroshandehMamorPakhshDAO.getIsSelect();
         /*if (new PubFunc().new ForoshandehMamorPakhsh().getNoeMasouliat(model) == 2)
         {
             //layBottomBarTasvieDarkhast.setVisibility(View.VISIBLE);

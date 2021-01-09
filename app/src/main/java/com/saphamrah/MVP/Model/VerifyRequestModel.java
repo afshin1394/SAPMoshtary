@@ -113,7 +113,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
     {
         boolean showBtnMarjoee = false;
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         showBtnMarjoee = foroshandehMamorPakhshModel.getCanGetMarjoee() == 1;
         mPresenter.onGetConfig(showBtnMarjoee);
     }
@@ -146,7 +146,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
     @Override
     public void getCustomerInfo(int ccMoshtary, int ccSazmanForosh)
     {
-        int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne());
+        int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect());
         boolean showTarikhPishbiniTahvil = false;
         MoshtaryAddressDAO moshtaryAddressDAO = new MoshtaryAddressDAO(mPresenter.getAppContext());
         ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
@@ -268,7 +268,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         MoshtaryEtebarSazmanForoshModel moshtaryEtebarSazmanForoshModel = moshtaryEtebarSazmanForoshDAO.getByccMoshtary(ccMoshtary);
         int modatVosol = moshtaryEtebarSazmanForoshModel.getModatVosol();
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         if (noeMasouliat == 4 || noeMasouliat == 5)
         {
@@ -306,7 +306,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         int codeNoeVosol = new MoshtaryDAO(mPresenter.getAppContext()).getByccMoshtary(ccMoshtary).getCodeNoeVosolAzMoshtary();
         Log.d("verifyREq", "codeNoeVosolAzMoshtary : " + codeNoeVosol);
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         int ccChildParameterNoeVosol = -1;
         if (noeMasouliat == 4 || noeMasouliat == 5)
@@ -544,7 +544,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
     @Override
     public void getTarikhPishbiniTahvilInfo()
     {
-        int ccMarkaz = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne().getCcMarkazForosh();
+        int ccMarkaz = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect().getCcMarkazForosh();
         int maxTedadRooz = 0;
         try
         {
@@ -566,7 +566,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor() , -1);
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
         DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
@@ -940,7 +940,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             Log.d("verifyRequest" , "arzeshAfozde in check : " + MablaghArzeshAfzoodeh + " , sumMablaghBaArzeshAfzoode : " + sumMablaghBaArzeshAfzoode + " , (mablaghKol - sumTakhfifat) : " +(mablaghKol - sumTakhfifat));
 
             //int ccForoshandeh = selectFaktorShared.getInt(selectFaktorShared.getCcForoshandeh() , 0);
-            int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne());
+            int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect());
             DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
             DarkhastFaktorModel entity = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
             entity.setTarikhPishbinyTahvil(strTarikhPishbiniTahvil);
@@ -1008,7 +1008,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
             MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
 
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             //ccAfradForoshandeh = foroshandehMamorPakhshModel.getCcAfrad();
             ElamMarjoeeSatrPPCDAO elammarjoeesatrDAO = new ElamMarjoeeSatrPPCDAO(mPresenter.getAppContext());
             MablaghKolMarjoeeMoshtary = elammarjoeesatrDAO.getSumMablaghMarjoeeByccDarkhastFaktor(ccDarkhastFaktor);
@@ -1127,7 +1127,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
     private int CheckEtebar(int codeNoeVosol , long sumMablaghArzeshAfzoodeh , int ccMoshtary , long ccDarkhastFaktor, int ccForoshandeh, int ModatVosol)
     {
-        int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getForoshandehMamorPakhsh());
+        int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect());
         //------------------- TedadFaktorBazRoozMoshtary -----------------------------
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
 

@@ -39,7 +39,7 @@ public class RptKharidKalaModel implements RptKharidKalaMVP.ModelOps
     public void updateListKharidKala()
     {
         final RptKharidKalaDAO rptKharidKalaDAO = new RptKharidKalaDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
 
         final Handler handler = new Handler(new Handler.Callback() {
             @Override

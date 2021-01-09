@@ -7,26 +7,25 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.saphamrah.Model.RptKalaInfoModel;
 import com.saphamrah.Model.ServerIpModel;
-import com.saphamrah.Network.RetrofitResponse;
+import com.saphamrah.Network.RxNetwork.RxCallback;
+import com.saphamrah.Network.RxNetwork.RxHttpRequest;
+import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIServiceGet;
-
-import com.saphamrah.WebService.ApiClientGlobal;
-import com.saphamrah.WebService.ServiceResponse.GetAllrptKalaInfoResult;
+import com.saphamrah.WebService.RxService.APIServiceRxjava;
+import com.saphamrah.WebService.RxService.Response.DataResponse.GetAllrptKalaInfoResponse;
 
 import java.util.ArrayList;
 
+import io.reactivex.disposables.Disposable;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class RptKalaInfoDAO {
 
     private DBHelper dbHelper;
     private Context context;
-
+    public final String CLASS_NAME =RptKalaInfoDAO.this.getClass().getSimpleName();
 
     public RptKalaInfoDAO(Context context) {
         this.context = context;
@@ -69,70 +68,104 @@ public class RptKalaInfoDAO {
                 };
     }
 
-    public void fetchRptKalaInfo(final Context context, final String activityNameForLog, String ccMarkazSazmanSakhtarForosh, final RetrofitResponse retrofitResponse) {
+    public void fetchRptKalaInfoRx(final Context context, final String activityNameForLog, String ccMarkazSazmanSakhtarForosh, final RxResponseHandler rxResponseHandler){
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
-            String message = "can't find server";
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RptKalaInfoDAO.class.getSimpleName(), activityNameForLog, "fetchRptKalaInfo", "");
-            retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
-        } else {
-            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-            Call<GetAllrptKalaInfoResult> call = apiServiceGet.getAllrptKalaInfo(ccMarkazSazmanSakhtarForosh);
-            call.enqueue(new Callback<GetAllrptKalaInfoResult>() {
-                @Override
-                public void onResponse(Call<GetAllrptKalaInfoResult> call, Response<GetAllrptKalaInfoResult> response) {
-                    try {
-                        if (response.raw().body() != null) {
-                            long contentLength = response.raw().body().contentLength();
-                            PubFunc.Logger logger = new PubFunc().new Logger();
-                            logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, RptKalaInfoDAO.class.getSimpleName(), "", "fetchRptKalaInfo", "onResponse");
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        if (response.isSuccessful()) {
-                            GetAllrptKalaInfoResult result = response.body();
-                            if (result != null) {
-                                if (result.getSuccess()) {
-                                    retrofitResponse.onSuccess(result.getData());
-                                } else {
-                                    PubFunc.Logger logger = new PubFunc().new Logger();
-                                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), RptKalaInfoDAO.class.getSimpleName(), activityNameForLog, "fetchRptKalaInfo", "onResponse");
-                                    retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
-                                }
-                            } else {
-                                String endpoint = getEndpoint(call);
-                                PubFunc.Logger logger = new PubFunc().new Logger();
-                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", context.getResources().getString(R.string.resultIsNull), endpoint), RptKalaInfoDAO.class.getSimpleName(), activityNameForLog, "fetchRptKalaInfo", "onResponse");
-                                retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
-                            }
-                        } else {
-                            String endpoint = getEndpoint(call);
-                            String message = String.format("error body : %1$s , code : %2$s * %3$s", response.message(), response.code(), endpoint);
-                            PubFunc.Logger logger = new PubFunc().new Logger();
-                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RptKalaInfoDAO.class.getSimpleName(), activityNameForLog, "fetchRptKalaInfo", "onResponse");
-                            retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), message);
-                        }
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
-                        PubFunc.Logger logger = new PubFunc().new Logger();
-                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), RptKalaInfoDAO.class.getSimpleName(), activityNameForLog, "fetchRptKalaInfo", "onResponse");
-                        retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION(), exception.toString());
-                    }
-                }
 
-                @Override
-                public void onFailure(Call<GetAllrptKalaInfoResult> call, Throwable t) {
-                    String endpoint = getEndpoint(call);
-                    PubFunc.Logger logger = new PubFunc().new Logger();
-                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", t.getMessage(), endpoint), RptKalaInfoDAO.class.getSimpleName(), activityNameForLog, "fetchRptKalaInfo", "onFailure");
-                    retrofitResponse.onFailed(Constants.RETROFIT_THROWABLE(), t.getMessage());
-                }
-            });
-        }
+        APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
+        RxHttpRequest.getInstance().execute(apiServiceRxjava.getAllrptKalaInfo(ccMarkazSazmanSakhtarForosh),activityNameForLog, CLASS_NAME,"fetchRptKalaInfoRx", new RxCallback<GetAllrptKalaInfoResponse>() {
+            @Override
+            public void onStart(Disposable disposable) {
+                rxResponseHandler.onStart(disposable);
+            }
+
+
+
+            @Override
+            public void onSuccess(GetAllrptKalaInfoResponse response) {
+                rxResponseHandler.onSuccess(response.getRptKalaInfoModels());
+            }
+
+
+
+            @Override
+            public void onError(String message,String type)
+            {
+                rxResponseHandler.onFailed(message,type);
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s", type), KalaPhotoDAO.class.getSimpleName(), activityNameForLog, "fetchKalaPhoto", "onError");
+
+            }
+
+
+        });
+
+
     }
+
+//    public void fetchRptKalaInfo(final Context context, final String activityNameForLog, String ccMarkazSazmanSakhtarForosh, final RetrofitResponse retrofitResponse) {
+//        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+//            String message = "can't find server";
+//            PubFunc.Logger logger = new PubFunc().new Logger();
+//            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RptKalaInfoDAO.class.getSimpleName(), activityNameForLog, "fetchRptKalaInfo", "");
+//            retrofitResponse.onFailed(Constants.HTTP_ERROR(), message);
+//        } else {
+//            APIService apiService = ApiClient.getClient(serverIpModel.getServerIp(), serverIpModel.getPort()).create(APIService.class);
+//            Call<GetAllrptKalaInfoResult> call = apiService.getAllrptKalaInfo(ccMarkazSazmanSakhtarForosh);
+//            call.enqueue(new Callback<GetAllrptKalaInfoResult>() {
+//                @Override
+//                public void onResponse(Call<GetAllrptKalaInfoResult> call, Response<GetAllrptKalaInfoResult> response) {
+//                    try {
+//                        if (response.raw().body() != null) {
+//                            long contentLength = response.raw().body().contentLength();
+//                            PubFunc.Logger logger = new PubFunc().new Logger();
+//                            logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, RptKalaInfoDAO.class.getSimpleName(), "", "fetchRptKalaInfo", "onResponse");
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    try {
+//                        if (response.isSuccessful()) {
+//                            GetAllrptKalaInfoResult result = response.body();
+//                            if (result != null) {
+//                                if (result.getSuccess()) {
+//                                    retrofitResponse.onSuccess(result.getData());
+//                                } else {
+//                                    PubFunc.Logger logger = new PubFunc().new Logger();
+//                                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), RptKalaInfoDAO.class.getSimpleName(), activityNameForLog, "fetchRptKalaInfo", "onResponse");
+//                                    retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
+//                                }
+//                            } else {
+//                                String endpoint = getEndpoint(call);
+//                                PubFunc.Logger logger = new PubFunc().new Logger();
+//                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", context.getResources().getString(R.string.resultIsNull), endpoint), RptKalaInfoDAO.class.getSimpleName(), activityNameForLog, "fetchRptKalaInfo", "onResponse");
+//                                retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
+//                            }
+//                        } else {
+//                            String endpoint = getEndpoint(call);
+//                            String message = String.format("error body : %1$s , code : %2$s * %3$s", response.message(), response.code(), endpoint);
+//                            PubFunc.Logger logger = new PubFunc().new Logger();
+//                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RptKalaInfoDAO.class.getSimpleName(), activityNameForLog, "fetchRptKalaInfo", "onResponse");
+//                            retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), message);
+//                        }
+//                    } catch (Exception exception) {
+//                        exception.printStackTrace();
+//                        PubFunc.Logger logger = new PubFunc().new Logger();
+//                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), RptKalaInfoDAO.class.getSimpleName(), activityNameForLog, "fetchRptKalaInfo", "onResponse");
+//                        retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION(), exception.toString());
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<GetAllrptKalaInfoResult> call, Throwable t) {
+//                    String endpoint = getEndpoint(call);
+//                    PubFunc.Logger logger = new PubFunc().new Logger();
+//                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", t.getMessage(), endpoint), RptKalaInfoDAO.class.getSimpleName(), activityNameForLog, "fetchRptKalaInfo", "onFailure");
+//                    retrofitResponse.onFailed(Constants.RETROFIT_THROWABLE(), t.getMessage());
+//                }
+//            });
+//        }
+//    }
 
     private String getEndpoint(Call call) {
         String endpoint = "";

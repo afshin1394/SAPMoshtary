@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
+
     <application
         android:name=".Application.BaseApplication"
         android:allowBackup="true"
@@ -30,7 +31,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon"
-        android:hardwareAccelerated="false"
+        android:hardwareAccelerated="true"
         android:requestLegacyExternalStorage="true">
         <activity android:name=".MVP.View.PorseshnameAdamActivity"></activity>
         <activity android:name=".MVP.View.AmargarCustomersMapActivity" />

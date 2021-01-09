@@ -37,7 +37,7 @@ public class RptListVosolModel implements RptListVosolMVP.ModelOps
     public void updateListVosol()
     {
         final RptListVosolDAO rptListVosolDAO = new RptListVosolDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
 
         final Handler handler = new Handler(new Handler.Callback() {
             @Override

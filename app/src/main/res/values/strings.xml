@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">SAP</string>
-    <string name="app_name_fa">ساپ</string>
+    <string name="app_name">SAP Hamrah</string>
+    <string name="app_name_fa">ساپ همراه</string>
     <string name="fontPath">font/IRANSans.ttf</string>
     <string name="crispURL">https://go.crisp.chat/chat/embed/?website_id=</string>
     <string name="Learning">آموزشی</string>
@@ -597,7 +597,7 @@
     <string name="cantMojazForResid">به علت بسته شدن اعتبار فروشنده، شما تنها قادر به ثبت وصول وجه نقد و چک می باشید.</string>
     <string name="onlyVajhNaghdForYourCustomer">شما برای مشتری به نام خود تنها قادر به ثبت وصول وجه نقد می باشید.</string>
     <string name="onlyVajhNaghdForCloseEtebar">به علت بسته شدن اعتبار فروشنده، شما تنها قادر به ثبت وصول وجه نقد می باشید.</string>
-    <string name="errorCantRegisterRequest">شما مجاز به ثبت درخواست نمی باشید.</string>
+    <string name="errorCantRegisterRequest">شما مجاز به ثبت درخواست نمی باشید. \n لطفا لوکیشن دستگاه را خاموش و روشن و دوباره بررسی نمایید.</string>
     <string name="errorLocationForRequest"> محل ثبت فاکتــور در محدوده مجاز نمی بـاشـــد.</string>
     <string name="errorLocationForPorseshname">محل ثبت پرسشنامه در محدوده مجاز نمی باشد.</string>
     <string name="errorDuplicateKala">این کالا قبلا ثبت شده است.</string>
@@ -989,5 +989,15 @@
     <string name="wantUpdateGallery">آیا مایل به دریافت تصاویر هستید؟</string>
     <string name="mablaghForoshBaArzeshAfzoodeh">مبلغ فروش باارزش افزوده</string>
     <string name="errorIPConnected">خطا در اتصال به وب سرویس</string>
+    <string name="identityCode">کد ملی را وارد نمایید</string>
+    <string name="Http_internal_server_error">خطای داخلی سرور لطفا مجددا تلاش نمایید</string>
+    <string name="Http_client_error">خطای نرم افزار,لطفا با واحد پشتیبانی تماس بگیرید</string>
+    <string name="Http_server_not_found">عدم دسترسی به سرور لطفا با واحد ئشتیبانی تماس بگیرید</string>
+    <string name="Http_internet_error">دسترسی به اینترنت را بررسی نمایید</string>
+    <string name="Http_internet_quality">کیفیت اینترنت خود را بررسی کنید</string>
+    <string name="confirm">ثبت</string>
+    <string name="invalidIdentityCode">کد ملی وارد شده در سیستم تعریف نشده است و لطفا با واحد پشتیبانی تماس بگیرید</string>
+    <string name="invalidIdentityCodeLength">تعداد ارقام کد ملی ثبت شده صحیح نمی باشد</string>
+
 
 </resources>

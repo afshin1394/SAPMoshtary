@@ -41,7 +41,7 @@ public class MainMenuModel implements MainMenuMVP.ModelOps
         {
             SystemMenuDAO systemMenuDAO = new SystemMenuDAO(mPresenter.getAppContext());
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-            int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshDAO.getOne());
+            int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshDAO.getIsSelect());
             ArrayList<SystemMenuModel> arrayListAllMenuItems = systemMenuDAO.getMenuByParent(noeMasouliat , parentsId);
             Log.d("MainMenuModel","arrayListAllMenuItems: " + arrayListAllMenuItems.toString());
             mPresenter.onGetMenuItems(arrayListAllMenuItems);

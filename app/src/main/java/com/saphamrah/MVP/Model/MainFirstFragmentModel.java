@@ -33,7 +33,7 @@ public class MainFirstFragmentModel implements MainFirstFragmentMVP.ModelOps
     @Override
     public void getNoeForoshandehMamorPakhsh()
     {
-        int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne());
+        int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect());
         mPresenter.onGetNoeForoshandehMamorPakhsh(noeMasouliat);
     }
 
@@ -86,7 +86,7 @@ public class MainFirstFragmentModel implements MainFirstFragmentMVP.ModelOps
     public void getForoshandehMamorPakhshName()
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        String name = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh().getFullName();
+        String name = foroshandehMamorPakhshDAO.getIsSelect().getFullName();
         if (name != null)
         {
             mPresenter.onGetForoshandehMamorPakhshName(name);

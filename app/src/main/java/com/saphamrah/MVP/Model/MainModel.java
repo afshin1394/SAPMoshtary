@@ -129,7 +129,7 @@ public class MainModel implements MainMVP.ModelOps
     public void checkForGetParameter()					  
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
 
         GetProgramShared getProgramShared = new GetProgramShared(mPresenter.getAppContext());
         final String lastDateTimeGetConfig = getProgramShared.getString(getProgramShared.GREGORIAN_DATE_TIME_OF_GET_CONFIG() , "20190101 00:00:00");
@@ -196,7 +196,7 @@ public class MainModel implements MainMVP.ModelOps
                         {
                             GetVersionResult result = response.body();
                             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-                            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+                            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
                             int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
                             mPresenter.onGetServerVersion(result , foroshandehMamorPakhshModel , noeMasouliat , childParameterModelsDownloadUrls);
                         }
@@ -303,7 +303,7 @@ public class MainModel implements MainMVP.ModelOps
     {
         final MessageBoxDAO messageBoxDAO = new MessageBoxDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         messageBoxDAO.fetchMessages(mPresenter.getAppContext(), "MainActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), String.valueOf(foroshandehMamorPakhshModel.getCcMamorPakhsh()), new RetrofitResponse()
         {
             @Override
@@ -529,7 +529,7 @@ public class MainModel implements MainMVP.ModelOps
     public void getForoshandehMamorPakhsh()
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();//getForoshandehMamorPakhsh();
         ForoshandehMamorPakhshUtils foroshandehMamorPakhsh = new ForoshandehMamorPakhshUtils();
         int stringResId = foroshandehMamorPakhsh.getNoeForoshandehMamorPakhsh(foroshandehMamorPakhshModel);
         String noeForoshandeh = "";
@@ -686,7 +686,7 @@ public class MainModel implements MainMVP.ModelOps
             public void run()
             {
                 ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-                ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+                ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
                 File storageDir = new File(Environment.getExternalStorageDirectory() + "/SapHamrah/Pictures/Profile/");
                 if (storageDir.exists())
                 {

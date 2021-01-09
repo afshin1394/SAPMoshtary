@@ -1,31 +1,55 @@
 package com.saphamrah.DAO;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.util.Base64;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.Model.KalaMojodiModel;
 import com.saphamrah.Model.KalaOlaviatModel;
 import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
+import com.saphamrah.Network.RxNetwork.RxHttpRequest;
+import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientMultiRequests;
+import com.saphamrah.WebService.RxService.APIServiceRxjava;
+import com.saphamrah.WebService.RxService.Response.DataResponse.KalaPhotoResponse;
 import com.saphamrah.WebService.ServiceResponse.GetImageKalaResult;
+import com.saphamrah.WebService.ServiceResponse.KalaPhotoResult;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Response;
+
+import static io.reactivex.plugins.RxJavaPlugins.onError;
 
 public class KalaPhotoDAO {
     private DBHelper dbHelper;
     private Context context;
+    private static final String CLASS_NAME = KalaPhotoDAO.class.getSimpleName();
 
 
     public KalaPhotoDAO(Context context) {
@@ -51,97 +75,223 @@ public class KalaPhotoDAO {
 
     }
 
+    public int progress = 0;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @SuppressLint("CheckResult")
+    public void fetchKalaPhotoRxJava(final Context context, final String activityNameForLog, ArrayList<Integer> ccKalaCodes, final RxResponseHandler rxResponseHandler) {
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().multiServerFromShared(context);
+        /**
+         * multi parallel apiCalls for Gallery
+         **/
+        APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
 
-    public void fetchKalaPhoto(final Context context, final String activityNameForLog, int ccKalaCode, final RetrofitResponse retrofitResponse) {
+        Observable.fromIterable(ccKalaCodes)
+                .flatMap(s ->
+                        apiServiceRxjava.getAllImageKala(String.valueOf(s))
+                )
+                .map(new Function<Response<KalaPhotoResponse>, ArrayList<KalaPhotoModel>>() {
+                    @Override
+                    public ArrayList<KalaPhotoModel> apply(@NonNull Response<KalaPhotoResponse> r) throws Exception {
+                        ArrayList<KalaPhotoModel> kalaPhotoModels = new ArrayList();
+                        if (r.body() != null) {
+                            if (r.body().getSuccess()) {
+                                if (r.body().getKalaPhotoResults().size() > 0) {
+                                    KalaPhotoResult kalaPhotoResult = r.body().getKalaPhotoResults().get(0);
 
-        ServerIpModel serverIpModel =new PubFunc().new  NetworkUtils().multiServerFromShared(context);
-        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
-            String message = "can't find server";
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchImageKala", "");
-            retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
-        } else {
-            Log.i("fetchKalaPhoto", "fetchKalaPhoto: " + serverIpModel.getServerIp() + " " + serverIpModel.getPort());
-            APIServiceGet apiServiceGet = ApiClientMultiRequests.getClient(serverIpModel.getServerIp(), serverIpModel.getPort()).create(APIServiceGet.class);
-            Call<GetImageKalaResult> call = apiServiceGet.getImageKala((String.valueOf(ccKalaCode)));
-
-            try {
-                Response<GetImageKalaResult> response = call.execute();
-
-                try {
-                    if (response.raw().body() != null) {
-                        long contentLength = response.raw().body().contentLength();
-                        PubFunc.Logger logger = new PubFunc().new Logger();
-                        Log.i("GET__RESPONSE_IMAGE", "onResponse: Response is not Null");
-                        logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, KalaOlaviatDAO.class.getSimpleName(), "", "fetchKalaImage", "onResponse");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.i("GET__RESPONSE_IMAGE", "exception in response.raw().body()");
-                }
-                try {
-
-                    if (response.isSuccessful()) {
-                        GetImageKalaResult result = response.body();
-                        if (result != null) {
-                            if (result.getSuccess()) {
-                                result.setData(result.getData());
-                                if (result.getData() != null) {
-                                    if (result.getData().size() > 0) {
-                                        Log.i("GET__RESPONSE_IMAGE", "onResponse: getTheResponse" + result.getData().get(0).getImage() + " " + response.body());
-                                        retrofitResponse.onSuccess(result.getData());
-
-                                    }
+                                    KalaPhotoModel kalaPhotoModel = new KalaPhotoModel();
+                                    kalaPhotoModel.setCcKalaCodeDb(kalaPhotoResult.getCcKalaCode());
+                                    kalaPhotoModel.setCcKalaPhotoDb(kalaPhotoResult.getCcKalaCode());
+                                    kalaPhotoModel.setImageDb(Base64.decode(kalaPhotoResult.getImage(), Base64.NO_WRAP));
+                                    kalaPhotoModels.add(kalaPhotoModel);
                                 }
-                            } else {
-                                Log.i("GET__RESPONSE_IMAGE", "onResponse: resultNotSuccessfull");
-                                PubFunc.Logger logger = new PubFunc().new Logger();
-                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchKalaOlaviat", "onResponse");
-                                retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
-                            }
 
+                            } else {
+                                onError(new Throwable(Constants.RETROFIT_NOT_SUCCESS_MESSAGE()));
+                            }
                         } else {
-                            Log.i("GET__RESPONSE_IMAGE", "onResponse: retrofit result is null");
-                            String endpoint = getEndpoint(call);
-                            PubFunc.Logger logger = new PubFunc().new Logger();
-                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", context.getResources().getString(R.string.resultIsNull), endpoint), KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchKalaOlaviat", "onResponse");
-                            retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
+                            onError(new Throwable(Constants.RETROFIT_RESULT_IS_NULL()));
                         }
 
-                    } else {
-                        Log.i("GET__RESPONSE_IMAGE", "onResponse: failed on Api Call");
-                        String endpoint = getEndpoint(call);
-                        String message = String.format("error body : %1$s , code : %2$s * %3$s", response.message(), response.code(), endpoint);
-                        PubFunc.Logger logger = new PubFunc().new Logger();
-                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchKalaImage", "onResponse");
-                        retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), message);
+                        return kalaPhotoModels;
                     }
-                }catch (Exception exception) {
-                    Log.i("GET__RESPONSE_IMAGE", "onResponse: checking weather response is successfull" + exception.getMessage());
-                    exception.printStackTrace();
-                    PubFunc.Logger logger = new PubFunc().new Logger();
-                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchKalaImage", "onResponse");
-                    retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION(), exception.toString());
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ArrayList<KalaPhotoModel>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-                }
+                        rxResponseHandler.onStart(d);
+                    }
 
+                    @Override
+                    public void onNext(@NonNull ArrayList<KalaPhotoModel> kalaPhotoModels) {
+                        progress += 1;
+                        rxResponseHandler.onProgress(progress * 100 / (ccKalaCodes.size()));
+                        if (kalaPhotoModels.size() > 0)
+                            rxResponseHandler.onSuccess(kalaPhotoModels);
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        rxResponseHandler.onFailed(e.getMessage(), e.getCause().getMessage());
+                        PubFunc.Logger logger = new PubFunc().new Logger();
+                        logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s ", e.getMessage(), e.getCause().getMessage()), CLASS_NAME, activityNameForLog, "fetchKalaPhotoRxJava", "onError");
+                    }
 
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.i("GET__RESPONSE_IMAGE", "onFailure: 8");
-                String endpoint = getEndpoint(call);
-                PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", e.getMessage(), endpoint), KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchKalaImage", "onFailure");
-                retrofitResponse.onFailed(Constants.RETROFIT_THROWABLE(), e.getMessage());
-            }
-
-
-        }
+                    @Override
+                    public void onComplete() {
+                        rxResponseHandler.onComplete();
+                    }
+                });
 
     }
+
+
+//       ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//
+//       if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+//           String message = "can't find server";
+//           PubFunc.Logger logger = new PubFunc().new Logger();
+//           logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchImageKala", "");
+//           retrofitResponse.onFailed(Constants.HTTP_ERROR(), message);
+//       } else {
+//           ApiRxJavaService apiRxJavaService = ApiRxJavaClient.createService(ApiRxJavaService.class,serverIpModel.getServerIp(), serverIpModel.getPort());
+//           final int[] progress = {0};
+//           Observable.fromIterable(ccKalaCodes)
+//                   .flatMap(s -> {
+//                       return apiRxJavaService.getImageKala(String.valueOf(s));
+//
+//                   })
+//                   .subscribeOn(Schedulers.io())
+//                   .observeOn(AndroidSchedulers.mainThread())
+//
+//
+//                       .subscribe(new Observer<GetImageKalaResult>() {
+//
+//
+//                           @Override
+//                           public void onSubscribe(Disposable d) {
+//
+//                           }
+//
+//                           @Override
+//                           public void onNext(GetImageKalaResult getImageKalaResult) {
+//                               Log.i("getImageKalaResult1", "onNext: " + getImageKalaResult.getData());
+//                               progress[0] += 1;
+////                               retrofitResponse.onUpdate(progress[0]*100/ccKalaCodes.size(),getImageKalaResult);
+//                               if (getImageKalaResult.getData()!=null){
+//                                   Log.i("getImageKalaResult2", "onNext: " + getImageKalaResult.getData());
+//
+//
+//                               }
+//                           }
+//
+//                           @Override
+//                           public void onError(Throwable e) {
+//                               retrofitResponse.onFailed(e.getMessage(), e.getLocalizedMessage());
+//                           }
+//
+//                           @Override
+//                           public void onComplete() {
+//                               retrofitResponse.onFinish();
+//                               Toast.makeText(context, "completed", Toast.LENGTH_LONG).show();
+//                           }
+//                       });
+//           }
+//       }
+
+
+//    public void fetchKalaPhoto(final Context context, final String activityNameForLog, int ccKalaCode, final RetrofitResponse retrofitResponse) {
+//
+//        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+//            String message = "can't find server";
+//            PubFunc.Logger logger = new PubFunc().new Logger();
+//            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchImageKala", "");
+//            retrofitResponse.onFailed(Constants.HTTP_ERROR(), message);
+//        } else {
+//            Log.i("fetchKalaPhoto", "fetchKalaPhoto: " + serverIpModel.getServerIp() + " " + serverIpModel.getPort());
+//            APIServiceGet apiServiceGet = ApiClientMultiRequests.getClient(serverIpModel.getServerIp(), serverIpModel.getPort()).create(APIServiceGet.class);
+//            Call<GetImageKalaResult> call = apiServiceGet.getImageKala((String.valueOf(ccKalaCode)));
+//
+//            try {
+//                Response<GetImageKalaResult> response = call.execute();
+//
+//                try {
+//                    if (response.raw().body() != null) {
+//                        long contentLength = response.raw().body().contentLength();
+//                        PubFunc.Logger logger = new PubFunc().new Logger();
+//                        Log.i("GET__RESPONSE_IMAGE", "onResponse: Response is not Null");
+//                        logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, KalaOlaviatDAO.class.getSimpleName(), "", "fetchKalaImage", "onResponse");
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    Log.i("GET__RESPONSE_IMAGE", "exception in response.raw().body()");
+//                }
+//                try {
+//
+//                    if (response.isSuccessful()) {
+//                        GetImageKalaResult result = response.body();
+//                        if (result != null) {
+//                            if (result.getSuccess()) {
+//                                result.setData(result.getData());
+//                                if (result.getData() != null) {
+//                                    if (result.getData().size() > 0) {
+//                                        Log.i("GET__RESPONSE_IMAGE", "onResponse: getTheResponse" + result.getData().get(0).getImage() + " " + response.body());
+//                                        retrofitResponse.onSuccess(result.getData());
+//
+//                                    }
+//                                }
+//                            } else {
+//                                Log.i("GET__RESPONSE_IMAGE", "onResponse: resultNotSuccessfull");
+//                                PubFunc.Logger logger = new PubFunc().new Logger();
+//                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchKalaOlaviat", "onResponse");
+//                                retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
+//                            }
+//
+//                        } else {
+//                            Log.i("GET__RESPONSE_IMAGE", "onResponse: retrofit result is null");
+//                            String endpoint = getEndpoint(call);
+//                            PubFunc.Logger logger = new PubFunc().new Logger();
+//                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", context.getResources().getString(R.string.resultIsNull), endpoint), KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchKalaOlaviat", "onResponse");
+//                            retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
+//                        }
+//
+//                    } else {
+//                        Log.i("GET__RESPONSE_IMAGE", "onResponse: failed on Api Call");
+//                        String endpoint = getEndpoint(call);
+//                        String message = String.format("error body : %1$s , code : %2$s * %3$s", response.message(), response.code(), endpoint);
+//                        PubFunc.Logger logger = new PubFunc().new Logger();
+//                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchKalaImage", "onResponse");
+//                        retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), message);
+//                    }
+//                }catch (Exception exception) {
+//                    Log.i("GET__RESPONSE_IMAGE", "onResponse: checking weather response is successfull" + exception.getMessage());
+//                    exception.printStackTrace();
+//                    PubFunc.Logger logger = new PubFunc().new Logger();
+//                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchKalaImage", "onResponse");
+//                    retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION(), exception.toString());
+//
+//                }
+//
+//
+//
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                Log.i("GET__RESPONSE_IMAGE", "onFailure: 8");
+//                String endpoint = getEndpoint(call);
+//                PubFunc.Logger logger = new PubFunc().new Logger();
+//                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", e.getMessage(), endpoint), KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchKalaImage", "onFailure");
+//                retrofitResponse.onFailed(Constants.RETROFIT_THROWABLE(), e.getMessage());
+//            }
+//
+//
+//        }
+//
+//    }
 
 
 

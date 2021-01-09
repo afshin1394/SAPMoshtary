@@ -1312,11 +1312,21 @@ get mac address in android 10
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
             {
                 //iMEI =  Settings.Secure.getString(context.getContentResolver(),Settings.Secure.ANDROID_ID);
-                iMEI =  getMacAddress(BaseApplication.getContext());
-                Log.d("PubFunc","Android UP 9 - iMei: " + iMEI );
-            }
-            else
-            {
+                //TODO
+                if (Authentication.getInstance().checkIfFileExists()) {
+                    String stream=Authentication.getInstance().getIdentityCodeWithHashKey();
+                    Log.i("STREAMM", "getIMEI: "+stream);
+                    if (stream.length()>1) {
+                        String[] strings = stream.split(",");
+                        String identityCode = strings[0];
+                        Log.i("STREAMM", "getIMEI: "+identityCode);
+                        String hashKey = strings[1];
+                        Log.i("STREAMM", "getIMEI: "+hashKey);
+                        iMEI = Authentication.getInstance().encrypt(identityCode, hashKey);
+                    }
+                }
+                Log.d("PubFunc", "Android UP 9 - iMei: " + iMEI);
+            } else {
                 TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
                 try
                 {
@@ -1855,7 +1865,7 @@ get mac address in android 10
             }
 
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(context);
-            ForoshandehMamorPakhshModel model = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+            ForoshandehMamorPakhshModel model = foroshandehMamorPakhshDAO.getIsSelect();
             int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(model);
             if (noeMasouliat == 2 || noeMasouliat == 4 || noeMasouliat == 5)
             {

@@ -36,7 +36,7 @@ public class RptSaleGoalModelLevel1 implements RptSaleGoalLevel1MVP.ModelOps{
     public void updateSaleGoalReport() {
         final RptHadafForoshDAO RptHadafForoshDAO = new RptHadafForoshDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        String ccForoshandeh = String.valueOf(foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh().getCcForoshandeh());
+        String ccForoshandeh = String.valueOf(foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh());
         Log.i("foroshande", "updateSaleGoalReport: "+ccForoshandeh);
         RptHadafForoshDAO.fetchAllrpHadafeForosh(mPresenter.getAppContext(), "SaleGoalReportActivity", ccForoshandeh, new RetrofitResponse() {
             @Override

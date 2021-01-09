@@ -404,7 +404,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps
             {
                 /*if (strCodeNoeVosol.equals(Constants.VALUE_POS()))
                 {
-                    ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+                    ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
                     dariaftPardakhtPPCModel.setCcShomarehHesab(foroshandehMamorPakhshModel.getCcPosShomarehHesab());
                 }*/
 
@@ -436,7 +436,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps
         ForoshandehMamorPakhshDAO foroshandehmamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
 
         long ccDariaftPardakht = -1L;
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehmamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehmamorPakhshDAO.getIsSelect();
         int isDirkard = 0;
         //int isTajil = 0;
 
@@ -557,7 +557,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps
             DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(mPresenter.getAppContext());
 
             ForoshandehMamorPakhshDAO foroshandehmamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehmamorPakhshDAO.getOne();
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehmamorPakhshDAO.getIsSelect();
             SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
             String currentDate = sdf.format(new Date());
             double mablaghTakhsis = 0;

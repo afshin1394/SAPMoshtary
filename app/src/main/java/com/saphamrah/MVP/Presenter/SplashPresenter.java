@@ -1,9 +1,12 @@
 package com.saphamrah.MVP.Presenter;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.SplashMVP;
 import com.saphamrah.MVP.Model.SplashModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
@@ -20,8 +23,11 @@ import com.saphamrah.WebService.ServiceResponse.GetVersionResult;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class SplashPresenter implements SplashMVP.PresenterOps , SplashMVP.RequiredPresenterOps
-{
+import mf.org.apache.wml.WMLPrevElement;
+
+import static androidx.core.content.ContextCompat.getSystemService;
+
+public class SplashPresenter implements SplashMVP.PresenterOps, SplashMVP.RequiredPresenterOps {
 
     private WeakReference<SplashMVP.RequiredViewOps> mView;
     private SplashMVP.ModelOps mModel;
@@ -218,7 +224,7 @@ public class SplashPresenter implements SplashMVP.PresenterOps , SplashMVP.Requi
             }
             else if (Constants.CURRENT_VERSION_TYPE() == 5)
             {
-                mView.get().setLblVersionName(versionName , "");
+                mView.get().setLblVersionName(versionName , getAppContext().getResources().getString(R.string.Learning));
             }
         }
         checkGPS();
@@ -242,7 +248,7 @@ public class SplashPresenter implements SplashMVP.PresenterOps , SplashMVP.Requi
     {
         if (!wifiStatus)
         {
-            mView.get().showToast(R.string.enableWifiForBetterLocation , "" , Constants.INFO_MESSAGE() , Constants.DURATION_LONG());
+            mView.get().showToast(R.string.enableWifiForBetterLocation , "" , Constants.INFO_MESSAGE() , Constants.DURATION_SHORT());
         }
         mView.get().onCheckWifiStatus(wifiStatus);
     }
@@ -330,7 +336,8 @@ public class SplashPresenter implements SplashMVP.PresenterOps , SplashMVP.Requi
         if (serverIpModel != null && serverIpModel.getServerIp() != null && serverIpModel.getPort() != null)
         {
             Log.d("serverIp" , "server ip not null"+serverIpModel.getServerIp()+"port: "+serverIpModel.getPort());
-            checkForoshandehAmoozeshi(serverIpModel);
+            checkAuthentication();
+            //checkForoshandehAmoozeshi(serverIpModel);
         }
         else
         {
@@ -560,9 +567,11 @@ public class SplashPresenter implements SplashMVP.PresenterOps , SplashMVP.Requi
     }
 
     @Override
-    public void onGetEmptyForoshandehMamorPakhsh()
+    public void onGetEmptyForoshandehMamorPakhsh(String usingIMEI)
     {
-        mView.get().showResourceError(true, R.string.unregisteredDeviceTitle, R.string.unregisteredDevice, Constants.FAILED_MESSAGE(), R.string.apply);
+        //mView.get().showResourceError(true, R.string.unregisteredDeviceTitle, R.string.unregisteredDevice, Constants.FAILED_MESSAGE(), R.string.apply);
+        mView.get().showErrorAlert(true, R.string.unregisteredDeviceTitle, getAppContext().getResources().getString(R.string.unregisteredDevice) +"\n"+ "َشناسه دستگاه : " + usingIMEI, Constants.FAILED_MESSAGE(), R.string.apply);
+        mView.get().copyClipBoard(usingIMEI);
     }
 
     @Override
@@ -631,6 +640,22 @@ public class SplashPresenter implements SplashMVP.PresenterOps , SplashMVP.Requi
         }
     }
 
+    @Override
+    public void checkAuthentication() {
+        mModel.checkAuthentication();
+    }
+
+    @Override
+    public void authenticateUser(String identityCode) {
+
+        if (identityCode.length()<10){
+            mView.get().showToast(R.string.invalidIdentityCodeLength, "", Constants.FAILED_MESSAGE(), Constants.DURATION_SHORT());
+        }else{
+            mModel.authenticateUser(identityCode);
+        }
+
+    }
+
 
     @Override
     public Context getAppContext() {
@@ -661,4 +686,40 @@ public class SplashPresenter implements SplashMVP.PresenterOps , SplashMVP.Requi
     public void onNetworkError(boolean closeActivity) {
         mView.get().showResourceError(closeActivity, R.string.errorGetDataTitle, R.string.errorGetData, Constants.FAILED_MESSAGE(), R.string.apply);
     }
+
+    @Override
+    public void onStartAuthenticationProcess() {
+        mView.get().showAuthenticationProcess();
+    }
+
+    @Override
+    public void onGetInvalidIdentityCode(String message,String type) {
+        switch (type){
+            case "INVALID_IDENTITY_CODE_LENGTH":
+                mView.get().showToast(R.string.invalidIdentityCodeLength, "", Constants.FAILED_MESSAGE(), Constants.DURATION_SHORT());
+                mView.get().clearInvalidIdentityCode();
+                break;
+
+            case "INVALID_IDENTITY_CODE":
+                mView.get().showToast(R.string.invalidIdentityCode, "", Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                mView.get().clearInvalidIdentityCode();
+                break;
+            case "HTTP_ERROR":
+                mView.get().showErrorAlert(true,R.string.errorDeniedPermissionTitle, message, Constants.FAILED_MESSAGE(), R.string.apply);
+                break;
+
+        }
+    }
+
+    @Override
+    public void startLoading() {
+        mView.get().startLoadingDialog();
+    }
+
+    @Override
+    public void finishLoading() {
+        mView.get().stopLoadingDialog();
+    }
+
+
 }

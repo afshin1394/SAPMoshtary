@@ -33,7 +33,7 @@ public class ForoshandehRouteMapModel implements ForoshandehRouteMapMVP.ModelOps
     public void getCustomerInfo()
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         CustomerAddressDAO customerAddressDAO = new CustomerAddressDAO(mPresenter.getAppContext());
         ArrayList<CustomerAddressModel> customerAddressModels = new ArrayList<>();
@@ -53,7 +53,7 @@ public class ForoshandehRouteMapModel implements ForoshandehRouteMapMVP.ModelOps
     {
         GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         ArrayList<GPSDataModel> gpsDataModels = new ArrayList<>();
         Log.d("routeMap" , "ccForoshandeh : " + foroshandehMamorPakhshModel.getCcForoshandeh());
@@ -73,7 +73,7 @@ public class ForoshandehRouteMapModel implements ForoshandehRouteMapMVP.ModelOps
     {
         final GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         final ArrayList<GPSDataModel> gpsDataModels = new ArrayList<>();
 

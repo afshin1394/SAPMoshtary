@@ -14,15 +14,20 @@ import com.saphamrah.Utils.Constants;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+
 public class GoodsInfoPresenter implements GoodsInfoMVP.PresenterOps, GoodsInfoMVP.RequiredPresenterOps {
 
     private GoodsInfoMVP.ModelOps mModel;
     private WeakReference<GoodsInfoMVP.RequiredViewOps> mView;
 
 
+
     public GoodsInfoPresenter(GoodsInfoMVP.RequiredViewOps mView) {
         this.mView = new WeakReference<>(mView);
         mModel = new GoodsInfoModel(this);
+
     }
 
 
@@ -69,6 +74,12 @@ public class GoodsInfoPresenter implements GoodsInfoMVP.PresenterOps, GoodsInfoM
     }
 
     @Override
+    public void onFinishProgress() {
+        mView.get().onFinishProgress();
+    }
+
+
+    @Override
     public void getKalaInfoCcBrandList() {
         mModel.getKalaInfoCcBrandList();
     }
@@ -89,6 +100,8 @@ public class GoodsInfoPresenter implements GoodsInfoMVP.PresenterOps, GoodsInfoM
     }
 
 
+
+
     /////////////////////////// RequiredPresenterOps ///////////////////////////
 
     @Override
@@ -96,12 +109,14 @@ public class GoodsInfoPresenter implements GoodsInfoMVP.PresenterOps, GoodsInfoM
         return mView.get().getAppContext();
     }
 
+
+
     @Override
     public void onGetListOfGoods(ArrayList<RptKalaInfoModel> rptKalaInfoModels) {
         if (rptKalaInfoModels.size() > 0) {
             mView.get().onGetListOfGoods(rptKalaInfoModels);
         } else {
-            mView.get().showToast(R.string.emptyList, Constants.FAILED_MESSAGE());
+            mView.get().showToast(getAppContext().getString( R.string.emptyList), Constants.FAILED_MESSAGE());
         }
     }
 
@@ -116,6 +131,11 @@ public class GoodsInfoPresenter implements GoodsInfoMVP.PresenterOps, GoodsInfoM
     }
 
     @Override
+    public void finishProgress() {
+     mView.get().onFinishProgress();
+    }
+
+    @Override
     public void updateProgress(int progress) {
         if (progress > 0) {
             mView.get().updateProgressBar(progress);
@@ -124,39 +144,29 @@ public class GoodsInfoPresenter implements GoodsInfoMVP.PresenterOps, GoodsInfoM
 
     @SuppressLint("LongLogTag")
     @Override
-    public void onCompleteUpdateGallery(ArrayList<Integer> messages,ArrayList<KalaPhotoModel> kalaPhotoModels) {
-
-        Log.i("--OnCompleteUpdateGallery--", "onCompleteUpdateGallery"+messages.size());
-
-        if (messages.contains(-1)){
-            Log.i("--OnCompleteUpdateGallery--", "onCompleteUpdateGallery: contains -1");
-
-            mView.get().showToast(R.string.updateNotComplete, Constants.RESPONSE_NOT_COMPLETE());
-            mView.get().closeProgressBar();
-        }else{
-            Log.i("--OnCompleteUpdateGallery--", "onCompleteUpdateGallery:dont contain -1");
-            mView.get().onUpdateGallery(kalaPhotoModels);
-            mView.get().showToast(R.string.updateSuccessed,Constants.SUCCESS_MESSAGE());
-            mView.get().closeProgressBar();
-        }
-
-
+    public void onCompleteUpdateGallery(ArrayList<KalaPhotoModel> kalaPhotoModels) {
+        mView.get().onUpdateGallery(kalaPhotoModels);
+        mView.get().showToast(getAppContext().getString(R.string.updateSuccessed),Constants.SUCCESS_MESSAGE());
+        mView.get().closeProgressBar();
     }
 
+
+
     @Override
-    public void onUpdateGoodsList(boolean status, int resId) {
+    public void onUpdateGoodsList(boolean status, String message) {
         mView.get().closeLoading();
         if (status) {
-            mView.get().showToast(resId, Constants.SUCCESS_MESSAGE());
+            mView.get().showToast(message, Constants.SUCCESS_MESSAGE());
         } else {
-            mView.get().showAlert(resId, Constants.FAILED_MESSAGE());
+            mView.get().showAlert(message, Constants.FAILED_MESSAGE());
         }
     }
 
+
     @Override
-    public void onError(int resId) {
+    public void onError(String message) {
         mView.get().closeProgressBar();
-        mView.get().showAlert(resId, Constants.FAILED_MESSAGE());
+        mView.get().showAlert(message, Constants.FAILED_MESSAGE());
     }
 
     @Override
@@ -168,4 +178,5 @@ public class GoodsInfoPresenter implements GoodsInfoMVP.PresenterOps, GoodsInfoM
     public void onGetKalaInfoCcGorohList(ArrayList<RptKalaInfoModel> kalaInfoByCcGorohList) {
         mView.get().onGetKalaInfoCcGorohList(kalaInfoByCcGorohList);
     }
+
 }

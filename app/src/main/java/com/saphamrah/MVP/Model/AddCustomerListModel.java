@@ -330,7 +330,7 @@ public class AddCustomerListModel implements AddCustomerListMVP.ModelOps
     private void prepareAllMoshtaryDataAsJson(int ccMoshtary)
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
 
         MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
         MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
@@ -897,7 +897,7 @@ public class AddCustomerListModel implements AddCustomerListMVP.ModelOps
         final MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
 
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
 
         String jsonString = moshtaryModel.toJsonString(moshtaryAddressModels, moshtaryAfradModels, moshtaryShomarehHesabModels, moshtaryPhotoPPCModels, String.valueOf(foroshandehMamorPakhshModel.getCcAfrad()), String.valueOf(foroshandehMamorPakhshModel.getCcMarkazForosh()), String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()));
         Log.d("addCustomer" , "json moshtary : " + jsonString);

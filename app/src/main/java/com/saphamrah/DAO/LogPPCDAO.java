@@ -32,7 +32,7 @@ public class LogPPCDAO
         {
             exception.printStackTrace();
             PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), "LogPPCDAO" , "" , "constructor" , "");
+           // logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), "LogPPCDAO" , "" , "constructor" , "");
         }
     }
 

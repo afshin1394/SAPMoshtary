@@ -43,7 +43,7 @@ public class RptCheckBargashtyModel implements RptCheckBargashtyMVP.ModelOps
     public void updateListBargashty()
     {
         final BargashtyDAO bargashtyDAO = new BargashtyDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
 
         final Handler handler = new Handler(new Handler.Callback() {

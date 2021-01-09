@@ -86,7 +86,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
     public void getNoeMasouliat()
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         ForoshandehMamorPakhshUtils foroshandehMamorPakhshUtils = new ForoshandehMamorPakhshUtils();
         int noeMasouliat = foroshandehMamorPakhshUtils.getNoeMasouliat(foroshandehMamorPakhshModel);
         mPresenter.onGetNoeMasouliat(noeMasouliat);
@@ -112,7 +112,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
 
         if (ccDarkhastFaktor != 0)
         {
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
             if (foroshandehMamorPakhshModel != null)
             {
                 int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
@@ -286,7 +286,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
             {
                 ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
                 ForoshandehMamorPakhshUtils foroshandehMamorPakhshUtils = new ForoshandehMamorPakhshUtils();
-                ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getForoshandehMamorPakhsh();
+                ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
                 int noeMasouliat = foroshandehMamorPakhshUtils.getNoeMasouliat(foroshandehMamorPakhshModel);
                 String enablePishnahadKala = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_PISHNAHAD_KALA);
                 Log.d("darkhastKala" , "calculateKalaPishnahadi : " + calculateKalaPishnahadi + " , noeMasouliat : " + noeMasouliat + " , enablePishnahadKala : " + enablePishnahadKala);
@@ -519,7 +519,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
     private long insertNewFaktor(int ccMoshtary , String strLatitude , String strLongitude)
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
 
         ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
         String ccChildParameters = Constants.CC_CODE_NOE_VOSOL_MPSHTARY_RESID() + "," + Constants.CC_BE_MASOLIAT_FOROSH() + "," + Constants.CC_NOE_HAML_ADDI() + "," + Constants.CC_VAZEIAT_FAKTOR_TEMP();
@@ -699,7 +699,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
         String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
         String tarikhDarkhast = currentDate;
         Log.d("darkhastKala", "ccForoshandeh in insertNewKalaMojodi : " + ccForoshandeh);
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         if (noeMasouliat == 4 || noeMasouliat == 5)
         {
@@ -729,7 +729,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
     private String createShomareDarkhast(int shomarehDarkhast)
     {
         ForoshandehMamorPakhshDAO foroshandehmamorpakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehmamorpakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehmamorpakhshDAO.getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         ForoshandehDAO foroshandehDAO = new ForoshandehDAO(mPresenter.getAppContext());
         String createShomareDarkhast = "";
@@ -851,7 +851,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
     @Override
     public void insertAdamSefaresh(int ccMoshtary, int ccElatAdamSefaresh, byte[] imageAdamSefaresh, String codeMoshtaryTekrari)
     {
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
         SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
         int ccForoshandeh = shared.getInt(shared.getCcForoshandeh() , 0);
         AdamDarkhastDAO adamDarkhastDAO = new AdamDarkhastDAO(mPresenter.getAppContext());

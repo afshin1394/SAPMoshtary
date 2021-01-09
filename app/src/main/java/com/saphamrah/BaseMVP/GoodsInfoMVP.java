@@ -8,6 +8,8 @@ import com.saphamrah.Model.RptKalaInfoModel;
 
 import java.util.ArrayList;
 
+import io.reactivex.disposables.Disposable;
+
 public interface GoodsInfoMVP
 {
 
@@ -21,9 +23,9 @@ public interface GoodsInfoMVP
         void onGetGallery(ArrayList<KalaPhotoModel> kalaPhotoModels);
         void closeProgressBar();
         void closeLoading();
-        void showAlert(int resId, int messageType);
-        void showToast(int resId, int messageType);
-
+        void showAlert(String resId, int messageType);
+        void showToast(String resId, int messageType);
+        void onFinishProgress();
         void onGetKalaInfoCcBrandList(ArrayList<RptKalaInfoModel> kalaInfoByCcBrandList);
         void onGetKalaInfoCcGorohList(ArrayList<RptKalaInfoModel> kalaInfoByCcGorohList);
     }
@@ -39,12 +41,14 @@ public interface GoodsInfoMVP
         void updateGoodsList();
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
-
+        void onFinishProgress();
         void getKalaInfoCcBrandList();
         void getKalaByCcBrand(String ccBrands);
 
         void getKalaInfoCcGorohList(String ccBrands);
         void getKalaByCcGoroh(String ccBrands);
+
+
     }
 
 
@@ -54,13 +58,14 @@ public interface GoodsInfoMVP
         void onGetListOfGoods(ArrayList<RptKalaInfoModel> rptKalaInfoModels);
         void onGetGallery(ArrayList<KalaPhotoModel> kalaPhotoModels);
         void startProgressBar();
+        void finishProgress();
         void updateProgress(int progress);
-        void onCompleteUpdateGallery(ArrayList<Integer> messages,ArrayList<KalaPhotoModel> kalaPhotoModels);
-        void onUpdateGoodsList(boolean status , int resId);
-        void onError(int resId);
-
+        void onCompleteUpdateGallery(ArrayList<KalaPhotoModel> kalaPhotoModels);
+        void onUpdateGoodsList(boolean status , String message);
+        void onError(String message);
         void onGetKalaInfoCcBrandList(ArrayList<RptKalaInfoModel> kalaInfoByCcBrandList);
         void onGetKalaInfoCcGorohList(ArrayList<RptKalaInfoModel> kalaInfoByCcGorohList);
+
 
     }
 
@@ -73,11 +78,10 @@ public interface GoodsInfoMVP
         void updateGoodsList();
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
-
         void getKalaInfoCcBrandList();
         void getKalaByCcBrand(String ccBrands);
         void getKalaInfoCcGorohList(String ccBrands);
         void getKalaByCcGoroh(String ccBrands);
     }
-    
+
 }

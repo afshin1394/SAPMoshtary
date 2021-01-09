@@ -141,7 +141,7 @@ public class TreasuryListOfflineModel implements TreasuryListOfflineMVP.ModelOps
 
     private int getNoeMasouliatForoshandeh()
     {
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
         int noeMasouliat = -1;
         if (foroshandehMamorPakhshModel != null)
         {

@@ -191,7 +191,7 @@ public class CustomersListActivity extends AppCompatActivity implements Customer
             public void onClick(View v) {
                 fabMenu.close(true);
                 ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
-                int ccForoshandeh = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh().getCcForoshandeh();
+                int ccForoshandeh = foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh();
                 mPresenter.getAllMoshtarian(TAG , ccForoshandeh);
                 alertDialogLoading = customLoadingDialog.showLoadingDialog(CustomersListActivity.this);
 

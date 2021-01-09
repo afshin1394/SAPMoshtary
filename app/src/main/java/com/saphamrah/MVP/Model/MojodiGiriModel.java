@@ -51,7 +51,7 @@ public class MojodiGiriModel implements MojodiGiriMVP.ModelOps
     public void getNoeMasouliat()
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         ForoshandehMamorPakhshUtils foroshandehMamorPakhshUtils = new ForoshandehMamorPakhshUtils();
         int noeMasouliat = foroshandehMamorPakhshUtils.getNoeMasouliat(foroshandehMamorPakhshModel);
         mPresenter.onGetNoeMasouliat(noeMasouliat);
@@ -100,7 +100,7 @@ public class MojodiGiriModel implements MojodiGiriMVP.ModelOps
                     float latitude = Float.parseFloat(selectFaktorShared.getString(selectFaktorShared.getLatitude() , String.valueOf(googleLocationProvider.getLatitude())));
                     float longtitude = Float.parseFloat(selectFaktorShared.getString(selectFaktorShared.getLongitude() , String.valueOf(googleLocationProvider.getLongitude())));
 
-                    ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+                    ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
                     int ccMamorPakhsh = 0;
                     int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
                     if (noeMasouliat == 4 || noeMasouliat == 5)

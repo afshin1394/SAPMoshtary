@@ -95,7 +95,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
     {
         final ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         final ArrayList<ForoshandehMamorPakhshModel> foroshandehMamorPakhshModels = foroshandehMamorPakhshDAO.getAll();
-        //final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        //final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         ForoshandehMamorPakhshUtils foroshandehMamorPakhshUtil = new ForoshandehMamorPakhshUtils();
         for (int i=0 ; i < foroshandehMamorPakhshModels.size() ; i++)
         {
@@ -111,7 +111,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
             {
                 final ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
                 final ArrayList<ForoshandehMamorPakhshModel> foroshandehMamorPakhshModels = foroshandehMamorPakhshDAO.getAll();
-                final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+                final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
                 PubFunc.ForoshandehMamorPakhsh foroshandehMamorPakhshUtil = new PubFunc().new ForoshandehMamorPakhsh();
                 for (int i=0 ; i < foroshandehMamorPakhshModels.size() ; i++)
                 {
@@ -160,7 +160,11 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
     @Override
     public void getProgram(int getProgramType , String date, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel)
     {
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         this.foroshandehMamorPakhshModel = foroshandehMamorPakhshModel;
+        GetProgramShared getProgramShared = new GetProgramShared(mPresenter.getAppContext());
+
+
         ccForoshandeh = foroshandehMamorPakhshModel.getCcForoshandeh();
         ccMamorPakhsh = foroshandehMamorPakhshModel.getCcMamorPakhsh();
         ccAfrad = foroshandehMamorPakhshModel.getCcAfrad();
@@ -178,12 +182,15 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
         ccMoshtaryPakhsh = "-1";
         ccForoshandehString = "-1";
         anbarakAfrad = "-1";
-        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getForoshandehMamorPakhsh());
+        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect());
         itemCounter = 0;
         this.date = date;
         selectedDateGregorian = "";
         calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -3);
+
+        getProgramShared.putString(getProgramShared.SELECT_FOROSHANDEH(),String.valueOf(ccForoshandeh));
+        foroshandehMamorPakhshDAO.updateIsSelect(ccForoshandeh);
 
         mPresenter.onGetNoeMasouliat(noeMasouliat);
 
@@ -325,7 +332,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
         ccGorohs= "347";
         ccAfrad = foroshandehMamorPakhshModel.getCcAfrad();
         anbarakAfrad = "-1";
-        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getForoshandehMamorPakhsh());
+        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect());
         itemCounter = 0;
         getProgramItemCount = mPresenter.getAppContext().getResources().getStringArray(R.array.updateKalaModatVosol).length;
         handler = new Handler(new Handler.Callback() {
@@ -357,7 +364,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
         ccMarkazForosh = foroshandehMamorPakhshModel.getCcMarkazForosh();
         ccMarkazSazmanForosh = foroshandehMamorPakhshModel.getCcMarkazSazmanForosh();
         itemCounter = 0;
-        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getForoshandehMamorPakhsh());
+        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect());
         getProgramItemCount = mPresenter.getAppContext().getResources().getStringArray(R.array.updateJayezehTakhfif).length;
         handler = new Handler(new Handler.Callback() {
             @Override
@@ -390,7 +397,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
         getProgramItemCount = mPresenter.getAppContext().getResources().getStringArray(R.array.updateCustomers).length;
         ccMoshtarys= "-1,";
         ccMasirs = "-1";
-        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getForoshandehMamorPakhsh());
+        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect());
         this.date = date;
         handler = new Handler(new Handler.Callback() {
             @Override
@@ -2832,7 +2839,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
     {
         final MandehMojodyMashinDAO mandehMojodyMashinDAO = new MandehMojodyMashinDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
 
         ccForoshandeh = String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh());
         if(noeMasouliat == 1)//1-Foroshandeh-Sard

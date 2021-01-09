@@ -74,7 +74,7 @@ public class RptSanadModel implements RptSanadMVP.ModelOps {
 
         } else {
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             if (foroshandehMamorPakhshModel != null) {
                 cCForoshande = String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh());
             }
@@ -113,7 +113,7 @@ public class RptSanadModel implements RptSanadMVP.ModelOps {
     }
 
     private int getNoeMasouliatForoshandeh() {
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
         int noeMasouliat = -1;
         if (foroshandehMamorPakhshModel != null) {
             noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);

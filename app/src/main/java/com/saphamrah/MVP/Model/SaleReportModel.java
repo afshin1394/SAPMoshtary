@@ -39,7 +39,7 @@ public class SaleReportModel implements SaleReportMVP.ModelOps
         final RptForoshDAO rptForoshDAO = new RptForoshDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         String today = new PubFunc().new DateUtils().todayDateGregorianWithSlash();
-        String ccForoshandeh = String.valueOf(foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh().getCcForoshandeh());
+        String ccForoshandeh = String.valueOf(foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh());
         rptForoshDAO.fetchAllrptAmarForosh(mPresenter.getAppContext(), "SaleReportActivity", ccForoshandeh, today, new RetrofitResponse() {
             @Override
             public void onSuccess(final ArrayList arrayListData) {

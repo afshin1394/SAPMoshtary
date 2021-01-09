@@ -23,7 +23,7 @@ public class OnlineSupportModel implements OnlineSupportMVP.ModelOps
     public void getCrispId()
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         if (foroshandehMamorPakhshModel != null && foroshandehMamorPakhshModel.getCcSazmanForosh() >= 0)
         {
             SupportCrispDAO supportCrispDAO = new SupportCrispDAO(mPresenter.getAppContext());

@@ -38,7 +38,7 @@ public class RptForoshandehRouteModel implements RptForoshandehRouteMVP.ModelOps
     public void updateRouteList()
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         if (foroshandehMamorPakhshModel != null)
         {
             final Handler handler = new Handler(new Handler.Callback() {

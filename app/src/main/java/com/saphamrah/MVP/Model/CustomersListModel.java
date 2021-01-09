@@ -50,7 +50,7 @@ public class CustomersListModel implements CustomersListMVP.ModelOps
     public void getAllMasirs()
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        int ccForoshandeh = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh().getCcForoshandeh();
+        int ccForoshandeh = foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh();
 
         AllMoshtaryForoshandehDAO allMoshtaryForoshandehDAO = new AllMoshtaryForoshandehDAO(mPresenter.getAppContext());
         ArrayList<MasirModel> masirModels = allMoshtaryForoshandehDAO.getAllMasirsByccForoshande(ccForoshandeh);
@@ -66,7 +66,7 @@ public class CustomersListModel implements CustomersListMVP.ModelOps
     public void getAllCustomers()
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        int ccForoshandeh = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh().getCcForoshandeh();
+        int ccForoshandeh = foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh();
 
         AllMoshtaryForoshandehDAO allMoshtaryForoshandehDAO = new AllMoshtaryForoshandehDAO(mPresenter.getAppContext());
         ArrayList<AllMoshtaryForoshandehModel> allMoshtaryForoshandehModels = allMoshtaryForoshandehDAO.getAllByccForoshandeh(ccForoshandeh);
@@ -77,7 +77,7 @@ public class CustomersListModel implements CustomersListMVP.ModelOps
     public void getCustomersByccMasir(int ccMasir)
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        int ccForoshandeh = foroshandehMamorPakhshDAO.getForoshandehMamorPakhsh().getCcForoshandeh();
+        int ccForoshandeh = foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh();
 
         AllMoshtaryForoshandehDAO allMoshtaryForoshandehDAO = new AllMoshtaryForoshandehDAO(mPresenter.getAppContext());
         ArrayList<AllMoshtaryForoshandehModel> allMoshtaryForoshandehModels = allMoshtaryForoshandehDAO.getAllByccMasir(ccForoshandeh , ccMasir);

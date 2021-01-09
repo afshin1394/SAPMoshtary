@@ -1,6 +1,8 @@
 package com.saphamrah.MVP.View;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -8,14 +10,19 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -40,6 +47,7 @@ import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
 import com.saphamrah.Utils.CustomAlertDialogResponse;
+import com.saphamrah.Utils.CustomLoadingDialog;
 import com.saphamrah.Utils.StateMaintainer;
 
 import java.io.File;
@@ -48,10 +56,13 @@ import java.util.ArrayList;
 import me.anwarshahriar.calligrapher.Calligrapher;
 
 import static android.provider.ContactsContract.Directory.PACKAGE_NAME;
+import static androidx.core.content.ContextCompat.getSystemService;
 
+//TODO
+public class SplashActivity extends AppCompatActivity implements SplashMVP.RequiredViewOps, AsyncTaskResponse {
 
-public class SplashActivity extends AppCompatActivity implements SplashMVP.RequiredViewOps , AsyncTaskResponse {
-
+    private static final int WIFI_SETTING = 110;
+    private static final int REQUEST_CODE_ENABLE_ADMIN = 125;
     private final String TAG = this.getClass().getSimpleName();
     StateMaintainer stateMaintainer = new StateMaintainer(this.getSupportFragmentManager(), TAG, SplashActivity.this);
     SplashMVP.PresenterOps mPresenter;
@@ -62,6 +73,12 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
     private String downloadUrl = "";
     private int invalidPackageUninstalledCounter;
     private int countInvalidPackage;
+    private boolean isNotOpenMain = true;
+
+    private CardView crdIdentityCode;
+    private EditText etvIdentityCode;
+    CustomLoadingDialog customLoadingDialog;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -73,7 +90,7 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
         calligrapher.setFont(this, getResources().getString(R.string.fontPath), true);
 
         startMVPOps();
-
+        findViews();
         //checkReadPhoneStatePermission();
 
         isTestNewVersion = false;
@@ -81,14 +98,23 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
         countInvalidPackage = 0;
 
         customAlertDialog = new CustomAlertDialog(SplashActivity.this);
+        customLoadingDialog = new CustomLoadingDialog();
 
+
+        checkPermission();
+
+
+
+    }
+
+    private void findViews() {
+        crdIdentityCode = findViewById(R.id.crdIdentityCode);
+        etvIdentityCode = findViewById(R.id.etv_IdentityCode);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        mPresenter.checkAvailableEmail();
     }
 
     @Override
@@ -116,55 +142,34 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
         }
     }
 
+    public boolean hasPermissions(Context context, String[] permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == Constants.READ_PHONE_STATE())
-        {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                checkReadPhoneStatePermission();
-            }
-            else
-            {
-                customAlertDialog.showMessageAlert(SplashActivity.this, true, getResources().getString(R.string.errorDeniedPermissionTitle), getResources().getString(R.string.errorDeniedPermission), Constants.FAILED_MESSAGE(), getResources().getString(R.string.apply));
-            }
-        }
-        else if (requestCode == Constants.ACCESS_FINE_LOCATION())
-        {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                checkLocationPermission();
-            }
-            else
-            {
-                customAlertDialog.showMessageAlert(SplashActivity.this, true, getResources().getString(R.string.errorDeniedPermissionTitle), getResources().getString(R.string.errorDeniedPermission), Constants.FAILED_MESSAGE(), getResources().getString(R.string.apply));
-            }
-        }
-        else if (requestCode == Constants.CHANGE_WIFI_STATE()) {
+        if (requestCode == Constants.ALL_PERMISSIONS()) {
+
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                checkWifiPermission();
+                checkPermission();
             } else {
                 customAlertDialog.showMessageAlert(SplashActivity.this, true, getResources().getString(R.string.errorDeniedPermissionTitle), getResources().getString(R.string.errorDeniedPermission), Constants.FAILED_MESSAGE(), getResources().getString(R.string.apply));
             }
-        } else if (requestCode == Constants.ACCESS_NETWORK_STATE()) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                checkNetworkStateAccess();
-            }
+
         }
-        else if (requestCode == Constants.WRITE_EXTERNAL_STORAGE())
-        {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                downloadNewVersion();
-            }
-        }
-        else if (requestCode == CHECK_ACCESS_FINE_LOCATION_FOR_OPEN_MAIN)
-        {
-            Log.d("openMain" , "from on check location access");
-            mPresenter.getInvalidPackages();
-        }
+//        else if (requestCode == CHECK_ACCESS_FINE_LOCATION_FOR_OPEN_MAIN)
+//        {
+//            Log.d("openMain" , "from on check location access");
+//            mPresenter.getInvalidPackages();
+//        }
     }
 
 
@@ -222,7 +227,7 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
 
     @Override
     public void onCheckInternetType() {
-        checkReadPhoneStatePermission();
+       // checkReadPhoneStatePermission();
     }
 
     @Override
@@ -243,6 +248,14 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
     public void showErrorAlert(boolean closeActivity, int titleResId, String message, int messageType, int buttonTextResId)
     {
         customAlertDialog.showMessageAlert(SplashActivity.this, closeActivity, getResources().getString(titleResId), message, messageType, getResources().getString(buttonTextResId));
+    }
+    @Override
+    public void copyClipBoard(String usingIMEI)
+    {
+        ClipboardManager myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        ClipData myClip = ClipData.newPlainText("text", usingIMEI);
+        myClipboard.setPrimaryClip(myClip);
+        customAlertDialog.showToast(SplashActivity.this , "شناسه دستگاه ("+usingIMEI+") کپی شد" , Constants.INFO_MESSAGE(), Constants.DURATION_SHORT());
     }
 	
     @Override
@@ -547,6 +560,36 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
         }
     }
 
+    @Override
+    public void showAuthenticationProcess() {
+        crdIdentityCode.setVisibility(View.VISIBLE);
+        setIdentityCodeTextWatcher();
+    }
+
+    @Override
+    public void startLoadingDialog() {
+        alertDialog = customLoadingDialog.showLoadingDialog(SplashActivity.this);
+
+    }
+
+    @Override
+    public void stopLoadingDialog() {
+        if (alertDialog != null) {
+            try {
+                alertDialog.dismiss();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void clearInvalidIdentityCode() {
+        if (etvIdentityCode!=null){
+            etvIdentityCode.getText().clear();
+        }
+    }
+
 
     @Override
     public Context getAppContext()
@@ -660,8 +703,80 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
     }
 
 
-    private void turnOnGPS()
-    {
+    public void checkPermission() {
+        int ALL_PERMISSIONS = Constants.ALL_PERMISSIONS();
+
+        final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
+                , Manifest.permission.READ_EXTERNAL_STORAGE
+                , Manifest.permission.CAMERA
+                , Manifest.permission.CHANGE_WIFI_STATE
+                , Manifest.permission.ACCESS_FINE_LOCATION
+                , android.Manifest.permission.ACCESS_NETWORK_STATE
+                , Manifest.permission.READ_PHONE_STATE};
+
+
+        if (!hasPermissions(SplashActivity.this, permissions)) {
+            ActivityCompat.requestPermissions(this, permissions, ALL_PERMISSIONS);
+        } else {
+            mPresenter.checkAvailableEmail();
+            mPresenter.checkServerIp();
+            //mPresenter.checkWifiStatus();
+            //mPresenter.checkInternetType();
+            mPresenter.checkGPS();
+
+        }
+    }
+
+//    public void checkPermission() {
+//        if (ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, Constants.WRITE_EXTERNAL_STORAGE());
+//        } else {
+//
+//            TextWatcher etvIdentityCodeTextWatcher = new TextWatcher() {
+//                @Override
+//                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                }
+//
+//                @Override
+//                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable identityCode) {
+//                 if (identityCode.length()==10)
+//                     mPresenter.authenticateUser(identityCode.toString());
+//                }
+//            };
+//            etvIdentityCode.addTextChangedListener(etvIdentityCodeTextWatcher);
+//
+//
+//        }
+//    }
+
+    private void setIdentityCodeTextWatcher() {
+        TextWatcher etvIdentityCodeTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable identityCode) {
+                if (identityCode.length() == 10)
+                    mPresenter.authenticateUser(identityCode.toString());
+            }
+        };
+        etvIdentityCode.addTextChangedListener(etvIdentityCodeTextWatcher);
+    }
+
+    private void turnOnGPS() {
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setInterval(1000);
         locationRequest.setFastestInterval(500);
@@ -705,8 +820,6 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
             }
         });
     }
-
-
 
 
 }

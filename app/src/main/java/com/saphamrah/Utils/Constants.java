@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE = 0  ; // 0- main  1- Learn  2- Test 4-pegah 5-pegahtest 6-Demo
+    private static final int CURRENT_VERSION_TYPE = 4 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahtest 6-Demo
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 
@@ -38,12 +38,35 @@ public class Constants
     public static String RETROFIT_THROWABLE(){return RETROFIT_THROWABLE;}
 
 
+    private static final String HTTP_EXCEPTION = "EXCEPTION";
+    private static final String HTTP_NULL_RESPONSE = "HTTP_NULL_RESPONSE";
+    private static final String HTTP_RESOURCE_NOT_FOUND = "HTTP_RESOURCE_NOT_FOUND_ERROR";
+    private static final String HTTP_INTERNAL_SERVER_ERROR = "HTTP_SERVER_ERROR";
+    private static final String HTTP_ERROR = "HTTP_ERROR";
+    private static final String HTTP_BAD_REQUEST="HTTP_BAD_REQUEST";
+    private static final String HTTP_WRONG_ENDPOINT = "HTTP_WRONG_ENDPOINT";
+    private static final String HTTP_TIME_OUT_EXCEPTION="HTTP_TIME_OUT_EXCEPTION";
+
+
+
+    public static final  String HTTP_WRONG_ENDPOINT() {  return  HTTP_WRONG_ENDPOINT;   }
+    public static final  String HTTP_NULL_RESPONSE() {  return  HTTP_NULL_RESPONSE;   }
+    public static final  String HTTP_BAD_REQUEST(){return HTTP_BAD_REQUEST;}
+    public static final  String HTTP_RESOURCE_NOT_FOUND(){return HTTP_RESOURCE_NOT_FOUND;}
+    public static final  String HTTP_INTERNAL_SERVER_ERROR(){return HTTP_INTERNAL_SERVER_ERROR;}
+    public static final  String HTTP_ERROR(){return HTTP_ERROR;}
+    public static final String HTTP_TIME_OUT_EXCEPTION(){return HTTP_TIME_OUT_EXCEPTION;}
+
+
+
     ///////////////////////////// PERMISSIONS CODE /////////////////////////////
     private static final int READ_PHONE_STATE = 101;
     private static final int ACCESS_FINE_LOCATION = 102;
     private static final int CHANGE_WIFI_STATE = 103;
     private static final int ACCESS_NETWORK_STATE = 104;
     private static final int WRITE_EXTERNAL_STORAGE = 105;
+    private static final int READ_PRIVILEGED_PHONE_STATE = 106;
+    private static final int ALL_PERMISSIONS = 917;
 
 
     public static int READ_PHONE_STATE() {
@@ -53,7 +76,9 @@ public class Constants
     public static int CHANGE_WIFI_STATE() { return CHANGE_WIFI_STATE; }
     public static int ACCESS_NETWORK_STATE() { return ACCESS_NETWORK_STATE; }
     public static int WRITE_EXTERNAL_STORAGE() { return WRITE_EXTERNAL_STORAGE; }
-
+    public static int ALL_PERMISSIONS() {
+        return ALL_PERMISSIONS;
+    }
 
     ///////////////////////////// OPEN ACTIVITY FOR RESULT CODE /////////////////////////////
     private static final int OPEN_LOCALE_SETTING = 101;
@@ -1225,4 +1250,13 @@ public class Constants
     public static final String MAIN_CHANNEL_ID(){
         return MAIN_CHANNEL_ID;
     }
+
+    /////////////////////////// Authentication /////////////////////
+
+    public static final int MAX_LENGTH_STRING_FILE = 15;
+    public static final String SYSTEM_INFO = "systemInfo";
+    public static final String File_Path ="Android/Data";
+
+
 }
+

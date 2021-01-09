@@ -40,7 +40,7 @@ public class RptDarkhastFaktorVazeiatModel implements RptDarkhastFaktorVazeiatMV
     public void updateData()
     {
         final RptDarkhastFaktorVazeiatPPCDAO rptDarkhastFaktorVazeiatPPCDAO = new RptDarkhastFaktorVazeiatPPCDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         String ccForoshandeh = String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh());
         String ccMamorPakhsh = String.valueOf(foroshandehMamorPakhshModel.getCcMamorPakhsh());
