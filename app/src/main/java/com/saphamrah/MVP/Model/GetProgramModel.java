@@ -1,6 +1,7 @@
 package com.saphamrah.MVP.Model;
 
 
+import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Base64;
@@ -24,8 +25,11 @@ import com.saphamrah.Model.KalaMojodiModel;
 import com.saphamrah.Model.MandehMojodyMashinModel;
 import com.saphamrah.Model.MasirModel;
 import com.saphamrah.Model.MoshtaryAfradModel;
+import com.saphamrah.Model.MoshtaryGharardadKalaModel;
+import com.saphamrah.Model.MoshtaryGharardadModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Network.RetrofitResponse;
+import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.DateUtils;
 import com.saphamrah.PubFunc.DeviceInfo;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
@@ -45,6 +49,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+
+import io.reactivex.disposables.Disposable;
 
 
 public class GetProgramModel implements GetProgramMVP.ModelOps
@@ -1490,7 +1496,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
         {
             String ccDarkhastFaktor = "0";
             String ccDarkhastHavaleh = "0";
-            if(noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3)
+            if(noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat==6 || noeMasouliat==8)
             {
                 ccDarkhastFaktor = String.valueOf(ccDarkhastFaktorHavaleh);
             }
@@ -1720,7 +1726,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
 
     private void getdarkhastFaktorKalaPishnahadi(int getProgramType , String ccForoshandeh , String ccMoshtarys){
 
-        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3){
+        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 8){
 
 
             DarkhastFaktorKalaPishnahadiDAO darkhastFaktorKalaPishnahadiDAO = new DarkhastFaktorKalaPishnahadiDAO(BaseApplication.getContext());
@@ -1860,7 +1866,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
     private void getBargashty(final int getProgramType)
     {
         final BargashtyDAO bargashtyDAO = new BargashtyDAO(mPresenter.getAppContext());
-        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3)
+        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat==6 || noeMasouliat==8)
         {
             bargashtyDAO.fetchBargashty(mPresenter.getAppContext(), activityNameForLog, String.valueOf(ccForoshandeh), new RetrofitResponse() {
                 @Override
@@ -2842,7 +2848,9 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
 
         ccForoshandeh = String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh());
-        if(noeMasouliat == 1)//1-Foroshandeh-Sard
+        String ccSazmanForosh = String.valueOf(foroshandehMamorPakhshModel.getCcSazmanForosh());
+        String ccKalaCode ="-1";
+        if (noeMasouliat == 1)//1-Foroshandeh-Sard
         {
             anbarakAfrad = "0";
             ccMamorPakhsh = "0";
@@ -2861,35 +2869,40 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
             ccMamorPakhsh = "0";
         }
 
-        mandehMojodyMashinDAO.fetchMandehMojodyMashin(mPresenter.getAppContext(), activityNameForLog, anbarakAfrad, ccForoshandeh, ccMamorPakhsh, new RetrofitResponse()
-        {
+        Log.d("GetProgram","Online: " + anbarakAfrad + " - " + ccForoshandeh + " - " + ccMamorPakhsh + " - " + ccKalaCode + " - " + ccSazmanForosh);
+        mandehMojodyMashinDAO.fetchMandehMojodyMashin(mPresenter.getAppContext(), activityNameForLog, anbarakAfrad, ccForoshandeh, ccMamorPakhsh,ccKalaCode,ccSazmanForosh, new RxResponseHandler() {
+
             @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
-                {
+            public void onStart(Disposable disposable) {
+                super.onStart(disposable);
+            }
+
+            @Override
+            public void onSuccess(final ArrayList arrayListData) {
+                Thread thread = new Thread() {
                     @Override
-                    public void run()
-                    {
+                    public void run() {
                         boolean deleteResult = mandehMojodyMashinDAO.deleteAll();
                         boolean insertResult = mandehMojodyMashinDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult)
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
+                        if (deleteResult && insertResult) {
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                             getKalaMojodi(getProgramType);
-                        }
-                        else
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
+                        } else {
+                            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
                         }
                     }
                 };
                 thread.start();
             }
+
             @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
+            public void onFailed(String type, String error) {
+                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
+            }
+
+            @Override
+            public void onComplete() {
+                super.onComplete();
             }
         });
     }
@@ -3444,6 +3457,8 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
     //new
     private void getTakhfifHajmiSatr(final int getProgramType)
     {
+        TakhfifHajmiDAO takhfifHajmiDAO = new TakhfifHajmiDAO(mPresenter.getAppContext());
+        ccTakhfifHajmis = takhfifHajmiDAO.getCcTakhfifHajmiForGetProgram();
         final TakhfifHajmiSatrDAO takhfifHajmiSatrDAO = new TakhfifHajmiSatrDAO(mPresenter.getAppContext());
         takhfifHajmiSatrDAO.fetchTakhfifHajmiSatr(mPresenter.getAppContext(), activityNameForLog , "-1", ccTakhfifHajmis, new RetrofitResponse()
         {
@@ -4999,7 +5014,8 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
                         if (deleteResult && insertResult)
                         {
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            getParameter(getProgramType);
+                            //getParameter(getProgramType);
+                            getAllMoshtaryGharardad(getProgramType,ccForoshandeh);
                         }
                         else
                         {
@@ -5017,13 +5033,181 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
         });
     }
 
+
+    /**
+     * get All contractions which a seller can sell to them weather a cold seller, a warm seller and a smart seller or a distributer
+     * {@link #getKalaMosavabBySazmanGharardad(int, int)}
+     *
+     * @param ccForoshandeh:each person in System has a cc
+     */
+    public final String GET_ALL_MOSHTARY_GHARARDAD_TAG = "__GET_ALL_GHARAR_DAD__";
+
+    public void getAllMoshtaryGharardad(final int getProgramType, int ccForoshandeh) {
+        Log.i(GET_ALL_MOSHTARY_GHARARDAD_TAG, "getAllMoshtaryGhararDad: " + foroshandehMamorPakhshModel.getCcSazmanForosh() + " " + foroshandehMamorPakhshModel.getCcMarkazSazmanForosh());
+
+
+        MoshtaryGharardadDAO moshtaryGharardadDAO = new MoshtaryGharardadDAO(mPresenter.getAppContext());
+        Log.i(GET_ALL_MOSHTARY_GHARARDAD_TAG, "getAllMoshtaryGhararDad: " + foroshandehMamorPakhshModel.getCcForoshandeh());
+
+        moshtaryGharardadDAO.fetchMoshtaryGharardad(mPresenter.getAppContext(), activityNameForLog, ccForoshandeh, new RetrofitResponse() {
+            @Override
+            public void onSuccess(ArrayList arrayListData) {
+
+                Log.i(GET_ALL_MOSHTARY_GHARARDAD_TAG, "onSuccess: " + arrayListData.size());
+                try {
+                    Log.i(GET_ALL_MOSHTARY_GHARARDAD_TAG, "onSuccess: 1" + arrayListData);
+                    Log.i(GET_ALL_MOSHTARY_GHARARDAD_TAG, "onSuccess: 2" + arrayListData.size());
+                    Thread thread = new Thread() {
+                        @Override
+                        public void run() {
+                            boolean deleteResult = moshtaryGharardadDAO.deleteAll();
+                            boolean insertResult = moshtaryGharardadDAO.insertGroup(arrayListData);
+                            Log.i(GET_ALL_MOSHTARY_GHARARDAD_TAG, "3: " + insertResult + " " + deleteResult);
+                            if (deleteResult && insertResult) {
+
+                                Log.i(GET_ALL_MOSHTARY_GHARARDAD_TAG, "run: " + insertResult + " " + deleteResult);
+                                sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                                Log.i(GET_ALL_MOSHTARY_GHARARDAD_TAG, "onSuccess: 4");
+
+
+                                ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels = ((ArrayList<MoshtaryGharardadModel>) arrayListData);
+                                /**
+                                 *now we have all ccSazman and cc Gharardad in our MoshtaryGharardad Table
+                                 * we need to find ccGharardads for each ccSazman and send a request for each set
+                                 *{@param ccSazmanForosh}
+                                 *{@param ccMoshtaryGharardad}
+                                 * we send all moshtary models to our getKalaMosavabModel And extract each set of{@param ccSazmanForosh}  && {@param ccMoshtaryGharardad}
+                                 */
+                                getAllKalaMosavab(getProgramType, moshtaryGharardadModels);
+                            } else {
+                                sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+                            }
+                        }
+                    };
+                    thread.start();
+
+
+                } catch (Exception exception) {
+
+                    Log.i(GET_ALL_MOSHTARY_GHARARDAD_TAG, "onFailed: ");
+                    mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", exception.getMessage(), exception.getLocalizedMessage()));
+                    String message = String.format("error body : %1$s , code : %2$s", exception.getMessage(), exception.getLocalizedMessage());
+                    PubFunc.Logger logger = new PubFunc().new Logger();
+                    logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), message, GetProgramModel.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onResponse");
+                }
+
+            }
+
+            @Override
+            public void onFailed(String type, String error) {
+                Log.i(GET_ALL_MOSHTARY_GHARARDAD_TAG, "onFailed: ");
+                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
+                String message = String.format("error body : %1$s , code : %2$s", type, error);
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), message, GetProgramModel.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onResponse");
+            }
+        });
+
+    }
+
+    /**
+     * now we have all ccSazman and cc Gharardad in our MoshtaryGharardad Table
+     * we neea to find ccGharardads for each ccSazman and send a request for each set
+     * {@param ccSazmanForosh}
+     * {@param ccMoshtaryGharardad}
+     * we extract each set in this method and after that we make apicalls  for each set
+     */
+    public  final String __GET_ALL_KALA_MOSAVAB__ = "GET_ALL_KALA_MOSAVAB";
+
+    private void getAllKalaMosavab(int getProgramType, ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels) {
+        ArrayList<ArrayList<MoshtaryGharardadKalaModel>> moshtaryGharardadArrayLists = new ArrayList<>();
+        for (MoshtaryGharardadModel moshtaryGharardadModel : moshtaryGharardadModels) {
+            ArrayList<MoshtaryGharardadKalaModel> moshtaryGharardadKalaModels;
+            /**
+             * moshtaryGharardadModel.getCcSazmanForosh() {@param ccSazmanForosh}
+             * moshtaryGharardadModel.getCcMoshtaryGharardad() {@param ccMoshtaryGharardad}
+             */
+            moshtaryGharardadKalaModels = getKalaMosavabBySazmanGharardad(moshtaryGharardadModel.getCcSazmanForosh(), moshtaryGharardadModel.getCcMoshtaryGharardad());
+            if (moshtaryGharardadKalaModels.size() > 0)
+                moshtaryGharardadArrayLists.add(moshtaryGharardadKalaModels);
+        }
+
+        MoshtaryGharardadKalaDAO moshtaryGharardadKalaDAO = new MoshtaryGharardadKalaDAO(mPresenter.getAppContext());
+
+        boolean deleteAll = moshtaryGharardadKalaDAO.deleteAll();
+        boolean insertGroup = moshtaryGharardadKalaDAO.insertGroup(moshtaryGharardadArrayLists);
+        if (deleteAll && insertGroup) {
+            Log.i(__GET_ALL_KALA_MOSAVAB__, "run: " + deleteAll + " " + insertGroup);
+            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+            getParameter(getProgramType);
+        } else {
+
+            Log.i(__GET_ALL_KALA_MOSAVAB__, "run: " + deleteAll + " " + insertGroup);
+            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+
+
+        }
+    }
+
+
+    /**
+     * gets all kala for each ccGharardad that is related to a sazmanForosh:
+     *
+     * @param ccMoshtaryGharardad :a MoshtaryParent Can have multiple contractions with multiple sazmanForosh and each contraction has a ccGharardad
+     * @param ccSazmanForosh      :All sazman forsh for instance mesal forostland , pegah , bastaniPanda ,zangirei ....
+     * ccsazmanForosh IN {1,2,3,4,5,6,11}
+     **/
+
+
+    public  final String API_CALL_FOREACH_SAZMAN_MOSHTARYGHARARDA = "SazmanMoshtaryGharardadApiCalls";
+
+
+    @SuppressLint("LongLogTag")
+    private ArrayList<MoshtaryGharardadKalaModel> getKalaMosavabBySazmanGharardad(
+            int ccSazmanForosh, int ccMoshtaryGharardad) {
+        ArrayList<MoshtaryGharardadKalaModel> moshtaryGharardadKalaModels = new ArrayList<>();
+        MoshtaryGharardadKalaDAO moshtaryGharardadKalaDAO = new MoshtaryGharardadKalaDAO(mPresenter.getAppContext());
+        moshtaryGharardadKalaDAO.fetchMoshtaryGharadadKala(mPresenter.getAppContext(), activityNameForLog, ccSazmanForosh, ccMoshtaryGharardad, new RetrofitResponse() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onSuccess(ArrayList arrayListData) {
+                Log.i(API_CALL_FOREACH_SAZMAN_MOSHTARYGHARARDA, "getMoshtaryGharardadAllKalaMosavabe: " + ccSazmanForosh + " " + ccMoshtaryGharardad);
+                if (arrayListData != null) {
+                    Log.i(API_CALL_FOREACH_SAZMAN_MOSHTARYGHARARDA, "onSuccess: " + arrayListData.size());
+                    if (arrayListData.size() > 0) {
+                        for (int i = 0; i < arrayListData.size(); i++) {
+                            MoshtaryGharardadKalaModel moshtaryGharardadKalaModel = (MoshtaryGharardadKalaModel) arrayListData.get(i);
+                            moshtaryGharardadKalaModel.setExtraprop_ccSazmanForosh(ccSazmanForosh);
+                            moshtaryGharardadKalaModels.add(moshtaryGharardadKalaModel);
+
+                            Log.i(API_CALL_FOREACH_SAZMAN_MOSHTARYGHARARDA, "onSuccess: " + moshtaryGharardadKalaModel.toString());
+                        }
+                    }
+
+
+                }
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailed(String type, String error) {
+                Log.i(API_CALL_FOREACH_SAZMAN_MOSHTARYGHARARDA, "onFailed: " + type + " " + error);
+
+
+            }
+        });
+        Log.i(API_CALL_FOREACH_SAZMAN_MOSHTARYGHARARDA, "getMoshtaryGharardadAllKalaMosavabe" + moshtaryGharardadKalaModels.size());
+        return moshtaryGharardadKalaModels;
+    }
+
+
     private void getParameter(final int getProgramType)
     {
         GetProgramShared getProgramShared = new GetProgramShared(mPresenter.getAppContext());
         final String lastDateTimeGetConfig = getProgramShared.getString(getProgramShared.GREGORIAN_DATE_TIME_OF_GET_CONFIG() , "20190101 00:00:00");
 
         final ParameterDAO parameterDAO = new ParameterDAO(mPresenter.getAppContext());
-        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3)
+        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat==6 || noeMasouliat==8)
         {
             ccMarkazAnbar = -1;
         }
@@ -5075,7 +5259,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
     private void getParameterChild(final int getProgramType, String lastDateTimeGetConfig , String ccMarkazSazmanForosh)
     {
         final ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
-        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3)
+        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat==6 || noeMasouliat==8)
         {
             ccMarkazAnbar = -1;
         }
