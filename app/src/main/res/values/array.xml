@@ -131,6 +131,8 @@
         <item>{\"name\":\"کدپستی\" , \"functdion\":\"getAllcodePosti\"}</item>
         <item>{\"name\":\"پشتیبانی آنلاین\" , \"functdion\":\"getSupportCrisp\"}</item>
         <item>{\"name\":\"نوع وصول\" , \"functdion\":\"getNoeVosolMoshtary\"}</item>
+        <item>{\"name\":\"قرارداد مشتری\" , \"functdion\":\"getAllMoshtaryGharardad\"}</item>
+        <item>{\"name\":\"کالا مصوبه قرارداد\" , \"functdion\":\"getAllKalaMosavab\"}</item>
         <item>{\"name\":\"دریافت تنظیمات\" , \"functdion\":\"getParameter\"}</item>
         <item>{\"name\":\"برخورد فروشنده با مشتری\" , \"function\":\"getBarkhordForoshandehBaMoshtary\"}</item>
     </string-array>
@@ -341,5 +343,10 @@
         <item>{\"title\":\"دوتایی\" , \"value\":\"2\",\"image\":\"ic_2section\"}</item>
         <item>{\"title\":\"چهار تایی\" , \"value\":\"3\",\"image\":\"ic_4section\"}</item>
 
+    </string-array>
+
+    <string-array name="sortTreasuryListTypeItems">
+        <item>{\"title\":\"بر اساس مسافت\" , \"value\":\"1\"}</item>
+        <item>{\"title\":\"بر اساس کد مشتری\" , \"value\":\"2\"}</item>
     </string-array>
 </resources>
