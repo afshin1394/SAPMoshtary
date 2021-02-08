@@ -134,7 +134,7 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
         findViews(view);
         initFragments();
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        requireActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screenHeight = displayMetrics.heightPixels;
         Log.i(TAG, "onCreateView: " + screenHeight);
 
@@ -476,6 +476,8 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
     @Override
     public void onShowOwghat(int drawableId, int stringId , OwghatModel owghatModel)
     {
+        Log.d("frag","owghat: "+ getResources().getString(stringId));
+
         imgDayTime.setImageResource(drawableId);
         lblDayTime.setVisibility(View.VISIBLE);
         lblDayTime.setText(String.format("%1$s%2$s %3$s" , foroshandehMamorPakhshName, getResources().getString(R.string.comma), getResources().getString(stringId)));
@@ -496,12 +498,16 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
     @Override
     public void onGetCurrentDate(String currentDate)
     {
+        Log.d("frag","currentDate: "+ currentDate);
+        lblCurrentDate.setVisibility(View.VISIBLE);
         lblCurrentDate.setText(currentDate);
     }
 
     @Override
     public void onGetWeather(WeatherModel weatherModel, WeatherDataModel weatherDataModel, WindModel windModel)
     {
+        Log.d("frag","weather: "+ weatherDataModel.getTemp().intValue());
+        lblTemperature.setVisibility(View.VISIBLE);
         lblTemperature.setText(String.format("%1$s: %2$s" , getResources().getString(R.string.temperature) , weatherDataModel.getTemp().intValue()));
         /*String weather = weatherModel.getDescription();
         String weatherData = "دما : " + weatherDataModel.getTemp() + "\n" + "فشار : " + weatherDataModel.getPressure() + "\n" +

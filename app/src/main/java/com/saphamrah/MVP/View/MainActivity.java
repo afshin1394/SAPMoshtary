@@ -572,8 +572,10 @@ public static final String SEND_PUSH_NOTIFICATION="SEND_PUSH_NOTIFICATION";
                 ccMamorPakhsh = message.getCcMamorPakhsh();
                 Log.i(SEND_PUSH_NOTIFICATION, "CcMessage: " + message.getCcMessage() + "MessageNoeNewFit: " + ccMessagesNewNofit);
                 manager.notify(message.getCcMessage(), BuildNotification(message.getMessage(), message.getTitle(), message.getCcMessage(), message.getNoeMessage()));
-                ccMessagesNewNofit = "-1";
+
             }
+            mPresenter.checkccMessagesForUpdateNotifStatus(ccForoshandeh, ccMamorPakhsh, ccMessagesNewNofit);
+            ccMessagesNewNofit = "-1";
 
         } else {
 
@@ -586,11 +588,11 @@ public static final String SEND_PUSH_NOTIFICATION="SEND_PUSH_NOTIFICATION";
                 Log.i(SEND_PUSH_NOTIFICATION, "sendPushNotification: "+message.getCcMessage());
                 notificationManager.notify(message.getCcMessage()+4, BuildNotification(message.getMessage(), message.getTitle(), message.getCcMessage(), message.getNoeMessage()));
 
-                ccMessagesNewNofit = "-1";
 
             }
             Log.i(SEND_PUSH_NOTIFICATION, "sendPushNotification: "+ccForoshandeh+"ccMamoorPakhsh:"+ccMamorPakhsh+"ccMessagesNewNotif:"+ccMessagesNewNofit);
             mPresenter.checkccMessagesForUpdateNotifStatus(ccForoshandeh, ccMamorPakhsh, ccMessagesNewNofit);
+            ccMessagesNewNofit = "-1";
 
 
         }
