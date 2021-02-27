@@ -72,6 +72,7 @@ public class EditCustomerActivity extends AppCompatActivity implements EditCusto
     private EditText editTextMasahateMaghaze;
     private EditText editTextSaateVisit;
     private EditText editTextMobile;
+    RecyclerView recyclerView;
     ImageView imgBack ;
     ImageView imgEditNoeFaaliatSenf ;
     ImageView imgEditSaateVisit ;
@@ -123,6 +124,8 @@ public class EditCustomerActivity extends AppCompatActivity implements EditCusto
         editTextMasahateMaghaze = findViewById(R.id.txtMasahateMaghazeh);
         editTextSaateVisit = findViewById(R.id.txtSaateVisit);
         editTextMobile = findViewById(R.id.txtMobile);
+        recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+
         customAlertDialog = new CustomAlertDialog(EditCustomerActivity.this);
         customLoadingDialog = new CustomLoadingDialog();
 
@@ -278,6 +281,11 @@ public class EditCustomerActivity extends AppCompatActivity implements EditCusto
         editTextMobile.setVisibility(View.GONE);
         imgEditMobile.setVisibility(View.GONE);
     }
+    @Override
+    public void hideAddress()
+    {
+        recyclerView.setVisibility(View.GONE);
+    }
 
     @Override
     public void onGetBaseCustomerInfo(String nationalCode, String mobile, String masahateMaghaze, int hasAnbar, String saateVisit, String noeSenf, String noeFaaliat, int codeNoeShakhsiat)
@@ -313,7 +321,7 @@ public class EditCustomerActivity extends AppCompatActivity implements EditCusto
     @Override
     public void onGetMoshtaryAddress(ArrayList<MoshtaryAddressModel> moshtaryAddressModels)
     {
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+
         AddCustomerAddressAdapter adapter = new AddCustomerAddressAdapter(EditCustomerActivity.this, moshtaryAddressModels, 2, true, new AddCustomerAddressAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(MoshtaryAddressModel moshtaryAddressModel, int position)

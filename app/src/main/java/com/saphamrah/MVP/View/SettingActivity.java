@@ -45,6 +45,7 @@ public class SettingActivity extends AppCompatActivity implements SettingMVP.Req
     private EditText edttxtPrintType;
     private EditText editTextMapService;
     private EditText editTextNumberGoodsEachPage;
+    private EditText edtTxtSortTreasuryList;
 
 
     @Override
@@ -61,6 +62,7 @@ public class SettingActivity extends AppCompatActivity implements SettingMVP.Req
         edttxtPrinterType = findViewById(R.id.txtPrinterType);
         edttxtPrintType = findViewById(R.id.txtPrintType);
         editTextMapService = findViewById(R.id.txtMapService);
+        edtTxtSortTreasuryList = findViewById(R.id.txtSortTreasuryList);
         editTextNumberGoodsEachPage= findViewById(R.id.txtGoodView);
         Button btnClearData = findViewById(R.id.btnClearData);
 
@@ -151,6 +153,25 @@ public class SettingActivity extends AppCompatActivity implements SettingMVP.Req
             }
         });
 
+
+        edtTxtSortTreasuryList.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                changeDrawableLeftTint(edtTxtSortTreasuryList , hasFocus);
+                if (hasFocus)
+                {
+                    mPresenter.getSortTreasuryList();
+                }
+            }
+        });
+
+        edtTxtSortTreasuryList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.getSortTreasuryList();
+            }
+        });
+
         editTextNumberGoodsEachPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,7 +227,7 @@ public class SettingActivity extends AppCompatActivity implements SettingMVP.Req
     }
 
     @Override
-    public void onGetSetting(String printerPaperSizeTitle, String printerTypeTitle, String printType,String mapServiceType,String goodItemsCountType)
+    public void onGetSetting(String printerPaperSizeTitle, String printerTypeTitle, String printType,String mapServiceType,String goodItemsCountType,String sortTreasuryList)
     {
         if (printerPaperSizeTitle != null && printerPaperSizeTitle.trim().length() > 0)
         {
@@ -225,6 +246,9 @@ public class SettingActivity extends AppCompatActivity implements SettingMVP.Req
         }
         if (goodItemsCountType !=null && goodItemsCountType.trim().length() >0){
             editTextNumberGoodsEachPage.setText(goodItemsCountType);
+        }
+        if (sortTreasuryList !=null && sortTreasuryList.trim().length()>0){
+            edtTxtSortTreasuryList.setText(sortTreasuryList);
         }
     }
 
@@ -353,6 +377,27 @@ public class SettingActivity extends AppCompatActivity implements SettingMVP.Req
     public void showAlertDialog(int resId, int messageType)
     {
         customAlertDialog.showMessageAlert(SettingActivity.this, false, "", getString(resId), messageType, getString(R.string.apply));
+    }
+
+    @Override
+    public void onGetSortTreasuryList(ArrayList<String> arrayListTitles, ArrayList<String> arrayListStringValues) {
+        CustomSpinner customSpinner = new CustomSpinner();
+        customSpinner.showSpinner(SettingActivity.this, arrayListTitles, new CustomSpinnerResponse()
+        {
+            @Override
+            public void onApplySingleSelection(int selectedIndex)
+            {
+                edtTxtSortTreasuryList.setText(arrayListTitles.get(selectedIndex));
+                mPresenter.checkSortTreasuryList(arrayListStringValues.get(selectedIndex));
+                // BaseApplication.MAP_TYPE=Integer.parseInt(arrayListStringValues.get(selectedIndex));
+            }
+
+            @Override
+            public void onApplyMultiSelection(ArrayList<Integer> selectedIndexes)
+            {
+
+            }
+        });
     }
 
     private void changeDrawableLeftTint(EditText editText , boolean hasFocus)

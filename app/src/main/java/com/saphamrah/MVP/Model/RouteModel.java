@@ -8,13 +8,16 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.RouteMVP;
 import com.saphamrah.DAO.MoshtaryDAO;
+import com.saphamrah.MVP.View.MainActivity;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.RoutingServerShared;
+import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Valhalla.Location;
 import com.saphamrah.Valhalla.SourcesToTargetsFailedResult;
 import com.saphamrah.WebService.APIServiceValhalla;
@@ -67,7 +70,11 @@ public class RouteModel implements RouteMVP.ModelOps
         String routingServerIP = new RoutingServerShared(mPresenter.getAppContext()).getString(RoutingServerShared.IP , "");
         if (routingServerIP.length() > 0)
         {
-            APIServiceValhalla apiServiceValhalla = ApiClientGlobal.getInstance().getClientServiceValhalla();
+
+            RoutingServerShared routingServerShared = new RoutingServerShared(BaseApplication.getContext());
+            String urlOsrm = routingServerShared.getString(RoutingServerShared.IP,"http://91.92.125.244:8002");
+            Log.d("urlOsrm",urlOsrm.substring(0, 11));
+            APIServiceValhalla apiServiceValhalla = ApiClientGlobal.getInstance().getClientServiceValhalla(urlOsrm);
             Call<Object> call = apiServiceValhalla.getOptimizedRoute(jsonObjectAllData.toString());
             call.enqueue(new Callback<Object>()
             {

@@ -16,6 +16,7 @@ public class SystemConfigTabletModel
     private static final String COLUMN_NoeFaktorPrint = "NoeFaktorPrint";
     private static final String COLUMN_NoeNaghshe="NoeNaghshe";
     private static final String COLUMN_GoodsNumberEachPage="GoodsShowNumberEachPage";
+    private static final String COLUMN_SortTreasuryList="SortTreasuryList";
     /*private static final String COLUMN_DateServer = "DateServer";
     private static final String COLUMN_CrispID = "CrispID";*/
 
@@ -52,6 +53,8 @@ public class SystemConfigTabletModel
     public static String COLUMN_GoodsShowNumberEachPage() {
         return COLUMN_GoodsNumberEachPage;
     }
+
+    public static String COLUMN_SortTreasuryList(){ return COLUMN_SortTreasuryList;}
 /*public static String COLUMN_DateServer() {
         return COLUMN_DateServer;
     }
@@ -173,6 +176,16 @@ public class SystemConfigTabletModel
         GoodsShowNumberEachPage = goodsShowNumberEachPage;
     }
 
+    private int sortTreasuryList;
+
+    public int getSortTreasuryList() {
+        return sortTreasuryList;
+    }
+
+    public void setSortTreasuryList(int sortTreasuryList) {
+        this.sortTreasuryList = sortTreasuryList;
+    }
+
     @Override
     public String toString() {
         return "SystemConfigTabletModel{" +
@@ -188,6 +201,7 @@ public class SystemConfigTabletModel
                 ", CrispID='" + CrispID + '\'' +
                 ", NoeNaghshe=" + NoeNaghshe +
                 ", GoodsShowNumberEachPage=" + GoodsShowNumberEachPage +
+                ", SortTreasuryList=" + sortTreasuryList +
                 '}';
     }
 }

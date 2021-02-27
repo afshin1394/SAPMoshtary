@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -31,6 +32,7 @@ import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.MVP.Presenter.CustomersListPresenter;
 import com.saphamrah.Model.AllMoshtaryForoshandehModel;
 import com.saphamrah.Model.MasirModel;
+import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
@@ -97,6 +99,7 @@ public class CustomersListActivity extends AppCompatActivity implements Customer
         FloatingActionButton fabSearch = findViewById(R.id.fabSearch);
         FloatingActionButton fabChooseRoute = findViewById(R.id.fabChooseRoute);
         FloatingActionButton fabRefresh = findViewById(R.id.fabRefresh);
+        FloatingActionButton fabCustomerListMap = findViewById(R.id.fabCustomerListMap);
         searchView = (MaterialSearchView) findViewById(R.id.searchView);
         searchView.setVoiceSearch(false);
         searchView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
@@ -112,6 +115,7 @@ public class CustomersListActivity extends AppCompatActivity implements Customer
         startMVPOps();
 
         mPresenter.getAllCustomers();
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
 
 
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
@@ -190,10 +194,28 @@ public class CustomersListActivity extends AppCompatActivity implements Customer
             @Override
             public void onClick(View v) {
                 fabMenu.close(true);
-                ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
                 int ccForoshandeh = foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh();
                 mPresenter.getAllMoshtarian(TAG , ccForoshandeh);
                 alertDialogLoading = customLoadingDialog.showLoadingDialog(CustomersListActivity.this);
+
+            }
+        });
+        int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshDAO.getIsSelect());
+
+        if(noeMasouliat ==6 || noeMasouliat==8){
+            fabCustomerListMap.setVisibility(View.VISIBLE);
+        }
+        else {
+            fabCustomerListMap.setVisibility(View.GONE);
+
+        }
+
+        fabCustomerListMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent =new Intent(CustomersListActivity.this, CustomersListMapActivity.class);
+                startActivity(intent);
 
             }
         });

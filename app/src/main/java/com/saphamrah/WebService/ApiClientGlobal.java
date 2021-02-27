@@ -48,6 +48,8 @@ public class ApiClientGlobal {
                 .build();
 
 
+
+
         Retrofit.Builder builder = new Retrofit
                 .Builder()
                 .client(client)
@@ -97,8 +99,8 @@ public class ApiClientGlobal {
         return apiServiceOwghatInstance;
     }
 
-    public APIServiceValhalla getClientServiceValhalla() {
-        String baseUrl = "http://192.168.80.38:8002/";
+    public APIServiceValhalla getClientServiceValhalla(String urlOsrm) {
+        String baseUrl = urlOsrm;
         if (apiServiceValhallaInstance == null)
             apiServiceValhallaInstance = createService(APIServiceValhalla.class, baseUrl);
         return apiServiceValhallaInstance;

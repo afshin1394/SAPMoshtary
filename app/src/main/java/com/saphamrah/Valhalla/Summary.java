@@ -3,6 +3,7 @@ package com.saphamrah.Valhalla;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
 public class Summary
 {
 
@@ -17,7 +18,7 @@ public class Summary
     private double maxLat;
     @SerializedName("time")
     @Expose
-    private int time;
+    private float time;
     @SerializedName("length")
     @Expose
     private double length;
@@ -36,6 +37,7 @@ public class Summary
         this.hasTimeRestrictions = hasTimeRestrictions;
     }
 
+
     public Double getMaxLon() {
         return maxLon;
     }
@@ -52,11 +54,11 @@ public class Summary
         this.maxLat = maxLat;
     }
 
-    public int getTime() {
+    public float getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(float time) {
         this.time = time;
     }
 

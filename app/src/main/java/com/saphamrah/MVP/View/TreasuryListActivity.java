@@ -22,6 +22,7 @@ import com.saphamrah.Adapter.TreasuryAdapter;
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.TreasuryListMVP;
 import com.saphamrah.MVP.Presenter.TreasuryListPresenter;
+import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.DarkhastFaktorMoshtaryForoshandeModel;
 import com.saphamrah.Utils.Constants;
@@ -42,8 +43,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
     private TreasuryListMVP.PresenterOps mPresenter;
     private final String ACTIVITY_NAME = "TreasuryListActivity";
 
-    private final int SORT_TYPE_CUSTOMER_CODE = 1;
-    private final int SORT_TYPE_ROUTING = 2;
+
 
 
     private int faktorRooz; // 0 -> today , 1 -> last
@@ -61,6 +61,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
     private AlertDialog alertDialogLoading;
     private CustomLoadingDialog customLoadingDialog;
     private CustomAlertDialog customAlertDialog;
+    private int sortList = 0;
 
 
 
@@ -87,7 +88,6 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
         recyclerViewFaktorRooz.setVisibility(View.VISIBLE);
         recyclerViewFaktorMandeDar.setVisibility(View.GONE);
         faktorRooz = 0;
-        setSortTypeTitle(SORT_TYPE_CUSTOMER_CODE);
         fabChangeList.setLabelText(getResources().getString(R.string.mandehDarVosolList));
 
         customAlertDialog = new CustomAlertDialog(TreasuryListActivity.this);
@@ -130,8 +130,12 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
             @Override
             public void onClick(View v)
             {
-                fabMenu.close(true);
-                mPresenter.getTreasuryList(faktorRooz , Constants.SORT_TREASURY_BY_CUSTOMER_CODE);
+                if (sortList == Constants.SORT_TREASURY_BY_CUSTOMER_CODE){
+                    customAlertDialog.showToast(TreasuryListActivity.this , getResources().getString(R.string.isSelectedSort) ,Constants.FAILED_MESSAGE() , Constants.DURATION_LONG());
+                } else {
+                    fabMenu.close(true);
+                    mPresenter.getTreasuryList(faktorRooz, Constants.SORT_TREASURY_BY_CUSTOMER_CODE);
+                }
             }
         });
 
@@ -140,8 +144,13 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
             @Override
             public void onClick(View v)
             {
-                fabMenu.close(true);
-                mPresenter.getTreasuryListWithRouting(darkhastFaktorMoshtaryForoshandeModels);
+                if (sortList == Constants.SORT_TREASURY_BY_ROUTING){
+                    customAlertDialog.showToast(TreasuryListActivity.this , getResources().getString(R.string.isSelectedSort) ,Constants.FAILED_MESSAGE() , Constants.DURATION_LONG());
+                } else  {
+                    fabMenu.close(true);
+                    mPresenter.getTreasuryListWithRouting(darkhastFaktorMoshtaryForoshandeModels);
+            }
+
             }
         });
 
@@ -175,7 +184,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
 
 
     @Override
-    public void onGetFaktorRooz(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> arrayListDarkhastFaktorMoshtaryForoshandeModel , int noeMasouliat)
+    public void onGetFaktorRooz(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> arrayListDarkhastFaktorMoshtaryForoshandeModel , int noeMasouliat , int sort)
     {
         this.darkhastFaktorMoshtaryForoshandeModels.clear();
         this.darkhastFaktorMoshtaryForoshandeModels.addAll(arrayListDarkhastFaktorMoshtaryForoshandeModel);
@@ -210,7 +219,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
                 }
             }
         });
-        setSortTypeTitle(SORT_TYPE_CUSTOMER_CODE);
+        setSortTypeTitle(sort);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(TreasuryListActivity.this);
         recyclerViewFaktorRooz.setLayoutManager(mLayoutManager);
         recyclerViewFaktorRooz.setItemAnimator(new DefaultItemAnimator());
@@ -244,7 +253,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
                 }
             }
         });
-        setSortTypeTitle(SORT_TYPE_CUSTOMER_CODE);
+        setSortTypeTitle(Constants.SORT_TREASURY_BY_CUSTOMER_CODE);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(TreasuryListActivity.this);
         recyclerViewFaktorMandeDar.setLayoutManager(mLayoutManager);
         recyclerViewFaktorMandeDar.setItemAnimator(new DefaultItemAnimator());
@@ -289,7 +298,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
                 }
             }
         });
-        setSortTypeTitle(SORT_TYPE_ROUTING);
+        setSortTypeTitle(Constants.SORT_TREASURY_BY_ROUTING);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(TreasuryListActivity.this);
         recyclerViewFaktorRooz.setLayoutManager(mLayoutManager);
         recyclerViewFaktorRooz.setItemAnimator(new DefaultItemAnimator());
@@ -397,14 +406,18 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
         customAlertDialog.showToast(TreasuryListActivity.this, getResources().getString(resId), messageType, duration);
     }
 
-
+    /**
+     * sort is 1 = SORT_TREASURY_BY_ROUTING
+     * sort is 2 = SORT_TREASURY_BY_CUSTOMER_CODE
+     */
     private void setSortTypeTitle(int sortType)
     {
-        if (sortType == SORT_TYPE_CUSTOMER_CODE)
+        sortList = sortType;
+        if (sortType == Constants.SORT_TREASURY_BY_CUSTOMER_CODE)
         {
             lblSortTitle.setText(getString(R.string.sortWithCustomerCode));
         }
-        else if (sortType == SORT_TYPE_ROUTING)
+        else if (sortType == Constants.SORT_TREASURY_BY_ROUTING)
         {
             lblSortTitle.setText(getString(R.string.sortWithRouting));
         }
@@ -550,6 +563,10 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new PubFunc().new LocationProvider().stopLocationProvider();
+    }
 
 }

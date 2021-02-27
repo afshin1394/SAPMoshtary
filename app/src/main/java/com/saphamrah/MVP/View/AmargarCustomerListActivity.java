@@ -394,7 +394,7 @@ public class AmargarCustomerListActivity extends AppCompatActivity implements Am
                 mPresenter.checkCustomerLocation(model.getNameMoshtary(), model.getLatitudeY(), model.getLongitudeX());
                 break;
             case ListMoshtarianAdapter.PORSESHNAME:
-                PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider(AmargarCustomerListActivity.this);
+                PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
                 Location currentLocation = new Location(locationProvider.getLatitude(), locationProvider.getLongitude());
                 mPresenter.checkForAddPorseshname(currentLocation, model);
                 break;
@@ -407,7 +407,7 @@ public class AmargarCustomerListActivity extends AppCompatActivity implements Am
     @Override
     public void onGetRadiusConfig(final ArrayList<String> arrayListRadiusItems)
     {
-        final PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider(this);
+        final PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
         List<String> titles = new ArrayList<>();
         for (String item : arrayListRadiusItems)
         {
@@ -761,6 +761,10 @@ public class AmargarCustomerListActivity extends AppCompatActivity implements Am
             }
         }
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new PubFunc().new LocationProvider().stopLocationProvider();
+    }
 
 }

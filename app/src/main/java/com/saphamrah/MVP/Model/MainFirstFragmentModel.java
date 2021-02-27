@@ -40,7 +40,7 @@ public class MainFirstFragmentModel implements MainFirstFragmentMVP.ModelOps
     @Override
     public void getOwghat(final String currentTime)
     {
-        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
+        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
         APIServiceOwghat apiService = ApiClientGlobal.getInstance().getClientServiceOwghat();
         Call<OwghatResult> call = apiService.getOwghatByLatLong(googleLocationProvider.getLatitude() , googleLocationProvider.getLongitude());
         call.enqueue(new Callback<OwghatResult>() {
@@ -111,7 +111,7 @@ public class MainFirstFragmentModel implements MainFirstFragmentMVP.ModelOps
     @Override
     public void getWeather(final int type)
     {
-        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
+        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
         APIServiceWeather apiServiceWeather = ApiClientWeather.getClient().create(APIServiceWeather.class);
         Call<WeatherResult> call = apiServiceWeather.getWeatherInfoByCoordinate(Constants.API_KEY_OPEN_WEATHER_MAP(), googleLocationProvider.getLatitude(), googleLocationProvider.getLongitude(), "fa", "metric");
         call.enqueue(new Callback<WeatherResult>() {

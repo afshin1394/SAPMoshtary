@@ -90,7 +90,7 @@ public class MojodiGiriModel implements MojodiGiriMVP.ModelOps
             MojoodiGiriModel mojoodiGiriModel = mojoodiGiriDAO.getByMoshtaryAndKalaCode(ccMoshtary, ccKalaCode, true);
             if (mojoodiGiriModel.getCcMojoodiGiri() == 0)
             {
-                PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
+                PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
                 /*if (!googleLocationProvider.getHasAccess())
                 {
                     mPresenter.onErrorAccessToLocation();
@@ -196,7 +196,7 @@ public class MojodiGiriModel implements MojodiGiriMVP.ModelOps
     @Override
     public void insertAdamDarkhast(int ccMoshtary , int ccElatAdamDarkhast, byte[] imageAdamDarkhast, String codeMoshtaryTekrari)
     {
-        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
+        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
         /*if (!googleLocationProvider.getHasAccess())
         {
             mPresenter.onErrorAccessToLocation();

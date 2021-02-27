@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.saphamrah.BaseMVP.SelectBonusMVP;
+import com.saphamrah.DAO.KalaMojodiDAO;
 import com.saphamrah.MVP.Model.SelectBonusModel;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.DarkhastFaktorJayezehTakhfifModel;
@@ -57,7 +58,7 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
     }
 
     @Override
-    public void calculateMablaghJayezeh(ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels , String mablaghTakhfif)
+    public void calculateMablaghJayezeh(ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels , String mablaghTakhfif, int noeJayezehTakhfif)
     {
         Log.d("bonus" , "mablaghTakhfif : " + mablaghTakhfif);
         float mablaghJayezeh = 0;
@@ -70,7 +71,7 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
                 mablaghJayezeh += model.getSelectedCount() * model.getGheymatForosh();
             }
         }
-        Log.d("bonus" , "mablaghJayezeh : " + mablaghJayezeh);
+        Log.d("bonus" , "mablaghJayezeh : " + mablaghJayezeh + ", mablaghTakhfif: " + mablaghTakhfif);
         try
         {
             fltMablaghTakhfif = Float.parseFloat(mablaghTakhfif.trim().replace("," , ""));
@@ -81,7 +82,7 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
             exception.printStackTrace();
             mModel.setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "SelectBonusModel", "", "calculateMablaghJayezeh", "");
         }
-        mView.get().onCalculateMablaghJayezeh(mablaghJayezeh , fltMandeh);
+        mView.get().onCalculateMablaghJayezeh(mablaghJayezeh , fltMandeh, noeJayezehTakhfif);
     }
 
     @Override
@@ -122,7 +123,9 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
                 countCcKalaCode += model.getSelectedCount();
                 mapKalaCount.put(model.getCcKalaCode() , countCcKalaCode);
 
-                Log.d("selectbonus", "selectedCount : " + model.getSelectedCount() + " , Max_MojodyByShomarehBach : " + model.getMax_MojodyByShomarehBach() + " , getMax_Mojody : " + model.getMax_Mojody() + " , countCcKalaCode : " + countCcKalaCode);
+
+
+                Log.d("selectbonus", "Tedad: " + model.getTedad() + " , selectedCount : " + model.getSelectedCount() + " , Max_MojodyByShomarehBach : " + model.getMax_MojodyByShomarehBach() + " , getMax_Mojody : " + model.getMax_Mojody() + " , countCcKalaCode : " + countCcKalaCode);
 
                 if (model.getSelectedCount() > model.getTedad() || model.getSelectedCount() > model.getMax_MojodyByShomarehBach() || countCcKalaCode > model.getMax_Mojody())
                 {
@@ -242,9 +245,9 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
     }
 
     @Override
-    public void onGetKalaForJayezeh(ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels)
+    public void onGetKalaForJayezeh(ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels , int noeJayezehTakhfif)
     {
-        mView.get().onGetKalaForJayezeh(jayezehEntekhabiMojodiModels);
+        mView.get().onGetKalaForJayezeh(jayezehEntekhabiMojodiModels , noeJayezehTakhfif);
         /*if (jayezehEntekhabiMojodiModels.size() > 0)
         {
 

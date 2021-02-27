@@ -17,7 +17,7 @@ public class Summary_
     private Double maxLat;
     @SerializedName("time")
     @Expose
-    private Integer time;
+    private float time;
     @SerializedName("length")
     @Expose
     private Double length;
@@ -52,11 +52,11 @@ public class Summary_
         this.maxLat = maxLat;
     }
 
-    public Integer getTime() {
+    public float getTime() {
         return time;
     }
 
-    public void setTime(Integer time) {
+    public void setTime(float time) {
         this.time = time;
     }
 

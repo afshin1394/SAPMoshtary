@@ -348,7 +348,7 @@ public interface APIServiceGet
     Call<GetAllModatVosolMarkazForoshByccMarkazForoshResult> getAllModatVosolMarkazForoshByccMarkazForosh(@Query("ccMarkazForosh") String ccMarkazForosh);
 
     @GET("Api/ApiTablet/GetMojodyAnbar")
-    Call<GetMojodyAnbarResult> getMojodyAnbar(@Query("ccAfrad") String ccAfrad);
+    Call<GetMojodyAnbarResult> getMojodyAnbar(@Query("ccAfrad") String ccAfrad, @Query("ccMarkazSazmanForoshSakhtarForosh") String ccMarkazSazmanForoshSakhtarForosh);
 
     @GET("Api/ApiTablet/Get_MandehMojody")
     Call<GetMandehMojodyMashinResult> getMandehMojodyMashin(@Query("ccAnbarak") String ccAnbarak, @Query("ccForoshandeh") String ccForoshandeh, @Query("ccMamorPakhsh") String ccMamorPakhsh);
@@ -373,6 +373,14 @@ public interface APIServiceGet
 
     @GET("Api/ApiTablet/GetMessageBox")
     Call<GetMessageBoxResult> getMessageBoxResult(@Query("ccForoshandeh") String ccForoshandeh , @Query("ccMamorPakhsh") String ccMamorPakhsh);
+
+    @GET("Api/apisales/GetMoshtaryGharardadKala")
+    Call<GetAllMoshtaryGharardadKalaResult> getMoshtaryGharardadKala(@Query("ccsazmanForosh") String ccSazmanForosh, @Query("ccMoshtaryGharardad") String ccMoshtaryGharardad);
+
+
+    @GET("Api/apisales/GetMoshtaryGharardad")
+    Call<GetAllMoshtaryGharardadResult> getMoshtaryGharardad(@Query("ccForoshandeh") String ccForoshandeh);
+
 
     //N
     @GET("Api/ApiGlobal/GetAllNoeHesab")

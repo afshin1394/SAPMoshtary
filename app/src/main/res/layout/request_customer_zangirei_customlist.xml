@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="5dp">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/altdlg_bg"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            app:cardCornerRadius="10dp"
+            android:layoutDirection="rtl">
+            <com.daimajia.swipe.SwipeLayout
+                xmlns:swipe="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/swipe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                swipe:leftEdgeSwipeOffset="0dp"
+                swipe:rightEdgeSwipeOffset="0dp">
+
+                <LinearLayout
+                    android:layout_width="210dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/layRight"
+                    android:gravity="center"
+                    android:layoutDirection="rtl"
+                    android:orientation="horizontal">
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/layChangeLocation"
+                        android:layout_gravity="center"
+                        android:background="@color/colorBackAddCustomerDocSwipe">
+                        <ImageView
+                            android:id="@+id/imgChangeLocation"
+                            android:layout_width="@dimen/iconSize64"
+                            android:layout_height="@dimen/iconSize64"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="5dp"
+                            android:layoutDirection="rtl"
+                            android:src="@drawable/ic_change_pin" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/layShowLocation"
+                        android:layout_gravity="center"
+                        android:background="@color/colorBackShowCustomerLocationSwipe">
+                        <ImageView
+                            android:layout_width="@dimen/iconSize64"
+                            android:layout_height="@dimen/iconSize64"
+                            android:id="@+id/imgShowLocation"
+                            android:src="@drawable/ic_show_location"
+                            android:layout_centerInParent="true"
+                            android:layoutDirection="rtl"
+                            android:layout_marginRight="5dp"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/layUpdateEtebar"
+                        android:layout_gravity="center"
+                        android:background="@color/colorSliderEtebarForoshandeh">
+                        <ImageView
+                            android:layout_width="@dimen/iconSize64"
+                            android:layout_height="@dimen/iconSize64"
+                            android:id="@+id/imgUpdateEtebar"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/ic_money"
+                            android:layout_gravity="center"
+                            android:layoutDirection="rtl" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/layLeft"
+                    android:background="@color/colorBackDeleteCustomerSwipe"
+                    android:gravity="center"
+                    android:layoutDirection="rtl">
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/layChangeCustomerInfo"
+                        android:layout_gravity="center"
+                        android:background="@color/colorBackDeleteCustomerSwipe">
+                        <ImageView
+                            android:layout_width="@dimen/iconSize64"
+                            android:layout_height="@dimen/iconSize64"
+                            android:id="@+id/imgChangeCustomerInfo"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/ic_edit_user"
+                            android:layout_gravity="center"
+                            android:layoutDirection="rtl" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/layShowCustomerInfo"
+                        android:layout_gravity="center"
+                        android:background="@color/colorBackSendDataSwipe">
+                        <ImageView
+                            android:layout_width="@dimen/iconSize64"
+                            android:layout_height="@dimen/iconSize64"
+                            android:id="@+id/imgShowCustomerInfo"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/ic_user_info"
+                            android:layout_gravity="center"
+                            android:layoutDirection="rtl" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layoutDirection="rtl">
+                    <LinearLayout
+                        android:layout_width="5dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/layStatusRight"
+                        android:orientation="horizontal">
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:id="@+id/lblRadif"
+                            android:gravity="center"
+                            android:textSize="20sp"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textStyle="bold"/>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:orientation="vertical">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:layoutDirection="rtl"
+                                android:gravity="center_vertical"
+                                android:layout_gravity="center_vertical">
+                                <ImageView
+                                    android:layout_width="@dimen/iconSize24"
+                                    android:layout_height="@dimen/iconSize24"
+                                    android:src="@drawable/ic_name"
+                                    android:layout_gravity="center_vertical" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/lblCustomerFullNameCode"
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="16sp"
+                                    android:gravity="center_vertical|right"
+                                    android:layoutDirection="rtl"
+                                    android:textDirection="rtl"
+                                    android:layout_marginRight="10dp"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:layoutDirection="rtl"
+                                android:gravity="center_vertical"
+                                android:layout_gravity="center_vertical">
+                                <ImageView
+                                    android:layout_width="@dimen/iconSize24"
+                                    android:layout_height="@dimen/iconSize24"
+                                    android:src="@drawable/ic_type_address"
+                                    android:layout_gravity="center_vertical" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/lblAddress"
+                                    android:textColor="@color/colorTextSecondary"
+                                    android:textSize="14sp"
+                                    android:maxLines="1"
+                                    android:ellipsize="end"
+                                    android:gravity="center_vertical|right"
+                                    android:layoutDirection="rtl"
+                                    android:textDirection="rtl"
+                                    android:layout_marginRight="10dp"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:layoutDirection="rtl"
+                                android:weightSum="4"
+                                android:gravity="center_vertical"
+                                android:layout_gravity="center_vertical">
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:layout_weight="2"
+                                    >
+                                    <ImageView
+                                        android:layout_width="@dimen/iconSize24"
+                                        android:layout_height="@dimen/iconSize24"
+                                        android:src="@drawable/ic_porseshname"
+                                        android:layout_gravity="center_vertical" />
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:id="@+id/txtShomareGharardad"
+                                        android:textColor="@color/colorTextSecondary"
+                                        android:textSize="14sp"
+                                        android:maxLines="1"
+                                        android:ellipsize="end"
+                                        android:gravity="center_vertical|right"
+                                        android:layoutDirection="rtl"
+                                        android:textDirection="rtl"
+                                        android:layout_marginRight="10dp"/>
+
+
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:layout_weight="2"
+                                    >
+                                    <ImageView
+                                        android:layout_width="@dimen/iconSize24"
+                                        android:layout_height="@dimen/iconSize24"
+                                        android:src="@drawable/ic_sell_center"
+                                        android:layout_gravity="center_vertical" />
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:id="@+id/txtNameSazmanForosh"
+                                        android:textColor="@color/colorTextSecondary"
+                                        android:textSize="14sp"
+                                        android:maxLines="1"
+                                        android:ellipsize="end"
+                                        android:gravity="center_vertical|right"
+                                        android:layoutDirection="rtl"
+                                        android:textDirection="rtl"
+                                        android:layout_marginRight="10dp"/>
+
+
+                                </LinearLayout>
+
+
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="5dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/layStatusLeft"
+                        android:orientation="horizontal">
+                    </LinearLayout>
+                </LinearLayout>
+
+            </com.daimajia.swipe.SwipeLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+</LinearLayout>

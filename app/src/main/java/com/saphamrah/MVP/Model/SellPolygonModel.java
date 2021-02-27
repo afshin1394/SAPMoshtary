@@ -27,7 +27,7 @@ public class SellPolygonModel implements SellPolygonMVP.ModelOps
     @Override
     public void getCurrentLocation()
     {
-        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
+        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
         /*Log.d("location" , "access : " + googleLocationProvider.getHasAccess());
         if (!googleLocationProvider.getHasAccess())
         {

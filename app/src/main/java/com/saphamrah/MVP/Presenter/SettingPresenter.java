@@ -138,6 +138,22 @@ public class SettingPresenter implements SettingMVP.PresenterOps , SettingMVP.Re
     }
 
     @Override
+    public void checkSortTreasuryList(String mapTypeValue) {
+        try
+        {
+
+            int sortTreasuryList = Integer.parseInt(mapTypeValue.trim());
+            mModel.saveSortTreasuryList(sortTreasuryList);
+        }
+        catch (Exception e)
+        {
+            mView.get().showToast(R.string.invalidsortTreasuryList, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+            e.printStackTrace();
+            checkInsertLogToDB(Constants.LOG_EXCEPTION(), e.toString(), "SettingPresenter", "", "checkForSaveMapType*value=" + mapTypeValue, "");
+        }
+    }
+
+    @Override
     public void checkForSaveShowItemNumbers(String showItemNumbers) {
         try
         {
@@ -189,6 +205,11 @@ public class SettingPresenter implements SettingMVP.PresenterOps , SettingMVP.Re
 
     }
 
+    @Override
+    public void getSortTreasuryList() {
+        mModel.getSortTreasuryList();
+    }
+
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
 
@@ -206,9 +227,9 @@ public class SettingPresenter implements SettingMVP.PresenterOps , SettingMVP.Re
     }
 
     @Override
-    public void onGetSetting(String printerPaperSizeTitle, String printerTypeTitle, String printType,String mapServiceType,String goodItemsCountType)
+    public void onGetSetting(String printerPaperSizeTitle, String printerTypeTitle, String printType,String mapServiceType,String goodItemsCountType , String sortTreasuryList)
     {
-        mView.get().onGetSetting(printerPaperSizeTitle, printerTypeTitle, printType,mapServiceType,goodItemsCountType);
+        mView.get().onGetSetting(printerPaperSizeTitle, printerTypeTitle, printType,mapServiceType,goodItemsCountType , sortTreasuryList);
     }
 
     @Override
@@ -292,6 +313,11 @@ public class SettingPresenter implements SettingMVP.PresenterOps , SettingMVP.Re
         mView.get().showToast(R.string.updateFailed, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
 
     }
+    @Override
+    public void onFailedUpdateSortTreasuryList() {
+        mView.get().showToast(R.string.updateFailed, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+
+    }
 
     @Override
     public void onFailedUpdatePrintType()
@@ -303,5 +329,10 @@ public class SettingPresenter implements SettingMVP.PresenterOps , SettingMVP.Re
     public void onFailedUpdateGoodsShowNumber() {
         mView.get().showToast(R.string.updateFailed, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
 
+    }
+
+    @Override
+    public void onGetSortTreasuryList(ArrayList<String> arrayListTitles, ArrayList<String> arrayListStringValues) {
+        mView.get().onGetSortTreasuryList(arrayListTitles , arrayListStringValues);
     }
 }

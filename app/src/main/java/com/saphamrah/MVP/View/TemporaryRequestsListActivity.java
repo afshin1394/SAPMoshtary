@@ -290,10 +290,10 @@ public class TemporaryRequestsListActivity extends AppCompatActivity implements 
     }
 
     @Override
-    public void onErrorSendRequest(int errorId)
+    public void onErrorSendRequest(int errorId,String message)
     {
         closeAlertDialog();
-        customAlertDialog.showMessageAlert(TemporaryRequestsListActivity.this, false, getResources().getString(R.string.error), getResources().getString(errorId), Constants.FAILED_MESSAGE(), getResources().getString(R.string.apply));
+        customAlertDialog.showMessageAlert(TemporaryRequestsListActivity.this, false, getResources().getString(R.string.error), getResources().getString(errorId) + message, Constants.FAILED_MESSAGE(), getResources().getString(R.string.apply));
     }
 
     @Override
@@ -421,5 +421,9 @@ public class TemporaryRequestsListActivity extends AppCompatActivity implements 
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        mPresenter.unBindDisposable();
+        super.onDestroy();
+    }
 }

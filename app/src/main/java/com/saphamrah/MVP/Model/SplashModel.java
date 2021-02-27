@@ -458,8 +458,9 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
                             if (result != null && result.getURLOSRM() != null) {
                                 routingServerShared.putString(RoutingServerShared.IP, result.getURLOSRM());
                             }
+                            else
                             {
-                                routingServerShared.putString(RoutingServerShared.IP, "http://192.168.80.38/");
+                                routingServerShared.putString(RoutingServerShared.IP, "http://91.92.125.244:8002/");
                             }
                             mPresenter.onGetServerVersion(result, foroshandehMamorPakhshModel, noeMasouliat, childParameterModelsDownloadUrls);
                         } else {

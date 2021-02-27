@@ -113,11 +113,11 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     }
 
     @Override
-    public void onCheckServerTime(boolean valid, String message)
+    public void onCheckServerTime(boolean valid, String message,int sortList)
     {
         if (valid)
         {
-            mModel.getTreasuryList(0 , Constants.SORT_TREASURY_BY_CUSTOMER_CODE);
+            mModel.getTreasuryList(0 , sortList);
         }
         else
         {
@@ -182,14 +182,14 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     }
 
     @Override
-    public void onGetFaktorRooz(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , int faktorRooz , int noeMasouliat)
+    public void onGetFaktorRooz(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , int faktorRooz , int noeMasouliat,int sort)
     {
         if (faktorRooz == 0)
         {
             mView.get().showHideFabButtons(true);
             if (darkhastFaktorMoshtaryForoshandeModels.size() > 0)
             {
-                mView.get().onGetFaktorRooz(darkhastFaktorMoshtaryForoshandeModels , noeMasouliat);
+                mView.get().onGetFaktorRooz(darkhastFaktorMoshtaryForoshandeModels , noeMasouliat , sort);
             }
             else
             {

@@ -619,7 +619,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
         long ccDarkhastFaktor = shared.getLong(shared.getCcDarkhastFaktor() , 0L);
         if (ccDarkhastFaktor == 0)
         {
-            PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
+            PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
             ccDarkhastFaktor = insertNewFaktor(ccMoshtary , String.valueOf(googleLocationProvider.getLatitude()), String.valueOf(googleLocationProvider.getLongitude()));
             /*if (googleLocationProvider.getHasAccess())
             {
@@ -857,7 +857,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
         AdamDarkhastDAO adamDarkhastDAO = new AdamDarkhastDAO(mPresenter.getAppContext());
         AdamDarkhastModel adamDarkhastModel = new AdamDarkhastModel();
 
-        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
+        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
         /*if (!googleLocationProvider.getHasAccess())
         {
             mPresenter.onFailedInsertAdamDarkhast(R.string.errorAccessToLocation);

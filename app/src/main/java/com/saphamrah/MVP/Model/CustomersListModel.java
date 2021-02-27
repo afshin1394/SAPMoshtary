@@ -53,7 +53,8 @@ public class CustomersListModel implements CustomersListMVP.ModelOps
         int ccForoshandeh = foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh();
 
         AllMoshtaryForoshandehDAO allMoshtaryForoshandehDAO = new AllMoshtaryForoshandehDAO(mPresenter.getAppContext());
-        ArrayList<MasirModel> masirModels = allMoshtaryForoshandehDAO.getAllMasirsByccForoshande(ccForoshandeh);
+       // ArrayList<MasirModel> masirModels = allMoshtaryForoshandehDAO.getAllMasirsByccForoshande(ccForoshandeh);
+        ArrayList<MasirModel> masirModels = allMoshtaryForoshandehDAO.getAllMasirs();
         MasirModel masirModel = new MasirModel();
         masirModel.setCcMasir(-1);
         masirModel.setNameMasir(mPresenter.getAppContext().getResources().getString(R.string.allMasirs));
@@ -66,20 +67,23 @@ public class CustomersListModel implements CustomersListMVP.ModelOps
     public void getAllCustomers()
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        int ccForoshandeh = foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh();
-
         AllMoshtaryForoshandehDAO allMoshtaryForoshandehDAO = new AllMoshtaryForoshandehDAO(mPresenter.getAppContext());
-        ArrayList<AllMoshtaryForoshandehModel> allMoshtaryForoshandehModels = allMoshtaryForoshandehDAO.getAllByccForoshandeh(ccForoshandeh);
+        // int ccForoshandeh = foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh();
+
+
+        //ArrayList<AllMoshtaryForoshandehModel> allMoshtaryForoshandehModels = allMoshtaryForoshandehDAO.getAllByccForoshandeh(ccForoshandeh);
+        ArrayList<AllMoshtaryForoshandehModel> allMoshtaryForoshandehModels = allMoshtaryForoshandehDAO.getAll();
         mPresenter.onGetAllCustomers(allMoshtaryForoshandehModels);
     }
 
     @Override
     public void getCustomersByccMasir(int ccMasir)
     {
-        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        int ccForoshandeh = foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh();
-
+        //ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         AllMoshtaryForoshandehDAO allMoshtaryForoshandehDAO = new AllMoshtaryForoshandehDAO(mPresenter.getAppContext());
+
+        int ccForoshandeh = allMoshtaryForoshandehDAO.getccForoshandehByccMasir(ccMasir);
+
         ArrayList<AllMoshtaryForoshandehModel> allMoshtaryForoshandehModels = allMoshtaryForoshandehDAO.getAllByccMasir(ccForoshandeh , ccMasir);
         mPresenter.onGetAllCustomers(allMoshtaryForoshandehModels);
     }
@@ -116,7 +120,7 @@ public class CustomersListModel implements CustomersListMVP.ModelOps
         if (foroshandehMamorPakhshModels.size() > 0)
         {
             foroshandehMamorPakhshModel = foroshandehMamorPakhshModels.get(0);
-            ccForoshandeh = foroshandehMamorPakhshModel.getCcForoshandeh();
+            //ccForoshandeh = foroshandehMamorPakhshModel.getCcForoshandeh();
             ccMarkazForosh = foroshandehMamorPakhshModel.getCcMarkazForosh();
             ccMarkazSazmanForoshSakhtarForosh = foroshandehMamorPakhshModel.getCcMarkazSazmanForoshSakhtarForosh();
             ccMarkazSazmanForosh = foroshandehMamorPakhshModel.getCcMarkazSazmanForosh();
@@ -162,6 +166,7 @@ public class CustomersListModel implements CustomersListMVP.ModelOps
         }
 
         final MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
+        ccForoshandeh = allMoshtaryForoshandehModel.getCcForoshandeh();
         moshtaryDAO.fetchAllMoshtaryByccMasir(mPresenter.getAppContext(), "CustomersListActivity", String.valueOf(ccForoshandeh), ccMasir, String.valueOf(allMoshtaryForoshandehModel.getCodeMoshtary()), new RetrofitResponse() {
             @Override
             public void onSuccess(final ArrayList arrayListData)
@@ -267,7 +272,7 @@ public class CustomersListModel implements CustomersListMVP.ModelOps
     private void getBargashty(final AllMoshtaryForoshandehModel allMoshtaryForoshandehModel)
     {
         final BargashtyDAO bargashtyDAO = new BargashtyDAO(mPresenter.getAppContext());
-        bargashtyDAO.fetchBargashty(mPresenter.getAppContext(), "CustomersListActivity", String.valueOf(allMoshtaryForoshandehModel.getCcForoshandeh()), new RetrofitResponse() {
+        bargashtyDAO.fetchBargashty(mPresenter.getAppContext(), "CustomersListActivity", String.valueOf(ccForoshandeh), new RetrofitResponse() {
             @Override
             public void onSuccess(ArrayList arrayListData) {
                 bargashtyDAO.deleteByccMoshtary(allMoshtaryForoshandehModel.getCcMoshtary());

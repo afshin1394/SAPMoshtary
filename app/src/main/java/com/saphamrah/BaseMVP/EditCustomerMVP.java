@@ -20,6 +20,7 @@ public interface EditCustomerMVP
         void hideEdttxtMasahatMaghaze();
         void hideEdttxtSaateVisit();
         void hideEdttxtMobile();
+        void hideAddress();
         void onGetBaseCustomerInfo(String nationalCode, String mobile, String masahateMaghaze, int hasAnbar, String saateVisit, String noeSenf, String noeFaaliat, int codeNoeShakhsiat);
         void onGetMoshtaryAddress(ArrayList<MoshtaryAddressModel> moshtaryAddressModels);
         void onGetNoeFaaliat(ArrayList<Integer> noeFaaliatIds, ArrayList<String> noeFaaliatNames);

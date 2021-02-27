@@ -79,7 +79,7 @@ public class MapActivity extends AppCompatActivity
         mLocationOverlay.enableMyLocation();
         map.getOverlays().add(mLocationOverlay);
 
-        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(MapActivity.this);
+        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
         IMapController mapController = new MapController(map);
         mapController.setCenter(new GeoPoint(googleLocationProvider.getLatitude() , googleLocationProvider.getLongitude()));
         mapController.setZoom(19.0);
@@ -437,5 +437,9 @@ public class MapActivity extends AppCompatActivity
         map.onPause();
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new PubFunc().new LocationProvider().stopLocationProvider();
+    }
 }

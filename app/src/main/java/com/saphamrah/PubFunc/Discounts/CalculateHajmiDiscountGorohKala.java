@@ -65,8 +65,8 @@ public class CalculateHajmiDiscountGorohKala extends DiscountCalculation
             TakhfifHajmiSatrDAO takhfifHajmiSatrDAO = new TakhfifHajmiSatrDAO(context);
             DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(context);
             MoshtaryModel moshtaryModel = new MoshtaryDAO(context).getByccMoshtary(darkhastFaktorModel.getCcMoshtary());
-
-            ArrayList<DataTableModel> gorohKalas= darkhastFaktorSatrDAO.getTedadBeTafkikGorohKalaAndTakhfifHajmi(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), takhfifHajmiTitrSatrModel.getOlaviat());
+            int currentOlaviat = takhfifHajmiTitrSatrModel.getOlaviat();
+            ArrayList<DataTableModel> gorohKalas= darkhastFaktorSatrDAO.getTedadBeTafkikGorohKalaAndTakhfifHajmi(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), currentOlaviat);
             ArrayList<DataTableModel> rowGorohKalas= darkhastFaktorSatrDAO.getRowsBeTafkikGorohKalaAndTakhfifHajmi(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getCcTakhfifHajmi());
             Log.d("takhfifHajmi" , "takhfifHajmiTitrSatrModel1 : " + takhfifHajmiTitrSatrModel.toString());
             Log.d("takhfifHajmi" , "gorohKalas : " + gorohKalas.toString());
@@ -117,7 +117,7 @@ public class CalculateHajmiDiscountGorohKala extends DiscountCalculation
                     for (TakhfifHajmiSatrModel takhfifHajmiSatr : takhfifHajmiSatrs)
                     {
                         ArrayList<DataTableModel> gorohKalaMohasebehs= darkhastFaktorSatrDAO.getTedadBeTafkikGorohKalaMohasebehAndTakhfifHajmi(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiSatr.getCcTakhfifHajmiSatr(), takhfifHajmiSatr.getCcGorohMohasebeh(), takhfifHajmiTitrSatrModel.getOlaviat());
-                        ArrayList<DataTableModel> rowGorohKalaMohasebehs= darkhastFaktorSatrDAO.getRowsBeTafkikGorohKalaMohasebehAndTakhfifHajmi(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getCcTakhfifHajmi());
+                        ArrayList<DataTableModel> rowGorohKalaMohasebehs= darkhastFaktorSatrDAO.getRowsBeTafkikGorohKalaMohasebehAndTakhfifHajmi(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), takhfifHajmiTitrSatrModel.getOlaviat());
 
                         Log.d("takhfifHajmi" , "takhfifHajmiSatr : " + takhfifHajmiSatr.toString());
                         Log.d("takhfifHajmi" , "gorohKalaMohasebehs : " + gorohKalaMohasebehs.toString());
@@ -164,7 +164,7 @@ public class CalculateHajmiDiscountGorohKala extends DiscountCalculation
                             Log.d("takhfifHajmi","after mablaghTakhfif" + mablaghTakhfif);
                             if (mablaghTakhfif > 0)
                             {
-                                insertFaktorTakhfifHajmi(context, darkhastFaktorModel.getCcDarkhastFaktor(), codeTakhfif, takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), takhfifHajmiTitrSatrModel.getSharhTakhfif(), takhfifHajmiSatr.getDarsadTakhfif(), mablaghTakhfif, takhfifHajmiTitrSatrModel.getForJayezeh());
+                                //insertFaktorTakhfifHajmi(context, darkhastFaktorModel.getCcDarkhastFaktor(), codeTakhfif, takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), takhfifHajmiTitrSatrModel.getSharhTakhfif(), takhfifHajmiSatr.getDarsadTakhfif(), mablaghTakhfif, takhfifHajmiTitrSatrModel.getForJayezeh());
                                 long sumMablaghTalkhfifSatr = 0;
                                 // تعداد کالاهایی که در گروه کالا وجود دارد برای محاسبه آخرین مرحله تخفیف سطر
                                 int countKalaExistInGoroh = 0;
@@ -183,6 +183,8 @@ public class CalculateHajmiDiscountGorohKala extends DiscountCalculation
                                 for (int i=0 ; i < rowGorohKalaMohasebehs.size() ; i++)
                                 {
                                     DataTableModel row = rowGorohKalaMohasebehs.get(i);
+                                    Log.d("takhfifHajmi","1 .1 takhfifHajmisatr-row: " + row.getFiled1() + " , "+ row.getFiled2() + " , "+ row.getFiled3() + " , "+ row.getFiled4() );
+
                                     Log.d("takhfifHajmi","takhfifHajmisatr-row.getFiled2(): "+ row.getFiled2() + " ,gorohKalaMohasebehs.get(0).getFiled1(): "+ gorohKalaMohasebehs.get(0).getFiled1());
                                     if (row.getFiled2().equals(gorohKalaMohasebehs.get(0).getFiled1()))
                                     {
@@ -191,41 +193,46 @@ public class CalculateHajmiDiscountGorohKala extends DiscountCalculation
                                         double mablaghTakhfifVahed = 0;
                                         Log.d("takhfifHajmi","takhfifHajmisatr-mablaghTakhfif"+mablaghTakhfif+", tedad"+sumTedadGorohKalaMohasebeh+ "-- " +
                                                 (double) mablaghTakhfif/(double) sumTedadGorohKalaMohasebeh+"    " +takhfifHajmiTitrSatrModel.getCcTakhfifHajmi());
-                                        mablaghTakhfifVahed = (double) mablaghTakhfif/ (double) sumTedadGorohKalaMohasebeh;
+                                       // mablaghTakhfifVahed = (double) mablaghTakhfif/ (double) sumTedadGorohKalaMohasebeh;
                                         Log.d("takhfifHajmi" , "takhfifHajmisatr-noetedadrial : " + takhfifHajmiTitrSatrModel.getNoeTedadRial());
-                                        if (takhfifHajmiTitrSatrModel.getNoeTedadRial() == getTedadRialTedad())
-                                        {
-                                            mablaghTakhfifSatr = Math.round(Long.valueOf(row.getFiled4())* mablaghTakhfifVahed) ;
-                                            Log.d("takhfifHajmi" , "takhfifHajmisatr-mablaghTakhfif : " + mablaghTakhfif + " , Tedad : " + Tedad);
-                                            Log.d("takhfifHajmi" , "takhfifHajmisatr-row.getFiled4() : " + row.getFiled4() + " , mablaghTakhfifVahed : " + mablaghTakhfifVahed);
-                                            Log.d("takhfifHajmi" , "mablaghTakhfifSatr : " + mablaghTakhfifSatr);
-                                        }
-                                        else
-                                        {
-                                            mablaghTakhfifSatr = Math.round(Long.valueOf(row.getFiled4())* mablaghTakhfifVahed) ;
-                                            Log.d("takhfifHajmi" , "mablaghTakhfifSatr : " + mablaghTakhfifSatr + " , mablaghTakhfifVahed : " + mablaghTakhfifVahed + " , row.getFiled4() : " + row.getFiled4());
-                                        }
-
+//                                        if (takhfifHajmiTitrSatrModel.getNoeTedadRial() == getTedadRialTedad())
+//                                        {
+//                                            mablaghTakhfifSatr = Math.round(Long.valueOf(row.getFiled4())* mablaghTakhfifVahed) ;
+//                                            Log.d("takhfifHajmi" , "takhfifHajmisatr-mablaghTakhfif : " + mablaghTakhfif + " , Tedad : " + Tedad);
+//                                            Log.d("takhfifHajmi" , "takhfifHajmisatr-row.getFiled4() : " + row.getFiled4() + " , mablaghTakhfifVahed : " + mablaghTakhfifVahed);
+//                                            Log.d("takhfifHajmi" , "mablaghTakhfifSatr : " + mablaghTakhfifSatr);
+//                                        }
+//                                        else
+//                                        {
+//                                            mablaghTakhfifSatr = Math.round(Long.valueOf(row.getFiled4())* mablaghTakhfifVahed) ;
+//                                            Log.d("takhfifHajmi" , "mablaghTakhfifSatr : " + mablaghTakhfifSatr + " , mablaghTakhfifVahed : " + mablaghTakhfifVahed + " , row.getFiled4() : " + row.getFiled4());
+//                                        }
+                                        Log.d("takhfifHajmi", "1.4 f3: " + Double.parseDouble(row.getFiled3()) + " , f4:" + Double.parseDouble(row.getFiled4()) + " , f5: " + Double.parseDouble(row.getFiled5()) + " , darsad:" +takhfifHajmiSatr.getDarsadTakhfif());
+                                        mablaghTakhfifSatr = Math.round((((Double.parseDouble(row.getFiled3())*Double.parseDouble(row.getFiled4()))-Double.parseDouble(row.getFiled5()))*takhfifHajmiSatr.getDarsadTakhfif())/100);
                                         if (mablaghTakhfifSatr > 0)
                                         {
-                                            Log.d("takhfifHajmi" , " 1.5 sumMablaghTakhfifSatr : " + mablaghTakhfifSatr + " , " + Math.round(mablaghTakhfifSatr));
+                                            Log.d("takhfifHajmi" , " 1.5 sumMablaghTakhfifSatr : " + mablaghTakhfifSatr + " , " + Math.round(mablaghTakhfifSatr)+ " , mablaghTakhfif: " +mablaghTakhfif + " , sumMablaghTalkhfifSatr: "+sumMablaghTalkhfifSatr );
                                             Log.d("takhfifHajmi" , " j  : " + j + " , rowKala.Size : " + rowGorohKalas.size() + " , rowGorohKalas.size()-1 : " + (rowGorohKalas.size()-1) + " , countKalaExistInGoroh : " + countKalaExistInGoroh);
-                                            if (j == countKalaExistInGoroh)
-                                            {
-                                                mablaghTakhfifSatr = mablaghTakhfif - sumMablaghTalkhfifSatr;
-                                            }
-                                            else
-                                            {
-                                                sumMablaghTalkhfifSatr += mablaghTakhfifSatr;
-                                            }
+//                                            if (j == countKalaExistInGoroh || mablaghTakhfif <= mablaghTakhfifSatr)
+//                                            {
+//                                                mablaghTakhfifSatr = mablaghTakhfif - sumMablaghTalkhfifSatr;
+//                                            }
+//                                            else
+//                                            {
+//                                                sumMablaghTalkhfifSatr += mablaghTakhfifSatr;
+//                                            }
+                                            sumMablaghTalkhfifSatr += mablaghTakhfifSatr;
                                             if (mablaghTakhfifSatr > 0)
                                             {
-                                                Log.d("takhfifHajmi" , " 1.65 takhfifHajmiTitrSatrModel CcTakhfifHajmi: " + takhfifHajmiTitrSatrModel.getCcTakhfifHajmi() +" mablaghTakhfifSatr : " + mablaghTakhfifSatr + " , mablaghTakhfif: " + mablaghTakhfif + " , sumMablaghTalkhfifSatr: " + sumMablaghTalkhfifSatr);
+                                                Log.d("takhfifHajmi" , " 1.6 takhfifHajmiTitrSatrModel CcTakhfifHajmi: " + takhfifHajmiTitrSatrModel.getCcTakhfifHajmi() +" mablaghTakhfifSatr : " + mablaghTakhfifSatr + " , mablaghTakhfif: " + mablaghTakhfif + " , sumMablaghTalkhfifSatr: " + sumMablaghTalkhfifSatr);
                                                 insertFaktorSatrTakhfifHajmi(context, Long.valueOf(row.getFiled1()), codeTakhfif, takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), takhfifHajmiTitrSatrModel.getSharhTakhfif(), takhfifHajmiSatr.getDarsadTakhfif(), mablaghTakhfifSatr, takhfifHajmiTitrSatrModel.getForJayezeh(), takhfifHajmiTitrSatrModel.getOlaviat());
                                             }
                                         }
                                     }
                                 }
+                                Log.d("takhfifHajmi" , " 1.7 takhfifHajmiTitrSatrModel CcTakhfifHajmi: " + takhfifHajmiTitrSatrModel.getCcTakhfifHajmi()  + " , sumMablaghTalkhfifSatr: " + sumMablaghTalkhfifSatr);
+                                mablaghTakhfif = sumMablaghTalkhfifSatr;
+                                insertFaktorTakhfifHajmi(context, darkhastFaktorModel.getCcDarkhastFaktor(), codeTakhfif, takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), takhfifHajmiTitrSatrModel.getSharhTakhfif(), takhfifHajmiSatr.getDarsadTakhfif(), mablaghTakhfif, takhfifHajmiTitrSatrModel.getForJayezeh());
                             }
                         }
                         else if (takhfifHajmiTitrSatrModel.getForJayezeh() == 2)

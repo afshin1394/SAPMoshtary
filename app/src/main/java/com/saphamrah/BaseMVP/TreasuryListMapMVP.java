@@ -3,6 +3,7 @@ package com.saphamrah.BaseMVP;
 import android.content.Context;
 
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
+import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.UIModel.DarkhastFaktorMoshtaryForoshandeModel;
 
 import org.osmdroid.util.GeoPoint;
@@ -19,13 +20,13 @@ public interface TreasuryListMapMVP
         void showCurrentLocation(double lat , double lng);
         void showRoutingInfo();
         void showCustomerCodeInfo();
-        void showFirstPriority(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
-        void showSecondPriority(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
-        void showThirdPriority(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
-        void onGetTodayTreasuryList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels);
-        void onGetAllEditedTodayTreasuryList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels);
-        void onGetEditedTodayTreasuryList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels);
-        void showCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo);
+        void showFirstPriority(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel ,  MoshtaryAddressModel moshtaryAddressModel);
+        void showSecondPriority(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel ,  MoshtaryAddressModel moshtaryAddressModel);
+        void showThirdPriority(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel, MoshtaryAddressModel moshtaryAddressModel);
+        void onGetTodayTreasuryList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , ArrayList<MoshtaryAddressModel> moshtaryAddressModelsNew);
+        void onGetAllEditedTodayTreasuryList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, ArrayList<MoshtaryAddressModel> moshtaryAddressModelArrayList);
+        void onGetEditedTodayTreasuryList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, ArrayList<MoshtaryAddressModel> moshtaryAddressModelArrayList);
+        void showCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, MoshtaryAddressModel moshtaryAddressModel , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo);
         void onGetFaktorImage(byte[] faktorImage);
         void openDarkhastKalaActivity(long ccDarkhastFaktor , int ccMoshtary);
         void onSuccessRouting(String customerName, ArrayList<GeoPoint> pointsOfPolyline, String routingResponse);
@@ -34,6 +35,8 @@ public interface TreasuryListMapMVP
         void showAlertDialog(int resId, boolean closeActivity, int messageType);
 		void showAlertDialog(String message, boolean closeActivity, int messageType);																			 
         void showToast(int resId, int messageType , int duration);
+        void closeLoadingDialog();
+        void onGetSortList(int sortList);
     }
 
 
@@ -43,7 +46,7 @@ public interface TreasuryListMapMVP
 		void getNoeMasouliat();					   
         void checkFakeLocationAndDateTime();
         void getCustomers(int sortType);
-        void getCustomerFaktors(DarkhastFaktorMoshtaryForoshandeModel customerInfo , String customerPriority);
+        void getCustomerFaktors(DarkhastFaktorMoshtaryForoshandeModel customerInfo , MoshtaryAddressModel moshtaryAddressModel, String customerPriority);
         void getTodayTreasuryList(int sortType);
         void getFaktorImage(long ccDarkhastFaktor);
         void setDarkhastFaktorShared(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
@@ -52,6 +55,7 @@ public interface TreasuryListMapMVP
 		void checkEditTreasury(int noeMasouliat , DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);																													   
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
+        void getSortList();
     }
 
 
@@ -62,9 +66,9 @@ public interface TreasuryListMapMVP
 		void onGetNoeMasouliat(int noeMasouliat);										 
         void onErrorUseFakeLocation();
         void onCheckServerTime(boolean isValidDateTime, String message);
-        void onGetCustomersList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> arrayListCanEditCustomerDarkhast, ArrayList<DarkhastFaktorMoshtaryForoshandeModel> arrayListAllDarkhastEdited, int sortType, double currentLatitude, double currentLongitude);
-        void onGetCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo);
-        void onGetTodayTreasuryList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> canEditDarkhastFaktorMoshtaryForoshandeModels, ArrayList<DarkhastFaktorMoshtaryForoshandeModel> cantEditDarkhastFaktorMoshtaryForoshandeModels, double currentLocationLat, double currentLocationLog, int sortType);
+        void onGetCustomersList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> arrayListCanEditCustomerDarkhast, ArrayList<DarkhastFaktorMoshtaryForoshandeModel> arrayListAllDarkhastEdited, int sortType, double currentLatitude, double currentLongitude , ArrayList<MoshtaryAddressModel> moshtaryAddressModels);
+        void onGetCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, MoshtaryAddressModel moshtaryAddressModel , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo);
+        void onGetTodayTreasuryList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> canEditDarkhastFaktorMoshtaryForoshandeModels, ArrayList<DarkhastFaktorMoshtaryForoshandeModel> cantEditDarkhastFaktorMoshtaryForoshandeModels, double currentLocationLat, double currentLocationLog, int sortType, ArrayList<MoshtaryAddressModel> moshtaryAddressModels);
         void onErrorGetCustomerLocation(int resId , String parameter);
         void onGetFaktorImage(DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel);
         void onSuccessSetDarkhastFaktorShared(long ccDarkhastFaktor , int ccMoshtary);
@@ -75,6 +79,8 @@ public interface TreasuryListMapMVP
         void onSuccessSendDariaftPardakht();
         void onSuccessRouting(String customerName, ArrayList<GeoPoint> pointsOfPolyline, String routingResponse);
         void onError(int resId);
+        void onGetSortList(int sortList);
+
     }
 
 
@@ -84,7 +90,7 @@ public interface TreasuryListMapMVP
         void checkFakeLocationAndDateTime();
         void getCustomersOrderByRouting();
         void getCustomersOrderByCode();
-        void getCustomerFaktors(DarkhastFaktorMoshtaryForoshandeModel customerInfo , String customerPriority);
+        void getCustomerFaktors(DarkhastFaktorMoshtaryForoshandeModel customerInfo, MoshtaryAddressModel moshtaryAddressModel, String customerPriority);
         void getTodayTreasuryListByRouting();
         void getTodayTreasuryListByCustomerCode();
         void getFaktorImage(long ccDarkhastFaktor);
@@ -93,6 +99,7 @@ public interface TreasuryListMapMVP
         void routingFromCurrentLocation(int ccMoshtary, String customerName, double desLatitude , double desLongitude);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
+        void getSortList();
     }
 
 }

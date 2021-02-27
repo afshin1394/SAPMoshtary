@@ -563,7 +563,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
     @Override
     public void updateDarkhastFaktor(String modatVosol, int modatRoozRaasGiri, double sumMablaghKol , double sumMablaghKhales , float mablaghArzeshAfzoode , float sumTakhfifat , int codeNoeVosol , String nameNoeVosol , int ccAddress)
     {
-        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
+        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor() , -1);
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
@@ -716,30 +716,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(), -1);
         DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(BaseApplication.getContext());
         ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels = darkhastFaktorSatrDAO.getByccDarkhastFaktorAndNoeKala(ccDarkhastFaktor , 2);
-       /*
-       چک کردن لیست جایزه برای زمانی که از یک جایزه دوبار ثبت شود
-        */
-        int checkJayezeh = 0;
-       if (darkhastFaktorSatrModels.size() > 0){
-           for (int i = 0 ; i < darkhastFaktorSatrModels.size() ; i++){
-               for (int j = 0 ; j < darkhastFaktorSatrModels.size() ; j++){
-                   if (darkhastFaktorSatrModels.get(i).getShomarehBach().equals(darkhastFaktorSatrModels.get(j).getShomarehBach()) &&
-                   darkhastFaktorSatrModels.get(i).getGheymatMasrafKonandeh() == darkhastFaktorSatrModels.get(j).getGheymatMasrafKonandeh() &&
-                   darkhastFaktorSatrModels.get(i).getMablaghForosh() == darkhastFaktorSatrModels.get(j).getMablaghForosh() &&
-                   darkhastFaktorSatrModels.get(i).getCcTaminKonandeh() == darkhastFaktorSatrModels.get(j).getCcTaminKonandeh()
-                   ){
-                       checkJayezeh++;
-                   }
-               }
-           }
-       }
 
-       if (checkJayezeh > 1)
-       {
-           hasError = true;
-           mPresenter.onErrorCheck(R.string.errorSabtJayezeh,"");
-           return;
-       }
+
        ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
        String codeNoeVosolResid = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_RESID());
        String codeNoeVosolNaghd = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD());
@@ -755,6 +733,17 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                ccGorohOmde = Integer.parseInt(model.getValue());
            }
        }
+
+       /*
+       چک کردن لیست جایزه برای زمانی که از یک جایزه دوبار ثبت شود
+        */
+        ArrayList<DarkhastFaktorSatrModel> jayezehDarkhastFaktorSatrModels = darkhastFaktorSatrDAO.getByccDarkhastFaktorAndNoeKala(ccDarkhastFaktor, 2);
+        boolean hasDuplication=new PubFunc().new DAOUtil().hasDuplicates(jayezehDarkhastFaktorSatrModels);
+        if (hasDuplication) {
+            hasError = true;
+            mPresenter.onErrorCheck(R.string.errorSabtJayezeh, "");
+            return;
+        }
 
        if (ccAddress == 0) {
            hasError = true;
@@ -840,7 +829,9 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         }
         //---------------------------- Etebar -------------------------------------------
         int Etebar = CheckEtebar(codeNoeVosol, sumMablaghBaArzeshAfzoode, ccMoshtary, ccDarkhastFaktor, ccForoshandeh, modatVosol);
-        Log.d("etebar","checketebar " + Etebar);
+
+
+        Log.d("etebar","checketebar " + Etebar );
         if (Etebar == 1)
         {
             mPresenter.onErrorCheck(R.string.errorMinEtebarRialiForoshandeh, "");
@@ -1127,6 +1118,11 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
     private int CheckEtebar(int codeNoeVosol , long sumMablaghArzeshAfzoodeh , int ccMoshtary , long ccDarkhastFaktor, int ccForoshandeh, int ModatVosol)
     {
+        MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
+ /*
+        اگر مقدار true باشد اعتبار فروشنده چک می گردد
+        */
+        boolean checkEtebarForoshandeh=  moshtaryDAO.getByccMoshtary(ccMoshtary).getControlEtebarForoshandeh()==0?false:true;
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect());
         //------------------- TedadFaktorBazRoozMoshtary -----------------------------
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
@@ -1303,17 +1299,17 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
 
 
-                Log.d("etebar","codeNoeVosol" + codeNoeVosol);
+                Log.d("etebar","codeNoeVosol" + codeNoeVosol + " ,checkEtebarForoshandeh:"+checkEtebarForoshandeh);
 
                 if(codeNoeVosol == valueResid)
                 {
                     //Check Etebar Rialy...
                     Log.d("etebar","mablaghFaktor"+ mablaghFaktor + " codeNoeVosol:" + codeNoeVosol);
-                    if ((mablaghFaktor >= EtebarMandehRialMoavaghForoshandeh))
+                    if ((mablaghFaktor >= EtebarMandehRialMoavaghForoshandeh) && checkEtebarForoshandeh)
                     {
                         return 1;
                     }
-                    if (mablaghFaktor >= saghfEtebarRialiForoshandeh)
+                    if (mablaghFaktor >= saghfEtebarRialiForoshandeh && checkEtebarForoshandeh)
                     {
                         return 2;
                     }
@@ -1326,11 +1322,11 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                         return 4;
                     }
                     //Check Etebar Tedady...
-                    if (tedadMoavaghForoshandeh >= foroshandehEtebarModel.getEtebarTedadMoavagh())
+                    if (tedadMoavaghForoshandeh >= foroshandehEtebarModel.getEtebarTedadMoavagh()  && checkEtebarForoshandeh)
                     {
                         return 5;
                     }
-                    if (saghfEtebarTedadiForoshandeh <= 0)//foroshandehEtebarModel.getSaghfEtebarTedadi())
+                    if (saghfEtebarTedadiForoshandeh <= 0  && checkEtebarForoshandeh)//foroshandehEtebarModel.getSaghfEtebarTedadi())
                     {
                         return 6;
                     }
@@ -1343,11 +1339,11 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                         return 8;
                     }
                     //Check Etebar Modat...
-                    if (modatMoavaghForoshandeh > foroshandehEtebarModel.getEtebarModatMoavagh())
+                    if (modatMoavaghForoshandeh > foroshandehEtebarModel.getEtebarModatMoavagh()  && checkEtebarForoshandeh)
                     {
                         return 9;
                     }
-                    if (saghfEtebarModatForoshandeh<0)
+                    if (saghfEtebarModatForoshandeh<0  && checkEtebarForoshandeh)
                     {
                         return 10;
                     }
@@ -1365,12 +1361,12 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 {
                     //Check Etebar Rialy...
                     Log.d("etebar","mablaghFaktor"+mablaghFaktor+ " EtebarMandehRialAsnadForoshandeh"+ EtebarMandehRialAsnadForoshandeh+" "+codeNoeVosol);
-                    if ((mablaghFaktor > EtebarMandehRialAsnadForoshandeh))
+                    if ((mablaghFaktor > EtebarMandehRialAsnadForoshandeh)  && checkEtebarForoshandeh)
                     {
                         Log.d("etebar","return1 valueCheck");
                         return 1;
                     }
-                    if (mablaghFaktor > saghfEtebarRialiForoshandeh)
+                    if (mablaghFaktor > saghfEtebarRialiForoshandeh  && checkEtebarForoshandeh)
                     {
                         return 2;
                     }
@@ -1383,11 +1379,11 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                         return 4;
                     }
                     //Check Etebar Tedady...
-                    if (tedadAsnadForoshandeh >= etebarTedadAsnadForoshandeh)
+                    if (tedadAsnadForoshandeh >= etebarTedadAsnadForoshandeh  && checkEtebarForoshandeh)
                     {
                         return 5;
                     }
-                    if (tedadAsnadForoshandeh >= foroshandehEtebarModel.getSaghfEtebarTedadi())
+                    if (tedadAsnadForoshandeh >= foroshandehEtebarModel.getSaghfEtebarTedadi()  && checkEtebarForoshandeh)
                     {
                         return 6;
                     }
@@ -2732,11 +2728,11 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                                 {
                                     if (jayezehSatr.getCodeNoeBastehBandy() == discountCalculation.getBasteBandiCarton())
                                     {
-                                        tedadJayezeh= zarib* jayezehSatr.getTedadJayezeh() * kalaentity.getTedadDarKarton();
+                                        tedadJayezeh= zarib* jayezehSatr.getTedadJayezeh() ;//* kalaentity.getTedadDarKarton();
                                     }
                                     else if (jayezehSatr.getCodeNoeBastehBandy() == discountCalculation.getBasteBandiBaste())
                                     {
-                                        tedadJayezeh= zarib* jayezehSatr.getTedadJayezeh() * kalaentity.getTedadDarBasteh();
+                                        tedadJayezeh= zarib* jayezehSatr.getTedadJayezeh() ;//* kalaentity.getTedadDarBasteh();
                                     }
                                     else if (jayezehSatr.getCodeNoeBastehBandy() ==discountCalculation.getBasteBandiAdad())
                                     {
@@ -2859,11 +2855,11 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                                     Log.d("jayezeh" , "kalaModel : " + kalaModel.toString());
                                     if (jayezehSatr.getCodeNoeBastehBandy() == discountCalculation.getBasteBandiCarton())
                                     {
-                                        tedadJayezeh= zarib * jayezehSatr.getTedadJayezeh() * kalaModel.getTedadDarKarton();
+                                        tedadJayezeh= zarib * jayezehSatr.getTedadJayezeh() ;//* kalaModel.getTedadDarKarton();
                                     }
                                     else if (jayezehSatr.getCodeNoeBastehBandy() == discountCalculation.getBasteBandiBaste())
                                     {
-                                        tedadJayezeh= zarib * jayezehSatr.getTedadJayezeh() * kalaModel.getTedadDarBasteh();
+                                        tedadJayezeh= zarib * jayezehSatr.getTedadJayezeh() ;//* kalaModel.getTedadDarBasteh();
                                     }
                                     else if (jayezehSatr.getCodeNoeBastehBandy() == discountCalculation.getBasteBandiAdad())
                                     {
@@ -2917,13 +2913,16 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             Log.d("jayezeh" , "ccJayezeh : " + ccJayezeh);
             Log.d("jayezeh" , "ccKalaCodeJayezeh : " + ccKalaCodeJayezeh);
             Log.d("jayezeh" , "tedadJayezeh : " + tedadJayezeh);
+            Log.d("jayezeh" , "isJayezehEntekhabi : " + isJayezehEntekhabi);
             haveBonus = true;
             if (isJayezehEntekhabi == 0)
             {
-                //auto
+                // todo auto
                 KalaMojodiDAO kalaMojodiDAO = new KalaMojodiDAO(mPresenter.getAppContext());
                 int countKalaMojodi = kalaMojodiDAO.getCountByccKalaCode(ccKalaCodeJayezeh);
-                Log.d("jayezeh" , "countKalaMojodi : " + countKalaMojodi);
+                int countMaxMojody = kalaMojodiDAO.getCountByccKalaCode(ccKalaCodeJayezeh);
+
+                Log.d("jayezeh" , "countKalaMojodi : " + countKalaMojodi +  " countMaxMojody:"+ countMaxMojody  + " tedadJayezeh: " + tedadJayezeh);
                 if (countKalaMojodi <= 0)
                 {
                     //insert takhfif naghdi

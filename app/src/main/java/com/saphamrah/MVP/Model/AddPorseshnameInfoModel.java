@@ -46,7 +46,7 @@ public class AddPorseshnameInfoModel implements AddPorseshnameInfoMVP.ModelOps
     @Override
     public void saveInfo()
     {
-        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
+        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
         SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
         PorseshnamehInfoShared shared = new PorseshnamehInfoShared(mPresenter.getAppContext());
         shared.removeAll();

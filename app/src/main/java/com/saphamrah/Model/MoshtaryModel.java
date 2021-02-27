@@ -42,7 +42,7 @@ public class MoshtaryModel
     private static final String COLUMN_MasahatMaghazeh = "MasahatMaghazeh";
     private static final String COLUMN_HasAnbar = "HasAnbar";
     private static final String COLUMN_ExtraProp_IsOld = "ExtraProp_IsOld";
-    private static final String COLUMN_ExtraProp_ccMoshtaryParent = "ExtraProp_ccMoshtaryParent";
+    private static final String COLUMN_ccMoshtaryParent = "ccMoshtaryParent";
     private static final String COLUMN_ExtraProp_IsMoshtaryAmargar = "ExtraProp_IsMoshtaryAmargar";
     private static final String COLUMN_ExtraProp_ccPorseshnameh = "ExtraProp_ccPorseshnameh";
     private static final String COLUMN_ExtraProp_NoeForoshandeh_First = "ExtraProp_NoeForoshandeh_First";
@@ -52,6 +52,8 @@ public class MoshtaryModel
     private static final String COLUMN_ControlEtebarForoshandeh = "ControlEtebarForoshandeh";
     private static final String COLUMN_ModateNaghd = "ModateNaghd";
     private static final String COLUMN_TarikhMoarefiMoshtary = "TarikhMoarefiMoshtary";
+    private static final String COLUMN_KharejAzMahal = "KharejAzMahal";
+
 
 
     public static String TableName()
@@ -166,9 +168,9 @@ public class MoshtaryModel
     {
         return COLUMN_ExtraProp_IsOld;
     }
-    public static String COLUMN_ExtraProp_ccMoshtaryParent()
+    public static String COLUMN_ccMoshtaryParent()
     {
-        return COLUMN_ExtraProp_ccMoshtaryParent;
+        return COLUMN_ccMoshtaryParent;
     }
     public static String COLUMN_ExtraProp_IsMoshtaryAmargar()
     {
@@ -206,7 +208,10 @@ public class MoshtaryModel
     {
         return COLUMN_TarikhMoarefiMoshtary;
     }
-
+    public static String COLUMN_KharejAzMahal()
+    {
+        return COLUMN_KharejAzMahal;
+    }
 
 
     @SerializedName("ccMoshtary")
@@ -291,13 +296,15 @@ public class MoshtaryModel
     private String Mobile;
     private int ToorVisit;
     private int ExtraProp_IsOld;
-    private int ExtraProp_ccMoshtaryParent;
+    private int ccMoshtaryParent;
     private int ExtraProp_IsMoshtaryAmargar;
     private int ExtraProp_ccPorseshnameh;
     private int ExtraProp_NoeForoshandeh_First;
     private int ExtraProp_MoshtaryMojazKharejAzMasir;
     private int ExtraProp_Olaviat;
     private String DateOfMasir;
+    private int KharejAzMahal;
+
 
 	
 	
@@ -524,11 +531,11 @@ public class MoshtaryModel
         ExtraProp_IsOld = extraProp_IsOld;
     }
 
-    public int getExtraProp_ccMoshtaryParent() {
-        return ExtraProp_ccMoshtaryParent;
+    public int getccMoshtaryParent() {
+        return ccMoshtaryParent;
     }
-    public void setExtraProp_ccMoshtaryParent(int extraProp_ccMoshtaryParent) {
-        ExtraProp_ccMoshtaryParent = extraProp_ccMoshtaryParent;
+    public void setccMoshtaryParent(int ccMoshtaryParent) {
+        this.ccMoshtaryParent = ccMoshtaryParent;
     }
 
     public int getExtraProp_IsMoshtaryAmargar() {
@@ -607,6 +614,16 @@ public class MoshtaryModel
     public void setTarikhMoarefiMoshtary(String tarikhMoarefiMoshtary)
     {
         TarikhMoarefiMoshtary = tarikhMoarefiMoshtary;
+    }
+
+    public int getKharejAzMahal()
+    {
+        return KharejAzMahal;
+    }
+
+    public void setKharejAzMahal(int kharejAzMahal)
+    {
+        KharejAzMahal = kharejAzMahal;
     }
 
     /**
@@ -759,7 +776,7 @@ public class MoshtaryModel
                 ", Mobile='" + Mobile + '\'' +
                 ", ToorVisit=" + ToorVisit +
                 ", ExtraProp_IsOld=" + ExtraProp_IsOld +
-                ", ExtraProp_ccMoshtaryParent=" + ExtraProp_ccMoshtaryParent +
+                ", ccMoshtaryParent=" + ccMoshtaryParent +
                 ", ExtraProp_IsMoshtaryAmargar=" + ExtraProp_IsMoshtaryAmargar +
                 ", ExtraProp_ccPorseshnameh=" + ExtraProp_ccPorseshnameh +
                 ", ExtraProp_NoeForoshandeh_First=" + ExtraProp_NoeForoshandeh_First +

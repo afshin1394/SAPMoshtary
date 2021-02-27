@@ -34,7 +34,7 @@ public class Maneuver
     private int type;
     @SerializedName("time")
     @Expose
-    private int time;
+    private float time;
     @SerializedName("verbal_multi_cue")
     @Expose
     private boolean verbalMultiCue;
@@ -108,11 +108,11 @@ public class Maneuver
         this.type = type;
     }
 
-    public int getTime() {
+    public float getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(float time) {
         this.time = time;
     }
 

@@ -444,6 +444,45 @@ Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiServiceGet.getTakhfifH
         return takhfifHajmiModels;
     }
 
+    public String getCcTakhfifHajmiForGetProgram()
+    {
+        String ccTakhfifajmis="-1";
+        String query = "SELECT DISTINCT ccTakhfifHajmi FROM TakhfifHajmi";
+
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast())
+                    {
+
+                        ccTakhfifajmis += "," + cursor.getInt(cursor.getColumnIndex(TakhfifHajmiModel.COLUMN_ccTakhfifHajmi()));
+                        cursor.moveToNext();
+                    }
+
+
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , TakhfifHajmiModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "TakhfifHajmiDAO" , "" , "getAll" , "");
+        }
+        return ccTakhfifajmis;
+    }
+
+
     public ArrayList<TakhfifHajmiTitrSatrModel> getByMoshtaryWithSatr(MoshtaryModel moshtary, int codeNoeHaml, boolean ShebhOmdeh, int CodeNoeVosol, int ccMarkazSazmanForosh)
     {
         final int NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY = 1;
@@ -457,17 +496,20 @@ Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiServiceGet.getTakhfifH
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             String ccNoeFieldMoshtarys =  moshtary.getCcNoeMoshtary() + "," + GOROH_LINK_NOE_MOSHTARY;
             int ccNoeSenfMoshtary = moshtary.getCcNoeSenf();
+            int ccMoshtaryParent = moshtary.getccMoshtaryParent();
             String noeVosols =  "0 ," + CodeNoeVosol;
             String query = "select t.* , ts.NameNoeField from TakhfifHajmi t inner join (select distinct(NameNoeField) , ccTakhfifHajmi from TakhfifHajmiSatr ) ts on t.ccTakhfifHajmi = ts.ccTakhfifHajmi where ";
             if(!ShebhOmdeh)
             {
                 query += " ((NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= " + moshtary.getCcMoshtary() + ")"
+                        + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= "+ccMoshtaryParent+")"
                         + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_GOROH + " AND ccNoeFieldMoshtary IN(" + ccNoeFieldMoshtarys + ") AND ccNoeSenf in (" + ccNoeSenfMoshtary + " , 0)))"
                         + " AND CodeNoeHaml= " + codeNoeHaml + " AND NoeVosol IN(" + noeVosols + ") AND (Darajeh in ( " + moshtary.getDarajeh() + " , 0 ) AND ccMarkazSazmanForosh = "+ ccMarkazSazmanForosh +")";
             }
             else
             {
                 query += " ((NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= " + moshtary.getCcMoshtary() + ")"
+                        + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= "+ccMoshtaryParent+")"
                         + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_GOROH + " AND ccNoeFieldMoshtary IN(" + ccNoeFieldMoshtarys + ") AND ccNoeSenf in (" + ccNoeSenfMoshtary + " , 0)))"
                         + " AND CodeNoeHaml= " + codeNoeHaml + " AND ccTakhfifHajmi<>1620  AND NoeVosol IN(" + noeVosols + ") AND (Darajeh in ( " + moshtary.getDarajeh() + " , 0) AND ccMarkazSazmanForosh = "+ ccMarkazSazmanForosh +")";
             }

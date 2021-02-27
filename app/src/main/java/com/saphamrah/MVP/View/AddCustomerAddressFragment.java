@@ -562,7 +562,7 @@ public class AddCustomerAddressFragment extends Fragment implements AddCustomerA
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
 
-        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(context);
+        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
 
         IMapController mapController = new MapController(map);
         mapController.setCenter(new GeoPoint(googleLocationProvider.getLatitude() , googleLocationProvider.getLongitude()));
@@ -1035,7 +1035,7 @@ public class AddCustomerAddressFragment extends Fragment implements AddCustomerA
 
     private void checkLocationPermission()
     {
-        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(context);
+        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
         if (Build.VERSION.SDK_INT >= 23)
         {
             ArrayList<String> permissions = new ArrayList<>();
@@ -1071,7 +1071,7 @@ public class AddCustomerAddressFragment extends Fragment implements AddCustomerA
         {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
-                PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(context);
+                PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
                 checkAddress(googleLocationProvider);
             }
         }

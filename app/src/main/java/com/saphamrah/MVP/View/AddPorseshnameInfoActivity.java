@@ -25,6 +25,7 @@ import com.saphamrah.Model.NoeTablighatModel;
 import com.saphamrah.Model.PorseshnamehModel;
 import com.saphamrah.Model.PorseshnamehTablighatModel;
 import com.saphamrah.Model.PorseshnamehTozihatModel;
+import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
@@ -1263,5 +1264,10 @@ public class AddPorseshnameInfoActivity extends AppCompatActivity implements Add
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new PubFunc().new LocationProvider().stopLocationProvider();
+    }
 
 }

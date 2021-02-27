@@ -665,8 +665,8 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
             dariaftPardakhtDarkhastFaktorPPCModel.setShomarehSanad(cursor.getString(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ShomarehSanad())));
             dariaftPardakhtDarkhastFaktorPPCModel.setTarikhSanad(cursor.getString(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_TarikhSanad())));
             dariaftPardakhtDarkhastFaktorPPCModel.setTarikhSanadShamsi(cursor.getString(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_TarikhSanadShamsi())));
-            dariaftPardakhtDarkhastFaktorPPCModel.setMablaghDariaftPardakht(cursor.getLong(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_MablaghDariaftPardakht())));
-            dariaftPardakhtDarkhastFaktorPPCModel.setMablagh(cursor.getLong(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_Mablagh())));
+            dariaftPardakhtDarkhastFaktorPPCModel.setMablaghDariaftPardakht(cursor.getDouble(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_MablaghDariaftPardakht())));
+            dariaftPardakhtDarkhastFaktorPPCModel.setMablagh(cursor.getDouble(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_Mablagh())));
             dariaftPardakhtDarkhastFaktorPPCModel.setCodeVazeiat(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_CodeVazeiat())));
             dariaftPardakhtDarkhastFaktorPPCModel.setZamaneTakhsiseFaktor(cursor.getString(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ZamaneTakhsiseFaktor())));
             dariaftPardakhtDarkhastFaktorPPCModel.setCcAfradErsalKonandeh(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ccAfradErsalKonandeh())));

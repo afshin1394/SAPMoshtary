@@ -1,11 +1,13 @@
 package com.saphamrah.DAO;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.saphamrah.Model.DarkhastFaktorSatrTakhfifModel;
 import com.saphamrah.Model.ForoshandehMoshtaryModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.MasirModel;
@@ -85,7 +87,7 @@ public class MoshtaryDAO
             MoshtaryModel.COLUMN_MasahatMaghazeh(),
             MoshtaryModel.COLUMN_HasAnbar(),
             MoshtaryModel.COLUMN_ExtraProp_IsOld(),
-            MoshtaryModel.COLUMN_ExtraProp_ccMoshtaryParent(),
+            MoshtaryModel.COLUMN_ccMoshtaryParent(),
             MoshtaryModel.COLUMN_ExtraProp_IsMoshtaryAmargar(),
             MoshtaryModel.COLUMN_ExtraProp_ccPorseshnameh(),
             MoshtaryModel.COLUMN_ExtraProp_NoeForoshandeh_First(),
@@ -94,7 +96,8 @@ public class MoshtaryDAO
             MoshtaryModel.COLUMN_DateOfMasir(),
             MoshtaryModel.COLUMN_ControlEtebarForoshandeh(),
             MoshtaryModel.COLUMN_ModateNaghd(),
-            MoshtaryModel.COLUMN_TarikhMoarefiMoshtary()
+            MoshtaryModel.COLUMN_TarikhMoarefiMoshtary(),
+            MoshtaryModel.COLUMN_KharejAzMahal()
         };
     }
 
@@ -594,27 +597,30 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
         }
     }
 
-    public boolean updateccMoshtaryParentInMoshtary(ArrayList<MoshtaryParentModel> moshtaryParentModels)
-    {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        try
-        {
-            db.beginTransaction();
-            for (MoshtaryParentModel moshtaryParentModel : moshtaryParentModels)
-            {
-                ContentValues values = new ContentValues();
-                values.put(MoshtaryModel.COLUMN_ExtraProp_ccMoshtaryParent(), moshtaryParentModel.getCcMoshtaryParent());
-                values.put(MoshtaryModel.COLUMN_ExtraProp_NoeForoshandeh_First(), moshtaryParentModel.getNoeForoshandeh_First());
-                db.update(MoshtaryModel.TableName(), values, "ccMoshtary= ?", new String[]{String.valueOf(moshtaryParentModel.getCcMoshtary())});
+    @SuppressLint("LongLogTag")
+    public boolean updateccMoshtaryParentInMoshtary(ArrayList<MoshtaryParentModel> moshtaryParentModels) {
+
+
+        try {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            for (MoshtaryParentModel moshtaryParentModel : moshtaryParentModels) {
+                int moshtaryParent = ((int) moshtaryParentModel.getCcMoshtaryParent());
+                int moshtary = ((int) moshtaryParentModel.getCcMoshtary());
+                int noeForoshandehFirst = ((int) moshtaryParentModel.getNoeForoshandeh_First());
+                String query = "UPDATE Moshtary SET ccMoshtaryParent = '" + moshtaryParent + "', ExtraProp_NoeForoshandeh_First = '" + noeForoshandehFirst + "' WHERE ccMoshtary = '" + moshtary + "'";
+                db.execSQL(query);
+                //db.endTransaction();
             }
-            db.setTransactionSuccessful();
-            db.endTransaction();
+
+            //db.setTransactionSuccessful();
+            //db.endTransaction();
             db.close();
             return true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate, MoshtaryModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "MoshtaryDAO", "", "updateccmoshtaryParent", "");
             return false;
         }
     }
@@ -953,6 +959,28 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
         }
         return toorVisit;
     }
+
+    public int getCcMasirByCcMoshtary(int ccMoshtary){
+        int ccMasir = -1;
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery("select "+MoshtaryModel.COLUMN_ccMasir() + " from "+MoshtaryModel.TableName()+"where"+MoshtaryModel.COLUMN_ccMoshtary()+" = "+ccMoshtary,null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    ccMasir = cursor.getInt(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll, MoshtaryModel.TableName()) + "\n" + e.toString();
+            logger.insertLogToDB(context, LogPPCModel.LOG_EXCEPTION, message, "MoshtaryDAO", "", "getToorVisit", "");
+        }
+        return ccMasir;
+    }
 	
     public boolean deleteAll()
     {
@@ -1071,7 +1099,7 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
         contentValues.put(MoshtaryModel.COLUMN_MasahatMaghazeh() , moshtaryModel.getMasahatMaghazeh());
         contentValues.put(MoshtaryModel.COLUMN_HasAnbar() , moshtaryModel.getHasAnbar());
         contentValues.put(MoshtaryModel.COLUMN_ExtraProp_IsOld() , moshtaryModel.getExtraProp_IsOld());
-        contentValues.put(MoshtaryModel.COLUMN_ExtraProp_ccMoshtaryParent() , moshtaryModel.getExtraProp_ccMoshtaryParent());
+        contentValues.put(MoshtaryModel.COLUMN_ccMoshtaryParent() , moshtaryModel.getccMoshtaryParent());
         contentValues.put(MoshtaryModel.COLUMN_ExtraProp_IsMoshtaryAmargar() , moshtaryModel.getExtraProp_IsMoshtaryAmargar());
         contentValues.put(MoshtaryModel.COLUMN_ExtraProp_ccPorseshnameh() , moshtaryModel.getExtraProp_ccPorseshnameh());
         contentValues.put(MoshtaryModel.COLUMN_ExtraProp_NoeForoshandeh_First() , moshtaryModel.getExtraProp_NoeForoshandeh_First());
@@ -1081,6 +1109,8 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
         contentValues.put(MoshtaryModel.COLUMN_ControlEtebarForoshandeh() , moshtaryModel.getControlEtebarForoshandeh());
         contentValues.put(MoshtaryModel.COLUMN_ModateNaghd() , moshtaryModel.getModateNaghd());
         contentValues.put(MoshtaryModel.COLUMN_TarikhMoarefiMoshtary(), moshtaryModel.getTarikhMoarefiMoshtary());
+        contentValues.put(MoshtaryModel.COLUMN_KharejAzMahal(), moshtaryModel.getKharejAzMahal());
+
 
         return contentValues;
     }
@@ -1121,7 +1151,7 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
             moshtaryModel.setMasahatMaghazeh(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_MasahatMaghazeh())));
             moshtaryModel.setHasAnbar(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_HasAnbar())));
             moshtaryModel.setExtraProp_IsOld(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ExtraProp_IsOld())));
-            moshtaryModel.setExtraProp_ccMoshtaryParent(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ExtraProp_ccMoshtaryParent())));
+            moshtaryModel.setccMoshtaryParent(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ccMoshtaryParent())));
             moshtaryModel.setExtraProp_IsMoshtaryAmargar(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ExtraProp_IsMoshtaryAmargar())));
             moshtaryModel.setExtraProp_ccPorseshnameh(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ExtraProp_ccPorseshnameh())));
             moshtaryModel.setExtraProp_NoeForoshandeh_First(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ExtraProp_NoeForoshandeh_First())));
@@ -1131,6 +1161,8 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
             moshtaryModel.setControlEtebarForoshandeh(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ControlEtebarForoshandeh())));
             moshtaryModel.setModateNaghd(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ModateNaghd())));
             moshtaryModel.setTarikhMoarefiMoshtary(cursor.getString(cursor.getColumnIndex(MoshtaryModel.COLUMN_TarikhMoarefiMoshtary())));
+            moshtaryModel.setKharejAzMahal(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_KharejAzMahal())));
+
 
             moshtaryModels.add(moshtaryModel);
             cursor.moveToNext();

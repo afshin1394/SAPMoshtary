@@ -141,7 +141,7 @@ public class RouteActivity extends AppCompatActivity implements RouteMVP.Require
 
 		showStartDirection();
 
-        mPresenter.getTripInfo(result.getId(), result.getTrip().getSummary().getTime(), result.getTrip().getSummary().getLength());
+        mPresenter.getTripInfo(result.getId(), (int) result.getTrip().getSummary().getTime(), result.getTrip().getSummary().getLength());
 
         adapter = new RoutingDirectionAdapter(RouteActivity.this, result.getTrip().getLegs().get(0).getManeuvers());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(RouteActivity.this);

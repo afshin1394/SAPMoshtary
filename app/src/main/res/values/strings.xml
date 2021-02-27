@@ -135,7 +135,7 @@
     <string name="mamorTozie">مامور توزیع</string>
     <string name="sarparast">سرپرست</string>
     <string name="amargar">آمارگر</string>
-    <string name="modir">مدیر</string>
+    <string name="modir">رئیس</string>
     <string name="success">موفق</string>
     <string name="error">خطا</string>
     <string name="errorOccurred">خطایی رخ داد.</string>
@@ -986,7 +986,7 @@
     <string name="isValidDataSabtMarjoeeKol">به علت ثبت وصول برای این درخواست امکان ثبت مرجوعی کامل وجود ندارد</string>
     <string name="errorGetMarjoee">کالای مرجوعی ثبت نشده است</string>
     <string name="errorSabtJayezeh">خطا در ثبت جایزه تکراری، لطفا درخواست را حدف و دوباره ثبت نمایید.</string>
-    <string name="wantUpdateGallery">آیا مایل به دریافت تصاویر هستید؟</string>
+    <string name="wantUpdateGallery">آیا مایل به دریافت تصاویر محصولات هستید؟</string>
     <string name="mablaghForoshBaArzeshAfzoodeh">مبلغ فروش باارزش افزوده</string>
     <string name="errorIPConnected">خطا در اتصال به وب سرویس</string>
     <string name="identityCode">کد ملی را وارد نمایید</string>
@@ -998,6 +998,20 @@
     <string name="confirm">ثبت</string>
     <string name="invalidIdentityCode">کد ملی وارد شده در سیستم تعریف نشده است و لطفا با واحد پشتیبانی تماس بگیرید</string>
     <string name="invalidIdentityCodeLength">تعداد ارقام کد ملی ثبت شده صحیح نمی باشد</string>
+    <string name="errormoghayeratdarmojodiKala">مغایرت در موجودی کالاهای:</string>
+    <string name="errormoghayeratdarmojodiNoMojodi">عدم موجودی برای کالاهای:</string>
+    <string name="errorCheckMoghayerat">خطا در بررسی مغایرت ها</string>
+    <string name="ChooseSortTreasuryList">در صورت تمایل می توانید نوع مرتب سازی لیست وصول خود را انتخاب نمایید</string>
+    <string name="sortTreasuryListManagement">مدیریت مرتب سازی لیست وصول</string>
+    <string name="sortTreasuryList">مرتب سازی لیست وصل</string>
+    <string name="invalidsortTreasuryList">نوع مرتب سازی انتخاب شده مجاز نمی باشد</string>
+    <string name="isSelectedSort">این نوع مرتب سازی اعمال شده است</string>
+    <string name="customerListWithMap">لیست مشتری براساس مسافت</string>
+    <string name="moshtaryListMapActivityTitle">لیست مشتری براساس مسافت</string>
+    <string name="addToCurrentDayCustomer">اضافه به مشتری مسیر روز</string>
+
+
+
 
 
 </resources>

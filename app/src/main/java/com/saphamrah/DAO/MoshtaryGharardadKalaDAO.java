@@ -240,7 +240,7 @@ public class MoshtaryGharardadKalaDAO {
     //TODO
     private static ContentValues modelToContentvalue(MoshtaryGharardadKalaModel moshtaryGharardadKalaModel) {
         ContentValues contentValues = new ContentValues();
-//        contentValues.put(MoshtaryGharardadKalaModel.COLUMN_radif(), moshtaryGharardadKalaModel.getRadif());
+        contentValues.put(MoshtaryGharardadKalaModel.COLUMN_radif(), moshtaryGharardadKalaModel.getRadif());
         contentValues.put(MoshtaryGharardadKalaModel.COLUMN_ccMoshtaryGharardad(), moshtaryGharardadKalaModel.getCcMoshtaryGharardad());
         contentValues.put(MoshtaryGharardadKalaModel.COLUMN_ccKalaCode(), moshtaryGharardadKalaModel.getCcKalaCode());
         contentValues.put(MoshtaryGharardadKalaModel.COLUMN_MablaghForosh(), moshtaryGharardadKalaModel.getMablaghForosh());

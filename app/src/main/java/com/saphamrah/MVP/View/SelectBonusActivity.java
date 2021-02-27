@@ -231,7 +231,7 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
     }
 
     @Override
-    public void onGetKalaForJayezeh(ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels)
+    public void onGetKalaForJayezeh(ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, int noeJayezehTakhfif)
     {
         this.jayezehEntekhabiMojodiModels.clear();
         this.jayezehEntekhabiMojodiModels.addAll(jayezehEntekhabiMojodiModels);
@@ -247,7 +247,7 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
             }
         }
         setJayezehEntekhabiAdapter();
-        mPresenter.calculateMablaghJayezeh(jayezehEntekhabiMojodiModels , editTextTakhfifFaktor.getText().toString());
+        mPresenter.calculateMablaghJayezeh(jayezehEntekhabiMojodiModels , editTextTakhfifFaktor.getText().toString(), noeJayezehTakhfif);
         //showAlertSelectKala(jayezehEntekhabiMojodiModels);
     }
 
@@ -267,7 +267,7 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
                     exception.printStackTrace();
                 }
                 jayezehEntekhabiMojodiModel.setSelectedCount(intCount);
-                mPresenter.calculateMablaghJayezeh(jayezehEntekhabiMojodiModels , editTextTakhfifFaktor.getText().toString());
+                mPresenter.calculateMablaghJayezeh(jayezehEntekhabiMojodiModels , editTextTakhfifFaktor.getText().toString(),1);
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(SelectBonusActivity.this);
@@ -278,12 +278,12 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
     }
 
     @Override
-    public void onCalculateMablaghJayezeh(float mablaghJayezeh, float mandeh)
+    public void onCalculateMablaghJayezeh(float mablaghJayezeh, float mandeh, int noeJayezehTakhfif)
     {
         editTextMande.setText(formatter.format(mandeh));
         editTextMablaghJayezeh.setText(formatter.format(mablaghJayezeh));
 
-        if (mandeh < 0)
+        if (mandeh < 0 && noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeTakhfif())
         {
             customTextInputLayout.setError(getResources().getString(R.string.errorNegativeRemain));
         }

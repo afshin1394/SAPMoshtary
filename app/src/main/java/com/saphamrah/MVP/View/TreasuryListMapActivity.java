@@ -6,12 +6,14 @@ import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,9 +28,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.saphamrah.Adapter.TreasuryMapFaktorAdapter;
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.TreasuryListMapMVP;
 import com.saphamrah.BuildConfig;
 import com.saphamrah.MVP.Presenter.TreasuryListMapPresenter;
+import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.RoutingServerShared;
@@ -36,6 +40,7 @@ import com.saphamrah.UIModel.DarkhastFaktorMoshtaryForoshandeModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
 import com.saphamrah.Utils.CustomAlertDialogResponse;
+import com.saphamrah.Utils.CustomLoadingDialog;
 import com.saphamrah.Utils.StateMaintainer;
 import com.saphamrah.Valhalla.SourcesToTargetsFailedResult;
 import com.saphamrah.WebService.APIServiceValhalla;
@@ -81,8 +86,8 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
     private Polyline polyline;
     private String routingResponse;
     private int noeMasouliat;
-
-
+    private CustomLoadingDialog customLoadingDialog;
+    private AlertDialog alertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -103,11 +108,11 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         LinearLayout lnrlayBottomsheet = findViewById(R.id.lnrlayRoot);
         bottomSheetBehavior = BottomSheetBehavior.from(lnrlayBottomsheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
+        customLoadingDialog = new CustomLoadingDialog();
         fabRouteActivity.setVisibility(View.GONE);
 
         customAlertDialog = new CustomAlertDialog(TreasuryListMapActivity.this);
-
+        alertDialog = customLoadingDialog.showLoadingDialog(TreasuryListMapActivity.this);
         startMVPOps();
 
         double[] location = getCurrentLocation();
@@ -120,20 +125,22 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         mapController.setZoom(12.0);
         showCurrentLocation(location[0] , location[1]);
 
-        //mPresenter.getTodayTreasuryList(Constants.SORT_TREASURY_BY_CUSTOMER_CODE);
-        mPresenter.getCustomers(Constants.SORT_TREASURY_BY_CUSTOMER_CODE);
-		mPresenter.getNoeMasouliat();							 
+        mPresenter.getSortList();
 
         fabSortByCustomerCode.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v)
-            {
-                fabMenu.close(true);
-                removePolyline();
-                map.getOverlays().clear();
-                map.invalidate();
-                mPresenter.getCustomers(Constants.SORT_TREASURY_BY_CUSTOMER_CODE);
+            public void onClick(View v) {
+                  if (sortType == Constants.SORT_TREASURY_BY_CUSTOMER_CODE){
+                    customAlertDialog.showToast(TreasuryListMapActivity.this , getResources().getString(R.string.isSelectedSort) ,Constants.FAILED_MESSAGE() , Constants.DURATION_LONG());
+                } else {
+                      alertDialog = customLoadingDialog.showLoadingDialog(TreasuryListMapActivity.this);
+                      fabMenu.close(true);
+                      removePolyline();
+                      map.getOverlays().clear();
+                      map.invalidate();
+                      mPresenter.getCustomers(Constants.SORT_TREASURY_BY_CUSTOMER_CODE);
+                  }
             }
         });
 
@@ -141,13 +148,19 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         fabSortByRouting.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v)
-            {
-                fabMenu.close(true);
-                removePolyline();
-                map.getOverlays().clear();
-                map.invalidate();
-                mPresenter.getCustomers(Constants.SORT_TREASURY_BY_ROUTING);
+            public void onClick(View v) {
+                if (sortType == Constants.SORT_TREASURY_BY_ROUTING){
+                    customAlertDialog.showToast(TreasuryListMapActivity.this , getResources().getString(R.string.isSelectedSort) ,Constants.FAILED_MESSAGE() , Constants.DURATION_LONG());
+                } else {
+                    alertDialog = customLoadingDialog.showLoadingDialog(TreasuryListMapActivity.this);
+                    fabMenu.close(true);
+                    removePolyline();
+                    map.getOverlays().clear();
+                    map.invalidate();
+                    mPresenter.getCustomers(Constants.SORT_TREASURY_BY_ROUTING);
+                }
+
+
             }
         });
 
@@ -216,7 +229,7 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
 
     public void route()
     {
-        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider(TreasuryListMapActivity.this);
+        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
         Location destinationLocation = new Location("destination");
         destinationLocation.setLatitude(35.754232);
         destinationLocation.setLongitude(51.215811);
@@ -235,11 +248,12 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         jsonObjectAllData.addProperty("id" , "");
 
 
-        RoutingServerShared routingServerShared = new RoutingServerShared(TreasuryListMapActivity.this);
-        String routingServerIP = routingServerShared.getString(RoutingServerShared.IP , "");
-        if (routingServerIP.length() > 0)
+        RoutingServerShared routingServerShared = new RoutingServerShared(BaseApplication.getContext());
+        String urlOsrm = routingServerShared.getString(RoutingServerShared.IP,"http://91.92.125.244:8002");
+        Log.d("urlOsrm",urlOsrm.substring(0, 11));
+        if (urlOsrm.length() > 0)
         {
-            APIServiceValhalla apiServiceValhalla = ApiClientGlobal.getInstance().getClientServiceValhalla();
+            APIServiceValhalla apiServiceValhalla = ApiClientGlobal.getInstance().getClientServiceValhalla(urlOsrm);
             Call<Object> call = apiServiceValhalla.getOptimizedRoute(jsonObjectAllData.toString());
             call.enqueue(new Callback<Object>()
             {
@@ -294,9 +308,21 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         mPresenter.checkFakeLocationAndDateTime();
     }
 
+
+
+    /**
+     * get sort in first time
+     * @param sortList
+     */
     @Override
-    public Context getAppContext()
-    {
+    public void onGetSortList(int sortList) {
+        mPresenter.getCustomers(sortList);
+        sortType = sortList;
+        mPresenter.getNoeMasouliat();
+    }
+
+    @Override
+    public Context getAppContext() {
         return TreasuryListMapActivity.this;
     }
 
@@ -343,19 +369,16 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
     }
 
     @Override
-    public void showFirstPriority(final DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel)
-    {
+    public void showFirstPriority(final DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel, MoshtaryAddressModel moshtaryAddressModel) {
         Marker marker = new Marker(map);
         marker.setIcon(getResources().getDrawable(R.drawable.ic_priority_one));
-        marker.setPosition(new GeoPoint(darkhastFaktorMoshtaryForoshandeModel.getLatitude() , darkhastFaktorMoshtaryForoshandeModel.getLongitude()));
-        marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener()
-        {
+        marker.setPosition(new GeoPoint(moshtaryAddressModel.getLatitude_y(), moshtaryAddressModel.getLongitude_x()));
+        marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
             @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView)
-            {
-                mapController.animateTo(new GeoPoint(darkhastFaktorMoshtaryForoshandeModel.getLatitude(), darkhastFaktorMoshtaryForoshandeModel.getLongitude()));
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                mapController.animateTo(new GeoPoint(moshtaryAddressModel.getLatitude_y(), moshtaryAddressModel.getLongitude_x()));
                 //showBottomSheet(darkhastFaktorMoshtaryForoshandeModel , true, "1");
-                mPresenter.getCustomerFaktors(darkhastFaktorMoshtaryForoshandeModel, "1");
+                mPresenter.getCustomerFaktors(darkhastFaktorMoshtaryForoshandeModel, moshtaryAddressModel, "1");
                 return false;
             }
         });
@@ -364,19 +387,16 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
     }
 
     @Override
-    public void showSecondPriority(final DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel)
-    {
+    public void showSecondPriority(final DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel, MoshtaryAddressModel moshtaryAddressModel) {
         Marker marker = new Marker(map);
         marker.setIcon(getResources().getDrawable(R.drawable.ic_priority_two));
-        marker.setPosition(new GeoPoint(darkhastFaktorMoshtaryForoshandeModel.getLatitude() , darkhastFaktorMoshtaryForoshandeModel.getLongitude()));
-        marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener()
-        {
+        marker.setPosition(new GeoPoint(moshtaryAddressModel.getLatitude_y(), moshtaryAddressModel.getLongitude_x()));
+        marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
             @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView)
-            {
-                mapController.animateTo(new GeoPoint(darkhastFaktorMoshtaryForoshandeModel.getLatitude(), darkhastFaktorMoshtaryForoshandeModel.getLongitude()));
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                mapController.animateTo(new GeoPoint(moshtaryAddressModel.getLatitude_y(), moshtaryAddressModel.getLongitude_x()));
                 //showBottomSheet(darkhastFaktorMoshtaryForoshandeModel , true, "2");
-                mPresenter.getCustomerFaktors(darkhastFaktorMoshtaryForoshandeModel, "2");
+                mPresenter.getCustomerFaktors(darkhastFaktorMoshtaryForoshandeModel, moshtaryAddressModel, "2");
                 return false;
             }
         });
@@ -385,19 +405,16 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
     }
 
     @Override
-    public void showThirdPriority(final DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel)
-    {
+    public void showThirdPriority(final DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel, MoshtaryAddressModel moshtaryAddressModel) {
         Marker marker = new Marker(map);
         marker.setIcon(getResources().getDrawable(R.drawable.ic_priority_three));
-        marker.setPosition(new GeoPoint(darkhastFaktorMoshtaryForoshandeModel.getLatitude() , darkhastFaktorMoshtaryForoshandeModel.getLongitude()));
-        marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener()
-        {
+        marker.setPosition(new GeoPoint(moshtaryAddressModel.getLatitude_y(), moshtaryAddressModel.getLongitude_x()));
+        marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
             @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView)
-            {
-                mapController.animateTo(new GeoPoint(darkhastFaktorMoshtaryForoshandeModel.getLatitude(), darkhastFaktorMoshtaryForoshandeModel.getLongitude()));
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                mapController.animateTo(new GeoPoint(moshtaryAddressModel.getLatitude_y(), moshtaryAddressModel.getLongitude_x()));
                 //showBottomSheet(darkhastFaktorMoshtaryForoshandeModel , true, "3");
-                mPresenter.getCustomerFaktors(darkhastFaktorMoshtaryForoshandeModel, "3");
+                mPresenter.getCustomerFaktors(darkhastFaktorMoshtaryForoshandeModel, moshtaryAddressModel, "3");
                 return false;
             }
         });
@@ -411,22 +428,27 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
      * @param darkhastFaktorMoshtaryForoshandeModels لیست درخواست فاکتورهایی که ارسال نشده اند.
      */
     @Override
-    public void onGetTodayTreasuryList(final ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels)
-    {
+    public void onGetTodayTreasuryList(final ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, ArrayList<MoshtaryAddressModel> moshtaryAddressModelsNew) {
+
+
         ArrayList<OverlayItem> items = new ArrayList<>();
-        for (int i=0 ; i<darkhastFaktorMoshtaryForoshandeModels.size() ; i++)
-        {
-            items.add(new OverlayItem(darkhastFaktorMoshtaryForoshandeModels.get(i).getFullNameMoshtary(), "", new GeoPoint(darkhastFaktorMoshtaryForoshandeModels.get(i).getLatitude(), darkhastFaktorMoshtaryForoshandeModels.get(i).getLongitude()))); // Lat/Lon decimal degrees
+        MoshtaryAddressModel moshtaryAddressModel = new MoshtaryAddressModel();
+        for (int i = 0; i < darkhastFaktorMoshtaryForoshandeModels.size(); i++) {
+            items.add(new OverlayItem(darkhastFaktorMoshtaryForoshandeModels.get(i).getFullNameMoshtary(), "", new GeoPoint(moshtaryAddressModelsNew.get(i).getLatitude_y(), moshtaryAddressModelsNew.get(i).getLongitude_x()))); // Lat/Lon decimal degrees
+//            for (int j = 0; j < moshtaryAddressModelsNew.size(); j++) {
+//                if(darkhastFaktorMoshtaryForoshandeModels.get(i).getCcMoshtary()==moshtaryAddressModelsNew.get(j).getCcMoshtary())
+//                    moshtaryAddressModel = moshtaryAddressModelsNew.get(j);
+//            }
+
         }
 
         ItemizedIconOverlay<OverlayItem> itemItemizedIconOverlay = new ItemizedIconOverlay<>(items, getResources().getDrawable(R.drawable.ic_red_star), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
             @Override
-            public boolean onItemSingleTapUp(int index, OverlayItem item)
-            {
-                mapController.animateTo(new GeoPoint(darkhastFaktorMoshtaryForoshandeModels.get(index).getLatitude(), darkhastFaktorMoshtaryForoshandeModels.get(index).getLongitude()));
+            public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                mapController.animateTo(new GeoPoint(moshtaryAddressModelsNew.get(index).getLatitude_y(), moshtaryAddressModelsNew.get(index).getLongitude_x()));
                 // به ایندکس 4 عدد اضافه میکنیم، سه تا برای اولویت های یک تا 3، یکی هم برای اینکه اندیس ها از صفر شروع می شوند.
                 //showBottomSheet(darkhastFaktorMoshtaryForoshandeModels.get(index) , true, String.valueOf(index + 4));
-                mPresenter.getCustomerFaktors(darkhastFaktorMoshtaryForoshandeModels.get(index), String.valueOf(index + 4));
+                mPresenter.getCustomerFaktors(darkhastFaktorMoshtaryForoshandeModels.get(index), moshtaryAddressModelsNew.get(index), String.valueOf(index + 4));
                 return false;
             }
 
@@ -440,7 +462,7 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
 
 
     @Override
-    public void onGetAllEditedTodayTreasuryList(final ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels)
+    public void onGetAllEditedTodayTreasuryList(final ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, ArrayList<MoshtaryAddressModel> moshtaryAddressModelArrayList)
     {
         ArrayList<OverlayItem> items = new ArrayList<>();
         for (int i=0 ; i<darkhastFaktorMoshtaryForoshandeModels.size() ; i++)
@@ -455,7 +477,7 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
                 mapController.animateTo(new GeoPoint(darkhastFaktorMoshtaryForoshandeModels.get(index).getLatitude(), darkhastFaktorMoshtaryForoshandeModels.get(index).getLongitude()));
                 // به ایندکس 4 عدد اضافه میکنیم، سه تا برای اولویت های یک تا 3، یکی هم برای اینکه اندیس ها از صفر شروع می شوند.
                 //showBottomSheet(darkhastFaktorMoshtaryForoshandeModels.get(index) , true, String.valueOf(index + 4));
-                mPresenter.getCustomerFaktors(darkhastFaktorMoshtaryForoshandeModels.get(index), String.valueOf(index + 4));
+                mPresenter.getCustomerFaktors(darkhastFaktorMoshtaryForoshandeModels.get(index), moshtaryAddressModelArrayList.get(index), String.valueOf(index + 4));
                 return false;
             }
 
@@ -468,7 +490,7 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
     }
 
     @Override
-    public void onGetEditedTodayTreasuryList(final ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels)
+    public void onGetEditedTodayTreasuryList(final ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, ArrayList<MoshtaryAddressModel> moshtaryAddressModelArrayList)
     {
         ArrayList<OverlayItem> items = new ArrayList<>();
         for (int i=0 ; i<darkhastFaktorMoshtaryForoshandeModels.size() ; i++)
@@ -482,7 +504,7 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
             {
                 mapController.animateTo(new GeoPoint(darkhastFaktorMoshtaryForoshandeModels.get(index).getLatitude(), darkhastFaktorMoshtaryForoshandeModels.get(index).getLongitude()));
                 //showBottomSheet(darkhastFaktorMoshtaryForoshandeModels.get(index) , false, "-1");
-                mPresenter.getCustomerFaktors(darkhastFaktorMoshtaryForoshandeModels.get(index) , "-1");
+                mPresenter.getCustomerFaktors(darkhastFaktorMoshtaryForoshandeModels.get(index) , moshtaryAddressModelArrayList.get(index), "-1");
                 return false;
             }
 
@@ -495,9 +517,9 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
     }
 
     @Override
-    public void showCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo)
+    public void showCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, MoshtaryAddressModel moshtaryAddressModel , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo)
     {
-        showBottomSheet(darkhastFaktorMoshtaryForoshandeModels, customerInfo, true, customerPriority);
+        showBottomSheet(darkhastFaktorMoshtaryForoshandeModels, customerInfo, moshtaryAddressModel, true, customerPriority);
     }
 
     @Override
@@ -570,7 +592,7 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         }
     }
 
-    public void showBottomSheet(final ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, final DarkhastFaktorMoshtaryForoshandeModel customerInfo, boolean showEditButton, String priority)
+    public void showBottomSheet(final ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, final DarkhastFaktorMoshtaryForoshandeModel customerInfo, MoshtaryAddressModel moshtaryAddressModel, boolean showEditButton, String priority)
     {
         if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
         {
@@ -637,7 +659,7 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
             public void onClick(View v)
             {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                mPresenter.routingFromCurrentLocation(customerInfo.getCcMoshtary(), customerInfo.getFullNameMoshtary(), customerInfo.getLatitude(), customerInfo.getLongitude());
+                mPresenter.routingFromCurrentLocation(customerInfo.getCcMoshtary(), customerInfo.getFullNameMoshtary(), moshtaryAddressModel.getLatitude_y(), moshtaryAddressModel.getLongitude_x());
             }
         });
 
@@ -776,7 +798,7 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
      */
     private double[] getCurrentLocation()
     {
-        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider(TreasuryListMapActivity.this);
+        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
         return new double[]{locationProvider.getLatitude() , locationProvider.getLongitude()};
     }
 
@@ -848,5 +870,26 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         }
     }
 
+    @Override
+    public void closeLoadingDialog()
+    {
+        if (alertDialog != null)
+        {
+            try
+            {
+                alertDialog.dismiss();
+            }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+                mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "RptFaktorMandehDarActivity", "closeLoadingDialog", "");
+            }
+        }
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new PubFunc().new LocationProvider().stopLocationProvider();
+    }
 }

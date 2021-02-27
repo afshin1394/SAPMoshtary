@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
-    tools:context=".MVP.View.CustomersListActivity">
+    android:layoutDirection="rtl"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MVP.View.RptDarkhastFaktorVazeiatActivity"
+    xmlns:fab="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,12 +17,14 @@
         android:background="@color/colorPrimary"
         android:padding="@dimen/paddingTitle"
         android:elevation="@dimen/elevationActivityTitle"
-        android:layout_alignParentTop="true">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/lblActivityTitle"
-            android:text="@string/customersList"
+            android:text="@string/moshtaryListMapActivityTitle"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/lblActivityTitle"
             android:layout_centerInParent="true"/>
@@ -43,28 +48,32 @@
                 style="@style/MaterialSearchViewStyle"
                 android:layoutDirection="ltr"
                 android:layout_alignParentRight="true"
-                android:hint="@string/searchCustomerName"/>
+                />
         </RelativeLayout>
+
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <org.osmdroid.views.MapView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recyclerView"
-        android:scrollbars="vertical"
-        android:layoutDirection="rtl"
-        android:layout_below="@+id/layTitle"
-        android:paddingBottom="20dp"
-        android:paddingTop="10dp">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:id="@+id/mapView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layTitle"
+      >
+    </org.osmdroid.views.MapView>
 
-
+    <RelativeLayout
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:layout_constraintTop_toBottomOf="@id/layTitle"
+        fab:layout_constraintLeft_toLeftOf="parent">
     <com.github.clans.fab.FloatingActionMenu
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/fabMenu"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
+
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         fab:menu_fab_size="normal"
@@ -95,50 +104,24 @@
         fab:menu_labels_ellipsize="none"
         fab:menu_labels_maxLines="-1"
         fab:menu_labels_position="right"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+
         fab:menu_openDirection="up"
         fab:menu_labels_customFont="@string/fontPath"
-        fab:menu_backgroundColor="@android:color/transparent">
+        fab:menu_backgroundColor="@android:color/transparent"
+     >
         <com.github.clans.fab.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/fabCustomerListMap"
-            android:src="@drawable/ic_map"
-            fab:fab_size="normal"
-            fab:fab_label="@string/customerListWithMap"
-            fab:fab_colorNormal="@color/colorFabRefresh"
-            fab:fab_colorPressed="@color/colorFabRefreshClick"/>
-
-        <com.github.clans.fab.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fabSearch"
-            android:src="@drawable/ic_search"
-            fab:fab_size="normal"
-            fab:fab_label="@string/searchCustomerName"
-            fab:fab_colorNormal="@color/colorFabSearch"
-            fab:fab_colorPressed="@color/colorFabSearchClick"
-            android:layout_margin="15dp"/>
-
-        <com.github.clans.fab.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fabChooseRoute"
-            android:src="@drawable/ic_arrow_down"
-            fab:fab_size="normal"
-            fab:fab_label="@string/entekhabMasir"
-            fab:fab_colorNormal="@color/colorFabAdd"
-            fab:fab_colorPressed="@color/colorFabAddClick"
-            android:layout_margin="15dp"/>
-        <com.github.clans.fab.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fabRefresh"
+            android:id="@+id/fabShowSelectRadius"
             android:src="@drawable/ic_refresh"
             fab:fab_size="normal"
-            fab:fab_label="@string/refresh"
+            fab:fab_label="@string/selectRadius"
             fab:fab_colorNormal="@color/colorFabRefresh"
             fab:fab_colorPressed="@color/colorFabRefreshClick"/>
-
     </com.github.clans.fab.FloatingActionMenu>
 
-</RelativeLayout>
+    </RelativeLayout>
+    <include layout="@layout/btmsht_customer_list_map"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -21,6 +21,7 @@ import com.saphamrah.Adapter.AddCustomerAdapter;
 import com.saphamrah.BaseMVP.AddCustomerListMVP;
 import com.saphamrah.MVP.Presenter.AddCustomerListPresenter;
 import com.saphamrah.Model.AddCustomerInfoModel;
+import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
@@ -344,5 +345,10 @@ public class AddCustomerListActivity extends AppCompatActivity implements AddCus
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new PubFunc().new LocationProvider().stopLocationProvider();
+    }
 
 }

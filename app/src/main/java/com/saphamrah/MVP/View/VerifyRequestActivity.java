@@ -34,6 +34,7 @@ import com.saphamrah.Model.DarkhastFaktorJayezehModel;
 import com.saphamrah.Model.DarkhastFaktorTakhfifModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.Model.ParameterChildModel;
+import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.KalaDarkhastFaktorSatrModel;
 import com.saphamrah.UIModel.KalaElamMarjoeeModel;
@@ -917,5 +918,11 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new PubFunc().new LocationProvider().stopLocationProvider();
     }
 }

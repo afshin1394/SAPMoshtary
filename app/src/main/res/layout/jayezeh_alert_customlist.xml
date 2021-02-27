@@ -38,6 +38,7 @@
             android:textColor="@color/colorBlack"
             app:layout_constraintRight_toLeftOf="@+id/lbl_az"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/lbl_beEza"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

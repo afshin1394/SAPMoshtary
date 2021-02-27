@@ -187,6 +187,10 @@ public class EditCustomerPresenter implements EditCustomerMVP.PresenterOps , Edi
                 {
                     mView.get().hideEdttxtMobile();
                 }
+                else if (childParameterModel.getName().trim().equalsIgnoreCase(Constants.CAN_UPDATE_ADDRESS().trim()))
+                {
+                    mView.get().hideAddress();
+                }
             }
         }
     }

@@ -813,5 +813,10 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new PubFunc().new LocationProvider().stopLocationProvider();
+    }
 
 }

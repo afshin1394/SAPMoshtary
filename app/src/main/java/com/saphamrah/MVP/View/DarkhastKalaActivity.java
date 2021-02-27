@@ -1233,9 +1233,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         LinearLayout lay_haventGift = alertView.findViewById(R.id.lay_haventGift);
         TextView txt_haventGift = alertView.findViewById(R.id.txt_haventGift);
         Typeface font = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fontPath));
-        edttxtCountCarton.setTypeface(font);
-        edttxtCountBaste.setTypeface(font);
-        edttxtCountAdad.setTypeface(font);
+
         txt_haventGift .setTypeface(font);
 
         btnOK.setTypeface(font);
@@ -1267,4 +1265,9 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new PubFunc().new LocationProvider().stopLocationProvider();
+    }
 }

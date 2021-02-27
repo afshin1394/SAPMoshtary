@@ -262,6 +262,47 @@ public class AllMoshtaryForoshandehDAO
         return masirModels;
     }
 
+    public ArrayList<MasirModel> getAllMasirs()
+    {
+        ArrayList<MasirModel> masirModels = new ArrayList<>();
+        String query = "SELECT DISTINCT ccMasir, NameMasir, ccForoshandeh" +
+                " FROM " + AllMoshtaryForoshandehModel.TableName() +
+                " GROUP BY " + MasirModel.COLUMN_ccMasir() + "," + MasirModel.COLUMN_NameMasir() + " ORDER BY NameMasir ";
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast())
+                    {
+                        MasirModel masirModel = new MasirModel();
+                        masirModel.setCcMasir(cursor.getInt(0));
+                        masirModel.setNameMasir(cursor.getString(1));
+                        masirModel.setCcForoshandeh(cursor.getInt(2));
+
+                        masirModels.add(masirModel);
+
+                        cursor.moveToNext();
+                    }
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , AllMoshtaryForoshandehModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "AllMoshtaryForoshandehDAO" , "" , "getMasirsByccForoshande" , "");
+        }
+        return masirModels;
+    }
+
     public String getAllccMasirsWithComma(int ccForoshandeh)
     {
         String ccMasirs = "";
@@ -392,6 +433,37 @@ public class AllMoshtaryForoshandehDAO
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "AllMoshtaryForoshandehDAO" , "" , "getAllByccMasir" , "");
         }
         return allMoshtaryForoshandehModels;
+    }
+
+    public int getccForoshandehByccMasir(int ccMasir)
+    {
+        int ccForoshandeh =-1;
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            //String query = "select * from AllMoshtaryForoshandeh where ccMasir not in (select distinct(ccMasir) from Masir) and ccForoshandeh = " + ccForoshandeh;
+            String query = "SELECT DISTINCT ccForoshandeh FROM AllMoshtaryForoshandeh WHERE ccMasir = " + ccMasir;
+            //Cursor cursor = db.query(AllMoshtaryForoshandehModel.TableName(), allColumns(), AllMoshtaryForoshandehModel.COLUMN_ccForoshandeh() + " = " + ccForoshandeh, null, null, null, null);
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    ccForoshandeh = cursor.getInt(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , AllMoshtaryForoshandehModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "AllMoshtaryForoshandehDAO" , "" , "getByccForoshandeh" , "");
+        }
+        return ccForoshandeh;
     }
 
     public boolean deleteAll()

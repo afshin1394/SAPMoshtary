@@ -145,9 +145,9 @@ public class DariaftPardakhtDarkhastFaktorPPCModel
 
     private String TarikhSanadShamsi;
 
-    private long MablaghDariaftPardakht;
+    private double MablaghDariaftPardakht;
 
-    private long Mablagh;
+    private double Mablagh;
 
     private int CodeVazeiat;
 
@@ -234,13 +234,13 @@ public class DariaftPardakhtDarkhastFaktorPPCModel
     public String getTarikhSanadShamsi(){
         return this.TarikhSanadShamsi;
     }
-    public void setMablaghDariaftPardakht(long MablaghDariaftPardakht){
+    public void setMablaghDariaftPardakht(double MablaghDariaftPardakht){
         this.MablaghDariaftPardakht = MablaghDariaftPardakht;
     }
     public double getMablaghDariaftPardakht(){
         return this.MablaghDariaftPardakht;
     }
-    public void setMablagh(long Mablagh){
+    public void setMablagh(double Mablagh){
         this.Mablagh = Mablagh;
     }
     public double getMablagh(){

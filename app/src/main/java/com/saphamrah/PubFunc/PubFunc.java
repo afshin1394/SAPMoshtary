@@ -88,9 +88,12 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Cipher;
@@ -169,9 +172,9 @@ public class PubFunc
 
         LocationManager locationManager;
 
-        public LocationProvider(Context context)
+        public LocationProvider()
         {
-            this.context = context;
+            this.context = BaseApplication.getContext();
             latitude = 0.0;
             longitude = 0.0;
             getLocation();
@@ -359,6 +362,38 @@ public class PubFunc
             return null;
         }
 
+        LocationListener locationListener=new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                if (location != null) {
+                    LocationProvider.this.location = location;
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+
+
+
+
+        public void stopLocationProvider() {
+            if (locationManager !=null) locationManager.removeUpdates(locationListener);
+            if (locationManager !=null) locationManager =null;
+            if (locationListener !=null) locationListener =null;
+        }
 
     }
 
@@ -411,7 +446,7 @@ public class PubFunc
                             {
                                 Log.d("Location" , "location = null");
                                 locations.clear();
-                                LocationProvider locationProvider = new LocationProvider(context);
+                                LocationProvider locationProvider = new LocationProvider();
                                 location = locationProvider.getLocation();
                                 Log.d("Location" , "location == null and " + location.getLatitude() + " , " + location.getLongitude());
                                 if (location != null)
@@ -1431,8 +1466,25 @@ get mac address in android 10
 
     public class Logger
     {
+        public String getCurrentVersion(Context context)
+        {
+            try
+            {
+                PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+                return pInfo.versionName;
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                Logger logger = new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.toString(), "DeviceInfo", "", "getCurrentVersion", "");
+                return "";
+            }
+        }
         public boolean insertLogToDB(Context context,int logType, String logMessage, String logClass, String logActivity, String logFunctionParent, String logFunctionChild)
         {
+
+
             int ccAfrad;
             Log.d("insertLogToDB","imei:" + new DeviceInfo().getIMEI(context) +"-"+ logType +"-"+ logMessage +"-"+ new DeviceInfo().getAPILevel(context));
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(context);
@@ -1442,7 +1494,7 @@ get mac address in android 10
             logModel.setCcAfrad(ccAfrad);
             logModel.setIMEI(new DeviceInfo().getIMEI(context));
             logModel.setLogType(logType);
-            logModel.setLogMessage(logMessage);
+            logModel.setLogMessage(logMessage + getCurrentVersion(context));
             logModel.setLogClass(logClass);
             logModel.setLogActivity(logActivity);
             logModel.setLogFunctionParent(logFunctionParent);
@@ -2075,6 +2127,36 @@ get mac address in android 10
             Log.i("PubFunc", "convertIntegerArrayToString: "+strInteger);
             return strInteger;
 
+        }
+
+        /**find duplicates in a list controling their properties T is the model and it should implement equal method*/
+        public <T> boolean hasDuplicates(Collection<T> collection) {
+            int equality = 0;
+            if (collection.size() > 0) {
+                for (int i = 0; i < collection.size(); i++) {
+                    for (int j = 0; j < collection.size(); j++) {
+                        if (((ArrayList<T>) collection).get(i).equals(((ArrayList<T>) collection).get(j))
+                        ) {
+                            equality++;
+                        }
+                    }
+                }
+            }
+            if (equality > collection.size()){
+                return true;
+            }
+            return false;
+        }
+        /**find duplicates in a list with their key value*/
+        public <T> boolean hasDuplicatesWithKey(Collection<T> collection) {
+
+            Set<T> duplicates = new LinkedHashSet<>();
+
+            for (T t : collection) {
+                if (!duplicates.add(t))
+                    return false;
+            }
+            return true;
         }
 
     }

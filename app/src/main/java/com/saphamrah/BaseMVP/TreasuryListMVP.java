@@ -13,7 +13,7 @@ public interface TreasuryListMVP
     interface RequiredViewOps
     {
         Context getAppContext();
-        void onGetFaktorRooz(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , int noeMasouliat);
+        void onGetFaktorRooz(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , int noeMasouliat , int sort);
         void onGetFaktorMandeDar(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , int noeMasouliat);
         void onGetTreasuryListWithRouting(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , int noeMasouliat);
         void onGetCustomerAddress(double latitude , double longitude);
@@ -52,7 +52,7 @@ public interface TreasuryListMVP
         Context getAppContext();
         void onConfigurationChanged(TreasuryListMVP.RequiredViewOps view);
         void onErrorUseFakeLocation();
-        void onCheckServerTime(boolean valid, String message);
+        void onCheckServerTime(boolean valid, String message , int sort);
         void onGetCustomerAddress(double latitude , double longitude);
         void onGetFaktorImage(DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel);
         void onFailedSetDarkhastFaktorShared(int resId);
@@ -60,7 +60,7 @@ public interface TreasuryListMVP
         void onWarningSetDarkhastFaktorShared(int resId);
         void onSuccessUpdateMandeMojodiMashin();
         void onFailedUpdateMandeMojodiMashin();
-        void onGetFaktorRooz(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , int faktorRooz , int noeMasouliat);
+        void onGetFaktorRooz(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , int faktorRooz , int noeMasouliat , int sort);
         void onGetTreasuryListWithRouting(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , int noeMasouliat);
         void onErrorSend(int resId);
         void onSuccessSend(int position);

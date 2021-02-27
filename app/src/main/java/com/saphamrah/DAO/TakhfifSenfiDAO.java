@@ -415,7 +415,7 @@ Call<GetAllvTakhfifSenfiByccMarkazForoshResult> call = apiServiceGet.getAllvTakh
         try
         {
             MoshtaryDAO moshtaryDAO = new MoshtaryDAO(context);
-            int ccMoshtaryParent = moshtaryDAO.getByccMoshtary(NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY).getExtraProp_ccMoshtaryParent();
+            int ccMoshtaryParent = moshtaryDAO.getByccMoshtary(NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY).getccMoshtaryParent();
             SQLiteDatabase db = dbHelper.getReadableDatabase();
 
             Cursor cursor = db.query(TakhfifSenfiModel.TableName(), allColumns(),

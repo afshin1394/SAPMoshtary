@@ -253,7 +253,7 @@ public class AddCustomerListModel implements AddCustomerListMVP.ModelOps
     private int checkMoshtaryPoint()
     {
         int isInPolygon = -1;
-        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
+        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
         /*if (!googleLocationProvider.getHasAccess())
         {
             return -2;

@@ -18,6 +18,7 @@ import com.saphamrah.BaseMVP.SellPolygonMVP;
 import com.saphamrah.BuildConfig;
 import com.saphamrah.MVP.Presenter.SellPolygonPresenter;
 import com.saphamrah.Model.PolygonForoshSatrModel;
+import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
@@ -99,12 +100,6 @@ public class SellPolygonFragment extends Fragment implements SellPolygonMVP.Requ
 
         stateMaintainer = new StateMaintainer(getFragmentManager() , TAG , context);
         startMVPOps();
-
-        /*MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay( new GpsMyLocationProvider(context) , map);
-        mLocationOverlay.enableFollowLocation();
-        mLocationOverlay.enableMyLocation();
-        Bitmap personIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_location);
-        map.getOverlays().add(mLocationOverlay);*/
 
         mPresenter.getCurrentLocation();
         mPresenter.getSellPolygon();

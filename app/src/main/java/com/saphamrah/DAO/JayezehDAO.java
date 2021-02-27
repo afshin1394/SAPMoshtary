@@ -739,8 +739,8 @@ Call<GetAllvJayezehByccMarkazForoshResult> call = apiServiceGet.getJayezeh("1", 
             jayezehModel.setCcJayezeh(cursor.getInt(cursor.getColumnIndex(jayezehModel.getCOLUMN_ccJayezeh())));
             jayezehModel.setSharhJayezeh(cursor.getString(cursor.getColumnIndex(jayezehModel.getCOLUMN_SharhJayezeh())));
             jayezehModel.setCcJayezehSatr(cursor.getInt(cursor.getColumnIndex(jayezehModel.getCOLUMN_ccJayezehSatr())));
-            jayezehModel.setAz(cursor.getInt(cursor.getColumnIndex(jayezehModel.getCOLUMN_Az())));
-            jayezehModel.setTa(cursor.getInt(cursor.getColumnIndex(jayezehModel.getCOLUMN_Ta())));
+            jayezehModel.setAz(cursor.getDouble(cursor.getColumnIndex(jayezehModel.getCOLUMN_Az())));
+            jayezehModel.setTa(cursor.getDouble(cursor.getColumnIndex(jayezehModel.getCOLUMN_Ta())));
             jayezehModel.setTedadJayezeh(cursor.getInt(cursor.getColumnIndex(jayezehModel.getCOLUMN_TedadJayezeh())));
             jayezehModel.setBeEza(cursor.getInt(cursor.getColumnIndex(jayezehModel.getCOLUMN_BeEza())));
             jayezehModel.setNoeTedadRial(cursor.getInt(cursor.getColumnIndex(jayezehModel.getCOLUMN_NoeTedadRial())));

@@ -7,26 +7,28 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.saphamrah.Model.MandehMojodyMashinModel;
 import com.saphamrah.Model.ServerIpModel;
-import com.saphamrah.Network.RetrofitResponse;
+import com.saphamrah.Network.RxNetwork.RxCallback;
+import com.saphamrah.Network.RxNetwork.RxHttpRequest;
+import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIServiceGet;
-
-import com.saphamrah.WebService.ApiClientGlobal;
-import com.saphamrah.WebService.ServiceResponse.GetMandehMojodyMashinResult;
+import com.saphamrah.WebService.RxService.APIServiceRxjava;
+import com.saphamrah.WebService.RxService.Response.DataResponse.GetMandehMojodyMashinResponse;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MandehMojodyMashinDAO
 {
 
     private DBHelper dbHelper;
     private Context context;
+    private static final String CLASS_NAME = MandehMojodyMashinDAO.class.getSimpleName();
 
 
     public MandehMojodyMashinDAO(Context context)
@@ -63,88 +65,31 @@ public class MandehMojodyMashinDAO
         };
     }
 
-    public void fetchMandehMojodyMashin(final Context context, final String activityNameForLog, final String ccAnbarak, String ccForoshandeh, String ccMamorPakhsh, final RetrofitResponse retrofitResponse)
-    {
+    public void fetchMandehMojodyMashin(final Context context, final String activityNameForLog, final String ccAnbarak, String ccForoshandeh, String ccMamorPakhsh,String ccKalaCode,String ccSazmanForosh, final RxResponseHandler rxResponseHandler) {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
-        {
-            String message = "can't find server";
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MandehMojodyMashinDAO.class.getSimpleName(), activityNameForLog, "fetchMandehMojodyMashin", "");
-            retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR() , message);
-        }
-        else
-        {
-            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-            Call<GetMandehMojodyMashinResult> call = apiServiceGet.getMandehMojodyMashin(ccAnbarak , ccForoshandeh , ccMamorPakhsh);
-            call.enqueue(new Callback<GetMandehMojodyMashinResult>() {
-                @Override
-                public void onResponse(Call<GetMandehMojodyMashinResult> call, Response<GetMandehMojodyMashinResult> response)
-                {
-                    try
-                    {
-                        if (response.raw().body() != null)
-                        {
-                            long contentLength = response.raw().body().contentLength();
-                            PubFunc.Logger logger = new PubFunc().new Logger();
-                            logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, MandehMojodyMashinDAO.class.getSimpleName(), "", "fetchMandehMojodyMashin", "onResponse");
-                        }
-                    }
-                    catch (Exception e){e.printStackTrace();}
-                    try
-                    {
-                        if (response.isSuccessful())
-                        {
-                            GetMandehMojodyMashinResult result = response.body();
-                            if (result != null)
-                            {
-                                if (result.getSuccess())
-                                {
-                                    retrofitResponse.onSuccess(result.getData());
-                                }
-                                else
-                                {
-                                    PubFunc.Logger logger = new PubFunc().new Logger();
-                                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), MandehMojodyMashinDAO.class.getSimpleName(), activityNameForLog, "fetchMandehMojodyMashin", "onResponse");
-                                    retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
-                                }
-                            }
-                            else
-                            {
-                                String endpoint = getEndpoint(call);
-                                PubFunc.Logger logger = new PubFunc().new Logger();
-                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", context.getResources().getString(R.string.resultIsNull), endpoint), MandehMojodyMashinDAO.class.getSimpleName(), activityNameForLog, "fetchMandehMojodyMashin", "onResponse");
-                                retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
-                            }
-                        }
-                        else
-                        {
-                            String endpoint = getEndpoint(call);
-                            String message = String.format("error body : %1$s , code : %2$s * %3$s" , response.message() , response.code(), endpoint);
-                            PubFunc.Logger logger = new PubFunc().new Logger();
-                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MandehMojodyMashinDAO.class.getSimpleName(), activityNameForLog, "fetchMandehMojodyMashin", "onResponse");
-                            retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), message);
-                        }
-                    }
-                    catch (Exception exception)
-                    {
-                        exception.printStackTrace();
-                        PubFunc.Logger logger = new PubFunc().new Logger();
-                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), MandehMojodyMashinDAO.class.getSimpleName(), activityNameForLog, "fetchMandehMojodyMashin", "onResponse");
-                        retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION() , exception.toString());
-                    }
-                }
 
-                @Override
-                public void onFailure(Call<GetMandehMojodyMashinResult> call, Throwable t)
-                {
-                    String endpoint = getEndpoint(call);
-                    PubFunc.Logger logger = new PubFunc().new Logger();
-                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", t.getMessage(), endpoint), MandehMojodyMashinDAO.class.getSimpleName(), activityNameForLog, "fetchMandehMojodyMashin", "onFailure");
-                    retrofitResponse.onFailed(Constants.RETROFIT_THROWABLE() , t.getMessage());
-                }
-            });
-        }
+        APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
+        RxHttpRequest.getInstance()
+                .execute(apiServiceRxjava.getMandehMojodyMashin(ccAnbarak, ccForoshandeh, ccMamorPakhsh,ccKalaCode,ccSazmanForosh), activityNameForLog, CLASS_NAME, "fetchAllRptHadafForoshRx", new RxCallback<GetMandehMojodyMashinResponse>() {
+                    @Override
+                    public void onStart(Disposable disposable) {
+                        rxResponseHandler.onStart(disposable);
+                    }
+
+
+                    @Override
+                    public void onSuccess(GetMandehMojodyMashinResponse response) {
+                        rxResponseHandler.onSuccess(response.getMandehMojodyMashinModels());
+                    }
+
+                    @Override
+                    public void onError(String message, String type) {
+                        rxResponseHandler.onFailed(message, type);
+                    }
+
+
+                });
+
     }
 
     private String getEndpoint(Call call)
@@ -160,8 +105,9 @@ public class MandehMojodyMashinDAO
         return endpoint;
     }
 
-    public boolean insertGroup(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels)
-    {
+
+
+    public boolean insertGroup(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try
         {
@@ -304,5 +250,24 @@ public class MandehMojodyMashinDAO
         return mandehMojodyMashinModels;
     }
 
-    
+
+
+
+
+    private Callable<Boolean>  insertGroupRX(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels) {
+        return new Callable<Boolean>() {
+            public Boolean call() {
+                return insertGroup(mandehMojodyMashinModels);
+            }
+        };
+    }
+
+    private Callable<Boolean> deleteAllRx() {
+        return new Callable<Boolean>() {
+            public Boolean call() {
+                return deleteAll();
+            }
+        };
+    }
+
 }

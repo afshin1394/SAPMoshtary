@@ -218,7 +218,7 @@
 
     <!--this array use in list of customers and user can add customer to today route-->
     <string-array name="getCustomerInfo">
-        <item>{\"name\":\"اطلاعات مسیر\" , \"function\":\"getMasir\"}</item>
+        <item>{\"name\":\"اطلاعات مشتری\" , \"function\":\"getMasir\"}</item>
         <item>{\"name\":\"اعتبار مشتری\" , \"function\":\"getMoshtaryEtebarSazmanForosh\"}</item>
         <item>{\"name\":\"گروه مشتری\" , \"function\":\"getMoshtaryGoroh\"}</item>
         <item>{\"name\":\"گزارش برگشتی\" , \"function\":\"getBargashty\"}</item>

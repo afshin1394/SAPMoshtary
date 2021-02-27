@@ -2,6 +2,7 @@ package com.saphamrah.MVP.Model;
 
 import android.util.Log;
 
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.SettingMVP;
 import com.saphamrah.DAO.SystemConfigTabletDAO;
 import com.saphamrah.Model.SystemConfigTabletModel;
@@ -17,7 +18,7 @@ public class SettingModel implements SettingMVP.ModelOps
 {
 
     private SettingMVP.RequiredPresenterOps mPresenter;
-
+    SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(BaseApplication.getContext());
 
     public SettingModel(SettingMVP.RequiredPresenterOps mPresenter)
     {
@@ -37,11 +38,13 @@ public class SettingModel implements SettingMVP.ModelOps
             String[] arrayPrintType = mPresenter.getAppContext().getResources().getStringArray(R.array.printTypeItems);
             String[] arrayMapServiceType=mPresenter.getAppContext().getResources().getStringArray(R.array.mapServiceTypeItems);
             String[] arrayGoodsNumberType=mPresenter.getAppContext().getResources().getStringArray(R.array.GoodsNumberItems);
+            String[] arraySortTreasuryList=mPresenter.getAppContext().getResources().getStringArray(R.array.sortTreasuryListTypeItems);
             String printerPaperSize = "";
             String printerType = "";
             String printType = "";
             String mapServiceType = "";
             String goodsNumber="";
+            String sortTreasuryList="";
 
             try
             {
@@ -97,7 +100,18 @@ public class SettingModel implements SettingMVP.ModelOps
                         break;
                     }
                 }
-                mPresenter.onGetSetting(printerPaperSize, printerType, printType,mapServiceType,goodsNumber);
+                for (String str :arraySortTreasuryList)
+                {
+
+                    JSONObject jsonObject=new JSONObject(str);
+
+                    if (jsonObject.getString("value").trim().equals(String.valueOf(systemConfigTabletModels.get(0).getSortTreasuryList())))
+                    {
+                        sortTreasuryList=jsonObject.getString("title");
+                        break;
+                    }
+                }
+                mPresenter.onGetSetting(printerPaperSize, printerType, printType,mapServiceType,goodsNumber,sortTreasuryList);
             }
             catch (Exception e)
             {
@@ -228,7 +242,7 @@ public class SettingModel implements SettingMVP.ModelOps
     @Override
     public void savePrinterPaperSize(int paperSizeValue)
     {
-        SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(mPresenter.getAppContext());
+
         if (!systemConfigTabletDAO.updatePrinterPaperSize(paperSizeValue))
         {
             mPresenter.onFailedUpdatePrinterPaperSize();
@@ -238,7 +252,7 @@ public class SettingModel implements SettingMVP.ModelOps
     @Override
     public void savePrinterType(int printerTypeValue)
     {
-        SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(mPresenter.getAppContext());
+
         if (!systemConfigTabletDAO.updatePrinterType(printerTypeValue))
         {
             mPresenter.onFailedUpdatePrinterType();
@@ -248,7 +262,7 @@ public class SettingModel implements SettingMVP.ModelOps
     @Override
     public void savePrintType(int printTypeValue)
     {
-        SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(mPresenter.getAppContext());
+
         if (!systemConfigTabletDAO.updatePrintType(printTypeValue))
         {
             mPresenter.onFailedUpdatePrintType();
@@ -257,7 +271,7 @@ public class SettingModel implements SettingMVP.ModelOps
 
     @Override
     public void saveMapServiceType(int mapServiceTypeValue) {
-        SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(mPresenter.getAppContext());
+
         if (!systemConfigTabletDAO.updateMapType(mapServiceTypeValue))
         {
             mPresenter.onFailedUpdateMapServiceType();
@@ -265,9 +279,16 @@ public class SettingModel implements SettingMVP.ModelOps
     }
 
     @Override
+    public void saveSortTreasuryList(int sortTreasuryList) {
+
+        if (!systemConfigTabletDAO.updateSortTreasuryList(sortTreasuryList))
+        {
+            mPresenter.onFailedUpdateSortTreasuryList();
+        }
+    }
+
+    @Override
     public void saveShowGoodsItemNumber(int showGoodsItemNumber) {
-        SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(mPresenter.getAppContext());
-        Log.i("showGoodsNumber", "saveShowGoodsItemNumber: "+systemConfigTabletDAO.updateGoodsShowItemNumber(showGoodsItemNumber));
         if (!systemConfigTabletDAO.updateGoodsShowItemNumber(showGoodsItemNumber))
         {
             mPresenter.onFailedUpdateGoodsShowNumber();
@@ -285,5 +306,28 @@ public class SettingModel implements SettingMVP.ModelOps
     public void onDestroy()
     {
 
+    }
+
+    @Override
+    public void getSortTreasuryList() {
+        ArrayList<String> arrayListTitle = new ArrayList<>();
+        ArrayList<String> arrayListValue = new ArrayList<>();
+        String[] arraySortTypes = mPresenter.getAppContext().getResources().getStringArray(R.array.sortTreasuryListTypeItems);
+        for (String str : arraySortTypes)
+        {
+            try
+            {
+                JSONObject jsonObject = new JSONObject(str);
+                arrayListTitle.add(jsonObject.getString("title"));
+                arrayListValue.add(jsonObject.getString("value"));
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                setLogToDB(Constants.LOG_EXCEPTION(), e.toString(), "SettingModel", "SettingActivity", "getPaperSizesForPrint", "");
+            }
+        }
+
+        mPresenter.onGetSortTreasuryList(arrayListTitle , arrayListValue);
     }
 }

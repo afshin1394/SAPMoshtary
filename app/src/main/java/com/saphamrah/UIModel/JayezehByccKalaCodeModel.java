@@ -24,10 +24,10 @@ public class JayezehByccKalaCodeModel {
     private int ccJayezehSatr;
     @SerializedName("Az")
     @Expose
-    private int Az;
+    private Double Az;
     @SerializedName("Ta")
     @Expose
-    private int Ta;
+    private Double Ta;
     @SerializedName("TedadJayezeh")
     @Expose
     private int TedadJayezeh;
@@ -87,19 +87,19 @@ public class JayezehByccKalaCodeModel {
         this.ccJayezehSatr = ccJayezehSatr;
     }
 
-    public int getAz() {
+    public double getAz() {
         return Az;
     }
 
-    public void setAz(int az) {
+    public void setAz(double az) {
         Az = az;
     }
 
-    public int getTa() {
+    public double getTa() {
         return Ta;
     }
 
-    public void setTa(int ta) {
+    public void setTa(double ta) {
         Ta = ta;
     }
 

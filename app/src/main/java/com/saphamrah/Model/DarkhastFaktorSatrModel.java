@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class DarkhastFaktorSatrModel
 {
@@ -609,6 +610,55 @@ public class DarkhastFaktorSatrModel
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DarkhastFaktorSatrModel that = (DarkhastFaktorSatrModel) o;
+        return
+                ccAfrad == that.ccAfrad &&
+                CodeNoeKala == that.CodeNoeKala &&
+                ccKala == that.ccKala &&
+                ccKalaCode == that.ccKalaCode &&
+                ccTaminKonandeh == that.ccTaminKonandeh &&
+                Tedad1 == that.Tedad1 &&
+                Tedad2 == that.Tedad2 &&
+                Tedad3 == that.Tedad3 &&
+                Double.compare(that.MablaghForosh, MablaghForosh) == 0 &&
+                GheymatMiangin == that.GheymatMiangin &&
+                CodeVazeiat == that.CodeVazeiat &&
+                Float.compare(that.MablaghTakhfifNaghdiVahed, MablaghTakhfifNaghdiVahed) == 0 &&
+                Float.compare(that.Maliat, Maliat) == 0 &&
+                Float.compare(that.Avarez, Avarez) == 0 &&
+                Float.compare(that.MablaghForoshKhalesKala, MablaghForoshKhalesKala) == 0 &&
+                Float.compare(that.MablaghKharid, MablaghKharid) == 0 &&
+                MablaghMasrafKonandeh == that.MablaghMasrafKonandeh &&
+                ccAnbarMarjoee == that.ccAnbarMarjoee &&
+                ccAnbarGhesmat == that.ccAnbarGhesmat &&
+                Float.compare(that.GheymatMasrafKonandeh, GheymatMasrafKonandeh) == 0 &&
+                Float.compare(that.GheymatForoshAsli, GheymatForoshAsli) == 0 &&
+                //Float.compare(that.ExtraProp_GheymatMasrafKonandehAsli, ExtraProp_GheymatMasrafKonandehAsli) == 0 &&
+                Float.compare(that.Vazn, Vazn) == 0 &&
+                ExtraProp_IsOld == that.ExtraProp_IsOld &&
+                Objects.equals(ccDarkhastFaktor, that.ccDarkhastFaktor) &&
+                Objects.equals(ccDarkhastFaktorSatrTaavoni, that.ccDarkhastFaktorSatrTaavoni) &&
+                Objects.equals(ccDarkhastFaktorSatrPPC, that.ccDarkhastFaktorSatrPPC) &&
+                Objects.equals(ShomarehBach, that.ShomarehBach) &&
+                Objects.equals(TarikhTolid, that.TarikhTolid) &&
+                Objects.equals(TarikhEngheza, that.TarikhEngheza) &&
+                Objects.equals(MablaghTakhfifDarkhast, that.MablaghTakhfifDarkhast) &&
+                Objects.equals(MablaghTakhfifFaktor, that.MablaghTakhfifFaktor) &&
+                Objects.equals(ccTafkikJoze, that.ccTafkikJoze) &&
+                Objects.equals(MojodyGhabelForosh, that.MojodyGhabelForosh) &&
+                Objects.equals(DateVorod, that.DateVorod) &&
+                Objects.equals(DarsadTakhfifTaavoni, that.DarsadTakhfifTaavoni) &&
+                Objects.equals(ccUser, that.ccUser) &&
+                Objects.equals(DisCntType, that.DisCntType) &&
+                Objects.equals(DisCntSubType, that.DisCntSubType) &&
+                Objects.equals(GheymatKharid, that.GheymatKharid) &&
+                Objects.equals(TarikhFaktor, that.TarikhFaktor) &&
+                Objects.equals(darkhastFaktorSatrTakhfifs, that.darkhastFaktorSatrTakhfifs);
+    }
 
 
 }

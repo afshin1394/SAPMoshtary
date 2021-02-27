@@ -17,6 +17,7 @@ import android.view.View;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.ForoshandehRouteMapMVP;
 import com.saphamrah.BuildConfig;
 import com.saphamrah.MVP.Presenter.ForoshandehRouteMapPresenter;
@@ -85,7 +86,7 @@ public class ForoshandehRouteMapActivity extends AppCompatActivity implements Fo
         polyline = new Polyline();
         fabMenu.setVisibility(View.GONE);
 
-        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay( new GpsMyLocationProvider(this) , map);
+        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay( new GpsMyLocationProvider(BaseApplication.getContext()) , map);
         mLocationOverlay.enableMyLocation();
         map.getOverlays().add(mLocationOverlay);
 
@@ -131,7 +132,7 @@ public class ForoshandehRouteMapActivity extends AppCompatActivity implements Fo
 
     private void showData()
     {
-        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(ForoshandehRouteMapActivity.this);
+        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
         IMapController mapController = new MapController(map);
         Log.d("location" , "map lat : " + googleLocationProvider.getLatitude() + " long : " + googleLocationProvider.getLongitude());
         mapController.setCenter(new GeoPoint(googleLocationProvider.getLatitude() , googleLocationProvider.getLongitude()));
@@ -317,6 +318,10 @@ public class ForoshandehRouteMapActivity extends AppCompatActivity implements Fo
 
 
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new PubFunc().new LocationProvider().stopLocationProvider();
+    }
 
 }

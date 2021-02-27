@@ -1111,46 +1111,53 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
 
     private void getMoshtaryParent(final int getProgramType , String ccMoshtarys)
     {
-        final MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
-        moshtaryDAO.fetchMoshtaryParent(mPresenter.getAppContext(), activityNameForLog, ccMoshtarys, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
+
+
+//        final MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
+//        moshtaryDAO.fetchMoshtaryParent(mPresenter.getAppContext(), activityNameForLog, ccMoshtarys, new RetrofitResponse()
+//        {
+//            @Override
+//            public void onSuccess(final ArrayList arrayListData)
+//            {
                 Thread thread = new Thread()
                 {
                     @Override
                     public void run()
                     {
-                        int successfulUpdateCounter = 0;
-                        /*for (int i = 0 ; i < arrayListData.size() ; i++)
-                        {
-                            boolean updateResult = moshtaryDAO.updateccMoshtaryParentInMoshtary((MoshtaryParentModel)arrayListData.get(i));
-                            if (updateResult)
-                            {
-                                successfulUpdateCounter++;
-                            }
-                        }*/
-                        boolean result = moshtaryDAO.updateccMoshtaryParentInMoshtary(arrayListData);
-                        if (result)
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            deleteMoshtaryAmargarImage(getProgramType);
-                        }
-                        else
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
-                        }
+                        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
+                        deleteMoshtaryAmargarImage(getProgramType);
+
+//                        int successfulUpdateCounter = 0;
+//                        for (int i = 0 ; i < arrayListData.size() ; i++)
+//                        {
+//                            boolean updateResult = moshtaryDAO.updateccMoshtaryParentInMoshtary(arrayListData);
+//                            if (updateResult)
+//                            {
+//                                successfulUpdateCounter++;
+//                            }
+//                        }
+
+//                        boolean result = true;//moshtaryDAO.updateccMoshtaryParentInMoshtary(arrayListData);
+//                        if (result)
+//                        {
+//                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
+//                            deleteMoshtaryAmargarImage(getProgramType);
+//                        }
+//                        else
+//                        {
+//                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
+//                        }
+
                     }
                 };
                 thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
-            }
-        });
+//            }
+//            @Override
+//            public void onFailed(String type, String error)
+//            {
+//                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
+//            }
+//        });
     }
 
 
@@ -2022,6 +2029,8 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
         }
     }
 
+
+
     private void getMoshtaryMorajeShodehRooz(final int getProgramType , String ccForoshandeh , String ccMasir)
     {
         final MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(mPresenter.getAppContext());
@@ -2570,7 +2579,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
                         if (deleteResult && insertResult)
                         {
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            getAnbarakInfo(getProgramType , String.valueOf(ccAfrad));
+                            getAnbarakInfo(getProgramType , String.valueOf(ccAfrad),String.valueOf(ccMarkazSazmanForoshSakhtarForosh));
                         }
                         else
                         {
@@ -2589,7 +2598,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
     }
 
 
-    private void getAnbarakInfo(final int getProgramType , final String ccAfrad)
+    private void getAnbarakInfo(final int getProgramType , final String ccAfrad, final String ccMarkazSazmanForoshSakhtarForosh)
     {
         final AnbarakAfradDAO anbarakAfradDAO = new AnbarakAfradDAO(mPresenter.getAppContext());
         anbarakAfradDAO.fetchAnbarakAfrad(mPresenter.getAppContext(), activityNameForLog, ccAfrad, new RetrofitResponse()
@@ -2613,7 +2622,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
                             if (getProgramType == Constants.GET_PROGRAM_UPDATE_KALA())
                             {
-                                getKala(getProgramType , ccAfrad);
+                                getKala(getProgramType , ccAfrad, ccMarkazSazmanForoshSakhtarForosh);
                             }
                             else
                             {
@@ -2755,13 +2764,13 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
     private void getEtebarForoshandeh(final int getProgramType)
     {
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-        getKala(getProgramType , String.valueOf(ccAfrad));
+        getKala(getProgramType , String.valueOf(ccAfrad), String.valueOf(ccMarkazSazmanForoshSakhtarForosh));
     }
 
-    private void getKala(final int getProgramType , String ccAfrad)
+    private void getKala(final int getProgramType , String ccAfrad, String ccMarkazSazmanForoshSakhtarForosh)
     {
         final KalaDAO kalaDAO = new KalaDAO(mPresenter.getAppContext());
-        kalaDAO.fetchMojodyAnbar(mPresenter.getAppContext(), activityNameForLog, ccAfrad, new RetrofitResponse()
+        kalaDAO.fetchMojodyAnbar(mPresenter.getAppContext(), activityNameForLog, ccAfrad , ccMarkazSazmanForoshSakhtarForosh, new RetrofitResponse()
         {
             @Override
             public void onSuccess(final ArrayList arrayListData)

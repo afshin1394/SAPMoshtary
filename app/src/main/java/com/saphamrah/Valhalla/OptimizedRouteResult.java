@@ -5,12 +5,12 @@ import com.google.gson.annotations.SerializedName;
 
 public class OptimizedRouteResult
 {
-    @SerializedName("id")
-    @Expose
-    private String id;
     @SerializedName("trip")
     @Expose
     private Trip trip;
+    @SerializedName("id")
+    @Expose
+    private String id;
 
 
     public String getId()

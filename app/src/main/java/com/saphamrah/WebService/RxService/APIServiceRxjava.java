@@ -32,8 +32,12 @@ public interface APIServiceRxjava {
 
 
     /**************************************************************************************M*****************************************************************************/
-    @GET("Api/ApiTablet/Get_MandehMojody")
-    Observable<Response<GetMandehMojodyMashinResponse>> getMandehMojodyMashin(@Query("ccAnbarak") String ccAnbarak, @Query("ccForoshandeh") String ccForoshandeh, @Query("ccMamorPakhsh") String ccMamorPakhsh);
+    @GET("Api/ApiTablet/Get_MandehMojody_Online")
+    Observable<Response< GetMandehMojodyMashinResponse>> getMandehMojodyMashin(@Query("ccAnbarak") String ccAnbarak
+            , @Query("ccForoshandeh") String ccForoshandeh
+            , @Query("ccMamorPakhsh") String ccMamorPakhsh
+            , @Query("cckalaCode") String ccKalaCode
+            , @Query("ccSazmanForosh") String ccSazmanForosh);
 
 
 

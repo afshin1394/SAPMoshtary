@@ -78,7 +78,7 @@ public class RptCustomersListByDistanceActivity extends AppCompatActivity implem
         circle = new Polygon(map);
         markerCurrentLocation = new Marker(map);
 
-        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider(RptCustomersListByDistanceActivity.this);
+        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
         currentLocation = new GeoPoint(locationProvider.getLatitude() , locationProvider.getLongitude());
 
 

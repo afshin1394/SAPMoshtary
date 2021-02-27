@@ -115,7 +115,7 @@ public class GoodsInfoActivity extends AppCompatActivity implements GoodsInfoMVP
 //        fabUpdateGallery.setClickable(false);
         fabMenu.close(true);
         if (adapter!=null){
-            customAlertDialog.showLogMessageAlert(GoodsInfoActivity.this, false, "", getResources().getString(R.string.error), Constants.INFO_MESSAGE(), getResources().getString(R.string.no), getResources().getString(R.string.yes), new CustomAlertDialogResponse()
+            customAlertDialog.showLogMessageAlert(GoodsInfoActivity.this, false, "", getResources().getString(R.string.wantUpdateGallery), Constants.INFO_MESSAGE(), getResources().getString(R.string.no), getResources().getString(R.string.yes), new CustomAlertDialogResponse()
             {
                 @Override
                 public void setOnCancelClick()

@@ -11,7 +11,7 @@ public class MoshtaryGharardadKalaModel {
     public MoshtaryGharardadKalaModel() {
     }
 
-    private static final String TABLE_NAME = "MoshtaryGhrardadKala";
+    private static final String TABLE_NAME = "MoshtaryGharardadKala";
     private static final String COLUMN_radif = "radif";
     private static final String COLUMN_ccMoshtaryGharardad = "ccMoshtaryGharardad";
     private static final String COLUMN_ccKalaCode = "ccKalaCode";

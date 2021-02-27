@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -65,7 +66,7 @@ public class JayezehParentAlertAdapter extends RecyclerView.Adapter<JayezehParen
         }
         holder.lbl_sharhJayezeh.setText(jayezehByccKalaCodeParentModels.get(position).getSharhJayezeh());
 
-        holder.expand_btn.setOnClickListener(v->{
+        holder.lay_expand_btn.setOnClickListener(v->{
             holder.bind(position);
         });
 
@@ -90,6 +91,7 @@ public class JayezehParentAlertAdapter extends RecyclerView.Adapter<JayezehParen
         private TextView lbl_sharhJayezeh;
         private RecyclerView recycler_view;
         private ImageView expand_btn;
+        private LinearLayout lay_expand_btn;
 
 
         private MyViewHolder(View view) {
@@ -99,6 +101,7 @@ public class JayezehParentAlertAdapter extends RecyclerView.Adapter<JayezehParen
             lbl_sharhJayezeh = view.findViewById(R.id.lbl_sharhJayezeh);
             recycler_view = view.findViewById(R.id.recycler_view);
             expand_btn = view.findViewById(R.id.expand_btn);
+            lay_expand_btn = view.findViewById(R.id.lay_expand_btn);
             lbl_sharhJayezeh.setTypeface(font);
             recycler_view.setLayoutManager(new LinearLayoutManager(context , LinearLayoutManager.VERTICAL , false));
 

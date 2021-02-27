@@ -174,6 +174,43 @@ public class KalaMojodiDAO
         }
         return count;
     }
+
+
+    public int getMaxMojodyByccKalaCode(int ccKalaCode)
+    {
+        int max = 0;
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            //select sum(Tedad) from KalaMojodi where ccKalaCode =
+            String query = " SELECT SUM(Tedad) " +
+                           " FROM ( " +
+                           "         SELECT SUM(Tedad) AS Tedad FROM KalaMojodi WHERE ccKalaCode = " + ccKalaCode + " AND Tedad<0 " +
+                           "         UNION ALL " +
+                           "         SELECT MAX(Max_Mojody) AS Tedad FROM KalaMojodi WHERE ccKalaCode = " + ccKalaCode +
+                           " ) ";
+
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    max = cursor.getInt(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , KalaMojodiModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaMojodiDAO" , "" , "getAll" , "");
+        }
+        return max;
+    }
 	
 	public ArrayList<KalaMojodiModel> getByccDarkhastFaktor(long ccDarkhastFaktor)
     {

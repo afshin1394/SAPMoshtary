@@ -345,8 +345,7 @@
                     android:textSize="@dimen/FontSize36"
                     android:textStyle="bold"
                     android:text="اقلام درخواست"
-                    android:textColor="@color/colorWhite"
-                    android:background="@drawable/table_content_cell_bg_blue"/>
+                    android:textColor="@color/colorBlack"/>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/lstKalaInfo"
                     android:layout_width="match_parent"
@@ -369,8 +368,7 @@
                         android:text="تخفیفات فروش"
                         android:textSize="@dimen/FontSize36"
                         android:textStyle="bold"
-                        android:textColor="@color/colorWhite"
-                        android:background="@drawable/table_content_cell_bg_blue"/>
+                        android:textColor="@color/colorBlack"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/lstTakhfif"
                         android:layout_width="match_parent"
@@ -394,8 +392,7 @@
                         android:text="@string/marjoee"
                         android:textSize="@dimen/FontSize36"
                         android:textStyle="bold"
-                        android:textColor="@color/colorWhite"
-                        android:background="@drawable/table_content_cell_bg_blue"/>
+                        android:textColor="@color/colorBlack"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/lstKalaMarjoee"
                         android:layout_width="match_parent"
@@ -420,8 +417,7 @@
                         android:text="جایزه"
                         android:textSize="@dimen/FontSize36"
                         android:textStyle="bold"
-                        android:textColor="@color/colorWhite"
-                        android:background="@drawable/table_content_cell_bg_blue"/>
+                        android:textColor="@color/colorBlack"/>
 
 
                     <androidx.recyclerview.widget.RecyclerView

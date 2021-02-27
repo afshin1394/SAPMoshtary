@@ -69,14 +69,14 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps
             JayezehEntekhabiMojodiDAO jayezehEntekhabiMojodiDAO = new JayezehEntekhabiMojodiDAO(mPresenter.getAppContext());
             ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels = jayezehEntekhabiMojodiDAO.getByccTakhfifHajmi(ccJayezehTakhfif);
             Log.d("bouns", "jayezehEntekhabiMojodiModels Takhfif:" + jayezehEntekhabiMojodiModels);
-            mPresenter.onGetKalaForJayezeh(jayezehEntekhabiMojodiModels);
+            mPresenter.onGetKalaForJayezeh(jayezehEntekhabiMojodiModels , noeJayezehTakhfif);
         }
         else if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeJayezeh())
         {
             JayezehEntekhabiMojodiDAO jayezehEntekhabiMojodiDAO = new JayezehEntekhabiMojodiDAO(mPresenter.getAppContext());
             ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels = jayezehEntekhabiMojodiDAO.getByccJayezeh(ccJayezehTakhfif, ccJayezehSatr);
             Log.d("bouns", "jayezehEntekhabiMojodiModels Jayezeh:" + jayezehEntekhabiMojodiModels);
-            mPresenter.onGetKalaForJayezeh(jayezehEntekhabiMojodiModels);
+            mPresenter.onGetKalaForJayezeh(jayezehEntekhabiMojodiModels , noeJayezehTakhfif);
         }
 
         /*for (JayezehEntekhabiMojodiModel model : jayezehEntekhabiMojodiModels)

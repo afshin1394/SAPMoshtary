@@ -11,6 +11,7 @@ import com.saphamrah.Model.RptForoshModel;
 import com.saphamrah.Model.WeatherDataModel;
 import com.saphamrah.Model.WeatherModel;
 import com.saphamrah.Model.WindModel;
+import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 
@@ -282,7 +283,6 @@ public class MainFirstFragmentPresenter implements MainFirstFragmentMVP.Presente
     {
         mView.get().onFailedGetWeather();
     }
-
 
 
 }

@@ -12,7 +12,7 @@
         android:layout_weight="1"
         android:id="@+id/lblRadif"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/FontSize14"
+        android:textSize="@dimen/FontSize20"
         android:gravity="center"
         android:background="@drawable/table_content_cell_bg" />
 
@@ -22,7 +22,7 @@
         android:layout_weight="3"
         android:id="@+id/lblNameKala"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/FontSize14"
+        android:textSize="@dimen/FontSize20"
         android:gravity="center"
         android:background="@drawable/table_content_cell_bg" />
 
@@ -32,7 +32,7 @@
         android:layout_weight="1"
         android:id="@+id/lblMablagh"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/FontSize14"
+        android:textSize="@dimen/FontSize20"
         android:gravity="center"
         android:background="@drawable/table_content_cell_bg" />
 
@@ -42,7 +42,7 @@
         android:layout_weight="1"
         android:id="@+id/lblCarton"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/FontSize14"
+        android:textSize="@dimen/FontSize26"
         android:gravity="center"
         android:background="@drawable/table_content_cell_bg" />
 
@@ -52,7 +52,7 @@
         android:layout_weight="1"
         android:id="@+id/lblBasteh"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/FontSize14"
+        android:textSize="@dimen/FontSize26"
         android:gravity="center"
         android:background="@drawable/table_content_cell_bg" />
 
@@ -62,7 +62,7 @@
         android:layout_weight="1"
         android:id="@+id/lblAdad"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/FontSize14"
+        android:textSize="@dimen/FontSize26"
         android:gravity="center"
         android:background="@drawable/table_content_cell_bg" />
 
@@ -72,7 +72,7 @@
         android:layout_weight="2"
         android:id="@+id/lblMablaghKol"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/FontSize14"
+        android:textSize="@dimen/FontSize26"
         android:gravity="center"
         android:background="@drawable/table_content_cell_bg" />
 

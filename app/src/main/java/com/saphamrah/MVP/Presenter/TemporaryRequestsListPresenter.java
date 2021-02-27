@@ -12,18 +12,23 @@ import com.saphamrah.Utils.Constants;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+
 public class TemporaryRequestsListPresenter implements TemporaryRequestsListMVP.PresenterOps , TemporaryRequestsListMVP.RequiredPresenterOps
 {
 
 
     private WeakReference<TemporaryRequestsListMVP.RequiredViewOps> mView;
     private TemporaryRequestsListMVP.ModelOps mModel;
+    private CompositeDisposable compositeDisposable;
     //private boolean mIsChangingConfig;
 
     public TemporaryRequestsListPresenter(TemporaryRequestsListMVP.RequiredViewOps viewOps)
     {
         this.mView = new WeakReference<>(viewOps);
         mModel = new TemporaryRequestsListModel(this);
+        compositeDisposable=new CompositeDisposable();
     }
 
 
@@ -118,12 +123,12 @@ public class TemporaryRequestsListPresenter implements TemporaryRequestsListMVP.
             }
             else
             {
-                mView.get().onErrorSendRequest(R.string.errorFaktorImage);
+                mView.get().onErrorSendRequest(R.string.errorFaktorImage,"");
             }
         }
         else
         {
-            mView.get().onErrorSendRequest(R.string.errorFaktorImage);
+            mView.get().onErrorSendRequest(R.string.errorFaktorImage,"");
         }
     }
 
@@ -140,6 +145,15 @@ public class TemporaryRequestsListPresenter implements TemporaryRequestsListMVP.
     public void onDestroy(boolean isChangingConfig)
     {
 
+    }
+
+    @Override
+    public void unBindDisposable() {
+        if (!compositeDisposable.isDisposed()){
+            compositeDisposable.dispose();
+            compositeDisposable.clear();
+            compositeDisposable=null;
+        }
     }
 
 
@@ -209,9 +223,9 @@ public class TemporaryRequestsListPresenter implements TemporaryRequestsListMVP.
     }
 
     @Override
-    public void onErrorSendRequest(int errorId)
+    public void onErrorSendRequest(int errorId,String message)
     {
-        mView.get().onErrorSendRequest(errorId);
+        mView.get().onErrorSendRequest(errorId,message);
     }
 
 	@Override
@@ -242,5 +256,10 @@ public class TemporaryRequestsListPresenter implements TemporaryRequestsListMVP.
     public void onSuccessSendRequest(int position , long ccDarkhastFaktorNew)
     {
         mView.get().onSuccessSendRequest(position , ccDarkhastFaktorNew);
+    }
+
+    @Override
+    public void bindDisposable(Disposable disposable) {
+        compositeDisposable.add(disposable);
     }
 }

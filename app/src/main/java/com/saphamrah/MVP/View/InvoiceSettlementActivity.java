@@ -83,7 +83,7 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
     private String sharhMoshtaryShomarehHesab = "";
     private int flagInputHesab = 0;
     private String tarikhSarResid = "";
-	private int showSayyadCheckScanner = View.GONE;											   
+	private int showSayyadCheckScanner = View.VISIBLE;
 
 
     private LinearLayout layShowMoreCheckInfo;

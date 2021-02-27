@@ -7,6 +7,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.TreasuryListMVP;
 import com.saphamrah.DAO.AdamDarkhastDAO;
 import com.saphamrah.DAO.AnbarakAfradDAO;
@@ -39,6 +40,7 @@ import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.DAO.RptForoshDAO;
 import com.saphamrah.DAO.RptMandehdarDAO;
 import com.saphamrah.DAO.RptSanadDAO;
+import com.saphamrah.DAO.SystemConfigTabletDAO;
 import com.saphamrah.Model.BargashtyModel;
 import com.saphamrah.Model.CodeNoeVosolModel;
 import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
@@ -65,6 +67,7 @@ import com.saphamrah.Model.RptMandehdarModel;
 import com.saphamrah.Model.RptSanadModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
+import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -96,6 +99,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 
+import io.reactivex.disposables.Disposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -104,6 +108,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 {
 
     private TreasuryListMVP.RequiredPresenterOps mPresenter;
+    SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(BaseApplication.getContext());
 
 
     public TreasuryListModel(TreasuryListMVP.RequiredPresenterOps mPresenter)
@@ -114,6 +119,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
     @Override
     public void checkDateAndFakeLocation()
     {
+        int sortList = systemConfigTabletDAO.getSortList();
         ForoshandehAmoozeshiDeviceNumberDAO foroshandehAmoozeshiDAO = new ForoshandehAmoozeshiDeviceNumberDAO(mPresenter.getAppContext());
         ArrayList<ForoshandehAmoozeshiModel> foroshandehAmoozeshiModelList = foroshandehAmoozeshiDAO.getAll();
 
@@ -140,7 +146,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
  , "");
             if (serverIP.equals("") || port.equals(""))
             {
-                mPresenter.onCheckServerTime(false, mPresenter.getAppContext().getString(R.string.errorGetDateTimeData));
+                mPresenter.onCheckServerTime(false, mPresenter.getAppContext().getString(R.string.errorGetDateTimeData) , sortList);
             }
             else
             {
@@ -154,14 +160,14 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                                 mPresenter.getAppContext().getString(R.string.serverTime), serverDateTime, mPresenter.getAppContext().getString(R.string.deviceTime), deviceDateTime,
                                 mPresenter.getAppContext().getString(R.string.timeDiff), Constants.ALLOWABLE_SERVER_LOCAL_TIME_DIFF(),
                                 mPresenter.getAppContext().getString(R.string.second), diff, mPresenter.getAppContext().getString(R.string.second));
-                        mPresenter.onCheckServerTime(validDiffTime, message);
+                        mPresenter.onCheckServerTime(validDiffTime, message, sortList);
                     }
 
                     @Override
                     public void onFailure(String error)
                     {
                         setLogToDB(Constants.LOG_EXCEPTION(), error, "TreasuryListModel", "", "getServerTime", "onFailure");
-                        mPresenter.onCheckServerTime(false, mPresenter.getAppContext().getString(R.string.errorGetDateTimeData));
+                        mPresenter.onCheckServerTime(false, mPresenter.getAppContext().getString(R.string.errorGetDateTimeData), sortList);
                     }
                 });
             }
@@ -170,7 +176,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         else
         {
             //this is a test user
-            mPresenter.onCheckServerTime(true, "");
+            mPresenter.onCheckServerTime(true, "", sortList);
         }
 
     }
@@ -210,7 +216,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         {
             darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getAll(faktorRooz);
         }
-        mPresenter.onGetFaktorRooz(darkhastFaktorMoshtaryForoshandeModels , faktorRooz , noeMasouliat);
+        mPresenter.onGetFaktorRooz(darkhastFaktorMoshtaryForoshandeModels , faktorRooz , noeMasouliat,sortType);
     }
 
 
@@ -270,10 +276,12 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             jsonObjectAllData.put("targets" , jsonArrayTargetsLocation);
             jsonObjectAllData.put("costing" , "auto");
 
-            String routingServerIP = new RoutingServerShared(mPresenter.getAppContext()).getString(RoutingServerShared.IP , "");
-            if (routingServerIP.length() > 0)
+            RoutingServerShared routingServerShared = new RoutingServerShared(BaseApplication.getContext());
+            String urlOsrm = routingServerShared.getString(RoutingServerShared.IP,"http://91.92.125.244:8002");
+            Log.d("urlOsrm",urlOsrm.substring(0, 11));
+            if (urlOsrm.length() > 0)
             {
-                APIServiceValhalla apiServiceValhalla = ApiClientGlobal.getInstance().getClientServiceValhalla();
+                APIServiceValhalla apiServiceValhalla = ApiClientGlobal.getInstance().getClientServiceValhalla(urlOsrm);
                 Call<Object> call = apiServiceValhalla.getSourcesToTargets(jsonObjectAllData.toString(), requestId);
                 call.enqueue(new Callback<Object>()
                 {
@@ -397,7 +405,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         try
         {
             // create json array of source location
-            PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
+            PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
             JSONObject jsonObjectSource = new JSONObject();
             jsonObjectSource.put("lat" , locationProvider.getLatitude());
             jsonObjectSource.put("lon" , locationProvider.getLongitude());
@@ -870,7 +878,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             AnbarakAfradDAO anbarakafradDAO = new AnbarakAfradDAO(mPresenter.getAppContext());
             int ccAnbarakFeli = anbarakafradDAO.getAll().get(0).getCcAnbarak();
 
-            PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
+            PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
 
 
             //Log.d("getCustomer" , "checkCheckBargashty : " + checkCheckBargashty + " , tedadBargashti : " + tedadBargashti + " , tedadEtebarCheckBargashti : " + tedadEtebarCheckBargashti);
@@ -1051,7 +1059,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             Date currentDate = sdf.parse(sdf.format(new Date()));
             long currentDateMiliSecond = currentDate.getTime();
             boolean needCheckKharejAzMahal = true;
-            if (currentDateMiliSecond >= fromDateKharejAzMahal.getTime() && currentDateMiliSecond <= endDateKharejAzMahal.getTime())
+            if (currentDateMiliSecond >= fromDateKharejAzMahal.getTime() && currentDateMiliSecond <= endDateKharejAzMahal.getTime() || moshtary.getKharejAzMahal() == 1)
             {
                 needCheckKharejAzMahal = false;
             }
@@ -1064,7 +1072,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                     MoshtaryAddressModel moshtaryAddress = moshtaryAddressDAO.getTopOneAddress(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());*/
                     MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(mPresenter.getAppContext());
                     int countMoshtaryMorajeShode = moshtaryMorajehShodehRoozDAO.getCountByccMoshtary(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
-                    PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
+                    PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
 
                     float[] distance = new float[2];
                     double[] location = getLocation(darkhastFaktorMoshtaryForoshandeModel.getCcAfradForoshandeh(), darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary(),
@@ -1275,9 +1283,19 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             ccForoshandeh = "0";
             ccMamorPakhsh = "0";
         }
+        String ccSazmanForosh=String.valueOf(darkhastFaktorMoshtaryForoshandeModel.getCcSazmanForosh());
+        /**fetch all kala with -1
+         * if you want to fetch a specific list of kala append their cckala in a string
+         * **/
+        String ccKalaCode="-1";
 
-        mandehMojodyMashinDAO.fetchMandehMojodyMashin(mPresenter.getAppContext(), "RequestCustomerListActivity", ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh, new RetrofitResponse()
+        mandehMojodyMashinDAO.fetchMandehMojodyMashin(mPresenter.getAppContext(), "RequestCustomerListActivity", ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh,ccKalaCode,ccSazmanForosh, new RxResponseHandler()
         {
+            @Override
+            public void onStart(Disposable disposable) {
+                super.onStart(disposable);
+            }
+
             @Override
             public void onSuccess(final ArrayList arrayListData)
             {
@@ -1342,6 +1360,11 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                 message.arg1 = -1;
                 handler.sendMessage(message);
             }
+
+            @Override
+            public void onComplete() {
+                super.onComplete();
+            }
         });
     }
 
@@ -1390,7 +1413,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             MoshtaryModel moshtary = moshtaryDAO.getByccMoshtary(ccMoshtary);
             shared.putString(shared.getCodeMely(), moshtary.getCodeMely());
             shared.putString(shared.getShenasehMely(), moshtary.getShenasehMely());
-            shared.putInt(shared.getCcMoshtaryParent(), moshtary.getExtraProp_ccMoshtaryParent());
+            shared.putInt(shared.getCcMoshtaryParent(), moshtary.getccMoshtaryParent());
             shared.putInt(shared.getMoshtaryDarajeh(), moshtary.getDarajeh());
             //CodePosty = moshtary.getCodePosty();
 
@@ -1697,5 +1720,38 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
     }
 
+    public boolean getDateOfGetProgram()
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_SHORT_FORMAT_WITH_SLASH());
+        GetProgramShared shared = new GetProgramShared(mPresenter.getAppContext());
+        String persianGetProgramdate = shared.getString(shared.PERSIAN_DATE_OF_GET_PROGRAM() , "");
+        String gregorianGetProgramDate = shared.getString(shared.GREGORIAN_DATE_OF_GET_PROGRAM() , "");
+        String today = sdf.format(new Date());
+        try
+        {
+            Date todayDate = sdf.parse(today);
+            Date dtGregorianGetProgramDate = sdf.parse(gregorianGetProgramDate);
+            //---------------------- For Test -----------------
+            UserTypeShared userTypeShared = new UserTypeShared(mPresenter.getAppContext());
+            int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
+            Log.d("date" , "istest : " + isTest);
 
+
+            long diff = todayDate.getTime() - dtGregorianGetProgramDate.getTime();
+            Log.d("date","Today: " + todayDate + "GetProgramDate: " + dtGregorianGetProgramDate + "Diff: " + diff);
+            if (diff <= 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            return false;
+        }
+    }
 }

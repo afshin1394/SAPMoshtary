@@ -100,7 +100,7 @@ public class ForoshandehRouteMapPresenter implements ForoshandehRouteMapMVP.Pres
     {
         if (gpsDataModels.size() > 0)
         {
-            PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(getAppContext());
+            PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
             ArrayList<GeoPoint> geoPoints = new ArrayList<>();
             for (GPSDataModel model : gpsDataModels)
             {

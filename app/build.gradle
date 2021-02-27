@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 29
@@ -6,9 +8,8 @@ android {
         applicationId "com.saphamrah"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 63
-        //versionName "2.2.3.0"
-        versionName "2.2.5.11"
+        versionCode 66
+        versionName "2.2.5.15"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -74,13 +75,13 @@ dependencies {
     // calligrapher
     implementation 'me.anwarshahriar:calligrapher:1.0'
 
-    // Restful
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation ("com.squareup.okhttp3:okhttp:4.7.2"){
+    // Restful ***** Not UpDate ********
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation ("com.squareup.okhttp3:okhttp:3.12.1"){
         force = true //API 19 support
     }
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
     // play gif
     implementation 'com.whiteelephant:gifplayer:1.2.0'
 
@@ -187,7 +188,7 @@ dependencies {
 
 
     //leak canary
-    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
 
     // dimens
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
@@ -205,6 +206,15 @@ dependencies {
     //rxLifeCycle
     implementation 'com.uber.autodispose:autodispose:1.1.0'
     implementation 'com.uber.autodispose:autodispose-android-archcomponents:1.1.0'
+
+// Import the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:26.5.0')
+
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+
+    // Declare the dependency for the Firebase SDK for Google Analytics
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-crashlytics'
 
 
 

@@ -18,18 +18,18 @@ public class Location
     }
 
 
-    @SerializedName("original_index")
-    @Expose
-    private Integer originalIndex;
     @SerializedName("type")
     @Expose
     private String type;
-    @SerializedName("lon")
-    @Expose
-    private Double lon;
     @SerializedName("lat")
     @Expose
     private Double lat;
+    @SerializedName("lon")
+    @Expose
+    private Double lon;
+    @SerializedName("original_index")
+    @Expose
+    private Integer originalIndex;
     @SerializedName("side_of_street")
     @Expose
     private String sideOfStreet;

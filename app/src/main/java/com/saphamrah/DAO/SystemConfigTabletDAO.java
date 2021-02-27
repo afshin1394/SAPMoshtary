@@ -43,7 +43,8 @@ public class SystemConfigTabletDAO
             SystemConfigTabletModel.COLUMN_SizePrint(),
             SystemConfigTabletModel.COLUMN_NoeFaktorPrint(),
             SystemConfigTabletModel.COLUMN_NoeNaghshe(),
-            SystemConfigTabletModel.COLUMN_GoodsShowNumberEachPage()
+            SystemConfigTabletModel.COLUMN_GoodsShowNumberEachPage(),
+            SystemConfigTabletModel.COLUMN_SortTreasuryList()
             /*SystemConfigTabletModel.COLUMN_UpdateJayezehTakhfif_Tablet(),
             SystemConfigTabletModel.COLUMN_ccMarkaz_GetData(),
             SystemConfigTabletModel.COLUMN_UpdateGallery_Tablet(),
@@ -116,6 +117,33 @@ public class SystemConfigTabletDAO
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "SystemConfigTabletDAO" , "" , "getAll" , "");
         }
         return systemConfigTabletModels;
+    }
+
+    public int getSortList()
+    {
+        int sort = 0;
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(SystemConfigTabletModel.TableName(), allColumns(), SystemConfigTabletModel.COLUMN_SortTreasuryList(), null, null, null, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    sort = cursorToModel(cursor).get(0).getSortTreasuryList();
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , SystemConfigTabletModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "SystemConfigTabletDAO" , "" , "getAll" , "");
+        }
+        return sort;
     }
 
     public boolean deleteAll()
@@ -220,6 +248,27 @@ public class SystemConfigTabletDAO
         return false;
     }
 }
+
+    public boolean updateSortTreasuryList(int sortTresuryList){
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(SystemConfigTabletModel.COLUMN_SortTreasuryList() , sortTresuryList);
+            db.update(SystemConfigTabletModel.TableName(), values, null, null);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , SystemConfigTabletModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "SystemConfigTabletDAO" , "" , "updateMapType" , "");
+            return false;
+        }
+    }
+
     public boolean updateGoodsShowItemNumber(int showItemNumber){
         try
         {
@@ -275,6 +324,7 @@ public class SystemConfigTabletDAO
         contentValues.put(SystemConfigTabletModel.COLUMN_NoeFaktorPrint() , systemConfigTabletModel.getNoeFaktorPrint());
         contentValues.put(SystemConfigTabletModel.COLUMN_NoeNaghshe(),systemConfigTabletModel.getNoeNaghshe());
         contentValues.put(SystemConfigTabletModel.COLUMN_GoodsShowNumberEachPage(),systemConfigTabletModel.getGoodsShowNumberEachPage());
+        contentValues.put(SystemConfigTabletModel.COLUMN_SortTreasuryList(),systemConfigTabletModel.getSortTreasuryList());
         /*contentValues.put(SystemConfigTabletModel.COLUMN_DateServer() , systemConfigTabletModel.getDateServer());
         contentValues.put(SystemConfigTabletModel.COLUMN_CrispID() , systemConfigTabletModel.getCrispID());*/
 
@@ -301,6 +351,7 @@ public class SystemConfigTabletDAO
             systemConfigTabletModel.setNoeFaktorPrint(cursor.getInt(cursor.getColumnIndex(SystemConfigTabletModel.COLUMN_NoeFaktorPrint())));
             systemConfigTabletModel.setNoeNaghshe(cursor.getInt(cursor.getColumnIndex(SystemConfigTabletModel.COLUMN_NoeNaghshe())));
             systemConfigTabletModel.setGoodsShowNumberEachPage(cursor.getInt(cursor.getColumnIndex(SystemConfigTabletModel.COLUMN_GoodsShowNumberEachPage())));
+            systemConfigTabletModel.setSortTreasuryList(cursor.getInt(cursor.getColumnIndex(SystemConfigTabletModel.COLUMN_SortTreasuryList())));
             /*systemConfigTabletModel.setDateServer(cursor.getString(cursor.getColumnIndex(SystemConfigTabletModel.COLUMN_DateServer())));
             systemConfigTabletModel.setCrispID(cursor.getString(cursor.getColumnIndex(SystemConfigTabletModel.COLUMN_CrispID())));*/
 

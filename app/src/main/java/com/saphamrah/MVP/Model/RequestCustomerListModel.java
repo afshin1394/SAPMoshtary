@@ -57,6 +57,7 @@ import com.saphamrah.Model.RptForoshModel;
 import com.saphamrah.Model.RptMandehdarModel;
 import com.saphamrah.Model.RptSanadModel;
 import com.saphamrah.Network.RetrofitResponse;
+import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.FakeLocation;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
@@ -124,7 +125,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             //---------------------- For Test -----------------
             UserTypeShared userTypeShared = new UserTypeShared(mPresenter.getAppContext());
             int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
-            Log.d("getDateOfGetProgram" , "istest : " + isTest);
+            Log.d("date" , "istest : " + isTest);
             if (isTest == 1)
             {
                 mPresenter.onGetDateOfGetProgram(persianGetProgramdate);
@@ -132,6 +133,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             }
 
             long diff = todayDate.getTime() - dtGregorianGetProgramDate.getTime();
+            Log.d("date","Today: " + todayDate + "GetProgramDate: " + dtGregorianGetProgramDate + "Diff: " + diff);
             if (diff <= 0)
             {
                 mPresenter.onGetDateOfGetProgram(persianGetProgramdate);
@@ -236,7 +238,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
     @Override
     public void checkSelectedCustomer(final int ccMoshtary)
     {
-        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider(mPresenter.getAppContext());
+        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
         AsyncTaskCheckSelectCustomer asyncTaskCheckSelectCustomer = new AsyncTaskCheckSelectCustomer(mPresenter.getAppContext(), ccMoshtary, locationProvider.getLocation(), new OnCheckSelectedCustomerResponse()
         {
             @Override
@@ -803,7 +805,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                         {
                             if (updateMandeMojodi)
                             {
-                                updateMandehMojodi(noeMasouliat, String.valueOf(foroshandehMamorPakhshModel.getCcMamorPakhsh()), String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), String.valueOf(foroshandehMamorPakhshModel.getCcAfrad()));
+                                updateMandehMojodi(noeMasouliat, String.valueOf(foroshandehMamorPakhshModel.getCcMamorPakhsh()), String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), String.valueOf(foroshandehMamorPakhshModel.getCcAfrad()),String.valueOf(foroshandehMamorPakhshModel.getCcSazmanForosh()));
                             }
                         }
                         if(checkMoshtaryForoshande && moshtaryForoshandehFlag)
@@ -844,6 +846,10 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     else if (canCreateFaktor == -3)
                     {
                         return -12;
+                    }
+                    else if (canCreateFaktor == -4)
+                    {
+                        return -15;
                     }
                 }
             }
@@ -938,7 +944,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 Date currentDate = sdf.parse(sdf.format(new Date()));
                 long currentDateMiliSecond = currentDate.getTime();
                 boolean needCheckKharejAzMahal = true;
-                if (currentDateMiliSecond >= fromDateKharejAzMahal.getTime() && currentDateMiliSecond <= endDateKharejAzMahal.getTime())
+                if ((currentDateMiliSecond >= fromDateKharejAzMahal.getTime() && currentDateMiliSecond <= endDateKharejAzMahal.getTime()) || moshtary.getKharejAzMahal() == 1)
                 {
                     needCheckKharejAzMahal = false;
                 }
@@ -950,6 +956,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 Log.d("kharejAzMahal", "current time : " + currentDate.getTime() + " , from time : " + fromDateKharejAzMahal.getTime() + " , end time : " + endDateKharejAzMahal.getTime());
                 Log.d("kharejAzMahal" , "getExtraProp_IsMoshtaryAmargar : " + moshtary.getExtraProp_IsMoshtaryAmargar());
                 Log.d("kharejAzMahal" , "CanVisitKharejAzMahal_Polygon : " + CanVisitKharejAzMahal_Polygon + " , needCheckKharejAzMahal:" + needCheckKharejAzMahal);
+                Log.d("kharejAzMahal" , "moshtary.getKharejAzMahal():" + moshtary.getKharejAzMahal());
 
                 if (needCheckKharejAzMahal && CanVisitKharejAzMahal_Polygon == 0)//SelectFaktorShared.getccGorohNoeMoshtary() != 350) && CanVisitKharejAzMahal_Polygon == 0)
                 {
@@ -966,7 +973,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                         {
                             Log.d("Date","checkTarikhMasir:"+checkTarikhMasir());
                             //mPresenter.onErrorSelectCustomer(R.string.errorCantRegisterRequest);
-                            return -1;
+                            return -4;
                         }
                         else
                         {
@@ -1204,7 +1211,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 }
             });
         }
-        private void updateMandehMojodi(int noeMasouliat , String ccMamorPakhsh , String ccForoshandeh, String ccAfrad)
+        private void updateMandehMojodi(int noeMasouliat , String ccMamorPakhsh , String ccForoshandeh, String ccAfrad, String ccSazmanForosh)
         {
             final int finalCCForoshandeh = Integer.valueOf(ccForoshandeh);
             final int finalCCAfrad = Integer.valueOf(ccAfrad);
@@ -1246,17 +1253,19 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 ccForoshandeh = "0";
                 ccMamorPakhsh = "0";
             }
+            String ccKalaCode="-1";
+            /**fetch all kala with -1
+             * if you want to fetch a specific list of kala append their cckala in a string
+             * **/
 
-            mandehMojodyMashinDAO.fetchMandehMojodyMashin(weakReferenceContext.get(), ACTIVITY_NAME_FOR_LOG, ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh, new RetrofitResponse()
-            {
+
+            mandehMojodyMashinDAO.fetchMandehMojodyMashin(weakReferenceContext.get(), ACTIVITY_NAME_FOR_LOG, ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh , ccKalaCode , ccSazmanForosh, new RxResponseHandler() {
                 @Override
-                public void onSuccess(final ArrayList arrayListData)
-                {
-                    /*Thread thread = new Thread()
-                    {
+                public void onSuccess(ArrayList arrayListData) {
+
+                    new Thread(new Runnable() {
                         @Override
-                        public void run()
-                        {*/
+                        public void run() {
                             boolean deleteResult = mandehMojodyMashinDAO.deleteAll();
                             boolean insertResult = mandehMojodyMashinDAO.insertGroup(arrayListData);
                             KalaMojodiDAO kalaMojodiDAO = new KalaMojodiDAO(weakReferenceContext.get());
@@ -1290,31 +1299,39 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                                     kalaMojodiModels.add(kalaMojodiModel);
                                 }
                                 insertResult = kalaMojodiDAO.insertGroup(kalaMojodiModels);
-                            }
-                            if (deleteResult && insertResult)
-                            {
+                                if (deleteResult && insertResult)
+                                {
                                 /*Message message = new Message();
                                 message.arg1 = 1;
                                 handler.sendMessage(message);*/
-                                publishProgress(1);
+                                    PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(new PubFunc.ConcurrencyEvents() {
+                                        @Override
+                                        public void uiThreadIsReady() {
+                                            publishProgress(1);
+
+                                        }
+                                    });
+                                }
+                                else
+                                {
+
+                                    PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(new PubFunc.ConcurrencyEvents() {
+                                        @Override
+                                        public void uiThreadIsReady() {
+                                            publishProgress(-4);
+
+                                        }
+                                    });
+
+                                }
                             }
-                            else
-                            {
-                                /*Message message = new Message();
-                                message.arg1 = -1;
-                                handler.sendMessage(message);*/
-                                publishProgress(-4);
-                            }
-                        /*}
-                    };
-                    thread.start();*/
+                        }
+                    }).start();
+
+
                 }
                 @Override
-                public void onFailed(String type, String error)
-                {
-                    /*Message message = new Message();
-                    message.arg1 = -1;
-                    handler.sendMessage(message);*/
+                public void onFailed(String message, String type) {
                     publishProgress(-4);
                 }
             });
@@ -1401,7 +1418,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 MoshtaryModel moshtary = moshtaryDAO.getByccMoshtary(ccMoshtary);
                 shared.putString(shared.getCodeMely(), moshtary.getCodeMely());
                 shared.putString(shared.getShenasehMely(), moshtary.getShenasehMely());
-                shared.putInt(shared.getCcMoshtaryParent(), moshtary.getExtraProp_ccMoshtaryParent());
+                shared.putInt(shared.getCcMoshtaryParent(), moshtary.getccMoshtaryParent());
                 shared.putInt(shared.getMoshtaryDarajeh(), moshtary.getDarajeh());
                 //CodePosty = moshtary.getCodePosty();
 
@@ -1814,6 +1831,10 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             else if (result == -14)
             {
                 listener.onFailed(R.string.errorInvalidPriority);
+            }
+            else if (result == -15)
+            {
+                listener.onFailed(R.string.needGetProgram);
             }
         }
     }

@@ -25,19 +25,19 @@
 
         <LinearLayout
             android:id="@+id/lay_expand_btn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@+id/lbl_sharhJayezeh"
             app:layout_constraintBottom_toBottomOf="@+id/lbl_sharhJayezeh"
             android:layout_marginStart="5dp"
-
+            android:gravity="center"
             >
 
             <ImageView
                 android:id="@+id/expand_btn"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
                 android:layout_gravity="center"
                 android:visibility="visible"
                 android:rotation="180"

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.saphamrah.BaseMVP.TreasuryListMapMVP;
 import com.saphamrah.MVP.Model.TreasuryListMapModel;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
+import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.DarkhastFaktorMoshtaryForoshandeModel;
 import com.saphamrah.Utils.Constants;
@@ -61,11 +62,11 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
     }
 
     @Override
-    public void getCustomerFaktors(DarkhastFaktorMoshtaryForoshandeModel customerInfo , String customerPriority)
+    public void getCustomerFaktors(DarkhastFaktorMoshtaryForoshandeModel customerInfo, MoshtaryAddressModel moshtaryAddressModel, String customerPriority)
     {
         if (customerInfo != null && customerInfo.getCcMoshtary() > 0)
         {
-            mModel.getCustomerFaktors(customerInfo, customerPriority);
+            mModel.getCustomerFaktors(customerInfo, moshtaryAddressModel, customerPriority);
         }
         else
         {
@@ -163,6 +164,10 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
 
     }
 
+    @Override
+    public void getSortList() {
+        mModel.getSortList();
+    }
 
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
@@ -196,7 +201,7 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
     }
 
     @Override
-    public void onGetCustomersList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> arrayListCanEditCustomerDarkhast, ArrayList<DarkhastFaktorMoshtaryForoshandeModel> arrayListAllDarkhastEdited, int sortType, double currentLatitude, double currentLongitude)
+    public void onGetCustomersList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> arrayListCanEditCustomerDarkhast, ArrayList<DarkhastFaktorMoshtaryForoshandeModel> arrayListAllDarkhastEdited, int sortType, double currentLatitude, double currentLongitude , ArrayList<MoshtaryAddressModel> moshtaryAddressModels)
     {
         mView.get().showCurrentLocation(currentLatitude , currentLongitude);
         if (sortType == Constants.SORT_TREASURY_BY_ROUTING)
@@ -209,41 +214,45 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
         }
         if (arrayListAllDarkhastEdited.size() > 0)
         {
-            mView.get().onGetAllEditedTodayTreasuryList(arrayListAllDarkhastEdited);
+            mView.get().onGetAllEditedTodayTreasuryList(arrayListAllDarkhastEdited , moshtaryAddressModels);
         }
         if (arrayListCanEditCustomerDarkhast.size() > 0)
         {
             if (arrayListCanEditCustomerDarkhast.size() >= 3)
             {
                 ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModelsNew = new ArrayList<>();
+                ArrayList<MoshtaryAddressModel> moshtaryAddressModelsNew = new ArrayList<>();
+                moshtaryAddressModelsNew.addAll(moshtaryAddressModels.subList(3 , moshtaryAddressModels.size()));
                 darkhastFaktorMoshtaryForoshandeModelsNew.addAll(arrayListCanEditCustomerDarkhast.subList(3 , arrayListCanEditCustomerDarkhast.size()));
-                mView.get().onGetTodayTreasuryList(darkhastFaktorMoshtaryForoshandeModelsNew);
-                mView.get().showThirdPriority(arrayListCanEditCustomerDarkhast.get(2));
-                mView.get().showSecondPriority(arrayListCanEditCustomerDarkhast.get(1));
-                mView.get().showFirstPriority(arrayListCanEditCustomerDarkhast.get(0));
+                mView.get().onGetTodayTreasuryList(darkhastFaktorMoshtaryForoshandeModelsNew , moshtaryAddressModelsNew);
+                mView.get().showThirdPriority(arrayListCanEditCustomerDarkhast.get(2) , moshtaryAddressModels.get(2));
+                mView.get().showSecondPriority(arrayListCanEditCustomerDarkhast.get(1), moshtaryAddressModels.get(1));
+                mView.get().showFirstPriority(arrayListCanEditCustomerDarkhast.get(0), moshtaryAddressModels.get(0));
             }
             else if (arrayListCanEditCustomerDarkhast.size() == 2)
             {
-                mView.get().showSecondPriority(arrayListCanEditCustomerDarkhast.get(1));
-                mView.get().showFirstPriority(arrayListCanEditCustomerDarkhast.get(0));
+                mView.get().showSecondPriority(arrayListCanEditCustomerDarkhast.get(1) ,moshtaryAddressModels.get(1));
+                mView.get().showFirstPriority(arrayListCanEditCustomerDarkhast.get(0) , moshtaryAddressModels.get(0));
             }
             else //if (darkhastFaktorMoshtaryForoshandeModels.size() == 1)
             {
-                mView.get().showFirstPriority(arrayListCanEditCustomerDarkhast.get(0));
+                mView.get().showFirstPriority(arrayListCanEditCustomerDarkhast.get(0), moshtaryAddressModels.get(0));
             }
         }
         else
         {
             mView.get().showToast(R.string.notFoundData, Constants.INFO_MESSAGE(), Constants.DURATION_LONG());
         }
+
+        mView.get().closeLoadingDialog();
     }
 
     @Override
-    public void onGetCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo)
+    public void onGetCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, MoshtaryAddressModel moshtaryAddressModel , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo)
     {
         if (darkhastFaktorMoshtaryForoshandeModels.size() > 0)
         {
-            mView.get().showCustomerFaktors(darkhastFaktorMoshtaryForoshandeModels , customerPriority , customerInfo);
+            mView.get().showCustomerFaktors(darkhastFaktorMoshtaryForoshandeModels, moshtaryAddressModel , customerPriority , customerInfo);
         }
         else
         {
@@ -252,7 +261,7 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
     }
 
     @Override
-    public void onGetTodayTreasuryList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> canEditDarkhastFaktorMoshtaryForoshandeModels, ArrayList<DarkhastFaktorMoshtaryForoshandeModel> cantEditDarkhastFaktorMoshtaryForoshandeModels, double currentLocationLat, double currentLocationLog, int sortType)
+    public void onGetTodayTreasuryList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> canEditDarkhastFaktorMoshtaryForoshandeModels, ArrayList<DarkhastFaktorMoshtaryForoshandeModel> cantEditDarkhastFaktorMoshtaryForoshandeModels, double currentLocationLat, double currentLocationLog, int sortType, ArrayList<MoshtaryAddressModel> moshtaryAddressModels)
     {
         mView.get().showCurrentLocation(currentLocationLat , currentLocationLog);
         if (sortType == Constants.SORT_TREASURY_BY_ROUTING)
@@ -265,7 +274,7 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
         }
         if (cantEditDarkhastFaktorMoshtaryForoshandeModels.size() > 0)
         {
-            mView.get().onGetEditedTodayTreasuryList(cantEditDarkhastFaktorMoshtaryForoshandeModels);
+            mView.get().onGetEditedTodayTreasuryList(cantEditDarkhastFaktorMoshtaryForoshandeModels, moshtaryAddressModels);
         }
         if (canEditDarkhastFaktorMoshtaryForoshandeModels.size() > 0)
         {
@@ -273,25 +282,29 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
             {
                 ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModelsNew = new ArrayList<>();
                 darkhastFaktorMoshtaryForoshandeModelsNew.addAll(canEditDarkhastFaktorMoshtaryForoshandeModels.subList(3 , canEditDarkhastFaktorMoshtaryForoshandeModels.size()));
-                mView.get().onGetTodayTreasuryList(darkhastFaktorMoshtaryForoshandeModelsNew);
-                mView.get().showThirdPriority(canEditDarkhastFaktorMoshtaryForoshandeModels.get(2));
-                mView.get().showSecondPriority(canEditDarkhastFaktorMoshtaryForoshandeModels.get(1));
-                mView.get().showFirstPriority(canEditDarkhastFaktorMoshtaryForoshandeModels.get(0));
+                ArrayList<MoshtaryAddressModel> moshtaryAddressModelsNew = new ArrayList<>();
+                moshtaryAddressModelsNew.addAll(moshtaryAddressModels.subList(3 , moshtaryAddressModels.size()));
+                mView.get().onGetTodayTreasuryList(darkhastFaktorMoshtaryForoshandeModelsNew , moshtaryAddressModelsNew);
+                mView.get().showThirdPriority(canEditDarkhastFaktorMoshtaryForoshandeModels.get(2) , moshtaryAddressModels.get(2));
+                mView.get().showSecondPriority(canEditDarkhastFaktorMoshtaryForoshandeModels.get(1), moshtaryAddressModels.get(1));
+                mView.get().showFirstPriority(canEditDarkhastFaktorMoshtaryForoshandeModels.get(0), moshtaryAddressModels.get(0));
             }
             else if (canEditDarkhastFaktorMoshtaryForoshandeModels.size() == 2)
             {
-                mView.get().showSecondPriority(canEditDarkhastFaktorMoshtaryForoshandeModels.get(1));
-                mView.get().showFirstPriority(canEditDarkhastFaktorMoshtaryForoshandeModels.get(0));
+                mView.get().showSecondPriority(canEditDarkhastFaktorMoshtaryForoshandeModels.get(1), moshtaryAddressModels.get(1));
+                mView.get().showFirstPriority(canEditDarkhastFaktorMoshtaryForoshandeModels.get(0), moshtaryAddressModels.get(0));
             }
             else //if (darkhastFaktorMoshtaryForoshandeModels.size() == 1)
             {
-                mView.get().showFirstPriority(canEditDarkhastFaktorMoshtaryForoshandeModels.get(0));
+                mView.get().showFirstPriority(canEditDarkhastFaktorMoshtaryForoshandeModels.get(0), moshtaryAddressModels.get(0));
             }
         }
         else
         {
             mView.get().showToast(R.string.notFoundData, Constants.INFO_MESSAGE(), Constants.DURATION_LONG());
         }
+
+        mView.get().closeLoadingDialog();
     }
 
     @Override
@@ -368,5 +381,11 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
     {
         mView.get().showToast(resId, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
     }
+
+    @Override
+    public void onGetSortList(int sortList) {
+        mView.get().onGetSortList(sortList);
+    }
+
 
 }

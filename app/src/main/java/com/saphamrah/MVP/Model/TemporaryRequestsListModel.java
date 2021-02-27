@@ -1,7 +1,10 @@
 package com.saphamrah.MVP.Model;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 
 import com.saphamrah.BaseMVP.TemporaryRequestsListMVP;
@@ -27,13 +30,16 @@ import com.saphamrah.DAO.ForoshandehDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.GPSDataMashinDAO;
 import com.saphamrah.DAO.GPSDataPpcDAO;
+import com.saphamrah.DAO.KalaDAO;
 import com.saphamrah.DAO.KalaMojodiDAO;
 import com.saphamrah.DAO.LogPPCDAO;
+import com.saphamrah.DAO.MandehMojodyMashinDAO;
 import com.saphamrah.DAO.MarkazDAO;
 import com.saphamrah.DAO.MojoodiGiriDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.DAO.MoshtaryMorajehShodehRoozDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
+import com.saphamrah.MVP.View.TemporaryRequestsListActivity;
 import com.saphamrah.Model.AdamDarkhastModel;
 import com.saphamrah.Model.AnbarakAfradModel;
 import com.saphamrah.Model.BarkhordForoshandehBaMoshtaryModel;
@@ -53,12 +59,15 @@ import com.saphamrah.Model.ElamMarjoeeSatrPPCTedadModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.GPSDataMashinModel;
 import com.saphamrah.Model.GPSDataModel;
+import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.KalaMojodiModel;
 import com.saphamrah.Model.LogPPCModel;
+import com.saphamrah.Model.MandehMojodyMashinModel;
 import com.saphamrah.Model.MojoodiGiriModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.MoshtaryMorajehShodehRoozModel;
 import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -97,7 +106,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -199,74 +217,83 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
     }
 
 
+//    @Override
+//    public void sendTempRequest(final int position , final CustomerDarkhastFaktorModel customerDarkhastFaktorModel)
+//    {
+//        if (checkDateTime())
+//        {
+//            /*ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
+//            int noeMasouliat = new PubFunc().new ForoshandehMamorPakhsh().getNoeMasouliat(foroshandehMamorPakhshModel);*/
+//            /*if (noeMasouliat != 5)
+//            {*/
+//                controlInsertFaktor(customerDarkhastFaktorModel.getUniqID_Tablet(), String.valueOf(customerDarkhastFaktorModel.getCcMoshtary()), String.valueOf(customerDarkhastFaktorModel.getCcForoshandeh()), new OnControlFaktor() {
+//                    @Override
+//                    public void onError(int resErrorId) {
+//                        mPresenter.onError(resErrorId);
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(int flag) {
+//                        if (flag == 1)
+//                        {
+//                            mPresenter.onErrorSendRequest(R.string.errorResend,"");
+//                        }
+//                        else
+//                        {
+//                            AsyncTaskSendRequest asyncTaskSendRequest = new AsyncTaskSendRequest(mPresenter.getAppContext(),customerDarkhastFaktorModel , position);
+//                            asyncTaskSendRequest.sendRequestResponse = new SendRequestResponse() {
+//                                @Override
+//                                public void onError(int resId) {
+//                                    mPresenter.onErrorSendRequest(resId,"");
+//                                }
+//
+//                                @Override
+//                                public void onSuccess(int position , long ccDarkhastFaktorNew) {
+//                                    mPresenter.onSuccessSendRequest(position, ccDarkhastFaktorNew);
+//
+//
+//                                }
+//                            };
+//                            asyncTaskSendRequest.execute();
+//                        }
+//                    }
+//                });
+//            /*}
+//            else
+//            {
+//                AsyncTaskSendRequest asyncTaskSendRequest = new AsyncTaskSendRequest(mPresenter.getAppContext(),customerDarkhastFaktorModel , position);
+//                asyncTaskSendRequest.sendRequestResponse = new SendRequestResponse() {
+//                    @Override
+//                    public void onError(int resId) {
+//                        mPresenter.onErrorSendRequest(resId);
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(int position , long ccDarkhastFaktorNew) {
+//                        mPresenter.onSuccessSendRequest(position, ccDarkhastFaktorNew);
+//                    }
+//                };
+//                asyncTaskSendRequest.execute();
+//            }*/
+//
+//
+//        }
+//        else
+//        {
+//            mPresenter.onErrorSendRequest(R.string.errorTimeLimitForRequest,"");
+//        }
+//    }
+
     @Override
-    public void sendTempRequest(final int position , final CustomerDarkhastFaktorModel customerDarkhastFaktorModel)
-    {
-        if (checkDateTime())
-        {
-            /*ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
-            int noeMasouliat = new PubFunc().new ForoshandehMamorPakhsh().getNoeMasouliat(foroshandehMamorPakhshModel);*/
-            /*if (noeMasouliat != 5)
-            {*/
-                controlInsertFaktor(customerDarkhastFaktorModel.getUniqID_Tablet(), String.valueOf(customerDarkhastFaktorModel.getCcMoshtary()), String.valueOf(customerDarkhastFaktorModel.getCcForoshandeh()), new OnControlFaktor() {
-                    @Override
-                    public void onError(int resErrorId) {
-                        mPresenter.onError(resErrorId);
-                    }
+    public void sendTempRequest(final int position, final CustomerDarkhastFaktorModel customerDarkhastFaktorModel) {
+        Log.i("sendTempRequest", "sendTempRequest: ");
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
+        int noeMasouliate = foroshandehMamorPakhshDAO.getOne().getNoeMasouliat();
+        Log.i("noeMasouliat", "sendTempRequest: " + noeMasouliate);
+        checkMandehMojodi(customerDarkhastFaktorModel, noeMasouliate, position);
 
-                    @Override
-                    public void onSuccess(int flag) {
-                        if (flag == 1)
-                        {
-                            mPresenter.onErrorSendRequest(R.string.errorResend);
-                        }
-                        else
-                        {
-                            AsyncTaskSendRequest asyncTaskSendRequest = new AsyncTaskSendRequest(mPresenter.getAppContext(),customerDarkhastFaktorModel , position);
-                            asyncTaskSendRequest.sendRequestResponse = new SendRequestResponse() {
-                                @Override
-                                public void onError(int resId) {
-                                    mPresenter.onErrorSendRequest(resId);
-                                }
 
-                                @Override
-                                public void onSuccess(int position , long ccDarkhastFaktorNew) {
-                                    mPresenter.onSuccessSendRequest(position, ccDarkhastFaktorNew);
-	  
-														  
-                                }
-                            };
-                            asyncTaskSendRequest.execute();
-                        }
-                    }
-                });
-            /*}
-            else
-            {
-                AsyncTaskSendRequest asyncTaskSendRequest = new AsyncTaskSendRequest(mPresenter.getAppContext(),customerDarkhastFaktorModel , position);
-                asyncTaskSendRequest.sendRequestResponse = new SendRequestResponse() {
-                    @Override
-                    public void onError(int resId) {
-                        mPresenter.onErrorSendRequest(resId);
-                    }
-
-                    @Override
-                    public void onSuccess(int position , long ccDarkhastFaktorNew) {
-                        mPresenter.onSuccessSendRequest(position, ccDarkhastFaktorNew);
-                    }
-                };
-                asyncTaskSendRequest.execute();
-            }*/
-	 
-	  
-        }
-        else
-        {
-            mPresenter.onErrorSendRequest(R.string.errorTimeLimitForRequest);
-        }
     }
-
-
     private boolean checkDateTime()
     {
         String startRestTime = "23:45";
@@ -368,7 +395,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         String serverPort=serverIpModel.getPort();
         if (serverIP.trim().equals("") || serverPort.trim().equals(""))
         {
-            mPresenter.onErrorSendRequest(R.string.errorFindServerIP);
+            mPresenter.onErrorSendRequest(R.string.errorFindServerIP,"");
         }
         else
         {
@@ -397,7 +424,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             else
                             {
                                 setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "" , "sendTempNoRequest" , "onResponse");
-                                mPresenter.onErrorSendRequest(R.string.errorOperation);
+                                mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                             }
                         }
                         else
@@ -408,14 +435,14 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                                 errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string() ;//+ "\n" + "can't send this log : " + logMessage;
                             }
                             setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "" , "sendTempNoRequest" , "onResponse");
-                            mPresenter.onErrorSendRequest(R.string.errorOperation);
+                            mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                         }
                     }
                     catch (Exception exception)
                     {
                         exception.printStackTrace();
                         setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "" , "sendTempNoRequest" , "onResponse");
-                        mPresenter.onErrorSendRequest(R.string.errorOperation);
+                        mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                     }
                 }
 
@@ -423,7 +450,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                 public void onFailure(Call<CreateAdamDarkhastResult> call, Throwable t)
                 {
                     setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "" , "sendTempNoRequest" , "onFailure");
-                    mPresenter.onErrorSendRequest(R.string.errorOperation);
+                    mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                 }
             });
         }
@@ -1050,7 +1077,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         if (serverIP.trim().equals("") || serverPort.trim().equals(""))
         {
             //sendRequestResponse.onError(R.string.errorFindServerIP);
-            mPresenter.onErrorSendRequest(R.string.errorFindServerIP);
+            mPresenter.onErrorSendRequest(R.string.errorFindServerIP,"");
         }
         else
         {
@@ -1088,7 +1115,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                                 Log.d("Temp" , "in else not success");
                                 setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "" , "sendDarkhastFaktorDataToServer" , "onResponse");
                                 //sendRequestResponse.onError(R.string.errorOperation);
-                                mPresenter.onErrorSendRequest(R.string.errorOperation);
+                                mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                             }
                         }
                         else
@@ -1100,7 +1127,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             }
                             setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "" , "sendDarkhastFaktorDataToServer" , "onResponse");
                             Log.d("tempRequest" , "message : " + errorMessage);
-                            mPresenter.onErrorSendRequest(R.string.errorOperation);
+                            mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                             //sendRequestResponse.onError(R.string.errorOperation);
                         }
                     }
@@ -1109,7 +1136,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                         Log.d("Temp" , "in exception");
                         exception.printStackTrace();
                         setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "" , "sendDarkhastFaktorDataToServer" , "onResponse");
-                        mPresenter.onErrorSendRequest(R.string.errorOperation);
+                        mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                         //sendRequestResponse.onError(R.string.errorOperation);
                     }
                 }
@@ -1119,7 +1146,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                 {
                     Log.d("noTemp" , "in onFailure");
                     setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "" , "sendDarkhastFaktorDataToServer" , "onFailure");
-                    mPresenter.onErrorSendRequest(R.string.errorOperation);
+                    mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                     //sendRequestResponse.onError(R.string.errorOperation);
                 }
             });
@@ -1251,7 +1278,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             {
                                 Log.d("noTemp" , "in else not success");
                                 setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "" , "sendAllAdamDarkhastForCustomerToServer" , "onResponse");
-                                mPresenter.onErrorSendRequest(R.string.errorOperation);
+                                mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                             }
                         }
                         else
@@ -1263,7 +1290,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             }
                             setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "" , "sendAllAdamDarkhastForCustomerToServer" , "onResponse");
                             Log.d("tempRequest" , "message : " + errorMessage);
-                            mPresenter.onErrorSendRequest(R.string.errorOperation);
+                            mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                         }
                     }
                     catch (Exception exception)
@@ -1271,7 +1298,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                         Log.d("noTemp" , "in exception");
                         exception.printStackTrace();
                         setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "" , "sendAllAdamDarkhastForCustomerToServer" , "onResponse");
-                        mPresenter.onErrorSendRequest(R.string.errorOperation);
+                        mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                     }
                 }
 
@@ -1280,7 +1307,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                 {
                     Log.d("noTemp" , "in onFailure");
                     setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "" , "sendAllAdamDarkhastForCustomerToServer" , "onFailure");
-                    mPresenter.onErrorSendRequest(R.string.errorOperation);
+                    mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                 }
             });
         }
@@ -1315,7 +1342,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             {
                                 Log.d("noTemp" , "in else not success");
                                 setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "" , "sendElamMarjoeeSatrPPCTedad" , "onResponse");
-                                mPresenter.onErrorSendRequest(R.string.errorOperation);
+                                mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                             }
                         }
                         else
@@ -1327,7 +1354,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             }
                             setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "" , "sendElamMarjoeeSatrPPCTedad" , "onResponse");
                             Log.d("tempRequest" , "message : " + errorMessage);
-                            mPresenter.onErrorSendRequest(R.string.errorOperation);
+                            mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                         }
                     }
                     catch (Exception exception)
@@ -1335,7 +1362,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                         Log.d("noTemp" , "in exception");
                         exception.printStackTrace();
                         setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "" , "sendElamMarjoeeSatrPPCTedad" , "onResponse");
-                        mPresenter.onErrorSendRequest(R.string.errorOperation);
+                        mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                     }
                 }
 
@@ -1344,7 +1371,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                 {
                     Log.d("noTemp" , "in onFailure");
                     setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "" , "sendElamMarjoeeSatrPPCTedad" , "onFailure");
-                    mPresenter.onErrorSendRequest(R.string.errorOperation);
+                    mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                 }
             });
         }
@@ -1379,7 +1406,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             {
                                 Log.d("noTemp" , "in else not success");
                                 setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "" , "sendDarkhastFaktorAfradforoshToServer" , "onResponse");
-                                mPresenter.onErrorSendRequest(R.string.errorOperation);
+                                mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                             }
                         }
                         else
@@ -1391,7 +1418,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             }
                             setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "" , "sendDarkhastFaktorAfradforoshToServer" , "onResponse");
                             Log.d("tempRequest" , "message : " + errorMessage);
-                            mPresenter.onErrorSendRequest(R.string.errorOperation);
+                            mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                         }
                     }
                     catch (Exception exception)
@@ -1399,7 +1426,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                         Log.d("noTemp" , "in exception");
                         exception.printStackTrace();
                         setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "" , "sendDarkhastFaktorAfradforoshToServer" , "onResponse");
-                        mPresenter.onErrorSendRequest(R.string.errorOperation);
+                        mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                     }
                 }
 
@@ -1408,7 +1435,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                 {
                     Log.d("noTemp" , "in onFailure");
                     setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "" , "sendDarkhastFaktorAfradforoshToServer" , "onFailure");
-                    mPresenter.onErrorSendRequest(R.string.errorOperation);
+                    mPresenter.onErrorSendRequest(R.string.errorOperation,"");
                 }
             });
         }
@@ -2255,19 +2282,19 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
         {
             if (num == -1)
             {
-                mPresenter.onErrorSendRequest(R.string.errorNotFoundDariaftPardakht);
+                mPresenter.onErrorSendRequest(R.string.errorNotFoundDariaftPardakht,"");
             }
             else if (num == -2)
             {
-                mPresenter.onErrorSendRequest(R.string.errorMoghayeratMarjoeeTitrSatr);
+                mPresenter.onErrorSendRequest(R.string.errorMoghayeratMarjoeeTitrSatr,"");
             }
             else if (num == -3)
             {
-                mPresenter.onErrorSendRequest(R.string.errorInvalidFaktorDetail);
+                mPresenter.onErrorSendRequest(R.string.errorInvalidFaktorDetail,"");
             }
             else if (num == -4)
             {
-                mPresenter.onErrorSendRequest(R.string.errorInvalidMarjoeeData);
+                mPresenter.onErrorSendRequest(R.string.errorInvalidMarjoeeData,"");
             }
         }
 
@@ -2547,11 +2574,351 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
     }*/
 
 
+    private void checkMandehMojodi(CustomerDarkhastFaktorModel customerDarkhastFaktorModel, int noeMasouliat, int position) {
+        MandehMojodyMashinDAO mandehMojodyMashinDAO = new MandehMojodyMashinDAO(mPresenter.getAppContext());
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
+        DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
+        DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
+        AnbarakAfradDAO anbarakAfradDAO = new AnbarakAfradDAO(mPresenter.getAppContext());
+        String ccForoshandeh = String.valueOf(foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh());
+        String ccMamorPakhsh = String.valueOf(foroshandehMamorPakhshDAO.getIsSelect().getCcMamorPakhsh());
+        String ccAnbarakAfrad = String.valueOf(anbarakAfradDAO.getAll().get(0).getCcAnbarak());
+
+        long ccDarkhastFaktor = customerDarkhastFaktorModel.getCcDarkhastFaktor();
+        ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels = darkhastFaktorSatrDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        //todo ccsazmanforosh Faktor
+        String ccSazmanForoshFaktor = String.valueOf(foroshandehMamorPakhshDAO.getIsSelect().getCcSazmanForosh());
+        ArrayList<Integer> ccKalaCodesForUpdate = new ArrayList<>();
+        for (DarkhastFaktorSatrModel darkhastFaktorSatrModel : darkhastFaktorSatrModels) {
+            ccKalaCodesForUpdate.add(darkhastFaktorSatrModel.getCcKala());
+        }
+        String ccKalaCodes=new PubFunc().new DAOUtil().convertIntegerArrayToString(ccKalaCodesForUpdate);
+
+        /** ررسی مغایرت مانده موجودی تنها برای فروشنده سرد و اسمارت بررسی می شود
+         * {@param noeMasouliat(1)  فروشنده سرد
+         * {@param noeMasouliat(3) فروشنده اسمارت
+         * **/
+        Log.i("checkMandehMojodi", "noeMasouliat: " + noeMasouliat);
+        if (noeMasouliat == 1 || noeMasouliat == 3) {
+
+            mandehMojodyMashinDAO.fetchMandehMojodyMashin(mPresenter.getAppContext(), TemporaryRequestsListActivity.class.getSimpleName(), ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh,ccKalaCodes, ccSazmanForoshFaktor, new RxResponseHandler() {
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onSuccess(ArrayList response) {
+                    ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels = ((ArrayList<MandehMojodyMashinModel>) response);
+                    for (MandehMojodyMashinModel mandehMojodyMashinModel : mandehMojodyMashinModels)
+                    {
+                        Log.i("MandehMojodyMashinModel", "onSuccess: " + mandehMojodyMashinModel.toString());
+                    }
+
+
+                    final Set<String> allContradictions = new HashSet<>();
+
+//                    Message message = searchForContradictions(mandehMojodyMashinModels, darkhastFaktorSatrModels);
+                    checkContradicts(mandehMojodyMashinModels, darkhastFaktorSatrModels, new Observer<HashMap<Integer,String>>() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d)
+                        {
+                            mPresenter.bindDisposable(d);
+                        }
+
+                        @Override
+                        public void onNext(@NonNull HashMap<Integer,String> contradicts)
+                        {
+
+
+                            if (contradicts != null)
+                                if (contradicts.size() > 0)
+                                    for (Integer key : contradicts.keySet()) {
+
+                                        allContradictions.add( contradicts.get(key));
+                                    }
+
+
+                            Log.i("contradictssss", "onNext: "+contradicts);
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable e)
+                        {
+                            mPresenter.onErrorSendRequest(R.string.errorCheckMoghayerat, "");
+                        }
+
+                        @Override
+                        public void onComplete()
+                        {
+
+
+                            switch (allContradictions.size()) {
+                                ////**هیچ مغایرتی  نداریم**
+                                case 0:
+                                    sendTempFaktor(customerDarkhastFaktorModel, position);
+                                    break;
+                                default:
+                                    String name="";
+                                    for(String nameKala : allContradictions){
+                                       name += " - " + nameKala ;
+                                }
+                                    mPresenter.onErrorSendRequest(R.string.errormoghayeratdarmojodiKala, name);
+                                    break;
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailed(String message, String type) {
+                    Log.i("fetchMandehMojodyMashin", "fail");
+                    mPresenter.onErrorSendRequest(R.string.errorSendData, "");
+                }
+            });
+        } else {
+            sendTempFaktor(customerDarkhastFaktorModel, position);
+        }
+
+    }
+
+    private void sendTempFaktor(CustomerDarkhastFaktorModel customerDarkhastFaktorModel, int position) {
+        if (checkDateTime()) {
+            /*ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+            int noeMasouliat = new PubFunc().new ForoshandehMamorPakhsh().getNoeMasouliat(foroshandehMamorPakhshModel);*/
+            /*if (noeMasouliat != 5)
+            {*/
+
+            controlInsertFaktor(customerDarkhastFaktorModel.getUniqID_Tablet(), String.valueOf(customerDarkhastFaktorModel.getCcMoshtary()), String.valueOf(customerDarkhastFaktorModel.getCcForoshandeh()), new OnControlFaktor() {
+                @Override
+                public void onError(int resErrorId) {
+                    mPresenter.onError(resErrorId);
+                }
+
+                @Override
+                public void onSuccess(int flag) {
+                    if (flag == 1) {
+                        mPresenter.onErrorSendRequest(R.string.errorResend, "");
+                    } else {
+                        AsyncTaskSendRequest asyncTaskSendRequest = new AsyncTaskSendRequest(mPresenter.getAppContext(), customerDarkhastFaktorModel, position);
+                        asyncTaskSendRequest.sendRequestResponse = new SendRequestResponse() {
+                            @Override
+                            public void onError(int resId) {
+                                mPresenter.onErrorSendRequest(resId, "");
+                            }
+
+                            @Override
+                            public void onSuccess(int position, long ccDarkhastFaktorNew) {
+                                mPresenter.onSuccessSendRequest(position, ccDarkhastFaktorNew);
+
+
+                            }
+                        };
+                        asyncTaskSendRequest.execute();
+                    }
+                }
+            });
+            /*}
+            else
+            {
+                AsyncTaskSendRequest asyncTaskSendRequest = new AsyncTaskSendRequest(mPresenter.getAppContext(),customerDarkhastFaktorModel , position);
+                asyncTaskSendRequest.sendRequestResponse = new SendRequestResponse() {
+                    @Override
+                    public void onError(int resId) {
+                        mPresenter.onErrorSendRequest(resId);
+                    }
+
+                    @Override
+                    public void onSuccess(int position , long ccDarkhastFaktorNew) {
+                        mPresenter.onSuccessSendRequest(position, ccDarkhastFaktorNew);
+                    }
+                };
+                asyncTaskSendRequest.execute();
+            }*/
+
+
+        } else {
+            mPresenter.onErrorSendRequest(R.string.errorTimeLimitForRequest, "");
+        }
+    }
+
+    @SuppressLint("LongLogTag")
+//    private Message searchForContradictions(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels, ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels, CustomerDarkhastFaktorModel customerDarkhastFaktorModel, int position) {
+//        HashMap<Integer, MandehMojodyMashinModel> hashMapMandehMojodi = populateDarkhastFaktorHash(mandehMojodyMashinModels);
+//        HashMap<Integer , Integer > hashMapSumEachGood = populateSumEachGoodHash(mandehMojodyMashinModels);
+//
+//        Message message = new Message();
+//        Bundle bundle = new Bundle();
+//        KalaDAO kalaDAO = new KalaDAO(mPresenter.getAppContext());
+//        String allContradictKala="";
+//
+//        for (DarkhastFaktorSatrModel darkhastFaktorSatrModel : darkhastFaktorSatrModels) {
+//
+//            Log.i("searchForContradictions", "searchForContradictions: darkhastFaktorSatrModel:" + darkhastFaktorSatrModel.toString());
+//
+//            /**check if Exists**/
+//
+//            if (!hashMapMandehMojodi.containsKey(darkhastFaktorSatrModel.getCcKalaCode())) {
+//                Log.i("searchForContradictions", "searchForContradictions: error !hashMap.containsKey(darkhastFaktorSatrModel.getCcKalaCode()");
+//
+//
+//                KalaModel kalaModel =kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode());
+//                Log.i("ccKalaCodeee", "searchForContradictions: "+kalaModel.toString());
+//                allContradictKala+=kalaModel.getNameKala()+" ";
+//
+//            }
+//
+//           if (hashMapSumEachGood.containsKey(darkhastFaktorSatrModel.getCcKalaCode()))
+//           {
+//               if (darkhastFaktorSatrModel.getTedad3() > hashMapSumEachGood.get(darkhastFaktorSatrModel.getCcKalaCode()))
+//               {
+//                   Log.i("searchForContradictions", "searchForContradictions: error MojodiSumCCkala > tedad dar darkhastFaktor");
+//                   KalaModel kalaModel =kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode());
+//                   allContradictKala += kalaModel.getNameKala()+" ";
+//               }
+//           }
+//
+//
+//            for (MandehMojodyMashinModel mandehMojodyMashinModel : mandehMojodyMashinModels) {
+//                Log.i("searchForContradictions", "searchForContradictions: mandehMojodyMashinModel: " + mandehMojodyMashinModel.toString());
+//
+//
+//                if (darkhastFaktorSatrModel.getCcKalaCode() == mandehMojodyMashinModel.getCcKalaCode() &&
+//                        darkhastFaktorSatrModel.getShomarehBach().equals(mandehMojodyMashinModel.getShomarehBach()) &&
+//                        darkhastFaktorSatrModel.getCcTaminKonandeh() == mandehMojodyMashinModel.getCcTaminKonandeh() &&
+//                        darkhastFaktorSatrModel.getMablaghForosh() == mandehMojodyMashinModel.getGheymatForosh() &&
+//                        darkhastFaktorSatrModel.getGheymatMasrafKonandeh() == mandehMojodyMashinModel.getGheymatMasrafKonandeh()) {
+//                    if (darkhastFaktorSatrModel.getTedad3() > mandehMojodyMashinModel.getMax_MojodyByShomarehBach()) {
+//
+//                        Log.i("searchForContradictions", "searchForContradictions: error");
+//
+//
+//                        Log.i("nameKala", "searchForContradictions: " + kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode()).getNameKala());
+//                        allContradictKala+=kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode()).getNameKala()+" ";
+//
+//                    }
+//                }
+//            }
+//
+//        }
+//
+//
+//        Log.i("allContradictKala", "searchForContradictions: "+allContradictKala);
+//        switch (allContradictKala) {
+//
+//            case "":
+//                message.what=1;
+//                Log.i("OnsearchForContradictions", "onSuccess: contradiction in:" + message.getData().getString("Data"));
+//                break;
+//            default:
+//                message.what=2;
+//                bundle.putString("Data", allContradictKala);
+//                message.setData(bundle);
+//                Log.i("OnsearchForContradictions", "onSuccess: contradiction in:" + message.getData().getString("Data"));
+//                break;
+//
+//        }
+//        return message;
+//
+//    }
+    //**fixed**//
+    public HashMap<Integer, Integer> populateSumTedadEachCcKalaHash(ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels) {
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        for (DarkhastFaktorSatrModel darkhastFaktorSatrModel : darkhastFaktorSatrModels) {
+            if (hashMap.containsKey(darkhastFaktorSatrModel.getCcKalaCode())) {
+                int currentMojodi = hashMap.get(darkhastFaktorSatrModel.getCcKalaCode());
+                hashMap.remove(darkhastFaktorSatrModel.getCcKalaCode());
+                hashMap.put(darkhastFaktorSatrModel.getCcKalaCode(), currentMojodi + darkhastFaktorSatrModel.getTedad3());
+            }else {
+                hashMap.put(darkhastFaktorSatrModel.getCcKalaCode(), darkhastFaktorSatrModel.getTedad3());
+            }
+        }
+        return hashMap;
+    }
+
+    public HashMap<Integer, MandehMojodyMashinModel> getDistinctValuesOfMandehMojodi(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels) {
+        HashMap<Integer, MandehMojodyMashinModel> hashMap = new HashMap<>();
+
+        for (MandehMojodyMashinModel mandehMojodyMashinModel : mandehMojodyMashinModels) {
+            if (!hashMap.containsKey(mandehMojodyMashinModel.getCcKalaCode())) {
+                hashMap.put(mandehMojodyMashinModel.getCcKalaCode(), mandehMojodyMashinModel);
+            }
+        }
+        return hashMap;
+    }
+
+    public Set<Integer> populatMandehMojodiHash(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels) {
+        Set<Integer> hashMap = new HashSet<>();
+        for (MandehMojodyMashinModel mandehMojodyMashinModel : mandehMojodyMashinModels) {
+            hashMap.add(mandehMojodyMashinModel.getCcKalaCode());
+        }
+
+        return hashMap;
+    }
 
 
 
 
 
+    private void checkContradicts(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels, ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels, Observer observer) {
 
+        Set<Integer> hashMapMandehMojodi = populatMandehMojodiHash(mandehMojodyMashinModels);
+        HashMap<Integer, Integer> hashMapSumEachGood = populateSumTedadEachCcKalaHash(darkhastFaktorSatrModels);
+        KalaDAO kalaDAO = new KalaDAO(mPresenter.getAppContext());
+
+        HashMap<Integer, String> allContradictions = new HashMap<>();
+        Observable.fromIterable(mandehMojodyMashinModels)
+
+                .flatMap(mandehMojodyMashinModel -> Observable.fromIterable(darkhastFaktorSatrModels)
+                                .map( darkhastFaktorSatrModel ->
+                                {
+
+                                    if (!hashMapMandehMojodi.contains(darkhastFaktorSatrModel.getCcKalaCode())) {
+                                        KalaModel kalaModel = kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode());
+                                        if (!allContradictions.containsKey(darkhastFaktorSatrModel.getCcKalaCode())) {
+//                                            Log.i("searchForContradictions", "!hashMapMandehMojodi.containsKey( darkhastFaktorSatrModel.getCcKalaCode())");
+                                            allContradictions.put(kalaModel.getCcKalaCode(), kalaModel.getNameKala());
+//                                            Log.i("allContradictionssa", "checkContradicts: " + allContradictions.get(0));
+//
+                                        }
+                                    }
+
+                                    if (mandehMojodyMashinModel.getCcKalaCode()== darkhastFaktorSatrModel.getCcKalaCode() &&   mandehMojodyMashinModel.getMaxMojody() < hashMapSumEachGood.get(darkhastFaktorSatrModel.getCcKalaCode())) {
+                                        KalaModel kalaModel = kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode());
+                                        if (!allContradictions.containsKey(kalaModel.getCcKalaCode())) {
+                                            Log.i("searchForContradictions", "distinctValuesOfMandehMojodi.get(ccKalaCode).getMaxMojody() < hashMapSumEachGood.get(darkhastFaktorSatrModel.getCcKalaCode())" + mandehMojodyMashinModel.getMaxMojody() + " " + hashMapSumEachGood.get(darkhastFaktorSatrModel.getCcKalaCode()));
+
+                                            allContradictions.put(kalaModel.getCcKalaCode(), kalaModel.getNameKala());
+                                            Log.i("allContradictionssa", "checkContradicts: " + allContradictions.get(0));
+
+                                        }
+                                    }
+
+
+                                    if (darkhastFaktorSatrModel.getCcKalaCode() == mandehMojodyMashinModel.getCcKalaCode() &&
+                                            darkhastFaktorSatrModel.getShomarehBach().equals(mandehMojodyMashinModel.getShomarehBach()) &&
+                                            darkhastFaktorSatrModel.getCcTaminKonandeh() == mandehMojodyMashinModel.getCcTaminKonandeh() &&
+                                            darkhastFaktorSatrModel.getMablaghForosh() == mandehMojodyMashinModel.getGheymatForosh() &&
+                                            darkhastFaktorSatrModel.getGheymatMasrafKonandeh() == mandehMojodyMashinModel.getGheymatMasrafKonandeh()) {
+                                        if (darkhastFaktorSatrModel.getTedad3() > mandehMojodyMashinModel.getMax_MojodyByShomarehBach()) {
+
+                                            KalaModel kalaModel = kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode());
+
+                                            if (!allContradictions.containsKey(kalaModel.getCcKalaCode())) {
+                                                Log.i("searchForContradictions", "darkhastFaktorSatrModel.getTedad3() > mandehMojodyMashinModel.getMax_MojodyByShomarehBach()");
+                                                allContradictions.put(kalaModel.getCcKalaCode(), kalaModel.getNameKala());
+                                                Log.i("allContradictionssa", "checkContradicts: " + allContradictions.get(0));
+                                            }
+//                                            allContradictions[0] += kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode()).getNameKala() + " ";
+
+                                        }
+                                    }
+
+
+                                    return allContradictions;
+                                })
+                )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+
+    }
 
 }

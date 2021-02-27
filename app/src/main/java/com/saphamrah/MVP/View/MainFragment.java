@@ -68,11 +68,9 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
     private ImageView imgDayTime;
     private TextView lblDayTime;
     private TextView lblTemperature;
-    private TextView lblCurrentTime;
     private TextView lblCurrentDate;
-    private TextView textView;
 
-    private LinearLayout layCharts;
+
 
     private final String TAG = this.getClass().getSimpleName();
     StateMaintainer stateMaintainer;
@@ -83,9 +81,9 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
     private final int WEATHER_DETAIL = 2;
     int getDatabase = 0;
 
-    private static final long DELAY_MS = 2000;
-    private static final long PERIOD_MS = 10000;
-    private static final long LONG_CLICK_DURATION= 800;
+    private  final long DELAY_MS = 2000;
+    private  final long PERIOD_MS = 10000;
+    private  final long LONG_CLICK_DURATION= 800;
     private View view;
     ConstraintLayout parentConstraintP;
     ConstraintLayout parentConstraintL;
@@ -95,10 +93,10 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
     private ViewPager viewPagerMainFrag;
     ArrayList<Fragment> fragList = new ArrayList<>();
     private SliderPagerMainFrag viewPagerAdapter;
-    TimerTask timerTask;
-    Timer timer;
-    Runnable update;
-    Handler handler;
+    private TimerTask timerTask;
+    private Timer timer;
+    private Runnable update;
+    private Handler handler;
     int screenHeight;
     boolean isLongClick = false;
 
@@ -110,21 +108,23 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
     {
         super.onAttach(context);
         this.context = context;
-        //TODO
-//        startTimer();
+
     }
 //todo
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         Log.i("FRAGMENT_VISIBLE", "setUserVisibleHint: ");
-        if (isVisibleToUser)
-        startTimer();
+        if (isVisibleToUser) {
+
+            startTimer();
+        }
         else {
             if (timer!=null)
             stopTimer();
         }
     }
+
 
     @Nullable
     @Override
@@ -134,7 +134,7 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
         findViews(view);
         initFragments();
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        requireActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screenHeight = displayMetrics.heightPixels;
         Log.i(TAG, "onCreateView: " + screenHeight);
 
@@ -153,7 +153,6 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
             int navigationBarSize = getActivity().findViewById(R.id.navigationTabBar).getLayoutParams().height;
             int appBarSize = getActionBarSize();
             parentConstraintP.getLayoutParams().height = (int) convertPixelsToDp(screenHeight, context);
-            ;
             screenHeight = screenHeight - appBarSize - navigationBarSize - getStatusBarHeight();
             child2Constraint.getLayoutParams().height = screenHeight / 2;
             child1Constraint.getLayoutParams().height = screenHeight / 2;
@@ -168,19 +167,21 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
         calligrapher.setFont(view , context.getResources().getString(R.string.fontPath));
         Typeface font = Typeface.createFromAsset(context.getAssets() , context.getResources().getString(R.string.fontPath));
 
-        textView = view.findViewById(R.id.lbl_mainfrgmnt);
+
         imgDayTime = view.findViewById(R.id.imgDayTime);
         lblDayTime = view.findViewById(R.id.lblDayTime);
         lblTemperature = view.findViewById(R.id.lblTemperature);
-        lblCurrentTime = view.findViewById(R.id.lblCurrentTime);
         lblCurrentDate = view.findViewById(R.id.lblCurrentDate);
+
+
 
 
         stateMaintainer = new StateMaintainer(getFragmentManager() , TAG , context);
         startMVPOps();
-
+        mPresenter.getForoshandehMamorPakhshName();
+        mPresenter.getCurrentDate();
+        mPresenter.getWeather(TEMPERATURE);
         mPresenter.getNoeForoshandehMamorPakhsh();
-
         lblTemperature.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,9 +207,10 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
                     Toast.makeText(context, "دیتا ذخیره شد"  , Toast.LENGTH_SHORT).show();
                     getDatabase=0;
                 }
-
+                throw new RuntimeException("Test Crash");
             }
         });
+
 
 
 //        Button btnShowBarkhord = view.findViewById(R.id.btnShowBarkhord);
@@ -476,10 +478,9 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
     @Override
     public void onShowOwghat(int drawableId, int stringId , OwghatModel owghatModel)
     {
-        Log.d("frag","owghat: "+ getResources().getString(stringId));
-
         imgDayTime.setImageResource(drawableId);
         lblDayTime.setVisibility(View.VISIBLE);
+        Log.i(TAG, "onShowOwghat: "+foroshandehMamorPakhshName + getResources().getString(R.string.comma)+ getResources().getString(stringId));
         lblDayTime.setText(String.format("%1$s%2$s %3$s" , foroshandehMamorPakhshName, getResources().getString(R.string.comma), getResources().getString(stringId)));
         //Toast.makeText(context , "string id : " + getResources().getString(stringId) , Toast.LENGTH_SHORT).show();
 
@@ -498,16 +499,12 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
     @Override
     public void onGetCurrentDate(String currentDate)
     {
-        Log.d("frag","currentDate: "+ currentDate);
-        lblCurrentDate.setVisibility(View.VISIBLE);
         lblCurrentDate.setText(currentDate);
     }
 
     @Override
     public void onGetWeather(WeatherModel weatherModel, WeatherDataModel weatherDataModel, WindModel windModel)
     {
-        Log.d("frag","weather: "+ weatherDataModel.getTemp().intValue());
-        lblTemperature.setVisibility(View.VISIBLE);
         lblTemperature.setText(String.format("%1$s: %2$s" , getResources().getString(R.string.temperature) , weatherDataModel.getTemp().intValue()));
         /*String weather = weatherModel.getDescription();
         String weatherData = "دما : " + weatherDataModel.getTemp() + "\n" + "فشار : " + weatherDataModel.getPressure() + "\n" +
@@ -583,7 +580,7 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
 
 
 
-    public void startTimer() {
+    private void startTimer() {
 
         handler = new Handler();
         update = new Runnable() {
@@ -604,7 +601,7 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
         Log.i(TAG, "startTimer: " + timer + " " + timerTask + " " + update + " " + handler);
     }
 
-    public void stopTimer() {
+    private void stopTimer() {
         Log.i(TAG, "stopTimer: " + handler);
         Log.i(TAG, "stopTimer: " + timer);
         timer.cancel();

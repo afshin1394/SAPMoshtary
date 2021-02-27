@@ -7,28 +7,28 @@ import java.util.List;
 
 public class Trip
 {
-
-    @SerializedName("language")
+    @SerializedName("locations")
     @Expose
-    private String language;
-    @SerializedName("status")
-    @Expose
-    private Integer status;
-    @SerializedName("units")
-    @Expose
-    private String units;
-    @SerializedName("status_message")
-    @Expose
-    private String statusMessage;
+    private List<Location> locations = null;
     @SerializedName("legs")
     @Expose
     private List<Leg> legs = null;
     @SerializedName("summary")
     @Expose
     private Summary_ summary;
-    @SerializedName("locations")
+    @SerializedName("status_message")
     @Expose
-    private List<Location> locations = null;
+    private String statusMessage;
+    @SerializedName("status")
+    @Expose
+    private int status;
+    @SerializedName("units")
+    @Expose
+    private String units;
+    @SerializedName("language")
+    @Expose
+    private String language;
+
 
     public String getLanguage() {
         return language;
@@ -38,11 +38,11 @@ public class Trip
         this.language = language;
     }
 
-    public Integer getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

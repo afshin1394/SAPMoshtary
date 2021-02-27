@@ -502,6 +502,9 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         }
     }
 
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new PubFunc().new LocationProvider().stopLocationProvider();
+    }
 }

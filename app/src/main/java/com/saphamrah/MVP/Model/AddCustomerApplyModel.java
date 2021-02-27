@@ -273,7 +273,7 @@ public class AddCustomerApplyModel implements AddCustomerApplyMVP.ModelOps
             moshtaryModel.setCcNoeSenf(Integer.parseInt(addCustomerInfoModel.getNoeSenfId()));
             moshtaryModel.setCcNoeMoshtary(Integer.parseInt(addCustomerInfoModel.getNoeFaaliatId()));
             moshtaryModel.setExtraProp_IsOld(0);
-            moshtaryModel.setExtraProp_ccMoshtaryParent(0);
+            moshtaryModel.setccMoshtaryParent(0);
             moshtaryModel.setCodeVazeiat(0);
             moshtaryModel.setExtraProp_ccPorseshnameh(ccPorseshnameh);
             moshtaryModel.setTarikhMoarefiMoshtary(currentDate);

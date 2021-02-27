@@ -360,7 +360,7 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         return goodsName;
     }
 
-    public ArrayList<DataTableModel> getByccDarkhastFaktorAndccKalaCode(long ccDarkhastFaktor , int ccKalaCode, int currentOlaviat)
+    public ArrayList<DataTableModel> getByccDarkhastFaktorAndccKalaCode(long ccDarkhastFaktor , int ccKalaCode, int currentOlaviat, int ccTakhfifHajmi)
     {
         ArrayList<DataTableModel> dataTableModels = new ArrayList<>();
         try
@@ -373,12 +373,14 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
             }
             else
             {
-                query += " (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat <= " + (currentOlaviat)
-                        + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
+                query += " (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
+                        + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + " and ccKalaCode = " + ccKalaCode +") ) AS MablaghKol ";
             }
-            query += "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN (SELECT DISTINCT ccKalaCode, ccBrand, TedadDarKarton, TedadDarBasteh FROM Kala) K ON A.ccKalaCode= K.ccKalaCode "
-                    + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " and A.ccKalaCode = " + ccKalaCode + " GROUP BY A.ccKalaCode";
+            query += " , " + ccTakhfifHajmi + " ccTakhfifHajmi"
+                    + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN (SELECT DISTINCT ccKalaCode, ccBrand, TedadDarKarton, TedadDarBasteh FROM Kala) K ON A.ccKalaCode= K.ccKalaCode "
+                    + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " and A.ccKalaCode = " + ccKalaCode + " GROUP BY A.ccDarkhastFaktorSatr, A.ccKalaCode";
                   //  + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " and A.ccKalaCode = " + ccKalaCode + " GROUP BY A.ccDarkhastFaktorSatr";
+            Log.d("takhfifKala", "query: " + query);
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
@@ -1256,13 +1258,13 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         }
         return gorohs;
     }
-    public ArrayList<DataTableModel> getRowsBeTafkikGorohKalaMohasebehAndTakhfifHajmi(long ccDarkhastFaktor, int ccTakhfifHajmi)
+    public ArrayList<DataTableModel> getRowsBeTafkikGorohKalaMohasebehAndTakhfifHajmi(long ccDarkhastFaktor, int ccTakhfifHajmi, int currentOlaviat)
     {
         ArrayList<DataTableModel> gorohs = new ArrayList<>();
 
         try
         {
-            String query = "SELECT A.ccDarkhastFaktorSatr, B.ccGoroh, A.MablaghForosh, A.Tedad3 "
+            String query = "SELECT A.ccDarkhastFaktorSatr, B.ccGoroh, A.MablaghForosh, A.Tedad3 ,((SELECT SUM(MablaghTakhfif) from DarkhastFaktorSatrTakhfif WHERE ccDarkhastFaktorSatr=A.ccDarkhastFaktorSatr AND ExtraProp_Olaviat < "+currentOlaviat+"))"
                     + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
                     + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.TedadDarKarton, A.TedadDarBasteh "
                     + "          FROM Kala A LEFT OUTER JOIN "
@@ -1273,7 +1275,8 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
                     + "                 WHERE B.ccTakhfifHajmi= ? "
                     + "               )G ON A.ccKalaCode= G.ccKalaCode "
                     + "       )B ON A.ccKalaCode= B.ccKalaCode "
-                    + " WHERE ccDarkhastFaktor= ? AND  B.ccGoroh IS NOT NULL ";
+                    + " WHERE ccDarkhastFaktor= ? AND  B.ccGoroh IS NOT NULL "
+                    + " ORDER BY B.ccGoroh ASC,A.MablaghForosh DESC, A.Tedad3 DESC";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Log.d("faktorsatrGorohMoh" , "query : " + query);
             Cursor cursor = db.rawQuery(query , new String[]{String.valueOf(ccTakhfifHajmi), String.valueOf(ccDarkhastFaktor)});

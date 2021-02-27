@@ -236,7 +236,7 @@ public class BanksInfoActivity extends AppCompatActivity implements BanksInfoMVP
      */
     private double[] getCurrentLocation()
     {
-        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider(BanksInfoActivity.this);
+        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
         return new double[]{locationProvider.getLatitude() , locationProvider.getLongitude()};
     }
 

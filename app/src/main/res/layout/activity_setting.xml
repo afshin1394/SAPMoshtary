@@ -351,6 +351,94 @@
             android:paddingBottom="5dp" />
     </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/laySortTreasuryListSettings"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layGoodsView"
+            android:layout_marginTop="10dp">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="-15dp"
+                android:layout_below="@+id/txtviewSortTreasuryListManagement">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="@dimen/btnCornerRadius">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="right|center_vertical"
+                            android:text="@string/ChooseSortTreasuryList"
+                            android:textColor="@color/colorTextSecondary"
+                            android:textSize="@dimen/FontSize16" />
+                        <com.saphamrah.CustomView.CustomTextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txtInputSortTreasuryList"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layoutDirection="rtl"
+                            android:textDirection="rtl"
+                            android:theme="@style/TextInputLayoutTheme">
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/txtSortTreasuryList"
+                                android:drawableLeft="@drawable/ic_arrow_down_secondary"
+                                android:drawableRight="@drawable/ic_sort_by_alphabet"
+                                android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                                android:editable="false"
+                                android:hint="@string/sortTreasuryList"
+                                android:textColorHint="@color/colorDivider"
+                                android:textSize="@dimen/FontSize16"
+                                android:textColor="@color/colorTextPrimary"
+                                android:inputType="none"
+                                android:maxLines="1"
+                                android:textDirection="rtl"/>
+                        </com.saphamrah.CustomView.CustomTextInputLayout>
+
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </FrameLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtviewSortTreasuryListManagement"
+                android:text="@string/sortTreasuryListManagement"
+                android:textSize="@dimen/FontSize18"
+                android:textColor="@color/colorTextPrimary"
+                android:gravity="center"
+                android:background="@drawable/rect_round_gray"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="20dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp" />
+        </RelativeLayout>
+
     <!--memory management-->
     <RelativeLayout
         android:layout_width="match_parent"

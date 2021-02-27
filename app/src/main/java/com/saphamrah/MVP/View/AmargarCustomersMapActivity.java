@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.AmargarCustomersMapMVP;
 import com.saphamrah.BuildConfig;
 import com.saphamrah.MVP.Presenter.AmargarCustomersMapPresenter;
@@ -65,7 +66,7 @@ public class AmargarCustomersMapActivity extends AppCompatActivity implements Am
         startMVPOps();
 
 
-        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider(this);
+        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
         IMapController mapController = new MapController(map);
         mapController.setCenter(new GeoPoint(googleLocationProvider.getLatitude() , googleLocationProvider.getLongitude()));
         mapController.setZoom(18.0);
@@ -108,7 +109,7 @@ public class AmargarCustomersMapActivity extends AppCompatActivity implements Am
         }, this);
         map.getOverlays().add(itemItemizedIconOverlay);
 
-        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay( new GpsMyLocationProvider(this) , map);
+        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay( new GpsMyLocationProvider(BaseApplication.getContext()) , map);
         mLocationOverlay.enableMyLocation();
         map.getOverlays().add(mLocationOverlay);
     }

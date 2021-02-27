@@ -85,7 +85,7 @@ public class KalaDAO
         };
     }
 
-    public void fetchMojodyAnbar(final Context context, final String activityNameForLog, final String ccAfrad, final RetrofitResponse retrofitResponse)
+    public void fetchMojodyAnbar(final Context context, final String activityNameForLog, final String ccAfrad, final String ccMarkazSazmanForoshSakhtarForosh, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
@@ -98,7 +98,7 @@ public class KalaDAO
         else
         {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-            Call<GetMojodyAnbarResult> call = apiServiceGet.getMojodyAnbar(ccAfrad);
+            Call<GetMojodyAnbarResult> call = apiServiceGet.getMojodyAnbar(ccAfrad,ccMarkazSazmanForoshSakhtarForosh);
             call.enqueue(new Callback<GetMojodyAnbarResult>() {
                 @Override
                 public void onResponse(Call<GetMojodyAnbarResult> call, Response<GetMojodyAnbarResult> response)

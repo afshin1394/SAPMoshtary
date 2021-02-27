@@ -7,6 +7,8 @@ import com.saphamrah.UIModel.CustomerDarkhastFaktorModel;
 
 import java.util.ArrayList;
 
+import io.reactivex.disposables.Disposable;
+
 public interface TemporaryRequestsListMVP
 {
 
@@ -24,7 +26,7 @@ public interface TemporaryRequestsListMVP
         void showDeleteNoRequestAlert(int position , CustomerAdamDarkhastModel customerAdamDarkhastModel);
         void onSuccessSendNoRequest(int position);
         void onSuccessSendRequest(int position , long ccDarkhastFaktorNew);
-        void onErrorSendRequest(int errorId);
+        void onErrorSendRequest(int errorId,String message);
         void showToast(int resId, int messageType , int duration);
     }
 
@@ -48,6 +50,7 @@ public interface TemporaryRequestsListMVP
         void checkSendTempRequest(int position , CustomerDarkhastFaktorModel customerDarkhastFaktorModel);
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
+        void unBindDisposable();
     }
 
 
@@ -62,12 +65,13 @@ public interface TemporaryRequestsListMVP
         void onCheckSaveImage(long ccDarkhastFaktor);
         void onErrorFindServer();
         void onNetworkError(int errorId);
-        void onErrorSendRequest(int errorId);
+        void onErrorSendRequest(int errorId,String message);
         void onErrorSendOtherDataOfFaktor();
         void onError(int resId);
         void onSuccessDeleteNoRequest(int position);
         void onSuccessSendNoRequest(int position);
         void onSuccessSendRequest(int position , long ccDarkhastFaktorNew);
+        void bindDisposable(Disposable disposable);
     }
 
 

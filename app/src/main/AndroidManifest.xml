@@ -33,6 +33,7 @@
         tools:replace="android:icon"
         android:hardwareAccelerated="true"
         android:requestLegacyExternalStorage="true">
+
         <activity android:name=".MVP.View.PorseshnameAdamActivity"></activity>
         <activity android:name=".MVP.View.AmargarCustomersMapActivity" />
         <activity android:name=".MVP.View.KalaAmargarActivity" />
@@ -99,6 +100,7 @@
             android:screenOrientation="sensorPortrait" />
         <activity android:name=".MVP.View.EditCustomerActivity" />
         <activity android:name=".MVP.View.CustomersListActivity" />
+        <activity android:name=".MVP.View.CustomersListMapActivity" />
         <activity
             android:name=".MVP.View.TemporaryRequestsListActivity"
             android:screenOrientation="sensorPortrait" />

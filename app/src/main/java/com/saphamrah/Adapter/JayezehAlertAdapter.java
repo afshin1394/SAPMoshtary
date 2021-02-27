@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.JayezehByccKalaCodeModel;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class JayezehAlertAdapter extends RecyclerView.Adapter<JayezehAlertAdapter.MyViewHolder> {
@@ -36,7 +37,7 @@ public class JayezehAlertAdapter extends RecyclerView.Adapter<JayezehAlertAdapte
         return new MyViewHolder(itemView);
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
@@ -62,8 +63,11 @@ public class JayezehAlertAdapter extends RecyclerView.Adapter<JayezehAlertAdapte
                 holder.layStatusRight.setBackgroundColor(context.getResources().getColor(R.color.colorYellow));
             }
         }
-        holder.lbl_az.setText(" از : " + jayezehByccKalaCodeModels.get(position).getAz());
-        holder.lbl_ta.setText(" تا : " + jayezehByccKalaCodeModels.get(position).getTa());
+
+        BigDecimal az = new BigDecimal(String.valueOf(jayezehByccKalaCodeModels.get(position).getAz()));
+        holder.lbl_az.setText(" از : " + az.toBigInteger());
+        BigDecimal ta = new BigDecimal(String.valueOf(jayezehByccKalaCodeModels.get(position).getTa()));
+        holder.lbl_ta.setText(" تا : " + ta.toBigInteger());
         holder.lbl_beEza.setText(context.getResources().getText(R.string.beEza) + " " + jayezehByccKalaCodeModels.get(position).getBeEza());
 
     }

@@ -61,7 +61,7 @@ public class CalculateHajmiDiscountKala extends DiscountCalculation
 
                 for (TakhfifHajmiSatrModel takhfifHajmiSatrModel : takhfifHajmiSatrs)
                 {
-                    ArrayList<DataTableModel> darkhastFaktorSatrModelsForTakhfif = darkhastFaktorSatrDAO.getByccDarkhastFaktorAndccKalaCode(darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorSatrModel.getCcKalaCode(), takhfifHajmiTitrSatrModel.getOlaviat());
+                    ArrayList<DataTableModel> darkhastFaktorSatrModelsForTakhfif = darkhastFaktorSatrDAO.getByccDarkhastFaktorAndccKalaCode(darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorSatrModel.getCcKalaCode(), takhfifHajmiTitrSatrModel.getOlaviat() , takhfifHajmiTitrSatrModel.getCcTakhfifHajmi());
                     Log.d("takhfifKala" , "darkhastFaktorSatrModelsForTakhfif : " + darkhastFaktorSatrModelsForTakhfif);
                     for (DataTableModel model : darkhastFaktorSatrModelsForTakhfif)
                     {
@@ -84,8 +84,9 @@ public class CalculateHajmiDiscountKala extends DiscountCalculation
                         int tedad = calculateTedad(takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(), kalaMohasebeh.getTedadDarKarton(), kalaMohasebeh.getTedadDarBasteh(), Double.parseDouble(model.getFiled3()));
                         long MablaghTakhfifDarkhast = Math.round(Double.valueOf(model.getFiled6()));
 
+                        Log.d("takhfifKala","CcTakhfifHajmi :" + takhfifHajmiSatrModel.getCcTakhfifHajmi() + " , Filed7: " + Integer.valueOf(model.getFiled7()));
                         Log.d("takhfifKala","MablaghTakhfifDarkhast :" + MablaghTakhfifDarkhast);
-                        if(takhfifHajmiTitrSatrModel.getOlaviat() == 0 || takhfifHajmiTitrSatrModel.getOlaviat() == 1)
+                        if(takhfifHajmiTitrSatrModel.getOlaviat() == 0 || takhfifHajmiTitrSatrModel.getOlaviat() == 1 )//|| (takhfifHajmiTitrSatrModel.getCcTakhfifHajmi() == Integer.valueOf(model.getFiled7())))
                         {
                             MablaghKol = (long) (tedad * mablaghVahedKalaMohasebeh);
                             Log.d("takhfifKala","if MablaghKol :" + MablaghKol);
