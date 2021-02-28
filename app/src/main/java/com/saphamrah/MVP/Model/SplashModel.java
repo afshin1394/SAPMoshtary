@@ -513,7 +513,9 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
                 mPresenter.onNetworkError(true);
             } else {
                 APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);//ApiClient.getClient(serverIP, port).create(APIServiceGet.class);
-                Call<GetForoshandehAmoozeshiResult> call = apiServiceGet.getForoshandehAmoozeshi();
+                final String deviceIMEI = deviceInfo.getIMEI(mPresenter.getAppContext());
+                Log.d("SplashModel","getForoshandehAmoozeshi deviceIMEI:" + deviceIMEI);
+                Call<GetForoshandehAmoozeshiResult> call = apiServiceGet.getForoshandehAmoozeshi(deviceIMEI);
                 call.enqueue(new Callback<GetForoshandehAmoozeshiResult>() {
                     @Override
                     public void onResponse(Call<GetForoshandehAmoozeshiResult> call, Response<GetForoshandehAmoozeshiResult> response) {

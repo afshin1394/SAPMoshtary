@@ -95,7 +95,7 @@ public interface APIServiceGet
 
     //F
     @GET("Api/ApiSales/GetForoshandehAmoozeshi_DeviceNumber")
-    Call<GetForoshandehAmoozeshiResult> getForoshandehAmoozeshi();
+    Call<GetForoshandehAmoozeshiResult> getForoshandehAmoozeshi(@Query("DeviceSerialNumber") String DeviceSerialNumber);
 
     @GET("Api/ApiSales/GetForoshandeh")
     Call<GetAllvForoshandehByccForoshandehResult> getAllvForoshandehByccForoshandeh(@Query("ccForoshandeh") String ccForoshandeh);
