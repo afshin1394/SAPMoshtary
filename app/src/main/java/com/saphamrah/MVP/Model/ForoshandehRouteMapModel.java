@@ -94,7 +94,7 @@ public class ForoshandehRouteMapModel implements ForoshandehRouteMapMVP.ModelOps
         });
 
 
-        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 7)
+        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 8)
         {
             gpsDataPpcDAO.fetchGPSDataByccForoshandeh(mPresenter.getAppContext(), "ForoshandehRouteMapActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse()
             {

@@ -76,6 +76,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps
             JayezehEntekhabiMojodiDAO jayezehEntekhabiMojodiDAO = new JayezehEntekhabiMojodiDAO(mPresenter.getAppContext());
             ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels = jayezehEntekhabiMojodiDAO.getByccJayezeh(ccJayezehTakhfif, ccJayezehSatr);
             Log.d("bouns", "jayezehEntekhabiMojodiModels Jayezeh:" + jayezehEntekhabiMojodiModels);
+
             mPresenter.onGetKalaForJayezeh(jayezehEntekhabiMojodiModels , noeJayezehTakhfif);
         }
 

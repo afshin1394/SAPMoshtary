@@ -1,6 +1,7 @@
 package com.saphamrah.UIModel;
 
 import com.saphamrah.Model.MoshtaryAddressModel;
+import com.saphamrah.Model.MoshtaryGharardadModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.MoshtaryMorajehShodehRoozModel;
 
@@ -12,6 +13,7 @@ public class CustomerAddressModel
     private MoshtaryModel moshtaryModel;
     private ArrayList<MoshtaryAddressModel> moshtaryAddressModels;
     private MoshtaryMorajehShodehRoozModel moshtaryMorajehShodehRoozModel;
+    private MoshtaryGharardadModel moshtaryGharardadModel;
 
 
     public MoshtaryModel getMoshtaryModel() {
@@ -39,5 +41,11 @@ public class CustomerAddressModel
         this.moshtaryMorajehShodehRoozModel = moshtaryMorajehShodehRoozModel;
     }
 
+    public MoshtaryGharardadModel getMoshtaryGharardadModel() {
+        return moshtaryGharardadModel;
+    }
 
+    public void setMoshtaryGharardadModel(MoshtaryGharardadModel moshtaryGharardadModel) {
+        this.moshtaryGharardadModel = moshtaryGharardadModel;
+    }
 }

@@ -239,16 +239,17 @@ public class NoeVosolMoshtaryDAO
         return noeVosolMoshtaryModels;
     }
 
-    public ArrayList<NoeVosolMoshtaryModel> getByccNoeVosolMoshtary(int ccNoeVosol)
+    public ArrayList<NoeVosolMoshtaryModel> getByccNoeVosolMoshtary(int ccNoeVosol , int ccMarkazSazmanforosh, int ccNoeMoshtary , int ccDarajeh)
     {
         ArrayList<NoeVosolMoshtaryModel> arrayList = new ArrayList<>();
-        String query = "SELECT DISTINCT ccMarkazSazmanForosh, ccNoeMoshtary, ccDarajeh,CodeNoeVosolAzMoshtary, CodeNoeVosol, NameNoeVosol, NameNoeVosolAzMoshtary "
-        + " FROM NoeVosolMoshtary "
-        + " WHERE CodeNoeVosolAzMoshtary= " + ccNoeVosol
-        + " UNION ALL "
-        + " SELECT ccMarkazSazmanForosh, ccNoeMoshtary, ccDarajeh,CodeNoeVosolAzMoshtary, CodeNoeVosolAzMoshtary CodeNoeVosol, NameNoeVosolAzMoshtary NameNoeVosol, NameNoeVosolAzMoshtary "
-        + " FROM NoeVosolMoshtary "
-        + " WHERE CodeNoeVosolAzMoshtary= " + ccNoeVosol ;
+        String query = "select * from (SELECT DISTINCT ccMarkazSazmanForosh, ccNoeMoshtary, ccDarajeh,CodeNoeVosolAzMoshtary, CodeNoeVosol, NameNoeVosol, NameNoeVosolAzMoshtary "
+                + " FROM NoeVosolMoshtary "
+                + " WHERE CodeNoeVosolAzMoshtary= " + ccNoeVosol +" and ccMarkazSazmanforosh = "+ ccMarkazSazmanforosh + " and ccNoeMoshtary = "+ ccNoeMoshtary +" and ccDarajeh = "+ ccDarajeh
+//                + " UNION ALL "
+//                + " SELECT DISTINCT ccMarkazSazmanForosh, ccNoeMoshtary, ccDarajeh,CodeNoeVosolAzMoshtary, CodeNoeVosolAzMoshtary CodeNoeVosol, NameNoeVosolAzMoshtary NameNoeVosol, NameNoeVosolAzMoshtary "
+//                + " FROM NoeVosolMoshtary "
+//                + " WHERE CodeNoeVosolAzMoshtary= " + ccNoeVosol + " and ccMarkazSazmanforosh = "+ ccMarkazSazmanforosh + " and ccNoeMoshtary = "+ ccNoeMoshtary +" and ccDarajeh = "+ ccDarajeh +"
+                + ")  order by codenoevosol";
 
 
         Log.d("Vosol","query:"+query);

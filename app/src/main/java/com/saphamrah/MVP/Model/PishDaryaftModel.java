@@ -1,0 +1,289 @@
+package com.saphamrah.MVP.Model;
+
+import android.util.Log;
+
+import com.saphamrah.Application.BaseApplication;
+import com.saphamrah.BaseMVP.PishDaryaftMVP;
+import com.saphamrah.DAO.CodeNoeVosolDAO;
+import com.saphamrah.DAO.DariaftPardakhtDarkhastFaktorPPCDAO;
+import com.saphamrah.DAO.DariaftPardakhtPPCDAO;
+import com.saphamrah.DAO.DarkhastFaktorDAO;
+import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
+import com.saphamrah.DAO.MoshtaryDAO;
+import com.saphamrah.DAO.ParameterChildDAO;
+import com.saphamrah.Model.CodeNoeVosolModel;
+import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
+import com.saphamrah.Model.DariaftPardakhtPPCModel;
+import com.saphamrah.Model.DarkhastFaktorModel;
+import com.saphamrah.Model.ForoshandehMamorPakhshModel;
+import com.saphamrah.Model.MoshtaryModel;
+import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
+import com.saphamrah.PubFunc.PubFunc;
+import com.saphamrah.R;
+import com.saphamrah.Shared.ServerIPShared;
+import com.saphamrah.Utils.Constants;
+import com.saphamrah.WebService.APIServiceGet;
+import com.saphamrah.WebService.APIServicePost;
+import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.ServiceResponse.CreateDariaftPardakhtPPCJSONResult;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class PishDaryaftModel implements PishDaryaftMVP.ModelOps
+{
+
+    private PishDaryaftMVP.RequiredPresenterOps mPresenter;
+    public PishDaryaftModel(PishDaryaftMVP.RequiredPresenterOps mPresenter)
+    {
+        this.mPresenter = mPresenter;
+    }
+
+
+    @Override
+    public void getAllCustomers()
+    {
+
+        MoshtaryDAO moshtaryDAO = new MoshtaryDAO(BaseApplication.getContext());
+        ArrayList<MoshtaryModel> moshtaryModels = moshtaryDAO.getAll();
+        mPresenter.onGetAllCustomers(moshtaryModels);
+    }
+
+
+    @Override
+    public void getDariaftPardakhtForSend(int ccMoshtary , int position)
+    {
+        DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(BaseApplication.getContext());
+        ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = dariaftPardakhtPPCDAO.getForSendToSqlByccMoshtary(ccMoshtary);
+        Log.d("treasury" , "dariaftPardakhtPPCModels.size : " + dariaftPardakhtPPCModels.size());
+        if (dariaftPardakhtPPCModels.size() > 0)
+        {
+            ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+            if (foroshandehMamorPakhshModel == null)
+            {
+                mPresenter.onErrorSend(R.string.errorFindForoshandehMamorPakhsh);
+            }
+            else
+            {
+                ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(BaseApplication.getContext());
+                if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+                {
+                    mPresenter.onErrorSend(R.string.errorFindServerIP);
+                }
+                else
+                {
+                    int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+                    DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
+                    DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(dariaftPardakhtPPCModels.get(0).getCcDarkhastFaktor());
+                    ParameterChildDAO childParameterDAO = new ParameterChildDAO(BaseApplication.getContext());
+                    int codeNoeVosolVajhNaghd = Integer.parseInt(childParameterDAO.getAllByccChildParameter(String.valueOf(Constants.CC_CHILD_CODE_NOE_VOSOL_VAJH_NAGHD())).get(0).getValue());
+                    String currentVersionNumber = new PubFunc().new DeviceInfo().getCurrentVersion(BaseApplication.getContext());
+                    sendDariaftPardakhtToServer(position, serverIpModel, dariaftPardakhtPPCModels, foroshandehMamorPakhshModel, noeMasouliat, darkhastFaktorModel, codeNoeVosolVajhNaghd, currentVersionNumber);
+                }
+            }
+        }
+        else
+        {
+            mPresenter.onErrorSend(R.string.errorNotExistItemForSend);
+        }
+    }
+
+    /**
+     * send to server
+     */
+    private void sendDariaftPardakhtToServer(final int position ,ServerIpModel serverIpModel , final ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, final DarkhastFaktorModel darkhastFaktorModel, int codeNoeVosolVajhNaghd, String currentVersionNumber)
+    {
+
+        CodeNoeVosolDAO codeNoeVosolDAO = new CodeNoeVosolDAO(BaseApplication.getContext());
+        final DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(BaseApplication.getContext());
+        APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+
+        String ccDpdfs = "-1";
+        JSONArray jsonArrayDariaftPardakht = new JSONArray();
+        int ccMarkazForosh = 0;
+        int ccMarkazAnbar = 0;
+        int ccMarkazSazmanForoshSakhtarForosh = 0;
+        if(noeMasouliat != 4)
+        {
+            ccMarkazForosh = foroshandehMamorPakhshModel.getCcMarkazForosh();
+            ccMarkazAnbar = foroshandehMamorPakhshModel.getCcMarkazAnbar();
+            ccMarkazSazmanForoshSakhtarForosh = foroshandehMamorPakhshModel.getCcMarkazSazmanForoshSakhtarForosh();
+        }
+        else
+        {
+            ccMarkazForosh = darkhastFaktorModel.getCcMarkazForosh();
+            ccMarkazAnbar = darkhastFaktorModel.getCcMarkazAnbar();
+            ccMarkazSazmanForoshSakhtarForosh = darkhastFaktorModel.getCcMarkazSazmanForoshSakhtarForosh();
+        }
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
+        int ccSazmanForosh = foroshandehMamorPakhshDAO.getIsSelect().getCcSazmanForosh();
+        //create JsonArray of DariaftPardakhtPPCModel
+        for (DariaftPardakhtPPCModel dpModel : dariaftPardakhtPPCModels)
+        {
+
+            CodeNoeVosolModel codeNoeVosolModel = codeNoeVosolDAO.getByCodeNoeVosol(dpModel.getCodeNoeVosol());
+            int codeNoeSanad = codeNoeVosolModel.getCodeNoeSanad_dp();
+            int codeNoeCheck = codeNoeVosolModel.getCodeNoeCheck_dp();
+            jsonArrayDariaftPardakht.put(dpModel.toJsonObjectCheckPishDariaft(ccMarkazForosh, ccMarkazAnbar, ccMarkazSazmanForoshSakhtarForosh, codeNoeSanad, codeNoeCheck, codeNoeVosolVajhNaghd, currentVersionNumber , ccSazmanForosh));
+            ccDpdfs += "," + dpModel.getCcDariaftPardakht();
+
+        }
+
+        /**
+         * create json string in model
+         */
+        try
+        {
+            JSONObject  jsonObjectPishDaryaft = new JSONObject();
+            jsonObjectPishDaryaft.put("DariaftPardakht" , jsonArrayDariaftPardakht);
+
+            String strJsonObjectCheckPishDariaft = jsonObjectPishDaryaft.toString();
+
+            Call<CreateDariaftPardakhtPPCJSONResult> call = apiServicePost.createDariaftPardakhtPPCPishDariaftJSON(strJsonObjectCheckPishDariaft);
+            call.enqueue(new Callback<CreateDariaftPardakhtPPCJSONResult>()
+            {
+                @Override
+                public void onResponse(Call<CreateDariaftPardakhtPPCJSONResult> call, Response<CreateDariaftPardakhtPPCJSONResult> response)
+                {
+                    try
+                    {
+                        if (response.isSuccessful() && response.body() != null)
+                        {
+                            CreateDariaftPardakhtPPCJSONResult result = response.body();
+                            if (result.getSuccess())
+                            {
+                                if (Integer.parseInt(result.getMessage()) > 0)
+                                {
+                                    long ccMoshtary = Integer.parseInt(result.getMessage());
+                                    DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(BaseApplication.getContext());
+                                    for (int i = 0; i < dariaftPardakhtPPCModels.size(); i++) {
+                                        dariaftPardakhtPPCDAO.updateSendedPishDaryaft(ccMoshtary, 1);
+                                    }
+                                    mPresenter.onSuccessSend(position);
+                                }
+                                else
+                                {
+                                    showResultError(Integer.parseInt(result.getMessage()));
+                                }
+
+                            }
+                            else
+                            {
+                                showResultError(Integer.parseInt(result.getMessage()));
+                                setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "PishDaryaftModel", "" , "sendDariaftPardakhtToServer" , "onResponse");
+                            }
+                        }
+                        else
+                        {
+                            String errorMessage = "response not successful " + response.message() ;
+                            if (response.errorBody() != null)
+                            {
+                                errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string() ;//+ "\n" + "can't send this log : " + logMessage;
+                            }
+                            setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "PishDaryaftModel", "" , "sendDariaftPardakhtToServer" , "onResponse");
+                            mPresenter.onErrorSend(R.string.errorOperation);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        exception.printStackTrace();
+                        setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "PishDaryaftModel", "" , "sendDariaftPardakhtToServer" , "onResponse");
+                        mPresenter.onErrorSend(R.string.errorOperation);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CreateDariaftPardakhtPPCJSONResult> call, Throwable t)
+                {
+                    setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "PishDaryaftModel", "" , "sendDariaftPardakhtToServer" , "onFailure");
+                    mPresenter.onErrorSend(R.string.errorOperation);
+                }
+            });
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            setLogToDB(Constants.LOG_EXCEPTION(), e.toString(), "PishDaryaftModel", "", "sendDariaftPardakhtToServer", "");
+        }
+
+    }
+
+    @Override
+    public void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild)
+    {
+        PubFunc.Logger logger = new PubFunc().new Logger();
+        logger.insertLogToDB(mPresenter.getAppContext(), logType, message, logClass, logActivity, functionParent, functionChild);
+    }
+
+    @Override
+    public void onDestroy()
+    {
+
+    }
+
+
+    /**
+     * show error for send pish daryaft
+     * @param errorCode
+     */
+    private void showResultError(int errorCode)
+    {
+        switch (errorCode)
+        {
+            case -1:
+                mPresenter.onErrorSend(R.string.errorDuplicatedFaktor);
+                break;
+            case -2:
+                mPresenter.onErrorSend(R.string.errorMoghayeratMablaghDarkhast);
+                break;
+            case -3:
+                mPresenter.onErrorSend(R.string.errorMoghayeratTedadAghlam);
+                break;
+            case -4:
+                mPresenter.onErrorSend(R.string.errorMoghayeratDarJayeze);
+                break;
+            case -5:
+                mPresenter.onErrorSend(R.string.errorMoghayeratTakhfifTitr);
+                break;
+            case -6:
+                mPresenter.onErrorSend(R.string.errorMoghayeratTakhfifSatr);
+                break;
+            case -7:
+                mPresenter.onErrorSend(R.string.errorMoghayeratMablaghTakhfif);
+                break;
+            case -8:
+                mPresenter.onErrorSend(R.string.errorMoghayeratTedadMarjoee);
+                break;
+            case -9:
+                mPresenter.onErrorSend(R.string.errorMoghayeratVosolTitr);
+                break;
+            case -10:
+                mPresenter.onErrorSend(R.string.errorMoghayeratTakhfifNaghdi);
+                break;
+            case -11:
+                mPresenter.onErrorSend(R.string.errorMoghayeratNameSahebHesab);
+                break;
+            case -12:
+                mPresenter.onErrorSend(R.string.errorMablaghVosolManfi);
+                break;
+            case -13:
+                mPresenter.onErrorSend(R.string.errorNotFoundAddress);
+                break;
+            case -14:
+                mPresenter.onErrorSend(R.string.errorTarikhFaktorVosol);
+                break;
+            default:
+                mPresenter.onErrorSend(R.string.errorSendData);
+        }
+    }
+
+}

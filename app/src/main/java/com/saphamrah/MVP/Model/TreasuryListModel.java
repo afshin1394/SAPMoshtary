@@ -956,7 +956,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                         mPresenter.onWarningSetDarkhastFaktorShared(R.string.onlyVajhNaghdForYourCustomer);
                     }
 
-                    if(noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 4 || noeMasouliat == 5)//بروزرسانی موجودی انبارک
+                    if(noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 4 || noeMasouliat == 5 || noeMasouliat == 6 || noeMasouliat ==8)//بروزرسانی موجودی انبارک
                     {
                         if (updateMandeMojodi)
                         {
@@ -1265,7 +1265,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         final MandehMojodyMashinDAO mandehMojodyMashinDAO = new MandehMojodyMashinDAO(mPresenter.getAppContext());
         String ccAnbarakAfrad = String.valueOf(new AnbarakAfradDAO(mPresenter.getAppContext()).getAll().get(0).getCcAnbarak());
 
-        if(noeMasouliat == 1)//1-Foroshandeh-Sard
+        if(noeMasouliat == 1 || noeMasouliat == 6 || noeMasouliat ==8)//1-Foroshandeh-Sard
         {
             ccAnbarakAfrad = "0";
             ccMamorPakhsh = "0";

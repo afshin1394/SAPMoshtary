@@ -6,6 +6,9 @@ import android.util.Log;
 import com.saphamrah.BaseMVP.InvoiceSettlementMVP;
 import com.saphamrah.MVP.Model.InvoiceSettlementModel;
 import com.saphamrah.Model.BankModel;
+import com.saphamrah.Model.BargashtyModel;
+import com.saphamrah.Model.CodeNoeVosolModel;
+import com.saphamrah.Model.ConfigNoeVosolMojazeMoshtaryModel;
 import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
 import com.saphamrah.Model.LogPPCModel;
@@ -63,9 +66,9 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
     }
 
     @Override
-    public void getInfo(long ccDarkhastFaktor)
+    public void getInfo(long ccDarkhastFaktor , int from)
     {
-        mModel.getInfo(ccDarkhastFaktor);
+        mModel.getInfo(ccDarkhastFaktor , from);
     }
 
     @Override
@@ -75,9 +78,14 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
     }
 
     @Override
-    public void getNoeVosols(long ccDarkhastFaktor , boolean getNoeVosolFromShared , boolean isFromTreasuryList)
+    public void getVosolsPishDariaft(long ccMoshtary) {
+        mModel.getVosolsPishDariaft(ccMoshtary);
+    }
+
+    @Override
+    public void getNoeVosols(long ccDarkhastFaktor , boolean getNoeVosolFromShared, int from , int ccMoshtary)
     {
-        mModel.getNoeVosols(ccDarkhastFaktor , getNoeVosolFromShared , isFromTreasuryList);
+        mModel.getNoeVosols(ccDarkhastFaktor , getNoeVosolFromShared , from , ccMoshtary);
     }
 
     @Override
@@ -125,18 +133,32 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
     }
 
     @Override
-    public void checkRemainCost(int codeNoeVosolMoshtary , String mablaghMandeh)
+    public void checkRemainCost(int codeNoeVosolMoshtary , String mablaghMandeh ,int from)
     {
         if (codeNoeVosolMoshtary > 0)
         {
-            if (mablaghMandeh.trim().equals("0"))
-            {
-                mView.get().showZeroRemainCostAlert();
-            }
-            else
-            {
+            if (from == Constants.FROM_TREASURYLIST  || from == -1){
+                if (mablaghMandeh.trim().equals("0"))
+                {
+                    mView.get().showZeroRemainCostAlert();
+                }
+                else
+                {
+                    mView.get().onSuccessCheckRemainCost();
+                }
+            } else  if (from == Constants.FROM_PISH_DARYAFT){
                 mView.get().onSuccessCheckRemainCost();
+            } else if (from == Constants.FROM_CHECK_BARGASHTI){
+                if (mablaghMandeh.trim().equals("0"))
+                {
+                    mView.get().canNotAdd();
+                }
+                else
+                {
+                    mView.get().onSuccessCheckRemainCost();
+                }
             }
+
         }
         else
         {
@@ -145,7 +167,7 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
     }
 
     @Override
-    public void checkInsert(int ccMoshtary , long ccDarkhastFaktor , int codeNoeVosolMoshtary , int flagInputHesab, String mablaghMandeh , DariaftPardakhtPPCModel dariaftPardakhtPPCModel , ArrayList<ParameterChildModel> childParameterModelsNoeVosol)
+    public void checkInsert(int ccMoshtary , long ccDarkhastFaktor , int codeNoeVosolMoshtary , int flagInputHesab, String mablaghMandeh , DariaftPardakhtPPCModel dariaftPardakhtPPCModel , ArrayList<CodeNoeVosolModel> childParameterModelsNoeVosol)
     {
         if (codeNoeVosolMoshtary == 0)
         {
@@ -155,11 +177,12 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
         {
             String nameNoeVosol = "";
             String strCodeNoeVosol = String.valueOf(codeNoeVosolMoshtary);
-            for (ParameterChildModel model : childParameterModelsNoeVosol)
+            for (CodeNoeVosolModel model : childParameterModelsNoeVosol)
             {
-                if (strCodeNoeVosol.equals(model.getValue()))
+
+                if (strCodeNoeVosol.equals(String.valueOf(model.getCodeNoeVosol())))
                 {
-                    nameNoeVosol = model.getTxt();
+                    nameNoeVosol = model.getTxtNoeVosol();
                     break;
                 }
             }
@@ -168,16 +191,77 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
     }
 
     @Override
-    public void removeItem(DariaftPardakhtDarkhastFaktorPPCModel dariaftPardakhtDarkhastFaktorPPCModel , int position)
+    public void checkInsertCheckBargashty(int ccMoshtary, long ccDarkhastFaktor, int codeNoeVosolMoshtary, int flagInputHesab, String mablaghMandeh, DariaftPardakhtPPCModel dariaftPardakhtPPCModel, ArrayList<ConfigNoeVosolMojazeMoshtaryModel> configNoeVosolMojazeMoshtaryModelArrayList) {
+        if (codeNoeVosolMoshtary == 0)
+        {
+            mView.get().showToast(R.string.errorSelectItem, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }
+        else
+        {
+            String nameNoeVosol = "";
+            int strCodeNoeVosol = codeNoeVosolMoshtary;
+            for (ConfigNoeVosolMojazeMoshtaryModel model : configNoeVosolMojazeMoshtaryModelArrayList)
+            {
+                if (strCodeNoeVosol== model.getCodeNoeVosol_Tablet())
+                {
+                    nameNoeVosol = model.getTxtNoeVosol();
+                    break;
+                }
+            }
+            mModel.checkInsertCheckBargashty(ccMoshtary, ccDarkhastFaktor, codeNoeVosolMoshtary, flagInputHesab , mablaghMandeh , nameNoeVosol , dariaftPardakhtPPCModel);
+        }
+    }
+
+    @Override
+    public void checkInsertCheckPishDrayaft(int ccMoshtary , int codeNoeVosolMoshtary, int flagInputHesab, String mablaghMandeh, DariaftPardakhtPPCModel dariaftPardakhtPPCModel, ArrayList<ConfigNoeVosolMojazeMoshtaryModel> configNoeVosolMojazeMoshtaryModelArrayList) {
+
+        String nameNoeVosol = "";
+        int strCodeNoeVosol = codeNoeVosolMoshtary;
+        for (ConfigNoeVosolMojazeMoshtaryModel model : configNoeVosolMojazeMoshtaryModelArrayList)
+        {
+            if (strCodeNoeVosol== model.getCodeNoeVosol_Tablet())
+            {
+                nameNoeVosol = model.getTxtNoeVosol();
+                break;
+            }
+        }
+        mModel.checkInsertCheckPishDrayaft(ccMoshtary, codeNoeVosolMoshtary, flagInputHesab , mablaghMandeh , nameNoeVosol , dariaftPardakhtPPCModel);
+
+
+    }
+
+
+
+
+
+    @Override
+    public void removeItem(DariaftPardakhtDarkhastFaktorPPCModel dariaftPardakhtDarkhastFaktorPPCModel , int position , int from,long ccDarkhastFaktor)
     {
         if (dariaftPardakhtDarkhastFaktorPPCModel != null && dariaftPardakhtDarkhastFaktorPPCModel.getCcDariaftPardakhtDarkhastFaktor() > 0)
         {
-            mModel.removeItem(dariaftPardakhtDarkhastFaktorPPCModel , position);
+            mModel.removeItem(dariaftPardakhtDarkhastFaktorPPCModel , position , from, ccDarkhastFaktor);
         }
         else
         {
             mView.get().showToast(R.string.errorSelectItem, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
         }
+    }
+
+    @Override
+    public void removeItemPishDaryaft(DariaftPardakhtPPCModel dariaftPardakhtPPCModel, int position, int from) {
+        if (dariaftPardakhtPPCModel != null )
+        {
+            mModel.removeItemPishDaryaft(dariaftPardakhtPPCModel , position , from);
+        }
+        else
+        {
+            mView.get().showToast(R.string.errorSelectItem, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }
+    }
+
+    @Override
+    public void callTajil(long ccDarkhastfaktor , int codeNoeVosol) {
+        mModel.callTajil(ccDarkhastfaktor , codeNoeVosol);
     }
 
     @Override
@@ -253,6 +337,13 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
 
     }
 
+    @Override
+    public void getDetailsCheckBargashti(String shomarehSanad , int ccDarajeh ,int ccNoeMoshtary) {
+        mModel.getDetailsCheckBargashti(shomarehSanad,ccDarajeh , ccNoeMoshtary);
+    }
+
+
+
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
 
@@ -265,6 +356,7 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
     @Override
     public void onGetConfig(String showSaayadCheckInfoScanner)
     {
+        Log.i("showSaayadCheckI" ,"showSaayadCheckInfoScanner : " + showSaayadCheckInfoScanner);
         // 8 = View.GONE , 0 = View.VISIBLE
         if (showSaayadCheckInfoScanner == null || showSaayadCheckInfoScanner.trim().equals("") || showSaayadCheckInfoScanner.trim().equals("0"))
         {
@@ -279,7 +371,7 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
     }
 
     @Override
-    public void onGetInfo(String shomareDarkhast , int ccNoeVosol, String noeVosol, String cost, String remainCost)
+    public void onGetInfo(String shomareDarkhast , int ccNoeVosol, String noeVosol, String cost, String remainCost , int from)
     {
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         if (!remainCost.trim().equals(""))
@@ -313,8 +405,9 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
 
         Log.d("invoce" , "shomareDarkhast : " + shomareDarkhast + " , ccNoeVosol : " + ccNoeVosol + " , cost : " + cost + " , remainCost : " + remainCost);
 
-        if (shomareDarkhast == null || ccNoeVosol <= 0 || noeVosol.trim().equals("") || cost.trim().equals("") || remainCost.trim().equals(""))
+        if (shomareDarkhast == null || ccNoeVosol <= 0 || noeVosol.trim().equals("") || cost.trim().equals("") || remainCost.trim().equals("") )
         {
+            if (from !=Constants.FROM_PISH_DARYAFT && from !=Constants.FROM_CHECK_BARGASHTI)
             mView.get().showToast(R.string.errorGetData, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
         }
     }
@@ -322,24 +415,48 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
     @Override
     public void onGetVosols(ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels)
     {
-        if (dariaftPardakhtDarkhastFaktorPPCModels != null && dariaftPardakhtDarkhastFaktorPPCModels.size() > 0)
+        if (dariaftPardakhtDarkhastFaktorPPCModels != null) //&& dariaftPardakhtDarkhastFaktorPPCModels.size() > 0)
         {
             mView.get().onGetVosols(dariaftPardakhtDarkhastFaktorPPCModels);
         }
     }
 
     @Override
-    public void onGetNoeVosols(ArrayList<ParameterChildModel> childParameterModels)
+    public void onGetVosolsPishDaryaft(ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels) {
+        if (dariaftPardakhtPPCModels !=null ){
+            mView.get().onGetVosolsPishDaryaft(dariaftPardakhtPPCModels);
+        }
+
+    }
+
+    @Override
+    public void oncallTajil(long mablaghTajil_Naghd, long mandehFaktorPasAzTajil_Naghd, long mablaghTajil_Check, long mandehFaktorPasAzTajil_Check,boolean canGetTajil) {
+        mView.get().oncallTajil(mablaghTajil_Naghd,mandehFaktorPasAzTajil_Naghd , mablaghTajil_Check,mandehFaktorPasAzTajil_Check,canGetTajil);
+    }
+
+//    @Override
+//    public void onGetVosolsPishDariaft(ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels)
+//    {
+//        if (dariaftPardakhtDarkhastFaktorPPCModels != null && dariaftPardakhtDarkhastFaktorPPCModels.size() > 0)
+//        {
+//            mView.get().onGetVosols(dariaftPardakhtDarkhastFaktorPPCModels);
+//        }
+//    }
+
+    @Override
+    public void onGetNoeVosols(ArrayList<CodeNoeVosolModel> codeNoeVosolModels)
     {
-        if (childParameterModels.size() > 0)
+        if (codeNoeVosolModels.size() > 0)
         {
-            mView.get().onGetNoeVosols(childParameterModels);
+            mView.get().onGetNoeVosols(codeNoeVosolModels);
         }
         else
         {
             mView.get().showToast(R.string.errorGetData, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
         }
     }
+
+
 
     @Override
     public void onGetPosShomareHesab(ArrayList<PosShomarehHesabModel> posShomarehHesabModels , int codeNoevosol)
@@ -415,6 +532,18 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
     {
         mView.get().showToast(resId, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
     }
+
+    @Override
+    public void onGetDetailsCheckBargashti(ArrayList<BargashtyModel> bargashtyModels) {
+        mView.get().onGetDetailsCheckBargashti(bargashtyModels);
+    }
+
+    @Override
+    public void onGetNoeVosolsMojazMoshtary(ArrayList<ConfigNoeVosolMojazeMoshtaryModel> configNoeVosolMojazeMoshtaryModels) {
+        mView.get().onGetNoeVosolsMojazMoshtary(configNoeVosolMojazeMoshtaryModels);
+    }
+
+
 
 
 }

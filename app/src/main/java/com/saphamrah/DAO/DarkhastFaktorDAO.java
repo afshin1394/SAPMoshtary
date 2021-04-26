@@ -1213,6 +1213,48 @@ public class DarkhastFaktorDAO
         return flag;
     }
 
+    /**
+     * 350 == ZANJIRE
+     * @return ccMoshtary by janjire
+     */
+    public String getCcMoshtaryForZanjire(){
+
+        String ccMoshtary = "-1";
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query = "SELECT DarkhastFaktor.ccMoshtary FROM DarkhastFaktor " +
+                    "LEFT JOIN Moshtary ON Moshtary.ccMoshtary = DarkhastFaktor.ccMoshtary " +
+                    "WHERE ccNoeMoshtary = 350 "  ;
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+
+                        ccMoshtary += " , " + cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ccMoshtary()));
+
+                        cursor.moveToNext();
+                    }
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorModel.TableName()) + "\n" + e.toString();
+            logger.insertLogToDB(context, LogPPCModel.LOG_EXCEPTION, message, "DarkhastFaktorDAO" , "" , "getCcMoshtaryForZanjire" , "");
+        }
+        return ccMoshtary;
+
+    }
+
     public boolean deleteAll()
     {
         try

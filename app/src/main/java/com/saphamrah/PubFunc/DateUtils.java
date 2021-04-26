@@ -1,11 +1,14 @@
 package com.saphamrah.PubFunc;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.format.DateFormat;
 
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,7 +17,36 @@ import java.util.concurrent.TimeUnit;
 public class DateUtils
 {
 
-    private static final String CLASS_NAME = "DateUtils";
+
+    /**
+     *  List Convert Date in class :: ******
+     *  todayDate(Context context)
+     *  todayDateWithSlash(Context context)
+     *  splittedTodayPersianDate(Context context)
+     *  gregorianToPersianDateTime(Date date)
+     *  todayDateGregorian()
+     *  todayGregorian()
+     *  todayDateGregorianWithSlash()
+     *  persianWithSlashToGregorianSlash(String persianDate)
+     *  persianWithSlashToGregorianDash(String persianDate)
+     *  gregorianWithSlashToPersianSlash(String gregorianDate)
+     *  gregorianWithDashToPersianSlash(String gregorianDate)
+     *  Date convertStringDateToDateClass(String strDate)
+     *  String getCurrentTime()
+     *  getMonthName(Context context , int monthId)
+     *  getDateDiffAsDay(Date dateStart , Date dateEnd)
+     *  Date addDay(Date date , int days)
+     *  Date diffDateMinModatHozor(int minModatHozor)
+     *  persianToGregorianWhithTime(String bankiDate)
+     *  isDateSelectedBiggerToday(String selectDate)
+     *  getTodayDatePersian()
+     *  differenceDatesWithToday(String selectDate)
+     *  todayDateWithoutSlash(Context context)
+     *  getDateWithoutSlashShamsi(Context context ,Date date)
+     *
+     */
+
+    private final String CLASS_NAME = "DateUtils";
 
     /**
      *تاریخ امروز به شمسی و در قالب عددی
@@ -145,6 +177,27 @@ public class DateUtils
         return String.format("%1$s/%2$s/%3$s - %4$s" , dateConverter.getYear() , dateConverter.getMonth() , dateConverter.getDay() , time);
     }
 
+    /**
+     * convert gregorian date to persian date
+     * @param date must be in this format : yyyy-MM-dd'T'HH:mm:ss
+     * @return persian date time (format : yyyy/MM/dd)
+     */
+    public String gregorianToPersianDateWithoutTime(Date date)
+    {
+        String gregorianDay = (String) DateFormat.format("dd" , date);
+        String gregorianMonth = (String) DateFormat.format("MM" , date);
+        String gregorianYear = (String) DateFormat.format("yyyy", date);
+
+
+        int year = Integer.parseInt(gregorianYear);
+        int month = Integer.parseInt(gregorianMonth);
+        int day = Integer.parseInt(gregorianDay);
+
+        DateConverter dateConverter = new DateConverter();
+        dateConverter.gregorianToPersian(year , month , day);
+
+        return String.format("%1$s/%2$s/%3$s" , dateConverter.getYear() , dateConverter.getMonth() , dateConverter.getDay());
+    }
 
     /**
      * تاریخ و زمان الان به میلادی و در قالب
@@ -212,6 +265,30 @@ public class DateUtils
         return gregorianDate;
     }
 
+    /**
+     * تبدیل تاریخ شمسی به میلادی همراه با دش
+     * <br>
+     * yyyy-(m)m-(d)d 00:00:00
+     * @param persianDate تاریخ شمسی با اسلش
+     * @return تاریخ میلادی با اسلش
+     */
+    public String persianWithSlashToGregorianDash(String persianDate)
+    {
+        String gregorianDate = "";
+        String[] splittedDate = persianDate.split("/");
+        int year = Integer.parseInt(splittedDate[0]);
+        int month = Integer.parseInt(splittedDate[1]);
+        int date = Integer.parseInt(splittedDate[2]);
+
+        DateConverter dateConverter = new DateConverter();
+        dateConverter.persianToGregorian(year , month , date);
+        String gregorianYear = String.valueOf(dateConverter.getYear());
+        String gregorianMonth = String.valueOf(dateConverter.getMonth());
+        String gregorianDay = String.valueOf(dateConverter.getDay());
+        gregorianDate = gregorianYear + "-" + gregorianMonth + "-" + gregorianDay + " 00:00:00" ;
+
+        return gregorianDate;
+    }
 
     /**
      * تبدیل تاریخ میلادی به شمسی همراه با اسلشgregorianWithSlashToPersianSlash
@@ -353,5 +430,190 @@ public class DateUtils
         calendar.add(Calendar.DAY_OF_MONTH , days);
         return calendar.getTime();
     }
+
+    public Date diffDateMinModatHozor(int minModatHozor){
+
+        int milliSecondsMinModatHozor = minModatHozor * 60000;
+        long diff = getCurrentDate().getTime() - milliSecondsMinModatHozor;
+        return new Date(diff);
+    }
+    public Date getCurrentDate()
+    {
+        Date currentDate = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
+        String date = sdf.format(new Date());
+        try
+        {
+            currentDate = sdf.parse(date);
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+        return currentDate;
+    }
+
+    /**
+     * get persian simple 1399/9/9
+     * return 2020/10/08T00:00:00
+     */
+    public String persianToGregorianWhithTime(String bankiDate){
+        String[] sepratedDate = bankiDate.split("/");
+        PubFunc.DateConverter dateConverter = new PubFunc().new DateConverter();
+        dateConverter.persianToGregorian(Integer.parseInt(sepratedDate[0]), Integer.parseInt(sepratedDate[1]), Integer.parseInt(sepratedDate[2]));
+        String year = String.valueOf(dateConverter.getYear());
+        String month = dateConverter.getMonth() > 9 ? String.valueOf(dateConverter.getMonth()) : "0" + dateConverter.getMonth();
+        String day = dateConverter.getDay() > 9 ? String.valueOf(dateConverter.getDay()) : "0" + dateConverter.getDay();
+
+        return year+"-"+month+"-"+day+"T00:00:00";
+    }
+
+    /**
+     date selected Bigger than today
+     Entrance string selectDate
+     */
+    public boolean isDateSelectedBiggerToday(String selectDate){
+        boolean isBigger = true;
+        try {
+
+            Date date1 = null;
+            Date date2 = null;
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat dates = new SimpleDateFormat("yyyy/MM/dd");
+
+            //Setting dates
+            date1 = getTodayDatePersian();
+            date2 = dates.parse(selectDate);
+
+
+
+            //Comparing dates
+            long difference = Math.abs(date1.getTime() - date2.getTime());
+            isBigger = date1.getTime() < date2.getTime();
+
+        } catch (Exception exception) {
+            isBigger = false;
+        }
+
+        return isBigger;
+    }
+
+    /**
+     get today DATE
+     format date "yyyy/MM/dd"
+     */
+    public Date getTodayDatePersian() {
+        DateUtils dateUtils = new DateUtils();
+        Date date = null;
+
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dates = new SimpleDateFormat("yyyy/MM/dd");
+        try {
+            String CurrentDate = dateUtils.todayDateWithSlash(BaseApplication.getContext());
+            date = dates.parse(CurrentDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    /**
+     difference today with other days
+     first call fun getTodayDatePersian() for get today
+     Entrance string selectDate when Calendar selected
+     */
+    public int differenceDatesWithToday(String selectDate) {
+
+        long differenceDates = 0;
+        try {
+
+            Date date1 = null;
+            Date date2 = null;
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat dates = new SimpleDateFormat("yyyy/MM/dd");
+
+            //Setting dates
+            date1 = getTodayDatePersian();
+            date2 = dates.parse(selectDate);
+
+
+
+            //Comparing dates
+            long difference = Math.abs(date1.getTime() - date2.getTime());
+            differenceDates = difference / (24 * 60 * 60 * 1000);
+
+        } catch (Exception exception) {
+            differenceDates = -1;
+        }
+        return (int) differenceDates;
+    }
+
+    /**
+     * تاریخ امروز به شمسی و بدون اسلش
+     * yyyymmdd
+     * @param context
+     * @return "" if exception occurs
+     */
+    public String todayDateWithoutSlash(Context context)
+    {
+        try
+        {
+            String today = new SimpleDateFormat(Constants.DATE_SHORT_FORMAT()).format(Calendar.getInstance().getTime());
+            String[] seperatedDate = today.split("-");
+            int year = Integer.parseInt(seperatedDate[0]);
+            int month = Integer.parseInt(seperatedDate[1]);
+            int day = Integer.parseInt(seperatedDate[2]);
+
+            DateConverter dateConverter = new DateConverter();
+            dateConverter.gregorianToPersian(year , month , day);
+
+            String persianYear = String.valueOf(dateConverter.getYear());
+            String persianMonth = String.valueOf(dateConverter.getMonth());
+            String persianDay = String.valueOf(dateConverter.getDay());
+
+            persianMonth = (persianMonth.length() == 1) ? "0" + persianMonth : persianMonth;
+            persianDay = (persianDay.length() == 1) ? "0" + persianDay : persianDay;
+
+            return String.format("%1$s%2$s%3$s" , persianYear , persianMonth , persianDay);
+        }
+        catch (Exception e)
+        {
+            return "";
+        }
+    }
+
+    /**
+     * تاریخ امروز به شمسی و بدون اسلش
+     * yyyymmdd
+     * @param context
+     * @return "" if exception occurs
+     */
+    public String getDateWithoutSlashShamsi(Context context ,Date date)
+    {
+        try
+        {
+            String today = new SimpleDateFormat(Constants.DATE_SHORT_FORMAT()).format(date);
+            String[] seperatedDate = today.split("-");
+            int year = Integer.parseInt(seperatedDate[0]);
+            int month = Integer.parseInt(seperatedDate[1]);
+            int day = Integer.parseInt(seperatedDate[2]);
+
+            DateConverter dateConverter = new DateConverter();
+            dateConverter.gregorianToPersian(year , month , day);
+
+            String persianYear = String.valueOf(dateConverter.getYear());
+            String persianMonth = String.valueOf(dateConverter.getMonth());
+            String persianDay = String.valueOf(dateConverter.getDay());
+
+            persianMonth = (persianMonth.length() == 1) ? "0" + persianMonth : persianMonth;
+            persianDay = (persianDay.length() == 1) ? "0" + persianDay : persianDay;
+
+            return String.format("%1$s%2$s%3$s" , persianYear , persianMonth , persianDay);
+        }
+        catch (Exception e)
+        {
+            return "";
+        }
+    }
+
+
+
 
 }

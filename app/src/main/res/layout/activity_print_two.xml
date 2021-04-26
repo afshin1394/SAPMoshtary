@@ -369,6 +369,12 @@
                         android:textSize="@dimen/FontSize36"
                         android:textStyle="bold"
                         android:textColor="@color/colorBlack"/>
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/colorBlack"
+                    android:layout_marginBottom="5dp"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/lstTakhfif"
                         android:layout_width="match_parent"
@@ -393,6 +399,12 @@
                         android:textSize="@dimen/FontSize36"
                         android:textStyle="bold"
                         android:textColor="@color/colorBlack"/>
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/colorBlack"
+                    android:layout_marginBottom="5dp"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/lstKalaMarjoee"
                         android:layout_width="match_parent"
@@ -419,13 +431,24 @@
                         android:textStyle="bold"
                         android:textColor="@color/colorBlack"/>
 
-
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/colorBlack"
+                    android:layout_marginBottom="5dp"/>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/lstKalaJayezeh"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scrollbars="vertical">
                     </androidx.recyclerview.widget.RecyclerView>
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/colorBlack"
+                    android:layout_marginBottom="5dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -434,6 +457,12 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:layout_marginTop="15dp">
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/colorBlack"
+                    android:layout_marginBottom="5dp"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

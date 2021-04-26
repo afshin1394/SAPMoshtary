@@ -89,6 +89,10 @@ public class DarkhastFaktorModel
     private static final String COLUMN_ExtraProp_ShowFaktorMamorPakhsh = "ExtraProp_ShowFaktorMamorPakhsh";
     private static final String COLUMN_ccUser = "ccUser";
     private static final String COLUMN_ccDarkhastFaktorNoeForosh = "ccDarkhastFaktorNoeForosh";
+    private static final String COLUMN_ccNoeMoshtary = "ccNoeMoshtary";
+    private static final String COLUMN_IsTajil = "IsTajil";
+    private static final String COLUMN_IsTakhir = "IsTakhir";
+
 
 
     public static String TableName() {
@@ -288,6 +292,16 @@ public class DarkhastFaktorModel
     }
     public static String COLUMN_ccDarkhastFaktorNoeForosh() {
         return COLUMN_ccDarkhastFaktorNoeForosh;
+    }
+    public static String COLUMN_ccNoeMoshtary() {
+        return COLUMN_ccNoeMoshtary;
+    }
+    public static String COLUMN_IsTajil() {
+        return COLUMN_IsTajil;
+    }
+
+    public static String COLUMN_IsTakhir() {
+        return COLUMN_IsTakhir;
     }
 
 
@@ -514,6 +528,12 @@ public class DarkhastFaktorModel
     @SerializedName("ccDarkhastFaktorNoeForosh")
     @Expose
     private int ccDarkhastFaktorNoeForosh;
+    @SerializedName("IsTajil")
+    @Expose
+    private int IsTajil;
+    @SerializedName("IsTakhir")
+    @Expose
+    private int IsTakhir;
 
 
 
@@ -972,6 +992,21 @@ public class DarkhastFaktorModel
         return this.UniqID_Tablet;
     }
 
+    public int getIsTajil() {
+        return IsTajil;
+    }
+
+    public void setIsTajil(int isTajil) {
+        IsTajil = isTajil;
+    }
+
+    public int getIsTakhir() {
+        return IsTakhir;
+    }
+
+    public void setIsTakhir(int isTakhir) {
+        IsTakhir = isTakhir;
+    }
 
     /*public float getMablaghFaktorPishAzTakhfif() {
         return MablaghFaktorPishAzTakhfif;
@@ -1400,6 +1435,8 @@ public class DarkhastFaktorModel
                 ", ExtraProp_ShomarehDarkhast='" + ExtraProp_ShomarehDarkhast + '\'' +
                 ", CodeMoshtary='" + CodeMoshtary + '\'' +
                 ", showFaktorMamorPakhsh=" + showFaktorMamorPakhsh +
+                ", IsTajil=" + IsTajil +
+                ", IsTakhir=" + IsTakhir +
                 '}';
     }
 

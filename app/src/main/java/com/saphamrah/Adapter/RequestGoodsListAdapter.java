@@ -32,7 +32,7 @@ public class RequestGoodsListAdapter extends RecyclerSwipeAdapter<RequestGoodsLi
     private ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels;
     private boolean showSwipe;
     private Context context;
-    private int lastSelectedItem;
+    private static int lastSelectedItem; // todo Add Static
 
     public RequestGoodsListAdapter(Context context , ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels , boolean showSwipe, OnItemClickListener listener)
     {

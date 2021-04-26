@@ -17,6 +17,7 @@ import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllTaghvimTatilByccMarkazResult;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -222,6 +223,35 @@ public class TaghvimTatilDAO
         {
             //query = select * from TaghvimTatil where TarikhTatily >= date('now') and ccMarkaz =
             String query = "select * from " + TaghvimTatilModel.TableName() + " where " + TaghvimTatilModel.COLUMN_TarikhTatily() + " >= date('now') " ;
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    taghvimTatilModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , TaghvimTatilModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, CLASS_NAME , "" , "getFromNowByccMarkaz" , "");
+        }
+        return taghvimTatilModels;
+    }
+
+    public ArrayList<TaghvimTatilModel> getTarikhTatilBetweenTwoDates(String AzTarikh , String TaTarikh)
+    {
+        ArrayList<TaghvimTatilModel> taghvimTatilModels = new ArrayList<>();
+        try
+        {
+            //query = select * from TaghvimTatil where TarikhTatily >= date('now') and ccMarkaz =
+            String query = " Select * From TaghvimTatil Where TarikhTatily Between  '" + AzTarikh + "' AND '" + TaTarikh+"'";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query, null);
             if (cursor != null)

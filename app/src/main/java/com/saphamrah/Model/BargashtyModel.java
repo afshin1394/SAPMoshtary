@@ -28,6 +28,8 @@ public class BargashtyModel
     private static final String COLUMN_TarikhSanadWithSlash = "TarikhSanadWithSlash";
     private static final String COLUMN_ZamaneSabt = "ZamaneSabt";
     private static final String COLUMN_ZamaneSabtWithSlash = "ZamaneSabtWithSlash";
+    private static final String COLUMN_ccNoeMoshtary = "ccNoeMoshtary";
+    private static final String COLUMN_ccDarajeh = "ccDarajeh";
 
 
     public static String TableName() {
@@ -117,6 +119,12 @@ public class BargashtyModel
     public static String COLUMN_ZamaneSabtWithSlash() {
         return COLUMN_ZamaneSabtWithSlash;
     }
+    public static String COLUMN_ccNoeMoshtary() {
+        return COLUMN_ccNoeMoshtary;
+    }
+    public static String COLUMN_ccDarajeh() {
+        return COLUMN_ccDarajeh;
+    }
 
 
 
@@ -184,6 +192,12 @@ public class BargashtyModel
     @SerializedName("TarikhSanadWithSlash")
     @Expose
     private String TarikhSanadWithSlash;
+    @SerializedName("ccNoeMoshtary")
+    @Expose
+    private int ccNoeMoshtary;
+    @SerializedName("ccDarajeh")
+    @Expose
+    private int ccDarajeh;
 
 
     public Integer getCcAfradErsalKonandeh() {
@@ -354,6 +368,21 @@ public class BargashtyModel
         TarikhSanadWithSlash = tarikhSanadWithSlash;
     }
 
+    public int getCcNoeMoshtary() {
+        return ccNoeMoshtary;
+    }
+
+    public void setCcNoeMoshtary(int ccNoeMoshtary) {
+        this.ccNoeMoshtary = ccNoeMoshtary;
+    }
+
+    public int getCcDarajeh() {
+        return ccDarajeh;
+    }
+
+    public void setCcDarajeh(int ccDarajeh) {
+        this.ccDarajeh = ccDarajeh;
+    }
 
     @Override
     public String toString() {
@@ -379,6 +408,8 @@ public class BargashtyModel
                 ", ZamaneSabt='" + ZamaneSabt + '\'' +
                 ", ZamaneSabtWithSlash='" + ZamaneSabtWithSlash + '\'' +
                 ", TarikhSanadWithSlash='" + TarikhSanadWithSlash + '\'' +
+                ", ccDarajeh='" + ccDarajeh + '\'' +
+                ", ccNoeMoshtary='" + ccNoeMoshtary + '\'' +
                 '}';
     }
 }

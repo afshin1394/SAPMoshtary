@@ -2,6 +2,11 @@ package com.saphamrah.Model;
 
 import androidx.annotation.NonNull;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class KardexSatrModel
 {
 
@@ -29,6 +34,14 @@ public class KardexSatrModel
     private static final String COLUMN_GheymatMasrafKonandeh = "GheymatMasrafKonandeh";
     private static final String COLUMN_ccAnbarGhesmat = "ccAnbarGhesmat";
     private static final String COLUMN_GheymatForoshAsli = "GheymatForoshAsli";
+    private static final String COLUMN_ccKala = "ccKala";
+    private static final String COLUMN_GheymatKhales = "GheymatKhales";
+
+
+
+
+
+
 
 
 
@@ -103,6 +116,14 @@ public class KardexSatrModel
     }
     public static String COLUMN_GheymatForoshAsli() {
         return COLUMN_GheymatForoshAsli;
+    }
+
+    public static String COLUMN_ccKala() {
+        return COLUMN_ccKala;
+    }
+
+    public static String COLUMN_GheymatKhales() {
+        return COLUMN_GheymatKhales;
     }
 
 
@@ -314,6 +335,29 @@ public class KardexSatrModel
     }
 
 
+    private int ccKala;
+
+    public int getCcKala() {
+        return ccKala;
+    }
+
+    public void setCcKala(int ccKala) {
+        this.ccKala = ccKala;
+    }
+
+
+
+    private double GheymatKhales;
+
+    public double getGheymatKhales() {
+        return GheymatKhales;
+    }
+
+    public void setGheymatKhales(double gheymatKhales) {
+        GheymatKhales = gheymatKhales;
+    }
+
+
     @NonNull
     @Override
     public String toString()
@@ -340,10 +384,94 @@ public class KardexSatrModel
                 ", GheymatForoshKhales=" + GheymatForoshKhales +
                 ", GheymatMasrafKonandeh=" + GheymatMasrafKonandeh +
                 ", ccAnbarGhesmat=" + ccAnbarGhesmat +
-                ", GheymatForoshAsli=" + GheymatForoshAsli;
+                ", GheymatForoshAsli=" + GheymatForoshAsli +
+                " , ccKala=" + ccKala +
+                " , GheymatKhales=" + GheymatKhales;
+
     }
 
 
+    // for convert string json
+    public JSONObject toJsonForKardexSatr()
+    {
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            jsonObject.put("ccKardexSatr_Tablet" , ccKardexSatr);
+            jsonObject.put("ccKardex" , ccKardex);
+            jsonObject.put("ccTaminKonandeh" , ccTaminKonandeh);
+            jsonObject.put("ccKalaCode" , ccKalaCode);
+            jsonObject.put("CodeNoeKala" , CodeNoeKala);
+            jsonObject.put("ShomarehBach" , ShomarehBach);
+            jsonObject.put("TarikhTolid" , TarikhTolid);
+            jsonObject.put("TarikhEngheza" , TarikhEngheza);
+            jsonObject.put("Tedad3" , Tedad3);
+            jsonObject.put("GheymatKharid" , GheymatKharid);
+            jsonObject.put("GheymatForosh" , GheymatForosh);
+            jsonObject.put("GheymatForoshKhales" , GheymatForoshKhales);
+            jsonObject.put("GheymatForoshAsli" , GheymatForoshAsli);
+            jsonObject.put("GheymatMasrafKonandeh" , GheymatMasrafKonandeh);
+            jsonObject.put("ccElat" , ccElat);
 
+
+            jsonObject.put("NameElat" , NameElat);
+            jsonObject.put("CodeKalaOld" , CodeKalaOld);
+            jsonObject.put("NameKala" , NameKala);
+            jsonObject.put("ccElamMarjoeeForoshandeh" , ccElamMarjoeeForoshandeh);
+            jsonObject.put("ccMarjoeeMamorPakhsh" , ccMarjoeeMamorPakhsh);
+            jsonObject.put("ccMoshtary" , ccMoshtary);
+            jsonObject.put("TarikhTolidShamsi" , TarikhTolidShamsi);
+            jsonObject.put("ccAnbarGhesmat" , ccAnbarGhesmat);
+            jsonObject.put("ccKala" , ccKala);
+            jsonObject.put("GheymatKhales" , GheymatKhales);
+
+//            ccKardexSatr_Tablet        BIGINT,
+//            ccKardex     BIGINT,
+//            ccTaminKonandeh            INT,
+//            ccKalaCode    INT,
+//            CodeNoeKala     INT,
+//            ShomarehBach CHAR(15),
+//            TarikhTolid  DATETIME,
+//            TarikhEngheza DATETIME,
+//            Tedad3           INT,
+//            GheymatKharid   BIGINT,
+//            GheymatForosh BIGINT,
+//            GheymatForoshKhales BIGINT,
+//            GheymatForoshAsli BIGINT,
+//            GheymatMasrafKonandeh      BIGINT,
+//            ccElat        INT,
+//            TarikhForm      DATETIME,
+//            CodeVazeiat   INT
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return jsonObject;
+    }
+
+    public JSONArray toJsonArrayKardexSatr(ArrayList<KardexSatrModel> models)
+    {
+        try
+        {
+            JSONArray jsonArray = new JSONArray();
+            for (KardexSatrModel model : models)
+            {
+                JSONObject jsonObject = model.toJsonForKardexSatr();
+                if (jsonObject != null)
+                {
+                    jsonArray.put(jsonObject);
+                }
+            }
+            return jsonArray;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return new JSONArray();
+        }
+    }
 
 }

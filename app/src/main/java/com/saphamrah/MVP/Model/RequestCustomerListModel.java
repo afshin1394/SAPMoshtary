@@ -8,13 +8,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.RequestCustomerListMVP;
 import com.saphamrah.DAO.AdamDarkhastDAO;
 import com.saphamrah.DAO.AnbarakAfradDAO;
 import com.saphamrah.DAO.BargashtyDAO;
 import com.saphamrah.DAO.CustomerAddressDAO;
 import com.saphamrah.DAO.DarkhastFaktorDAO;
-import com.saphamrah.DAO.EtebarDAO;
 import com.saphamrah.DAO.ForoshandehAmoozeshiDeviceNumberDAO;
 import com.saphamrah.DAO.ForoshandehEtebarDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
@@ -51,7 +51,9 @@ import com.saphamrah.Model.MaxFaktorMandehDarModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.Model.MoshtaryAfradModel;
 import com.saphamrah.Model.MoshtaryEtebarSazmanForoshModel;
+import com.saphamrah.Model.MoshtaryGharardadModel;
 import com.saphamrah.Model.MoshtaryModel;
+import com.saphamrah.Model.MoshtaryMorajehShodehRoozModel;
 import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.RptForoshModel;
 import com.saphamrah.Model.RptMandehdarModel;
@@ -63,6 +65,7 @@ import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.GetProgramShared;
+import com.saphamrah.Shared.LastOlaviatMoshtaryShared;
 import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.Shared.UserTypeShared;
 import com.saphamrah.UIModel.CustomerAddressModel;
@@ -81,6 +84,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
     private RequestCustomerListMVP.RequiredPresenterOps mPresenter;
     private final static String ACTIVITY_NAME_FOR_LOG = "RequestCustomerListActivity";
     private final static String CLASS_NAME = "RequestCustomerListModel";
+    UserTypeShared userTypeShared = new UserTypeShared(BaseApplication.getContext());
 
     public RequestCustomerListModel(RequestCustomerListMVP.RequiredPresenterOps mPresenter)
     {
@@ -123,7 +127,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             Date todayDate = sdf.parse(today);
             Date dtGregorianGetProgramDate = sdf.parse(gregorianGetProgramDate);
             //---------------------- For Test -----------------
-            UserTypeShared userTypeShared = new UserTypeShared(mPresenter.getAppContext());
+
             int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
             Log.d("date" , "istest : " + isTest);
             if (isTest == 1)
@@ -133,7 +137,6 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             }
 
             long diff = todayDate.getTime() - dtGregorianGetProgramDate.getTime();
-            Log.d("date","Today: " + todayDate + "GetProgramDate: " + dtGregorianGetProgramDate + "Diff: " + diff);
             if (diff <= 0)
             {
                 mPresenter.onGetDateOfGetProgram(persianGetProgramdate);
@@ -160,6 +163,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
         final ArrayList<MoshtaryModel> moshtaryModels = new ArrayList<>();
         final ArrayList<MoshtaryAddressModel> moshtaryAddressModels = new ArrayList<>();
         final ArrayList<Integer> arrayListNoeMorajeh = new ArrayList<>();
+        final ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels=new ArrayList<>();
         final Handler handler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message message) {
@@ -172,7 +176,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     {
                         canUpdateCustomer = true;
                     }
-                    mPresenter.onGetCustomers(moshtaryModels , moshtaryAddressModels , arrayListNoeMorajeh , canUpdateCustomer);
+                    mPresenter.onGetCustomers(moshtaryModels , moshtaryAddressModels , arrayListNoeMorajeh ,moshtaryGharardadModels, canUpdateCustomer);
                 }
                 return false;
             }
@@ -199,6 +203,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
                 CustomerAddressDAO customerAddressDAO = new CustomerAddressDAO(mPresenter.getAppContext());
                 ArrayList<CustomerAddressModel> customerAddressModels = new ArrayList<>();
+                Log.i("getCustomersXC", "run: "+canInsertFaktorForMoshtaryJadid.trim());
                 if (canInsertFaktorForMoshtaryJadid.trim().equals("1"))
                 {
                     customerAddressModels = customerAddressDAO.getByMasir();
@@ -213,6 +218,8 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     moshtaryModels.add(customerAddressModels.get(i).getMoshtaryModel());
                     moshtaryAddressModels.add(customerAddressModels.get(i).getMoshtaryAddressModels().get(0));
                     arrayListNoeMorajeh.add(customerAddressModels.get(i).getMoshtaryMorajehShodehRoozModel().getNoeMorajeh());
+                    moshtaryGharardadModels.add(customerAddressModels.get(i).getMoshtaryGharardadModel());
+
                 }
                 handler.sendEmptyMessage(1);
             }
@@ -221,25 +228,25 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
     }
 
     @Override
-    public void checkDuplicateRequestForCustomer(MoshtaryModel moshtaryModel)
+    public void checkDuplicateRequestForCustomer(MoshtaryModel moshtaryModel,MoshtaryGharardadModel moshtaryGharardadModel)
     {
         RptDarkhastFaktorVazeiatPPCDAO darkhastFaktorVazeiatPPCDAO = new RptDarkhastFaktorVazeiatPPCDAO(mPresenter.getAppContext());
         int countFaktorForMoshtary = darkhastFaktorVazeiatPPCDAO.getCountFaktorForMoshtary(moshtaryModel.getCcMoshtary());
         if (countFaktorForMoshtary > 0)
         {
-            mPresenter.showAlertDuplicateRequestForCustomer(moshtaryModel);
+            mPresenter.showAlertDuplicateRequestForCustomer(moshtaryModel,moshtaryGharardadModel);
         }
         else
         {
-            checkSelectedCustomer(moshtaryModel.getCcMoshtary());
+            checkSelectedCustomer(moshtaryModel.getCcMoshtary(),moshtaryGharardadModel.getCcMoshtaryGharardad(),moshtaryGharardadModel.getCcSazmanForosh());
         }
     }
 
     @Override
-    public void checkSelectedCustomer(final int ccMoshtary)
+    public void checkSelectedCustomer(final int ccMoshtary,final int ccMoshtareyGharardad ,final int moshtaryGharardadccSazmanForosh)
     {
         PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
-        AsyncTaskCheckSelectCustomer asyncTaskCheckSelectCustomer = new AsyncTaskCheckSelectCustomer(mPresenter.getAppContext(), ccMoshtary, locationProvider.getLocation(), new OnCheckSelectedCustomerResponse()
+        AsyncTaskCheckSelectCustomer asyncTaskCheckSelectCustomer = new AsyncTaskCheckSelectCustomer(mPresenter.getAppContext(), ccMoshtary,ccMoshtareyGharardad,moshtaryGharardadccSazmanForosh, locationProvider.getLocation(), new OnCheckSelectedCustomerResponse()
         {
             @Override
             public void onFailed(int resId)
@@ -256,7 +263,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             @Override
             public void onSuccess()
             {
-                getBottomBarStatus(ccMoshtary);
+                getBottomBarStatus(ccMoshtary,moshtaryGharardadccSazmanForosh);
             }
 
             @Override
@@ -274,7 +281,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
         asyncTaskCheckSelectCustomer.execute();
     }
 
-    private void getBottomBarStatus(int ccMoshtary)
+    private void getBottomBarStatus(int ccMoshtary,int ccSazmanForoshGharardad)
     {
         PubFunc.RequestBottomBarConfig bottomBarConfig = new PubFunc().new RequestBottomBarConfig();
         bottomBarConfig.getConfig(mPresenter.getAppContext());
@@ -290,7 +297,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 showMojodiGiri = false;
             }
         }*/
-        mPresenter.onSetRequestInfoShared(ccMoshtary, bottomBarConfig.getShowBarkhordAvalie(), bottomBarConfig.getShowMojoodiGiri());
+        mPresenter.onSetRequestInfoShared(ccMoshtary,ccSazmanForoshGharardad, bottomBarConfig.getShowBarkhordAvalie(), bottomBarConfig.getShowMojoodiGiri());
     }
 
     @Override
@@ -391,7 +398,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                             Log.d("updateEtebarForoshandeh","ccAnbarak:" + ccAnbarak);
                         }
                     }
-                    else if(noeMasouliat == 1 || noeMasouliat == 4)
+                    else if(noeMasouliat == 1 || noeMasouliat == 4 || noeMasouliat == 6 || noeMasouliat == 8)
                     {
                         ccAnbarak = "-1";
                     }
@@ -443,6 +450,52 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
     }
 
+    @Override
+    public void updateMoshtaryMorajehShodehRooz() {
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
+        MasirDAO masirDAO = new MasirDAO(BaseApplication.getContext());
+        MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(BaseApplication.getContext());
+        int ccForoshandeh = foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh();
+        String ccMasirs = masirDAO.getstrCcMasir();
+
+        moshtaryMorajehShodehRoozDAO.fetchMoshtaryMorajehShodehRooz(BaseApplication.getContext(), "RequestCustomerList", String.valueOf(ccForoshandeh), ccMasirs, new RetrofitResponse()
+        {
+            @Override
+            public void onSuccess(final ArrayList arrayListData)
+            {
+
+                        if (arrayListData.size() > 0)
+                        {
+                            boolean deleteResult = moshtaryMorajehShodehRoozDAO.deleteAll();
+                            boolean insertResult = moshtaryMorajehShodehRoozDAO.insertGroup(arrayListData);
+                            if (deleteResult && insertResult)
+                            {
+                                getCustomers();
+                                mPresenter.onUpdateMoshtaryMorajehShodehRooz();
+                            }
+                            else
+                            {
+                                getCustomers();
+                                mPresenter.onFailUpdateMoshtaryMorajehShodehRooz();
+                            }
+                        }
+                        else
+                        {
+                            getCustomers();
+                            mPresenter.onFailUpdateMoshtaryMorajehShodehRooz();
+                        }
+
+            }
+            @Override
+            public void onFailed(String type, String error)
+            {
+                mPresenter.onFailUpdateMoshtaryMorajehShodehRooz();
+                setLogToDB(LogPPCModel.LOG_EXCEPTION, String.format(" type : %1$s \n error : %2$s", type , error), CLASS_NAME, "", "updateMoshtaryMorajehShodehRooz", "");
+
+            }
+        });
+    }
+
 
     interface OnCheckSelectedCustomerResponse
     {
@@ -457,13 +510,17 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
     {
         private WeakReference<Context> weakReferenceContext;
         private int ccMoshtary;
+        private int ccMoshtaryGharardad;
+        private int moshtaryGharardadccSazmanForosh;
         private Location location;
         private OnCheckSelectedCustomerResponse listener;
 
-        AsyncTaskCheckSelectCustomer(Context context , int ccMoshtary , Location location, OnCheckSelectedCustomerResponse listener)
+        AsyncTaskCheckSelectCustomer(Context context , int ccMoshtary,int ccMoshtaryGharardad, int moshtaryGharardadccSazmanForosh, Location location, OnCheckSelectedCustomerResponse listener)
         {
             this.weakReferenceContext = new WeakReference<>(context);
             this.ccMoshtary = ccMoshtary;
+            this.ccMoshtaryGharardad=ccMoshtaryGharardad;
+            this.moshtaryGharardadccSazmanForosh = moshtaryGharardadccSazmanForosh;
             this.location = location;
             this.listener = listener;
         }
@@ -471,6 +528,9 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
         @Override
         protected Integer doInBackground(Void... voids)
         {
+            UserTypeShared userTypeShared = new UserTypeShared(BaseApplication.getContext());
+            int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
+
             //updateEtebarForoshandeh();
             DarkhastFaktorDAO darkhastfaktorDAO = new DarkhastFaktorDAO(weakReferenceContext.get());
             darkhastfaktorDAO.deleteAllFaktorTaeedNashode();
@@ -752,7 +812,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     //Toast.makeText(context, "به علت تغییر انبارک شما قادر به ثبت درخواست نمی باشید.لطفا مجددا دریافت برنامه نمایید.\n", Toast.LENGTH_LONG).show();
                     return -7;
                 }
-                else if (foroshandehMamorPakhshModel.getCheckOlaviatMoshtary() == 1 && !checkPriority(moshtaryModel.getExtraProp_Olaviat()))
+                else if (isTest!=1 && ( foroshandehMamorPakhshModel.getCheckOlaviatMoshtary() == 1 && !checkPriority(moshtaryModel.getExtraProp_Olaviat())))
                 {
                     return -14;
                 }
@@ -801,7 +861,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     if (canCreateFaktor == 1)
                     {
                         //updateEtebarForoshandeh();
-                        if(noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 4 || noeMasouliat == 5)//بروزرسانی موجودی انبارک
+                        if(noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 4 || noeMasouliat == 5 || noeMasouliat == 6 || noeMasouliat == 8 )//بروزرسانی موجودی انبارک
                         {
                             if (updateMandeMojodi)
                             {
@@ -826,7 +886,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                             //Toast.makeText(context, "به علت بسته شدن اعتبار فروشنده، شما تنها قادر به ثبت وصول وجه نقد می باشید.\n", Toast.LENGTH_LONG).show();
                             publishProgress(-3);
                         }
-                        if (setRequestInfoShared(ccMoshtary, moshtaryForoshandehFlag, isMojazForResid, isEtebarAsnad, isEtebarCheckBargashty, ccChildParameterNoeVosol, location, isMorajehShodeh))
+                        if (setRequestInfoShared(ccMoshtary,ccMoshtaryGharardad, moshtaryGharardadccSazmanForosh, moshtaryForoshandehFlag, isMojazForResid, isEtebarAsnad, isEtebarCheckBargashty, ccChildParameterNoeVosol, location, isMorajehShodeh))
                         {
                             return 1;
                         }
@@ -1144,7 +1204,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                             Log.d("updateEtebarForoshandeh","ccAnbarak:" + ccAnbarak);
                         }
                     }
-                    else if(noeMasouliat == 1 || noeMasouliat == 4)
+                    else if(noeMasouliat == 1 || noeMasouliat == 4 || noeMasouliat == 6 || noeMasouliat == 8)
                     {
                         ccAnbarak = "-1";
                     }
@@ -1235,7 +1295,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             final MandehMojodyMashinDAO mandehMojodyMashinDAO = new MandehMojodyMashinDAO(weakReferenceContext.get());
             String ccAnbarakAfrad = String.valueOf(new AnbarakAfradDAO(weakReferenceContext.get()).getAll().get(0).getCcAnbarak());
 
-            if(noeMasouliat == 1)//1-Foroshandeh-Sard
+            if(noeMasouliat == 1 || noeMasouliat == 6 || noeMasouliat == 8)//1-Foroshandeh-Sard
             {
                 ccAnbarakAfrad = "0";
                 ccMamorPakhsh = "0";
@@ -1340,8 +1400,8 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
         private boolean checkPriority(int customerPriority)
         {
             //TODO remove comment of this lines
-            return true;
-            /*LastOlaviatMoshtaryShared shared = new LastOlaviatMoshtaryShared(weakReferenceContext.get());
+            //return true;
+            LastOlaviatMoshtaryShared shared = new LastOlaviatMoshtaryShared(weakReferenceContext.get());
             int lastPriority = shared.getInt(LastOlaviatMoshtaryShared.OLAVIAT , 0);
             int diff = lastPriority - customerPriority;
             Log.d("RequestCustomer", "lastPriority : " + lastPriority + " , customerPriority : " + customerPriority + " , diff : " + diff);
@@ -1352,10 +1412,10 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             else
             {
                 return false;
-            }*/
+            }
         }
 
-        private boolean setRequestInfoShared(int ccMoshtary , boolean moshtaryForoshandehFlag , boolean isMojazForResid, boolean isEtebarAsnad, boolean isEtebarCheckBargashty , int ccChildCodeNoeVosol, Location location, boolean isMorajehShodeh)
+        private boolean setRequestInfoShared(int ccMoshtary ,int ccMoshtaryGharardad,int moshtaryGharardadccSazmanForosh, boolean moshtaryForoshandehFlag , boolean isMojazForResid, boolean isEtebarAsnad, boolean isEtebarCheckBargashty , int ccChildCodeNoeVosol, Location location, boolean isMorajehShodeh)
         {
             try
             {
@@ -1377,7 +1437,10 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 shared.putInt(shared.getccChildCodeNoeVosol() , ccChildCodeNoeVosol);
                 shared.putInt(shared.getCcMarkazForosh(),foroshandehMamorPakhshModel.getCcMarkazForosh());
                 shared.putInt(shared.getCcSazmanForosh(),foroshandehMamorPakhshModel.getCcSazmanForosh());
+                shared.putInt(shared.getCcMoshtaryGharardad(),ccMoshtaryGharardad);
+                shared.putInt(shared.getMoshtaryGharardadccSazmanForosh(), moshtaryGharardadccSazmanForosh);
                 shared.putBoolean(shared.getIsMorajehShodeh(),isMorajehShodeh);
+                Log.i("shared.put","ccMoshtaryGharardad:" + ccMoshtaryGharardad + " , moshtaryGharardadccSazmanForosh:" + moshtaryGharardadccSazmanForosh);
                 Log.d("shared.put","CcMarkazForosh:" + foroshandehMamorPakhshModel.getCcMarkazForosh());
                 Log.d("shared.put","CcSazmanForosh:" + foroshandehMamorPakhshModel.getCcSazmanForosh());
 

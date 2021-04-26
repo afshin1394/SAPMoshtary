@@ -207,7 +207,7 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
                     Toast.makeText(context, "دیتا ذخیره شد"  , Toast.LENGTH_SHORT).show();
                     getDatabase=0;
                 }
-                throw new RuntimeException("Test Crash");
+               // throw new RuntimeException("Test Crash");
             }
         });
 

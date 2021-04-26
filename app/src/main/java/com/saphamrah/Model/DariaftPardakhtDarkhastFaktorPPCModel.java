@@ -36,6 +36,8 @@ public class DariaftPardakhtDarkhastFaktorPPCModel
     private static final String COLUMN_ExtraProp_ccDarkhastFaktorServer = "ExtraProp_ccDarkhastFaktorServer";
     private static final String COLUMN_ccMarkazForosh = "ccMarkazForosh";
     private static final String COLUMN_ccMarkazSazmanForoshSakhtarForosh = "ccMarkazSazmanForoshSakhtarForosh";
+    private static final String COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty = "ExtraProp_ccDaryaftPardakhtCheckBargashty";
+    private static final String COLUMN_IsTaeedShodeh = "IsTaeedShodeh";
 
 
     public static String TableName() {
@@ -125,6 +127,12 @@ public class DariaftPardakhtDarkhastFaktorPPCModel
     public static String COLUMN_ccMarkazSazmanForoshSakhtarForosh() {
         return COLUMN_ccMarkazSazmanForoshSakhtarForosh;
     }
+    public static String COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty() {
+        return COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty;
+    }
+    public static String COLUMN_IsTaeedShodeh() {
+        return COLUMN_IsTaeedShodeh;
+    }
 
 
 
@@ -184,6 +192,17 @@ public class DariaftPardakhtDarkhastFaktorPPCModel
     private int ExtraProp_CanDelete;
     private int ExtraProp_IsTajil;
     private long ExtraProp_ccDarkhastFaktorServer;
+    private int IsTaeedShodeh;
+
+    public long getExtraProp_ccDaryaftPardakhtCheckBargashty() {
+        return ExtraProp_ccDaryaftPardakhtCheckBargashty;
+    }
+
+    public void setExtraProp_ccDaryaftPardakhtCheckBargashty(long extraProp_ccDaryaftPardakhtCheckBargashty) {
+        ExtraProp_ccDaryaftPardakhtCheckBargashty = extraProp_ccDaryaftPardakhtCheckBargashty;
+    }
+
+    private long ExtraProp_ccDaryaftPardakhtCheckBargashty;
 
 
     public void setCcDariaftPardakhtDarkhastFaktor(int ccDariaftPardakhtDarkhastFaktor){
@@ -392,6 +411,13 @@ public class DariaftPardakhtDarkhastFaktorPPCModel
         ExtraProp_ccDarkhastFaktorServer = extraProp_ccDarkhastFaktorServer;
     }
 
+    public int getIsTaeedShodeh() {
+        return IsTaeedShodeh;
+    }
+
+    public void setIsTaeedShodeh(int isTaeedShodeh) {
+        this.IsTaeedShodeh = isTaeedShodeh;
+    }
 
     public JSONObject toJsonObject(int ccMarkazForosh, int ccMarkazAnbar, int ccMarkazSazmanForoshSakhtarForosh, int ccAfrad)
     {
@@ -404,6 +430,34 @@ public class DariaftPardakhtDarkhastFaktorPPCModel
             jsonObject.put("Mablagh" , Mablagh);
             jsonObject.put("CodeVazeiat" , CodeVazeiat);
             jsonObject.put("ZamaneTakhsiseFaktor" , ZamaneTakhsiseFaktor);
+            jsonObject.put("ShomarehFaktor" , 0);
+            jsonObject.put("SalFaktor" , 0);
+            jsonObject.put("ccUser" , ccAfrad);
+            jsonObject.put("Taeed" , 0);
+            jsonObject.put("ccdpdf_PPC" , ccDariaftPardakhtDarkhastFaktor);
+            jsonObject.put("IsForTasviehTakhir" , IsForTasviehTakhir);
+            jsonObject.put("ccMarkazAnbar" , ccMarkazAnbar);
+            jsonObject.put("ccMarkazForosh" , ccMarkazForosh);
+            jsonObject.put("ccMarkazSazmanForoshSakhtarForosh" , this.ccMarkazSazmanForoshSakhtarForosh==0 ? ccMarkazSazmanForoshSakhtarForosh : this.ccMarkazSazmanForoshSakhtarForosh);
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    public JSONObject toJsonObjectCheckBargashty(int ccMarkazForosh, int ccMarkazAnbar, int ccMarkazSazmanForoshSakhtarForosh, int ccAfrad)
+    {
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            jsonObject.put("ccDariaftPardakhtBargashty " , ccDariaftPardakhtDarkhastFaktor);
+            jsonObject.put("ccDariaftPardakht_CheckBargashty" , ExtraProp_ccDaryaftPardakhtCheckBargashty);
+            jsonObject.put("ccDariaftPardakhtPPC" , ccDariaftPardakht);
+            jsonObject.put("Mablagh" , Mablagh);
+            jsonObject.put("CodeVazeiat" , CodeVazeiat);
+            jsonObject.put("ZamaneTakhsise" , ZamaneTakhsiseFaktor);
             jsonObject.put("ShomarehFaktor" , 0);
             jsonObject.put("SalFaktor" , 0);
             jsonObject.put("ccUser" , ccAfrad);
@@ -450,6 +504,8 @@ public class DariaftPardakhtDarkhastFaktorPPCModel
                 ", Tabdil_NaghdBeFish=" + Tabdil_NaghdBeFish +
                 ", NaghlAzGhabl=" + NaghlAzGhabl +
                 ", IsForTasviehTakhir=" + IsForTasviehTakhir +
+                ", ExtraProp_ccDaryaftPardakhtCheckBargashty=" + ExtraProp_ccDaryaftPardakhtCheckBargashty +
+                ", IsTaeedShodeh=" + IsTaeedShodeh +
                 '}';
     }
 }

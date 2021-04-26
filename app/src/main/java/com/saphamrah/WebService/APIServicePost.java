@@ -21,9 +21,11 @@ import com.saphamrah.WebService.ServiceResponse.CreateMoshtaryWithMadarekResult;
 import com.saphamrah.WebService.ServiceResponse.CreateShomarehHesabResult;
 import com.saphamrah.WebService.ServiceResponse.CreateVisitMoshtaryResult;
 import com.saphamrah.WebService.ServiceResponse.GetUpdateMoshtaryResult;
+import com.saphamrah.WebService.ServiceResponse.MarjoeeKardexResult;
 import com.saphamrah.WebService.ServiceResponse.UpdateDarkhastFaktorWithJSONResult;
 import com.saphamrah.WebService.ServiceResponse.UpdateNotificationMessageBoxResult;
 import com.saphamrah.WebService.ServiceResponse.UpdateStatusMessageBoxResult;
+import com.saphamrah.WebService.ServiceResponse.VarizBeBankResult;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -59,6 +61,12 @@ public interface APIServicePost
     @FormUrlEncoded
     @POST("Api/ApiSales/CreateDariaftPardakhtPPCJSON")
     Call<CreateDariaftPardakhtPPCJSONResult> createDariaftPardakhtPPCJSON(@Field("") String jsonDariaftPardakht);
+    @FormUrlEncoded
+    @POST("Api/ApiSales/CreateDariaftPardakhtPPCBargashtyJSON")
+    Call<CreateDariaftPardakhtPPCJSONResult> createDariaftPardakhtPPCBargashtyJSON(@Field("") String jsonDariaftPardakht);
+    @FormUrlEncoded
+    @POST("Api/ApiSales/CreateDariaftPardakhtPPCPishDariaftJSON")
+    Call<CreateDariaftPardakhtPPCJSONResult> createDariaftPardakhtPPCPishDariaftJSON(@Field("") String jsonDariaftPardakht);
 
 
     //D
@@ -154,5 +162,14 @@ public interface APIServicePost
     @FormUrlEncoded
     @POST("Api/ApiSales/UpdateMoshtaryJSON")
     Call<GetUpdateMoshtaryResult> getUpdateMoshtaryResult(@Field("") String data);
+    // v
+
+    @FormUrlEncoded
+    @POST("Api/ApiSales/UpdateVarizBeBankJSON")
+    Call<VarizBeBankResult> varizVajehNaghdBeBank(@Field("") String jsonStringData);
+
+    @FormUrlEncoded
+    @POST("Api/ApiSales/CreateKardexJSON ")
+    Call<MarjoeeKardexResult> marjoeeKardex(@Field("") String jsonStringData);
 
 }

@@ -87,7 +87,7 @@ public class JayezehEntekhabiMojodiDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query = "select * , sum(m.Tedad) sumTedad from JayezehEntekhabi j inner join KalaMojodi m \n" +
+            String query = "select * , sum(m.Tedad) sumTedad, (select ) from JayezehEntekhabi j inner join KalaMojodi m \n" +
                     " on j.ccKalaCode = m.ccKalaCode and j.ccJayezeh = " + ccJayezeh + " and j.ccJayezehSatr = " + ccJayezehSatr +
                     " group by  m.ccKalaCode, m.ShomarehBach, m.ccTaminKonandeh, m.GheymatForosh, m.GheymatMasrafKonandeh having sum(m.Tedad) > 0";
             Cursor cursor = db.rawQuery(query , null);

@@ -1,10 +1,12 @@
 package com.saphamrah.MVP.Presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.saphamrah.BaseMVP.RequestCustomerListMVP;
 import com.saphamrah.MVP.Model.RequestCustomerListModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
+import com.saphamrah.Model.MoshtaryGharardadModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -35,6 +37,18 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
     public void onConfigurationChanged(RequestCustomerListMVP.RequiredViewOps view)
     {
         this.mView = new WeakReference<>(view);
+    }
+
+    @Override
+    public void onUpdateMoshtaryMorajehShodehRooz() {
+        mView.get().closeLoading();
+    }
+
+    @Override
+    public void onFailUpdateMoshtaryMorajehShodehRooz() {
+
+        mView.get().closeLoading();
+        mView.get().showErrorAlert(R.string.errorOperationUpdateMoshtaryMorajehShodehRooz , Constants.FAILED_MESSAGE(), false);
     }
 
     @Override
@@ -95,15 +109,15 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
     }
 
     @Override
-    public void checkDuplicateRequestForCustomer(MoshtaryModel moshtaryModel)
+    public void checkDuplicateRequestForCustomer(MoshtaryModel moshtaryModel,MoshtaryGharardadModel moshtaryGharardadModel)
     {
-        mModel.checkDuplicateRequestForCustomer(moshtaryModel);
+        mModel.checkDuplicateRequestForCustomer(moshtaryModel,moshtaryGharardadModel);
     }
 
     @Override
-    public void checkSelectedCustomer(int ccMoshtary)
+    public void checkSelectedCustomer(int ccMoshtary,int ccSazmanForoshGharardad,int ccMoshtaryGharardad)
     {
-        mModel.checkSelectedCustomer(ccMoshtary);
+        mModel.checkSelectedCustomer(ccMoshtary,ccMoshtaryGharardad,ccSazmanForoshGharardad);
     }
 
 
@@ -133,6 +147,11 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
     public void onDestroy(boolean isChangingConfig)
     {
 
+    }
+
+    @Override
+    public void updateMoshtaryMorajehShodehRooz() {
+        mModel.updateMoshtaryMorajehShodehRooz();
     }
 
 
@@ -169,7 +188,7 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
     }*/
 
     @Override
-    public void onSetRequestInfoShared(int ccMoshtary, boolean showBarkhordAvalie, boolean showMojodiGiri)
+    public void onSetRequestInfoShared(int ccMoshtary,int ccSazmanForosh, boolean showBarkhordAvalie, boolean showMojodiGiri)
     {
         mView.get().closeLoading();
         if (showBarkhordAvalie)
@@ -178,11 +197,11 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
         }
         else if (showMojodiGiri)
         {
-            mView.get().showMojoodiGiriActivity(ccMoshtary);
+            mView.get().showMojoodiGiriActivity(ccMoshtary,ccSazmanForosh);
         }
         else
         {
-            mView.get().showDarkhastKalaActivity(ccMoshtary);
+            mView.get().showDarkhastKalaActivity(ccMoshtary,ccSazmanForosh);
         }
     }
 
@@ -194,10 +213,10 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
     }
 
     @Override
-    public void showAlertDuplicateRequestForCustomer(MoshtaryModel moshtaryModel)
+    public void showAlertDuplicateRequestForCustomer(MoshtaryModel moshtaryModel,MoshtaryGharardadModel moshtaryGharardadModel)
     {
         mView.get().closeLoading();
-        mView.get().showAlertDuplicateRequestForCustomer(moshtaryModel);
+        mView.get().showAlertDuplicateRequestForCustomer(moshtaryModel,moshtaryGharardadModel);
     }
 
     @Override
@@ -227,9 +246,9 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
     }
 
     @Override
-    public void onGetCustomers(ArrayList<MoshtaryModel> moshtaryModels , ArrayList<MoshtaryAddressModel> moshtaryAddressModels , ArrayList<Integer> arrayListNoeMorajeh , boolean canUpdateCustomer)
+    public void onGetCustomers(ArrayList<MoshtaryModel> moshtaryModels , ArrayList<MoshtaryAddressModel> moshtaryAddressModels , ArrayList<Integer> arrayListNoeMorajeh, ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels , boolean canUpdateCustomer)
     {
-        mView.get().onGetCustomers(moshtaryModels , moshtaryAddressModels , arrayListNoeMorajeh , canUpdateCustomer);
+        mView.get().onGetCustomers(moshtaryModels , moshtaryAddressModels , arrayListNoeMorajeh , moshtaryGharardadModels, canUpdateCustomer);
     }
 
 

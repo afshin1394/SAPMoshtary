@@ -4,8 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.saphamrah.Model.BargashtyModel;
+import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
@@ -70,7 +72,9 @@ public class BargashtyDAO
             BargashtyModel.COLUMN_MablaghMandeh(),
             BargashtyModel.COLUMN_TarikhSanadWithSlash(),
             BargashtyModel.COLUMN_ZamaneSabt(),
-            BargashtyModel.COLUMN_ZamaneSabtWithSlash()
+            BargashtyModel.COLUMN_ZamaneSabtWithSlash(),
+            BargashtyModel.COLUMN_ccDarajeh(),
+            BargashtyModel.COLUMN_ccNoeMoshtary()
         };
     }
 
@@ -209,7 +213,28 @@ public class BargashtyDAO
         }
     }
 
-
+    public boolean updateMandehBargashti(long ccDarkhastFaktor)
+    {
+        try
+        {
+            String query =" UPDATE Bargashty "
+                    +" SET MablaghMandeh = Mablagh -  ifnull((SELECT sum(Mablagh) FROM DariaftPardakhtDarkhastFaktorPPC WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + "),0)  "
+                    +" Where ccDariaftPardakht = " + ccDarkhastFaktor ;
+            Log.d("mablaghMandeh" , "query : " + query);
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "BargashtiDAO" , "" , "updateMandehDarkhastFaktor" , "");
+            return false;
+        }
+    }
     public ArrayList<BargashtyModel> getAll()
     {
         ArrayList<BargashtyModel> bargashtyModels = new ArrayList<>();
@@ -237,7 +262,32 @@ public class BargashtyDAO
         return bargashtyModels;
     }
 
-
+    public BargashtyModel getByccDarkhastFaktor(long ccDarkhastFaktor)
+    {
+        BargashtyModel bargashtyModel = new BargashtyModel();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(BargashtyModel.TableName(), allColumns(), BargashtyModel.COLUMN_ccDariaftPardakht() + " = " + ccDarkhastFaktor, null, null, null, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    bargashtyModel = cursorToModel(cursor).get(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "getByccDarkhastFaktor" , "");
+        }
+        return bargashtyModel;
+    }
     public ArrayList<BargashtyModel> getAllWithSum()
     {
         ArrayList<BargashtyModel> bargashtyModels = new ArrayList<>();
@@ -495,6 +545,64 @@ public class BargashtyDAO
         return bargashtyModels;
     }
 
+    public ArrayList<BargashtyModel> getBargashtyByShomarehSanad(String shomarehSanad)
+    {
+        ArrayList<BargashtyModel> bargashtyModels = new ArrayList<>();
+        try
+        {
+            String query = "SELECT * FROM Bargashty WHERE ShomarehSanad = " + shomarehSanad;
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    bargashtyModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , BargashtyModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "BargashtyDAO" , "" , "getModatBargashtyByccForoshandeh" , "");
+        }
+        return bargashtyModels;
+    }
+
+    public String getNameMoshtaryByccMoshtary(int ccMoshtary)
+    {
+        String nameMoshtary = "";
+        try
+        {
+            String query = " Select NameMoshtary "
+                    + "	FROM Bargashty Where ccMoshtary=" + ccMoshtary +"" ;
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    nameMoshtary = cursor.getString(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , BargashtyModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "BargashtyDAO" , "" , "getSumBargashtyByccMoshtary" , "");
+        }
+        return nameMoshtary;
+    }
+
     public boolean deleteAll()
     {
         try
@@ -558,6 +666,8 @@ public class BargashtyDAO
         contentValues.put(BargashtyModel.COLUMN_TarikhSanadWithSlash() , bargashtyModel.getTarikhSanadWithSlash());
         contentValues.put(BargashtyModel.COLUMN_ZamaneSabt() , bargashtyModel.getZamaneSabt());
         contentValues.put(BargashtyModel.COLUMN_ZamaneSabtWithSlash() , bargashtyModel.getZamaneSabtWithSlash());
+        contentValues.put(BargashtyModel.COLUMN_ccNoeMoshtary() , bargashtyModel.getCcNoeMoshtary());
+        contentValues.put(BargashtyModel.COLUMN_ccDarajeh() , bargashtyModel.getCcDarajeh());
 
         return contentValues;
     }
@@ -593,6 +703,8 @@ public class BargashtyDAO
             bargashtyModel.setTarikhSanadWithSlash(cursor.getString(cursor.getColumnIndex(BargashtyModel.COLUMN_TarikhSanadWithSlash())));
             bargashtyModel.setZamaneSabt(cursor.getString(cursor.getColumnIndex(BargashtyModel.COLUMN_ZamaneSabt())));
             bargashtyModel.setZamaneSabtWithSlash(cursor.getString(cursor.getColumnIndex(BargashtyModel.COLUMN_ZamaneSabtWithSlash())));
+            bargashtyModel.setCcNoeMoshtary(cursor.getInt(cursor.getColumnIndex(BargashtyModel.COLUMN_ccNoeMoshtary())));
+            bargashtyModel.setCcDarajeh(cursor.getInt(cursor.getColumnIndex(BargashtyModel.COLUMN_ccDarajeh())));
 
             bargashtyModels.add(bargashtyModel);
             cursor.moveToNext();

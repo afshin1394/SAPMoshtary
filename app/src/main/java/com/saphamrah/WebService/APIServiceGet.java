@@ -63,6 +63,12 @@ public interface APIServiceGet
                                                         @Query("ccForoshandeh") String ccForoshandeh);
 
 
+    @GET("Api/apitreasury/GetConfigNoeVosolMojazefaktor")
+    Call<GetConfigNoeVosolMojazefaktorResult> getConfigNoeVosolMojazefaktor();
+
+    @GET("Api/apitreasury/GetConfigNoeVosolMojazeMoshtary")
+    Call<GetConfigNoeVosolMojazeMoshtaryResult> getConfigNoeVosolMojazeMoshtary(@Query("ccNoeMoshtarys")  String ccNoeMoshtarys);
+
     //D
     @GET("Api/ApiSales/GetDarkhastFaktor")
     Call<GetDarkhastFaktorResult> getDarkhastFaktor(@Query("ccAfrad") String ccAfrad , @Query("ccMoshtarys") String ccMoshtarys);
@@ -92,6 +98,10 @@ public interface APIServiceGet
 
     @GET("Api/ApiSales/GetForoshandehEtebar")
     Call<GetEtebarForoshandehResult> getEtebarForoshandeh(@Query("ccForoshandehs") String ccForoshandehs);
+
+    @GET("Api/ApiSales/GetElamMarjoeeForoshandeh_Pakhsh")
+    Call<GetElamMarjoeeForoshandehResult> getElamMarjoeeForoshandeh(@Query("ccDarkhastFaktors") String ccDarkhastFaktors);
+
 
     //F
     @GET("Api/ApiSales/GetForoshandehAmoozeshi_DeviceNumber")
@@ -209,7 +219,8 @@ public interface APIServiceGet
 
     //P
     @GET("Api/ApiGlobal/GetPosShomarehHesab")
-    Call<GetPosShomarehHesabResult> getPosShomarehHesab(@Query("ccPosShomarehHesab") String ccPosShomarehHesab);
+    //Call<GetPosShomarehHesabResult> getPosShomarehHesab(@Query("ccPosShomarehHesab") String ccPosShomarehHesab);
+    Call<GetPosShomarehHesabResult> getPosShomarehHesab(@Query("ccPosShomarehHesab") String ccPosShomarehHesab , @Query("ccMarkazAnbar") String ccMarkazAnbar);
 
     @GET("Api/ApiAmargar/GetPorseshnamehTozihat")
     Call<GetPorseshnamehTozihatResult> getPorseshnamehTozihat();
@@ -381,6 +392,10 @@ public interface APIServiceGet
     @GET("Api/apisales/GetMoshtaryGharardad")
     Call<GetAllMoshtaryGharardadResult> getMoshtaryGharardad(@Query("ccForoshandeh") String ccForoshandeh);
 
+    @GET("Api/ApiSales/GetMarjoeeMamorPakhsh_Pakhsh")
+    Call<MarjoeeMamorPakhshResult> getMarjoeeMamorPakhsh(@Query("ccMoshtarys") String ccMoshtarys);
+
+
 
     //N
     @GET("Api/ApiGlobal/GetAllNoeHesab")
@@ -499,5 +514,8 @@ public interface APIServiceGet
     @GET("API/apisales/GetDarkhastFaktorKalaPishnahadi")
     Call<DarkhastFaktorKalaPishnahadiResult> getDarkhastFaktorKalaPishnahadiResult(@Query("ccForoshandeh") String ccForoshandeh , @Query("ccmoshtarys") String ccmoshtarys);
 
+    /// V
+    @GET("Api/apiTreasury/GetVosolNaghdRooz")
+    Call<GetVarizBeBankResult> getVosolNaghdRooz(@Query("ccAfrad") int ccAfrad);
 
 }

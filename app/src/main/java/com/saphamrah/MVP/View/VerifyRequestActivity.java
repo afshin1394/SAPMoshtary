@@ -412,7 +412,6 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
             nameNoeVosol = childParameterModelsVosols.get(childParameterModelsVosols.size()-1).getTxt();
             modatRoozRaasgiri = modatVosol;
             alertDialog = customLoadingDialog.showLoadingDialog(VerifyRequestActivity.this);
-            //mPresenter.getModatRoozRaasgiri(ccChildParameterNoeVosol);
             mPresenter.getModatRoozRaasgiri(noeVosol);
         }
     }

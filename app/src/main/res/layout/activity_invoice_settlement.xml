@@ -30,33 +30,33 @@
     </RelativeLayout>
 
 
-    <ScrollView
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true"
+    android:layout_below="@+id/layTitle"
+    android:layout_above="@+id/layBottom">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/layTitle"
-        android:layout_above="@+id/layBottom">
+        android:layout_height="wrap_content"
+        >
+
         <LinearLayout
+            android:id="@+id/lay_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            fab:layout_constraintLeft_toLeftOf="parent"
+            fab:layout_constraintRight_toRightOf="parent"
+            fab:layout_constraintTop_toTopOf="parent"
             android:orientation="vertical">
 
-            <!--request detail-->
-            <!--           <TextView
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:text="@string/settlementDetail"
-                           android:textSize="@dimen/FontSize16"
-                           android:textColor="@color/colorTextPrimary"
-                           android:gravity="right|center_vertical"
-                           android:background="@color/colorListHeaderBackground"
-                           android:paddingBottom="20dp"
-                           android:paddingTop="20dp"
-                           android:paddingRight="10dp"/>-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <com.saphamrah.CustomView.CustomTextInputLayout
+                    android:id="@+id/txtInputLayoutInvoiceCode"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -84,6 +84,7 @@
                         android:layout_weight="1" />
                 </com.saphamrah.CustomView.CustomTextInputLayout>
                 <com.saphamrah.CustomView.CustomTextInputLayout
+                    android:id="@+id/editTxtNoeVosol"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -159,18 +160,209 @@
                 </com.saphamrah.CustomView.CustomTextInputLayout>
             </LinearLayout>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lay_tajil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            fab:layout_constraintLeft_toLeftOf="parent"
+            fab:layout_constraintRight_toRightOf="parent"
+            fab:layout_constraintTop_toBottomOf="@+id/lay_details"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    >
+
+
+                    <com.saphamrah.CustomView.CustomTextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layoutDirection="rtl"
+                        android:textDirection="rtl"
+                        fab:layout_constraintLeft_toLeftOf="parent"
+                        fab:layout_constraintRight_toRightOf="parent"
+                        fab:layout_constraintTop_toTopOf="parent"
+                        android:theme="@style/TextInputLayoutTheme">
+
+                        <EditText
+                            android:id="@+id/edt_naghdi_tajil"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:hint="@string/naghdi_tajil"
+                            android:inputType="none"
+                            android:maxLines="1"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textColorHint="@color/colorDivider"
+                            android:textSize="@dimen/FontSize16" />
+                    </com.saphamrah.CustomView.CustomTextInputLayout>
+
+
+
+
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <com.saphamrah.CustomView.CustomTextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layoutDirection="rtl"
+                        android:textDirection="rtl"
+                        fab:layout_constraintLeft_toLeftOf="parent"
+                        fab:layout_constraintRight_toRightOf="parent"
+                        fab:layout_constraintTop_toTopOf="parent"
+                        android:theme="@style/TextInputLayoutTheme">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/edt_mablagh_pas_az_kasr_naghd_tajil"
+                            android:hint="@string/pas_az_kasr"
+                            android:textColorHint="@color/colorDivider"
+                            android:textSize="@dimen/FontSize16"
+                            android:textColor="@color/colorTextPrimary"
+                            android:maxLines="1"
+                            android:inputType="none"
+                            android:editable="false"/>
+                    </com.saphamrah.CustomView.CustomTextInputLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/lay_naghd">
+
+
+                    <com.saphamrah.CustomView.CustomTextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layoutDirection="rtl"
+                        android:textDirection="rtl"
+                        fab:layout_constraintLeft_toLeftOf="parent"
+                        fab:layout_constraintRight_toRightOf="parent"
+                        fab:layout_constraintTop_toTopOf="parent"
+                        android:theme="@style/TextInputLayoutTheme">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/edt_check_tajil"
+                            android:hint="@string/check_tajil"
+                            android:textColorHint="@color/colorDivider"
+                            android:textSize="@dimen/FontSize16"
+                            android:textColor="@color/colorTextPrimary"
+                            android:maxLines="1"
+                            android:inputType="none"
+                            android:editable="false"/>
+                    </com.saphamrah.CustomView.CustomTextInputLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <com.saphamrah.CustomView.CustomTextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layoutDirection="rtl"
+                        android:textDirection="rtl"
+                        fab:layout_constraintLeft_toLeftOf="parent"
+                        fab:layout_constraintRight_toRightOf="parent"
+                        fab:layout_constraintTop_toTopOf="parent"
+                        android:theme="@style/TextInputLayoutTheme">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/edt_mablagh_pas_az_kasr_check_tajil"
+                            android:hint="@string/pas_az_kasr"
+                            android:textColorHint="@color/colorDivider"
+                            android:textSize="@dimen/FontSize16"
+                            android:textColor="@color/colorTextPrimary"
+                            android:maxLines="1"
+                            android:inputType="none"
+                            android:editable="false"/>
+                    </com.saphamrah.CustomView.CustomTextInputLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/layAddVosol"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:visibility="gone"
+                fab:layout_constraintLeft_toLeftOf="parent"
+                fab:layout_constraintRight_toRightOf="parent"
+                fab:layout_constraintTop_toBottomOf="@+id/lay_tajil"
                 app:cardCornerRadius="@dimen/altdlgCorner">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:id="@+id/layAddVosol"
-                    android:visibility="gone"
+
                     android:paddingTop="15dp">
                     <com.saphamrah.CustomView.CustomTextInputLayout
                         android:layout_width="match_parent"
@@ -221,7 +413,8 @@
                                 android:textSize="@dimen/FontSize16"
                                 android:textColor="@color/colorTextPrimary"
                                 android:inputType="number"
-                                android:maxLines="1" />
+                                android:maxLines="1"
+                                />
                         </com.saphamrah.CustomView.CustomTextInputLayout>
                     </LinearLayout>
 
@@ -347,7 +540,8 @@
                                 android:textSize="@dimen/FontSize16"
                                 android:textColor="@color/colorTextPrimary"
                                 android:inputType="number"
-                                android:maxLines="1" />
+                                android:maxLines="1"
+                                android:maxLength="18"/>
                         </com.saphamrah.CustomView.CustomTextInputLayout>
                     </LinearLayout>
 
@@ -401,7 +595,8 @@
                                 android:textSize="@dimen/FontSize16"
                                 android:textColor="@color/colorTextPrimary"
                                 android:inputType="none"
-                                android:maxLines="1" />
+                                android:maxLines="1"
+                                android:maxLength="18"/>
                         </com.saphamrah.CustomView.CustomTextInputLayout>
                     </LinearLayout>
 
@@ -528,7 +723,8 @@
                                 android:textSize="@dimen/FontSize16"
                                 android:textColor="@color/colorTextPrimary"
                                 android:inputType="number"
-                                android:maxLines="1" />
+                                android:maxLines="1"
+                                android:maxLength="18"/>
                         </com.saphamrah.CustomView.CustomTextInputLayout>
                     </LinearLayout>
 
@@ -618,7 +814,7 @@
                             <ImageView
                                 android:layout_width="42dp"
                                 android:layout_height="42dp"
-														 
+
                                 android:id="@+id/imgShowInputCheck"
                                 android:src="@drawable/ic_smartphone_manual"
                                 android:layout_gravity="center_vertical"
@@ -754,7 +950,8 @@
                                 android:textSize="@dimen/FontSize16"
                                 android:textColor="@color/colorTextPrimary"
                                 android:inputType="number"
-                                android:maxLines="1" />
+                                android:maxLines="1"
+                                android:maxLength="18"/>
                         </com.saphamrah.CustomView.CustomTextInputLayout>
                     </LinearLayout>
 
@@ -801,18 +998,28 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/recyclerView"
-                android:scrollbars="vertical"
-                android:layoutDirection="rtl"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp">
-            </androidx.recyclerview.widget.RecyclerView>
 
-        </LinearLayout>
-    </ScrollView>
+
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            fab:layout_constraintLeft_toLeftOf="parent"
+            fab:layout_constraintRight_toRightOf="parent"
+            fab:layout_constraintTop_toBottomOf="@+id/layAddVosol"
+            fab:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/recyclerView"
+            android:scrollbars="vertical"
+            android:layoutDirection="rtl"
+            android:layout_marginTop="20dp"
+            >
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
+
 
     <com.github.clans.fab.FloatingActionMenu
         android:layout_width="wrap_content"
@@ -1054,5 +1261,7 @@
                 android:background="@android:color/transparent"/>
         </LinearLayout>
     </LinearLayout>
+
+
 
 </RelativeLayout>

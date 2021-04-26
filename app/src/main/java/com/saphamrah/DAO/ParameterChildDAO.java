@@ -291,14 +291,14 @@ public class ParameterChildDAO
         return txt;
     }
 
-    public ParameterChildModel getByParameterNameAndValue(String parameterName , String value)
+
+
+    public ParameterChildModel getByParameterTxtAndValue(String txt , String value)
     {
         ParameterChildModel parameterChildModel = new ParameterChildModel();
-        String query = "select * from " +
-                ParameterChildModel.TableName() + " inner join " + ParameterModel.TableName() +
-                " on " + ParameterModel.TableName() + "." + ParameterChildModel.COLUMN_ccParameter() + " = " + ParameterChildModel.TableName() + "." + ParameterChildModel.COLUMN_ccParameter() +
-                " where " + ParameterModel.TableName() + "." + ParameterModel.COLUMN_Name() + " = '" + parameterName +
-                "' and " + ParameterChildModel.TableName() + "." + ParameterChildModel.COLUMN_Value() + " = '" + value + "' collate NOCASE";
+        String query = "select * from  ParameterChild" +
+                " where txt  = '" + txt + "' AND Value = '" + value + "'" ;
+
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();

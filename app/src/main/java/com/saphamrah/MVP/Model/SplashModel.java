@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.SplashMVP;
 import com.saphamrah.DAO.EmailLogPPCDAO;
 import com.saphamrah.DAO.ForoshandehAmoozeshiDeviceNumberDAO;
@@ -32,6 +33,7 @@ import com.saphamrah.Network.RxNetwork.RxCallback;
 import com.saphamrah.Network.RxNetwork.RxHttpRequest;
 import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.Authentication;
+import com.saphamrah.PubFunc.DeviceInfo;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -612,7 +614,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
                                         foroshandehMamorPakhshDAO.updateIsSelect(foroshandehMamorPakhshDAO.getOne().getCcForoshandeh());
                                     mPresenter.onGetForoshandehMamorPakhsh(true, false);
                                 } else {
-                                    mPresenter.onGetEmptyForoshandehMamorPakhsh(usingIMEI);
+                                    mPresenter.onGetEmptyForoshandehMamorPakhsh(deviceInfo.getIMEI(BaseApplication.getContext()));
                                 }
                             } catch (Exception exception) {
                                 setLogToDB(exception.getMessage(), SplashModel.class.getSimpleName(), "", "getForoshandehMamorPakhsh", "onResponse");

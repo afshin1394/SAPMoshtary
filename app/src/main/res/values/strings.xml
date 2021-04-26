@@ -967,6 +967,7 @@
     <string name="dateFish">تاریخ فیش</string>
     <string name="ShomarehHesab">شماره حساب</string>
     <string name="errorFishBanki">" شماره فیش را وارد نمایید"</string>
+    <string name="errorFishMablagh">" مبلغ را انتخاب نمایید"</string>
     <string name="errorDateBiggerTodat">تاریخ نمی تواند از تاریخ روز بزرگتر باشد</string>
     <string name="errorDifferenceDatesWithToday">تاریخ وارد شده مجاز نمی باشد</string>
     <string name="errorDateSet">تاریخ را انتخاب نمایید</string>
@@ -1009,9 +1010,34 @@
     <string name="customerListWithMap">لیست مشتری براساس مسافت</string>
     <string name="moshtaryListMapActivityTitle">لیست مشتری براساس مسافت</string>
     <string name="addToCurrentDayCustomer">اضافه به مشتری مسیر روز</string>
-
-
-
-
-
+    <string name="check_rooz">چک روز</string>
+    <string name="takhfifNaghdi">تخفیف نقدی</string>
+    <string name="mablaghPasAzKasr">مبلغ پس از کسر</string>
+    <string name="naghdi_tajil">تعجیل وصول نقد (ریال)</string>
+    <string name="check_tajil">تعجیل وصول چک روز (ریال)</string>
+    <string name="pas_az_kasr">مانده پس از کسر (ریال)</string>
+    <string name="successUpdate">بروزرسانی با موفقیت انجام شد</string>
+    <string name="failUpdate">بروزرسانی با موفقیت انجام نشد</string>
+    <string name="warningUpadateVarizBeBank">در صورت عدم ارسال واریزی ها ، تمامی آنها حذف خواهد شد!</string>
+    <string name="shobe">شعبه</string>
+    <string name="haveShomarehSanadForUpdate">شماره سند ورودی قبلا استفاده شده است</string>
+    <string name="canNotAddMoney">"مانده وصول صفر می باشد "</string>
+    <string name="errorDuplicatedVarizBeBank">"این فیش بانکی قبلا ارسال شده است"</string>
+    <string name="errorTarikhVarizBeBank">"امکان ارسال فیش به علت عدم ثبت تاریخ روز وجود ندارد"</string>
+    <string name="exit">برای خروج یک بار دیگر کلیک کنید</string>
+    <string name="isTaeedShode">شما یک وصول تایید نشده دارید لطفا با واحد وصول هماهنگ نمایید</string>
+    <string name="canNotDelete">شما نمیتوانید این گزینه را حذف نمایید</string>
+    <string name="btnOk">متوجه شدم</string>
+    <string name="tasvieKamel">تسویه کامل</string>
+    <string name="mandehDar">مانده دار</string>
+    <string name="helpVosolColor">راهنمای رنگ وصول</string>
+    <string name="checkDiffDayForSend">شما امکان ارسال وصولی های روز گذشته را ندارید</string>
+    <string name="hashiehSoud">حاشیه سود</string>
+    <string name="takhfifHajmi">تخفیف حجمی</string>
+    <string name="hashiehSoudKala">حاشیه سود کالا</string>
+    <string name="jamSoudMaghazeh">جمع سود مغازه</string>
+    <string name="darsadSoudMaghazeh">درصد سود مغازه</string>
+    <string name="errorOperationCheckBarghashti">"خطا در ارسال اطلاعات "</string>
+    <string name="errorOperationCheckBarghashtiResponse">"خطا در دریافت اطلاعات از سرور "</string>
+    <string name="errorOperationUpdateMoshtaryMorajehShodehRooz">خطا در دریافت مشتری مراجعه شده در روز</string>
 </resources>

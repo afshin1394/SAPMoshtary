@@ -59,7 +59,7 @@ public class PosShomarehHesabDAO
         };
     }
 
-    public void fetchPosShomareHesab(final Context context, final String activityNameForLog,final String ccPosShomarehHesab, final RetrofitResponse retrofitResponse)
+    public void fetchPosShomareHesab(final Context context, final String activityNameForLog,final String ccPosShomarehHesab , String ccMarkazAnbar, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
@@ -72,7 +72,7 @@ public class PosShomarehHesabDAO
         else
         {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-            Call<GetPosShomarehHesabResult> call = apiServiceGet.getPosShomarehHesab(ccPosShomarehHesab);
+            Call<GetPosShomarehHesabResult> call = apiServiceGet.getPosShomarehHesab(ccPosShomarehHesab,ccMarkazAnbar);
             call.enqueue(new Callback<GetPosShomarehHesabResult>() {
                 @Override
                 public void onResponse(Call<GetPosShomarehHesabResult> call, Response<GetPosShomarehHesabResult> response)

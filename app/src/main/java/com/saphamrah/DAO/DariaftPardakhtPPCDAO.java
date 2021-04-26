@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
+import com.saphamrah.Model.ForoshandehMamorPakhshModel;
+import com.saphamrah.Model.KardexSatrModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
@@ -86,7 +88,9 @@ public class DariaftPardakhtPPCDAO
             DariaftPardakhtPPCModel.COLUMN_ccAfradErsalKonandeh(),
             DariaftPardakhtPPCModel.COLUMN_IsCheckMoshtary(),
             DariaftPardakhtPPCModel.COLUMN_ccMarkazForosh(),
-            DariaftPardakhtPPCModel.COLUMN_ccMarkazSazmanForoshSakhtarForosh()
+            DariaftPardakhtPPCModel.COLUMN_ccMarkazSazmanForoshSakhtarForosh(),
+            DariaftPardakhtPPCModel.COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty()
+
         };
     }
 
@@ -267,6 +271,63 @@ public class DariaftPardakhtPPCDAO
         return dariaftPardakhtPPCModels;
     }
 
+    public DariaftPardakhtPPCModel SetForInsert_DariaftPardakhtPPC(
+            int ccMarkazAnbar, String CodeNoeSanad, String NameNoeSanad, int ccShomarehHesab,
+            String SharhShomarehHesab,String NameSahebHesab, int ccBankSanad, String NameBankSanad,
+            String NameShobehSanad, String CodeShobehSanad, String ShomarehHesabSanad, int CodeNoeCheck,
+            String ShomarehSanad, String TarikhSanadShamsi, double Mablagh, double MablaghMandeh,
+            int ccMoshtary, int IsPishDariaft, long ccDarkhastFaktor, int IsDirkard, String TarikhSarResidMilady, int IsTajil, int CodeNoeVosol )
+    {
+
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(context);
+        ForoshandehMamorPakhshModel ForoshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
+
+        DariaftPardakhtPPCModel dariaftPardakhtPPC = new DariaftPardakhtPPCModel();
+
+        dariaftPardakhtPPC.setCcMarkazAnbar(ccMarkazAnbar);
+//        dariaftPardakhtPPC.setCodeNoeSanad(CodeNoeSanad);
+//        dariaftPardakhtPPC.setNameNoeSanad(NameNoeSanad);
+        dariaftPardakhtPPC.setCcShomarehHesab(ccShomarehHesab);
+        dariaftPardakhtPPC.setSharhShomarehHesab(SharhShomarehHesab);
+        dariaftPardakhtPPC.setCodeNoeVosol(Integer.parseInt(CodeNoeSanad));
+        // check shavad
+        dariaftPardakhtPPC.setZamaneSabt(String.valueOf(0));
+        dariaftPardakhtPPC.setNameSahebHesab(NameSahebHesab);
+        dariaftPardakhtPPC.setCcBankSanad(ccBankSanad);
+        dariaftPardakhtPPC.setNameBankSanad(NameBankSanad);
+        dariaftPardakhtPPC.setNameShobehSanad(NameShobehSanad);
+        dariaftPardakhtPPC.setCodeShobehSanad(CodeShobehSanad);
+        dariaftPardakhtPPC.setShomarehHesabSanad(ShomarehHesabSanad);
+        dariaftPardakhtPPC.setCcNoeHesabSanad(0);
+        dariaftPardakhtPPC.setNameNoeHesabSanad("");
+        dariaftPardakhtPPC.setCcShahrCheck(String.valueOf(0));
+        dariaftPardakhtPPC.setCodeNoeCheck(CodeNoeCheck);
+        dariaftPardakhtPPC.setNameNoeCheck("");
+        dariaftPardakhtPPC.setShomarehSanad(ShomarehSanad);
+        dariaftPardakhtPPC.setTarikhSanadShamsi(TarikhSanadShamsi);
+        dariaftPardakhtPPC.setTarikhSanad(TarikhSarResidMilady);
+        dariaftPardakhtPPC.setMablagh(Mablagh);
+        dariaftPardakhtPPC.setMablaghMandeh(MablaghMandeh);
+        dariaftPardakhtPPC.setCcDariaftPardakhtLink(0);
+//        dariaftPardakhtPPC.setccUser(mamorPakhsh.get(0).getCcAfrad());
+        dariaftPardakhtPPC.setCcKardex(0);
+        dariaftPardakhtPPC.setCodeVazeiat(0);
+//        dariaftPardakhtPPC.setPos(0);
+//        dariaftPardakhtPPC.setccvTafsily0(ccvTafsily0);
+        dariaftPardakhtPPC.setIsPishDariaft(IsPishDariaft);
+//        dariaftPardakhtPPC.setccLinkTakhirTajil(0);
+//        dariaftPardakhtPPC.setExtraProp_IsOld(0);
+//        dariaftPardakhtPPC.setccDarkhastFaktor(ccDarkhastFaktor);
+//        dariaftPardakhtPPC.setExtraProp_CodeNoeSanad(CodeNoeSanad);
+        dariaftPardakhtPPC.setExtraProp_IsDirkard(IsDirkard);
+        dariaftPardakhtPPC.setTabdil_NaghdBeFish(0);
+//        dariaftPardakhtPPC.setExtraProp_IsTajil(IsTajil);
+        dariaftPardakhtPPC.setCodeNoeVosol(CodeNoeVosol);
+        dariaftPardakhtPPC.setCcMoshtary(ccMoshtary);
+
+        return dariaftPardakhtPPC;
+    }
+
     public ArrayList<DariaftPardakhtPPCModel> getByccMoshtary(int ccMoshtary)
     {
         ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = new ArrayList<>();
@@ -274,6 +335,62 @@ public class DariaftPardakhtPPCDAO
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.query(DariaftPardakhtPPCModel.TableName(), allColumns(), DariaftPardakhtPPCModel.COLUMN_ccMoshtary() + " = " + ccMoshtary, null, null, null, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    dariaftPardakhtPPCModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DariaftPardakhtPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtPPCDAO" , "" , "getByccMoshtary" , "");
+        }
+        return dariaftPardakhtPPCModels;
+    }
+    public ArrayList<DariaftPardakhtPPCModel> getByccDarkhastFaktor(long ccDarkhastFaktor)
+    {
+        ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(DariaftPardakhtPPCModel.TableName(), allColumns(), DariaftPardakhtPPCModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor, null, null, null, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    dariaftPardakhtPPCModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DariaftPardakhtPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtPPCDAO" , "" , "getByccMoshtary" , "");
+        }
+        return dariaftPardakhtPPCModels;
+    }
+
+    public ArrayList<DariaftPardakhtPPCModel> getByccMoshtaryPishdariaft(long ccMoshtary)
+    {
+        ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = new ArrayList<>();
+        String query = "SELECT * FROM "+ DariaftPardakhtPPCModel.TableName() + " WHERE "+ DariaftPardakhtPPCModel.COLUMN_ccMoshtary() +" = " + ccMoshtary +" AND IsPishDariaft = " + Constants.FROM_PISH_DARYAFT + " ";
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+//            Cursor cursor = db.query(DariaftPardakhtPPCModel.TableName(), allColumns(),  + " = " + ccMoshtary + " AND IsPishDariaft = " + 1 , null, null, null, null);
+            Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)
@@ -378,6 +495,83 @@ public class DariaftPardakhtPPCDAO
         return dariaftPardakhtPPCs;
     }
 
+    public ArrayList<DariaftPardakhtPPCModel> getForSendToSqlByccDariaftPardakht(long ccDariaftPardakht)
+    {
+        ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCs = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(" SELECT * FROM DariaftPardakhtPPC dp "
+                    +" WHERE NaghlAzGhabl = 0 AND ExtraProp_IsSend = 0 AND ccDariaftPardakht> 0 AND ccDariaftPardakht= ? " +
+                    "			AND (SELECT Count(*) FROM DariaftPardakhtDarkhastFaktorPPC WHERE ccDariaftPardakht = dp.ccDariaftPardakht) >= 1 "
+                    + " ", new String[]{String.valueOf(ccDariaftPardakht)});
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    dariaftPardakhtPPCs = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DariaftPardakhtPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtPPCDAO" , "" , "getForSendToSqlByccDarkhastFaktor" , "");
+        }
+        return dariaftPardakhtPPCs;
+    }
+
+    public ArrayList<DariaftPardakhtPPCModel> getForSendToSqlByccMoshtary(int ccMoshtary)
+    {
+        ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCs = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(DariaftPardakhtPPCModel.TableName(), allColumns(), " ccMoshtary= " + ccMoshtary + " AND ExtraProp_IsSend = " + 0, null, null, null, null);
+
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    dariaftPardakhtPPCs = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DariaftPardakhtPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtPPCDAO" , "" , "getForSendToSqlByccDarkhastFaktor" , "");
+        }
+        return dariaftPardakhtPPCs;
+    }
+
+    public boolean haveTajilDarkhastFaktor(long ccDarkhastFaktor)
+    {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(DariaftPardakhtPPCModel.TableName(), allColumns(), " CodeNoeVosol = " + Constants.VALUE_SANAD_TAJIL + " AND ccDarkhastFaktor=? ",
+                    new String[]{String.valueOf(ccDarkhastFaktor)}, null, null,  null);
+            cursor.moveToFirst();
+            if(cursor.getCount() !=0)
+                return true;
+            cursor.close();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
 
     public boolean deleteAll()
     {
@@ -398,12 +592,69 @@ public class DariaftPardakhtPPCDAO
         }
     }
 
+    public boolean deleteByIsPishDaryaft(long ccMoshtary)
+    {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.delete(DariaftPardakhtPPCModel.TableName(), DariaftPardakhtPPCModel.COLUMN_ccDariaftPardakht() + " = " + ccMoshtary + " AND IsPishDariaft = " + Constants.FROM_PISH_DARYAFT + " ", null);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDelete , DariaftPardakhtPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtPPCDAO" , "" , "deleteByccDariaftPardakht" , "");
+            return false;
+        }
+    }
+
     public boolean deleteByccDariaftPardakht(long ccDariaftPardakht)
     {
         try
         {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             db.delete(DariaftPardakhtPPCModel.TableName(), DariaftPardakhtPPCModel.COLUMN_ccDariaftPardakht() + " = " + ccDariaftPardakht, null);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDelete , DariaftPardakhtPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtPPCDAO" , "" , "deleteByccDariaftPardakht" , "");
+            return false;
+        }
+    }
+
+    public boolean deleteByccDarkhastFaktor(long ccDarkhastFaktor)
+    {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.delete(DariaftPardakhtPPCModel.TableName(), DariaftPardakhtPPCModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor, null);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDelete , DariaftPardakhtPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtPPCDAO" , "" , "deleteByccDarkhastFaktor" , "");
+            return false;
+        }
+    }
+
+    public boolean deleteByccDariaftPardakht_checkBargashty(long ccDariaftPardakht)
+    {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.delete(DariaftPardakhtPPCModel.TableName(), DariaftPardakhtPPCModel.COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty() + " = " + ccDariaftPardakht, null);
             db.close();
             return true;
         }
@@ -456,6 +707,48 @@ public class DariaftPardakhtPPCDAO
         }
     }
 
+    public boolean deleteMarjoeeForoshandehByccDarkhastFaktor(String ccDarkhastFaktor)
+    {
+        String query = "delete from " + DariaftPardakhtPPCModel.TableName() + " where " + DariaftPardakhtPPCModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor;
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , KardexSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtPPCModelDAO" , "" , "deleteMarjoeeForoshandehByccDarkhastFaktor" , "");
+            return false;
+        }
+    }
+
+
+    public boolean deleteMarjoeeForoshandehByccMoshtary(int ccMoshtary)
+    {
+        String query = "delete from " + DariaftPardakhtPPCModel.TableName() + " where " + DariaftPardakhtPPCModel.COLUMN_ccMoshtary() + " = " + ccMoshtary + " AND " + DariaftPardakhtPPCModel.COLUMN_CodeNoeVosol() + " = " + Constants.VALUE_MARJOEE();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , KardexSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtPPCModelDAO" , "" , "deleteMarjoeeForoshandehByccDarkhastFaktor" , "");
+            return false;
+        }
+    }
+
+
     public boolean updateSendedDarkhastFaktor(long ccDarkhastFaktorOld , long ccDarkhastFaktorNew , int isSend)
     {
         try
@@ -476,6 +769,124 @@ public class DariaftPardakhtPPCDAO
             return true;
         }
     }
+
+    /**
+     * update DB when send details check bargashty to server
+     * @param ccDaryaftPardakhtNew
+     * @param ccDaryaftPardakhtOld
+     * @param isSend
+     * @return
+     */
+    public boolean updateSendedCheckBargashty(long ccDaryaftPardakhtNew , long ccDaryaftPardakhtOld , int isSend)
+    {
+        try
+        {
+            String query = "update " + DariaftPardakhtPPCModel.TableName() + " set " + DariaftPardakhtPPCModel.COLUMN_ExtraProp_IsSend() + " = " + isSend + "  where " + DariaftPardakhtPPCModel.COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty() + " = " + ccDaryaftPardakhtNew;
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , DariaftPardakhtPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtPPCDAO" , "" , "updateSendedDarkhastFaktor" , "");
+            return true;
+        }
+    }
+
+
+    /**
+     * update DB when send details pish daryaft  to server
+     * @param ccMoshtaryGetServer
+     * @param isSend
+     * @return
+     */
+
+    public boolean updateSendedPishDaryaft(long ccMoshtaryGetServer  , int isSend)
+    {
+        try
+        {
+            String query = "update " + DariaftPardakhtPPCModel.TableName() + " set " + DariaftPardakhtPPCModel.COLUMN_ExtraProp_IsSend() + " = " + isSend +
+                    " where " + DariaftPardakhtPPCModel.COLUMN_ccMoshtary() + " = " + ccMoshtaryGetServer;
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , DariaftPardakhtPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtPPCDAO" , "" , "updateSendedDarkhastFaktor" , "");
+            return true;
+        }
+    }
+
+    /**
+     * update db vajh naghd to fish banki
+     * @param entity
+     * @return
+     */
+    public boolean UpdateNaghdBeFish(DariaftPardakhtPPCModel entity)
+    {
+        ContentValues values = new ContentValues();
+        boolean update = false;
+        try
+        {
+            values.put("CodeNoeVosol" , entity.getCodeNoeVosol());
+            values.put("ShomarehHesabSanad" , entity.getShomarehHesabSanad());
+            values.put("TarikhSanadShamsi", entity.getTarikhSanadShamsi());
+            values.put("TarikhSanad", entity.getTarikhSanad());
+            values.put("NameBankSanad" , entity.getNameBankSanad());
+            values.put("CodeShobehSanad" , entity.getCodeShobehSanad());
+            values.put("NameShobehSanad" , entity.getNameShobehSanad());
+            values.put("ShomarehHesabSanad" , entity.getShomarehHesabSanad());
+            values.put("Tabdil_NaghdBeFish" , entity.getTabdil_NaghdBeFish());
+            values.put("Mablagh" , entity.getMablagh());
+            values.put("NameNoeVosol",entity.getNameNoeVosol());
+            values.put("NameSahebHesab", "");
+
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            db.update(DariaftPardakhtPPCModel.TableName(), values, "ccDariaftPardakht=" +entity.getCcDariaftPardakht(),null);
+
+            update= true;
+            db.close();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+
+
+        return update;
+    }
+
+    public boolean updateMablaghMarjoee(long ccDariaftPardakht , double Mablagh)
+    {
+        try
+        {
+            String query = "update " + DariaftPardakhtPPCModel.TableName() + " set " + DariaftPardakhtPPCModel.COLUMN_ccDariaftPardakht() + " = " + ccDariaftPardakht +
+                    " where " + DariaftPardakhtPPCModel.COLUMN_Mablagh() + " = " + Mablagh;
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , DariaftPardakhtPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtPPCDAO" , "" , "updateMablaghMarjoee" , "");
+            return false;
+        }
+    }
+
 
     private static ContentValues modelToContentvalue(DariaftPardakhtPPCModel dariaftPardakhtPPCModel)
     {
@@ -522,7 +933,7 @@ public class DariaftPardakhtPPCDAO
         contentValues.put(DariaftPardakhtPPCModel.COLUMN_IsCheckMoshtary() , dariaftPardakhtPPCModel.getIsCheckMoshtary());
         contentValues.put(DariaftPardakhtPPCModel.COLUMN_ccMarkazForosh() , dariaftPardakhtPPCModel.getCcMarkazForosh());
         contentValues.put(DariaftPardakhtPPCModel.COLUMN_ccMarkazSazmanForoshSakhtarForosh() , dariaftPardakhtPPCModel.getCcMarkazSazmanForoshSakhtarForosh());
-
+        contentValues.put(DariaftPardakhtPPCModel.COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty(), dariaftPardakhtPPCModel.getExtraProp_ccDaryaftPardakhtCheckBargashty());
         return contentValues;
     }
 
@@ -556,8 +967,8 @@ public class DariaftPardakhtPPCDAO
             dariaftPardakhtPPCModel.setShomarehSanad(cursor.getString(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_ShomarehSanad())));
             dariaftPardakhtPPCModel.setTarikhSanad(cursor.getString(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_TarikhSanad())));
             dariaftPardakhtPPCModel.setTarikhSanadShamsi(cursor.getString(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_TarikhSanadShamsi())));
-            dariaftPardakhtPPCModel.setMablagh(cursor.getDouble(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_Mablagh())));
-            dariaftPardakhtPPCModel.setMablaghMandeh(cursor.getFloat(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_MablaghMandeh())));
+            dariaftPardakhtPPCModel.setMablagh(cursor.getLong(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_Mablagh())));
+            dariaftPardakhtPPCModel.setMablaghMandeh(cursor.getLong(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_MablaghMandeh())));
             dariaftPardakhtPPCModel.setCcDariaftPardakhtLink(cursor.getLong(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_ccDariaftPardakhtLink())));
             dariaftPardakhtPPCModel.setCcKardex(cursor.getLong(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_ccKardex())));
             dariaftPardakhtPPCModel.setCodeVazeiat(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_CodeVazeiat())));
@@ -573,7 +984,7 @@ public class DariaftPardakhtPPCDAO
             dariaftPardakhtPPCModel.setIsCheckMoshtary(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_IsCheckMoshtary())));
             dariaftPardakhtPPCModel.setCcMarkazForosh(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_ccMarkazForosh())));
             dariaftPardakhtPPCModel.setCcMarkazSazmanForoshSakhtarForosh(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_ccMarkazSazmanForoshSakhtarForosh())));
-
+            dariaftPardakhtPPCModel.setExtraProp_ccDaryaftPardakhtCheckBargashty(cursor.getLong(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty())));
             dariaftPardakhtPPCModels.add(dariaftPardakhtPPCModel);
             cursor.moveToNext();
         }

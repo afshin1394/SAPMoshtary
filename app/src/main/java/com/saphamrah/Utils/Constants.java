@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE = 0 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest
+    private static final int CURRENT_VERSION_TYPE = 4 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 
@@ -522,6 +522,9 @@ public class Constants
     private static final int CC_CHILD_VOSOL_MOSHTARY_RESID = 4;
     private static final int CC_CHILD_VOSOL_MOSHTARY_CHECK = 5;
     private static final int CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD = 6;
+    private static final int CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh = 7;
+    private static final int CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh = 8;
+    private static final int CC_CHILD_VOSOL_MOSHTARY_Resid_Naghd = 9;
     private static final int CODE_NOE_VOSOL_RESID = 9;
     private static final int CODE_NOE_VOSOL_CHECK = 2;
     private static final int CODE_NOE_VOSOL_VAJH_NAGHD = 1;
@@ -582,6 +585,9 @@ public class Constants
     private static final String VALUE_SANAD_CHECK_BANKI = "3";
     private static final String VALUE_SANAD_POS = "102";
     private static final String VALUE_SANAD_RESID = "9";
+    public static final String VALUE_SANAD_TAJIL = "18";
+    public static final String VALUE_SANAD_DIRKARD = "19";
+    public static final String VALUE_CHECK_BANKI = "100";
     private static final String CC_PARAMETER_TAEED_DARKHAST_CONFIG = "25";
     private static final int CC_TAEED_DARKHAST_SHOW_BTN_MARJOEE = 96;
     private static final String CC_PARAMETER_GOROH_MOSHTARY = "26";
@@ -731,6 +737,19 @@ public class Constants
     public static int CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD()
     {
         return CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD;
+    }
+
+    public static int CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh()
+    {
+        return CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh;
+    }
+    public static int CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh()
+    {
+        return CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh;
+    }
+    public static int CC_CHILD_VOSOL_MOSHTARY_Resid_Naghd()
+    {
+        return CC_CHILD_VOSOL_MOSHTARY_Resid_Naghd;
     }
     public static int CC_CHILD_VOSOL_VAJH_NAGHD()
     {
@@ -1257,6 +1276,10 @@ public class Constants
     public static final String SYSTEM_INFO = "systemInfo";
     public static final String File_Path ="Android/Data";
 
+    ///////////////////////////// Code Noe Vorod Vosol /////////////////////////////////
+    public static final int CODE_NOE_VOROD_VOSOL_FAKTOR = 1;
+    public static final int CODE_NOE_VOROD_VOSOL_BARGASHTY = 3;
+    public static final int CODE_NOE_VOROD_PISHDARYAFT = 5;
 
 }
 

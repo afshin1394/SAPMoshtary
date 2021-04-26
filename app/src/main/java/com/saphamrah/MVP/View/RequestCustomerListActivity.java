@@ -1,6 +1,7 @@
 package com.saphamrah.MVP.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,8 +28,11 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.saphamrah.Adapter.RequestCustomerListAdapter;
 import com.saphamrah.BaseMVP.RequestCustomerListMVP;
+import com.saphamrah.DAO.MoshtaryDAO;
+import com.saphamrah.MVP.Model.GetProgramModel;
 import com.saphamrah.MVP.Presenter.RequestCustomerListPresenter;
 import com.saphamrah.Model.MoshtaryAddressModel;
+import com.saphamrah.Model.MoshtaryGharardadModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -38,6 +43,7 @@ import com.saphamrah.Utils.CustomLoadingDialog;
 import com.saphamrah.Utils.StateMaintainer;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 import me.anwarshahriar.calligrapher.Calligrapher;
 
@@ -53,6 +59,8 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
     private ArrayList<MoshtaryModel> moshtaryModels;
     private ArrayList<MoshtaryAddressModel> moshtaryAddressModels;
     private ArrayList<Integer> moshtaryNoeMorajeh;
+    private ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels;
+
     private ArrayList<MoshtaryModel> moshtaryModelsSearch; // result of search
     private ArrayList<MoshtaryAddressModel> moshtaryAddressModelsSearch; // result of search
     private boolean canUpdateCustomer;
@@ -63,7 +71,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
     private CustomAlertDialog customAlertDialog;
     private int searchStatus; // not in search mode = 0 , search with name = 1 , search with code = 2
     private final int LOCATION_PERMISSION = 100;
-
+    private  RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -89,6 +97,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         searchView = findViewById(R.id.searchView);
         FloatingActionButton fabSearchName = findViewById(R.id.fabSearchName);
         FloatingActionButton fabSearchCode = findViewById(R.id.fabSearchCode);
+        FloatingActionButton fabRefresh = findViewById(R.id.fabRefresh);
         final FloatingActionMenu fabMenu = findViewById(R.id.fabMenu);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -179,10 +188,11 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
                 visibleCloseSearchIcon();
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSearchViewClosed() {
                 searchStatus = 0;
-                onGetCustomers(moshtaryModels , moshtaryAddressModels , moshtaryNoeMorajeh, canUpdateCustomer);
+                onGetCustomers(moshtaryModels , moshtaryAddressModels , moshtaryNoeMorajeh,moshtaryGharardadModels, canUpdateCustomer);
             }
         });
 
@@ -202,11 +212,12 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         });
 
         findViewById(com.miguelcatalan.materialsearchview.R.id.action_empty_btn).setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 searchView.closeSearch();
                 searchStatus = 0;
-                onGetCustomers(moshtaryModels , moshtaryAddressModels , moshtaryNoeMorajeh , canUpdateCustomer);
+                onGetCustomers(moshtaryModels , moshtaryAddressModels , moshtaryNoeMorajeh,moshtaryGharardadModels, canUpdateCustomer);
             }
         });
 
@@ -230,6 +241,14 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
                 searchView.setHint(getResources().getString(R.string.searchCustomerCode));
                 searchStatus = 2;
             }
+        });
+
+        fabRefresh.setOnClickListener(v->{
+            fabMenu.close(true);
+            alertDialog = customLoadingDialog.showLoadingDialog(RequestCustomerListActivity.this);
+            mPresenter.updateMoshtaryMorajehShodehRooz();
+            recyclerView.setAdapter(null);
+
         });
 
     }
@@ -277,18 +296,29 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         lblTitle.setText(getResources().getString(R.string.RequestCustomerListActivityTitle , date));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    public void onGetCustomers(final ArrayList<MoshtaryModel> moshtaryModels , final ArrayList<MoshtaryAddressModel> moshtaryAddressModels , ArrayList<Integer> arrayListNoeMorajeh , boolean canUpdateCustomer)
+    public void onGetCustomers(final ArrayList<MoshtaryModel> moshtaryModels , final ArrayList<MoshtaryAddressModel> moshtaryAddressModels , ArrayList<Integer> arrayListNoeMorajeh, ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels , boolean canUpdateCustomer)
     {
         this.moshtaryModels = moshtaryModels;
         this.moshtaryAddressModels = moshtaryAddressModels;
         this.moshtaryNoeMorajeh = arrayListNoeMorajeh;
         this.canUpdateCustomer = canUpdateCustomer;
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        adapter = new RequestCustomerListAdapter(RequestCustomerListActivity.this, moshtaryModels , moshtaryAddressModels , arrayListNoeMorajeh , canUpdateCustomer , new RequestCustomerListAdapter.OnItemClickListener() {
+        this.moshtaryGharardadModels=moshtaryGharardadModels;
+        recyclerView = findViewById(R.id.recyclerView);
+//        moshtaryGharardadModels.forEach(new Consumer<MoshtaryGharardadModel>() {
+//            @Override
+//            public void accept(MoshtaryGharardadModel moshtaryGharardadModel) {
+//                Log.i("forEach", "accept: "+moshtaryGharardadModel.toString());
+//            }
+//        });
+        adapter = new RequestCustomerListAdapter(RequestCustomerListActivity.this, moshtaryModels , moshtaryAddressModels , arrayListNoeMorajeh,moshtaryGharardadModels , canUpdateCustomer , new RequestCustomerListAdapter.OnItemClickListener() {
+            @SuppressLint("LongLogTag")
             @Override
             public void onItemClick(int operation, int position) {
-                onListItemClickListener(operation , moshtaryModels.get(position) , moshtaryAddressModels.get(position));
+                Log.i("RequestCustomerListAdapter", "checkDuplicateRequestForCustomer: "+moshtaryGharardadModels.get(position).getCcSazmanForosh());
+
+                onListItemClickListener(operation , moshtaryModels.get(position) , moshtaryAddressModels.get(position),moshtaryGharardadModels.get(position));
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(RequestCustomerListActivity.this);
@@ -306,10 +336,10 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         moshtaryAddressModelsSearch = moshtaryAddressModels;
         //moshtaryNoeMorajehSearch = arrayListNoeMorajeh;
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        adapter = new RequestCustomerListAdapter(RequestCustomerListActivity.this, moshtaryModels, moshtaryAddressModels, arrayListNoeMorajeh, canUpdateCustomer, new RequestCustomerListAdapter.OnItemClickListener() {
+        adapter = new RequestCustomerListAdapter(RequestCustomerListActivity.this, moshtaryModels, moshtaryAddressModels, arrayListNoeMorajeh,moshtaryGharardadModels, canUpdateCustomer, new RequestCustomerListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int operation, int position) {
-                onListItemClickListener(operation , moshtaryModelsSearch.get(position) , moshtaryAddressModelsSearch.get(position));
+                onListItemClickListener(operation , moshtaryModelsSearch.get(position) , moshtaryAddressModelsSearch.get(position),moshtaryGharardadModels.get(position));
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(RequestCustomerListActivity.this);
@@ -330,29 +360,33 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
     }
 
     @Override
-    public void showMojoodiGiriActivity(int ccMoshtary)
+    public void showMojoodiGiriActivity(int ccMoshtary,int ccSazmanForosh)
     {
         //customLoadingDialog.closeLoadingDialog(RequestCustomerListActivity.this);
         Intent intent = new Intent(RequestCustomerListActivity.this , MojodiGiriActivity.class);
         intent.putExtra("ccMoshtary" , ccMoshtary);
+        intent.putExtra("ccSazmanForosh" , ccSazmanForosh);
         startActivity(intent);
         overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
         RequestCustomerListActivity.this.finish();
     }
 
     @Override
-    public void showDarkhastKalaActivity(int ccMoshtary)
+    public void showDarkhastKalaActivity(int ccMoshtary,int ccSazmanForosh)
     {
         //customLoadingDialog.closeLoadingDialog(RequestCustomerListActivity.this);
         Intent intent = new Intent(RequestCustomerListActivity.this , DarkhastKalaActivity.class);
         intent.putExtra("ccMoshtary" , ccMoshtary);
+        intent.putExtra("ccSazmanForoshGharardad",ccSazmanForosh);
         startActivity(intent);
         overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
         RequestCustomerListActivity.this.finish();
     }
 
 
-    public void showAlertDuplicateRequestForCustomer(final MoshtaryModel moshtaryModel)
+
+    @Override
+    public void showAlertDuplicateRequestForCustomer(MoshtaryModel moshtaryModel,MoshtaryGharardadModel moshtaryGharardadModel)
     {
         customAlertDialog.showLogMessageAlert(RequestCustomerListActivity.this, false, "", getResources().getString(R.string.warningDuplicateRequestForCustomer), Constants.INFO_MESSAGE(), getResources().getString(R.string.no), getResources().getString(R.string.yes), new CustomAlertDialogResponse()
         {
@@ -365,11 +399,9 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
             @Override
             public void setOnApplyClick()
             {
-
                 alertDialog = customLoadingDialog.showLoadingDialog(RequestCustomerListActivity.this);
-
-                mPresenter.checkUpdateEtebarMoshtary(moshtaryModel);
-                mPresenter.checkSelectedCustomer(moshtaryModel.getCcMoshtary());
+                mPresenter.checkSelectedCustomer(moshtaryModel.getCcMoshtary(),moshtaryGharardadModel.getCcSazmanForosh(),moshtaryGharardadModel.getCcMoshtaryGharardad());
+                Log.i(TAG, "setOnApplyClick: ");
             }
         });
     }
@@ -390,7 +422,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         }
     }
 
-    private void onListItemClickListener(int operation , MoshtaryModel moshtaryModel , MoshtaryAddressModel moshtaryAddressModel)
+    private void onListItemClickListener(int operation , MoshtaryModel moshtaryModel , MoshtaryAddressModel moshtaryAddressModel, MoshtaryGharardadModel moshtaryGharardadModel)
     {
         if (operation == Constants.REQUEST_CUSTOMER_SHOW_LOCATION())
         {
@@ -402,7 +434,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         }
         else if (operation == Constants.REQUEST_CUSTOMER_CHANGE_LOCATION())
         {
-
+            Log.i("onListItemClic ", "2");
         }
         else if (operation == Constants.REQUEST_CUSTOMER_SHOW_CUSTOMER_INFO())
         {
@@ -422,7 +454,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         {
             //customLoadingDialog.showLoadingDialog(RequestCustomerListActivity.this);
             alertDialog = customLoadingDialog.showLoadingDialog(RequestCustomerListActivity.this);
-            mPresenter.checkDuplicateRequestForCustomer(moshtaryModel);
+            mPresenter.checkDuplicateRequestForCustomer(moshtaryModel,moshtaryGharardadModel);
             //showBarkhordAvalieActivity(moshtaryModel.getCcMoshtary());
         }
         else if (operation == Constants.REQUEST_CUSTOMER_UPDATE_CREDIT())
@@ -503,7 +535,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         new PubFunc().new LocationProvider().stopLocationProvider();
     }

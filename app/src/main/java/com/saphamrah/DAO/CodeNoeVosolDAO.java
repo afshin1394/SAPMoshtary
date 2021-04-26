@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.saphamrah.Model.CodeNoeVosolModel;
 import com.saphamrah.Model.ServerIpModel;
@@ -215,6 +216,32 @@ public class CodeNoeVosolDAO
         return codeNoeVosolModels;
     }
 
+    public int GetCodeNoeVosolByCodeNoeSanad(String CodeNoeSanad, int CodeNoeCheck)
+    {
+        int CodeNoeVosool = 0;
+
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(CodeNoeVosolModel.TableName(), allColumns(), " CodeNoeSanad_dp= " + CodeNoeSanad + " AND CodeNoeCheck_dp = " + CodeNoeCheck,null, null, null,  null);
+            cursor.moveToFirst();
+
+            while (!cursor.isAfterLast())
+            {
+
+                ArrayList<CodeNoeVosolModel> entity = cursorToModel(cursor);
+                CodeNoeVosool = entity.get(0).getCodeNoeVosol();
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+        return CodeNoeVosool;
+    }
+
     public CodeNoeVosolModel getByCodeNoeVosol(int codeNoeVosolMoshtary)
     {
         CodeNoeVosolModel codeNoeVosolModel = new CodeNoeVosolModel();
@@ -242,6 +269,38 @@ public class CodeNoeVosolDAO
         }
         return codeNoeVosolModel;
     }
+
+    public ArrayList<CodeNoeVosolModel> getAllByParentsId(String parentsId)
+    {
+        ArrayList<CodeNoeVosolModel> arrayList = new ArrayList<>();
+        String query = "select * from " +
+                CodeNoeVosolModel.TableName() +
+                " where " + CodeNoeVosolModel.COLUMN_CodeNoeVosol() + " in (" + parentsId + ")";
+
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+
+//            Cursor cursor = db.query(CodeNoeVosolModel.TableName(), allColumns(), CodeNoeVosolModel.COLUMN_CodeNoeVosol() + " in (?) ", new String[]{(parentsId)}, null, null, null);
+            if (cursor != null)
+            {
+                Log.d("parameter" , "cursor size : " + cursor.getCount());
+                arrayList = cursorToModel(cursor);
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), exception.toString(), "CodeNoeVosolDAO" , "" , "getAllByParentsId" , "");
+        }
+        return arrayList;
+    }
+
+
 
     public boolean deleteAll()
     {

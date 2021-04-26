@@ -2,6 +2,11 @@ package com.saphamrah.Model;
 
 import androidx.annotation.NonNull;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class KardexModel
 {
 
@@ -20,6 +25,19 @@ public class KardexModel
     private static final String COLUMN_ccAfradMamurPakhsh = "ccAfradMamurPakhsh";
     private static final String COLUMN_ccRefrence = "ccRefrence";
     private static final String COLUMN_ExtraProp_IsOld = "ExtraProp_IsOld";
+    private static final String COLUMN_TarikhForm = "TarikhForm";
+    private static final String COLUMN_TarikhFaktor = "TarikhFaktor";
+    private static final String COLUMN_SumGheymatMarjoee = "SumGheymatMarjoee";
+    private static final String COLUMN_SumTedadMarjoee = "SumTedadMarjoee";
+    private static final String COLUMN_ExtraProp_ccElatMarjoeeKala = "ExtraProp_ccElatMarjoeeKala";
+
+
+
+
+
+
+
+
 
 
     public static String TableName() {
@@ -67,6 +85,21 @@ public class KardexModel
     public static String COLUMN_ExtraProp_IsOld() {
         return COLUMN_ExtraProp_IsOld;
     }
+    public static String COLUMN_TarikhForm() {
+        return COLUMN_TarikhForm;
+    } public static String COLUMN_TarikhFaktor() {
+    return COLUMN_TarikhFaktor;
+}public static String COLUMN_SumGheymatMarjoee() {
+    return COLUMN_SumGheymatMarjoee;
+}public static String COLUMN_SumTedadMarjoee() {
+    return COLUMN_SumTedadMarjoee;
+}
+
+public static String COLUMN_ExtraProp_ccElatMarjoeeKala() {
+    return COLUMN_ExtraProp_ccElatMarjoeeKala;
+}
+
+
 
 
 
@@ -196,6 +229,48 @@ public class KardexModel
         ExtraProp_IsOld = extraProp_IsOld;
     }
 
+    private String TarikhForm;
+    public String getTarikhForm() {
+        return TarikhForm;
+    }
+    public void setTarikhForm(String tarikhForm) {
+        TarikhForm = tarikhForm;
+    }
+
+    private String TarikhFaktor;
+    public String getTarikhFaktor() {
+        return TarikhFaktor;
+    }
+    public void setTarikhFaktor(String tarikhFaktor) {
+        TarikhFaktor = tarikhFaktor;
+    }
+
+    private float SumGheymatMarjoee;
+    public float getSumGheymatMarjoee() {
+        return SumGheymatMarjoee;
+    }
+    public void setSumGheymatMarjoee(float sumGheymatMarjoee) {
+        SumGheymatMarjoee = sumGheymatMarjoee;
+    }
+
+    private float SumTedadMarjoee;
+    public float getSumTedadMarjoee() {
+        return SumTedadMarjoee;
+    }
+    public void setSumTedadMarjoee(float sumTedadMarjoee) {
+        SumTedadMarjoee = sumTedadMarjoee;
+    }
+
+
+    private int ExtraProp_ccElatMarjoeeKala;
+
+    public int getExtraProp_ccElatMarjoeeKala() {
+        return ExtraProp_ccElatMarjoeeKala;
+    }
+
+    public void setExtraProp_ccElatMarjoeeKala(int extraProp_ccElatMarjoeeKala) {
+        ExtraProp_ccElatMarjoeeKala = extraProp_ccElatMarjoeeKala;
+    }
 
     @NonNull
     @Override
@@ -214,9 +289,92 @@ public class KardexModel
                 ", ccForoshandeh=" + ccForoshandeh +
                 ", ccAfradMamurPakhsh=" + ccAfradMamurPakhsh +
                 ", ccRefrence=" + ccRefrence +
-                ", ExtraProp_IsOld=" + ExtraProp_IsOld;
+                ", ExtraProp_IsOld=" + ExtraProp_IsOld +
+                ", TarikhForm=" + TarikhForm +
+                " , TarikhFaktor=" + TarikhFaktor +
+                " , SumGheymatMarjoee=" + SumGheymatMarjoee +
+                " , SumTedadMarjoee=" + SumTedadMarjoee+
+                " , ExtraProp_ccElatMarjoeeKala=" + ExtraProp_ccElatMarjoeeKala;
     }
 
+    // for convert string json
+    public JSONObject toJsonForKardex(int  ccAfradMamorPakhsh , int ccAnbarSazmanSakhtar, int ccElatMarjoee)
+    {
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            jsonObject.put("ccKardex_Tablet" , ccKardex);
+            jsonObject.put("ccAnbar" , 0);
+            jsonObject.put("CodeNoeForm" , CodeNoeForm);
+            jsonObject.put("CodeNoeAmalyat" , CodeNoeAmalyat);
+            jsonObject.put("TarikhForm" , TarikhForm);
+            jsonObject.put("ccRefrence" , ccRefrence);
+            jsonObject.put("CodeVazeiat" , CodeVazeiat);
+            jsonObject.put("CodeNoeAnbar" , CodeNoeAnbar);
+            jsonObject.put("ccUser" , ccAfradMamorPakhsh);
+            jsonObject.put("ccMoshtary" , ccMoshtary);
+            jsonObject.put("MarjoeeKamel" , MarjoeeKamel);
+            jsonObject.put("ccForoshandeh" , ccForoshandeh);
+            jsonObject.put("ccAfradMamurPakhsh" , ccAfradMamurPakhsh);
+            jsonObject.put("ccAfradForoshandeh" , 0);
+            jsonObject.put("ccMarkazSazmanForoshSakhtarForosh" , 0);
+            jsonObject.put("ccMarkazAnbar" , ccMarkazAnbar);
+            jsonObject.put("ccNoeKardex" , 19);
+            jsonObject.put("ccAnbarSazmanSakhtar" , ccAnbarSazmanSakhtar);
+            jsonObject.put("ccElatMarjoee" , ccElatMarjoee);
+            jsonObject.put("ccElatMarjoee" , ExtraProp_ccElatMarjoeeKala);
+
+
+        }
+
+//        ccKardex_Tablet BIGINT,
+//        ccAnbar INT,
+//        CodeNoeForm           INT,
+//        CodeNoeAmalyat  INT,
+//        TarikhForm      DATETIME,
+//        ccRefrence BIGINT,
+//        CodeVazeiat         INT,
+//        CodeNoeAnbar         INT,
+//        ccUser          INT,
+//        ccMoshtary      INT,
+//        MarjoeeKamel    INT,
+//        ccForoshandeh INT,
+//        ccAfradMamorPakhsh            INT,
+//        ccAfradForoshandeh    INT,
+//        ccMarkazSazmanForoshSakhtarForosh INT,
+//        ccMarkazAnbar   INT,
+//        ccNoeKardex          INT,
+//        ccAnbarSazmanSakhtar  INT,
+//                ccElatMarjoee
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return jsonObject;
+    }
+
+    public JSONArray toJsonArrayKardex(ArrayList<KardexModel> models,int  ccAfradMamorPakhsh , int ccAnbarSazmanSakhtar, int ccElatMarjoee)
+    {
+        try
+        {
+            JSONArray jsonArray = new JSONArray();
+            for (KardexModel model : models)
+            {
+                JSONObject jsonObject = model.toJsonForKardex(  ccAfradMamorPakhsh , ccAnbarSazmanSakhtar ,ccElatMarjoee );
+                if (jsonObject != null)
+                {
+                    jsonArray.put(jsonObject);
+                }
+            }
+            return jsonArray;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return new JSONArray();
+        }
+    }
 
 
 }

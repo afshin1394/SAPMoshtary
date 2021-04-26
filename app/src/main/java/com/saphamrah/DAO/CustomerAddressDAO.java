@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.saphamrah.Model.MoshtaryAddressModel;
+import com.saphamrah.Model.MoshtaryGharardadModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.MoshtaryMorajehShodehRoozModel;
 import com.saphamrah.PubFunc.PubFunc;
@@ -13,7 +14,6 @@ import com.saphamrah.UIModel.CustomerAddressModel;
 import com.saphamrah.Utils.Constants;
 
 import java.util.ArrayList;
-
 public class CustomerAddressDAO
 {
 
@@ -43,16 +43,30 @@ public class CustomerAddressDAO
         ArrayList<CustomerAddressModel> customerAddressModels = new ArrayList<>();
         try
         {
-            String query = "select m.*,MA.*,IFNULL(NoeMorajeh,0) AS NoeMorajeh from (SELECT * FROM( SELECT * FROM Moshtary \n" +
-                    " WHERE (ExtraProp_IsOld = 1 OR ExtraProp_IsMoshtaryAmargar = 1) and ccMasir in (select ccMasir from Masir) \n" +
-                    " AND CodeVazeiat > 0 \n" +
-                    " UNION SELECT * FROM Moshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY ExtraProp_Olaviat ) AS M \n" +
-                    " LEFT JOIN (SELECT * FROM MoshtaryAddress \n" +
-                    " WHERE ccNoeAddress IN (1,2) GROUP BY ccMoshtary ORDER BY ccNoeAddress DESC) AS MA on MA.ccMoshtary = M.ccMoshtary \n" +
-                    " LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
-                    " on MSR.ccMoshtary = M.ccMoshtary ";
+            String strQry = " select m.*,MA.*,IFNULL(NoeMorajeh,0) AS NoeMorajeh from (SELECT * FROM( SELECT * FROM Moshtary\n" +
+                    "left join MoshtaryGharardad mg on Moshtary.ccMoshtaryParent = mg.ccMoshtary\n" +
+                    "                     WHERE (ExtraProp_IsOld = 1 OR ExtraProp_IsMoshtaryAmargar = 1) and ccMasir in (select ccMasir from Masir) \n" +
+                    "                     AND CodeVazeiat > 0 \n" +
+                    "                     UNION SELECT * FROM Moshtary\n" +
+                    "left join MoshtaryGharardad mg on Moshtary.ccMoshtaryParent = mg.ccMoshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY ExtraProp_Olaviat ) AS M \n" +
+                    "                     LEFT JOIN (SELECT * FROM MoshtaryAddress \n" +
+                    "                     WHERE ccNoeAddress IN (1,2) GROUP BY ccMoshtary ORDER BY ccNoeAddress DESC) AS MA on MA.ccMoshtary = M.ccMoshtary \n" +
+                    "                     LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
+                    "                     on MSR.ccMoshtary = M.ccMoshtary      \n" +
+                    "      \n ";
+
+
+
+//            String query = "select m.*,MA.*,IFNULL(NoeMorajeh,0) AS NoeMorajeh from (SELECT * FROM( SELECT * FROM Moshtary \n" +
+//                    " WHERE (ExtraProp_IsOld = 1 OR ExtraProp_IsMoshtaryAmargar = 1) and ccMasir in (select ccMasir from Masir) \n" +
+//                    " AND CodeVazeiat > 0 \n" +
+//                    " UNION SELECT * FROM Moshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY ExtraProp_Olaviat ) AS M \n" +
+//                    " LEFT JOIN (SELECT * FROM MoshtaryAddress \n" +
+//                    " WHERE ccNoeAddress IN (1,2) GROUP BY ccMoshtary ORDER BY ccNoeAddress DESC) AS MA on MA.ccMoshtary = M.ccMoshtary \n" +
+//                    " LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
+//                    " on MSR.ccMoshtary = M.ccMoshtary ";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.rawQuery(query , null);
+            Cursor cursor = db.rawQuery(strQry , null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)
@@ -79,15 +93,26 @@ public class CustomerAddressDAO
         ArrayList<CustomerAddressModel> customerAddressModels = new ArrayList<>();
         try
         {
-            String query = "select m.*,MA.*,IFNULL(NoeMorajeh,0) AS NoeMorajeh from (SELECT * FROM( SELECT * FROM Moshtary \n" +
-                    " WHERE (ExtraProp_IsOld = 1 OR ExtraProp_IsMoshtaryAmargar = 1) and ccMasir in (select ccMasir from Masir) \n" +
-                    " UNION SELECT * FROM Moshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY ExtraProp_Olaviat ) AS M \n" +
-                    " LEFT JOIN (SELECT * FROM MoshtaryAddress \n" +
-                    " WHERE ccNoeAddress IN (1,2) GROUP BY ccMoshtary ORDER BY ccNoeAddress DESC) AS MA on MA.ccMoshtary = M.ccMoshtary \n" +
-                    " LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
-                    " on MSR.ccMoshtary = M.ccMoshtary";
+            String strQry="select m.*,MA.*,IFNULL(NoeMorajeh,0) AS NoeMorajeh from (SELECT * FROM( SELECT * FROM Moshtary\n" +
+                    "left join MoshtaryGharardad mg on Moshtary.ccMoshtaryParent = mg.ccMoshtary\n" +
+                    "\n" +
+                    "                     WHERE (ExtraProp_IsOld = 1 OR ExtraProp_IsMoshtaryAmargar = 1) and ccMasir in (select ccMasir from Masir) \n" +
+                    "                     UNION \n" +
+                    "                     SELECT * FROM Moshtary\n" +
+                    "left join MoshtaryGharardad mg on Moshtary.ccMoshtaryParent = mg.ccMoshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY ExtraProp_Olaviat ) AS M \n" +
+                    "                     LEFT JOIN (SELECT * FROM MoshtaryAddress \n" +
+                    "                     WHERE ccNoeAddress IN (1,2) GROUP BY ccMoshtary ORDER BY ccNoeAddress DESC) AS MA on MA.ccMoshtary = M.ccMoshtary \n" +
+                    "                     LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
+                    "                     on MSR.ccMoshtary = M.ccMoshtary\n";
+//            String query = "select m.*,MA.*,IFNULL(NoeMorajeh,0) AS NoeMorajeh from (SELECT * FROM( SELECT * FROM Moshtary \n" +
+//                    " WHERE (ExtraProp_IsOld = 1 OR ExtraProp_IsMoshtaryAmargar = 1) and ccMasir in (select ccMasir from Masir) \n" +
+//                    " UNION SELECT * FROM Moshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY ExtraProp_Olaviat ) AS M \n" +
+//                    " LEFT JOIN (SELECT * FROM MoshtaryAddress \n" +
+//                    " WHERE ccNoeAddress IN (1,2) GROUP BY ccMoshtary ORDER BY ccNoeAddress DESC) AS MA on MA.ccMoshtary = M.ccMoshtary \n" +
+//                    " LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
+//                    " on MSR.ccMoshtary = M.ccMoshtary";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.rawQuery(query , null);
+            Cursor cursor = db.rawQuery(strQry , null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)
@@ -154,6 +179,7 @@ public class CustomerAddressDAO
             CustomerAddressModel customerAddressModel = new CustomerAddressModel();
             MoshtaryModel moshtaryModel = new MoshtaryModel();
             ArrayList<MoshtaryAddressModel> moshtaryAddressModels = new ArrayList<>();
+            MoshtaryGharardadModel moshtaryGharardadModel=new MoshtaryGharardadModel();
             MoshtaryAddressModel moshtaryAddressModel = new MoshtaryAddressModel();
 
             moshtaryModel.setCcMoshtary(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ccMoshtary())));
@@ -221,6 +247,30 @@ public class CustomerAddressDAO
             customerAddressModel.setMoshtaryModel(moshtaryModel);
             customerAddressModel.setMoshtaryAddressModels(moshtaryAddressModels);
             customerAddressModel.setMoshtaryMorajehShodehRoozModel(moshtaryMorajehShodehRoozModel);
+
+
+            moshtaryGharardadModel.setRadif(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_Radif())));
+            moshtaryGharardadModel.setCcMoshtaryGharardad(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ccMoshtaryGharardad())));
+            moshtaryGharardadModel.setCcMoshtary(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ccMoshtaryGharardad())));
+            moshtaryGharardadModel.setCcMoshtaryNoeGharardad(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ccMoshtaryGharardad())));
+            moshtaryGharardadModel.setNameMoshtaryNoeGharardad(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_NameMoshtaryNoeGharardad())));
+            moshtaryGharardadModel.setShomarehGharardad(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ShomarehGharardad())));
+            moshtaryGharardadModel.setTarikhGharardad(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_TarikhGharardad())));
+            moshtaryGharardadModel.setFromDate(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_FromDate())));
+            moshtaryGharardadModel.setEndDate(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_EndDate())));
+            moshtaryGharardadModel.setTarikhEtebar(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_TarikhEtebar())));
+            moshtaryGharardadModel.setCcNoeVisit(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_TarikhEtebar())));
+            moshtaryGharardadModel.setNameNoeVisit(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_NameNoeVisit())));
+            moshtaryGharardadModel.setCodeNoeHaml(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_CodeNoeHaml())));
+            moshtaryGharardadModel.setModatVosol(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ModatVosol())));
+            moshtaryGharardadModel.setModatVosol(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ModatTakhirMojaz())));
+            moshtaryGharardadModel.setCcDarkhastFaktorNoeForosh(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ccDarkhastFaktorNoeForosh())));
+            moshtaryGharardadModel.setCodeNoeVosolAzMoshtary(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_CodeNoeVosolAzMoshtary())));
+            moshtaryGharardadModel.setNameNoeVosolAzMoshtary(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_NameNoeVosolAzMoshtary())));
+            moshtaryGharardadModel.setCcSazmanForosh(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_CcSazmanForosh())));
+            moshtaryGharardadModel.setNameSazmanForosh(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.getCOLUMN_NameSazmanForosh())));
+
+            customerAddressModel.setMoshtaryGharardadModel(moshtaryGharardadModel);
 
             customerAddressModels.add(customerAddressModel);
 

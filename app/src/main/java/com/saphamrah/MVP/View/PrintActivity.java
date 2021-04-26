@@ -787,7 +787,7 @@ public class PrintActivity extends AppCompatActivity
                     createShomareDarkhast += year.substring(2) + "/";
                     break;
                 case "{CodeForoshandeh}":
-                    if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3)
+                    if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3  || noeMasouliat == 6 || noeMasouliat ==8)
                     {
                         codeForoshandeh = foroshandehMamorPakhshModel.getCodeForoshandeh();
                     }
@@ -798,7 +798,7 @@ public class PrintActivity extends AppCompatActivity
                     createShomareDarkhast += codeForoshandeh + "/";
                     break;
                 case "{CodeMarkazForosh}":
-                    if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3)
+                    if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat ==8)
                     {
                         codeMarkazForosh = String.valueOf(foroshandehMamorPakhshModel.getCcMarkazSazmanForoshSakhtarForosh());
                     }

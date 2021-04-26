@@ -126,15 +126,20 @@
         <item>{\"name\":\"تفکیک جز\" , \"functdion\":\"getTafkikJozePakhsh\"}</item>
         <item>{\"name\":\"گروه کالا نوع صنف\" , \"functdion\":\"getGorohKalaNoeSenf\"}</item>
         <item>{\"name\":\"مشتری برند\" , \"functdion\":\"getMoshtaryBrand\"}</item>
+        <item>{\"name\":\"مرجوعی مامور پخش\" , \"function\":\"getMarjoeeMamorPakhsh\"}</item>
         <item>{\"name\":\"شهر\" , \"functdion\":\"getAllMarkazShahrMarkazi\"}</item>
         <item>{\"name\":\"حداقل ریال خرید\" , \"functdion\":\"getAllNoeMoshtaryRialKharid\"}</item>
         <item>{\"name\":\"کدپستی\" , \"functdion\":\"getAllcodePosti\"}</item>
+        <item>{\"name\":\"اطلاعات مجاز فاکتور\" , \"functdion\":\"ConfigNoeVosolMojazeFaktor\"}</item>
+        <item>{\"name\":\"اطلاعات مجاز مشتری\" , \"functdion\":\"ConfigNoeVosolMojazeMoshtary\"}</item>
+        <item>{\"name\":\"گزارش برگشتی ارسال شده\" , \"function\":\"getDariaftPardakhtBargashty\"}</item>
         <item>{\"name\":\"پشتیبانی آنلاین\" , \"functdion\":\"getSupportCrisp\"}</item>
         <item>{\"name\":\"نوع وصول\" , \"functdion\":\"getNoeVosolMoshtary\"}</item>
         <item>{\"name\":\"قرارداد مشتری\" , \"functdion\":\"getAllMoshtaryGharardad\"}</item>
         <item>{\"name\":\"کالا مصوبه قرارداد\" , \"functdion\":\"getAllKalaMosavab\"}</item>
         <item>{\"name\":\"دریافت تنظیمات\" , \"functdion\":\"getParameter\"}</item>
         <item>{\"name\":\"برخورد فروشنده با مشتری\" , \"function\":\"getBarkhordForoshandehBaMoshtary\"}</item>
+        <item>{\"name\":\"مرجوعی پخش \" , \"function\":\"getMarjoeePakhsh\"}</item>
     </string-array>
 
 

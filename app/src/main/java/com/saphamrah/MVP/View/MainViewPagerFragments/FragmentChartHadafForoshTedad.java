@@ -223,8 +223,8 @@ public class FragmentChartHadafForoshTedad extends Fragment implements HadafForo
     public void onGetHadafForoshTedady(BaseHadafForoshModel baseHadafForoshModel) {
         String legendLabel1,legendLabel2;
 
-        legendLabel1=getString(R.string.goalLegendLabel);
-        legendLabel2=getString(R.string.saleLegendLable);
+        legendLabel1=getString(R.string.saleLegendLable);
+        legendLabel2=getString(R.string.goalLegendLabel);
         ArrayList<String> xAxisLables=new ArrayList<>();
         ArrayList<String> legendLables=new ArrayList<>();
 

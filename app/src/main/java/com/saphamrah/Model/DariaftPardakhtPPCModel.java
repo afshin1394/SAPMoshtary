@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.saphamrah.Utils.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -53,7 +54,7 @@ public class DariaftPardakhtPPCModel
     private static final String COLUMN_IsCheckMoshtary = "IsCheckMoshtary";
     private static final String COLUMN_ccMarkazForosh = "ccMarkazForosh";
     private static final String COLUMN_ccMarkazSazmanForoshSakhtarForosh = "ccMarkazSazmanForoshSakhtarForosh";
-
+    private static final String COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty = "ExtraProp_ccDaryaftPardakhtCheckBargashty";
 
     public static String TableName() {
         return TABLE_NAME;
@@ -168,6 +169,9 @@ public class DariaftPardakhtPPCModel
     }
     public static String COLUMN_ccMarkazSazmanForoshSakhtarForosh() {
         return COLUMN_ccMarkazSazmanForoshSakhtarForosh;
+    }
+    public static String COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty() {
+        return COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty;
     }
 
 
@@ -286,7 +290,18 @@ public class DariaftPardakhtPPCModel
     @SerializedName("IsCheckMoshtary")
     @Expose
     private int IsCheckMoshtary;
+    @SerializedName("ExtraProp_ccDaryaftPardakhtCheckBargashty")
+    @Expose
+    private long ExtraProp_ccDaryaftPardakhtCheckBargashty;
 
+
+    public long getExtraProp_ccDaryaftPardakhtCheckBargashty() {
+        return ExtraProp_ccDaryaftPardakhtCheckBargashty;
+    }
+
+    public void setExtraProp_ccDaryaftPardakhtCheckBargashty(long extraProp_ccDaryaftPardakhtCheckBargashty) {
+        ExtraProp_ccDaryaftPardakhtCheckBargashty = extraProp_ccDaryaftPardakhtCheckBargashty;
+    }
 
     private int ExtraProp_IsDirkard;
     private int ExtraProp_IsSend;
@@ -544,7 +559,7 @@ public class DariaftPardakhtPPCModel
         try
         {
             jsonObject.put("ccDariaftPardakht" , ccDariaftPardakht);
-            jsonObject.put("CodeNoeVorod" , 1);//HCode change later
+            jsonObject.put("CodeNoeVorod" , Constants.CODE_NOE_VOROD_VOSOL_FAKTOR);//HCode change later
             jsonObject.put("CodeNoeDariaftPardakht" , 1);
             jsonObject.put("CodeNoeSanad" , codeNoeSanad);
             jsonObject.put("CodeNoeCheck" , codeNoeCheck);
@@ -578,6 +593,105 @@ public class DariaftPardakhtPPCModel
             jsonObject.put("ccMarkazSazmanForoshSakhtarForosh" , this.ccMarkazSazmanForoshSakhtarForosh==0 ? ccMarkazSazmanForoshSakhtarForosh : this.ccMarkazSazmanForoshSakhtarForosh);
             jsonObject.put("CodeNoeVosol" , CodeNoeVosol);
             jsonObject.put("ccDariaftPardakhtPPC" , ccDariaftPardakht);
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+
+    public JSONObject toJsonObjectCheckBargashty(int ccMarkazForosh, int ccMarkazAnbar, int ccMarkazSazmanForoshSakhtarForosh, int codeNoeSanad, int codeNoeCheck, int codeNoeVosolVajhNaghd, String currentVersionNumber  )
+    {
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            jsonObject.put("ccDariaftPardakht" , ccDariaftPardakht);
+            jsonObject.put("CodeNoeVorod" , Constants.CODE_NOE_VOROD_VOSOL_BARGASHTY);//HCode change later
+            jsonObject.put("CodeNoeDariaftPardakht" , 1);
+            jsonObject.put("CodeNoeSanad" , codeNoeSanad);
+            jsonObject.put("CodeNoeCheck" , codeNoeCheck);
+            jsonObject.put("ccShomarehHesab" , ccShomarehHesab);
+            jsonObject.put("ccMoshtary" , ccMoshtary);
+            jsonObject.put("ZamaneSabt" , ZamaneSabt);
+            jsonObject.put("ccBankSanad" , ccBankSanad);
+            jsonObject.put("NameShobehSanad" , NameShobehSanad);
+            jsonObject.put("CodeShobehSanad" , CodeShobehSanad);
+            jsonObject.put("ShomarehHesabSanad" , ShomarehHesabSanad);
+            jsonObject.put("ccNoeHesabSanad" , ccNoeHesabSanad);
+            jsonObject.put("ShomarehSanad" , ShomarehSanad);
+            jsonObject.put("NameSahebHesab" , NameSahebHesab);
+            jsonObject.put("TarikhSanad" , CodeNoeVosol != codeNoeVosolVajhNaghd ? TarikhSanad : "");
+            jsonObject.put("Mablagh" , Mablagh);
+            jsonObject.put("CounterCheck" , 0);
+            jsonObject.put("ShomarehElamieh" , 0);
+            jsonObject.put("TarikhElamieh" , "");
+            jsonObject.put("ccDariaftPardakhtLink" , ccDariaftPardakhtLink);
+            jsonObject.put("ccUserSabtKonandeh" , ccUserSabtKonandeh);
+            jsonObject.put("ccAfradErsalKonandeh" , ccAfradErsalKonandeh);
+            jsonObject.put("ccKardex" , ccKardex);
+            jsonObject.put("CodeVazeiat" , CodeVazeiat);
+            jsonObject.put("Taeed" , 0);
+            jsonObject.put("IsPishDariaft" , IsPishDariaft);
+            jsonObject.put("Tabdil_NaghdBeFish" , Tabdil_NaghdBeFish);
+            jsonObject.put("ccDarkhastFaktor_dp" , ccDarkhastFaktor);
+            jsonObject.put("PPC_VersionNumber" , currentVersionNumber);
+            jsonObject.put("ccMarkazAnbar" , ccMarkazAnbar);
+            jsonObject.put("ccMarkazForosh" , ccMarkazForosh);
+            jsonObject.put("ccMarkazSazmanForoshSakhtarForosh" , this.ccMarkazSazmanForoshSakhtarForosh==0 ? ccMarkazSazmanForoshSakhtarForosh : this.ccMarkazSazmanForoshSakhtarForosh);
+            jsonObject.put("CodeNoeVosol" , CodeNoeVosol);
+            jsonObject.put("ccDariaftPardakhtPPC" , ccDariaftPardakht);
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    public JSONObject toJsonObjectCheckPishDariaft(int ccMarkazForosh, int ccMarkazAnbar, int ccMarkazSazmanForoshSakhtarForosh, int codeNoeSanad, int codeNoeCheck, int codeNoeVosolVajhNaghd, String currentVersionNumber , int ccSazmanForosh)
+    {
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            jsonObject.put("ccDariaftPardakht" , ccDariaftPardakht);
+            jsonObject.put("CodeNoeVorod" , Constants.CODE_NOE_VOROD_PISHDARYAFT);//HCode change later
+            jsonObject.put("CodeNoeDariaftPardakht" , 1);
+            jsonObject.put("CodeNoeSanad" , codeNoeSanad);
+            jsonObject.put("CodeNoeCheck" , codeNoeCheck);
+            jsonObject.put("ccShomarehHesab" , ccShomarehHesab);
+            jsonObject.put("ccMoshtary" , ccMoshtary);
+            jsonObject.put("ZamaneSabt" , ZamaneSabt);
+            jsonObject.put("ccBankSanad" , ccBankSanad);
+            jsonObject.put("NameShobehSanad" , NameShobehSanad);
+            jsonObject.put("CodeShobehSanad" , CodeShobehSanad);
+//            jsonObject.put("ShomarehHesabSanad" , ShomarehHesabSanad);
+            jsonObject.put("ccNoeHesabSanad" , ccNoeHesabSanad);
+            jsonObject.put("ShomarehSanad" , ShomarehSanad);
+            jsonObject.put("NameSahebHesab" , NameSahebHesab);
+            jsonObject.put("TarikhSanad" , CodeNoeVosol != codeNoeVosolVajhNaghd ? TarikhSanad : "");
+            jsonObject.put("Mablagh" , Mablagh);
+            jsonObject.put("CounterCheck" , 0);
+            jsonObject.put("ShomarehElamieh" , 0);
+            jsonObject.put("TarikhElamieh" , "");
+            jsonObject.put("ccDariaftPardakhtLink" , ccDariaftPardakhtLink);
+            jsonObject.put("ccUserSabtKonandeh" , ccUserSabtKonandeh);
+            jsonObject.put("ccAfradErsalKonandeh" , ccAfradErsalKonandeh);
+            jsonObject.put("ccKardex" , ccKardex);
+            jsonObject.put("CodeVazeiat" , CodeVazeiat);
+            jsonObject.put("Taeed" , 0);
+            jsonObject.put("IsPishDariaft" , IsPishDariaft);
+            jsonObject.put("Tabdil_NaghdBeFish" , Tabdil_NaghdBeFish);
+            jsonObject.put("ccDarkhastFaktor_dp" , ccDarkhastFaktor);
+            jsonObject.put("PPC_VersionNumber" , currentVersionNumber);
+            jsonObject.put("ccMarkazAnbar" , ccMarkazAnbar);
+            jsonObject.put("ccMarkazForosh" , ccMarkazForosh);
+            jsonObject.put("ccMarkazSazmanForoshSakhtarForosh" , this.ccMarkazSazmanForoshSakhtarForosh==0 ? ccMarkazSazmanForoshSakhtarForosh : this.ccMarkazSazmanForoshSakhtarForosh);
+            jsonObject.put("CodeNoeVosol" , CodeNoeVosol);
+            jsonObject.put("ccDariaftPardakhtPPC" , ccDariaftPardakht);
+            jsonObject.put("ShomarehHesabSanad" , ShomarehHesabSanad);
+            jsonObject.put("ccSazmanForosh" , ccSazmanForosh);
         }
         catch (Exception exception)
         {

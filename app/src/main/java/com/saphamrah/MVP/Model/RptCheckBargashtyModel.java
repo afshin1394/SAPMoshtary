@@ -63,7 +63,7 @@ public class RptCheckBargashtyModel implements RptCheckBargashtyMVP.ModelOps
             }
         });
 
-        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3)
+        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat ==8)
         {
             bargashtyDAO.fetchBargashty(mPresenter.getAppContext(), "RptCheckBargashtyActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse() {
                 @Override

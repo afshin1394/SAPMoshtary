@@ -12,6 +12,9 @@ public class SelectFaktorShared
     private SharedPreferences sharedPreferences;
     private Context context;
 
+    private String moshtaryGharardadccSazmanForosh ="sVndWrpfDGld";
+    private String ccMoshtaryGharardad="momoSfkpswd";
+
     private String ccMoshtary = "ezQI6YvaOK";            //int
     private String ccForoshandeh = "oJbuCX7HpM";         //int
     private String saatVorodBeMaghazeh = "ZxwlT7teMz";
@@ -389,6 +392,8 @@ public class SelectFaktorShared
             editor.remove(mablaghHavaleh);
             editor.remove(isMorajehShodeh);
             editor.remove(minModatHozor);
+            editor.remove(ccMoshtaryGharardad);
+            editor.remove(moshtaryGharardadccSazmanForosh);
             editor.apply();
 
             editor.clear();
@@ -713,7 +718,18 @@ public class SelectFaktorShared
     public String getMinModatHozor() {
         return minModatHozor;
     }
+    //TODO
+    public String getMoshtaryGharardadccSazmanForosh() {
+        return moshtaryGharardadccSazmanForosh;
+    }
 
+    public String getCcMoshtaryGharardad() {
+        return ccMoshtaryGharardad;
+    }
+
+    public void setCcMoshtaryGharardad(String ccMoshtaryGharardad) {
+        this.ccMoshtaryGharardad = ccMoshtaryGharardad;
+    }
     /*selectFaktorShared.putInt(selectFaktorShared.getCcDarkhastFaktor() , 0);
         selectFaktorShared.putInt(selectFaktorShared.getCcMoshtary() , 0);
         selectFaktorShared.putInt(selectFaktorShared.getCcGorohNoeMoshtary() , 0);

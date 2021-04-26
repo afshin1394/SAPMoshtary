@@ -1663,7 +1663,7 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
             //int tedadKolDariaftPardakhtDarkhastFaktor = 0;
 
 
-            if (dariaftPardakhtPPCModels.size() > 0 || noeMasouliat == 1 || noeMasouliat == 3)
+            if (dariaftPardakhtPPCModels.size() > 0 || noeMasouliat == 1 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat ==8)
             {
                 // get ccMarkazForosh , ccMarkazAnbar , ccMarkazSazmanForoshSakhtarForosh
                 int ccMarkazForoshFordp = 0;
@@ -1794,7 +1794,7 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
             DarkhastFaktorAfradForoshModel darkhastFaktorAfradForoshModel = insertDarkhastFaktorAfradForosh(noeMasouliat, darkhastFaktorModel.getCcDarkhastFaktorNoeForosh(), darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcForoshandeh(), foroshandehMamorPakhshModel.getCcAfrad(), foroshandehMamorPakhshModel.getCcAfradModir());
 
 
-                if ( (noeMasouliat == 1 || noeMasouliat == 3) && foroshandehMamorPakhshModel.getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale )
+                if ( (noeMasouliat == 1 || noeMasouliat == 3  || noeMasouliat == 6 || noeMasouliat ==8) && foroshandehMamorPakhshModel.getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale )
                 {
 
                     JSONArray jsonDarkhastHavaleSatrs = new JSONArray();
@@ -2600,7 +2600,7 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
          * {@param noeMasouliat(3) فروشنده اسمارت
          * **/
         Log.i("checkMandehMojodi", "noeMasouliat: " + noeMasouliat);
-        if (noeMasouliat == 1 || noeMasouliat == 3) {
+        if (noeMasouliat == 1 || noeMasouliat == 3  || noeMasouliat == 6 || noeMasouliat ==8) {
 
             mandehMojodyMashinDAO.fetchMandehMojodyMashin(mPresenter.getAppContext(), TemporaryRequestsListActivity.class.getSimpleName(), ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh,ccKalaCodes, ccSazmanForoshFaktor, new RxResponseHandler() {
                 @SuppressLint("LongLogTag")

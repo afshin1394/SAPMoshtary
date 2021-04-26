@@ -164,7 +164,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             ccNoeAddresses = "2,3";
         }
         ArrayList<MoshtaryAddressModel> addressModels = moshtaryAddressDAO.getByccMoshtaryAndccNoeAddress(ccMoshtary , ccNoeAddresses);
-        if (addressModels.size() > 0 && (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3))
+        if (addressModels.size() > 0 && (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3  || noeMasouliat == 6 || noeMasouliat ==8))
         {
             MarkazShahrMarkaziDAO markazShahrMarkaziDAO = new MarkazShahrMarkaziDAO(mPresenter.getAppContext());
             DarkhastFaktorDAO darkhastfaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
@@ -208,12 +208,26 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         }
 
 
-//        NoeVosolMoshtaryDAO noeVosolMoshtaryDAO = new NoeVosolMoshtaryDAO(mPresenter.getAppContext());
-//        int CodeNoeVosolMoshtary = Integer.parseInt(childParameterModelsVosols.get(childParameterModelsVosols.size()-1).getValue());
-//        String NameCodeNoeVosolMoshtary = childParameterModelsVosols.get(childParameterModelsVosols.size()-1).getTxt();
-//
-//        Log.d("vosol" , "model childParameterModelsVosols : " + CodeNoeVosolMoshtary );
-//        Log.d("vosol" , "model childParameterModelsVosols 0 : " + NameCodeNoeVosolMoshtary );
+        NoeVosolMoshtaryDAO noeVosolMoshtaryDAO = new NoeVosolMoshtaryDAO(mPresenter.getAppContext());
+        int CodeNoeVosolMoshtary = Integer.parseInt(childParameterModelsVosols.get(childParameterModelsVosols.size() - 1).getValue());
+        String NameCodeNoeVosolMoshtary = childParameterModelsVosols.get(childParameterModelsVosols.size() - 1).getTxt();
+
+        Log.d("vosol", "model childParameterModelsVosols : " + CodeNoeVosolMoshtary);
+        Log.d("vosol", "model childParameterModelsVosols 0 : " + NameCodeNoeVosolMoshtary);
+
+        MoshtaryDAO moshtaryDAO = new MoshtaryDAO(BaseApplication.getContext());
+        MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
+        ArrayList<NoeVosolMoshtaryModel> noeVosolMoshtaryModels = noeVosolMoshtaryDAO.getByccNoeVosolMoshtary(CodeNoeVosolMoshtary , selectFaktorShared.getInt(selectFaktorShared.getCcMarkazSazmanForosh(),-1) , selectFaktorShared.getInt(selectFaktorShared.getCcGorohNoeMoshtary(),-1) , selectFaktorShared.getInt(selectFaktorShared.getMoshtaryDarajeh(),-1) );
+        ParameterChildModel parameterChildModel = new ParameterChildModel();
+        ArrayList<ParameterChildModel> NoeVosolsDarkhasts = new ArrayList<ParameterChildModel>();
+        Log.d("vosol", "model noeVosolMoshtaryModels  : " + noeVosolMoshtaryModels.size());
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO =new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
+        int MaxtedadResid = foroshandehMamorPakhshDAO.getOne().getMaxResidCheck();
+        int MaxtedadResidNaghd = foroshandehMamorPakhshDAO.getOne().getMaxResidNaghd();
+
+        for (NoeVosolMoshtaryModel model : noeVosolMoshtaryModels) {
+            Log.d("vosol", "model NoeVosolMoshtaryModel: " + model.toString());
+        }
 
 //        ArrayList<NoeVosolMoshtaryModel> noeVosolMoshtaryModels = noeVosolMoshtaryDAO.getByccNoeVosolMoshtary(CodeNoeVosolMoshtary);
 //        ParameterChildModel parameterChildModel = new ParameterChildModel();
@@ -250,16 +264,61 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 //                NoeVosolsDarkhasts.add(pModel);
 //            }
 //        }
-//
-//
-//        for (ParameterChildModel model : NoeVosolsDarkhasts)
-//        {
-//            Log.d("vosol" , "model NoeVosolsDarkhasts: " + model.toString());
-//        }
+
+
+        if (noeVosolMoshtaryModels.size() == 0) {
+            parameterChildModel.setCcParameter(1);
+            parameterChildModel.setCcParameterChild(1);
+            parameterChildModel.setName(NameCodeNoeVosolMoshtary);
+            parameterChildModel.setValue(String.valueOf(CodeNoeVosolMoshtary));
+            parameterChildModel.setTxt(NameCodeNoeVosolMoshtary);
+            parameterChildModel.setCodeSort(1);
+            NoeVosolsDarkhasts.add(parameterChildModel);
+
+        } else {
+            Log.d("vosol", "size>0  - " + noeVosolMoshtaryModels.size());
+            int CodeNoeVosolResid= Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_RESID()));
+            int CodeNoeVosolResidNaghd= Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_Resid_Naghd()));
+            int CodeNoeVosolNaghd2Setareh= Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh()));
+            for (NoeVosolMoshtaryModel model : noeVosolMoshtaryModels) {
+                ParameterChildModel pModel = new ParameterChildModel();
+                if((model.getCodeNoeVosol()==CodeNoeVosolResid || CodeNoeVosolMoshtary==CodeNoeVosolResidNaghd)
+                        && selectFaktorShared.getInt(selectFaktorShared.getTedadResid(),-1) + selectFaktorShared.getInt(selectFaktorShared.getTedadResidNaghd(),-1) <= MaxtedadResid + MaxtedadResidNaghd) {
+                    pModel.setCcParameter(1);
+                    pModel.setCcParameterChild(1);
+                    pModel.setName(model.getNameNoeVosolAzMoshtary());
+                    pModel.setValue(String.valueOf(model.getCodeNoeVosol()));
+                    pModel.setTxt(model.getNameNoeVosol());
+                    pModel.setCodeSort(1);
+                    NoeVosolsDarkhasts.add(pModel);
+                }
+                else if(model.getCodeNoeVosol()==CodeNoeVosolNaghd2Setareh)
+                {
+                    pModel.setCcParameter(1);
+                    pModel.setCcParameterChild(1);
+                    pModel.setName(model.getNameNoeVosolAzMoshtary());
+                    pModel.setValue(String.valueOf(model.getCodeNoeVosol()));
+                    pModel.setTxt(model.getNameNoeVosol());
+                    pModel.setCodeSort(1);
+                    NoeVosolsDarkhasts.add(pModel);
+                }
+                else if (model.getCodeNoeVosol()!=CodeNoeVosolResid || CodeNoeVosolMoshtary!=CodeNoeVosolResidNaghd || model.getCodeNoeVosol()!=CodeNoeVosolNaghd2Setareh)
+                {
+                    pModel.setCcParameter(1);
+                    pModel.setCcParameterChild(1);
+                    pModel.setName(model.getNameNoeVosolAzMoshtary());
+                    pModel.setValue(String.valueOf(model.getCodeNoeVosol()));
+                    pModel.setTxt(model.getNameNoeVosol());
+                    pModel.setCodeSort(1);
+                    NoeVosolsDarkhasts.add(pModel);
+                }
+            }
+        }
+
 
 //todo shanbeh
-       //mPresenter.onGetInfo(ccDarkhastFaktor , modatVosol , NoeVosolsDarkhasts);
-        mPresenter.onGetInfo(ccDarkhastFaktor , modatVosol , childParameterModelsVosols);
+       mPresenter.onGetInfo(ccDarkhastFaktor , modatVosol , NoeVosolsDarkhasts);
+//        mPresenter.onGetInfo(ccDarkhastFaktor , modatVosol , childParameterModelsVosols);
     }
 
     private int calculateModatVosol(long ccDarkhastFaktor , int ccMoshtary)
@@ -593,7 +652,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         darkhastFaktorModel.setMablaghKhalesFaktor(sumMablaghKhales);
         darkhastFaktorModel.setMablaghKhalesDarkhast(sumMablaghKhales);
         Log.d("verifyRequest" , "update faktor , getMablaghKhalesFaktor : " + darkhastFaktorModel.getMablaghKhalesFaktor());
-        if(noeMasouliat == 1) //1-Foroshandeh-Sard
+        if(noeMasouliat == 1  || noeMasouliat == 6 || noeMasouliat ==8) //1-Foroshandeh-Sard
         {
             darkhastFaktorModel.setCodeVazeiat(Constants.CODE_VAZEIAT_FAKTOR_TAEED());
         }
@@ -903,19 +962,21 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         Log.d("takhfif" , "darkhastFaktorJayezehModels : " + darkhastFaktorJayezehModels.size());
         if (ccTakhfifs.replace("," , "").length() > 0 || darkhastFaktorJayezehModels.size() > 0)
         {
-            ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels = darkhastFaktorTakhfifDAO.getByccDarkhastFaktorsAndccTakhfifs(ccDarkhastFaktor , ccTakhfifs);
-            String sharhTakhfifs = "";
-            for (DarkhastFaktorTakhfifModel model : darkhastFaktorTakhfifModels)
+            if(clickedBottomBarposition!=2)//Page SabtDarkhast
             {
-                sharhTakhfifs += model.getSharhTakhfif() + "\n";
+                ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels = darkhastFaktorTakhfifDAO.getByccDarkhastFaktorsAndccTakhfifs(ccDarkhastFaktor, ccTakhfifs);
+                String sharhTakhfifs = "";
+                for (DarkhastFaktorTakhfifModel model : darkhastFaktorTakhfifModels) {
+                    sharhTakhfifs += model.getSharhTakhfif() + "\n";
+                }
+                for (DarkhastFaktorJayezehModel jayezehModel : darkhastFaktorJayezehModels) {
+                    Log.d("jayezeh", "jayezehModel : " + jayezehModel.toString());
+                    sharhTakhfifs += jayezehModel.getSharh() + "\n";
+                }
+
+                mPresenter.onErrorCheck(R.string.errorSelectBonus, sharhTakhfifs);
+                return;
             }
-            for (DarkhastFaktorJayezehModel jayezehModel : darkhastFaktorJayezehModels)
-            {
-                Log.d("jayezeh" , "jayezehModel : " + jayezehModel.toString());
-                sharhTakhfifs += jayezehModel.getSharh() + "\n";
-            }
-            mPresenter.onErrorCheck(R.string.errorSelectBonus , sharhTakhfifs);
-            return;
         }
 
         /*if (darkhastFaktorTakhfifDAO.getCountJayezehByccDarkhastFaktor(ccDarkhastFaktor) > 0 && darkhastFaktorJayezehDAO.getByccDarkhastFaktor(ccDarkhastFaktor).size() == 0)
@@ -1451,16 +1512,52 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
             String ccChildParametersOfTakhfif = "";
             Log.d("vosol","ccChildParameterNoeVosol Takhfif: "+ ccChildParameterNoeVosol);
-//todo shanbe
-            if (ccChildParameterNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD())
+//todo takhfif barasas noevosolmoshtary dar pegah
+//            if (ccChildParameterNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD())
+//            {
+//                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
+//            }
+//            else if (ccChildParameterNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh())
+//            {
+//                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
+//            }
+//            else if (ccChildParameterNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh())
+//            {
+//                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
+//            }
+//            else if (ccChildParameterNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_CHECK())
+//            {
+//                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_CHECK());
+//            }
+//            else if (ccChildParameterNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_RESID())
+//            {
+//                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_RESID());
+//            }
+//            else if (ccChildParameterNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_Resid_Naghd())
+//            {
+//                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_RESID());
+//            }
+            if (valueNoeVosol == Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD())))
             {
                 ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
             }
-            else if (ccChildParameterNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_CHECK())
+            else if (valueNoeVosol == Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh())))
+            {
+                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
+            }
+            else if (valueNoeVosol == Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh())))
+            {
+                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
+            }
+            else if (valueNoeVosol == Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_CHECK())))
             {
                 ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_CHECK());
             }
-            else if (ccChildParameterNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_RESID())
+            else if (valueNoeVosol == Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_RESID())))
+            {
+                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_RESID());
+            }
+            else if (valueNoeVosol == Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_Resid_Naghd())))
             {
                 ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_RESID());
             }
@@ -1474,8 +1571,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 //            }
 //            else if (ccChildParameterNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_RESID())
 //            {
-//                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_RESID());
-//            }
+//                ccChildParametersOfTakhfif= childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_RESID());
+////            }
             Log.d("darkhastfaktor","ccChildParametersOfTakhfif:"+ccChildParametersOfTakhfif);
             String[] seperatedccChildParameterOfTakhfif = ccChildParametersOfTakhfif.split(",");
             Log.d("darkhastfaktor", "seperatedccChildParameterOfTakhfif : " + seperatedccChildParameterOfTakhfif.toString());

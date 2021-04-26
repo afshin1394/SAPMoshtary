@@ -290,7 +290,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
                 int noeMasouliat = foroshandehMamorPakhshUtils.getNoeMasouliat(foroshandehMamorPakhshModel);
                 String enablePishnahadKala = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_PISHNAHAD_KALA);
                 Log.d("darkhastKala" , "calculateKalaPishnahadi : " + calculateKalaPishnahadi + " , noeMasouliat : " + noeMasouliat + " , enablePishnahadKala : " + enablePishnahadKala);
-                if (calculateKalaPishnahadi && (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3) && enablePishnahadKala.trim().equals("1"))
+                if (calculateKalaPishnahadi && (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 8) && enablePishnahadKala.trim().equals("1"))
                 {
                     Log.d("darkhastKala" , "in calculate kala pishnahadi");
                     DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
@@ -774,7 +774,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
                     createShomareDarkhast += year.substring(2) + "/";
                     break;
                 case "{CodeForoshandeh}":
-                    if(noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3)
+                    if(noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 8)
                     {
                         codeForoshandeh = foroshandehMamorPakhshModel.getCodeForoshandeh();
                     }

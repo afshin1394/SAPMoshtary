@@ -317,7 +317,7 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
 	@Override
     public void onGetNoeMasouliat(int noeMasouliat)
     {
-        if (noeMasouliat != 1 && noeMasouliat != 2 && noeMasouliat != 3)
+        if (noeMasouliat != 1 && noeMasouliat != 2 && noeMasouliat != 3 && noeMasouliat!=6 && noeMasouliat!=8)
         {
             mView.get().hideNoRequestButton();
         }

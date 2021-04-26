@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/altdlg_bg"
+    android:layoutDirection="rtl">
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerView"
+        android:scrollbars="vertical"
+        android:layoutDirection="rtl"
+        android:paddingBottom="10dp"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/txtinputSearchKalaName"
+        android:layout_above="@+id/layCounts">
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layCounts"
+        android:orientation="horizontal"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="30dp"
+        android:layout_above="@+id/lblError"
+        android:layoutDirection="rtl">
+
+        <com.saphamrah.CustomView.CustomTextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/txtinputCartonCount"
+            android:layoutDirection="rtl"
+            android:textDirection="rtl"
+            android:theme="@style/TextInputLayoutTheme"
+            android:layout_marginLeft="10dp">
+            <TextView
+                android:id="@+id/txtMablaghKhales"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="مبلغ کل : 0"
+                android:inputType="number"
+                android:maxLines="1"
+                android:nextFocusDown="@+id/txtBastehCount"
+                android:nextFocusRight="@+id/txtBastehCount"
+                android:nextFocusLeft="@+id/txtBastehCount"
+                android:nextFocusForward="@+id/txtBastehCount"
+                android:singleLine="true"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/FontSize16" />
+        </com.saphamrah.CustomView.CustomTextInputLayout>
+
+
+    </LinearLayout>
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lblError"
+        android:textSize="@dimen/FontSize14"
+        android:textColor="@color/colorRed"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_above="@+id/layButtons"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/layButtons"
+        android:background="@drawable/alert_btn_bg_accent"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginBottom="2dp"
+        android:layoutDirection="rtl"
+        android:layout_alignParentBottom="true">
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnApply"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/apply"
+            android:textSize="@dimen/btnFontMain"
+            android:textColor="@color/colorWhite"
+            android:padding="@dimen/altdlgButtonPadding"
+            android:layout_margin="1dp"
+            android:background="@android:color/transparent"/>
+        <LinearLayout
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:layout_margin="5dp">
+        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnCancel"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textSize="@dimen/btnFontMain"
+            android:textColor="@color/colorWhite"
+            android:padding="@dimen/altdlgButtonPadding"
+            android:layout_margin="1dp"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
+
+</RelativeLayout>
