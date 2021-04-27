@@ -102,6 +102,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 {
 
     private VerifyRequestMVP.RequiredPresenterOps mPresenter;
+    ParameterChildDAO childParameterDAO = new ParameterChildDAO(BaseApplication.getContext());
 
     public VerifyRequestModel(VerifyRequestMVP.RequiredPresenterOps mPresenter)
     {
@@ -133,7 +134,11 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         Log.d("modatVosol" , "Constants.CC_CHILD_CODE_NOE_VOSOL_VAJH_NAGHD() : " + Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD());
         //todo shanbeh
         //if (ccChildSelectNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD())
-        if (ccChildSelectNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD())
+        int codeNoeVosolVajhNaghd2Setareh = Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh()));
+        int codeNoeVosolVajhNaghd1Setareh = Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh()));
+        if (ccChildSelectNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD()
+                || ccChildSelectNoeVosol == codeNoeVosolVajhNaghd1Setareh
+                || ccChildSelectNoeVosol == codeNoeVosolVajhNaghd2Setareh)
         {
             isSelectedVosolVajhNaghd = true;
         }
@@ -329,6 +334,9 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+        int codeNoeVosolVajhNaghd2Setareh = Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh()));
+        int codeNoeVosolVajhNaghd1Setareh = Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh()));
+
         if (noeMasouliat == 4 || noeMasouliat == 5)
         {
             DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
@@ -339,7 +347,9 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 Log.d("vosol","CodeNoeVosolAzMoshtary" + darkhastFaktorModel.getCodeNoeVosolAzMoshtary());
                 Log.d("vosol","modatVosol" + modatVosol);
 
-                if (darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD())
+                if (darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD()
+                        || darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == codeNoeVosolVajhNaghd1Setareh
+                        || darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == codeNoeVosolVajhNaghd2Setareh)
                 {
                     modatVosol = 0;
                     Log.d("vosol","modatVosol in if" + modatVosol);
@@ -351,7 +361,9 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             Log.d("vosol","CodeNoeVosolAzMoshtary" + new MoshtaryDAO(mPresenter.getAppContext()).getByccMoshtary(ccMoshtary).getCodeNoeVosolAzMoshtary());
             Log.d("vosol","modatVosol" + modatVosol);
             int codeNoeVosol = new MoshtaryDAO(mPresenter.getAppContext()).getByccMoshtary(ccMoshtary).getCodeNoeVosolAzMoshtary();
-            if (codeNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD())
+            if (codeNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD()
+                    || codeNoeVosol == codeNoeVosolVajhNaghd1Setareh
+                    || codeNoeVosol == codeNoeVosolVajhNaghd2Setareh)
             {
                 modatVosol = 0;
                 Log.d("vosol","modatVosol in if" + modatVosol);

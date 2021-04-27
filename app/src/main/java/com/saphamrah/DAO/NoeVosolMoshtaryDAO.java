@@ -249,7 +249,7 @@ public class NoeVosolMoshtaryDAO
 //                + " SELECT DISTINCT ccMarkazSazmanForosh, ccNoeMoshtary, ccDarajeh,CodeNoeVosolAzMoshtary, CodeNoeVosolAzMoshtary CodeNoeVosol, NameNoeVosolAzMoshtary NameNoeVosol, NameNoeVosolAzMoshtary "
 //                + " FROM NoeVosolMoshtary "
 //                + " WHERE CodeNoeVosolAzMoshtary= " + ccNoeVosol + " and ccMarkazSazmanforosh = "+ ccMarkazSazmanforosh + " and ccNoeMoshtary = "+ ccNoeMoshtary +" and ccDarajeh = "+ ccDarajeh +"
-                + ")  order by codenoevosol";
+                + ")  order by codenoevosol desc";
 
 
         Log.d("Vosol","query:"+query);

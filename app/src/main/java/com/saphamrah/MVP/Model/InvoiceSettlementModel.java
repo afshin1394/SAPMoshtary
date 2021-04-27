@@ -202,20 +202,19 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
 
         } else if (from == Constants.FROM_TREASURYLIST) {
 
-            if (darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Constants.CODE_NOE_VOSOL_MOSHTARY_RESID()) {
-                parents = configNoeVosolMojazeFaktorDAO.getValueByNoeVosol(Constants.CODE_NOE_VOSOL_MOSHTARY_RESID());
-                if (from == Constants.FROM_TREASURYLIST) {
-                    // حذف نوع وصول رسید برای فاکتورهای موجود در لیست وصول
-                    parents = parents.replace(String.valueOf(Constants.CC_CHILD_VOSOL_RESID()), "");
-                    parents = parents.replace(",,", ",");
-                    parents = parents.startsWith(",") ? parents.substring(1) : parents;
-                    parents = parents.endsWith(",") ? parents.substring(0, parents.length() - 1) : parents;
-                }
-            } else if (darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Constants.CODE_NOE_VOSOL_MOSHTARY_CHECK()) {
-                parents = configNoeVosolMojazeFaktorDAO.getValueByNoeVosol(Constants.CODE_NOE_VOSOL_MOSHTARY_CHECK());
-            } else if (darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD()) {
-                parents = configNoeVosolMojazeFaktorDAO.getValueByNoeVosol(Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD());
-            }
+//            int codeNoeVosolResid = Integer.parseInt(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_RESID()));
+//            int codeNoeVosolResidNaghd = Integer.parseInt(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_Resid_Naghd()));
+
+                parents = configNoeVosolMojazeFaktorDAO.getValueByNoeVosol(darkhastFaktorModel.getCodeNoeVosolAzMoshtary());
+//                if (from == Constants.FROM_TREASURYLIST && (darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == codeNoeVosolResid
+//                      || darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == codeNoeVosolResidNaghd)) {
+//                    // حذف نوع وصول رسید برای فاکتورهای موجود در لیست وصول
+//                    parents = parents.replace(String.valueOf(Constants.CC_CHILD_VOSOL_RESID()), "");
+//                    parents = parents.replace(String.valueOf(Constants.CC_CHILD_VOSOL_RESID()), "");
+//                    parents = parents.replace(",,", ",");
+//                    parents = parents.startsWith(",") ? parents.substring(1) : parents;
+//                    parents = parents.endsWith(",") ? parents.substring(0, parents.length() - 1) : parents;
+//                }
 
             ArrayList<CodeNoeVosolModel> codeNoeVosolModels = codeNoeVosolDAO.getAllByParentsId(parents);
             mPresenter.onGetNoeVosols(codeNoeVosolModels);

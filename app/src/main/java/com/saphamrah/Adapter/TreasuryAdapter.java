@@ -64,7 +64,7 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         holder.lblMablaghKhalesFaktor.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.mablaghKhales), formatter.format((int)models.get(position).getMablaghKhalesFaktor()),context.getResources().getString(R.string.rial)));
         holder.lblMablaghMandehFaktor.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.mande), formatter.format(models.get(position).getMablaghMandeh()),context.getResources().getString(R.string.rial)));
         holder.lblNameNoeVosol.setText(models.get(position).getNameNoeVosolAzMoshtary());
-        holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s" , context.getResources().getString(R.string.shomareDarkhast),String.valueOf(models.get(position).getShomarehDarkhast())));
+        holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s" , context.getResources().getString(R.string.shomareDarkhast),String.valueOf(models.get(position).getShomarehFaktor())));
         if ( (models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) && ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6 && faktorRooz)) )
         {
             holder.layEditDarkhast.setVisibility(View.VISIBLE);

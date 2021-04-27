@@ -17,6 +17,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -519,6 +520,8 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
             try {
                 if (show.getWindow() != null) {
                     show.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    show.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
                 }
             } catch (Exception exception) {
                 exception.printStackTrace();
@@ -707,6 +710,8 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
             try {
                 if (show.getWindow() != null) {
                     show.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    show.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
                 }
             } catch (Exception exception) {
                 exception.printStackTrace();
@@ -928,6 +933,8 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
             try {
                 if (show.getWindow() != null) {
                     show.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    show.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
                 }
             } catch (Exception exception) {
                 exception.printStackTrace();
@@ -1255,6 +1262,8 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
             try {
                 if (show.getWindow() != null) {
                     show.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    show.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
                 }
             } catch (Exception exception) {
                 exception.printStackTrace();

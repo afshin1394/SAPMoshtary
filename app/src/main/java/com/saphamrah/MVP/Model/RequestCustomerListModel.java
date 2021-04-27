@@ -69,6 +69,7 @@ import com.saphamrah.Shared.LastOlaviatMoshtaryShared;
 import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.Shared.UserTypeShared;
 import com.saphamrah.UIModel.CustomerAddressModel;
+import com.saphamrah.UIModel.OlaviatMorajehModel;
 import com.saphamrah.Utils.Constants;
 
 import java.lang.ref.WeakReference;
@@ -496,6 +497,17 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
         });
     }
 
+   private void updateOlaviat(){
+       MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(BaseApplication.getContext());
+       OlaviatMorajehModel olaviatMorajehModel = moshtaryMorajehShodehRoozDAO.getOlaviatMorajeh();
+
+       LastOlaviatMoshtaryShared lastOlaviatMoshtaryShared = new LastOlaviatMoshtaryShared(mPresenter.getAppContext());
+       lastOlaviatMoshtaryShared.removeAll();
+
+       lastOlaviatMoshtaryShared.putInt(LastOlaviatMoshtaryShared.OLAVIAT, olaviatMorajehModel.getOlaviat());
+       lastOlaviatMoshtaryShared.putInt(LastOlaviatMoshtaryShared.CCMOSHTARY, olaviatMorajehModel.getCcMoshtary());
+       lastOlaviatMoshtaryShared.putString(LastOlaviatMoshtaryShared.TARIKH, new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date()));
+    }
 
     interface OnCheckSelectedCustomerResponse
     {
@@ -528,14 +540,28 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
         @Override
         protected Integer doInBackground(Void... voids)
         {
-            UserTypeShared userTypeShared = new UserTypeShared(BaseApplication.getContext());
-            int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
+
+            /*
+            ***** new object Doa
+             */
+            DarkhastFaktorDAO darkhastfaktorDAO = new DarkhastFaktorDAO(weakReferenceContext.get());
+            ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(weakReferenceContext.get());
+            MoshtaryModel moshtaryModel = new MoshtaryDAO(weakReferenceContext.get()).getByccMoshtary(ccMoshtary);
+            MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(weakReferenceContext.get());
+            ParameterChildDAO childParameterDAO = new ParameterChildDAO(weakReferenceContext.get());
+            ForoshandehEtebarDAO foroshandehEtebarDAO = new ForoshandehEtebarDAO(weakReferenceContext.get());
+            DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(weakReferenceContext.get());
+            MoshtaryAfradDAO moshtaryafradDAO = new MoshtaryAfradDAO(weakReferenceContext.get());
+            BargashtyDAO bargashtyDAO = new BargashtyDAO(weakReferenceContext.get());
+            MoshtaryEtebarSazmanForoshDAO moshtaryetebarsazmanforoshDAO = new MoshtaryEtebarSazmanForoshDAO(weakReferenceContext.get());
+            MoshtaryDAO moshtaryDAO = new MoshtaryDAO(weakReferenceContext.get());
+            AnbarakAfradDAO anbarakafradDAO = new AnbarakAfradDAO(weakReferenceContext.get());
 
             //updateEtebarForoshandeh();
-            DarkhastFaktorDAO darkhastfaktorDAO = new DarkhastFaktorDAO(weakReferenceContext.get());
+
             darkhastfaktorDAO.deleteAllFaktorTaeedNashode();
 
-			MoshtaryModel moshtaryModel = new MoshtaryDAO(weakReferenceContext.get()).getByccMoshtary(ccMoshtary);
+
             // if value of this variable equal to false, then ignore checks
             boolean checkMojazForDarkhast = true;
             boolean checkEtebarCheckBargashty = true;
@@ -550,9 +576,54 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 			boolean checkMobile = true;
             boolean updateMandeMojodi = true;
             boolean isMorajehShodeh = true;
+            boolean isEtebarCheckBargashty = true;
+            boolean isEtebarAsnad = true;
+            boolean isMojazForResid = true;
+            boolean needCheckKharejAzMahal = true;
+            boolean moshtaryForoshandehFlag = false;
+            /**
+             * check Tarikh Masir customer
+             */
+            boolean checkTarikhMasir = checkTarikhMasir();
+            /**
+             * check olaviat customer
+             */
+            boolean checkPriority = checkPriority(moshtaryModel.getExtraProp_Olaviat());
 
-            //MoshtaryMorajehShodeh
-            MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(weakReferenceContext.get());
+
+            /**
+             *  needCheckKharejAzMahal
+             */
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
+            int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+            boolean isMojazForDarkhast = foroshandehMamorPakhshModel.getIsMojazForSabtDarkhast() == 1;
+
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
+                Date fromDateKharejAzMahal = sdf.parse(foroshandehMamorPakhshModel.getFromDateKharejAzMahal());
+                Date endDateKharejAzMahal = sdf.parse(foroshandehMamorPakhshModel.getEndDateKharejAzMahal());
+                Date currentDate = sdf.parse(sdf.format(new Date()));
+                long currentDateMiliSecond = currentDate.getTime();
+                if (currentDateMiliSecond >= fromDateKharejAzMahal.getTime() && currentDateMiliSecond <= endDateKharejAzMahal.getTime())
+                {
+                    needCheckKharejAzMahal = false;
+                }
+            } catch (Exception e){
+                e.getMessage();
+                setLogToDB(LogPPCModel.LOG_EXCEPTION, e.toString(), CLASS_NAME, "", "AsyncTaskCheckSelectCustomer", "needCheckKharejAzMahal");
+
+            }
+
+            Log.i("selectCustomer" ,"checkTarikhMasir :" + checkTarikhMasir);
+            Log.i("selectCustomer" , "needCheckKharejAzMahal :" + needCheckKharejAzMahal);
+            Log.i("selectCustomer" , "checkPriority :" + checkPriority(moshtaryModel.getExtraProp_Olaviat()));
+
+
+
+            /*
+               **** MoshtaryMorajehShodeh
+             */
+
             int countMoshtaryMorajeShode = moshtaryMorajehShodehRoozDAO.getCountByccMoshtary(ccMoshtary);
             if(countMoshtaryMorajeShode <= 0)
             {
@@ -560,7 +631,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             }
 
 
-            ParameterChildDAO childParameterDAO = new ParameterChildDAO(weakReferenceContext.get());
+
             ArrayList<ParameterChildModel> childParameterModels = childParameterDAO.getAllByccParameter(Constants.REQUEST_CUSTOMER_CCPARAMETER_OF_CHECKS() + "," + Constants.UPDATE_MANDE_MOJODI());
             for (ParameterChildModel model : childParameterModels)
             {
@@ -614,27 +685,27 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
 
 
-            ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(weakReferenceContext.get());
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
-            int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
-            boolean isMojazForDarkhast = foroshandehMamorPakhshModel.getIsMojazForSabtDarkhast() == 1;
-            boolean isEtebarCheckBargashty = true;
-            boolean isEtebarAsnad = true;
-            boolean isMojazForResid = true;
 
-            // Foroshandeh Etebar
-            ForoshandehEtebarDAO foroshandehEtebarDAO = new ForoshandehEtebarDAO(weakReferenceContext.get());
+
+
+            /*
+             **** Foroshandeh Etebar
+             */
             ForoshandehEtebarModel foroshandehEtebarModel = foroshandehEtebarDAO.getByccForoshandeh(foroshandehMamorPakhshModel.getCcForoshandeh());
 
-            DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(weakReferenceContext.get());
+
             Log.d("updateEtebarForoshandeh","foroshandehEtebarModel:" + foroshandehEtebarModel.toString());
 
-            //EtebarBargashty
+            /*
+             **** EtebarBargashty
+             */
             long rialBargahsty = foroshandehEtebarModel.getRialBargashty();
             int tedadBargahsty = foroshandehEtebarModel.getTedadBargashty();
             long modatBargashty = foroshandehEtebarModel.getModatBargashty();
 
-            // EtebarAsnad
+            /*
+              **** EtebarAsnad
+             */
             long RialAsnad = foroshandehEtebarModel.getRialAsnad();
             int TedadAsnad = foroshandehEtebarModel.getTedadAsnad();
             //int ModatAsnad = foroshandehEtebarModel.getModatAsnad();
@@ -643,13 +714,16 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             int etebarTedadAsnadForoshandeh = foroshandehEtebarModel.getEtebarTedadAsnadMoshtary() + foroshandehEtebarModel.getEtebarTedadAsnadShakhsi();
             //int etebarModatAsnadForoshandeh = foroshandehEtebarModel.getEtebarModatAsnadMoshtary() + foroshandehEtebarModel.getEtebarModatAsnadShakhsi();
 
-            // EtebarMoavagh
-
+            /*
+              **** EtebarMoavagh
+             */
             long rialMoavaghForoshandeh = foroshandehEtebarModel.getRialMoavagh();
             int tedadMoavaghForoshandeh = foroshandehEtebarModel.getTedadMoavagh();
             int modatMoavaghForoshandeh = foroshandehEtebarModel.getModatMoavagh();
 
-            //saghf etebar
+            /*
+             **** saghf etebar
+             */
             long MandehSaghfEtebarRiali = foroshandehEtebarModel.getSaghfEtebarRiali() - (rialBargahsty + RialAsnad + rialMoavaghForoshandeh);
             int MandehSaghfEtebarTedadi = foroshandehEtebarModel.getSaghfEtebarTedadi() - (tedadBargahsty + TedadAsnad + tedadMoavaghForoshandeh);
             long MandehSaghfEtebarModat = foroshandehEtebarModel.getSaghfEtebarModat() - Math.max(modatBargashty , modatMoavaghForoshandeh);
@@ -661,7 +735,9 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
 
 
-            // check etebar bargashty
+            /*
+              **** check etebar bargashty
+             */
             Log.d("requestCustomer1","rialBargahsty:" + rialBargahsty + " foroshandehEtebarModel.getEtebarRialBargashty():" + foroshandehEtebarModel.getEtebarRialBargashty() + " MandehSaghfEtebarRiali:" + MandehSaghfEtebarRiali);
             if(rialBargahsty >= foroshandehEtebarModel.getEtebarRialBargashty() || MandehSaghfEtebarRiali<=0)//rialBargahsty >= (foroshandehEtebarModel.getSaghfEtebarRiali() - (RialAsnad + rialMoavaghForoshandeh)))
             {
@@ -681,7 +757,9 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 Log.d("requestCustomer2","isEtebarCheckBargashty:" + isEtebarCheckBargashty);
             }
 
-            // check etebar asnad
+            /*
+              **** check etebar asnad
+             */
             Log.d("requestCustomer1","sumRialAsnad:" + RialAsnad + " rialAsnadForoshandeh:" + etebarRialAsnadForoshandeh + " MandehSaghfEtebarRiali:" + MandehSaghfEtebarRiali);
             if(RialAsnad >= etebarRialAsnadForoshandeh || MandehSaghfEtebarRiali<=0)//RialAsnad >= (foroshandehEtebarModel.getSaghfEtebarRiali() - (rialBargahsty + rialMoavaghForoshandeh)))
             {
@@ -702,7 +780,9 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             }*/
 
 
-            // check etebar moavagh
+            /*
+              **** check etebar moavagh
+             */
             Log.d("requestCustomer1","rialMoavaghForoshandeh:" + rialMoavaghForoshandeh + " foroshandehEtebarModel.getRialMoavagh():" + foroshandehEtebarModel.getRialMoavagh() + " MandehSaghfEtebarRiali:" + MandehSaghfEtebarRiali);
             if(rialMoavaghForoshandeh >= foroshandehEtebarModel.getEtebarRialMoavagh() || MandehSaghfEtebarRiali<=0)//rialMoavaghForoshandeh >= (foroshandehEtebarModel.getSaghfEtebarRiali() - (rialBargahsty + RialAsnad )))
             {
@@ -725,8 +805,8 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             }
 
 
-            boolean moshtaryForoshandehFlag = false;
-            MoshtaryAfradDAO moshtaryafradDAO = new MoshtaryAfradDAO(weakReferenceContext.get());
+
+
             ArrayList<MoshtaryAfradModel> moshtaryAfradModels = moshtaryafradDAO.getByccMoshtary(ccMoshtary);
             Log.d("moshtaryAfrad" , "ccMoshtary : " + ccMoshtary + " , moshtaryAfrad size : " + moshtaryAfradModels.size());
             if (moshtaryAfradModels.size() > 0)
@@ -745,17 +825,15 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
             Log.d("parameter" , "checkDistance : " + checkDistance);
 
-            BargashtyDAO bargashtyDAO = new BargashtyDAO(weakReferenceContext.get());
+
             int ccSazmanForosh = foroshandehMamorPakhshModel.getCcSazmanForosh();
             int tedadBargashti = bargashtyDAO.getCountByccMoshtaryAndSazmanForosh(ccMoshtary, ccSazmanForosh);
-            MoshtaryEtebarSazmanForoshDAO moshtaryetebarsazmanforoshDAO = new MoshtaryEtebarSazmanForoshDAO(weakReferenceContext.get());
             int tedadEtebarCheckBargashti = moshtaryetebarsazmanforoshDAO.getByccMoshtary(ccMoshtary).getTedadBargashty();
             int countDarkhastFaktorErsalNashodeh = darkhastfaktorDAO.getCountErsalNashode();
             Log.d("customer" , "count ersal nashode : " + countDarkhastFaktorErsalNashodeh);
             if(checkMojazForDarkhast && !isMojazForDarkhast)// & PubFuncs.DeviceInfo_TestBarnameh(context) == false)
             {
                 return -2;
-                //Toast.makeText(context, ".\n", Toast.LENGTH_LONG).show();
             }
             else
             {
@@ -769,12 +847,13 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     e.printStackTrace();
                     setLogToDB(LogPPCModel.LOG_EXCEPTION, e.toString(), "", "", "", "");
                 }
+
                 int ccAnbarakActive = foroshandehMamorPakhshDAO.getAll().get(0).getCcAnbarak();
-                AnbarakAfradDAO anbarakafradDAO = new AnbarakAfradDAO(weakReferenceContext.get());
                 ArrayList<AnbarakAfradModel> anbarakAfradModels = anbarakafradDAO.getAll();
 				String customerMobile = moshtaryModel.getMobile();
                 customerMobile = customerMobile == null ? "" : customerMobile;
                 int ccAnbarakFeli = -1;
+
                 if (anbarakAfradModels.size() > 0)
                 {
                     ccAnbarakFeli = anbarakAfradModels.get(0).getCcAnbarak();
@@ -812,13 +891,13 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     //Toast.makeText(context, "به علت تغییر انبارک شما قادر به ثبت درخواست نمی باشید.لطفا مجددا دریافت برنامه نمایید.\n", Toast.LENGTH_LONG).show();
                     return -7;
                 }
-                else if (isTest!=1 && ( foroshandehMamorPakhshModel.getCheckOlaviatMoshtary() == 1 && !checkPriority(moshtaryModel.getExtraProp_Olaviat())))
-                {
-                    return -14;
-                }
+//                else if (foroshandehMamorPakhshModel.getCheckOlaviatMoshtary() == 1  && !checkPriority)
+//                {
+//                    return -14;
+//                }
                 else
                 {
-                    int codeNoeVosol = new MoshtaryDAO(weakReferenceContext.get()).getByccMoshtary(ccMoshtary).getCodeNoeVosolAzMoshtary();
+                    int codeNoeVosol = moshtaryDAO.getByccMoshtary(ccMoshtary).getCodeNoeVosolAzMoshtary();
                     int ccChildParameterNoeVosol = -1;
                     if (codeNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD())
                     {
@@ -853,10 +932,14 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                         //ccChildParameterNoeVosol = Constants.CC_VOSOL_IS_RESID();
                     }
 
-                    int canCreateFaktor = 1; //1=>canCreateFaktor , -1=>can'tCreateFaktor , -2=> not in Polygon
+                    /**
+                     * help
+                     * // 1=> canCreateFaktor , -1=> can'tCreateFaktor , -2=> not in Polygon
+                     */
+                    int canCreateFaktor = 1;
                     if (checkDistance)
                     {
-                        canCreateFaktor = isValidCreateFaktor(ccMoshtary , foroshandehMamorPakhshModel, moshtaryForoshandehFlag, location);
+                        canCreateFaktor = isValidCreateFaktor(ccMoshtary , foroshandehMamorPakhshModel, moshtaryForoshandehFlag, location,needCheckKharejAzMahal , checkPriority);
                     }
                     if (canCreateFaktor == 1)
                     {
@@ -910,6 +993,10 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     else if (canCreateFaktor == -4)
                     {
                         return -15;
+                    }
+                    else if (canCreateFaktor == -5)
+                    {
+                        return -14;
                     }
                 }
             }
@@ -965,7 +1052,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             }
         }
 
-        private int isValidCreateFaktor(int ccMoshtary , ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, boolean moshtaryForoshandehFlag, Location location)
+        private int isValidCreateFaktor(int ccMoshtary , ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, boolean moshtaryForoshandehFlag, Location location,boolean needCheckKharejAzMahal, boolean checkPriority)
         {
             ParameterChildDAO parameterChildDAO = new ParameterChildDAO(weakReferenceContext.get());
             MoshtaryAddressDAO moshtaryAddressDAO = new MoshtaryAddressDAO(weakReferenceContext.get());
@@ -998,25 +1085,15 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             //String strDate = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_NOT_CHECK_KHAREJ_AZ_MAHAL());
             try
             {
-                SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
-                Date fromDateKharejAzMahal = sdf.parse(foroshandehMamorPakhshModel.getFromDateKharejAzMahal());
-                Date endDateKharejAzMahal = sdf.parse(foroshandehMamorPakhshModel.getEndDateKharejAzMahal());
-                Date currentDate = sdf.parse(sdf.format(new Date()));
-                long currentDateMiliSecond = currentDate.getTime();
-                boolean needCheckKharejAzMahal = true;
-                if ((currentDateMiliSecond >= fromDateKharejAzMahal.getTime() && currentDateMiliSecond <= endDateKharejAzMahal.getTime()) || moshtary.getKharejAzMahal() == 1)
-                {
-                    needCheckKharejAzMahal = false;
-                }
+
 
                 MoshtaryPolygonDAO moshtaryPolygonDAO = new MoshtaryPolygonDAO(weakReferenceContext.get());
                 int CanVisitKharejAzMahal_Polygon = moshtaryPolygonDAO.getCanVisitKharejAzMahal(ccMoshtary);
 
-                Log.d("kharejAzMahal", "current : " + currentDate + " , from : " + fromDateKharejAzMahal + " , end : " + endDateKharejAzMahal);
-                Log.d("kharejAzMahal", "current time : " + currentDate.getTime() + " , from time : " + fromDateKharejAzMahal.getTime() + " , end time : " + endDateKharejAzMahal.getTime());
+//                Log.d("kharejAzMahal", "current : " + currentDate + " , from : " + fromDateKharejAzMahal + " , end : " + endDateKharejAzMahal);
+//                Log.d("kharejAzMahal", "current time : " + currentDate.getTime() + " , from time : " + fromDateKharejAzMahal.getTime() + " , end time : " + endDateKharejAzMahal.getTime());
                 Log.d("kharejAzMahal" , "getExtraProp_IsMoshtaryAmargar : " + moshtary.getExtraProp_IsMoshtaryAmargar());
                 Log.d("kharejAzMahal" , "CanVisitKharejAzMahal_Polygon : " + CanVisitKharejAzMahal_Polygon + " , needCheckKharejAzMahal:" + needCheckKharejAzMahal);
-                Log.d("kharejAzMahal" , "moshtary.getKharejAzMahal():" + moshtary.getKharejAzMahal());
 
                 if (needCheckKharejAzMahal && CanVisitKharejAzMahal_Polygon == 0)//SelectFaktorShared.getccGorohNoeMoshtary() != 350) && CanVisitKharejAzMahal_Polygon == 0)
                 {
@@ -1075,6 +1152,10 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                         }
                         //}
                     }
+                }
+                if (foroshandehMamorPakhshModel.getCheckOlaviatMoshtary() == 1  && !checkPriority && checkTarikhMasir() && needCheckKharejAzMahal)
+                {
+                    return -5;
                 }
                 return 1;
             }

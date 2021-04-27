@@ -501,7 +501,7 @@ public class SplashPresenter implements SplashMVP.PresenterOps, SplashMVP.Requir
 
     private void checkVersionAzmayeshi(int appVersion , int azmayeshiVersion , String urlAzmayeshi)
     {
-        if (appVersion < azmayeshiVersion)
+        if (appVersion < azmayeshiVersion || appVersion > azmayeshiVersion)
         {
             /*for (ParameterChildModel childParameterModel : childParameterModelsDownloadUrls)
             {

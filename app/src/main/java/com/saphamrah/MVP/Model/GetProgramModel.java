@@ -41,6 +41,7 @@ import com.saphamrah.Shared.GetProgramShared;
 import com.saphamrah.Shared.LastOlaviatMoshtaryShared;
 import com.saphamrah.Shared.LocalConfigShared;
 import com.saphamrah.Shared.UserTypeShared;
+import com.saphamrah.UIModel.OlaviatMorajehModel;
 import com.saphamrah.Utils.Constants;
 
 import java.text.SimpleDateFormat;
@@ -5522,24 +5523,32 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
 
     private void checkLastOlaviat()
     {
+        MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(BaseApplication.getContext());
+        OlaviatMorajehModel olaviatMorajehModel = moshtaryMorajehShodehRoozDAO.getOlaviatMorajeh();
+
         LastOlaviatMoshtaryShared lastOlaviatMoshtaryShared = new LastOlaviatMoshtaryShared(mPresenter.getAppContext());
-        Date currentDate = new Date();
-        Date lastOlaviatDate = new Date();
-        String strLastOlaviatDate = lastOlaviatMoshtaryShared.getString(LastOlaviatMoshtaryShared.TARIKH , "");
-        if (strLastOlaviatDate != null && !strLastOlaviatDate.trim().equals(""))
-        {
-            try
-            {
-                lastOlaviatDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).parse(strLastOlaviatDate);
-                Log.d("GetProgram" , "lastOlaviatDate : " + lastOlaviatDate);
-            }
-            catch (Exception e){e.printStackTrace();}
-        }
-        long daysOfDiff = DateUtils.getDateDiffAsDay(currentDate , lastOlaviatDate);
-        if (daysOfDiff != 0)
-        {
-            lastOlaviatMoshtaryShared.removeAll();
-        }
+        lastOlaviatMoshtaryShared.removeAll();
+
+        lastOlaviatMoshtaryShared.putInt(LastOlaviatMoshtaryShared.OLAVIAT, olaviatMorajehModel.getOlaviat());
+        lastOlaviatMoshtaryShared.putInt(LastOlaviatMoshtaryShared.CCMOSHTARY, olaviatMorajehModel.getCcMoshtary());
+        lastOlaviatMoshtaryShared.putString(LastOlaviatMoshtaryShared.TARIKH, new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date()));
+//        Date currentDate = new Date();
+//        Date lastOlaviatDate = new Date();
+//        String strLastOlaviatDate = lastOlaviatMoshtaryShared.getString(LastOlaviatMoshtaryShared.TARIKH , "");
+//        if (strLastOlaviatDate != null && !strLastOlaviatDate.trim().equals(""))
+//        {
+//            try
+//            {
+//                lastOlaviatDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).parse(strLastOlaviatDate);
+//                Log.d("GetProgram" , "lastOlaviatDate : " + lastOlaviatDate);
+//            }
+//            catch (Exception e){e.printStackTrace();}
+//        }
+//        long daysOfDiff = DateUtils.getDateDiffAsDay(currentDate , lastOlaviatDate);
+//        if (daysOfDiff != 0)
+//        {
+//            lastOlaviatMoshtaryShared.removeAll();
+//        }
     }
 
     private void saveLastGetProgramDate()

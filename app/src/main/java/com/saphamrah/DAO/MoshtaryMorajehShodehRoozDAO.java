@@ -10,6 +10,7 @@ import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.UIModel.OlaviatMorajehModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServiceGet;
 
@@ -261,6 +262,38 @@ public class MoshtaryMorajehShodehRoozDAO
         return moshtaryMorajehShodehRoozModels;
     }
 
+    public OlaviatMorajehModel getOlaviatMorajeh(){
+        OlaviatMorajehModel olaviatMorajehModel = new OlaviatMorajehModel();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+            String query = "select m.ccmoshtary , noemorajeh , moshtary.Olaviat\n" +
+                    "from moshtarymorajehshodeh_rooz m\n" +
+                    "left join moshtary on moshtary.ccmoshtary = m.ccmoshtary\n" +
+                    "where noemorajeh != 0 \n" +
+                    "order by Olaviat desc LIMIT 1";
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    olaviatMorajehModel = cursorToModelOlaviat(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , MoshtaryMorajehShodehRoozModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "MoshtaryMorajehShodehRoozDAO" , "" , "getOlaviatMorajeh" , "");
+        }
+        return olaviatMorajehModel;
+    }
+
     public ArrayList<MoshtaryMorajehShodehRoozModel> getEtebarByccMoshtary(int ccMoshtary)
     {
         ArrayList<MoshtaryMorajehShodehRoozModel> moshtaryMorajehShodehRooz = new ArrayList<>();
@@ -389,6 +422,22 @@ public class MoshtaryMorajehShodehRoozDAO
             cursor.moveToNext();
         }
         return moshtaryMorajehShodehRoozModels;
+    }
+
+    private OlaviatMorajehModel cursorToModelOlaviat(Cursor cursor)
+    {
+        OlaviatMorajehModel model = new OlaviatMorajehModel();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast())
+        {
+            model.setCcMoshtary(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_ccMoshtary())));
+            model.setNoeMorajeh(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_NoeMorajeh())));
+            model.setOlaviat(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_Olaviat())));
+
+            cursor.moveToNext();
+        }
+        return model;
     }
 
 }

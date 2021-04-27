@@ -19,6 +19,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -657,6 +658,7 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
                 if (show.getWindow() != null)
                 {
                     show.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    show.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                 }
             }
             catch (Exception exception)
