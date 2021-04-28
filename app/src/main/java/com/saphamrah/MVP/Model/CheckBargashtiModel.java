@@ -209,7 +209,7 @@ public class CheckBargashtiModel implements CheckBargashtiMVP.ModelOps
                                     errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string();//+ "\n" + "can't send this log : " + logMessage;
                                 }
                                 setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "CheckBargashtiModel", "", "sendDariaftPardakhtToServer", "onResponse");
-                                mPresenter.onErrorSend(R.string.errorOperation);
+                                mPresenter.onErrorSend(R.string.errorOperationCheckBarghashtiResponse);
                             }
                         } catch (Exception exception) {
                             exception.printStackTrace();
@@ -221,7 +221,7 @@ public class CheckBargashtiModel implements CheckBargashtiMVP.ModelOps
                     @Override
                     public void onFailure(Call<CreateDariaftPardakhtPPCJSONResult> call, Throwable t) {
                         setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "CheckBargashtiModel", "", "sendDariaftPardakhtToServer", "onFailure");
-                        mPresenter.onErrorSend(R.string.errorOperation);
+                        mPresenter.onErrorSend(R.string.errorOperationCheckBarghashti);
                     }
                 });
 
