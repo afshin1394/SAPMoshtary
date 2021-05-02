@@ -2,10 +2,14 @@ package com.saphamrah.MVP.View;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -99,6 +103,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     private EditText editTextSumTedad;
     private TextInputLayout txtinputLayTarikhPishbiniTahvil;
     private FloatingActionButton fabAddMarjoee;
+    private FloatingActionButton fabHashiehSoud;
     private FloatingActionButton fabSelectBonus;
     private RecyclerView recyclerViewRequestedGoods;
     private RecyclerView recyclerViewMarjoee;
@@ -106,7 +111,8 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     private RecyclerView recyclerViewJayezeh;
     private AlertDialog alertDialog;
     private CustomLoadingDialog customLoadingDialog;
-
+    private View alertView;
+    private AlertDialog show;
 
     //getModatRoozRaasgiri -> calculate and get Discounts -> calculate and get request details
 
@@ -156,6 +162,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         txtinputLayTarikhPishbiniTahvil = findViewById(R.id.inputLayTarikhPishbiniTahvil);
         final FloatingActionMenu fabMenu = findViewById(R.id.fabMenu);
         fabAddMarjoee = findViewById(R.id.fabAddMarjoee);
+        fabHashiehSoud = findViewById(R.id.fabHashiehSoud);
         fabSelectBonus = findViewById(R.id.fabSelectBonus);
         FloatingActionButton fabShowCustomerInfo = findViewById(R.id.fabShowCustomerInfo);
         recyclerViewRequestedGoods = findViewById(R.id.recyclerViewSefaresh);
@@ -262,6 +269,9 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
             }
         });
 
+        fabHashiehSoud.setOnClickListener(v->{
+            mPresenter.getHashiehSoud(ccDarkhastFaktor,editTextMablaghKhales.getText().toString().replace("," , ""));
+        });
 
         fabAddMarjoee.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -432,11 +442,15 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
 
 
     @Override
-    public void showModatRoozRaasgiri(int modatRoozRaasgiri, boolean isSelectedVosolVajhNagh)
+    public void showModatRoozRaasgiri(int modatRoozRaasgiri, boolean isSelectedVosolVajhNagh,boolean isSelectedVosolResidNaghd)
     {
-        if (isSelectedVosolVajhNagh)
+        if (isSelectedVosolVajhNagh && !isSelectedVosolResidNaghd)
         {
             this.modatVosol = 0;
+        }
+        else if(isSelectedVosolVajhNagh && isSelectedVosolResidNaghd)
+        {//todo shanbe
+            this.modatVosol = 2;
         }
         else
         {
@@ -725,6 +739,73 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
             {
                 exception.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public void onHashiehSoud(double mablaghTakhfifNaghdi, double mablaghTakhfifHajmi, double mablaghJayezeh, double mablaghHashiehSood, double jamSoodMaghazeh, double darsadSoodMaghazeh) {
+        DecimalFormat formatter = new DecimalFormat("#,###,###");
+        AlertDialog.Builder builder = new AlertDialog.Builder(VerifyRequestActivity.this);
+        alertView = getLayoutInflater().inflate(R.layout.alert_hashieh_soud, null);
+        Button btnOk = alertView.findViewById(R.id.btnOk);
+        TextView txtTakhfifNaghdi = alertView.findViewById(R.id.txtTakhfifNaghdi);
+        TextView txtTakhfifHajmi = alertView.findViewById(R.id.txtTakhfifHajmi);
+        TextView txtMablaghJayezeh = alertView.findViewById(R.id.txtMablaghJayezeh);
+        TextView txtHashieySoudKala = alertView.findViewById(R.id.txtHashieySoudKala);
+        TextView txtJamSoudMaghazeh = alertView.findViewById(R.id.txtJamSoudMaghazeh);
+        TextView txtDarsadSoudMaghazeh = alertView.findViewById(R.id.txtDarsadSoudMaghazeh);
+
+        TextView detailsTakhfifNaghdi = alertView.findViewById(R.id.detailsTakhfifNaghdi);
+        TextView detailsTakhfifHajmi = alertView.findViewById(R.id.detailsTakhfifHajmi);
+        TextView detailsMablaghJayezeh = alertView.findViewById(R.id.detailsMablaghJayezeh);
+        TextView detailsHashieySoudKala = alertView.findViewById(R.id.detailsHashieySoudKala);
+        TextView detailsJamSoudMaghazeh = alertView.findViewById(R.id.detailsJamSoudMaghazeh);
+        TextView detailsDarsadSoudMaghazeh = alertView.findViewById(R.id.detailsDarsadSoudMaghazeh);
+
+
+
+        Typeface font = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fontPath));
+        btnOk.setTypeface(font);
+        txtTakhfifNaghdi.setTypeface(font);
+        txtTakhfifHajmi.setTypeface(font);
+        txtMablaghJayezeh.setTypeface(font);
+        txtHashieySoudKala.setTypeface(font);
+        txtJamSoudMaghazeh.setTypeface(font);
+        txtDarsadSoudMaghazeh.setTypeface(font);
+        detailsTakhfifNaghdi.setTypeface(font);
+        detailsTakhfifHajmi.setTypeface(font);
+        detailsMablaghJayezeh.setTypeface(font);
+        detailsHashieySoudKala.setTypeface(font);
+        detailsJamSoudMaghazeh.setTypeface(font);
+        detailsDarsadSoudMaghazeh.setTypeface(font);
+
+        txtTakhfifNaghdi.setText(formatter.format((int)mablaghTakhfifNaghdi)+ " ریال ");
+        txtTakhfifHajmi.setText(formatter.format((int)mablaghTakhfifHajmi)+ " ریال ");
+        txtMablaghJayezeh.setText(formatter.format((int)mablaghJayezeh)+ " ریال ");
+        txtHashieySoudKala.setText(formatter.format((int)mablaghHashiehSood)+ " ریال ");
+        txtJamSoudMaghazeh.setText(formatter.format((int)jamSoodMaghazeh)+ " ریال ");
+        txtDarsadSoudMaghazeh.setText(String.valueOf(darsadSoodMaghazeh)+ " درصد ");
+
+
+        builder.setCancelable(true);
+        builder.setView(alertView);
+        builder.create();
+
+        if (!(VerifyRequestActivity.this).isFinishing()) {
+            show = builder.show();
+            try {
+                if (show.getWindow() != null) {
+                    show.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(VerifyRequestActivity.this, Constants.LOG_EXCEPTION(), exception.toString(), "", "VerifyRequestActivity", "showHashiehSoud", "");
+            }
+
+
+            btnOk.setOnClickListener(v -> show.dismiss());
+
         }
     }
 
