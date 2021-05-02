@@ -265,6 +265,11 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
     public void onDestroy(boolean isChangingConfig)
     {}
 
+    @Override
+    public void getHashiehSoud(long ccDarkhastFaktor,String mablaghBaArzeshAfzoodeh) {
+        mModel.getHashiehSoud(ccDarkhastFaktor,mablaghBaArzeshAfzoodeh);
+    }
+
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
 
@@ -326,9 +331,9 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
     }
 
     @Override
-    public void onGetModatRoozRaasgiri(int modatRoozRaasgiri, boolean isSelectedVosolVajhNagh)
+    public void onGetModatRoozRaasgiri(int modatRoozRaasgiri, boolean isSelectedVosolVajhNagh, boolean isSelectedVosolResidNaghd)
     {
-        mView.get().showModatRoozRaasgiri(modatRoozRaasgiri, isSelectedVosolVajhNagh);
+        mView.get().showModatRoozRaasgiri(modatRoozRaasgiri, isSelectedVosolVajhNagh ,isSelectedVosolResidNaghd);
     }
 
     @Override
@@ -487,5 +492,10 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
     public void closeLoading()
     {
         mView.get().closeLoading();
+    }
+
+    @Override
+    public void onHashiehSoud(double mablaghTakhfifNaghdi, double mablaghTakhfifHajmi, double mablaghJayezeh, double mablaghHashiehSood, double jamSoodMaghazeh, double darsadSoodMaghazeh) {
+        mView.get().onHashiehSoud(mablaghTakhfifNaghdi,mablaghTakhfifHajmi,mablaghJayezeh,mablaghHashiehSood,jamSoodMaghazeh,darsadSoodMaghazeh);
     }
 }
