@@ -7,7 +7,7 @@ import com.saphamrah.BaseMVP.InvoiceSettlementMVP;
 import com.saphamrah.MVP.Model.InvoiceSettlementModel;
 import com.saphamrah.Model.BankModel;
 import com.saphamrah.Model.BargashtyModel;
-import com.saphamrah.Model.CodeNoeVosolModel;
+import com.saphamrah.Model.ConfigNoeVosolMojazeFaktorModel;
 import com.saphamrah.Model.ConfigNoeVosolMojazeMoshtaryModel;
 import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
@@ -167,7 +167,7 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
     }
 
     @Override
-    public void checkInsert(int ccMoshtary , long ccDarkhastFaktor , int codeNoeVosolMoshtary , int flagInputHesab, String mablaghMandeh , DariaftPardakhtPPCModel dariaftPardakhtPPCModel , ArrayList<CodeNoeVosolModel> childParameterModelsNoeVosol)
+    public void checkInsert(int ccMoshtary , long ccDarkhastFaktor , int codeNoeVosolMoshtary , int flagInputHesab, String mablaghMandeh , DariaftPardakhtPPCModel dariaftPardakhtPPCModel , ArrayList<ConfigNoeVosolMojazeFaktorModel> configNoeVosolMojazeFaktorModels)
     {
         if (codeNoeVosolMoshtary == 0)
         {
@@ -177,10 +177,10 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
         {
             String nameNoeVosol = "";
             String strCodeNoeVosol = String.valueOf(codeNoeVosolMoshtary);
-            for (CodeNoeVosolModel model : childParameterModelsNoeVosol)
+            for (ConfigNoeVosolMojazeFaktorModel model : configNoeVosolMojazeFaktorModels)
             {
 
-                if (strCodeNoeVosol.equals(String.valueOf(model.getCodeNoeVosol())))
+                if (strCodeNoeVosol.equals(String.valueOf(model.getCodeNoeVosol_Tablet())))
                 {
                     nameNoeVosol = model.getTxtNoeVosol();
                     break;
@@ -259,10 +259,7 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
         }
     }
 
-    @Override
-    public void callTajil(long ccDarkhastfaktor , int codeNoeVosol) {
-        mModel.callTajil(ccDarkhastfaktor , codeNoeVosol);
-    }
+
 
     @Override
     public void checkRegisteredVosol(int position)
@@ -444,11 +441,11 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
 //    }
 
     @Override
-    public void onGetNoeVosols(ArrayList<CodeNoeVosolModel> codeNoeVosolModels)
+    public void onGetNoeVosols(ArrayList<ConfigNoeVosolMojazeFaktorModel> configNoeVosolMojazeFaktorModels)
     {
-        if (codeNoeVosolModels.size() > 0)
+        if (configNoeVosolMojazeFaktorModels.size() > 0)
         {
-            mView.get().onGetNoeVosols(codeNoeVosolModels);
+            mView.get().onGetNoeVosols(configNoeVosolMojazeFaktorModels);
         }
         else
         {

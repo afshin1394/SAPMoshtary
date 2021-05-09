@@ -2,51 +2,36 @@ package com.saphamrah.MVP.View;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SnapHelper;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog;
 import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
-import com.saphamrah.Adapter.RequestGoodsAdapter;
-import com.saphamrah.Adapter.RequestGoodsListAdapter;
 import com.saphamrah.Adapter.invoiceSettelment.SettlementAdapter;
 import com.saphamrah.Adapter.invoiceSettelment.SettlementPishDaryaftAdapter;
-import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.InvoiceSettlementMVP;
 import com.saphamrah.CustomView.BottomBar;
 import com.saphamrah.CustomView.CustomSpinner;
@@ -54,7 +39,7 @@ import com.saphamrah.CustomView.CustomTextInputLayout;
 import com.saphamrah.MVP.Presenter.InvoiceSettlementPresenter;
 import com.saphamrah.Model.BankModel;
 import com.saphamrah.Model.BargashtyModel;
-import com.saphamrah.Model.CodeNoeVosolModel;
+import com.saphamrah.Model.ConfigNoeVosolMojazeFaktorModel;
 import com.saphamrah.Model.ConfigNoeVosolMojazeMoshtaryModel;
 import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
@@ -62,13 +47,10 @@ import com.saphamrah.Model.MarkazShomarehHesabModel;
 import com.saphamrah.Model.MoshtaryShomarehHesabModel;
 import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.PosShomarehHesabModel;
-import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
-import com.saphamrah.UIModel.KalaMojodiZaribModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
 import com.saphamrah.Utils.CustomAlertDialogResponse;
-import com.saphamrah.Utils.CustomLoadingDialog;
 import com.saphamrah.Utils.CustomSpinnerResponse;
 import com.saphamrah.Utils.StateMaintainer;
 
@@ -76,8 +58,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import me.anwarshahriar.calligrapher.Calligrapher;
-
-import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 public class InvoiceSettlementActivity extends AppCompatActivity implements InvoiceSettlementMVP.RequiredViewOps {
 
@@ -92,7 +72,7 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
     private CustomAlertDialog customAlertDialog;
     private int ccMoshtary;
     private long ccDarkhastFaktor;
-    private ArrayList<CodeNoeVosolModel> codeNoeVosolModelModelsNoeVosol;
+    private ArrayList<ConfigNoeVosolMojazeFaktorModel> configNoeVosolMojazeFaktorModelArrayList;
     private ArrayList<ConfigNoeVosolMojazeMoshtaryModel> configNoeVosolMojazeMoshtaryModelArrayList;
     private ArrayList<String> noeVosolTitles;
     private ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModelsVosol;
@@ -275,7 +255,7 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
         decimalFormatter = new DecimalFormat("#,###,###");
         customSpinner = new CustomSpinner();
         customAlertDialog = new CustomAlertDialog(InvoiceSettlementActivity.this);
-        codeNoeVosolModelModelsNoeVosol = new ArrayList<>();
+        configNoeVosolMojazeFaktorModelArrayList = new ArrayList<>();
         noeVosolTitles = new ArrayList<>();
         dariaftPardakhtDarkhastFaktorPPCModelsVosol = new ArrayList<>();
         configNoeVosolMojazeMoshtaryModelArrayList = new ArrayList<>();
@@ -497,9 +477,9 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
             lay_tajil_naghd.setVisibility(View.GONE);
         }
 
-        if (from == Constants.FROM_TREASURYLIST || from == Constants.FROM_CHECK_BARGASHTI || from == -1)
-
-            mPresenter.callTajil(ccDarkhastFaktor, 0);
+//        if (from == Constants.FROM_TREASURYLIST || from == Constants.FROM_CHECK_BARGASHTI || from == -1)
+//
+//            mPresenter.callTajil(ccDarkhastFaktor, 0);
     }
 
     @Override
@@ -615,13 +595,13 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
     /**
      * get code noe vosol
      *
-     * @param codeNoeVosolModels
+     * @param configNoeVosolMojazeFaktorModels
      */
     @Override
-    public void onGetNoeVosols(ArrayList<CodeNoeVosolModel> codeNoeVosolModels) {
-        for (CodeNoeVosolModel model : codeNoeVosolModels) {
+    public void onGetNoeVosols(ArrayList<ConfigNoeVosolMojazeFaktorModel> configNoeVosolMojazeFaktorModels) {
+        for (ConfigNoeVosolMojazeFaktorModel model : configNoeVosolMojazeFaktorModels) {
             noeVosolTitles.add(model.getTxtNoeVosol());
-            codeNoeVosolModelModelsNoeVosol.add(model);
+            configNoeVosolMojazeFaktorModelArrayList.add(model);
         }
     }
 
@@ -933,7 +913,9 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
         final ArrayList<String> bankTitles = new ArrayList<>();
 
         for (MoshtaryShomarehHesabModel model : moshtaryShomarehHesabModels) {
-            shomareHesabTitles.add(String.format("%1$s - %2$s - %3$s", model.getNameMoshtary(), model.getNameBank(), model.getNameNoeHesab()));
+
+            shomareHesabTitles.add(String.format("%1$s - %2$s - %3$s", model.getNameMoshtary(), model.getNameBank()+" - "+
+                    model.getShomarehHesab(), model.getNameNoeHesab()));
         }
         for (BankModel model : bankModels) {
             bankTitles.add(model.getNameBank());
@@ -1260,7 +1242,7 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
             dariaftPardakhtPPCModel.setSharhShomarehHesab(sharhMoshtaryShomarehHesab);
 
             if (from == Constants.FROM_TREASURYLIST || from == -1) {
-                mPresenter.checkInsert(ccMoshtary, ccDarkhastFaktor, codeNoeVosolMoshtary, flagInputHesab, editTextMablaghMandeh.getText().toString().trim().replace(",", ""), dariaftPardakhtPPCModel, codeNoeVosolModelModelsNoeVosol);
+                mPresenter.checkInsert(ccMoshtary, ccDarkhastFaktor, codeNoeVosolMoshtary, flagInputHesab, editTextMablaghMandeh.getText().toString().trim().replace(",", ""), dariaftPardakhtPPCModel, configNoeVosolMojazeFaktorModelArrayList);
             } else if (from == Constants.FROM_CHECK_BARGASHTI) {
                 mPresenter.checkInsertCheckBargashty(ccMoshtary, ccDarkhastFaktor, codeNoeVosolMoshtary, flagInputHesab, editTextMablaghMandeh.getText().toString().trim().replace(",", ""), dariaftPardakhtPPCModel, configNoeVosolMojazeMoshtaryModelArrayList);
             } else if (from == Constants.FROM_PISH_DARYAFT) {
@@ -1311,7 +1293,7 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
 //            editTextMablaghMandeh.setText(decimalFormatter.format(mablaghMandeh));
 //        }
         if (from == Constants.FROM_TREASURYLIST || from == Constants.FROM_CHECK_BARGASHTI || from == -1) {
-            mPresenter.callTajil(ccDarkhastFaktor, 0);
+            //mPresenter.callTajil(ccDarkhastFaktor, 0);
             mPresenter.getVosols(ccDarkhastFaktor);
             editTextMablaghMandeh.setText(decimalFormatter.format(mablaghMandeh));
         } else {
@@ -1327,12 +1309,13 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
      */
     @Override
     public void onGetDetailsCheckBargashti(ArrayList<BargashtyModel> bargashtyModels) {
-        editTextShomareDarkhast.setText(String.valueOf(bargashtyModels.get(0).getShomarehSanad()));
-        DecimalFormat formatter = new DecimalFormat("#,###,###");
-        txtCost.setText(String.valueOf(formatter.format(bargashtyModels.get(0).getMablagh())));
-        txtRemain.setText(String.valueOf(formatter.format(bargashtyModels.get(0).getMablaghMandeh())));
-        editTxtNoeVosol.setVisibility(View.GONE);
-
+        if(bargashtyModels.size()>0) {
+            editTextShomareDarkhast.setText(String.valueOf(bargashtyModels.get(0).getShomarehSanad()));
+            DecimalFormat formatter = new DecimalFormat("#,###,###");
+            txtCost.setText(String.valueOf(formatter.format(bargashtyModels.get(0).getMablagh())));
+            txtRemain.setText(String.valueOf(formatter.format(bargashtyModels.get(0).getMablaghMandeh())));
+            editTxtNoeVosol.setVisibility(View.GONE);
+        }
     }
 
 
@@ -1405,9 +1388,9 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
 
                         mablaghMandeh = Double.parseDouble(editTextMablaghMandeh.getText().toString().trim().replace(",", ""));
 
-                        codeNoeVosolMoshtary = codeNoeVosolModelModelsNoeVosol.get(selectedIndex).getCodeNoeVosol();
+                        codeNoeVosolMoshtary = configNoeVosolMojazeFaktorModelArrayList.get(selectedIndex).getCodeNoeVosol_Tablet();
                         mPresenter.checkSelectedNoeVosol(String.valueOf(codeNoeVosolMoshtary), ccMoshtary, ccDarkhastFaktor, mablaghMandeh);
-                        Log.d("noeVosol", codeNoeVosolModelModelsNoeVosol.get(selectedIndex).toString());
+                        Log.d("noeVosol", configNoeVosolMojazeFaktorModelArrayList.get(selectedIndex).toString());
                     } else if (from == Constants.FROM_PISH_DARYAFT) {
                         editTextSelectNoeVosol.setText(noeVosolTitles.get(selectedIndex));
                         codeNoeVosolMoshtary = configNoeVosolMojazeMoshtaryModelArrayList.get(selectedIndex).getCodeNoeVosol_Tablet();
@@ -1419,9 +1402,9 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
 
                         mablaghMandeh = Double.parseDouble(editTextMablaghMandeh.getText().toString().trim().replace(",", ""));
 
-                        codeNoeVosolMoshtary = codeNoeVosolModelModelsNoeVosol.get(selectedIndex).getCodeNoeVosol();
+                        codeNoeVosolMoshtary = configNoeVosolMojazeFaktorModelArrayList.get(selectedIndex).getCodeNoeVosol_Tablet();
                         mPresenter.checkSelectedNoeVosol(String.valueOf(codeNoeVosolMoshtary), ccMoshtary, ccDarkhastFaktor, mablaghMandeh);
-                        Log.d("noeVosol", codeNoeVosolModelModelsNoeVosol.get(selectedIndex).toString());
+                        Log.d("noeVosol", configNoeVosolMojazeFaktorModelArrayList.get(selectedIndex).toString());
                     }
 
                     //Toast.makeText(InvoiceSettlementActivity.this, "select : " + childParameterModelsNoeVosol.get(selectedIndex).getTxt() , Toast.LENGTH_LONG).show();
