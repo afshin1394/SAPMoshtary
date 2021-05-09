@@ -1,11 +1,10 @@
 package com.saphamrah.BaseMVP;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.saphamrah.Model.BankModel;
 import com.saphamrah.Model.BargashtyModel;
-import com.saphamrah.Model.CodeNoeVosolModel;
+import com.saphamrah.Model.ConfigNoeVosolMojazeFaktorModel;
 import com.saphamrah.Model.ConfigNoeVosolMojazeMoshtaryModel;
 import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
@@ -26,7 +25,7 @@ public interface InvoiceSettlementMVP
         void openEmzaMoshtaryActivity();
         void onGetInfo(String shomareDarkhast , int ccNoeVosol , String noeVosol , String cost , String remainCost /*, ArrayList<> paymentsItem */);
         void onGetVosols(ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels);
-        void onGetNoeVosols(ArrayList<CodeNoeVosolModel> codeNoeVosolModels);
+        void onGetNoeVosols(ArrayList<ConfigNoeVosolMojazeFaktorModel> configNoeVosolMojazeFaktorModels);
         void showVosolNaghdInfo(int codeNoevosol);
         void showVosolPOSInfo(ArrayList<PosShomarehHesabModel> posShomarehHesabModels , int codeNoevosol);
         void showVosolIranCheckInfo(ArrayList<ParameterChildModel> childParameterModels , int codeNoevosol);
@@ -61,7 +60,7 @@ public interface InvoiceSettlementMVP
         void getNoeVosols(long ccDarkhastFaktor , boolean getNoeVosolFromShared , int from , int ccMoshtary);
         void checkSelectedNoeVosol(String codeNoeVosol , int ccMoshtary , long ccDarkhastFaktor , double mablaghMandeh);
         void checkRemainCost(int codeNoeVosolMoshtary , String mablaghMandeh ,int from);
-        void checkInsert(int ccMoshtary , long ccDarkhastFaktor , int codeNoeVosolMoshtary , int flagInputHesab , String mablaghMandeh , DariaftPardakhtPPCModel dariaftPardakhtPPCModel , ArrayList<CodeNoeVosolModel> codeNoeVosolModels);
+        void checkInsert(int ccMoshtary , long ccDarkhastFaktor , int codeNoeVosolMoshtary , int flagInputHesab , String mablaghMandeh , DariaftPardakhtPPCModel dariaftPardakhtPPCModel , ArrayList<ConfigNoeVosolMojazeFaktorModel> configNoeVosolMojazeFaktorModels);
         void checkInsertCheckBargashty(int ccMoshtary , long ccDarkhastFaktor , int codeNoeVosolMoshtary , int flagInputHesab , String mablaghMandeh , DariaftPardakhtPPCModel dariaftPardakhtPPCModel , ArrayList<ConfigNoeVosolMojazeMoshtaryModel> configNoeVosolMojazeMoshtaryModelArrayList);
         void removeItem(DariaftPardakhtDarkhastFaktorPPCModel dariaftPardakhtDarkhastFaktorPPCModel , int position , int from,long ccDarkhastFaktor);
         void checkRegisteredVosol(int position);
@@ -73,7 +72,6 @@ public interface InvoiceSettlementMVP
         void checkInsertCheckPishDrayaft(int ccMoshtary , int codeNoeVosolMoshtary  , int flagInputHesab , String mablaghMandeh , DariaftPardakhtPPCModel dariaftPardakhtPPCModel , ArrayList<ConfigNoeVosolMojazeMoshtaryModel> configNoeVosolMojazeMoshtaryModelArrayList);
         void getVosolsPishDariaft(long ccMoshtary);
         void removeItemPishDaryaft(DariaftPardakhtPPCModel dariaftPardakhtPPCModel , int position , int from);
-        void callTajil(long ccDarkhastfaktor , int codeNoeVosol);
     }
 
 
@@ -84,7 +82,7 @@ public interface InvoiceSettlementMVP
 		void onGetConfig(String showSaayadCheckInfoScanner);													
         void onGetInfo(String shomareDarkhast , int ccNoeVosol , String noeVosol , String cost , String remainCost /*, ArrayList<> paymentsItem */ , int from);
         void onGetVosols(ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels);
-        void onGetNoeVosols(ArrayList<CodeNoeVosolModel> codeNoeVosolModels);
+        void onGetNoeVosols(ArrayList<ConfigNoeVosolMojazeFaktorModel> configNoeVosolMojazeFaktorModels);
         void onGetPosShomareHesab(ArrayList<PosShomarehHesabModel> posShomarehHesabModels , int codeNoevosol);
         void onGetFishBanki(ArrayList<MarkazShomarehHesabModel> markazShomarehHesabModels , int codeNoevosol);
         void onGetMoshtaryHesab(ArrayList<MoshtaryShomarehHesabModel> moshtaryShomarehHesabModels , ArrayList<BankModel> bankModels , int codeNoevosol , String tarikhSarResidForCheckShamsi , String tarikhSarResidForCheckGregorian);
@@ -127,7 +125,6 @@ public interface InvoiceSettlementMVP
         void checkInsertCheckPishDrayaft(int ccMoshtary  , int codeNoeVosolMoshtary , int flagInputHesab , String mablaghMandeh , String nameNoeVosol , DariaftPardakhtPPCModel dariaftPardakhtPPCModel);
        void getVosolsPishDariaft(long ccMoshtary);
         void removeItemPishDaryaft(DariaftPardakhtPPCModel dariaftPardakhtPPCModel , int position , int from);
-        void callTajil(long ccDarkhastfaktor , int codeNoeVosol);
 
     }
 
