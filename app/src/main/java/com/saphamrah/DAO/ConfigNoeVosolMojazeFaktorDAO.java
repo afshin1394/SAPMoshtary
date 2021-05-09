@@ -244,7 +244,33 @@ public class ConfigNoeVosolMojazeFaktorDAO
         return configNoeVosolMojazeFaktorModels;
     }
 
-
+    public ArrayList<ConfigNoeVosolMojazeFaktorModel> getByNoeVosol(int NoeVosol)
+    {
+        ArrayList<ConfigNoeVosolMojazeFaktorModel> configNoeVosolMojazeFaktorModels = new ArrayList<>();
+        try
+        {
+            String query = "select * from ConfigNoeVosolMojazeFaktor where CodeNoeVosolAzMoshtary = " + NoeVosol + " order by CodeNoeVosol_Tablet";
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    configNoeVosolMojazeFaktorModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = BaseApplication.getContext().getResources().getString(R.string.errorSelectAll , modelGetTABLE_NAME.getTABLE_NAME()) + "\n" + exception.toString();
+            logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), message, "ConfigNoeVosolMojazeFaktorDAO" , "" , "getAll" , "");
+        }
+        return configNoeVosolMojazeFaktorModels;
+    }
     public String getValueByNoeVosol(int NoeVosol)
     {
         String value = "-1";

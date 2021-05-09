@@ -8,13 +8,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.saphamrah.Application.BaseApplication;
-import com.saphamrah.Model.CodeNoeVosolModel;
 import com.saphamrah.Model.ConfigNoeVosolMojazeMoshtaryModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
-import com.saphamrah.UIModel.CustomerAdamDarkhastModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
