@@ -2,16 +2,15 @@ package com.saphamrah.WebService.ServiceResponse;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.saphamrah.Model.CodeNoeVosolModel;
 
 import java.util.ArrayList;
 
-public class GetCodeNoeVosolResult
+public class MarjoeeKardexResult
 {
 
     @SerializedName("Data")
     @Expose
-    private ArrayList<CodeNoeVosolModel> data = null;
+    private ArrayList data = null;
     @SerializedName("Message")
     @Expose
     private String message;
@@ -25,11 +24,11 @@ public class GetCodeNoeVosolResult
     @Expose
     private Integer totalCount;
 
-    public ArrayList<CodeNoeVosolModel> getData() {
+    public ArrayList getData() {
         return data;
     }
 
-    public void setData(ArrayList<CodeNoeVosolModel> data) {
+    public void setData(ArrayList data) {
         this.data = data;
     }
 
