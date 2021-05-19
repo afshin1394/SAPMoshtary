@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/altdlg_bg"
+    android:layoutDirection="rtl">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lblItemName"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="@dimen/FontSize18"
+        android:gravity="center"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" />
+
+    <com.saphamrah.CustomView.CustomTextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtinputLayCount"
+        android:layout_marginBottom="25dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layoutDirection="ltr"
+        android:textDirection="ltr"
+        android:theme="@style/TextInputLayoutTheme"
+        android:gravity="center">
+        <EditText
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtCount"
+            android:hint="@string/count"
+            android:textColorHint="@color/colorDivider"
+            android:textSize="@dimen/twoColumnFontSize"
+            android:textColor="@color/colorTextPrimary"
+            android:maxLines="1"
+            android:inputType="number"
+            android:gravity="center"/>
+    </com.saphamrah.CustomView.CustomTextInputLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lblError"
+        android:textColor="@color/colorRed"
+        android:textSize="@dimen/FontSize18"
+        android:gravity="center"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:visibility="gone"/>
+
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerSelectElatMarjoee"
+        android:prompt="@string/elatMarjoee"
+        android:layoutDirection="rtl"
+        android:textDirection="rtl"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp">
+    </Spinner>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnApply"
+        android:gravity="center"
+        android:text="@string/apply"
+        android:textSize="@dimen/btnFontMain"
+        android:textColor="@color/colorWhite"
+        android:padding="@dimen/altdlgButtonPadding"
+        android:layout_marginRight="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginBottom="2dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/alert_btn_bg_accent" />
+
+</LinearLayout>

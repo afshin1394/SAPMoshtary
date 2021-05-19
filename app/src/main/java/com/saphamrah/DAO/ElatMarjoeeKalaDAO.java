@@ -52,7 +52,8 @@ public class ElatMarjoeeKalaDAO
             ElatMarjoeeKalaModel.COLUMN_ccElatMarjoeeKala(),
             ElatMarjoeeKalaModel.COLUMN_Sharh(),
             ElatMarjoeeKalaModel.COLUMN_CodeNoeElat(),
-            ElatMarjoeeKalaModel.COLUMN_IsZayeat()
+            ElatMarjoeeKalaModel.COLUMN_IsZayeat(),
+                ElatMarjoeeKalaModel.COLUMN_GetImage()
         };
     }
 
@@ -215,6 +216,50 @@ Call<GetAllElatMarjoeeKalaResult> call = apiServiceGet.getElatMarjoeeKala();
         return elatMarjoeeKalaModels;
     }
 
+    public ArrayList<ElatMarjoeeKalaModel> getElatMarjoeePakhsh() {
+        ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels = new ArrayList<>();
+
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(ElatMarjoeeKalaModel.TableName(), allColumns(), ElatMarjoeeKalaModel.COLUMN_CodeNoeElat() + "=" + 1, null, null, null, null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    elatMarjoeeKalaModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll, ElatMarjoeeKalaModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "ElatMarjoeeKalaDAO", "", "getElatMarjoee", "");
+        }
+        return elatMarjoeeKalaModels;
+    }
+
+    public ArrayList<ElatMarjoeeKalaModel> getElatMarjoeeForosh() {
+        ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels = new ArrayList<>();
+
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(ElatMarjoeeKalaModel.TableName(), allColumns(), ElatMarjoeeKalaModel.COLUMN_CodeNoeElat() + "=" + 2, null, null, null, null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    elatMarjoeeKalaModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll, ElatMarjoeeKalaModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "ElatMarjoeeKalaDAO", "", "getElatMarjoee", "");
+        }
+        return elatMarjoeeKalaModels;
+    }
+
 
     public boolean deleteAll()
     {
@@ -248,6 +293,7 @@ Call<GetAllElatMarjoeeKalaResult> call = apiServiceGet.getElatMarjoeeKala();
             elatMarjoeeKalaModel.setSharh(cursor.getString(cursor.getColumnIndex(ElatMarjoeeKalaModel.COLUMN_Sharh())));
             elatMarjoeeKalaModel.setCodeNoeElat(cursor.getInt(cursor.getColumnIndex(ElatMarjoeeKalaModel.COLUMN_CodeNoeElat())));
             elatMarjoeeKalaModel.setIsZayeat(cursor.getInt(cursor.getColumnIndex(ElatMarjoeeKalaModel.COLUMN_IsZayeat())));
+            elatMarjoeeKalaModel.setGetImage(cursor.getInt(cursor.getColumnIndex(ElatMarjoeeKalaModel.COLUMN_GetImage())));
 
             elatMarjoeeKalaModels.add(elatMarjoeeKalaModel);
             cursor.moveToNext();
@@ -266,6 +312,7 @@ Call<GetAllElatMarjoeeKalaResult> call = apiServiceGet.getElatMarjoeeKala();
         contentValues.put(ElatMarjoeeKalaModel.COLUMN_Sharh() , elatMarjoeeKalaModel.getSharh());
         contentValues.put(ElatMarjoeeKalaModel.COLUMN_CodeNoeElat() , elatMarjoeeKalaModel.getCodeNoeElat());
         contentValues.put(ElatMarjoeeKalaModel.COLUMN_IsZayeat() , elatMarjoeeKalaModel.getIsZayeat());
+        contentValues.put(ElatMarjoeeKalaModel.COLUMN_GetImage() , elatMarjoeeKalaModel.getGetImage());
 
         return contentValues;
     }

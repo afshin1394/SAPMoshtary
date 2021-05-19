@@ -338,6 +338,34 @@ Call<GetAllvJayezehEntekhabiResult> call = apiServiceGet.getAllvJayezehEntekhabi
         return jayezehEntekhabiModel;
     }
 
+    public ArrayList<JayezehEntekhabiModel> getByccKalaCode(int ccKalaCode)
+    {
+        ArrayList<JayezehEntekhabiModel> jayezeh = new ArrayList<>();
+        try
+        {
+            String StrSql =" SELECT * FROM JayezehEntekhabi "
+                    +" WHERE ccKalaCode =" + ccKalaCode ;
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(StrSql, null);
+
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                jayezeh = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+        return jayezeh;
+    }
+
+
     public boolean deleteAll()
     {
         try

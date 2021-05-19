@@ -407,9 +407,6 @@ public interface APIServiceGet
     @GET("Api/ApiSales/GetAllNoeMoshtaryrialKharidByccMarkazForosh")
     Call<GetAllNoeMoshtaryRialKharidResualt> getAllNoeMoshtaryrialKharid(@Query("ccMarkazSazmanForoshSakhtarForoshs") String ccMarkazSazmanForoshSakhtarForoshs);
 
-    @GET("Api/ApiTreasury/GetCodeNoeVosol")
-    Call<GetCodeNoeVosolResult> getCodeNoeVosol();
-
     @GET("Api/ApiTablet/GET_NoeFaaliatForMoarefiMoshtaryJadid")
     Call<GetNoeFaaliatForMoarefiMoshtaryJadidResult> getNoeFaaliatForMoarefiMoshtaryJadid(@Query("ccforoshandeh") String ccForoshandeh);
 

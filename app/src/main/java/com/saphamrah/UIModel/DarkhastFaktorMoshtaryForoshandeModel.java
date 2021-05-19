@@ -9,6 +9,7 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     private static final String COLUMN_ccDarkhastFaktor = "ccDarkhastFaktor";
     private static final String COLUMN_ccDarkhastFaktorNoeForosh = "ccDarkhastFaktorNoeForosh";
     private static final String COLUMN_TarikhFaktor = "TarikhFaktor";
+    private static final String COLUMN_TarikhErsal = "TarikhErsal";
     private static final String COLUMN_ShomarehDarkhast = "ShomarehDarkhast";
     private static final String COLUMN_ShomarehFaktor = "ShomarehFaktor";
     private static final String COLUMN_ccForoshandeh = "ccForoshandeh";
@@ -33,6 +34,9 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     private static final String COLUMN_ExtraProp_ShowFaktorMamorPakhsh = "ExtraProp_ShowFaktorMamorPakhsh";
     private static final String COLUMN_Sort = "Sort";
     private static final String COLUMN_CountDarkhastFaktor = "CountDarkhastFaktor";
+    private static final String COLUMN_ExtraProp_IsMarjoeeKamel = "ExtraProp_IsMarjoeeKamel";
+    private static final String COLUMN_ExtraProp_Resid = "ExtraProp_Resid";
+    private static final String COLUMN_ExtraProp_MablaghDariaftPardakht = "ExtraProp_MablaghDariaftPardakht";
 
 
     public static String COLUMN_ccDarkhastFaktor() {
@@ -43,6 +47,9 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     }
     public static String COLUMN_TarikhFaktor() {
         return COLUMN_TarikhFaktor;
+    }
+    public static String COLUMN_TarikhErsal() {
+        return COLUMN_TarikhErsal;
     }
     public static String COLUMN_ShomarehDarkhast() {
         return COLUMN_ShomarehDarkhast;
@@ -116,7 +123,15 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     public static String COLUMN_CountDarkhastFaktor() {
         return COLUMN_CountDarkhastFaktor;
     }
-
+    public static String COLUMN_ExtraProp_IsMarjoeeKamel() {
+        return COLUMN_ExtraProp_IsMarjoeeKamel;
+    }
+    public static String COLUMN_ExtraProp_Resid() {
+        return COLUMN_ExtraProp_Resid;
+    }
+    public static String COLUMN_ExtraProp_MablaghDariaftPardakht() {
+        return COLUMN_ExtraProp_MablaghDariaftPardakht;
+    }
 
 
     private long ccDarkhastFaktor;
@@ -126,6 +141,7 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     private int ccDarkhastFaktorNoeForosh;
     private int ShomarehDarkhast;
     private String TarikhFaktor;
+    private String TarikhErsal;
     private int ShomarehFaktor;
     private float MablaghKhalesFaktor;
     private String NameNoeVosolAzMoshtary;
@@ -147,8 +163,9 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     private int Sort;
     private boolean canEditDarkhast;
     private int CountDarkhastFaktor;
-
-
+    private int ExtraProp_Resid;
+    private int ExtraProp_IsMarjoeeKamel;
+    private long ExtraProp_MablaghDariaftPardakht;
 
     public long getCcDarkhastFaktor() {
         return ccDarkhastFaktor;
@@ -208,6 +225,14 @@ public class DarkhastFaktorMoshtaryForoshandeModel
 
     public void setTarikhFaktor(String TarikhFaktor) {
         this.TarikhFaktor = TarikhFaktor;
+    }
+
+    public String getTarikhErsal() {
+        return TarikhErsal;
+    }
+
+    public void setTarikhErsal(String tarikhErsal) {
+        TarikhErsal = tarikhErsal;
     }
 
     public int getShomarehFaktor() {
@@ -398,6 +423,29 @@ public class DarkhastFaktorMoshtaryForoshandeModel
         CountDarkhastFaktor = countDarkhastFaktor;
     }
 
+    public int getExtraProp_Resid() {
+        return ExtraProp_Resid;
+    }
+
+    public void setExtraProp_Resid(int extraProp_Resid) {
+        ExtraProp_Resid = extraProp_Resid;
+    }
+
+    public int getExtraProp_IsMarjoeeKamel() {
+        return ExtraProp_IsMarjoeeKamel;
+    }
+
+    public void setExtraProp_IsMarjoeeKamel(int extraProp_IsMarjoeeKamel) {
+        ExtraProp_IsMarjoeeKamel = extraProp_IsMarjoeeKamel;
+    }
+
+    public long getExtraProp_MablaghDariaftPardakht() {
+        return ExtraProp_MablaghDariaftPardakht;
+    }
+
+    public void setExtraProp_MablaghDariaftPardakht(long extraProp_MablaghDariaftPardakht) {
+        ExtraProp_MablaghDariaftPardakht = extraProp_MablaghDariaftPardakht;
+    }
 
     @NonNull
     @Override
@@ -411,6 +459,7 @@ public class DarkhastFaktorMoshtaryForoshandeModel
                 ", ccDarkhastFaktorNoeForosh=" + ccDarkhastFaktorNoeForosh +
                 ", ShomarehDarkhast=" + ShomarehDarkhast +
                 ", TarikhFaktor='" + TarikhFaktor + '\'' +
+                ", TarikhErsal='" + TarikhErsal + '\'' +
                 ", ShomarehFaktor=" + ShomarehFaktor +
                 ", MablaghKhalesFaktor=" + MablaghKhalesFaktor +
                 ", NameNoeVosolAzMoshtary='" + NameNoeVosolAzMoshtary + '\'' +

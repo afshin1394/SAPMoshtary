@@ -190,7 +190,7 @@ public class DariaftPardakhtPPCDAO
         return endpoint;
     }
 
-    public boolean insertGroup(ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels)
+    public boolean insertGroup(ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels , boolean fromGetProgram)
     {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try
@@ -198,6 +198,10 @@ public class DariaftPardakhtPPCDAO
             db.beginTransaction();
             for (DariaftPardakhtPPCModel dariaftPardakhtPPCModel : dariaftPardakhtPPCModels)
             {
+                if (fromGetProgram)
+                {
+                    dariaftPardakhtPPCModel.setExtraProp_IsSend(1);
+                }
                 ContentValues contentValues = modelToContentvalue(dariaftPardakhtPPCModel);
                 db.insertOrThrow(DariaftPardakhtPPCModel.TableName() , null , contentValues);
             }

@@ -19,16 +19,15 @@ public interface TreasuryListMVP
         void onGetCustomerAddress(double latitude , double longitude);
         void onGetFaktorImage(byte[] faktorImage);
         void openDarkhastKalaActivity(long ccDarkhastFaktor , int ccMoshtary);
-        void showHideFabButtons(boolean faktorRooz);
+
         void onError(boolean closeActivity , int errorResId);
 		void onError(boolean closeActivity , String message);													 
         void showAlertMessage(int resId, int messageType);
         void showAlertMessage(int resId , String parameter, int messageType);
         void showToast(int resId, int messageType , int duration);
-
         void showLoading();
-
         void closeLoading();
+        void onSuccessSend(int position);
     }
 
 

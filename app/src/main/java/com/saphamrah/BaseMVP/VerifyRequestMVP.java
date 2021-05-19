@@ -25,7 +25,7 @@ public interface VerifyRequestMVP
         void showTarikhPishbiniTahvil();
         void hideTarikhPishbiniTahvil();
         void onGetRequestDetail(int sumTedadAghlam, int tedadAghlam, double sumVazn, double sumHajm, double vaznFaktor, double hajmFaktor, double sumMablaghKol, double sumMablaghBaArzeshAfzoodeh, double sumMablaghKhales, int sumTedadAghlamPishnehadiBiSetareh);
-        void showModatRoozRaasgiri(int modatRoozRaasgiri, boolean isSelectedVosolVajhNagh);
+        void showModatRoozRaasgiri(int modatRoozRaasgiri, boolean isSelectedVosolVajhNagh, boolean isSelectedVosolResidNaghd);
         void onGetCustomerAddress(ArrayList<MoshtaryAddressModel> moshtaryAddressModels , ArrayList<String> moshtaryAddressTitles);
         void openBarkhordAvalieActivity();
         void openDarkhastActivity();
@@ -46,6 +46,8 @@ public interface VerifyRequestMVP
         void showAlertDialog(int resId, boolean closeActivity, int messageType);
         void showLoading();
         void closeLoading();
+        void onHashiehSoud(double mablaghTakhfifNaghdi ,double mablaghTakhfifHajmi ,double mablaghJayezeh ,double mablaghHashiehSood ,double jamSoodMaghazeh ,double darsadSoodMaghazeh);
+
     }
 
 
@@ -69,6 +71,7 @@ public interface VerifyRequestMVP
         void checkData(int clickedBottomBarposition ,String mablaghKol, String sumTakhfifat, String mablaghFaktor , String sumMablaghBaArzeshAfzoode , int ccAddress , int modatVosol , int codeNoeVosol, String nameNoeVosol , int modatRoozRaasGiri , String vaznFaktor , String hajmFaktor, Date tarikhPishbiniTahvil, String TedadAghlam);
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
+        void getHashiehSoud(long ccDarkhastFaktor,String mablaghBaArzeshAfzoodeh);
     }
 
 
@@ -78,7 +81,7 @@ public interface VerifyRequestMVP
         void onConfigurationChanged(VerifyRequestMVP.RequiredViewOps view);
         void onGetConfig(boolean showBtnMarjoee);
         void onGetRequestDetail(int sumTedadAghlam, int tedadAghlam, double sumVazn, double sumHajm, double vaznFaktor, double hajmFaktor, double sumMablaghKol, double sumMablaghBaArzeshAfzoodeh, double sumMablaghKhales, int sumTedadAghlamPishnehadiBiSetareh);
-        void onGetModatRoozRaasgiri(int modatRoozRaasgiri, boolean isSelectedVosolVajhNagh);
+        void onGetModatRoozRaasgiri(int modatRoozRaasgiri, boolean isSelectedVosolVajhNagh, boolean isSelectedVosolResidNaghd);
         void onGetCustomerAddress(ArrayList<MoshtaryAddressModel> moshtaryAddressModels, boolean showTarikhPishbiniTahvil);
         void onGetInfo(long ccDarkhastFaktor , int modatVosol , ArrayList<ParameterChildModel> childParameterModelsVosols);
         void onGetRequestsList(ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorModels);
@@ -96,6 +99,7 @@ public interface VerifyRequestMVP
         void deleteTakhfifJayezeForDarkhastFaktor(long ccDarkhastFaktor);
         void showLoading();
         void closeLoading();
+        void onHashiehSoud(double mablaghTakhfifNaghdi ,double mablaghTakhfifHajmi ,double mablaghJayezeh ,double mablaghHashiehSood ,double jamSoodMaghazeh ,double darsadSoodMaghazeh);
     }
 
 
@@ -118,6 +122,7 @@ public interface VerifyRequestMVP
         void checkData(int clickedBottomBarposition ,double mablaghKol, float sumTakhfifat, double mablaghFaktor , long sumMablaghBaArzeshAfzoode , int ccAddress , int modatVosol , int codeNoeVosol, String nameNoeVosol , int modatRoozRaasGiri , double vaznFaktor , double hajmFaktor, Date tarikhPishbiniTahvil, int tedadAghlam);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
+        void getHashiehSoud(long ccDarkhastFaktor, String mablaghBaArzeshAfzoodeh);
     }
 
 }

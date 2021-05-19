@@ -57,6 +57,8 @@ public class RptMojodiAnbarDAO
             RptMojodiAnbarModel.COLUMN_MandehMojodi_Basteh(),
             RptMojodiAnbarModel.COLUMN_MandehMojodi_Adad(),
             RptMojodiAnbarModel.COLUMN_IsAdamForosh(),
+            RptMojodiAnbarModel.COLUMN_ccSazmanForosh(),
+            RptMojodiAnbarModel.COLUMN_NameSazmanForosh()
 
 
         };
@@ -336,6 +338,8 @@ public class RptMojodiAnbarDAO
         contentValues.put(RptMojodiAnbarModel.COLUMN_MandehMojodi_Basteh() , rptMojodiAnbarModel.getMandehMojodi_Basteh());
         contentValues.put(RptMojodiAnbarModel.COLUMN_MandehMojodi_Adad() , rptMojodiAnbarModel.getMandehMojodi_Adad());
         contentValues.put(RptMojodiAnbarModel.COLUMN_IsAdamForosh() , rptMojodiAnbarModel.getIsAdamForosh());
+        contentValues.put(RptMojodiAnbarModel.COLUMN_ccSazmanForosh() , rptMojodiAnbarModel.getCcSazmanForosh());
+        contentValues.put(RptMojodiAnbarModel.COLUMN_NameSazmanForosh() , rptMojodiAnbarModel.getNameSazmanForosh());
 
 
         return contentValues;
@@ -359,6 +363,8 @@ public class RptMojodiAnbarDAO
             rptMojodiAnbarModel.setMandehMojodi_Basteh(cursor.getInt(cursor.getColumnIndex(RptMojodiAnbarModel.COLUMN_MandehMojodi_Basteh())));
             rptMojodiAnbarModel.setMandehMojodi_Adad(cursor.getInt(cursor.getColumnIndex(RptMojodiAnbarModel.COLUMN_MandehMojodi_Adad())));
             rptMojodiAnbarModel.setIsAdamForosh(cursor.getInt(cursor.getColumnIndex(RptMojodiAnbarModel.COLUMN_IsAdamForosh())));
+            rptMojodiAnbarModel.setCcSazmanForosh(cursor.getInt(cursor.getColumnIndex(RptMojodiAnbarModel.COLUMN_ccSazmanForosh())));
+            rptMojodiAnbarModel.setNameSazmanForosh(cursor.getString(cursor.getColumnIndex(RptMojodiAnbarModel.COLUMN_NameSazmanForosh())));
 
             rptMojodiAnbarModels.add(rptMojodiAnbarModel);
             cursor.moveToNext();

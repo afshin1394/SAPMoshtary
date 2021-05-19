@@ -20,13 +20,14 @@ public interface VarizNaghdBeBankMVP
         void onGetAllVarizBeBank(ArrayList<VarizBeBankModel> varizBeBankModels);
         void onCheckHaveShomarehSanadForUpdate(boolean haveShomarehSanad);
         void showAlertMessage(int resId, int messageType);
+        void closeLoading();
     }
 
 
     interface PresenterOps
     {
         void onGetAllBank();
-        void updateDaoAll(int ccBankSanad , String nameShobehSanad , String codeShobehSand , String shomareHesabSanad , int ccShomareHesab , String shomarehSanad ,String nameBankSanad , String TarikhSanad, ArrayList<VarizBeBankModel> modelsArrayList);
+        void updateDaoAll(int ccBankSanad , String nameShobehSanad , String codeShobehSand , String shomareHesabSanad , int ccShomareHesab , String shomarehSanad ,String nameBankSanad , String TarikhSanad, ArrayList<VarizBeBankModel> modelsArrayList,String mablaghEntekhabi);
         void getAllMoshtary();
         void getRefresh();
         void getSumMablagh();
@@ -53,7 +54,7 @@ public interface VarizNaghdBeBankMVP
     interface ModelOps
     {
         void getAllBank();
-        void updateDaoAll(int ccBankSanad , String nameShobehSanad , String codeShobehSand , String shomareHesabSanad , int ccShomareHesab , String shomarehSanad ,String nameBankSanad , String TarikhSanad, ArrayList<VarizBeBankModel> modelsArrayList);
+        void updateDaoAll(int ccBankSanad , String nameShobehSanad , String codeShobehSand , String shomareHesabSanad , int ccShomareHesab , String shomarehSanad ,String nameBankSanad , String TarikhSanad, ArrayList<VarizBeBankModel> modelsArrayList,String mablaghEntekhabi);
         void getAllMoshtary();
         void getRefresh();
         void getSumMablagh();

@@ -2,6 +2,7 @@ package com.saphamrah.MVP.Model;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.location.LocationManager;
 import android.os.Build;
@@ -39,6 +40,7 @@ import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.EmailLogPPCShared;
 import com.saphamrah.Shared.GetProgramShared;
+import com.saphamrah.Shared.InstalledAppsShared;
 import com.saphamrah.Shared.RoutingServerShared;
 import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Shared.UserTypeShared;
@@ -58,7 +60,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -66,10 +74,12 @@ import retrofit2.Response;
 public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices {
 
     private SplashMVP.RequiredPresenterOps mPresenter;
+    private CompositeDisposable compositeDisposable;
 
     public SplashModel(SplashMVP.RequiredPresenterOps presenterOps)
     {
         mPresenter = presenterOps;
+        compositeDisposable = new CompositeDisposable();
     }
 
     @Override
@@ -834,6 +844,72 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
                 rxResponseHandler.onFailed(message, type);
             }
         });
+    }
+    @Override
+    public void getInstalledPackages() {
+
+        List<ApplicationInfo> apps = mPresenter.getAppContext().getPackageManager().getInstalledApplications(0);
+        Log.i("getInstalledPackages", "getInstalledPackages: "+apps.size());
+        final String[] installedApps = {mPresenter.getAppContext().getResources().getString(R.string.installedApplications)};
+        Observable.fromIterable(apps)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(applicationInfo -> applicationInfo!=null)
+                .filter(applicationInfo -> applicationInfo.flags > 0)
+                .filter(applicationInfo -> (applicationInfo.flags != ApplicationInfo.FLAG_SYSTEM))
+                .filter(applicationInfo -> (applicationInfo.flags != ApplicationInfo.FLAG_UPDATED_SYSTEM_APP))
+                .filter(applicationInfo -> applicationInfo.taskAffinity!=null)
+
+                .subscribe(new Observer<ApplicationInfo>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d)
+                    {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ApplicationInfo applicationInfo) {
+                        String appName = applicationInfo.taskAffinity.trim();
+                        Log.i("getInstalledPackages", "onNext: processName"+applicationInfo.processName+"\n"
+                                +"Name"+applicationInfo.name+"\n"
+                                +"ClassName"+applicationInfo.className+"\n"
+                                +"flag"+applicationInfo.flags+"\n"
+                                +"nativeLibraryDir"+applicationInfo.nativeLibraryDir+"\n"
+                                +"taskAffinity"+applicationInfo.taskAffinity+"\n"
+                        );
+                        installedApps[0] +="\n"+appName+"\n";
+
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        PubFunc.Logger logger = new PubFunc().new Logger();
+                        logger.insertLogToDB(mPresenter.getAppContext(),Constants.LOG_EXCEPTION(),"error getting installed packages:"+e.getMessage(),"SplashModel","SplashActivity","getInstalledPackages","");
+                        Log.i("getInstalledPackages", "onError: exception in finding packages" + e.getMessage()+"");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        InstalledAppsShared shared = new InstalledAppsShared(mPresenter.getAppContext());
+                        String installedAppsLog = shared.getString(shared.INSTALLED_APPLICATIONS,null);
+                        if (installedAppsLog != null)
+                        {
+                            if (!installedApps[0].equals(installedAppsLog))
+                            {
+                                shared.removeAll();
+                                shared.putString(shared.INSTALLED_APPLICATIONS, installedApps[0]);
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), installedApps[0], "SplashModel", "SplashActivity", "getInstalledPackages", "");
+                            }
+                        }
+                        else
+                        {
+                            shared.putString(shared.INSTALLED_APPLICATIONS, installedApps[0]);
+                            PubFunc.Logger logger = new PubFunc().new Logger();
+                            logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), installedApps[0], "SplashModel", "SplashActivity", "getInstalledPackages", "");
+                        }
+                    }
+                });
     }
 }
 

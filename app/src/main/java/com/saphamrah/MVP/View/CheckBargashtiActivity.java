@@ -171,7 +171,7 @@ public class CheckBargashtiActivity extends AppCompatActivity implements CheckBa
     protected void onResume() {
         super.onResume();
         // request for get all check
-//        mPresenter.onGetAllCheckBargashti();
+        mPresenter.onGetAllCheckBargashti();
     }
 
     // setup

@@ -127,18 +127,18 @@ public class MainFirstFragmentPresenter implements MainFirstFragmentMVP.Presente
                 //Date currentTime = sdf.parse(currentDate);
 
 
-                Date sunrise = sdf.parse(owghatModel.getToluAftab());
+                Date sunrise = sdf.parse(owghatModel.getToluAftab()+":00");
                 calendar.setTime(sunrise);
                 calendar.add(Calendar.HOUR_OF_DAY , 2);
                 Date twoHourAfterSunrise = sdf.parse(calendar.get(Calendar.HOUR_OF_DAY ) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
 
-                Date midday = sdf.parse(owghatModel.getAzanZohr());
+                Date midday = sdf.parse(owghatModel.getAzanZohr()+":00");
 
                 calendar.setTime(midday);
                 calendar.add(Calendar.HOUR_OF_DAY , 2);
                 Date twoHourAfterMidday = sdf.parse(calendar.get(Calendar.HOUR_OF_DAY ) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
 
-                Date sunset = sdf.parse(owghatModel.getAzanMaghreb());
+                Date sunset = sdf.parse(owghatModel.getAzanMaghreb()+":00");
                 /*calendar.setTime(sunset);
                 calendar.add(Calendar.HOUR_OF_DAY , -1);
                 Date oneHourBeforeSunset = sdf.parse(calendar.get(Calendar.HOUR_OF_DAY ) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));*/

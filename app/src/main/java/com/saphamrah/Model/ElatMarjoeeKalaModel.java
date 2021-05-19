@@ -11,6 +11,7 @@ public class ElatMarjoeeKalaModel
     private static final String COLUMN_Sharh = "Sharh";
     private static final String COLUMN_CodeNoeElat = "CodeNoeElat";
     private static final String COLUMN_IsZayeat = "IsZayeat";
+    private static final String COLUMN_GetImage = "GetImage";
 
     public static String TableName() {
         return TABLE_NAME;
@@ -26,6 +27,9 @@ public class ElatMarjoeeKalaModel
     }
     public static String COLUMN_IsZayeat() {
         return COLUMN_IsZayeat;
+    }
+    public static String COLUMN_GetImage() {
+        return COLUMN_GetImage;
     }
 
 
@@ -53,6 +57,9 @@ public class ElatMarjoeeKalaModel
     @SerializedName("Id")
     @Expose
     private Integer Id;
+    @SerializedName("GetImage")
+    @Expose
+    private Integer GetImage;
 
 
     public Integer getCcElatMarjoeeKala() {
@@ -119,11 +126,19 @@ public class ElatMarjoeeKalaModel
         Id = id;
     }
 
+    public Integer getGetImage() {
+        return GetImage;
+    }
+
+    public void setGetImage(Integer getImage) {
+        GetImage = getImage;
+    }
+
     @Override
     public String toString() {
         return "ccElatMarjoeeKala : " + ccElatMarjoeeKala + " , Sharh : " + Sharh + " , CodeNoeElat : " + CodeNoeElat +
                 " , MasoleiatElat : " + MasoleiatElat + " , CodeNoeAnbar : " + CodeNoeAnbar + " , ViewInPPC : " + ViewInPPC +
-                " , IsZayeat : " + IsZayeat + " , Id : " + Id;
+                " , IsZayeat : " + IsZayeat + " , Id : " + Id + " , GetImage : " + GetImage;
     }
 
 }

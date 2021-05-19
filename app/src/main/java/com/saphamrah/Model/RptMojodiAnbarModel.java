@@ -14,6 +14,8 @@ public class RptMojodiAnbarModel
     private static final String COLUMN_MandehMojodi_Basteh = "MandehMojodi_Basteh";
     private static final String COLUMN_MandehMojodi_Adad = "MandehMojodi_Adad";
     private static final String COLUMN_IsAdamForosh = "IsAdamForosh";
+    private static final String COLUMN_ccSazmanForosh = "ccSazmanForosh";
+    private static final String COLUMN_NameSazmanForosh = "NameSazmanForosh";
 
 
     public static String TableName() {
@@ -43,6 +45,12 @@ public class RptMojodiAnbarModel
     public static String COLUMN_IsAdamForosh() {
         return COLUMN_IsAdamForosh;
     }
+    public static String COLUMN_ccSazmanForosh() {
+        return COLUMN_ccSazmanForosh;
+    }
+    public static String COLUMN_NameSazmanForosh() {
+        return COLUMN_NameSazmanForosh;
+    }
 
 
 
@@ -55,6 +63,8 @@ public class RptMojodiAnbarModel
     private int MandehMojodi_Basteh;
     private int MandehMojodi_Adad;
     private int IsAdamForosh;
+    private int ccSazmanForosh;
+    private String NameSazmanForosh;
 
 
     public void setRadif(int Radif){
@@ -122,6 +132,19 @@ public class RptMojodiAnbarModel
         IsAdamForosh = isAdamForosh;
     }
 
+    public void setCcSazmanForosh(int ccSazmanForosh){
+        this.ccSazmanForosh = ccSazmanForosh;
+    }
+    public int getCcSazmanForosh(){
+        return this.ccSazmanForosh;
+    }
+
+    public void setNameSazmanForosh(String NameSazmanForosh){
+        this.NameSazmanForosh = NameSazmanForosh;
+    }
+    public String getNameSazmanForosh(){
+        return this.NameSazmanForosh;
+    }
 
     @NonNull
     @Override
@@ -137,6 +160,8 @@ public class RptMojodiAnbarModel
                 ", MandehMojodi_Basteh=" + MandehMojodi_Basteh +
                 ", MandehMojodi_Adad=" + MandehMojodi_Adad +
                 ", IsAdamForosh=" + IsAdamForosh +
+                ", CcSazmanForosh=" + ccSazmanForosh +
+                ", NameSazmanForosh=" + NameSazmanForosh +
                 '}';
     }
 

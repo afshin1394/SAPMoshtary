@@ -718,6 +718,7 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
         if (!hasPermissions(SplashActivity.this, permissions)) {
             ActivityCompat.requestPermissions(this, permissions, ALL_PERMISSIONS);
         } else {
+            mPresenter.getInstalledPackages();
             mPresenter.checkAvailableEmail();
             mPresenter.checkServerIp();
             //mPresenter.checkWifiStatus();

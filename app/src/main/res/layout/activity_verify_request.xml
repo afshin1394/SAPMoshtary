@@ -558,6 +558,17 @@
         <com.github.clans.fab.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/fabHashiehSoud"
+            android:src="@drawable/ic_hashiehsood"
+            fab:fab_size="normal"
+            fab:fab_label="@string/hashiehSoud"
+            fab:fab_colorNormal="@color/colorFabAddColorfulIcon"
+            fab:fab_colorPressed="@color/colorFabAddClick"
+            android:layout_margin="15dp"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/fabAddMarjoee"
             android:src="@drawable/ic_marjoee"
             fab:fab_size="normal"

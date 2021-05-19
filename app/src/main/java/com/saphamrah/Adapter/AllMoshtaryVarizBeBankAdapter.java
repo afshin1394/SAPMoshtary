@@ -70,11 +70,13 @@ public class AllMoshtaryVarizBeBankAdapter extends RecyclerView.Adapter<AllMosht
                     .load(R.drawable.ic_success)
                     .placeholder(R.drawable.nopic_whit)
                     .into(holder.img_is_selected);
+            holder.lblMablaghSabtShode.setText(String.format("%1$s : %2$s", BaseApplication.getContext().getResources().getString(R.string.mablaghSabtShode), formatter.format(models.get(position).getExtraProp_MablaghSabtShode())));
         } else if (models.get(position).getExtraProp_IsSelected() == 0) {
             Glide.with(context)
                     .load(R.drawable.ic_error)
                     .placeholder(R.drawable.nopic_whit)
                     .into(holder.img_is_selected);
+            holder.lblMablaghSabtShode.setText(String.format("%1$s : %2$s", BaseApplication.getContext().getResources().getString(R.string.mablaghSabtShode), 0));
         }
         holder.bind(models.get(position).getMablagh(), position, listener);
     }
@@ -91,6 +93,7 @@ public class AllMoshtaryVarizBeBankAdapter extends RecyclerView.Adapter<AllMosht
         private TextView lblMoshtaryDetails;
         private TextView lblMablaghKhales;
         private TextView lblNoeVosol;
+        private TextView lblMablaghSabtShode;
         private CardView crdviewRoot;
         private ConstraintLayout layRoot;
         private ImageView img_is_selected;
@@ -103,6 +106,7 @@ public class AllMoshtaryVarizBeBankAdapter extends RecyclerView.Adapter<AllMosht
             lblMoshtaryDetails = view.findViewById(R.id.lblMoshtaryDetails);
             lblMablaghKhales = view.findViewById(R.id.lblMablaghKhales);
             lblNoeVosol = view.findViewById(R.id.lblNoeVosol);
+            lblMablaghSabtShode = view.findViewById(R.id.lblMablaghSabtShode);
             crdviewRoot = view.findViewById(R.id.crdviewRoot);
             layRoot = view.findViewById(R.id.layRoot);
             img_is_selected = view.findViewById(R.id.img_is_selected);
@@ -110,9 +114,10 @@ public class AllMoshtaryVarizBeBankAdapter extends RecyclerView.Adapter<AllMosht
             lblMoshtaryDetails.setTypeface(font);
             lblMablaghKhales.setTypeface(font);
             lblNoeVosol.setTypeface(font);
+            lblMablaghSabtShode.setTypeface(font);
         }
 
-        public void bind(long mablagh, int position, final OnItemClickListener listener) {
+        public void bind(double mablagh, int position, final OnItemClickListener listener) {
 
             if (models.get(position).getExtraProp_IsSelected() == 0){
                 crdviewRoot.setOnClickListener(v -> {
@@ -136,7 +141,7 @@ public class AllMoshtaryVarizBeBankAdapter extends RecyclerView.Adapter<AllMosht
 
 
     public interface OnItemClickListener {
-        void onItemClick(long mablagh, int position, ArrayList<VarizBeBankModel> modelsList);
+        void onItemClick(double mablagh, int position, ArrayList<VarizBeBankModel> modelsList);
     }
 
 

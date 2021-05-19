@@ -110,7 +110,17 @@
         fab:menu_openDirection="up"
         fab:menu_labels_customFont="@string/fontPath"
         fab:menu_backgroundColor="@android:color/transparent">
-raw        <com.github.clans.fab.FloatingActionButton
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabHelp"
+            android:src="@drawable/ic_fab_help"
+            fab:fab_size="normal"
+            fab:fab_label="@string/helpVosolColor"
+            fab:fab_colorNormal="@color/colorFabAdd"
+            fab:fab_colorPressed="@color/colorFabAddClick"
+            android:layout_margin="15dp"/>
+      <com.github.clans.fab.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/fabShowMap"

@@ -245,19 +245,19 @@ public static String COLUMN_ExtraProp_ccElatMarjoeeKala() {
         TarikhFaktor = tarikhFaktor;
     }
 
-    private float SumGheymatMarjoee;
-    public float getSumGheymatMarjoee() {
+    private double SumGheymatMarjoee;
+    public double getSumGheymatMarjoee() {
         return SumGheymatMarjoee;
     }
-    public void setSumGheymatMarjoee(float sumGheymatMarjoee) {
+    public void setSumGheymatMarjoee(double sumGheymatMarjoee) {
         SumGheymatMarjoee = sumGheymatMarjoee;
     }
 
-    private float SumTedadMarjoee;
-    public float getSumTedadMarjoee() {
+    private double SumTedadMarjoee;
+    public double getSumTedadMarjoee() {
         return SumTedadMarjoee;
     }
-    public void setSumTedadMarjoee(float sumTedadMarjoee) {
+    public void setSumTedadMarjoee(double sumTedadMarjoee) {
         SumTedadMarjoee = sumTedadMarjoee;
     }
 

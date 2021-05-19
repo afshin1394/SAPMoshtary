@@ -1,15 +1,11 @@
 package com.saphamrah.MVP.Model;
 
-import android.util.Log;
-
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.VarizNaghdBeBankMVP;
 import com.saphamrah.DAO.DariaftPardakhtDarkhastFaktorPPCDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.MarkazShomarehHesabDAO;
 import com.saphamrah.DAO.VarizBeBankDAO;
-import com.saphamrah.Model.BankModel;
-import com.saphamrah.Model.DarkhastFaktorSatrModel;
 import com.saphamrah.Model.MarkazShomarehHesabModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.VarizBeBankModel;
@@ -35,20 +31,21 @@ import retrofit2.Response;
 
 public class VarizNaghdBeBankModel implements VarizNaghdBeBankMVP.ModelOps {
     private VarizNaghdBeBankMVP.RequiredPresenterOps mPresenter;
-    private String TAG = "VarizBeBAnk";
+    private String TAG = "VarizBeBank";
     DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(BaseApplication.getContext());
     private int ccAfrad = 0;
     VarizBeBankDAO varizBeBankDAO = new VarizBeBankDAO(BaseApplication.getContext());
-    ArrayList<com.saphamrah.Model.VarizBeBankModel> varizBeBankModels = new ArrayList<>();
+    ArrayList<VarizBeBankModel> varizBeBankModels = new ArrayList<>();
+
     public VarizNaghdBeBankModel(VarizNaghdBeBankMVP.RequiredPresenterOps mPresenter) {
         this.mPresenter = mPresenter;
     }
 
     /**
-    get all bank from MarkazShomarehHesabDAO
+     * get all bank from MarkazShomarehHesabDAO
      */
     @Override
-    public void  getAllBank() {
+    public void getAllBank() {
         // get details in SQLite
         MarkazShomarehHesabDAO markazShomarehHesabDAO = new MarkazShomarehHesabDAO(BaseApplication.getContext());
         ArrayList<MarkazShomarehHesabModel> markazShomarehHesabModels = markazShomarehHesabDAO.getAll();
@@ -56,44 +53,57 @@ public class VarizNaghdBeBankModel implements VarizNaghdBeBankMVP.ModelOps {
     }
 
 
-
     /**
-  setModelAndUpdate
-  dariaftPardakhtDarkhastFaktorPPCModel update DAO
-  dariaftPardakhtPPCModel update DAO
-     getCcDariaftPardakhtDarkhastFaktor in DariaftPardakhtDarkhastFaktorPPCModel
-
+     * setModelAndUpdate
+     * dariaftPardakhtDarkhastFaktorPPCModel update DAO
+     * dariaftPardakhtPPCModel update DAO
+     * getCcDariaftPardakhtDarkhastFaktor in DariaftPardakhtDarkhastFaktorPPCModel
      */
     @Override
-    public void updateDaoAll (int ccBankSanad , String nameShobehSanad , String codeShobehSand , String shomareHesabSanad , int ccShomareHesab , String shomarehSanad ,String nameBankSanad , String tarikhSanad, ArrayList<VarizBeBankModel> modelsArrayList) {
-        
+    public void updateDaoAll(int ccBankSanad, String nameShobehSanad, String codeShobehSand, String shomareHesabSanad, int ccShomareHesab, String shomarehSanad, String nameBankSanad, String tarikhSanad, ArrayList<VarizBeBankModel> modelsArrayList, String mablaghEntekhabi) {
 
-        DateUtils dateUtils = new DateUtils();
-    for (int i = 0 ; i< modelsArrayList.size() ; i ++){
+        double mablaghSabtShodeVorodi = Double.valueOf(mablaghEntekhabi.trim().replace(",", ""));
 
-        VarizBeBankModel model = new VarizBeBankModel();
+        boolean isUpdate = true;
+        for (int i = 0; i < modelsArrayList.size(); i++) {
+            DateUtils dateUtils = new DateUtils();
+            VarizBeBankModel model = new VarizBeBankModel();
+            model.setCcDariaftPardakht(modelsArrayList.get(i).getCcDariaftPardakht());
+            model.setExtraProp_ccBankSanad(ccBankSanad);
+            model.setExtraProp_NameShobehSanad(nameShobehSanad);
+            model.setExtraProp_CodeShobehSand(codeShobehSand);
+            model.setExtraProp_ShomareHesabSanad(shomareHesabSanad);
+            model.setExtraProp_ccShomareHesab(ccShomareHesab);
+            model.setExtraProp_ShomarehSanad(shomarehSanad);
+            model.setExtraProp_TarikhSanad(dateUtils.persianToGregorianWhithTime(tarikhSanad));
+            model.setExtraProp_NameBankSanad(nameBankSanad);
+            model.setCodeNoeVosol(Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD());
+            model.setExtraProp_IsSelected(1);
+            /*
+             * check mablagh vorodi
+             * when mablaghSabtShodeZero = true we should break for()
+             */
+            boolean mablaghSabtShodeZero = false;
+            if (mablaghSabtShodeVorodi >= modelsArrayList.get(i).getExtraProp_MablaghSabtShode()) {
+                model.setExtraProp_MablaghSabtShode(modelsArrayList.get(i).getMablagh());
+            } else if (mablaghSabtShodeVorodi < modelsArrayList.get(i).getExtraProp_MablaghSabtShode() && mablaghSabtShodeVorodi > 0){
+                model.setExtraProp_MablaghSabtShode(mablaghSabtShodeVorodi);
+                mablaghSabtShodeZero = true;
+            }
+            mablaghSabtShodeVorodi -= modelsArrayList.get(i).getExtraProp_MablaghSabtShode();
 
-        model.setCcDariaftPardakht(modelsArrayList.get(i).getCcDariaftPardakht());
-        model.setExtraProp_ccBankSanad(ccBankSanad);
-        model.setExtraProp_NameShobehSanad(nameShobehSanad);
-        model.setExtraProp_CodeShobehSand(codeShobehSand);
-        model.setExtraProp_ShomareHesabSanad(shomareHesabSanad);
-        model.setExtraProp_ccShomareHesab(ccShomareHesab);
-        model.setExtraProp_ShomarehSanad(shomarehSanad);
-        model.setExtraProp_TarikhSanad(dateUtils.persianToGregorianWhithTime(tarikhSanad));
-        model.setExtraProp_NameBankSanad(nameBankSanad);
-        model.setCodeNoeVosol(Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD());
-        model.setExtraProp_IsSelected(1);
+            isUpdate = varizBeBankDAO.updateNaghdBeFish(model);
 
+            if (mablaghSabtShodeZero){
+                break;
+            }
+        }
 
-        if (varizBeBankDAO.UpdateNaghdBeFish(model)){
+        if (isUpdate) {
             mPresenter.onUpdateDao(true);
         } else {
             mPresenter.onUpdateDao(false);
         }
-
-    }
-
     }
 
 
@@ -114,26 +124,25 @@ public class VarizNaghdBeBankModel implements VarizNaghdBeBankMVP.ModelOps {
 
         ccAfrad = foroshandehMamorPakhshDAO.getCCAfrad();
 
-        varizBeBankDAO.fetchBargashty(BaseApplication.getContext(), TAG, ccAfrad, new RetrofitResponse() {
+        varizBeBankDAO.fetchVarizBeBanck(BaseApplication.getContext(), TAG, ccAfrad, new RetrofitResponse() {
             @Override
             public void onSuccess(ArrayList arrayListData) {
 
                 boolean deleteResult = varizBeBankDAO.deleteAll();
                 boolean insertResult = varizBeBankDAO.insertGroup(arrayListData);
-                if (deleteResult && insertResult)
-                {
-                    mPresenter.onGetRefresh(R.string.successUpdate , Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
+                if (deleteResult && insertResult) {
+                    mPresenter.onGetRefresh(R.string.successUpdate, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
                     getSumMablagh();
                 } else {
-                    mPresenter.onGetRefresh(R.string.failUpdate , Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                    mPresenter.onGetRefresh(R.string.failUpdate, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
                 }
 
-                    }
+            }
 
 
             @Override
             public void onFailed(String type, String error) {
-                mPresenter.onGetRefresh(R.string.failUpdate , Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                mPresenter.onGetRefresh(R.string.failUpdate, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
             }
         });
     }
@@ -147,17 +156,26 @@ public class VarizNaghdBeBankModel implements VarizNaghdBeBankMVP.ModelOps {
 
     @Override
     public void getAllVarizBeBank() {
-        ArrayList<VarizBeBankModel> models  = varizBeBankDAO.getVarizUpdate();
+        ArrayList<VarizBeBankModel> models = varizBeBankDAO.getVarizUpdate();
         mPresenter.onGetAllVarizBeBank(models);
     }
 
+    /**
+     * varizBeBank = vosol vajeh naghd kamel be fish tabdil shode
+     * varizBeBankExtra = vosol vajeh naghd be sourat nesfeh be fish tabdil shode
+     * @param varizBeBankModel
+     */
     @Override
     public void sendVariz(VarizBeBankModel varizBeBankModel) {
-        ArrayList<VarizBeBankModel> varizBeBankModels = varizBeBankDAO.getByCcShomarehSanad(varizBeBankModel.getExtraProp_ShomarehSanad());
+        ArrayList<VarizBeBankModel> varizBeBankModelsMablagh = varizBeBankDAO.getByCcShomarehSanadMablagh(varizBeBankModel.getExtraProp_ShomarehSanad());
+        ArrayList<VarizBeBankModel> varizBeBankModelsExtraProp_Mablagh = varizBeBankDAO.getByCcShomarehSanadExtraProp_Mablagh(varizBeBankModel.getExtraProp_ShomarehSanad());
         JSONObject jsonObjectFinal = new JSONObject();
-        JSONArray jsonArrayVarizBeBank = varizBeBankModel.toJsonArrayVariz(varizBeBankModels);
+        JSONArray jsonArrayVarizBeBank = varizBeBankModel.toJsonArrayVariz(varizBeBankModelsMablagh);
+        JSONArray jsonArrayVarizBeBankExtra = varizBeBankModel.toJsonArrayVariz(varizBeBankModelsExtraProp_Mablagh);
+
         try {
-            jsonObjectFinal.put("varizBeBank" , jsonArrayVarizBeBank);
+            jsonObjectFinal.put("varizBeBank", jsonArrayVarizBeBank);
+            jsonObjectFinal.put("varizBeBankExtra", jsonArrayVarizBeBankExtra);
 
             String strVariz = jsonObjectFinal.toString();
 
@@ -203,6 +221,7 @@ public class VarizNaghdBeBankModel implements VarizNaghdBeBankMVP.ModelOps {
 
     /**
      * set text for show Toast and handler response API send Variz Be Bank
+     *
      * @param errorCode
      */
     private void showResultError(int errorCode)

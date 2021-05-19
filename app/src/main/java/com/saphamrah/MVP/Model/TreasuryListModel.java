@@ -12,7 +12,6 @@ import com.saphamrah.BaseMVP.TreasuryListMVP;
 import com.saphamrah.DAO.AdamDarkhastDAO;
 import com.saphamrah.DAO.AnbarakAfradDAO;
 import com.saphamrah.DAO.BargashtyDAO;
-import com.saphamrah.DAO.CodeNoeVosolDAO;
 import com.saphamrah.DAO.DariaftPardakhtDarkhastFaktorPPCDAO;
 import com.saphamrah.DAO.DariaftPardakhtPPCDAO;
 import com.saphamrah.DAO.DarkhastFaktorDAO;
@@ -20,7 +19,6 @@ import com.saphamrah.DAO.DarkhastFaktorEmzaMoshtaryDAO;
 import com.saphamrah.DAO.DarkhastFaktorMoshtaryForoshandeDAO;
 import com.saphamrah.DAO.DarkhastFaktorRoozSortDAO;
 import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
-import com.saphamrah.DAO.EtebarDAO;
 import com.saphamrah.DAO.ForoshandehAmoozeshiDeviceNumberDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.KalaMojodiDAO;
@@ -42,13 +40,11 @@ import com.saphamrah.DAO.RptMandehdarDAO;
 import com.saphamrah.DAO.RptSanadDAO;
 import com.saphamrah.DAO.SystemConfigTabletDAO;
 import com.saphamrah.Model.BargashtyModel;
-import com.saphamrah.Model.CodeNoeVosolModel;
 import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
 import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.DarkhastFaktorRoozSortModel;
-import com.saphamrah.Model.EtebarModel;
 import com.saphamrah.Model.ForoshandehAmoozeshiModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.KalaMojodiModel;
@@ -66,7 +62,6 @@ import com.saphamrah.Model.RptForoshModel;
 import com.saphamrah.Model.RptMandehdarModel;
 import com.saphamrah.Model.RptSanadModel;
 import com.saphamrah.Model.ServerIpModel;
-import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
@@ -483,7 +478,6 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
     private void sendDariaftPardakhtToServer(final int position , String ip , String port , final ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, final DarkhastFaktorModel darkhastFaktorModel, int codeNoeVosolVajhNaghd, String currentVersionNumber)
     {
         ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
-        CodeNoeVosolDAO codeNoeVosolDAO = new CodeNoeVosolDAO(mPresenter.getAppContext());
         final DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(mPresenter.getAppContext());
         APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
 
@@ -510,9 +504,8 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         //create JsonArray of DariaftPardakhtPPCModel
         for (DariaftPardakhtPPCModel dpModel : dariaftPardakhtPPCModels)
         {
-            CodeNoeVosolModel codeNoeVosolModel = codeNoeVosolDAO.getByCodeNoeVosol(dpModel.getCodeNoeVosol());
-            int codeNoeSanad = codeNoeVosolModel.getCodeNoeSanad_dp();
-            int codeNoeCheck = codeNoeVosolModel.getCodeNoeCheck_dp();
+            int codeNoeSanad = 0;
+            int codeNoeCheck = 0;
             jsonArrayDariaftPardakht.put(dpModel.toJsonObject(ccMarkazForosh, ccMarkazAnbar, ccMarkazSazmanForoshSakhtarForosh, codeNoeSanad, codeNoeCheck, codeNoeVosolVajhNaghd, currentVersionNumber));
             ccDpdfs += "," + dpModel.getCcDariaftPardakht();
         }

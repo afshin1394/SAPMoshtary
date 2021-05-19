@@ -60,6 +60,7 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
         }
         else
         {
+            mView.get().showLoading();
             mModel.getDariaftPardakhtForSend(ccDarkhastFaktor , position);
         }
     }
@@ -186,7 +187,7 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     {
         if (faktorRooz == 0)
         {
-            mView.get().showHideFabButtons(true);
+
             if (darkhastFaktorMoshtaryForoshandeModels.size() > 0)
             {
                 mView.get().onGetFaktorRooz(darkhastFaktorMoshtaryForoshandeModels , noeMasouliat , sort);
@@ -198,7 +199,7 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
         }
         else
         {
-            mView.get().showHideFabButtons(false);
+
             if (darkhastFaktorMoshtaryForoshandeModels.size() > 0)
             {
                 mView.get().onGetFaktorMandeDar(darkhastFaktorMoshtaryForoshandeModels , noeMasouliat);
@@ -220,6 +221,7 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     @Override
     public void onErrorSend(int resId)
     {
+        mView.get().closeLoading();
         mView.get().showToast(resId, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
     }
 
@@ -227,7 +229,9 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     @Override
     public void onSuccessSend(int position)
     {
+        mView.get().closeLoading();
         mView.get().showAlertMessage(R.string.successSendData , Constants.SUCCESS_MESSAGE());
+        mView.get().onSuccessSend(position);
     }
 
 

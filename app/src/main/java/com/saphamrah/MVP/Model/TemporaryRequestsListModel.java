@@ -3,15 +3,12 @@ package com.saphamrah.MVP.Model;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Message;
 import android.util.Log;
 
 import com.saphamrah.BaseMVP.TemporaryRequestsListMVP;
 import com.saphamrah.DAO.AdamDarkhastDAO;
 import com.saphamrah.DAO.AnbarakAfradDAO;
 import com.saphamrah.DAO.BarkhordForoshandehBaMoshtaryDAO;
-import com.saphamrah.DAO.CodeNoeVosolDAO;
 import com.saphamrah.DAO.CustomerAdamDarkhastDAO;
 import com.saphamrah.DAO.CustomerDarkhastFaktorDAO;
 import com.saphamrah.DAO.DariaftPardakhtDarkhastFaktorPPCDAO;
@@ -43,7 +40,6 @@ import com.saphamrah.MVP.View.TemporaryRequestsListActivity;
 import com.saphamrah.Model.AdamDarkhastModel;
 import com.saphamrah.Model.AnbarakAfradModel;
 import com.saphamrah.Model.BarkhordForoshandehBaMoshtaryModel;
-import com.saphamrah.Model.CodeNoeVosolModel;
 import com.saphamrah.Model.ControlDataErsaliTabletModel;
 import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
@@ -1654,7 +1650,6 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
             dariaftPardakhtdfPPCDAO.updateExtraPropccDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcDarkhastFaktor());
             JSONArray jsonArrayDariaftPardakhtPPC = new JSONArray();
             JSONArray jsonDariaftPardakhtDarkhastFaktorPPCs = new JSONArray();
-            CodeNoeVosolDAO codeNoeVosolDAO = new CodeNoeVosolDAO(mPresenter.getAppContext());
             ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
             int codeNoeVosolVajhNaghd = Integer.parseInt(childParameterDAO.getAllByccChildParameter(String.valueOf(Constants.CC_CHILD_CODE_NOE_VOSOL_VAJH_NAGHD())).get(0).getValue());
             String currentVersionNumber = new PubFunc().new DeviceInfo().getCurrentVersion(mPresenter.getAppContext());
@@ -1682,13 +1677,11 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
                     ccMarkazSazmanForoshSakhtarForosh = darkhastFaktorModel.getCcMarkazSazmanForoshSakhtarForosh();
                 }
 
-                //DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(mPresenter.getAppContext());
                 for (DariaftPardakhtPPCModel dariaftpardakhtppc : dariaftPardakhtPPCModels)
                 {
                     mablaghKolDariaftPardakht += dariaftpardakhtppc.getMablagh();
-                    CodeNoeVosolModel codeNoeVosolModel = codeNoeVosolDAO.getByCodeNoeVosol(dariaftpardakhtppc.getCodeNoeVosol());
-                    int codeNoeSanad = codeNoeVosolModel.getCodeNoeSanad_dp();
-                    int codeNoeCheck = codeNoeVosolModel.getCodeNoeCheck_dp();
+                    int codeNoeSanad = 0;
+                    int codeNoeCheck = 0;
 
                     ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktors = dariaftPardakhtdfPPCDAO.getForSendToSql(dariaftpardakhtppc.getCcDariaftPardakht());
                     //tedadKolDariaftPardakhtDarkhastFaktor += dariaftPardakhtDarkhastFaktors.size();

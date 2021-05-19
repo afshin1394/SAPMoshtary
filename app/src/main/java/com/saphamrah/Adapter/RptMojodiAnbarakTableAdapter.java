@@ -63,6 +63,7 @@ public class RptMojodiAnbarakTableAdapter extends RecyclerView.Adapter<RptMojodi
         {
             holder.lblCodeKala.setBackgroundResource(R.drawable.table_header_cell_bg);
             holder.lblNameKala.setBackgroundResource(R.drawable.table_header_cell_bg);
+            holder.lblNameSazman.setBackgroundResource(R.drawable.table_header_cell_bg);
             holder.lblCarton.setBackgroundResource(R.drawable.table_header_cell_bg);
             holder.lblBasteh.setBackgroundResource(R.drawable.table_header_cell_bg);
             holder.lblAdad.setBackgroundResource(R.drawable.table_header_cell_bg);
@@ -76,6 +77,7 @@ public class RptMojodiAnbarakTableAdapter extends RecyclerView.Adapter<RptMojodi
 
             holder.lblCodeKala.setText(context.getResources().getString(R.string.codeKala));
             holder.lblNameKala.setText(context.getResources().getString(R.string.nameKala));
+            holder.lblNameKala.setText(context.getResources().getString(R.string.nameSazman));
             holder.lblCarton.setText(context.getResources().getString(R.string.carton));
             holder.lblBasteh.setText(context.getResources().getString(R.string.basteh));
             holder.lblAdad.setText(context.getResources().getString(R.string.adad));
@@ -90,6 +92,7 @@ public class RptMojodiAnbarakTableAdapter extends RecyclerView.Adapter<RptMojodi
             {
                 holder.lblCodeKala.setBackgroundResource(R.drawable.table_content_cell_bg_red);
                 holder.lblNameKala.setBackgroundResource(R.drawable.table_content_cell_bg_red);
+                holder.lblNameSazman.setBackgroundResource(R.drawable.table_content_cell_bg_red);
                 holder.lblCarton.setBackgroundResource(R.drawable.table_content_cell_bg_red);
                 holder.lblBasteh.setBackgroundResource(R.drawable.table_content_cell_bg_red);
                 holder.lblAdad.setBackgroundResource(R.drawable.table_content_cell_bg_red);
@@ -98,6 +101,7 @@ public class RptMojodiAnbarakTableAdapter extends RecyclerView.Adapter<RptMojodi
             {
                 holder.lblCodeKala.setBackgroundResource(R.drawable.table_content_cell_bg_orange);
                 holder.lblNameKala.setBackgroundResource(R.drawable.table_content_cell_bg_orange);
+                holder.lblNameSazman.setBackgroundResource(R.drawable.table_content_cell_bg_orange);
                 holder.lblCarton.setBackgroundResource(R.drawable.table_content_cell_bg_orange);
                 holder.lblBasteh.setBackgroundResource(R.drawable.table_content_cell_bg_orange);
                 holder.lblAdad.setBackgroundResource(R.drawable.table_content_cell_bg_orange);
@@ -106,6 +110,7 @@ public class RptMojodiAnbarakTableAdapter extends RecyclerView.Adapter<RptMojodi
             {
                 holder.lblCodeKala.setBackgroundResource(R.drawable.table_content_cell_bg_green);
                 holder.lblNameKala.setBackgroundResource(R.drawable.table_content_cell_bg_green);
+                holder.lblNameSazman.setBackgroundResource(R.drawable.table_content_cell_bg_green);
                 holder.lblCarton.setBackgroundResource(R.drawable.table_content_cell_bg_green);
                 holder.lblBasteh.setBackgroundResource(R.drawable.table_content_cell_bg_green);
                 holder.lblAdad.setBackgroundResource(R.drawable.table_content_cell_bg_green);
@@ -113,6 +118,7 @@ public class RptMojodiAnbarakTableAdapter extends RecyclerView.Adapter<RptMojodi
 
             holder.lblCodeKala.setTextColor(context.getResources().getColor(R.color.colorTextPrimary));
             holder.lblNameKala.setTextColor(context.getResources().getColor(R.color.colorTextPrimary));
+            holder.lblNameSazman.setTextColor(context.getResources().getColor(R.color.colorTextPrimary));
             holder.lblCarton.setTextColor(context.getResources().getColor(R.color.colorTextPrimary));
             holder.lblBasteh.setTextColor(context.getResources().getColor(R.color.colorTextPrimary));
             holder.lblAdad.setTextColor(context.getResources().getColor(R.color.colorTextPrimary));
@@ -120,6 +126,7 @@ public class RptMojodiAnbarakTableAdapter extends RecyclerView.Adapter<RptMojodi
 
             holder.lblCodeKala.setText(mojodiAnbarModels.get(position).getCodeKala());
             holder.lblNameKala.setText(mojodiAnbarModels.get(position).getNameKala());
+            holder.lblNameSazman.setText(mojodiAnbarModels.get(position).getNameSazmanForosh());
             holder.lblCarton.setText(String.valueOf(mojodiAnbarModels.get(position).getMandehMojodi_Karton()));
             holder.lblBasteh.setText(String.valueOf(mojodiAnbarModels.get(position).getMandehMojodi_Basteh()));
             holder.lblAdad.setText(String.valueOf(mojodiAnbarModels.get(position).getMandehMojodi_Adad()));
@@ -147,6 +154,7 @@ public class RptMojodiAnbarakTableAdapter extends RecyclerView.Adapter<RptMojodi
 
         private TextView lblCodeKala;
         private TextView lblNameKala;
+        private TextView lblNameSazman;
         private TextView lblCarton;
         private TextView lblBasteh;
         private TextView lblAdad;
@@ -158,12 +166,14 @@ public class RptMojodiAnbarakTableAdapter extends RecyclerView.Adapter<RptMojodi
 
             lblCodeKala = (TextView)itemView.findViewById(R.id.lblCodeKala);
             lblNameKala = (TextView)itemView.findViewById(R.id.lblNameKala);
+            lblNameSazman = (TextView)itemView.findViewById(R.id.lblNameSazman);
             lblCarton = (TextView)itemView.findViewById(R.id.lblCarton);
             lblBasteh = (TextView)itemView.findViewById(R.id.lblBasteh);
             lblAdad = (TextView)itemView.findViewById(R.id.lblAdad);
 
             lblCodeKala.setTypeface(font);
             lblNameKala.setTypeface(font);
+            lblNameSazman.setTypeface(font);
             lblCarton.setTypeface(font);
             lblBasteh.setTypeface(font);
             lblAdad.setTypeface(font);

@@ -295,9 +295,45 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
                     "			sum(Mablagh) Mablagh,0 CodeVazeiat, ZamaneTakhsiseFaktor, 0 ccAfradMamorVosol,0 ccMarkazAnbar, " +
                     "			0 AS Tabdil_NaghdBeFish, 0 AS ccTafkikJoze, 0 AS NaghlAzGhabl,0 AS IsForTasviehTakhir, ZamaneTakhsiseFaktorShamsi," +
                     "			0 AS ExtraProp_IsDirkard, 0 AS ExtraProp_ccKardexSatr," +
-                    "			0 ExtraProp_IsBestankari_ForTasviehTakhir, ExtraProp_IsSend, 0 AS ExtraProp_CanDelete, 0 AS ExtraProp_IsTajil, 0 as ExtraProp_ccDarkhastFaktorServer, 0 as ccMarkazForosh, 0 as ccMarkazSazmanForoshSakhtarForosh , 0 as  ExtraProp_ccDaryaftPardakhtCheckBargashty , 0 IsTaeedShodeh " +
+                    "			0 ExtraProp_IsBestankari_ForTasviehTakhir, ExtraProp_IsSend, 0 AS ExtraProp_CanDelete, 0 AS ExtraProp_IsTajil, 0 as ExtraProp_ccDarkhastFaktorServer, 0 as ccMarkazForosh, 0 as ccMarkazSazmanForoshSakhtarForosh , 0 as  ExtraProp_ccDaryaftPardakhtCheckBargashty ,  IsTaeedShodeh " +
                     " 	FROM DariaftPardakhtDarkhastFaktorPPC " +
                     " 	WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeVosol = " + Constants.VALUE_MARJOEE() +
+                    " 	GROUP BY CodeNoeVosol, NameNoeVosol, TarikhSanadShamsi, ccDarkhastFaktor" + " ) A" +
+                    " ORDER BY ccDariaftPardakhtDarkhastFaktor ";
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    dariaftPardakhtDarkhastFaktorPPCModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DariaftPardakhtDarkhastFaktorPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtDarkhastFaktorPPCDAO" , "" , "getByccDarkhastFaktor" , "");
+        }
+        return dariaftPardakhtDarkhastFaktorPPCModels;
+    }
+
+    public ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> getByccDarkhastFaktorForCheckPosition(long ccDarkhastFaktor)
+    {
+        ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query = " SELECT *  FROM ( " +
+                    " 	SELECT * FROM DariaftPardakhtDarkhastFaktorPPC " +
+                    " 	WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeVosol <> " + Constants.VALUE_MARJOEE() + " AND IsTaeedShodeh=0 " +
+                    " 	UNION ALL " +
+                    " 	SELECT 	* " +
+                    " 	FROM DariaftPardakhtDarkhastFaktorPPC " +
+                    " 	WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeVosol = " + Constants.VALUE_MARJOEE() + " AND IsTaeedShodeh=0 " +
                     " 	GROUP BY CodeNoeVosol, NameNoeVosol, TarikhSanadShamsi, ccDarkhastFaktor" + " ) A" +
                     " ORDER BY ccDariaftPardakhtDarkhastFaktor ";
             Cursor cursor = db.rawQuery(query , null);
@@ -513,10 +549,10 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
                 exception.printStackTrace();
             }
         }
-        int TedadRoozMazad= 10;//todo mazad
+       // int TedadRoozMazad= 10;//todo mazad
 
         //modatVosol +=1;
-        modatVosol += TedadRoozMazad;
+       // modatVosol += TedadRoozMazad;
         tedadRoozRaasGiri = (int) Math.round(((modatVosol * mablaghFaktor) - sumMablaghTakhsisDiffdays ) / mablaghMandeh);
         tarikhSarResid = new PubFunc().new DateUtils().addDay(tarikhErsal , tedadRoozRaasGiri);
         return tarikhSarResid;

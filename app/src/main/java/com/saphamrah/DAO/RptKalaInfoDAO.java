@@ -364,6 +364,61 @@ public class RptKalaInfoDAO {
         return rptKalaInfoModels;
     }
 
+    //TODO : ccTaminKonandeh
+    public ArrayList<RptKalaInfoModel> getByCcKalaCodeAndShomarehBach(int ccKalaCode, String shomarehBach , double mablaghForosh , float mablaghMasrafKonandeh) {
+//    public ArrayList<RptKalaInfoModel> getByCcKalaCode(int ccKalaCode) {
+        ArrayList<RptKalaInfoModel> rptKalaInfoModels = new ArrayList<>();
+
+        String query = "  select * from Rpt_KalaInfo where ccKalaCode in (" + ccKalaCode + " ) and ShomarehBach " + shomarehBach + " and GheymatForoshAsli " + mablaghForosh + " and GheymatMasrafKonandeh " + mablaghMasrafKonandeh +"";
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+
+                    rptKalaInfoModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll, RptKalaInfoModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "RptKalaInfoDAO", "", "getByCcKalaCode", "");
+        }
+
+
+        return rptKalaInfoModels;
+    }
+
+    public ArrayList<RptKalaInfoModel> getByCcKalaCode(int ccKalaCode) {
+        ArrayList<RptKalaInfoModel> rptKalaInfoModels = new ArrayList<>();
+
+        String query = "  select * from Rpt_KalaInfo where ccKalaCode in (" + ccKalaCode + " ) ";
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+
+                    rptKalaInfoModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll, RptKalaInfoModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "RptKalaInfoDAO", "", "getByCcKalaCode", "");
+        }
+
+
+        return rptKalaInfoModels;
+    }
+
+
     public boolean deleteAll() {
         try {
             SQLiteDatabase db = dbHelper.getWritableDatabase();

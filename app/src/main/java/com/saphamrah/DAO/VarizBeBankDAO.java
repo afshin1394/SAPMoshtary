@@ -64,12 +64,13 @@ public class VarizBeBankDAO
                 modelTABLE_NAME.getCOLUMN_ExtraProp_ShomarehSanad(),
                 modelTABLE_NAME.getCOLUMN_ExtraProp_TarikhSanad(),
                 modelTABLE_NAME.getCOLUMN_ExtraProp_NameBankSanad(),
-                modelTABLE_NAME.getCOLUMN_txtCodeNoeVosol()
+                modelTABLE_NAME.getCOLUMN_txtCodeNoeVosol(),
+                modelTABLE_NAME.getCOLUMN_ExtraProp_MablaghSabtShode()
 
         };
     }
 
-    public void fetchBargashty(final Context context, final String activityNameForLog ,int ccAfrad, final RetrofitResponse retrofitResponse)
+    public void fetchVarizBeBanck(final Context context, final String activityNameForLog ,int ccAfrad, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
@@ -94,7 +95,7 @@ public class VarizBeBankDAO
                         {
                             long contentLength = response.raw().body().contentLength();
                             PubFunc.Logger logger = new PubFunc().new Logger();
-                            logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, VarizBeBankDAO.class.getSimpleName(), "", "fetchBargashty", "onResponse");
+                            logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, VarizBeBankDAO.class.getSimpleName(), "", "fetchVarizBeBank", "onResponse");
                         }
                     }
                     catch (Exception e){e.printStackTrace();}
@@ -112,7 +113,7 @@ public class VarizBeBankDAO
                                 else
                                 {
                                     PubFunc.Logger logger = new PubFunc().new Logger();
-                                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), VarizBeBankDAO.class.getSimpleName(), activityNameForLog, "fetchBargashty", "onResponse");
+                                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), VarizBeBankDAO.class.getSimpleName(), activityNameForLog, "fetchVarizBeBank", "onResponse");
                                     retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
                                 }
                             }
@@ -125,7 +126,7 @@ public class VarizBeBankDAO
                                     endpoint = endpoint.substring(endpoint.lastIndexOf("/")+1);
                                 }catch (Exception e){e.printStackTrace();}
                                 PubFunc.Logger logger = new PubFunc().new Logger();
-                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s",context.getResources().getString(R.string.resultIsNull) , endpoint), VarizBeBankDAO.class.getSimpleName(), activityNameForLog, "fetchBargashty", "onResponse");
+                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s",context.getResources().getString(R.string.resultIsNull) , endpoint), VarizBeBankDAO.class.getSimpleName(), activityNameForLog, "fetchVarizBeBank", "onResponse");
                                 retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
                             }
                         }
@@ -139,7 +140,7 @@ public class VarizBeBankDAO
                             }catch (Exception e){e.printStackTrace();}
                             String message = String.format("error body : %1$s , code : %2$s * %3$s" , response.message() , response.code(), endpoint);
                             PubFunc.Logger logger = new PubFunc().new Logger();
-                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, VarizBeBankDAO.class.getSimpleName(), activityNameForLog, "fetchBargashty", "onResponse");
+                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, VarizBeBankDAO.class.getSimpleName(), activityNameForLog, "fetchVarizBeBank", "onResponse");
                             retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), message);
                         }
                     }
@@ -147,7 +148,7 @@ public class VarizBeBankDAO
                     {
                         exception.printStackTrace();
                         PubFunc.Logger logger = new PubFunc().new Logger();
-                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), VarizBeBankDAO.class.getSimpleName(), activityNameForLog, "fetchBargashty", "onResponse");
+                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), VarizBeBankDAO.class.getSimpleName(), activityNameForLog, "fetchVarizBeBank", "onResponse");
                         retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION() , exception.toString());
                     }
                 }
@@ -162,7 +163,7 @@ public class VarizBeBankDAO
                         endpoint = endpoint.substring(endpoint.lastIndexOf("/")+1);
                     }catch (Exception e){e.printStackTrace();}
                     PubFunc.Logger logger = new PubFunc().new Logger();
-                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", t.getMessage(), endpoint), VarizBeBankDAO.class.getSimpleName(), activityNameForLog, "fetchBargashty", "onFailure");
+                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", t.getMessage(), endpoint), VarizBeBankDAO.class.getSimpleName(), activityNameForLog, "fetchVarizBeBank", "onFailure");
                     retrofitResponse.onFailed(Constants.RETROFIT_THROWABLE() , t.getMessage());
                 }
             });
@@ -253,14 +254,19 @@ public class VarizBeBankDAO
             exception.printStackTrace();
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorSelectAll , BargashtyModel.TableName()) + "\n" + exception.toString();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "VarizBeBankDAO" , "" , "getAll" , "");
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "VarizBeBankDAO" , "" , "getIsSelected" , "");
         }
         return models;
     }
 
-    public ArrayList<VarizBeBankModel> getByCcShomarehSanad(String shomarehSanad)
+    /**
+     * when we have complete variz
+     * @param shomarehSanad
+     * @return
+     */
+    public ArrayList<VarizBeBankModel> getByCcShomarehSanadMablagh(String shomarehSanad)
     {
-        String query = "select * from varizBeBank where " + modelTABLE_NAME.getCOLUMN_ExtraProp_ShomarehSanad() + " = " + shomarehSanad + " ";
+        String query = "select * from varizBeBank where " + modelTABLE_NAME.getCOLUMN_ExtraProp_ShomarehSanad() + " = " + shomarehSanad + " and Mablagh = ExtraProp_MablaghSabtShode  and ExtraProp_IsSend = 0";
         ArrayList<VarizBeBankModel> models = new ArrayList<>();
         try
         {
@@ -281,7 +287,40 @@ public class VarizBeBankDAO
             exception.printStackTrace();
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorSelectAll , BargashtyModel.TableName()) + "\n" + exception.toString();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "VarizBeBankDAO" , "" , "getAll" , "");
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "VarizBeBankDAO" , "" , "getByCcShomarehSanadMablagh" , "");
+        }
+        return models;
+    }
+
+    /**
+     * when we have not complete variz
+     * @param shomarehSanad
+     * @return
+     */
+    public ArrayList<VarizBeBankModel> getByCcShomarehSanadExtraProp_Mablagh(String shomarehSanad)
+    {
+        String query = "select * from varizBeBank where " + modelTABLE_NAME.getCOLUMN_ExtraProp_ShomarehSanad() + " = " + shomarehSanad + " and Mablagh != ExtraProp_MablaghSabtShode and ExtraProp_IsSend = 0 ";
+        ArrayList<VarizBeBankModel> models = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    models = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , BargashtyModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "VarizBeBankDAO" , "" , "getByCcShomarehSanadExtraProp_Mablagh" , "");
         }
         return models;
     }
@@ -291,7 +330,7 @@ public class VarizBeBankDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query = "SELECT ExtraProp_NameShobehSanad , ExtraProp_ShomarehSanad , ExtraProp_TarikhSanad , ExtraProp_NameBankSanad, ExtraProp_IsSend , sum (Mablagh ) Mablagh " +
+            String query = "SELECT ExtraProp_NameShobehSanad , ExtraProp_ShomarehSanad , ExtraProp_TarikhSanad , ExtraProp_NameBankSanad, ExtraProp_IsSend ,sum(ExtraProp_MablaghSabtShode) ExtraProp_MablaghSabtShode " +
                     " FROM varizbebank " +
                     " WHERE ExtraProp_IsSelected = 1 " +
                     " GROUP BY ExtraProp_NameShobehSanad , ExtraProp_ShomarehSanad , ExtraProp_TarikhSanad , ExtraProp_NameBankSanad ,ExtraProp_IsSend";
@@ -311,7 +350,7 @@ public class VarizBeBankDAO
             exception.printStackTrace();
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorSelectAll , VarizBeBankModel.TABLE_NAME) + "\n" + exception.toString();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "VarizBeBankDAO" , "" , "getccForoshandehByForTasviehVosol" , "");
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "VarizBeBankDAO" , "" , "getVarizUpdate" , "");
         }
         return models;
     }
@@ -341,19 +380,22 @@ public class VarizBeBankDAO
             exception.printStackTrace();
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorSelectAll , VarizBeBankModel.TABLE_NAME) + "\n" + exception.toString();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "VarizBeBankDAO" , "" , "getccForoshandehByForTasviehVosol" , "");
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "VarizBeBankDAO" , "" , "checkHaveShomarehSanadForUpdate" , "");
         }
 
 
         return haveShomarehsanad;
     }
 
+
+
+
     /**
      * update db vajh naghd to fish banki
      * @param entity
      * @return
      */
-    public boolean UpdateNaghdBeFish(VarizBeBankModel entity)
+    public boolean updateNaghdBeFish(VarizBeBankModel entity)
     {
         ContentValues values = new ContentValues();
         boolean update = false;
@@ -362,6 +404,7 @@ public class VarizBeBankDAO
         try
         {
             values.put("ccDariaftPardakht", entity.getCcDariaftPardakht());
+            values.put("ExtraProp_MablaghSabtShode" , entity.getExtraProp_MablaghSabtShode());
             values.put("ExtraProp_ccBankSanad" , entity.getExtraProp_ccBankSanad());
             values.put("ExtraProp_NameShobehSanad" , entity.getExtraProp_NameShobehSanad());
             values.put("ExtraProp_CodeShobehSand" , entity.getExtraProp_CodeShobehSand());
@@ -376,7 +419,60 @@ public class VarizBeBankDAO
 
 
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            db.update(VarizBeBankModel.TABLE_NAME, values, "ccDariaftPardakht=" +entity.getCcDariaftPardakht(),null);
+            db.update(VarizBeBankModel.TABLE_NAME, values, "ccDariaftPardakht = " +entity.getCcDariaftPardakht(),null);
+            update = true;
+            db.close();
+        }
+        catch (Exception e)
+        {
+            update = false;
+            throw new RuntimeException(e);
+        }
+
+        return update;
+    }
+
+    /**
+     * update is send when send is success
+     * @param shomarehSanad
+     * @return
+     */
+    public boolean updateIsSend(int shomarehSanad)
+    {
+        ContentValues values = new ContentValues();
+        boolean update = false;
+
+
+        try
+        {
+            values.put("ExtraProp_IsSend", 1);
+
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.update(VarizBeBankModel.TABLE_NAME, values, "ExtraProp_ShomarehSanad = " + shomarehSanad,null);
+            update = true;
+            db.close();
+        }
+        catch (Exception e)
+        {
+            update = false;
+            throw new RuntimeException(e);
+        }
+
+        return update;
+    }
+
+    public boolean updateCcDaryaftPardakht(int ccDaryaftPardakhat , int ccDaryaftPardakhatNew)
+    {
+        ContentValues values = new ContentValues();
+        boolean update = false;
+
+
+        try
+        {
+            values.put("ccDariaftPardakht", ccDaryaftPardakhatNew);
+
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.update(VarizBeBankModel.TABLE_NAME, values, "ccDariaftPardakht = " + ccDaryaftPardakhat,null);
             update = true;
             db.close();
         }
@@ -429,6 +525,7 @@ public class VarizBeBankDAO
         contentValues.put(model.getCOLUMN_ExtraProp_TarikhSanad() , model.getExtraProp_TarikhSanad());
         contentValues.put(model.getCOLUMN_ExtraProp_NameBankSanad() , model.getExtraProp_NameBankSanad());
         contentValues.put(model.getCOLUMN_txtCodeNoeVosol() , model.getTxtCodeNoeVosol());
+        contentValues.put(model.getCOLUMN_ExtraProp_MablaghSabtShode() , model.getMablagh());
 
 
         return contentValues;
@@ -443,11 +540,10 @@ public class VarizBeBankDAO
         {
             VarizBeBankModel model = new VarizBeBankModel();
 
-            Log.i("asdas", "asd");
             model.setCcDariaftPardakht(cursor.getInt(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_ccDariaftPardakht())));
             model.setNamemoshtary(cursor.getString(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_namemoshtary())));
             model.setCcMoshtary(cursor.getInt(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_ccmoshtary())));
-            model.setMablagh(cursor.getLong(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_Mablagh())));
+            model.setMablagh(cursor.getDouble(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_Mablagh())));
             model.setCodeNoeVosol(cursor.getInt(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_CodeNoeVosol())));
             model.setExtraProp_IsSend(cursor.getInt(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_ExtraProp_IsSend())));
             model.setExtraProp_IsSelected(cursor.getInt(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_ExtraProp_IsSelected())));
@@ -461,7 +557,7 @@ public class VarizBeBankDAO
             model.setExtraProp_TarikhSanad(cursor.getString(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_ExtraProp_TarikhSanad())));
             model.setExtraProp_NameBankSanad(cursor.getString(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_ExtraProp_NameBankSanad())));
             model.setTxtCodeNoeVosol(cursor.getString(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_txtCodeNoeVosol())));
-            Log.i("asdas", "asd");
+            model.setExtraProp_MablaghSabtShode(cursor.getDouble(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_ExtraProp_MablaghSabtShode())));
 
 
 
@@ -480,10 +576,7 @@ public class VarizBeBankDAO
         {
             VarizBeBankModel model = new VarizBeBankModel();
 
-            model.setMablagh(cursor.getLong(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_Mablagh())));
-//            model.setExtraProp_IsSend(cursor.getInt(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_ExtraProp_IsSend())));
-//            model.setExtraProp_IsSelected(cursor.getInt(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_ExtraProp_IsSelected())));
-
+            model.setExtraProp_MablaghSabtShode(cursor.getDouble(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_ExtraProp_MablaghSabtShode())));
             model.setExtraProp_NameShobehSanad(cursor.getString(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_ExtraProp_NameShobehSanad())));
             model.setExtraProp_ShomarehSanad(cursor.getString(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_ExtraProp_ShomarehSanad())));
             model.setExtraProp_TarikhSanad(cursor.getString(cursor.getColumnIndex(modelTABLE_NAME.getCOLUMN_ExtraProp_TarikhSanad())));

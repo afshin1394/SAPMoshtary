@@ -173,7 +173,7 @@ public class SaleGoalBarChartsAdapter extends RecyclerView.Adapter<RecyclerView.
             }
 //            tableTitle.setText(name);
             foroshRooz.setText(String.valueOf(baseHadafForoshModel.getTedadForoshRooz()));
-            hadafRooz.setText(String.valueOf(baseHadafForoshModel.getTedadForoshMah()));
+            hadafRooz.setText(String.valueOf(baseHadafForoshModel.getTedadHadafRooz()));
             foroshMah.setText(String.valueOf(baseHadafForoshModel.getTedadForoshMah())  );
             hadafMah.setText(String.valueOf(baseHadafForoshModel.getTedadHadafMah()));
             if (RptSaleGoalActivity.activityState.equals("FragmentLevel1") || RptSaleGoalActivity.activityState.equals("FragmentLevel2")) {

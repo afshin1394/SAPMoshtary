@@ -4,15 +4,11 @@ import android.util.Log;
 
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.PishDaryaftMVP;
-import com.saphamrah.DAO.CodeNoeVosolDAO;
-import com.saphamrah.DAO.DariaftPardakhtDarkhastFaktorPPCDAO;
 import com.saphamrah.DAO.DariaftPardakhtPPCDAO;
 import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
-import com.saphamrah.Model.CodeNoeVosolModel;
-import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
 import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
@@ -21,9 +17,7 @@ import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
-import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.APIServicePost;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.CreateDariaftPardakhtPPCJSONResult;
@@ -102,8 +96,6 @@ public class PishDaryaftModel implements PishDaryaftMVP.ModelOps
     private void sendDariaftPardakhtToServer(final int position ,ServerIpModel serverIpModel , final ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, final DarkhastFaktorModel darkhastFaktorModel, int codeNoeVosolVajhNaghd, String currentVersionNumber)
     {
 
-        CodeNoeVosolDAO codeNoeVosolDAO = new CodeNoeVosolDAO(BaseApplication.getContext());
-        final DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(BaseApplication.getContext());
         APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
 
         String ccDpdfs = "-1";
@@ -129,9 +121,8 @@ public class PishDaryaftModel implements PishDaryaftMVP.ModelOps
         for (DariaftPardakhtPPCModel dpModel : dariaftPardakhtPPCModels)
         {
 
-            CodeNoeVosolModel codeNoeVosolModel = codeNoeVosolDAO.getByCodeNoeVosol(dpModel.getCodeNoeVosol());
-            int codeNoeSanad = codeNoeVosolModel.getCodeNoeSanad_dp();
-            int codeNoeCheck = codeNoeVosolModel.getCodeNoeCheck_dp();
+            int codeNoeSanad = 0;
+            int codeNoeCheck = 0;
             jsonArrayDariaftPardakht.put(dpModel.toJsonObjectCheckPishDariaft(ccMarkazForosh, ccMarkazAnbar, ccMarkazSazmanForoshSakhtarForosh, codeNoeSanad, codeNoeCheck, codeNoeVosolVajhNaghd, currentVersionNumber , ccSazmanForosh));
             ccDpdfs += "," + dpModel.getCcDariaftPardakht();
 

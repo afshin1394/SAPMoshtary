@@ -104,7 +104,18 @@ public class RequestGoodsAdapter extends RecyclerSwipeAdapter<RequestGoodsAdapte
         holder.lblNameBrand.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.nameBrand), model.getNameBrand()));
         holder.lblZaribforoshDetail.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.zaribForosh), model.getZaribForosh()));
         holder.lblBarcode.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.barcode), model.getBarCode()));
-        holder.lblShomareBach.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.shomareBach), model.getShomarehBach()));
+
+        if (kalaMojodiZaribModels.get(position).getShomarehBach() !=null) {
+            if (!kalaMojodiZaribModels.get(position).getShomarehBach().equals("")){
+                holder.lblShomareBach.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.shomareBach), kalaMojodiZaribModels.get(position).getShomarehBach()));
+            } else {
+                holder.lblShomareBach.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.gheymatMasrafKonandeRial),  formatter.format(kalaMojodiZaribModels.get(position).getMablaghMasrafKonandeh())));
+            }
+        } else {
+            holder.lblShomareBach.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.gheymatMasrafKonande), kalaMojodiZaribModels.get(position).getMablaghMasrafKonandeh()));
+        }
+
+//        holder.lblShomareBach.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.shomareBach), model.getShomarehBach()));
         holder.lblTarikhTolid.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.tarikhTolid), tarikhTolid));
         holder.lblTarikhEngheza.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.tarikhEngheza), tarikhEngheza));
         holder.imgHaveMaliatAvarez.setImageResource(haveMaliatAvarezResId);

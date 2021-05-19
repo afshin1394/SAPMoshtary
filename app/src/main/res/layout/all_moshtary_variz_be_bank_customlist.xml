@@ -51,13 +51,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/lblMoshtaryDetails"
                 app:layout_constraintLeft_toRightOf="@+id/lblNoeVosol"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginBottom="5dp"
                 android:textColor="@color/colorTextPrimary"
                 android:textSize="@dimen/FontListLbl" />
 
@@ -66,15 +64,13 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/lblNoeVosol"
                 app:layout_constraintTop_toBottomOf="@+id/lblMoshtaryDetails"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/img_is_selected"
                 app:layout_constraintRight_toLeftOf="@+id/lblMablaghKhales"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginBottom="5dp"
                 android:textColor="@color/colorTextPrimary"
                 android:textSize="@dimen/FontListLbl" />
 
@@ -87,6 +83,24 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginLeft="5dp"
                 />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblMablaghSabtShode"
+                app:layout_constraintTop_toBottomOf="@+id/lblMablaghKhales"
+                app:layout_constraintLeft_toRightOf="@+id/img_is_selected"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/FontListLbl" />
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -69,6 +69,8 @@ public interface SplashMVP
         void onDestroy(boolean isChangingConfig);
         void checkAuthentication();
         void authenticateUser(String identityCode);
+        void getInstalledPackages();
+
     }
 
 
@@ -136,6 +138,7 @@ public interface SplashMVP
         void onDestroy();
         void checkAuthentication();
         void authenticateUser(String identityCode);
+        void getInstalledPackages();
     }
 
 

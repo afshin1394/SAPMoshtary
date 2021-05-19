@@ -8,6 +8,16 @@
     <TextView
         android:layout_width="90dp"
         android:layout_height="match_parent"
+        android:id="@+id/lblNameSazman"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="@dimen/FontSize14"
+        android:gravity="center"
+        android:background="@drawable/table_content_cell_bg"
+        android:padding="5dp"/>
+
+    <TextView
+        android:layout_width="90dp"
+        android:layout_height="match_parent"
         android:id="@+id/lblCodeKala"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/FontSize14"

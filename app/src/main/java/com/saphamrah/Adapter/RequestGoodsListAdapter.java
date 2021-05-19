@@ -59,8 +59,17 @@ public class RequestGoodsListAdapter extends RecyclerSwipeAdapter<RequestGoodsLi
         String mablaghForosh = formatter.format((int)kalaMojodiZaribModels.get(position).getGheymatForosh());
         holder.lblCodeNameKala.setText(String.format("%1$s - %2$s", kalaMojodiZaribModels.get(position).getCodeKala(), kalaMojodiZaribModels.get(position).getNameKala()));
         holder.lblMablaghForosh.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.mablaghForoshUnitRial), mablaghForosh));
-        holder.lblShomareBach.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.shomareBach), kalaMojodiZaribModels.get(position).getShomarehBach()));
-        int[] counts = new PubFunc().new ConvertUnit().tedadToCartonBasteAdad(kalaMojodiZaribModels.get(position).getTedad(), kalaMojodiZaribModels.get(position).getTedadDarKarton(), kalaMojodiZaribModels.get(position).getTedadDarBasteh(), kalaMojodiZaribModels.get(position).getAdad());
+        if (kalaMojodiZaribModels.get(position).getShomarehBach() !=null) {
+            if (!kalaMojodiZaribModels.get(position).getShomarehBach().equals("")){
+                holder.lblShomareBach.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.shomareBach), kalaMojodiZaribModels.get(position).getShomarehBach()));
+            } else {
+                holder.lblShomareBach.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.gheymatMasrafKonandeRial),  formatter.format(kalaMojodiZaribModels.get(position).getMablaghMasrafKonandeh())));
+            }
+        } else {
+            holder.lblShomareBach.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.gheymatMasrafKonande), kalaMojodiZaribModels.get(position).getMablaghMasrafKonandeh()));
+        }
+
+            int[] counts = new PubFunc().new ConvertUnit().tedadToCartonBasteAdad(kalaMojodiZaribModels.get(position).getTedad(), kalaMojodiZaribModels.get(position).getTedadDarKarton(), kalaMojodiZaribModels.get(position).getTedadDarBasteh(), kalaMojodiZaribModels.get(position).getAdad());
         holder.lblCartonCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.carton), String.valueOf(counts[0])));
         holder.lblBasteCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.basteh), String.valueOf(counts[1])));
         holder.lblAdadCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.adad), String.valueOf(counts[2])));

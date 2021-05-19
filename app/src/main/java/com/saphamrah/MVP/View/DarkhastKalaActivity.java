@@ -1067,19 +1067,41 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
             @Override
             public void onClick(View view) {
                 if (adapterRequestKalaListGrid != null) {
-                    //get height and width for measuring the recycler view in tablet screen
                     adapterRequestKalaListGrid.updateStatus();
+                    if (recyclerViewNew.getHeight()!=0 && recyclerViewNew.getWidth()!=0)
+                        adapterRequestKalaListGrid.setMeasurements(recyclerViewNew.getHeight(),recyclerViewNew.getWidth());
                     setViewPackages(adapterRequestKalaListGrid.getStatus());
 
                 }
             }
         });
 
-
     }
 
 
-    private void refreshRecyclerView(int spanCount, boolean hasCache) {
+    private RecyclerView.LayoutManager setGridLayoutManager(int spanCount) {
+        mLayoutManager = null;
+        mLayoutManager = new GridLayoutManager(DarkhastKalaActivity.this, spanCount, GridLayoutManager.VERTICAL, false);
+        return mLayoutManager;
+    }
+
+
+
+
+
+    private void refreshRecyclerView(int spanCount) {
+        recyclerViewNew.setAdapter(null);
+        recyclerViewNew.setLayoutManager(null);
+        if (recyclerViewNew.getOnFlingListener() != null) {
+            recyclerViewNew.clearOnScrollListeners();
+            recyclerViewNew.setOnFlingListener(null);
+        }
+        recyclerViewNew.setLayoutManager(setGridLayoutManager(spanCount));
+        recyclerViewNew.setAdapter(adapterRequestKalaListGrid);
+        adapterRequestKalaListGrid.notifyDataSetChanged();
+    }
+
+    private void refreshRecyclerView( int spanCount,boolean hasCache) {
         recyclerViewNew.setAdapter(null);
         recyclerViewNew.setLayoutManager(null);
         if (recyclerViewNew.getOnFlingListener() != null) {
@@ -1093,6 +1115,16 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         recyclerViewNew.setLayoutManager(setGridLayoutManager(spanCount));
         recyclerViewNew.setAdapter(adapterRequestKalaListGrid);
         adapterRequestKalaListGrid.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void onGetGridRecyclerDetails(int status, ArrayList<KalaPhotoModel> kalaPhotoModels) {
+
+        Log.i("ITEMNUMBERPER", "onGetGridRecyclerDetails: "+status);
+        adapterRequestKalaListGrid.setStatus(status);
+        adapterRequestKalaListGrid.setKalaImages(kalaPhotoModels);
+        setViewPackages(adapterRequestKalaListGrid.getStatus());
     }
 
 
@@ -1153,23 +1185,6 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
 
     }
 
-    private RecyclerView.LayoutManager setGridLayoutManager(int spanCount) {
-        mLayoutManager = null;
-        mLayoutManager = new GridLayoutManager(DarkhastKalaActivity.this, spanCount, GridLayoutManager.VERTICAL, false);
-        return mLayoutManager;
-    }
-
-    private void refreshRecyclerView(int spanCount) {
-        recyclerViewNew.setAdapter(null);
-        recyclerViewNew.setLayoutManager(null);
-        if (recyclerViewNew.getOnFlingListener() != null) {
-            recyclerViewNew.clearOnScrollListeners();
-            recyclerViewNew.setOnFlingListener(null);
-        }
-        recyclerViewNew.setLayoutManager(setGridLayoutManager(spanCount));
-        recyclerViewNew.setAdapter(adapterRequestKalaListGrid);
-        adapterRequestKalaListGrid.notifyDataSetChanged();
-    }
 
 
 
@@ -1201,14 +1216,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         showJayezehAlert(jayezehByccKalaCodeParentModels, tedadKala, mablaghForosh , ccKalaCode , ccDarkhastFaktor);
     }
 
-    @Override
-    public void onGetGridRecyclerDetails(int status, ArrayList<KalaPhotoModel> kalaPhotoModels) {
 
-        Log.i("ITEMNUMBERPER", "onGetGridRecyclerDetails: "+status);
-        adapterRequestKalaListGrid.setStatus(status);
-        adapterRequestKalaListGrid.setKalaImages(kalaPhotoModels);
-        setViewPackages(adapterRequestKalaListGrid.getStatus());
-    }
 
     /**
      * get response for DB for Show details Jayezeh

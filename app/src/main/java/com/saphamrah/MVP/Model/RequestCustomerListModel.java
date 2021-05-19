@@ -1153,7 +1153,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                         //}
                     }
                 }
-                if (foroshandehMamorPakhshModel.getCheckOlaviatMoshtary() == 1  && !checkPriority && checkTarikhMasir() && needCheckKharejAzMahal)
+                if (foroshandehMamorPakhshModel.getCheckOlaviatMoshtary() == 1  && !checkPriority && !checkTarikhMasir() && needCheckKharejAzMahal)
                 {
                     return -5;
                 }

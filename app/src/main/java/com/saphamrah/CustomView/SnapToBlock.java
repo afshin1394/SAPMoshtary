@@ -30,7 +30,7 @@ public class SnapToBlock extends SnapHelper {
     private RecyclerView mRecyclerView;
 
     // Total number of items in a block of view in the RecyclerView
-    private int mBlocksize;
+    private static int mBlocksize;
 
     // Maximum number of positions to move on a fling.
     private int mMaxPositionsToMove;
@@ -206,10 +206,16 @@ public class SnapToBlock extends SnapHelper {
 
         if (layoutManager.canScrollHorizontally()) {
             mItemDimension = child.getWidth();
-            mBlocksize = getSpanCount(layoutManager) * (mRecyclerView.getWidth() / mItemDimension);
+            int Width =(mRecyclerView.getWidth() / mItemDimension);
+            if(Width==0)
+                Width=1;
+            mBlocksize = getSpanCount(layoutManager) * Width;
         } else if (layoutManager.canScrollVertically()) {
             mItemDimension = child.getHeight();
-            mBlocksize = getSpanCount(layoutManager) * (mRecyclerView.getHeight() / mItemDimension);
+            int Height = (mRecyclerView.getHeight() / mItemDimension);
+            if(Height==0)
+                Height=1;
+            mBlocksize = getSpanCount(layoutManager) * Height;
         }
         mMaxPositionsToMove = mBlocksize * mMaxFlingBlocks;
     }

@@ -98,7 +98,7 @@ public class MarjoeeKalaModel implements MarjoeeKalaMVP.ModelOps
     public void getListElatMarjoee()
     {
         ElatMarjoeeKalaDAO elatMarjoeeKalaDAO = new ElatMarjoeeKalaDAO(mPresenter.getAppContext());
-        ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels = elatMarjoeeKalaDAO.getAll();
+        ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels = elatMarjoeeKalaDAO.getElatMarjoeeForosh();
         mPresenter.onGetListElatMarjoeeKala(elatMarjoeeKalaModels);
     }
 
@@ -295,7 +295,7 @@ public class MarjoeeKalaModel implements MarjoeeKalaMVP.ModelOps
             dariaftPardakhtDarkhastFaktorPPC.setTarikhSanad(new SimpleDateFormat(Constants.DATE_SHORT_FORMAT()).format(new Date()));
             dariaftPardakhtDarkhastFaktorPPC.setTarikhSanadShamsi("");
             dariaftPardakhtDarkhastFaktorPPC.setMablaghDariaftPardakht(MablaghKolMarjoeeMoshtary);
-            dariaftPardakhtDarkhastFaktorPPC.setMablagh(MablaghDariaftPardakhtDarkhastFaktor);
+            dariaftPardakhtDarkhastFaktorPPC.setMablagh(Double.valueOf(MablaghDariaftPardakhtDarkhastFaktor));
             dariaftPardakhtDarkhastFaktorPPC.setCodeVazeiat(0);
             dariaftPardakhtDarkhastFaktorPPC.setZamaneTakhsiseFaktor(new SimpleDateFormat(Constants.DATE_SHORT_FORMAT()).format(new Date()));
             dariaftPardakhtDarkhastFaktorPPC.setZamaneTakhsiseFaktorShamsi(new PubFunc().new DateUtils().todayDateWithSlash(mPresenter.getAppContext()));

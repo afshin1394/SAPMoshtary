@@ -35,7 +35,6 @@ public class KardexSatrModel
     private static final String COLUMN_ccAnbarGhesmat = "ccAnbarGhesmat";
     private static final String COLUMN_GheymatForoshAsli = "GheymatForoshAsli";
     private static final String COLUMN_ccKala = "ccKala";
-    private static final String COLUMN_GheymatKhales = "GheymatKhales";
 
 
 
@@ -122,9 +121,6 @@ public class KardexSatrModel
         return COLUMN_ccKala;
     }
 
-    public static String COLUMN_GheymatKhales() {
-        return COLUMN_GheymatKhales;
-    }
 
 
 
@@ -281,38 +277,38 @@ public class KardexSatrModel
     }
 
 
-    private float GheymatKharid;
-    public float getGheymatKharid() {
+    private double GheymatKharid;
+    public double getGheymatKharid() {
         return GheymatKharid;
     }
-    public void setGheymatKharid(float gheymatKharid) {
+    public void setGheymatKharid(double gheymatKharid) {
         GheymatKharid = gheymatKharid;
     }
 
 
-    private float GheymatForosh;
-    public float getGheymatForosh() {
+    private double GheymatForosh;
+    public double getGheymatForosh() {
         return GheymatForosh;
     }
-    public void setGheymatForosh(float gheymatForosh) {
+    public void setGheymatForosh(double gheymatForosh) {
         GheymatForosh = gheymatForosh;
     }
 
 
-    private float GheymatForoshKhales;
-    public float getGheymatForoshKhales() {
+    private double GheymatForoshKhales;
+    public double getGheymatForoshKhales() {
         return GheymatForoshKhales;
     }
-    public void setGheymatForoshKhales(float gheymatForoshKhales) {
+    public void setGheymatForoshKhales(double gheymatForoshKhales) {
         GheymatForoshKhales = gheymatForoshKhales;
     }
 
 
-    private float GheymatMasrafKonandeh;
-    public float getGheymatMasrafKonandeh() {
+    private double GheymatMasrafKonandeh;
+    public double getGheymatMasrafKonandeh() {
         return GheymatMasrafKonandeh;
     }
-    public void setGheymatMasrafKonandeh(float gheymatMasrafKonandeh) {
+    public void setGheymatMasrafKonandeh(double gheymatMasrafKonandeh) {
         GheymatMasrafKonandeh = gheymatMasrafKonandeh;
     }
 
@@ -326,11 +322,11 @@ public class KardexSatrModel
     }
 
 
-    private float GheymatForoshAsli;
-    public float getGheymatForoshAsli() {
+    private double GheymatForoshAsli;
+    public double getGheymatForoshAsli() {
         return GheymatForoshAsli;
     }
-    public void setGheymatForoshAsli(float gheymatForoshAsli) {
+    public void setGheymatForoshAsli(double gheymatForoshAsli) {
         GheymatForoshAsli = gheymatForoshAsli;
     }
 
@@ -347,15 +343,8 @@ public class KardexSatrModel
 
 
 
-    private double GheymatKhales;
 
-    public double getGheymatKhales() {
-        return GheymatKhales;
-    }
 
-    public void setGheymatKhales(double gheymatKhales) {
-        GheymatKhales = gheymatKhales;
-    }
 
 
     @NonNull
@@ -385,8 +374,7 @@ public class KardexSatrModel
                 ", GheymatMasrafKonandeh=" + GheymatMasrafKonandeh +
                 ", ccAnbarGhesmat=" + ccAnbarGhesmat +
                 ", GheymatForoshAsli=" + GheymatForoshAsli +
-                " , ccKala=" + ccKala +
-                " , GheymatKhales=" + GheymatKhales;
+                " , ccKala=" + ccKala ;
 
     }
 
@@ -412,8 +400,6 @@ public class KardexSatrModel
             jsonObject.put("GheymatForoshAsli" , GheymatForoshAsli);
             jsonObject.put("GheymatMasrafKonandeh" , GheymatMasrafKonandeh);
             jsonObject.put("ccElat" , ccElat);
-
-
             jsonObject.put("NameElat" , NameElat);
             jsonObject.put("CodeKalaOld" , CodeKalaOld);
             jsonObject.put("NameKala" , NameKala);
@@ -423,25 +409,7 @@ public class KardexSatrModel
             jsonObject.put("TarikhTolidShamsi" , TarikhTolidShamsi);
             jsonObject.put("ccAnbarGhesmat" , ccAnbarGhesmat);
             jsonObject.put("ccKala" , ccKala);
-            jsonObject.put("GheymatKhales" , GheymatKhales);
 
-//            ccKardexSatr_Tablet        BIGINT,
-//            ccKardex     BIGINT,
-//            ccTaminKonandeh            INT,
-//            ccKalaCode    INT,
-//            CodeNoeKala     INT,
-//            ShomarehBach CHAR(15),
-//            TarikhTolid  DATETIME,
-//            TarikhEngheza DATETIME,
-//            Tedad3           INT,
-//            GheymatKharid   BIGINT,
-//            GheymatForosh BIGINT,
-//            GheymatForoshKhales BIGINT,
-//            GheymatForoshAsli BIGINT,
-//            GheymatMasrafKonandeh      BIGINT,
-//            ccElat        INT,
-//            TarikhForm      DATETIME,
-//            CodeVazeiat   INT
 
         }
         catch (Exception e)

@@ -550,7 +550,7 @@ public class BargashtyDAO
         ArrayList<BargashtyModel> bargashtyModels = new ArrayList<>();
         try
         {
-            String query = "SELECT * FROM Bargashty WHERE ShomarehSanad = " + shomarehSanad;
+            String query = "SELECT * FROM Bargashty WHERE ShomarehSanad = '" + shomarehSanad + "'";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
@@ -698,8 +698,8 @@ public class BargashtyDAO
             bargashtyModel.setCodeMoshtary(cursor.getString(cursor.getColumnIndex(BargashtyModel.COLUMN_CodeMoshtary())));
             bargashtyModel.setTarikhSanad(cursor.getString(cursor.getColumnIndex(BargashtyModel.COLUMN_TarikhSanad())));
             bargashtyModel.setShomarehSanad(cursor.getString(cursor.getColumnIndex(BargashtyModel.COLUMN_ShomarehSanad())));
-            bargashtyModel.setMablagh(cursor.getFloat(cursor.getColumnIndex(BargashtyModel.COLUMN_Mablagh())));
-            bargashtyModel.setMablaghMandeh(cursor.getFloat(cursor.getColumnIndex(BargashtyModel.COLUMN_MablaghMandeh())));
+            bargashtyModel.setMablagh(cursor.getDouble(cursor.getColumnIndex(BargashtyModel.COLUMN_Mablagh())));
+            bargashtyModel.setMablaghMandeh(cursor.getDouble(cursor.getColumnIndex(BargashtyModel.COLUMN_MablaghMandeh())));
             bargashtyModel.setTarikhSanadWithSlash(cursor.getString(cursor.getColumnIndex(BargashtyModel.COLUMN_TarikhSanadWithSlash())));
             bargashtyModel.setZamaneSabt(cursor.getString(cursor.getColumnIndex(BargashtyModel.COLUMN_ZamaneSabt())));
             bargashtyModel.setZamaneSabtWithSlash(cursor.getString(cursor.getColumnIndex(BargashtyModel.COLUMN_ZamaneSabtWithSlash())));
@@ -728,8 +728,8 @@ public class BargashtyDAO
             bargashtyModel.setCodeMoshtary(cursor.getString(cursor.getColumnIndex(BargashtyModel.COLUMN_CodeMoshtary())));
             bargashtyModel.setTarikhSanad(cursor.getString(cursor.getColumnIndex("TarikhSarResidCheck")));
             bargashtyModel.setShomarehSanad(cursor.getString(cursor.getColumnIndex("ShomarehCheck")));
-            bargashtyModel.setMablagh(cursor.getFloat(cursor.getColumnIndex("MablaghCheck")));
-            bargashtyModel.setMablaghMandeh(cursor.getFloat(cursor.getColumnIndex(BargashtyModel.COLUMN_MablaghMandeh())));
+            bargashtyModel.setMablagh(cursor.getDouble(cursor.getColumnIndex("MablaghCheck")));
+            bargashtyModel.setMablaghMandeh(cursor.getDouble(cursor.getColumnIndex(BargashtyModel.COLUMN_MablaghMandeh())));
 
             bargashtyModels.add(bargashtyModel);
             cursor.moveToNext();

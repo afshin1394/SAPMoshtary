@@ -18,6 +18,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.ViewPropertyAnimatorCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,9 +40,11 @@ import com.saphamrah.PubFunc.DateUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Model.VarizBeBankModel;
+import com.saphamrah.Utils.AnimApp;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
 import com.saphamrah.Utils.CustomAlertDialogResponse;
+import com.saphamrah.Utils.CustomLoadingDialog;
 import com.saphamrah.Utils.CustomSpinnerResponse;
 import com.saphamrah.Utils.StateMaintainer;
 
@@ -58,29 +62,28 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
     private StateMaintainer stateMaintainer = new StateMaintainer(this.getSupportFragmentManager(), TAG, VarizNaghdBeBankActivity.this);
     private VarizNaghdBeBankMVP.PresenterOps mPresenter;
     private CustomAlertDialog customAlertDialog;
-    private String mablagh = "";
-    private String number = "";
-    private String date = "";
-    private int ccMoshtaryHesab = 0;
-    private String shomareHesab = "";
-    private String sharhMoshtaryShomarehHesab = "";
-    private int flagInputHesab = 0;
+    private DecimalFormat formatter;
+    private CustomLoadingDialog customLoadingDialog;
+    private AlertDialog alertDialog;
+    private View alertView;
+    private DateUtils dateUtils = new DateUtils();
+
     private String nameBank = "";
     private int ccBank = 0;
     private String nameShobehBank = "";
     private String mablaghUpdate = "";
     private String codeShobe = "";
-    private int sum = 0;
+    private double sum = 0;
     private String selectedDate = "";
     private int ccShomarehHesab = 0;
     private CustomSpinner customSpinner;
     private DecimalFormat decimalFormatter;
-    private AlertDialog show;
-    private View alertView;
+    private double checkMablagh =0;
+    private String inputString;
+
     private AllMoshtaryVarizBeBankAdapter allMoshtaryVarizBeBankAdapter;
     private VarizBeBankAdapter varizBeBankAdapter;
     private ArrayList<VarizBeBankModel> selectedVarizBeBankModels = new ArrayList<>();
-    private DateUtils dateUtils = new DateUtils();
     private ArrayList<VarizBeBankModel> modelsUpdate = new ArrayList<>();
     private ArrayList<VarizBeBankModel> varizBeBankModelsRecycler = new ArrayList<>();
 
@@ -95,6 +98,8 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
     EditText editTextShobeBank;
     @BindView(R.id.editTextMablagh)
     EditText editTextMablagh;
+    @BindView(R.id.editTextMablaghEdit)
+    EditText editTextMablaghEdit;
     @BindView(R.id.editTextShomarehHesab)
     EditText editTextShomarehHesab;
     @BindView(R.id.img_mablagh)
@@ -127,6 +132,7 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
         setContentView(R.layout.activity_variz_be_bank);
         ButterKnife.bind(this);
         customSpinner = new CustomSpinner();
+        customLoadingDialog = new CustomLoadingDialog();
         // set font
         Calligrapher calligrapher = new Calligrapher(this);
         calligrapher.setFont(this, getResources().getString(R.string.fontPath), true);
@@ -134,15 +140,13 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
         customAlertDialog = new CustomAlertDialog(VarizNaghdBeBankActivity.this);
 
         // setup before anyThing
-        startMVPOps();
+        mPresenter = new VarizNaghdBeBankPresenter(this);
         recyclerSetting();
         editTextMablagh.setEnabled(false);
         // request for get all check
         mPresenter.onGetAllBank();
 
-
-
-        // date
+        // data
         editTextFishBankiDate.setOnClickListener(v -> showDatePickerAlert(editTextFishBankiDate));
 
         editTextFishBankiDate.setOnFocusChangeListener((v, hasFocus) -> {
@@ -150,7 +154,6 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
                 showDatePickerAlert(editTextFishBankiDate);
             }
         });
-
 
         // text Mablagh
         editTextMablagh.addTextChangedListener(new TextWatcher() {
@@ -168,6 +171,24 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
             public void afterTextChanged(Editable s) {
                 addCommaToPrice(editTextMablagh, s, this);
                 mablaghUpdate = s.toString();
+            }
+        });
+
+        // text Mablagh edit
+        editTextMablaghEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                addCommaToPrice(editTextMablaghEdit, s, this);
             }
         });
 
@@ -213,6 +234,7 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
 
                     @Override
                     public void setOnApplyClick() {
+                        alertDialog = customLoadingDialog.showLoadingDialog(VarizNaghdBeBankActivity.this);
                         mPresenter.getRefresh();
                     }
                 });
@@ -224,9 +246,13 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
     @OnClick(R.id.fabAdd)
     public void fabAdd() {
         fabMenu.close(true);
-        lay_varizBeBank.setVisibility(View.VISIBLE);
-        recycler_view_variz_be_Bank.setVisibility(View.GONE);
+        AnimApp.expand(lay_varizBeBank);
+        AnimApp.collapse(recycler_view_variz_be_Bank);
+
     }
+
+
+
 
     /**
      * on click btnCancel
@@ -234,8 +260,8 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
 
     @OnClick(R.id.btnCancel)
     public void btnCancel() {
-        lay_varizBeBank.setVisibility(View.GONE);
-        recycler_view_variz_be_Bank.setVisibility(View.VISIBLE);
+        AnimApp.collapse(lay_varizBeBank);
+        AnimApp.expand(recycler_view_variz_be_Bank);
         clearItem();
         clearError();
     }
@@ -248,7 +274,7 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
     @Override
     public void onGetAllBank(ArrayList<MarkazShomarehHesabModel> markazShomarehHesabModels) {
 
-        final ArrayList<String> arrayListTitles = new ArrayList<>();
+        ArrayList<String> arrayListTitles = new ArrayList<>();
 
         if (markazShomarehHesabModels.size() > 0) {
             Log.i("VarizBeBank", String.valueOf(markazShomarehHesabModels.size()));
@@ -311,16 +337,21 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
     @Override
     public void onGetSumMablagh(ArrayList<VarizBeBankModel> models) {
         modelsUpdate = models;
+        /*
+        *** This 'for' is for summing numbers with out selected
+         */
         sum = 0;
         for (int i = 0; i < models.size(); i++) {
             if(models.get(i).getExtraProp_IsSelected()==0) {
-                sum = (int) (sum + models.get(i).getMablagh());
+                sum = sum + models.get(i).getMablagh();
                 mablaghUpdate = String.valueOf(sum);
             }
         }
+        checkMablagh = sum;
         Log.i("VarizBebank", "sum mablagh : " + sum);
         DecimalFormat formatter = new DecimalFormat("#,###,###");
-        editTextMablagh.setText(String.valueOf(formatter.format(sum)));
+        editTextMablagh.setText(formatter.format(sum));
+        editTextMablaghEdit.setText(formatter.format(sum));
     }
 
 
@@ -351,6 +382,7 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
     private void recyclerSetting(){
         varizBeBankAdapter = new VarizBeBankAdapter(BaseApplication.getContext(), varizBeBankModelsRecycler, (operation, position) -> {
             if (operation == Constants.SEND()){
+                alertDialog = customLoadingDialog.showLoadingDialog(VarizNaghdBeBankActivity.this);
                 mPresenter.sendVariz(varizBeBankModelsRecycler.get(position));
             }
         });
@@ -359,6 +391,11 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
         recycler_view_variz_be_Bank.setItemAnimator(new DefaultItemAnimator());
         recycler_view_variz_be_Bank.addItemDecoration(new DividerItemDecoration(this , 0));
         recycler_view_variz_be_Bank.setAdapter(varizBeBankAdapter);
+        ViewPropertyAnimatorCompat viewAnimator = ViewCompat.animate(recycler_view_variz_be_Bank)
+                .scaleY(1).scaleX(1)
+                .setStartDelay(800)
+                .setDuration(500);
+
     }
 
     /**
@@ -373,8 +410,8 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
             mPresenter.getSumMablagh();
             mPresenter.getAllVarizBeBank();
             selectedVarizBeBankModels.clear();
-            lay_varizBeBank.setVisibility(View.GONE);
-            recycler_view_variz_be_Bank.setVisibility(View.VISIBLE);
+            AnimApp.collapse(lay_varizBeBank);
+            AnimApp.expand(recycler_view_variz_be_Bank);
         } else {
             customAlertDialog.showToast(this, getResources().getString(R.string.errorGetData), Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
         }
@@ -413,7 +450,9 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
                             editTextFishBankiNumber.getText().toString(),
                             editTextNameBank.getText().toString(),
                             editTextFishBankiDate.getText().toString(),
-                            selectedVarizBeBankModels
+                            selectedVarizBeBankModels,
+                            editTextMablaghEdit.getText().toString()
+
                     );
                 } else {
                     mPresenter.updateDaoAll(Integer.parseInt(editTextFishBankiNumber.getText().toString()),
@@ -424,7 +463,8 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
                             editTextFishBankiNumber.getText().toString(),
                             editTextNameBank.getText().toString(),
                             editTextFishBankiDate.getText().toString(),
-                            modelsUpdate
+                            modelsUpdate,
+                            editTextMablaghEdit.getText().toString()
                     );
                 }
             } else {
@@ -441,17 +481,40 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
 
     }
 
-    // on click btnApply
+    @Override
+    public void closeLoading() {
+        if (alertDialog != null)
+        {
+            try
+            {
+                alertDialog.dismiss();
+            }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * on click btnApply
+     */
+
     @OnClick(R.id.btnApply)
     public void btnApply() {
-        mPresenter.checkHaveShomarehSanadForUpdate(editTextFishBankiNumber.getText().toString());
+        Log.i("sumMablagh" , String.valueOf(checkMablagh));
+        Log.i("sumMablaghEntekhabi" , editTextMablaghEdit.getText().toString());
+        if (checkMablagh < Double.parseDouble(inputString)){
+            customAlertDialog.showToast(this, getResources().getString(R.string.errorMablaghEntekhabi), Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        } else {
+            mPresenter.checkHaveShomarehSanadForUpdate(editTextFishBankiNumber.getText().toString());
+        }
     }
 
 
     /**
      * clear item
      */
-
     private void clearItem() {
         editTextFishBankiNumber.setText("");
         editTextFishBankiDate.setText("");
@@ -466,7 +529,6 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
     /**
      * all moshtary dialog
      */
-
     private void showAllMoshtaryDialog(ArrayList<VarizBeBankModel> varizBeBankModels) {
         selectedVarizBeBankModels.clear();
         ArrayList<VarizBeBankModel> searchModel = varizBeBankModels;
@@ -485,12 +547,14 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
         builder.setCancelable(true);
         builder.setView(alertView);
         builder.create();
-        DecimalFormat formatter = new DecimalFormat("#,###,###");
+
+        formatter = new DecimalFormat("#,###,###");
         allMoshtaryVarizBeBankAdapter = new AllMoshtaryVarizBeBankAdapter(BaseApplication.getContext(), varizBeBankModels, new AllMoshtaryVarizBeBankAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(long mablagh, int position, ArrayList<VarizBeBankModel> modelsList) {
+            public void onItemClick(double mablagh, int position, ArrayList<VarizBeBankModel> modelsList) {
                 selectedVarizBeBankModels = modelsList;
                 txtMablaghKhales.setText(String.format("%1$s : %2$s", "مبلغ کل ", formatter.format(mablagh)));
+                editTextMablaghEdit.setText(formatter.format(mablagh));
             }
         });
 
@@ -499,10 +563,10 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
         recyclerView.measure(View.MeasureSpec.makeMeasureSpec(recyclerView.getWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.UNSPECIFIED);
 
         if (!(VarizNaghdBeBankActivity.this).isFinishing()) {
-            show = builder.show();
+            alertDialog = builder.show();
             try {
-                if (show.getWindow() != null) {
-                    show.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                if (alertDialog.getWindow() != null) {
+                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 }
             } catch (Exception exception) {
                 exception.printStackTrace();
@@ -512,23 +576,40 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
 
 
             btnCancel.setOnClickListener(v -> {
-                        show.dismiss();
+                        alertDialog.dismiss();
+                        editTextMablaghEdit.setText(formatter.format(sum));
+                        editTextMablagh.setText(formatter.format(sum));
                     }
             );
 
             btnOK.setOnClickListener(v -> {
                 lblError.setVisibility(View.GONE);
                 lblError.setText("");
+                double sumEntekhabi = 0;
                 if (selectedVarizBeBankModels.size() > 0) {
-                    editTextMablagh.setText(String.valueOf(txtMablaghKhales.getText()));
+                    /*
+                     *** This 'for' is for summing numbers when we select
+                     */
+
+                    for (int i = 0; i < selectedVarizBeBankModels.size(); i++) {
+                        if(selectedVarizBeBankModels.get(i).getExtraProp_IsSelected()==0) {
+                            sumEntekhabi = sumEntekhabi + selectedVarizBeBankModels.get(i).getMablagh();
+                        }
+                    }
+                    checkMablagh = sumEntekhabi;
+                    editTextMablagh.setText(formatter.format(sumEntekhabi));
+
                 } else {
-                    editTextMablagh.setText(String.valueOf(formatter.format(sum)));
+                    editTextMablagh.setText(formatter.format(sum));
+                    editTextMablaghEdit.setText(formatter.format(sum));
+                    checkMablagh = sum;
                 }
-                show.dismiss();
+                alertDialog.dismiss();
 
             });
 
         }
+
     }
 
     /**
@@ -547,7 +628,6 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
                         editText.setText(selectedDate);
                     } catch (Exception exception) {
                         exception.printStackTrace();
-//                            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", GetProgramActivity.class.getSimpleName(), "showDatePickerAlert", "onDateSet");
                     }
                 }, persianCalendar.getPersianYear(), persianCalendar.getPersianMonth(), persianCalendar.getPersianDay());
         datePickerDialog.show(getFragmentManager(), "Datepickerdialog");
@@ -560,7 +640,7 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
     private void addCommaToPrice(EditText editText, Editable s, TextWatcher textWatcher) {
         editText.removeTextChangedListener(textWatcher);
         try {
-            String inputString = s.toString();
+            inputString = s.toString();
             inputString = inputString.replaceAll(",", "");
             Long longval = Long.parseLong(inputString);
             String formattedString = decimalFormatter.format(longval);
@@ -641,42 +721,5 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
         customTextMablagh.setError(null);
     }
 
-
-    // setup
-    public void startMVPOps() {
-        try {
-            if (stateMaintainer.firstTimeIn()) {
-                initialize(this);
-            } else {
-                reinitialize(this);
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
-
-
-    private void initialize(VarizNaghdBeBankMVP.RequiredViewOps view) {
-        try {
-            mPresenter = new VarizNaghdBeBankPresenter(view);
-            stateMaintainer.put(VarizNaghdBeBankMVP.PresenterOps.class.getSimpleName(), mPresenter);
-        } catch (Exception exception) {
-        }
-    }
-
-
-    private void reinitialize(VarizNaghdBeBankMVP.RequiredViewOps view) {
-        try {
-            mPresenter = stateMaintainer.get(VarizNaghdBeBankMVP.PresenterOps.class.getSimpleName());
-            if (mPresenter == null) {
-                initialize(view);
-            } else {
-
-            }
-        } catch (Exception exception) {
-            if (mPresenter != null) {
-            }
-        }
-    }
 
 }

@@ -29,9 +29,9 @@ public class VarizNaghdBeBankPresenter implements VarizNaghdBeBankMVP.PresenterO
     }
 
     @Override
-    public void updateDaoAll(int ccBankSanad , String nameShobehSanad , String codeShobehSand , String shomareHesabSanad , int ccShomareHesab , String shomarehSanad ,String nameBankSanad , String TarikhSanad, ArrayList<VarizBeBankModel> modelsArrayList)
+    public void updateDaoAll(int ccBankSanad , String nameShobehSanad , String codeShobehSand , String shomareHesabSanad , int ccShomareHesab , String shomarehSanad ,String nameBankSanad , String TarikhSanad, ArrayList<VarizBeBankModel> modelsArrayList,String mablaghEntekhabi)
     {
-        mModel.updateDaoAll(ccBankSanad ,nameShobehSanad , codeShobehSand , shomareHesabSanad , ccShomareHesab , shomarehSanad , nameBankSanad , TarikhSanad , modelsArrayList);
+        mModel.updateDaoAll(ccBankSanad ,nameShobehSanad , codeShobehSand , shomareHesabSanad , ccShomareHesab , shomarehSanad , nameBankSanad , TarikhSanad , modelsArrayList,mablaghEntekhabi);
     }
 
 
@@ -90,6 +90,7 @@ public class VarizNaghdBeBankPresenter implements VarizNaghdBeBankMVP.PresenterO
     @Override
     public void onGetRefresh(int resId, int messageType, int duration) {
             mView.get().showToast(resId, messageType , duration);
+            mView.get().closeLoading();
             /*
             for refresh recycler data
              */
@@ -108,11 +109,13 @@ public class VarizNaghdBeBankPresenter implements VarizNaghdBeBankMVP.PresenterO
 
     @Override
     public void onErrorSend(int resId) {
+        mView.get().closeLoading();
         mView.get().showToast(resId , Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
     }
 
     @Override
     public void onSuccessSend() {
+        mView.get().closeLoading();
         mView.get().showAlertMessage(R.string.successSendData , Constants.SUCCESS_MESSAGE());
     }
 

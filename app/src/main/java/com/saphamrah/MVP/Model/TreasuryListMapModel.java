@@ -11,7 +11,6 @@ import com.saphamrah.BaseMVP.TreasuryListMapMVP;
 import com.saphamrah.DAO.AdamDarkhastDAO;
 import com.saphamrah.DAO.AnbarakAfradDAO;
 import com.saphamrah.DAO.BargashtyDAO;
-import com.saphamrah.DAO.CodeNoeVosolDAO;
 import com.saphamrah.DAO.DariaftPardakhtDarkhastFaktorPPCDAO;
 import com.saphamrah.DAO.DariaftPardakhtPPCDAO;
 import com.saphamrah.DAO.DarkhastFaktorDAO;
@@ -19,9 +18,7 @@ import com.saphamrah.DAO.DarkhastFaktorEmzaMoshtaryDAO;
 import com.saphamrah.DAO.DarkhastFaktorMoshtaryForoshandeDAO;
 import com.saphamrah.DAO.DarkhastFaktorRoozSortDAO;
 import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
-import com.saphamrah.DAO.EtebarDAO;
 import com.saphamrah.DAO.ForoshandehAmoozeshiDeviceNumberDAO;
-import com.saphamrah.DAO.ForoshandehEtebarDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.KalaMojodiDAO;
 import com.saphamrah.DAO.MandehMojodyMashinDAO;
@@ -42,15 +39,12 @@ import com.saphamrah.DAO.RptMandehdarDAO;
 import com.saphamrah.DAO.RptSanadDAO;
 import com.saphamrah.DAO.SystemConfigTabletDAO;
 import com.saphamrah.Model.BargashtyModel;
-import com.saphamrah.Model.CodeNoeVosolModel;
 import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
 import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.DarkhastFaktorRoozSortModel;
-import com.saphamrah.Model.EtebarModel;
 import com.saphamrah.Model.ForoshandehAmoozeshiModel;
-import com.saphamrah.Model.ForoshandehEtebarModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.KalaMojodiModel;
 import com.saphamrah.Model.LogPPCModel;
@@ -67,7 +61,6 @@ import com.saphamrah.Model.RptForoshModel;
 import com.saphamrah.Model.RptMandehdarModel;
 import com.saphamrah.Model.RptSanadModel;
 import com.saphamrah.Model.ServerIpModel;
-import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
@@ -87,7 +80,6 @@ import com.saphamrah.Valhalla.SourcesToTargetsFailedResult;
 import com.saphamrah.Valhalla.Trip;
 import com.saphamrah.WebService.APIServicePost;
 import com.saphamrah.WebService.APIServiceValhalla;
-
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.CreateDariaftPardakhtPPCJSONResult;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
@@ -1000,7 +992,6 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
 
     private void sendDariaftPardakhtToServer(ServerIpModel serverIpModel , final ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, final DarkhastFaktorModel darkhastFaktorModel, int codeNoeVosolVajhNaghd, String currentVersionNumber)
     {
-        CodeNoeVosolDAO codeNoeVosolDAO = new CodeNoeVosolDAO(mPresenter.getAppContext());
         final DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(mPresenter.getAppContext());
         //APIServicePost apiServicePost = ApiClient.getClient(ip , port).create(APIServicePost.class);
         final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
@@ -1029,9 +1020,8 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
         //create JsonArray of DariaftPardakhtPPCModel
         for (DariaftPardakhtPPCModel dpModel : dariaftPardakhtPPCModels)
         {
-            CodeNoeVosolModel codeNoeVosolModel = codeNoeVosolDAO.getByCodeNoeVosol(dpModel.getCodeNoeVosol());
-            int codeNoeSanad = codeNoeVosolModel.getCodeNoeSanad_dp();
-            int codeNoeCheck = codeNoeVosolModel.getCodeNoeCheck_dp();
+            int codeNoeSanad = 0;
+            int codeNoeCheck = 0;
             jsonArrayDariaftPardakht.put(dpModel.toJsonObject(ccMarkazForosh, ccMarkazAnbar, ccMarkazSazmanForoshSakhtarForosh, codeNoeSanad, codeNoeCheck, codeNoeVosolVajhNaghd, currentVersionNumber));
             ccDpdfs += "," + dpModel.getCcDariaftPardakht();
         }

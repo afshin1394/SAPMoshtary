@@ -9,6 +9,9 @@ import android.util.Log;
 import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.DarkhastFaktorSatrModel;
 import com.saphamrah.Model.DataTableModel;
+import com.saphamrah.Model.KalaModel;
+import com.saphamrah.Model.ParameterChildModel;
+import com.saphamrah.Model.RptKalaInfoModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
@@ -1594,10 +1597,65 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         return gorohs;
     }
 
-    public boolean deleteAll()
-    {
-        try
-        {
+    public double getSumMablaghHashiehSood(long ccDarkhastFaktor) {
+        double mablaghMasrafKonandeh = 0;
+        double mablaghForosh = 0;
+        double mablaghMaliatAvarez = 0;
+        double mablaghPasAzKasrMaliatAvarez = 0;
+        KalaDAO kaladao = new KalaDAO(context);
+        KalaModel kalaModel = new KalaModel();
+        ParameterChildDAO parameterChildDAO = new ParameterChildDAO(context);
+        List<ParameterChildModel> parameterChildModels = parameterChildDAO.getAll();
+
+        try {
+
+            String StrSQL = " SELECT *  "
+                    + " FROM DarkhastFaktorSatr "
+                    + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor;
+
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(StrSQL, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                ArrayList<DarkhastFaktorSatrModel> entity = cursorToModel(cursor);
+
+                kalaModel = kaladao.getByccKalaCode(entity.get(0).getCcKalaCode());
+                mablaghMasrafKonandeh += kalaModel.getMablaghMasrafKonandeh() * entity.get(0).getTedad3();
+
+                mablaghMaliatAvarez = 0;
+                mablaghForosh = (entity.get(0).getMablaghForosh() * entity.get(0).getTedad3());
+
+                int maliat = 0;
+                int avarez = 0;
+
+                for (int i = 0; i < parameterChildModels.size(); i++) {
+                    if (parameterChildModels.get(i).getCcParameterChild() == Constants.CC_CHILD_AVAREZ) {
+                        avarez = Integer.parseInt(parameterChildModels.get(i).getValue());
+                    }
+                    if (parameterChildModels.get(i).getCcParameterChild() == Constants.CC_CHILD_MALIAT) {
+                        maliat = Integer.parseInt(parameterChildModels.get(i).getValue());
+                    }
+                }
+
+                if (kalaModel.getMashmolMaliatAvarez() == 1)
+                    mablaghMaliatAvarez = (entity.get(0).getMablaghForosh() * entity.get(0).getTedad3()) * ((maliat + avarez) / 100);
+
+                mablaghPasAzKasrMaliatAvarez += mablaghForosh + mablaghMaliatAvarez;
+
+                cursor.moveToNext();
+            }
+
+            cursor.close();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return mablaghMasrafKonandeh - mablaghPasAzKasrMaliatAvarez;
+    }
+
+
+    public boolean deleteAll() {
+        try {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             db.delete(DarkhastFaktorSatrModel.TableName(), null, null);
             db.close();

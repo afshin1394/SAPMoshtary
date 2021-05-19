@@ -66,6 +66,7 @@ public class RptMojodiAnbarakAdapter extends RecyclerView.Adapter<RptMojodiAnbar
     {
         holder.lblCodeKala.setText(mojodiAnbarakModels.get(position).getCodeKala());
         holder.lblNameKala.setText(mojodiAnbarakModels.get(position).getNameKala());
+        holder.lblNameSazman.setText(mojodiAnbarakModels.get(position).getNameSazmanForosh());
         holder.lblCartonCount.setText(String.format("%1$s: %2$s" , context.getResources().getString(R.string.carton) , String.valueOf(mojodiAnbarakModels.get(position).getMandehMojodi_Karton())));
         holder.lblBastehCount.setText(String.format("%1$s: %2$s" , context.getResources().getString(R.string.basteh) , String.valueOf(mojodiAnbarakModels.get(position).getMandehMojodi_Basteh())));
         holder.lblAdadCount.setText(String.format("%1$s: %2$s" , context.getResources().getString(R.string.adad) , String.valueOf(mojodiAnbarakModels.get(position).getMandehMojodi_Adad())));
@@ -146,6 +147,7 @@ public class RptMojodiAnbarakAdapter extends RecyclerView.Adapter<RptMojodiAnbar
 		ImageView imgKalaImage;
         TextView lblCodeKala;
         TextView lblNameKala;
+        TextView lblNameSazman;
         TextView lblCartonCount;
         TextView lblBastehCount;
         TextView lblAdadCount;
@@ -161,12 +163,14 @@ public class RptMojodiAnbarakAdapter extends RecyclerView.Adapter<RptMojodiAnbar
 			imgKalaImage = itemView.findViewById(R.id.imgProductPic);																	 
             lblCodeKala = itemView.findViewById(R.id.lblCodeKala);
             lblNameKala = itemView.findViewById(R.id.lblNameKala);
+            lblNameSazman = itemView.findViewById(R.id.lblNameSazman);
             lblCartonCount = itemView.findViewById(R.id.lblCarton);
             lblBastehCount = itemView.findViewById(R.id.lblBasteh);
             lblAdadCount = itemView.findViewById(R.id.lblAdad);
 
             lblCodeKala.setTypeface(font);
             lblNameKala.setTypeface(font);
+            lblNameSazman.setTypeface(font);
             lblCartonCount.setTypeface(font);
             lblBastehCount.setTypeface(font);
             lblAdadCount.setTypeface(font);

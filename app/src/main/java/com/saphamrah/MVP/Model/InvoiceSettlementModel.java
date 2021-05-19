@@ -460,7 +460,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
 
 
                 boolean haveDirkardVosol = haveDirkardVosol(darkhastFaktorModel, null);
-                if (mablaghMandehOtherVosol == 0 && haveDirkardVosol) {
+                if (mablaghMandehOtherVosol == 0 && !haveDirkardVosol) {
                     insertDirkardVosol(darkhastFaktorModel, null);
                 }
 
@@ -1243,7 +1243,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                     boolean deletedpdfPPC = dariaftPardakhtDarkhastFaktorPPCDAO.deleteByccDariaftPardakht(dariaftPardakhtDarkhastFaktorPPCModel.getCcDariaftPardakht());
                     long mablaghMandeh = (long) setMablaghMandehOtherVosol(dariaftPardakhtDarkhastFaktorPPCModel.getCcDarkhastFaktor());
                     if (deletedpdfPPC) {
-                       if (!biggerCcDaryaftPardakht || mablaghMandeh > 0){
+                       if (!biggerCcDaryaftPardakht && mablaghMandeh > 0){
                            dariaftPardakhtDarkhastFaktorPPCDAO.deleteDirKardAndTajil(0, ccDpDf_Extra);
                        }
                         mablaghMandeh = (long) setMablaghMandehOtherVosol(dariaftPardakhtDarkhastFaktorPPCModel.getCcDarkhastFaktor());
@@ -1277,9 +1277,14 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                 boolean deleteDpdfPPC = dariaftPardakhtDarkhastFaktorPPCDAO.deleteByccDariaftPardakht(dariaftPardakhtDarkhastFaktorPPCModel.getCcDariaftPardakht());
                 long mablaghMandeh = setMablaghMandehFaktor(ccDarkhastFaktor);
                 if (deleteDpdfPPC) {
-                   if (!biggerCcDaryaftPardakht || mablaghMandeh > 0){
-                       dariaftPardakhtDarkhastFaktorPPCDAO.deleteDirKardAndTajil(ccDarkhastFaktor, 0);
-                   }
+                    if (!biggerCcDaryaftPardakht && mablaghMandeh > 0){
+                        dariaftPardakhtDarkhastFaktorPPCDAO.deleteDirKardAndTajil(ccDarkhastFaktor, 0);
+                    }
+                    mablaghMandeh =  setMablaghMandehFaktor(ccDarkhastFaktor);
+
+                    if (mablaghMandeh == 0){
+                        dariaftPardakhtDarkhastFaktorPPCDAO.deleteDirKardAndTajil(ccDarkhastFaktor, 0);
+                    }
 
 
                      mPresenter.onSuccessRemoveItem(position, mablaghMandeh);
@@ -1298,7 +1303,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
      *  when ccDaryaftPardakht item selected bigger another ccDaryaftPardakht vosols , we can not delete "DirKard"
      */
     private boolean biggerCcDaryaftPardakht(DariaftPardakhtDarkhastFaktorPPCModel dariaftPardakhtDarkhastFaktorPPCModel,long ccDarkhastFaktor){
-        ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels = dariaftPardakhtDarkhastFaktorPPCDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels = dariaftPardakhtDarkhastFaktorPPCDAO.getByccDarkhastFaktorForCheckPosition(ccDarkhastFaktor);
 
         boolean biggerCcDaryaftPardakht = false;
         for (int i = 0; i < dariaftPardakhtDarkhastFaktorPPCModels.size(); i++) {
@@ -1549,18 +1554,6 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                 diff_days = (Max_Rooz_TarikhSanad.getTime() - tarikhDate.getTime()) / ConvertToDay;
             }
 
-//            for (int i = 0; i <dariaftPardakhtDarkhastFaktorPPCModels.size() ; i++) {
-//                if (dariaftPardakhtDarkhastFaktorPPCModels.get(i).getCodeNoeVosol() == Integer.parseInt(Constants.VALUE_SANAD_DIRKARD)){
-//                    try {
-//                        Date zamane = simpleDateFormatShort.parse(entity.getZamaneTakhsiseFaktor());
-//                        diff_days = (zamane.getTime() - tarikhDate.getTime()) / ConvertToDay;
-//                        break;
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                }
-//            }
 
             if (diff_days <= 0)
                 diff_days = 1;
@@ -1575,6 +1568,8 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
         //------------------------------------------------
         modatVosol += 1;
         modatDirkard = (int) modatRoozRaasGiri - modatVosol;
+        if(modatDirkard < 0)
+            modatDirkard = 0;
         MablaghDirkard_Nahaee = -1 * Math.round((Sum_MablaghTakhsisyFaktor * modatDirkard * zaribDirkardVosol));
         return MablaghDirkard_Nahaee;
     }

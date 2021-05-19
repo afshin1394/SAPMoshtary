@@ -38,6 +38,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 
 public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGridGoodAdapter.ViewHolder> {
 
@@ -55,8 +61,8 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
     private int lastSelectedPosition;
     private int itemPerRow;
     private int status;
-    private int heightOfRecycler;
-    private int widthOfRecycler;
+    private static int heightOfRecycler;
+    private static int widthOfRecycler;
     private SparseArray allKalaPhoto = new SparseArray();
 
 
@@ -185,9 +191,15 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
 
         if (holder.getItemViewType() == SHOW_DETAILS) {
 
+
+            /**VERSION ANDROID>4.4.2**/
+            /**SET ANIMATION AND ARROW_KEYS**/
+            /**LOWER VERSION DONT SUPPERT VERCTOR ROTATION**/
+            int arrowVisibility = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? View.VISIBLE : View.GONE;
+
             /**make arrows visible to show scrollable item**/
-            holder.rightArrow.setVisibility(View.VISIBLE);
-            holder.leftArrow.setVisibility(View.VISIBLE);
+            holder.rightArrow.setVisibility(arrowVisibility);
+            holder.leftArrow.setVisibility(arrowVisibility);
 
             /**setAnimations for arrows**/
             holder.leftArrow.startAnimation(myBounceAnimation);
@@ -237,7 +249,16 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
 
             holder.lblMainNameCodeKala.setText(String.format("%1$s - %2$s", model.getCodeKala(), model.getNameKala()));
             holder.lblMainGheymatForosh.setText(String.format(" %1$s %2$s", gheymatForosh, context.getResources().getString(R.string.rial)));
-            holder.lblMainBatchNumber.setText(model.getShomarehBach());
+            //holder.lblMainBatchNumber.setText(model.getShomarehBach());
+            if (model.getShomarehBach() !=null) {
+                if (!model.getShomarehBach().equals("")){
+                    holder.lblMainBatchNumber.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.shomareBach), model.getShomarehBach()));
+                } else {
+                    holder.lblMainBatchNumber.setText(String.format("%1$s %2$s",   formatter.format(model.getMablaghMasrafKonandeh() ) , context.getResources().getString(R.string.rial)));
+                }
+            } else {
+                holder.lblMainBatchNumber.setText(String.format("%1$s %2$s", model.getMablaghMasrafKonandeh() , context.getResources().getString(R.string.rial)));
+            }
 //            if (model.getKalaAsasi()) {
 //                holder.imgStatusKala.setVisibility(View.VISIBLE);
 //            } else {
@@ -265,7 +286,17 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
 
 
             holder.lblTedadMojodi.setText(String.format(" %1$s %2$s", model.getTedad(), context.getResources().getString(R.string.adad)));
-            holder.lblMainBatchNumber.setText(String.format(" %1$s %2$s", model.getShomarehBach(), ""));
+
+            if (model.getShomarehBach() !=null) {
+                if (!model.getShomarehBach().equals("")){
+                    holder.lblMainBatchNumber.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.shomareBach), model.getShomarehBach()));
+                } else {
+                    holder.lblMainBatchNumber.setText(String.format("%1$s %2$s",   formatter.format(model.getMablaghMasrafKonandeh() ) , context.getResources().getString(R.string.rial)));
+                }
+            } else {
+                holder.lblMainBatchNumber.setText(String.format("%1$s %2$s", model.getMablaghMasrafKonandeh() , context.getResources().getString(R.string.rial)));
+            }
+//            holder.lblMainBatchNumber.setText(String.format(" %1$s", model.getShomarehBach()));
 
             //set  Main New lbl Texts
             holder.lblMainNameCodeKala.setText(String.format("%1$s - %2$s", String.valueOf(model.getCodeKala()), model.getNameKala()));
@@ -547,11 +578,22 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
 
 
     public void setKalaImages(ArrayList<KalaPhotoModel> kalaPhotoModels) {
-        for (KalaPhotoModel kalaPhotoModel : kalaPhotoModels)
-            allKalaPhoto.put(kalaPhotoModel.getCcKalaCodeDb(), kalaPhotoModel.getImageDb());
+
+        Disposable disposable = Observable.fromIterable(kalaMojodiZaribModels)
+                .flatMap(kalaMojodiZaribModel -> Observable.fromIterable(kalaPhotoModels)
+                        .map(kalaPhotoModel -> {
+
+                            if (kalaPhotoModel.getCcKalaCodeDb() == kalaMojodiZaribModel.getCcKalaCode()) {
+                                allKalaPhoto.put(kalaPhotoModel.getCcKalaCodeDb(),kalaPhotoModel.getImageDb());
+
+                            }
+                            return kalaMojodiZaribModel;
+                        })
+                ).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
 
     }
-
 
     public void setStatus(int status) {
         this.status = status;

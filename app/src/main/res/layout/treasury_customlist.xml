@@ -67,6 +67,24 @@
                             android:layout_gravity="center"
                             android:layoutDirection="rtl" />
                     </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/layMarjoee"
+                        android:layout_gravity="center"
+                        android:background="@color/colorSliderCustomers">
+                        <ImageView
+                            android:layout_width="@dimen/iconSize64"
+                            android:layout_height="@dimen/iconSize64"
+                            android:id="@+id/imgMarjoee"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/ic_marjoee"
+                            android:layout_gravity="center"
+                            android:layoutDirection="rtl" />
+                    </RelativeLayout>
+
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -155,6 +173,7 @@
                         android:orientation="horizontal">
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/lay_for_color"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -215,6 +234,24 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/lblShomarehDarkhast"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/FontSize16"
+                                android:gravity="center_vertical|right"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/lblShomarehFaktor"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/FontSize16"
+                                android:gravity="center_vertical|right"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/lblTarikhErsal"
                                 android:textColor="@color/colorTextPrimary"
                                 android:textSize="@dimen/FontSize16"
                                 android:gravity="center_vertical|right"

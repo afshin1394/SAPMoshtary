@@ -116,7 +116,9 @@ public class DarkhastFaktorDAO
             DarkhastFaktorModel.COLUMN_Noe_Faktor_Havaleh(),
             DarkhastFaktorModel.COLUMN_ExtraProp_ShowFaktorMamorPakhsh(),
             DarkhastFaktorModel.COLUMN_ccUser(),
-			DarkhastFaktorModel.COLUMN_ccDarkhastFaktorNoeForosh()
+			DarkhastFaktorModel.COLUMN_ccDarkhastFaktorNoeForosh(),
+			DarkhastFaktorModel.COLUMN_IsTajil(),
+			DarkhastFaktorModel.COLUMN_IsTakhir(),
         };
     }
 
@@ -1255,6 +1257,45 @@ public class DarkhastFaktorDAO
 
     }
 
+    public String getCcdarkhastFaktorsForZanjirei(){
+
+        String ccDarkhastFaktor = "-1";
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query = "SELECT DarkhastFaktor.ccDarkhastFaktor FROM DarkhastFaktor " +
+                    "LEFT JOIN Moshtary ON Moshtary.ccMoshtary = DarkhastFaktor.ccMoshtary " +
+                    "WHERE ccNoeMoshtary = 350 "  ;
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+
+                        ccDarkhastFaktor += " , " + cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ccDarkhastFaktor()));
+
+                        cursor.moveToNext();
+                    }
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorModel.TableName()) + "\n" + e.toString();
+            logger.insertLogToDB(context, LogPPCModel.LOG_EXCEPTION, message, "DarkhastFaktorDAO" , "" , "getCcdarkhastFaktorsForZanjirei" , "");
+        }
+        return ccDarkhastFaktor;
+
+    }
+
+
     public boolean deleteAll()
     {
         try
@@ -1336,6 +1377,25 @@ public class DarkhastFaktorDAO
             return false;
         }
     }
+
+    public void updateMarjoee(String ccDarkhastFaktor, int Marjoee)
+    {
+        try
+        {
+            String strSql =" UPDATE DarkhastFaktor "
+                    +" SET   ExtraProp_IsMarjoeeKamel = " + Marjoee
+                    +" Where ccDarkhastFaktor = " + ccDarkhastFaktor ;
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery(strSql, null);
+            cursor.moveToFirst();
+            cursor.close();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public boolean updateModatRoozRaasGiri(long ccDarkhastFaktor , int modatRoozRaasGiri)
     {
@@ -1577,6 +1637,27 @@ public class DarkhastFaktorDAO
         }
     }
 
+    public boolean updateExtraPropIsMarjoeeKamelDarkhastFaktor(long ccDarkhastFaktor , int extraPropIsMarjoeeKamel)
+    {
+        try
+        {
+            String query = "update " + DarkhastFaktorModel.TableName() + " set " + DarkhastFaktorModel.COLUMN_ExtraProp_IsMarjoeeKamel() + " = " + extraPropIsMarjoeeKamel +
+                    " where " + DarkhastFaktorModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor;
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "updateIsOld" , "");
+            return true;
+        }
+    }
+
     private static ContentValues modelToContentvalue(DarkhastFaktorModel darkhastFaktorModel)
     {
         ContentValues contentValues = new ContentValues();
@@ -1648,6 +1729,8 @@ public class DarkhastFaktorDAO
         contentValues.put(DarkhastFaktorModel.COLUMN_ExtraProp_ShowFaktorMamorPakhsh() , darkhastFaktorModel.getShowFaktorMamorPakhsh());
         contentValues.put(DarkhastFaktorModel.COLUMN_ccUser() , darkhastFaktorModel.getCcUser());
 		contentValues.put(DarkhastFaktorModel.COLUMN_ccDarkhastFaktorNoeForosh() , darkhastFaktorModel.getCcDarkhastFaktorNoeForosh());
+		contentValues.put(DarkhastFaktorModel.COLUMN_IsTajil() , darkhastFaktorModel.getIsTajil());
+		contentValues.put(DarkhastFaktorModel.COLUMN_IsTakhir() , darkhastFaktorModel.getIsTakhir());
 
         return contentValues;
     }
@@ -1727,6 +1810,8 @@ public class DarkhastFaktorDAO
             darkhastFaktorModel.setShowFaktorMamorPakhsh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ExtraProp_ShowFaktorMamorPakhsh())));
             darkhastFaktorModel.setCcUser(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ccUser())));
 			darkhastFaktorModel.setCcDarkhastFaktorNoeForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ccDarkhastFaktorNoeForosh())));
+			darkhastFaktorModel.setIsTajil(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_IsTajil())));
+			darkhastFaktorModel.setIsTakhir(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_IsTakhir())));
 
             darkhastFaktorModels.add(darkhastFaktorModel);
             cursor.moveToNext();

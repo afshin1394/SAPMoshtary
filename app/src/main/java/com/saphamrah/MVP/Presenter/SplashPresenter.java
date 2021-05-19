@@ -666,6 +666,12 @@ public class SplashPresenter implements SplashMVP.PresenterOps, SplashMVP.Requir
 
 
     @Override
+    public void getInstalledPackages() {
+        mModel.getInstalledPackages();
+    }
+
+
+    @Override
     public Context getAppContext() {
         try
         {

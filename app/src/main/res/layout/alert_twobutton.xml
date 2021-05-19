@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:weightSum="80"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/altdlg_bg"
@@ -9,8 +10,10 @@
 
 
     <RelativeLayout
+        android:id="@+id/relDetails"
+        android:layout_weight="78"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp">
         <LinearLayout
             android:layout_width="@dimen/iconSize100"
             android:layout_height="@dimen/iconSize100"
@@ -72,9 +75,11 @@
                 app:siShape="@drawable/ic_warning"
                 android:visibility="gone"/>
         </LinearLayout>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:id="@+id/scrollview"
             android:layout_marginBottom="15dp"
             android:layout_marginLeft="15dp"
@@ -83,56 +88,58 @@
             android:layout_below="@+id/layImageStatus">
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/lblMessage"
                 android:textColor="@color/colorTextPrimary"
                 android:textSize="@dimen/FontSize18"
                 android:gravity="center" />
         </ScrollView>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/alert_btn_bg_accent"
-            android:gravity="center_horizontal"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
-            android:layout_marginBottom="2dp"
-            android:layout_below="@+id/scrollview"
-            android:layoutDirection="rtl">
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnApply"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textSize="@dimen/btnFontMain"
-                android:textColor="@color/colorWhite"
-                android:padding="@dimen/altdlgButtonPadding"
-                android:layout_margin="1dp"
-                android:background="@android:color/transparent"/>
-            <LinearLayout
-                android:layout_width="2dp"
-                android:layout_height="match_parent"
-                android:background="@color/colorWhite"
-                android:layout_margin="5dp">
-            </LinearLayout>
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnCancel"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textSize="@dimen/btnFontMain"
-                android:textColor="@color/colorWhite"
-                android:padding="@dimen/altdlgButtonPadding"
-                android:layout_margin="1dp"
-                android:background="@android:color/transparent"/>
-        </LinearLayout>
+
     </RelativeLayout>
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="2"
+        android:orientation="horizontal"
+        android:background="@drawable/alert_btn_bg_accent"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginBottom="1dp"
+        android:layout_below="@+id/relDetails"
+        android:layoutDirection="rtl">
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/btnApply"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="@dimen/btnFontMain"
+            android:textColor="@color/colorWhite"
+            android:padding="@dimen/altdlgButtonPadding"
+            android:layout_margin="1dp"
+            android:background="@android:color/transparent"/>
+        <LinearLayout
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:layout_margin="5dp">
+        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/btnCancel"
+            android:layout_weight="1"
+            android:textSize="@dimen/btnFontMain"
+            android:textColor="@color/colorWhite"
+            android:padding="@dimen/altdlgButtonPadding"
+            android:layout_margin="1dp"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
 
 
 </LinearLayout>

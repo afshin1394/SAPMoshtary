@@ -4,20 +4,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.CheckBargashtiMVP;
 import com.saphamrah.DAO.BargashtyDAO;
-import com.saphamrah.DAO.CodeNoeVosolDAO;
 import com.saphamrah.DAO.DariaftPardakhtDarkhastFaktorPPCDAO;
 import com.saphamrah.DAO.DariaftPardakhtPPCDAO;
 import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.Model.BargashtyModel;
-import com.saphamrah.Model.CodeNoeVosolModel;
 import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
 import com.saphamrah.Model.DarkhastFaktorModel;
@@ -28,7 +23,6 @@ import com.saphamrah.PubFunc.DateUtils;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
-import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServicePost;
 import com.saphamrah.WebService.ApiClientGlobal;
@@ -119,7 +113,6 @@ public class CheckBargashtiModel implements CheckBargashtiMVP.ModelOps
         int convertToDay = (24 * 60 * 60 * 1000);
         long diffDays = 0;
         canVosolDiffDayForSend = true;
-        CodeNoeVosolDAO codeNoeVosolDAO = new CodeNoeVosolDAO(BaseApplication.getContext());
         final DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(BaseApplication.getContext());
         APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
 
@@ -146,9 +139,8 @@ public class CheckBargashtiModel implements CheckBargashtiMVP.ModelOps
         //create JsonArray of DariaftPardakhtPPCModel
         for (DariaftPardakhtPPCModel dpModel : dariaftPardakhtPPCModels)
         {
-            CodeNoeVosolModel codeNoeVosolModel = codeNoeVosolDAO.getByCodeNoeVosol(dpModel.getCodeNoeVosol());
-            int codeNoeSanad = codeNoeVosolModel.getCodeNoeSanad_dp();
-            int codeNoeCheck = codeNoeVosolModel.getCodeNoeCheck_dp();
+            int codeNoeSanad = 0;
+            int codeNoeCheck = 0;
             jsonArrayDariaftPardakht.put(dpModel.toJsonObjectCheckBargashty(ccMarkazForosh, ccMarkazAnbar, ccMarkazSazmanForoshSakhtarForosh, codeNoeSanad, codeNoeCheck, codeNoeVosolVajhNaghd, currentVersionNumber));
             ccDpdfs += "," + dpModel.getCcDariaftPardakht();
 

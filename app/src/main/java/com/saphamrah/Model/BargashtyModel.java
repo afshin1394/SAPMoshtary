@@ -176,10 +176,10 @@ public class BargashtyModel
     private String ShomarehSanad;
     @SerializedName("Mablagh")
     @Expose
-    private Float Mablagh;
+    private Double Mablagh;
     @SerializedName("MablaghMandeh")
     @Expose
-    private Float MablaghMandeh;
+    private Double MablaghMandeh;
     @SerializedName("TarikhSanad")
     @Expose
     private String TarikhSanad;
@@ -320,19 +320,19 @@ public class BargashtyModel
         ShomarehSanad = shomarehSanad;
     }
 
-    public Float getMablagh() {
+    public Double getMablagh() {
         return Mablagh;
     }
 
-    public void setMablagh(Float mablagh) {
+    public void setMablagh(Double mablagh) {
         Mablagh = mablagh;
     }
 
-    public Float getMablaghMandeh() {
+    public Double getMablaghMandeh() {
         return MablaghMandeh;
     }
 
-    public void setMablaghMandeh(Float mablaghMandeh) {
+    public void setMablaghMandeh(Double mablaghMandeh) {
         MablaghMandeh = mablaghMandeh;
     }
 

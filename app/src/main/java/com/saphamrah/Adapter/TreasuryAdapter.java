@@ -2,6 +2,8 @@ package com.saphamrah.Adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,24 +19,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.saphamrah.Model.DarkhastFaktorModel;
+import com.saphamrah.PubFunc.DateUtils;
+import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.DarkhastFaktorMoshtaryForoshandeModel;
 import com.saphamrah.Utils.Constants;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHolder>
-{
+public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHolder> {
     private final OnItemClickListener listener;
     private Context context;
     private ArrayList<DarkhastFaktorMoshtaryForoshandeModel> models;
     private int lastPosition = -1;
     private boolean faktorRooz;
     private int noeMasouliat;
-
-    public TreasuryAdapter(Context context, ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , boolean faktorRooz , int noeMasouliat , OnItemClickListener listener)
-    {
+    private PubFunc.DateUtils dateUtils = new PubFunc().new DateUtils();
+    SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_MILISECONDS());
+    public TreasuryAdapter(Context context, ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, boolean faktorRooz, int noeMasouliat, OnItemClickListener listener) {
         this.listener = listener;
         this.context = context;
         this.models = darkhastFaktorMoshtaryForoshandeModels;
@@ -44,16 +50,15 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.treasury_customlist , parent , false);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.treasury_customlist, parent, false);
+
         return new ViewHolder(view);
     }
 
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position)
-    {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         DecimalFormat formatter = new DecimalFormat("#,###,###");
 
         holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
@@ -61,78 +66,104 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         holder.lblRadif.setText(String.valueOf(position + 1));
         holder.lblCodeNameCustomer.setText(String.format("%1$s - %2$s", models.get(position).getCodeMoshtary(), models.get(position).getFullNameMoshtary()));
         holder.lblNameForoshandeh.setText(models.get(position).getFullNameForoshande());
-        holder.lblMablaghKhalesFaktor.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.mablaghKhales), formatter.format((int)models.get(position).getMablaghKhalesFaktor()),context.getResources().getString(R.string.rial)));
-        holder.lblMablaghMandehFaktor.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.mande), formatter.format(models.get(position).getMablaghMandeh()),context.getResources().getString(R.string.rial)));
-        holder.lblNameNoeVosol.setText(models.get(position).getNameNoeVosolAzMoshtary());
-        holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s" , context.getResources().getString(R.string.shomareDarkhast),String.valueOf(models.get(position).getShomarehFaktor())));
-        if ( (models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) && ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6 && faktorRooz)) )
-        {
-            holder.layEditDarkhast.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            holder.layEditDarkhast.setVisibility(View.GONE);
-        }
-        if (models.get(position).getExtraProp_IsSend() == 0)
-        {
-            holder.layStatusRight.setBackgroundColor(context.getResources().getColor(R.color.colorBadStatus));
-            holder.layStatusLeft.setBackgroundColor(context.getResources().getColor(R.color.colorBadStatus));
-        }
-        else
-        {
-            holder.layStatusRight.setBackgroundColor(context.getResources().getColor(R.color.colorGoodStatus));
-            holder.layStatusLeft.setBackgroundColor(context.getResources().getColor(R.color.colorGoodStatus));
+        holder.lblMablaghKhalesFaktor.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.mablaghKhales), formatter.format((int) models.get(position).getMablaghKhalesFaktor()), context.getResources().getString(R.string.rial)));
+        holder.lblMablaghMandehFaktor.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.mande), formatter.format(models.get(position).getMablaghMandeh()), context.getResources().getString(R.string.rial)));
+        holder.lblNameNoeVosol.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.noeVosol), models.get(position).getNameNoeVosolAzMoshtary()));
+
+        holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.shomareDarkhast), models.get(position).getShomarehDarkhast()));
+        if (models.get(position).getShomarehFaktor() != 0)
+        holder.lblShomarehFaktor.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.shomareFaktor), models.get(position).getShomarehFaktor()));
+
+        try {
+            Date date = sdf.parse(models.get(position).getTarikhErsal());
+            String tarikhErsal = (String) DateFormat.format(Constants.DATE_SHORT_FORMAT_WITH_SLASH() , date);
+            holder.lblTarikhErsal.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.tarikhErsal), dateUtils.gregorianWithSlashToPersianSlash(tarikhErsal)));
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
-        if (models.get(position).getExtraProp_ShowFaktorMamorPakhsh() == 0)
-        {
-            holder.layFaktorDetail.setVisibility(View.VISIBLE);
+        if ((models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) && ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6 && faktorRooz))) {
+            holder.layEditDarkhast.setVisibility(View.VISIBLE);
+            holder.layMarjoee.setVisibility(View.GONE);
+        } else {
+            holder.layMarjoee.setVisibility(View.VISIBLE);
+            holder.layEditDarkhast.setVisibility(View.GONE);
         }
-        else
-        {
+
+        /**
+         * check show marjoee
+         */
+        if (models.get(position).getFaktorRooz() == 1){
+            holder.layMarjoee.setVisibility(View.GONE);
+        } else {
+            holder.layMarjoee.setVisibility(View.VISIBLE);
+        }
+
+        /**
+         * set color for layout
+         */
+
+        if (models.get(position).getExtraProp_IsMarjoeeKamel() == 1) {
+            holder.lay_for_color.setBackgroundResource(R.color.marjoeeKamel);
+        } else if (models.get(position).getExtraProp_Resid() == 1) {
+            holder.lay_for_color.setBackgroundResource(R.color.resid);
+        } else if (models.get(position).getMablaghMandeh() == 0 && models.get(position).getExtraProp_MablaghDariaftPardakht() == 0) {
+            holder.lay_for_color.setBackgroundResource(R.color.tasvieKamel);
+        } else if (models.get(position).getMablaghMandeh() == 0 && models.get(position).getExtraProp_MablaghDariaftPardakht() != 0) {
+            holder.lay_for_color.setBackgroundResource(R.color.bestankari);
+        } else if (models.get(position).getMablaghMandeh() != models.get(position).getMablaghKhalesFaktor() && models.get(position).getMablaghMandeh() != 0) {
+            holder.lay_for_color.setBackgroundResource(R.color.mandehDar);
+        } else if (models.get(position).getCodeVazeiat() == 9 & models.get(position).getMablaghMandeh() != 0 & models.get(position).getMablaghMandeh() == models.get(position).getMablaghKhalesFaktor()) {
+            holder.lay_for_color.setBackgroundResource(R.color.resid);
+        } else {
+            holder.lay_for_color.setBackgroundResource(R.color.defultTreasuryList);
+        }
+
+
+        if (models.get(position).getExtraProp_IsSend() == 0) {
+            holder.layStatusRight.setBackgroundResource(R.drawable.radius_layout_red_right);
+            holder.layStatusLeft.setBackgroundResource(R.drawable.radius_layout_red_left);
+        } else {
+            holder.layStatusRight.setBackgroundResource(R.drawable.radius_layout_green_right);
+            holder.layStatusLeft.setBackgroundResource(R.drawable.radius_layout_green_right);
+        }
+
+        if (models.get(position).getExtraProp_ShowFaktorMamorPakhsh() == 0) {
+            holder.layFaktorDetail.setVisibility(View.VISIBLE);
+        } else {
             holder.layFaktorDetail.setVisibility(View.GONE);
         }
 
-        if ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6))
-        {
+        if ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6)) {
             holder.layEditVosol.setVisibility(View.GONE);
             holder.laySendVosol.setVisibility(View.GONE);
-        }
-        else
-        {
-            if (models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale)
-            {
+        } else {
+            if (models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) {
                 holder.layEditVosol.setVisibility(View.VISIBLE);
             }
             holder.laySendVosol.setVisibility(View.VISIBLE);
         }
 
-        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right , holder.itemView.findViewById(R.id.layRight));
-        if (holder.layEditVosol.getVisibility() == View.GONE && holder.laySendVosol.getVisibility() == View.GONE && holder.layEditDarkhast.getVisibility() == View.GONE)
-        {
-            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left , null);
+        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.itemView.findViewById(R.id.layRight));
+        if (holder.layEditVosol.getVisibility() == View.GONE && holder.laySendVosol.getVisibility() == View.GONE && holder.layEditDarkhast.getVisibility() == View.GONE) {
+            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, null);
+        } else {
+            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.itemView.findViewById(R.id.layLeft));
         }
-        else
-        {
-            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left , holder.itemView.findViewById(R.id.layLeft));
-        }
-		
-        holder.bind(position , listener);
+
+        holder.bind(position, listener);
         setAnimation(holder.itemView, position);
     }
 
 
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return models.size();
     }
 
 
-    private void setAnimation(View viewToAnimate, int position)
-    {
-        if (position > lastPosition)
-        {
+    private void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
             Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;
@@ -140,9 +171,7 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
     }
 
 
-
-    public class ViewHolder extends RecyclerView.ViewHolder
-    {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private SwipeLayout swipeLayout;
         private LinearLayout layStatusRight;
         private LinearLayout layStatusLeft;
@@ -152,6 +181,8 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         private TextView lblMablaghKhalesFaktor;
         private TextView lblMablaghMandehFaktor;
         private TextView lblShomarehDarkhast;
+        private TextView lblShomarehFaktor;
+        private TextView lblTarikhErsal;
         private TextView lblNameNoeVosol;
         private RelativeLayout layShowLocation;
         private RelativeLayout layFaktor;
@@ -159,21 +190,24 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         private RelativeLayout laySendVosol;
         private RelativeLayout layEditVosol;
         private RelativeLayout layEditDarkhast;
+        private RelativeLayout layMarjoee;
+        private LinearLayout lay_for_color;
 
-        public ViewHolder(View view)
-        {
+        public ViewHolder(View view) {
             super(view);
-            Typeface font = Typeface.createFromAsset(context.getAssets() , context.getResources().getString(R.string.fontPath));
+            Typeface font = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fontPath));
 
-            swipeLayout =  itemView.findViewById(R.id.swipe);
-            layStatusRight =  itemView.findViewById(R.id.layStatusRight);
-            layStatusLeft =  itemView.findViewById(R.id.layStatusLeft);
+            swipeLayout = itemView.findViewById(R.id.swipe);
+            layStatusRight = itemView.findViewById(R.id.layStatusRight);
+            layStatusLeft = itemView.findViewById(R.id.layStatusLeft);
             lblRadif = view.findViewById(R.id.lblRadif);
             lblCodeNameCustomer = view.findViewById(R.id.lblCodeNameCustomer);
             lblNameForoshandeh = view.findViewById(R.id.lblNameForoshandeh);
             lblMablaghKhalesFaktor = view.findViewById(R.id.lblMablaghKhalesFaktor);
             lblMablaghMandehFaktor = view.findViewById(R.id.lblMablaghMandehFaktor);
             lblShomarehDarkhast = view.findViewById(R.id.lblShomarehDarkhast);
+            lblShomarehFaktor = view.findViewById(R.id.lblShomarehFaktor);
+            lblTarikhErsal = view.findViewById(R.id.lblTarikhErsal);
             lblNameNoeVosol = view.findViewById(R.id.lblNameNoeVosol);
             layShowLocation = view.findViewById(R.id.layShowLocation);
             layFaktor = view.findViewById(R.id.layFaktorImage);
@@ -181,6 +215,8 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             laySendVosol = view.findViewById(R.id.laySend);
             layEditVosol = view.findViewById(R.id.layEdit);
             layEditDarkhast = view.findViewById(R.id.layEditDarkhast);
+            layMarjoee = view.findViewById(R.id.layMarjoee);
+            lay_for_color = view.findViewById(R.id.lay_for_color);
 
             lblRadif.setTypeface(font);
             lblCodeNameCustomer.setTypeface(font);
@@ -188,70 +224,58 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             lblMablaghKhalesFaktor.setTypeface(font);
             lblMablaghMandehFaktor.setTypeface(font);
             lblShomarehDarkhast.setTypeface(font);
+            lblShomarehFaktor.setTypeface(font);
             lblNameNoeVosol.setTypeface(font);
+            lblTarikhErsal.setTypeface(font);
         }
 
-        void bind(final int position , final OnItemClickListener listener)
-        {
+        void bind(final int position, final OnItemClickListener listener) {
 
-            layShowLocation.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    listener.onItemClick(Constants.SHOW_LOCATION() , position);
-                    swipeLayout.close(true);
-                }
+            layShowLocation.setOnClickListener(v -> {
+                listener.onItemClick(Constants.SHOW_LOCATION(), position);
+                swipeLayout.close(true);
             });
 
-            layFaktor.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    listener.onItemClick(Constants.SHOW_IMAGE() , position);
-                    swipeLayout.close(true);
-                }
+            layFaktor.setOnClickListener(v -> {
+                listener.onItemClick(Constants.SHOW_IMAGE(), position);
+                swipeLayout.close(true);
             });
 
-            layFaktorDetail.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    listener.onItemClick(Constants.SHOW_FAKTOR_DETAIL() , position);
-                    swipeLayout.close(true);
-                }
+            layFaktorDetail.setOnClickListener(v -> {
+                listener.onItemClick(Constants.SHOW_FAKTOR_DETAIL(), position);
+                swipeLayout.close(true);
             });
 
-            laySendVosol.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(Constants.SEND() , position);
-                    swipeLayout.close(true);
-                }
+            laySendVosol.setOnClickListener(v -> {
+                listener.onItemClick(Constants.SEND(), position);
+                swipeLayout.close(true);
             });
 
-            layEditVosol.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(Constants.EDIT(), position);
-                    swipeLayout.close(true);
-                }
+            layEditVosol.setOnClickListener(v -> {
+                listener.onItemClick(Constants.EDIT(), position);
+                swipeLayout.close(true);
             });
 
 
-            layEditDarkhast.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(Constants.EDIT_DARKHAST(), position);
-                    swipeLayout.close(true);
-                }
+            layEditDarkhast.setOnClickListener(v -> {
+                listener.onItemClick(Constants.EDIT_DARKHAST(), position);
+                swipeLayout.close(true);
             });
+
+            layMarjoee.setOnClickListener(v -> {
+                listener.onItemClick(Constants.MARJOEE, position);
+                Log.d("Treasury", Constants.MARJOEE + "  " + position);
+                swipeLayout.close(true);
+            });
+
 
         }
-
 
     }
 
 
-    public interface OnItemClickListener
-    {
-        void onItemClick(int operation , int position);
+    public interface OnItemClickListener {
+        void onItemClick(int operation, int position);
     }
 
     @Override

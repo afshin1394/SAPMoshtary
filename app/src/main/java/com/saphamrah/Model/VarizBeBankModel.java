@@ -24,7 +24,7 @@ public class VarizBeBankModel {
     private int ccMoshtary;
     @SerializedName("Mablagh")
     @Expose
-    private long Mablagh;
+    private double Mablagh;
     @SerializedName("CodeNoeVosol")
     @Expose
     private int CodeNoeVosol;
@@ -64,6 +64,9 @@ public class VarizBeBankModel {
     @SerializedName("txtCodeNoeVosol")
     @Expose
     private String txtCodeNoeVosol ;
+    @SerializedName("ExtraProp_MablaghSabtShode")
+    @Expose
+    private double ExtraProp_MablaghSabtShode ;
 
 
     public String getExtraProp_NameBankSanad() {
@@ -98,11 +101,11 @@ public class VarizBeBankModel {
         this.ccMoshtary = ccMoshtary;
     }
 
-    public long getMablagh() {
+    public double getMablagh() {
         return Mablagh;
     }
 
-    public void setMablagh(long mablagh) {
+    public void setMablagh(double mablagh) {
         Mablagh = mablagh;
     }
 
@@ -202,6 +205,14 @@ public class VarizBeBankModel {
         this.txtCodeNoeVosol = txtCodeNoeVosol;
     }
 
+    public double getExtraProp_MablaghSabtShode() {
+        return ExtraProp_MablaghSabtShode;
+    }
+
+    public void setExtraProp_MablaghSabtShode(double extraProp_MablaghSabtShode) {
+        ExtraProp_MablaghSabtShode = extraProp_MablaghSabtShode;
+    }
+
     public String getCOLUMN_ccDariaftPardakht() {
         return "ccDariaftPardakht";
     }
@@ -257,6 +268,9 @@ public class VarizBeBankModel {
     public String getCOLUMN_txtCodeNoeVosol() {
         return "txtCodeNoeVosol";
     }
+    public String getCOLUMN_ExtraProp_MablaghSabtShode() {
+        return "ExtraProp_MablaghSabtShode";
+    }
 
 
 
@@ -282,7 +296,7 @@ public class VarizBeBankModel {
             jsonObject.put("ccDariaftPardakht" , ccDariaftPardakht);
             jsonObject.put("NameMoshtary" , namemoshtary);
             jsonObject.put("ccMoshtary" , ccMoshtary);
-            jsonObject.put("Mablagh" , Mablagh);
+            jsonObject.put("Mablagh" , ExtraProp_MablaghSabtShode);
             jsonObject.put("ccBankSanad" , ExtraProp_ccBankSanad);
             jsonObject.put("NameShobehSanad" , ExtraProp_NameShobehSanad);
             jsonObject.put("CodeShobehSand" , ExtraProp_CodeShobehSand);

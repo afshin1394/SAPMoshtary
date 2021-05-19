@@ -68,9 +68,9 @@ public class LogPPCDAO
         catch (Exception exception)
         {
             exception.printStackTrace();
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            String message = context.getResources().getString(R.string.errorInsert , LogPPCModel.TableName()) + "\n" + exception.toString();
-            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), message, "LogPPCDAO" , "" , "insert" , "");
+            //PubFunc.Logger logger = new PubFunc().new Logger();
+           // String message = context.getResources().getString(R.string.errorInsert , LogPPCModel.TableName()) + "\n" + exception.toString();
+            //logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), message, "LogPPCDAO" , "" , "insert" , "");
             return false;
         }
     }
