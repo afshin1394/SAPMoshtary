@@ -168,7 +168,9 @@ public class ConfigNoeVosolMojazeFaktorDAO
                 modelGetTABLE_NAME.getCOLUMN_CodeNoeVosol_Tablet(),
                 modelGetTABLE_NAME.getCOLUMN_CodeNoeVosolAzMoshtary(),
                 modelGetTABLE_NAME.getCOLUMN_CodeVazeiat(),
-                modelGetTABLE_NAME.getCOLUMN_IsPishDariaft()
+                modelGetTABLE_NAME.getCOLUMN_IsPishDariaft(),
+                modelGetTABLE_NAME.getCOLUMN_MashmoolTakhfifNaghdi(),
+                modelGetTABLE_NAME.getCOLUMN_MashmoolDirkardVosol()
 
 
 
@@ -305,6 +307,74 @@ public class ConfigNoeVosolMojazeFaktorDAO
         return value;
     }
 
+    public int isTajilFromCodeSabtShode(int NoeVosol)
+    {
+        int value = 0;
+        try
+        {
+            String query = "select * from " + modelGetTABLE_NAME.getTABLE_NAME() + " where " + modelGetTABLE_NAME.getCOLUMN_CodeNoeVosol_Tablet() + " = " + NoeVosol ;
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    while(!cursor.isAfterLast())
+                    {
+                        value =  cursor.getInt(cursor.getColumnIndex(modelGetTABLE_NAME.getCOLUMN_MashmoolTakhfifNaghdi()));
+                        cursor.moveToNext();
+                    }
+
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), exception.toString(), "ConfigNoeVosolMojazeFaktorDAO" , "" , "getValueByNoeVosol" , "");
+        }
+
+        return value;
+    }
+
+    public int isDirkardFromCodeSabtShode(int NoeVosol)
+    {
+        int value = 0;
+        try
+        {
+            String query = "select * from " + modelGetTABLE_NAME.getTABLE_NAME() + " where " + modelGetTABLE_NAME.getCOLUMN_CodeNoeVosol_Tablet() + " = " + NoeVosol ;
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    while(!cursor.isAfterLast())
+                    {
+                        value =  cursor.getInt(cursor.getColumnIndex(modelGetTABLE_NAME.getCOLUMN_MashmoolDirkardVosol()));
+                        cursor.moveToNext();
+                    }
+
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), exception.toString(), "ConfigNoeVosolMojazeFaktorDAO" , "" , "getValueByNoeVosol" , "");
+        }
+
+        return value;
+    }
+
     public boolean deleteAll()
     {
         try
@@ -334,6 +404,8 @@ public class ConfigNoeVosolMojazeFaktorDAO
         contentValues.put(faktor.getCOLUMN_CodeNoeVosolAzMoshtary() , model.getCodeNoeVosolAzMoshtary());
         contentValues.put(faktor.getCOLUMN_CodeVazeiat() , model.getCodeVazeiat());
         contentValues.put(faktor.getCOLUMN_IsPishDariaft() , model.getIsPishDariaft());
+        contentValues.put(faktor.getCOLUMN_MashmoolTakhfifNaghdi() , model.getMashmoolTakhfifNaghdi());
+        contentValues.put(faktor.getCOLUMN_MashmoolDirkardVosol() , model.getMashmoolDirkardVosol());
 
         return contentValues;
     }
@@ -356,6 +428,8 @@ public class ConfigNoeVosolMojazeFaktorDAO
             configNoeVosolMojazeFaktorModel.setCodeVazeiat(cursor.getInt(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_CodeVazeiat())));
             configNoeVosolMojazeFaktorModel.setTxtNoeVosol(cursor.getString(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_txtNoeVosol())));
             configNoeVosolMojazeFaktorModel.setIsPishDariaft(cursor.getInt(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_IsPishDariaft())));
+            configNoeVosolMojazeFaktorModel.setMashmoolTakhfifNaghdi(cursor.getInt(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_MashmoolTakhfifNaghdi())));
+            configNoeVosolMojazeFaktorModel.setMashmoolDirkardVosol(cursor.getInt(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_MashmoolDirkardVosol())));
 
 
             configNoeVosolMojazeFaktorModels.add(configNoeVosolMojazeFaktorModel);

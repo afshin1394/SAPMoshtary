@@ -13,6 +13,7 @@ import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.UIModel.CustomerAdamDarkhastModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
@@ -169,6 +170,9 @@ public class ConfigNoeVosolMojazeMoshtaryDAO
                 modelGetTABLE_NAME.getCOLUMNCodeNoeVosol_Tablet(),
                 modelGetTABLE_NAME.getCOLUMN_txtNoeVosol(),
                 modelGetTABLE_NAME.getCOLUMN_IsPishDariaft(),
+                modelGetTABLE_NAME.getCOLUMN_modatVosolMazad(),
+                modelGetTABLE_NAME.getCOLUMN_MashmoolTakhfifNaghdi(),
+                modelGetTABLE_NAME.getCOLUMN_MashmoolDirkardVosol(),
 
 
         };
@@ -305,6 +309,37 @@ public class ConfigNoeVosolMojazeMoshtaryDAO
         return configNoeVosolMojazeMoshtaryModels;
     }
 
+    public int getTedadRoozMazadForRotbeh(int darajeh , int codeNoeVosolAzMoshtary , int ccGorohMoshtary){
+        int modatVosolMazad = 0;
+        try
+        {
+
+
+            String query = "select ModatVosolMazad from ConfigNoeVosolMojazeMoshtary\n" +
+                    "where ccDarajeh = "+ darajeh +" AND CodeNoeVosol_Tablet = " + codeNoeVosolAzMoshtary + " AND ccNoeMoshtary = "+ ccGorohMoshtary +"";
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    modatVosolMazad = cursor.getInt(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = BaseApplication.getContext().getResources().getString(R.string.errorSelectAll , "InvoiceSettlement") + "\n" + exception.toString();
+            logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), message, "ConfigNoeVosolMojazeMoshtaryDAO" , "" , "getTedadRoozForRotbeh" , "");
+        }
+        return modatVosolMazad;
+    }
+
 
     public boolean deleteAll()
     {
@@ -336,6 +371,8 @@ public class ConfigNoeVosolMojazeMoshtaryDAO
         contentValues.put(configNoeVosolMojazeMoshtary.getCOLUMN_ccNoeMoshtary() , configNoeVosolMojazeMoshtaryModel.getCcNoeMoshtary());
         contentValues.put(configNoeVosolMojazeMoshtary.getCOLUMN_CodeVazeiat() , configNoeVosolMojazeMoshtaryModel.getCodeVazeiat());
         contentValues.put(configNoeVosolMojazeMoshtary.getCOLUMN_IsPishDariaft() , configNoeVosolMojazeMoshtaryModel.getIsPishDariaft());
+        contentValues.put(configNoeVosolMojazeMoshtary.getCOLUMN_MashmoolTakhfifNaghdi() , configNoeVosolMojazeMoshtaryModel.getMashmoolTakhfifNaghdi());
+        contentValues.put(configNoeVosolMojazeMoshtary.getCOLUMN_MashmoolDirkardVosol() , configNoeVosolMojazeMoshtaryModel.getMashmoolDirkardVosol());
         return contentValues;
     }
 
@@ -358,6 +395,8 @@ public class ConfigNoeVosolMojazeMoshtaryDAO
            model.setCcNoeMoshtary(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_ccNoeMoshtary())));
            model.setCodeVazeiat(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_CodeVazeiat())));
            model.setIsPishDariaft(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_IsPishDariaft())));
+           model.setMashmoolTakhfifNaghdi(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_MashmoolTakhfifNaghdi())));
+           model.setMashmoolDirkardVosol(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_MashmoolDirkardVosol())));
            configNoeVosolMojazeMoshtaryModels.add(model);
             cursor.moveToNext();
         }
