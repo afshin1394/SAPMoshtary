@@ -3,7 +3,6 @@ package com.saphamrah.MVP.View;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +15,6 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.saphamrah.Adapter.CheckBargashtiAdapter;
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.CheckBargashtiMVP;
-import com.saphamrah.BaseMVP.TreasuryListMVP;
 import com.saphamrah.MVP.Presenter.CheckBargashtiPresenter;
 import com.saphamrah.Model.BargashtyModel;
 import com.saphamrah.R;
@@ -92,7 +90,7 @@ public class CheckBargashtiActivity extends AppCompatActivity implements CheckBa
     @Override
     public void onGetAllCheckBargashti(ArrayList<BargashtyModel> bargashtyModels) {
         adapter = new CheckBargashtiAdapter(BaseApplication.getContext(), bargashtyModels, (operation, position) -> {
-            if (operation == Constants.EDIT()) {
+            if (operation == Constants.CLEARING()) {
                 openInvoiceSettlement(bargashtyModels.get(position).getCcMoshtary()
                         , bargashtyModels.get(position).getCcDariaftPardakht()
                         , bargashtyModels.get(position).getCcNoeMoshtary()

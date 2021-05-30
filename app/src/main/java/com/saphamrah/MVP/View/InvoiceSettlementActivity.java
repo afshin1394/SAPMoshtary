@@ -575,13 +575,16 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
             edt_check_tajil.setText(formatter.format(mablaghTajil_Check));
             edt_mablagh_pas_az_kasr_naghd_tajil.setText(formatter.format(mandehFaktorPasAzTajil_Naghd));
             edt_mablagh_pas_az_kasr_check_tajil.setText(formatter.format(mandehFaktorPasAzTajil_Check));
+        }
+    }
 
-            if (from != Constants.FROM_PISH_DARYAFT && from != Constants.FROM_CHECK_BARGASHTI)
-                lay_tajil_naghd.setVisibility(View.VISIBLE);
+    @Override
+    public void onVisibilityLayoutTajil(boolean visible) {
+        if (visible){
+            lay_tajil_naghd.setVisibility(View.VISIBLE);
         } else {
             lay_tajil_naghd.setVisibility(View.GONE);
         }
-
     }
 
     /**

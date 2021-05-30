@@ -126,7 +126,7 @@ public class CheckBargashtiAdapter extends RecyclerSwipeAdapter<CheckBargashtiAd
 
         void bind(final int position, final OnItemClickListener listener) {
             imgAddToRequestList.setOnClickListener(v -> {
-                listener.onItemClick(Constants.EDIT() ,position);
+                listener.onItemClick(Constants.CLEARING() ,position);
                 swipeLayout.close(true);
             });
 

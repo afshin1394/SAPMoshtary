@@ -61,6 +61,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
     private DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
     ParameterChildDAO parameterChildDAO = new ParameterChildDAO(BaseApplication.getContext());
     DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(BaseApplication.getContext());
+    ConfigNoeVosolMojazeFaktorDAO configNoeVosolMojazeFaktorDAO = new ConfigNoeVosolMojazeFaktorDAO(BaseApplication.getContext());
 
     public InvoiceSettlementModel(InvoiceSettlementMVP.RequiredPresenterOps mPresenter) {
         this.mPresenter = mPresenter;
@@ -116,6 +117,8 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
         ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels = dariaftPardakhtDarkhastFaktorPPCDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
         Log.d("vosols", "getCcDarkhastFaktor : " + ccDarkhastFaktor);
         Log.d("vosols", "count : " + dariaftPardakhtDarkhastFaktorPPCModels.size());
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        setTajil(darkhastFaktorModel, darkhastFaktorModel.getCodeNoeVosolAzMoshtary());
         mPresenter.onGetVosols(dariaftPardakhtDarkhastFaktorPPCModels);
     }
 
@@ -459,17 +462,17 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                 long mablaghMandehOtherVosol = (long) setMablaghMandehFaktor(ccDarkhastFaktor);
 
 
-                boolean haveDirkardVosol = haveDirkardVosol(darkhastFaktorModel, null);
+                boolean haveDirkardVosol = haveDirkardVosol(darkhastFaktorModel, null, CodeNoeVosolSabtShode);
                 if (mablaghMandehOtherVosol == 0 && !haveDirkardVosol) {
                     insertDirkardVosol(darkhastFaktorModel, null);
                 }
 
                 // TODO ::
-                callTajil(ccDarkhastFaktor,codeNoeVosolMoshtary,CodeNoeVosolSabtShode);
+                callTajil(ccDarkhastFaktor,codeNoeVosolMoshtary,Integer.parseInt(strCodeNoeVosol));
 
                 if (canGetTajil) {
                     Insert_Tajil(codeNoeVosolMoshtary, darkhastFaktorModel);
-                    callTajil(ccDarkhastFaktor,codeNoeVosolMoshtary,CodeNoeVosolSabtShode);
+//                    callTajil(ccDarkhastFaktor,codeNoeVosolMoshtary,Integer.parseInt(strCodeNoeVosol));
                 }
                 }
                 mPresenter.onSuccessInsert(setMablaghMandehFaktor(ccDarkhastFaktor));
@@ -695,7 +698,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                 mPresenter.onSuccessInsert(mablaghMandehOtherVosol);
 
 
-                boolean haveDirkardVosol = haveDirkardVosol(null, bargashtyModel);
+                boolean haveDirkardVosol = haveDirkardVosol(null, bargashtyModel, CodeNoeVosolSabtShode);
                 if (mablaghMandehOtherVosol == 0 && !haveDirkardVosol) {
                     insertDirkardVosol(null, bargashtyModel);
                     mablaghMandehOtherVosol = (long) setMablaghMandehOtherVosol(ccDarkhastFaktor);
@@ -1180,43 +1183,49 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
 
     private int getTedadRoozForRotbeh(int darajeh , int codeNoeVosolAzMoshtary , int ccGorohMoshtary)
     {// todo shanbe
-        final int Namayandeh1 = 351, Namayandeh2 = 352, Khordeh = 347, Omdeh=348, Zanjirei = 350, TaavoniVijeh = 349;
+        ConfigNoeVosolMojazeMoshtaryDAO configNoeVosolMojazeMoshtaryDAO = new ConfigNoeVosolMojazeMoshtaryDAO(BaseApplication.getContext());
+
+//        ParameterChildDAO parameterChildDAO = new ParameterChildDAO(BaseApplication.getContext());
+//        int khordeh = parameterChildDAO.getAllByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_KHORDE()).
+        // paramet child
+//        final int Namayandeh1 = 351, Namayandeh2 = 352, Khordeh = 347, Omdeh=348, Zanjirei = 350, TaavoniVijeh = 349;
         int tedadRooz = 0;
         if(codeNoeVosolAzMoshtary <= 3)
         {
-            if(darajeh == 0)
-            {
-                if(ccGorohMoshtary == Khordeh || ccGorohMoshtary == Omdeh)
-                {
-                    tedadRooz = 2;
-                }
-                else if(ccGorohMoshtary == Namayandeh1 )
-                {
-                    tedadRooz = 5;
-                }
-                else if(ccGorohMoshtary == Namayandeh2 )
-                {
-                    tedadRooz = 3;
-                }
-            }
-            if(darajeh == 1)
-            {
-                if(ccGorohMoshtary == Khordeh || ccGorohMoshtary == Omdeh)
-                    tedadRooz = 1;
-                if(ccGorohMoshtary == Namayandeh1 )
-                    tedadRooz = 3;
-                if(ccGorohMoshtary == Namayandeh2 )
-                    tedadRooz = 2;
-            }
-            if(darajeh == 2)
-            {
-                if(ccGorohMoshtary == Namayandeh1 )
-                    tedadRooz = 2;
-                if(ccGorohMoshtary == Namayandeh2 )
-                    tedadRooz = 1;
-            }
+            tedadRooz = configNoeVosolMojazeMoshtaryDAO.getTedadRoozMazadForRotbeh(darajeh,codeNoeVosolAzMoshtary,ccGorohMoshtary);
+//            if(darajeh == 0)
+//            {
+//                if(ccGorohMoshtary == Khordeh || ccGorohMoshtary == Omdeh)
+//                {
+//                    tedadRooz = 2;
+//                }
+//                else if(ccGorohMoshtary == Namayandeh1 )
+//                {
+//                    tedadRooz = 5;
+//                }
+//                else if(ccGorohMoshtary == Namayandeh2 )
+//                {
+//                    tedadRooz = 3;
+//                }
+//            }
+//            if(darajeh == 1)
+//            {
+//                if(ccGorohMoshtary == Khordeh || ccGorohMoshtary == Omdeh)
+//                    tedadRooz = 1;
+//                if(ccGorohMoshtary == Namayandeh1 )
+//                    tedadRooz = 3;
+//                if(ccGorohMoshtary == Namayandeh2 )
+//                    tedadRooz = 2;
+//            }
+//            if(darajeh == 2)
+//            {
+//                if(ccGorohMoshtary == Namayandeh1 )
+//                    tedadRooz = 2;
+//                if(ccGorohMoshtary == Namayandeh2 )
+//                    tedadRooz = 1;
+//            }
         }
-        tedadRooz = 0;
+
         return tedadRooz;
     }
 
@@ -1239,7 +1248,6 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                 //-----------------Update_Check bargashty------------------------------------------
                 if (deleteResult) {
                     Long ccDpDf_Extra = dariaftPardakhtDarkhastFaktorPPCModel.getExtraProp_ccDaryaftPardakhtCheckBargashty();
-                    //todo
                     boolean deletedpdfPPC = dariaftPardakhtDarkhastFaktorPPCDAO.deleteByccDariaftPardakht(dariaftPardakhtDarkhastFaktorPPCModel.getCcDariaftPardakht());
                     long mablaghMandeh = (long) setMablaghMandehOtherVosol(dariaftPardakhtDarkhastFaktorPPCModel.getCcDarkhastFaktor());
                     if (deletedpdfPPC) {
@@ -1277,16 +1285,12 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                 boolean deleteDpdfPPC = dariaftPardakhtDarkhastFaktorPPCDAO.deleteByccDariaftPardakht(dariaftPardakhtDarkhastFaktorPPCModel.getCcDariaftPardakht());
                 long mablaghMandeh = setMablaghMandehFaktor(ccDarkhastFaktor);
                 if (deleteDpdfPPC) {
-                    if (!biggerCcDaryaftPardakht && mablaghMandeh > 0){
-                        dariaftPardakhtDarkhastFaktorPPCDAO.deleteDirKardAndTajil(ccDarkhastFaktor, 0);
-                    }
-                    mablaghMandeh =  setMablaghMandehFaktor(ccDarkhastFaktor);
+                   if (!biggerCcDaryaftPardakht && mablaghMandeh > 0){
+                       dariaftPardakhtDarkhastFaktorPPCDAO.deleteDirKardAndTajil(ccDarkhastFaktor, 0);
+                       mPresenter.onVisibilityLayoutTajil(false);
+                   }
 
-                    if (mablaghMandeh == 0){
-                        dariaftPardakhtDarkhastFaktorPPCDAO.deleteDirKardAndTajil(ccDarkhastFaktor, 0);
-                    }
-
-
+                     mablaghMandeh = setMablaghMandehFaktor(ccDarkhastFaktor);
                      mPresenter.onSuccessRemoveItem(position, mablaghMandeh);
                 } else {
                     mPresenter.onFailedRemoveItem();
@@ -1303,7 +1307,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
      *  when ccDaryaftPardakht item selected bigger another ccDaryaftPardakht vosols , we can not delete "DirKard"
      */
     private boolean biggerCcDaryaftPardakht(DariaftPardakhtDarkhastFaktorPPCModel dariaftPardakhtDarkhastFaktorPPCModel,long ccDarkhastFaktor){
-        ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels = dariaftPardakhtDarkhastFaktorPPCDAO.getByccDarkhastFaktorForCheckPosition(ccDarkhastFaktor);
+        ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels = dariaftPardakhtDarkhastFaktorPPCDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
 
         boolean biggerCcDaryaftPardakht = false;
         for (int i = 0; i < dariaftPardakhtDarkhastFaktorPPCModels.size(); i++) {
@@ -1345,9 +1349,10 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
 
     public void callTajil(long ccDarkhastfaktor, int codeNoeVosol, int codeNoeVosolSabtShodeh) {
         DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastfaktor);
-
-        if (darkhastFaktorModel.getIsTajil() == 1)
-            setTajil(darkhastFaktorModel, codeNoeVosol);
+        int isTajilFromCodeSabtShode = configNoeVosolMojazeFaktorDAO.isTajilFromCodeSabtShode(codeNoeVosolSabtShodeh);
+        if (darkhastFaktorModel.getIsTajil() == 1 )//&& codeNoeVosol != Integer.parseInt(Constants.VALUE_VAJH_NAGHD()))
+            if (isTajilFromCodeSabtShode == 1)
+               setTajil(darkhastFaktorModel, codeNoeVosol);
     }
 
     @Override
@@ -1414,14 +1419,19 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
      *
      * @return
      */
-    private boolean haveDirkardVosol(DarkhastFaktorModel darkhastFaktorModel, BargashtyModel bargashtyModel) {
+    private boolean haveDirkardVosol(DarkhastFaktorModel darkhastFaktorModel, BargashtyModel bargashtyModel, int codeNoeVosolSabtShodeh) {
         boolean flag = false;
         DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtBargashtyPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(BaseApplication.getContext());
+        int isDirkardFromCodeSabtShode = configNoeVosolMojazeFaktorDAO.isDirkardFromCodeSabtShode(codeNoeVosolSabtShodeh);
+
         if (darkhastFaktorModel != null) {
-            if(darkhastFaktorModel.getIsTakhir()==1)
-                flag = dariaftPardakhtBargashtyPPCDAO.HaveDirkardDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor());
-        } else {
-            flag = dariaftPardakhtBargashtyPPCDAO.HaveDirkardBargahsty(bargashtyModel.getCcDariaftPardakht());
+            if (isDirkardFromCodeSabtShode == 1) {
+                if (darkhastFaktorModel.getIsTakhir() == 1) {
+                    flag = dariaftPardakhtBargashtyPPCDAO.HaveDirkardDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor());
+                } else {
+                    flag = dariaftPardakhtBargashtyPPCDAO.HaveDirkardBargahsty(bargashtyModel.getCcDariaftPardakht());
+                }
+            }
         }
         return flag;
     }
@@ -1667,9 +1677,9 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
         boolean flag_HaveTajil = false;
         int TedadRoozTatil = 0;
         long TedadRoozSabtVosol = 0;
-        boolean Is_TarikhRooz = false;
+        boolean Is_TarikhRooz = true;
 
-        DariaftPardakhtPPCDAO dpDAO = new DariaftPardakhtPPCDAO(BaseApplication.getContext());
+//        DariaftPardakhtPPCDAO dpDAO = new DariaftPardakhtPPCDAO(BaseApplication.getContext());
         DariaftPardakhtDarkhastFaktorPPCDAO dpdfDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(BaseApplication.getContext());
         //ArrayList<DariaftPardakhtPPCModel> dps = dpDAO.getByccDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor());
         ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dps = dpdfDAO.getByccDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor());
@@ -1889,6 +1899,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
         }
 
         mPresenter.oncallTajil(mablaghTajil_Naghd, mandehFaktorPasAzTajil_Naghd, mablaghTajil_Check, mandehFaktorPasAzTajil_Check, canGetTajil);
+        mPresenter.onVisibilityLayoutTajil(canGetTajil);
     }
 
     /**
@@ -1958,7 +1969,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
         if (MandehTajil < 1000 & MandehTajil > 0)
             Sum_MablaghDariaftPardakht += MandehTajil;
 
-        if (Sum_MablaghDariaftPardakht >= MablaghPasAzKasrTajil && Tajil && CodeNoeVosol_Sabt != Integer.parseInt(Constants.VALUE_VAJH_NAGHD())) {
+        if (Sum_MablaghDariaftPardakht >= MablaghPasAzKasrTajil && Tajil ){//&& CodeNoeVosol_Sabt != Integer.parseInt(Constants.VALUE_VAJH_NAGHD())) {
             int codeNoeVosolD = Integer.valueOf(Constants.VALUE_SANAD_TAJIL);
             String nameNoeVosol = "تعجیل وصول";
             int isTajil = 1;

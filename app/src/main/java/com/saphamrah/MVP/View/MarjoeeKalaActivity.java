@@ -113,7 +113,7 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
                 {
                     showRemoveAlert(kalaElamMarjoeeModel , position);
                 }
-                else if (operation == Constants.EDIT())
+                else if (operation == Constants.CLEARING())
                 {
                     showEditCountmAlert(kalaElamMarjoeeModel.getCcElamMarjoeeSatrPPC(), kalaElamMarjoeeModel.getNameKala(), kalaElamMarjoeeModel.getTedad3());
                 }

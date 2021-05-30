@@ -1632,7 +1632,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 shared.putInt(shared.getMoshtaryJadidDarajeh() , darajehMoshtary);
 
                 MaxFaktorMandehDarDAO maxFaktorMandehDarDAO= new MaxFaktorMandehDarDAO(weakReferenceContext.get());
-                ArrayList<MaxFaktorMandehDarModel> maxFaktorMandehDars= maxFaktorMandehDarDAO.getAll();
+                ArrayList<MaxFaktorMandehDarModel> maxFaktorMandehDars = maxFaktorMandehDarDAO.getAll();
                 int maxRoozFaktorMandehDarNoeMoshtary = 0;
                 for (MaxFaktorMandehDarModel model : maxFaktorMandehDars)
                 {

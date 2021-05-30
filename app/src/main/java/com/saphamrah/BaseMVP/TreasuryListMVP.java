@@ -19,7 +19,7 @@ public interface TreasuryListMVP
         void onGetCustomerAddress(double latitude , double longitude);
         void onGetFaktorImage(byte[] faktorImage);
         void openDarkhastKalaActivity(long ccDarkhastFaktor , int ccMoshtary);
-
+        void showHideFabButtons(boolean faktorRooz);
         void onError(boolean closeActivity , int errorResId);
 		void onError(boolean closeActivity , String message);													 
         void showAlertMessage(int resId, int messageType);
@@ -28,6 +28,8 @@ public interface TreasuryListMVP
         void showLoading();
         void closeLoading();
         void onSuccessSend(int position);
+
+        void openInvoiceSettlementActivity(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
     }
 
 
@@ -43,6 +45,12 @@ public interface TreasuryListMVP
         void setDarkhastFaktorShared(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
+
+        void checkMoshtaryKharejAzMahal(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
+
+        void updateGpsData();
+
+        void checkIsLocationSendToServer(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
     }
 
 
@@ -66,6 +74,9 @@ public interface TreasuryListMVP
         void onErrorAccessToLocation();
         void onErrorGetCustomerLocation(int resId , String customerName);
         void onError(int resId);
+        void onSuccess(int resId);
+        void openInvoiceSettlement(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel,boolean openInvoiceSettlement);
+        void closeLoading();
     }
 
 
@@ -80,6 +91,9 @@ public interface TreasuryListMVP
         void setDarkhastFaktorShared(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
+        void checkMohtaryKharejAzMahal(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
+        void updateGpsData();
+        void checkIsLocationSendToServer(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
     }
 
 

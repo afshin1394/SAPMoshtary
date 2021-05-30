@@ -193,17 +193,26 @@ public class VarizNaghdBeBankModel implements VarizNaghdBeBankMVP.ModelOps {
                     @Override
                     public void onResponse(Call<VarizBeBankResult> call, Response<VarizBeBankResult> response) {
 
-                            if (response.isSuccessful() && response.body() != null) {
-                                VarizBeBankResult result = response.body();
-                                if (result.getSuccess()) {
-                                    if (Integer.parseInt(result.getMessage()) > 0) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            VarizBeBankResult result = response.body();
+                            if (result.getSuccess()) {
+                                if (Integer.parseInt(result.getMessage()) > 0) {
+                                    mPresenter.onSuccessSend();
+                                    int ccDariaftPardakhtNew = Integer.parseInt(result.getMessage());
+                                    boolean isSend = varizBeBankDAO.updateIsSend(Integer.parseInt(varizBeBankModel.getExtraProp_ShomarehSanad()));
+                                    boolean ccDaryaftPardakhtUpdate = varizBeBankDAO.updateCcDaryaftPardakht(varizBeBankModel.getCcDariaftPardakht() , ccDariaftPardakhtNew);
+                                    if (isSend && ccDaryaftPardakhtUpdate){
                                         mPresenter.onSuccessSend();
-                                        int ccDariaftPardakhtNew = Integer.parseInt(result.getMessage());
+                                    } else {
+                                        mPresenter.onErrorSend(R.string.errorSabtVariz);
                                     }
-                                } else {
-                                    showResultError(Integer.parseInt(result.getMessage()));
                                 }
+                            } else {
+                                showResultError(Integer.parseInt(result.getMessage()));
                             }
+                        } else {
+                            mPresenter.onErrorSend(R.string.errorSabtVarizServer);
+                        }
                     }
 
                     @Override
@@ -215,6 +224,7 @@ public class VarizNaghdBeBankModel implements VarizNaghdBeBankMVP.ModelOps {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            mPresenter.onErrorSend(R.string.errorSendDataResend);
         }
 
     }

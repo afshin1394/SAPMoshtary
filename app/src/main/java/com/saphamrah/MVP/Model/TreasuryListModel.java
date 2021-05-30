@@ -21,6 +21,7 @@ import com.saphamrah.DAO.DarkhastFaktorRoozSortDAO;
 import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
 import com.saphamrah.DAO.ForoshandehAmoozeshiDeviceNumberDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
+import com.saphamrah.DAO.GPSDataPpcDAO;
 import com.saphamrah.DAO.KalaMojodiDAO;
 import com.saphamrah.DAO.MandehMojodyMashinDAO;
 import com.saphamrah.DAO.MasirDAO;
@@ -47,6 +48,7 @@ import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.DarkhastFaktorRoozSortModel;
 import com.saphamrah.Model.ForoshandehAmoozeshiModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
+import com.saphamrah.Model.GPSDataModel;
 import com.saphamrah.Model.KalaMojodiModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.MandehMojodyMashinModel;
@@ -56,12 +58,14 @@ import com.saphamrah.Model.MaxFaktorMandehDarModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.Model.MoshtaryAfradModel;
 import com.saphamrah.Model.MoshtaryEtebarSazmanForoshModel;
+import com.saphamrah.Model.MoshtaryGharardadModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.RptForoshModel;
 import com.saphamrah.Model.RptMandehdarModel;
 import com.saphamrah.Model.RptSanadModel;
 import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
@@ -81,6 +85,7 @@ import com.saphamrah.WebService.APIServicePost;
 import com.saphamrah.WebService.APIServiceValhalla;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.CreateDariaftPardakhtPPCJSONResult;
+import com.saphamrah.WebService.ServiceResponse.CreateGpsDataPPCResult;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
 
 import org.json.JSONArray;
@@ -1243,7 +1248,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             {
                 if (msg.arg1 == 1)
                 {
-                    setRequestInfoShared(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary(), darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor(), darkhastFaktorMoshtaryForoshandeModel.getCcForoshandeh(), darkhastFaktorMoshtaryForoshandeModel.getCcMarkazForosh(), darkhastFaktorMoshtaryForoshandeModel.getCcSazmanForosh(), darkhastFaktorMoshtaryForoshandeModel.getCcMarkazSazmanForosh(), moshtaryForoshandehFlag , isMojazForResid , isEtebarCheckBargashty , ccChildParameterNoeVosol, googleLocationProvider, (long)darkhastFaktorMoshtaryForoshandeModel.getMablaghKhalesFaktor());
+                    setRequestInfoShared(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary(), darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor(), darkhastFaktorMoshtaryForoshandeModel.getCcForoshandeh(), darkhastFaktorMoshtaryForoshandeModel.getCcMarkazForosh(), darkhastFaktorMoshtaryForoshandeModel.getCcSazmanForosh(), darkhastFaktorMoshtaryForoshandeModel.getCcMarkazSazmanForosh(), moshtaryForoshandehFlag , isMojazForResid , isEtebarCheckBargashty , ccChildParameterNoeVosol, googleLocationProvider, (long)darkhastFaktorMoshtaryForoshandeModel.getMablaghKhalesFaktor(), darkhastFaktorMoshtaryForoshandeModel.getMoshtaryGharardadccSazmanForosh(), darkhastFaktorMoshtaryForoshandeModel.getCcMoshtaryGharardad());
                     mPresenter.onSuccessUpdateMandeMojodiMashin();
                 }
                 else if (msg.arg1 == -1)
@@ -1362,7 +1367,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
     }
 
 
-    private void setRequestInfoShared(int ccMoshtary , long ccDarkhastFaktor , int ccForoshandeh, int ccMarkazForosh , int ccSazmanForosh ,int ccMarkazSazmanForosh , boolean moshtaryForoshandehFlag , boolean isMojazForResid , boolean isEtebarCheckBargashty , int ccChildParameterNoeVosol, PubFunc.LocationProvider googleLocationProvider, long MablaghKhalesHavaleh)
+    private void setRequestInfoShared(int ccMoshtary , long ccDarkhastFaktor , int ccForoshandeh, int ccMarkazForosh , int ccSazmanForosh ,int ccMarkazSazmanForosh , boolean moshtaryForoshandehFlag , boolean isMojazForResid , boolean isEtebarCheckBargashty , int ccChildParameterNoeVosol, PubFunc.LocationProvider googleLocationProvider, long MablaghKhalesHavaleh, int MoshtaryGharardadccSazmanForosh, int ccMoshtaryGharardad)
     {
         try
         {
@@ -1372,6 +1377,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
             ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
+
 
             shared.removeAll();
             shared.setDefaultRequestInfo();
@@ -1689,6 +1695,10 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             shared.putBoolean(shared.getVerifiedMarjoee() , false);
             shared.putString(shared.getCcKalaCodesOfKalaAsasi(), "");
 
+            //------------------Zanjirei--------------------
+            shared.putInt(shared.getMoshtaryGharardadccSazmanForosh(), MoshtaryGharardadccSazmanForosh);
+            shared.putInt(shared.getCcMoshtaryGharardad(), ccMoshtaryGharardad);
+
             mPresenter.onSuccessSetDarkhastFaktorShared(ccDarkhastFaktor , ccMoshtary);
         }
         catch (Exception exception)
@@ -1708,43 +1718,319 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
 
     }
 
-    public boolean getDateOfGetProgram()
+    /**
+     * 1-check location of mamorPakhsh before tasvie darkhast to see
+     * {@link TreasuryListModel#isValidCreateFaktor(DarkhastFaktorMoshtaryForoshandeModel, ForoshandehMamorPakhshModel)}
+     * if he is not out of the moshtary span(polygon)
+     * 2-save location of mamorPakhsh if he is inside the moshtary polygon
+     * {@link TreasuryListModel insertGPSDataMashinPPC(PubFunc.LocationProvider, long, int, ForoshandehMamorPakhshModel, int, String)}
+     **/
+    @Override
+    public void checkMohtaryKharejAzMahal(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel)
     {
-        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_SHORT_FORMAT_WITH_SLASH());
-        GetProgramShared shared = new GetProgramShared(mPresenter.getAppContext());
-        String persianGetProgramdate = shared.getString(shared.PERSIAN_DATE_OF_GET_PROGRAM() , "");
-        String gregorianGetProgramDate = shared.getString(shared.GREGORIAN_DATE_OF_GET_PROGRAM() , "");
-        String today = sdf.format(new Date());
-        try
+
+        if ((getNoeMasouliatForoshandeh() == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD
+                || getNoeMasouliatForoshandeh() == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SMART)
+                && darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktorNoeForosh() == 1)
         {
-            Date todayDate = sdf.parse(today);
-            Date dtGregorianGetProgramDate = sdf.parse(gregorianGetProgramDate);
-            //---------------------- For Test -----------------
-            UserTypeShared userTypeShared = new UserTypeShared(mPresenter.getAppContext());
-            int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
-            Log.d("date" , "istest : " + isTest);
-
-
-            long diff = todayDate.getTime() - dtGregorianGetProgramDate.getTime();
-            Log.d("date","Today: " + todayDate + "GetProgramDate: " + dtGregorianGetProgramDate + "Diff: " + diff);
-            if (diff <= 0)
+            boolean checkDistance = true;
+            ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
+            checkDistance = parameterChildDAO.getValueByccChildParameter(Constants.CHECK_MOSHTARY_MASIR_ROOZ_DISTANCE()).equals("1");
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+            if (checkDistance)
             {
-                return true;
+                if (isValidCreateFaktor(darkhastFaktorMoshtaryForoshandeModel, foroshandehMamorPakhshModel))
+                {
+                    sendGps(foroshandehMamorPakhshModel,darkhastFaktorMoshtaryForoshandeModel);
+
+                }
+                else
+                {
+                    mPresenter.closeLoading();
+                    mPresenter.onError(R.string.errorCantRegisterRequest);
+                }
             }
             else
             {
-                return false;
+                sendGps(foroshandehMamorPakhshModel,darkhastFaktorMoshtaryForoshandeModel);
             }
         }
-        catch (Exception exception)
-        {
-            exception.printStackTrace();
-            return false;
+
+    }
+
+    private void sendGps(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel,DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel){
+        String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
+        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
+        int noeMasouliat = getNoeMasouliatForoshandeh();
+        int ccForoshandehMamorPakhsh = 0;
+        if (noeMasouliat == 4 || noeMasouliat == 5) {
+            ccForoshandehMamorPakhsh = foroshandehMamorPakhshModel.getCcMamorPakhsh();
         }
+        else
+        {
+            ccForoshandehMamorPakhsh = foroshandehMamorPakhshModel.getCcForoshandeh();
+        }
+        insertGpsData( ccForoshandehMamorPakhsh,foroshandehMamorPakhshModel.getCcAfrad(),currentDate,locationProvider.getLatitude(),locationProvider.getLongitude(), foroshandehMamorPakhshModel.getCcMamorPakhsh(), darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary() , darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor());
+        GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
+
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+        String serverIP = serverIpModel.getServerIp();
+        String serverPort = serverIpModel.getPort();
+        if (serverIP.trim().equals("") || serverPort.trim().equals("")) {
+            mPresenter.onError(R.string.errorFindServerIP);
+        } else {
+            final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+            ArrayList<GPSDataModel> gpsDataModels = gpsDataPpcDAO.getAllByccMoshtary(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
+            if (gpsDataModels.size() > 0) {
+                sendGPSDataToServer(apiServicePost,gpsDataModels);
+            }
+        }
+    }
+
+    @Override
+    public void updateGpsData() {
+        final GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+        final ArrayList<GPSDataModel> gpsDataModels = new ArrayList<>();
+
+        final Handler handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg)
+            {
+                mPresenter.closeLoading();
+                if (msg.arg1 == 1)
+                {
+
+                    mPresenter.onSuccess(R.string.SuccessGetMamorPakhshLocations);
+                }
+                else if (msg.arg1 == -1)
+                {
+
+                    mPresenter.onError(R.string.errorGetMamorPakhshLocations);
+                }
+                return false;
+            }
+        });
+
+
+        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 7)
+        {
+            gpsDataPpcDAO.fetchGPSDataByccForoshandeh(mPresenter.getAppContext(), "ForoshandehRouteMapActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse()
+            {
+                @Override
+                public void onSuccess(final ArrayList arrayListData)
+                {
+                    Thread thread = new Thread()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            boolean deleteResult = gpsDataPpcDAO.deleteAll();
+                            boolean insertResult = gpsDataPpcDAO.insertGroup(arrayListData);
+                            if (deleteResult && insertResult)
+                            {
+                                gpsDataModels.addAll(arrayListData);
+
+                                Message message = new Message();
+                                message.arg1 = 1;
+                                handler.sendMessage(message);
+                            }
+                            else
+                            {
+                                Message message = new Message();
+                                message.arg1 = -1;
+                                handler.sendMessage(message);
+                            }
+                        }
+                    };
+                    thread.start();
+                }
+                @Override
+                public void onFailed(String type, String error)
+                {
+                    mPresenter.onError(R.string.errorGetMamorPakhshLocations);
+                }
+            });
+        }
+        else if (noeMasouliat == 4 || noeMasouliat == 5)
+        {
+            gpsDataPpcDAO.fetchGPSDataByccMamorPakhs(mPresenter.getAppContext(), "ForoshandehRouteMapActivity", String.valueOf(foroshandehMamorPakhshModel.getCcMamorPakhsh()), new RetrofitResponse()
+            {
+                @Override
+                public void onSuccess(final ArrayList arrayListData)
+                {
+                    Thread thread = new Thread()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            boolean deleteResult = gpsDataPpcDAO.deleteAll();
+                            boolean insertResult = gpsDataPpcDAO.insertGroup(arrayListData);
+                            if (deleteResult && insertResult)
+                            {
+                                gpsDataModels.addAll(arrayListData);
+
+                                Message message = new Message();
+                                message.arg1 = 1;
+                                handler.sendMessage(message);
+                            }
+                            else
+                            {
+                                Message message = new Message();
+                                message.arg1 = -1;
+                                handler.sendMessage(message);
+                            }
+                        }
+                    };
+                    thread.start();
+                }
+                @Override
+                public void onFailed(String type, String error)
+                {
+                    mPresenter.onError(R.string.errorGetMamorPakhshLocations);
+                }
+            });
+        }
+
+    }
+
+    @Override
+    public void checkIsLocationSendToServer(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel) {
+        UserTypeShared userTypeShared = new UserTypeShared(mPresenter.getAppContext());
+
+        int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE(), 0);
+
+        if ((darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktorNoeForosh() == 1) &&
+                (getNoeMasouliatForoshandeh() == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SMART
+                        || getNoeMasouliatForoshandeh() == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD)
+        && isTest!=1 ) {
+            final Handler handler = new Handler(msg -> {
+                if (msg.arg1 == 1) {
+                    mPresenter.openInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModel, true);
+
+                } else if (msg.arg1 == -1) {
+                    mPresenter.openInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModel, false);
+                }
+                return false;
+            });
+
+
+            new Thread(() -> {
+                GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
+                Message message = new Message();
+                message.arg1 = 1;
+                ArrayList<GPSDataModel> gpsDataModels = gpsDataPpcDAO.getAllByccMoshtary(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
+                if (gpsDataModels.size() > 0) {
+
+                    for (GPSDataModel gpsDataModel : gpsDataModels) {
+                        if (gpsDataModel.getExtraProp_IsSend() == 0) {
+                            message.arg1 = -1;
+                            break;
+                        }
+                    }
+                } else {
+                    message.arg1 = -1;
+                }
+
+                handler.sendMessage(message);
+            }).start();
+        }
+        else
+        {
+            mPresenter.openInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModel, true);
+        }
+
+
+    }
+
+    private void sendGPSDataToServer(APIServicePost apiServicePost, ArrayList<GPSDataModel> gpsDataModels) {
+        JSONArray jsonArray = new JSONArray();
+        String ccGPSDatas = "-1";
+        for (GPSDataModel model : gpsDataModels) {
+            JSONObject jsonObject = model.toJsonObject();
+            if (jsonObject != null) {
+                jsonArray.put(jsonObject);
+                ccGPSDatas += "," + model.getCcGpsData_PPC();
+            }
+        }
+        //به دلیل اینکه برای استفاده از شناسه موقعیت مکانی های ارسال شده به سرور در کالبک باید متغییر final داشته باشیم و اگر ccGPSDatas را final تعریف کنیم سپس امکان افزودن شناسه های جدید را نداریم، از این فیلد استفاده میکنیم.
+        final String ccGPSDatasFinal = ccGPSDatas;
+        if (jsonArray.length() > 0) {
+            Call<CreateGpsDataPPCResult> call = apiServicePost.createGpsDataPPCResult(jsonArray.toString());
+            call.enqueue(new Callback<CreateGpsDataPPCResult>() {
+                @Override
+                public void onResponse(Call<CreateGpsDataPPCResult> call, Response<CreateGpsDataPPCResult> response) {
+                    try {
+                        mPresenter.closeLoading();
+                        if (response.isSuccessful() && response.body() != null) {
+                            Log.d("noTemp", "in if success and body not null");
+                            CreateGpsDataPPCResult result = response.body();
+                            if (result.getSuccess()) {
+                                GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
+                                gpsDataPpcDAO.updateIsSend(ccGPSDatasFinal);
+                                mPresenter.onSuccess(R.string.successSendData);
+                            } else {
+                                Log.d("noTemp", "in else not success");
+                                setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "", "sendGPSDataToServer", "onResponse");
+                                mPresenter.onError(R.string.errorSendGpsData);
+                            }
+                        } else {
+                            String errorMessage = "response not successful " + response.message();//+ "\n" + "can't send this log : " + logMessage;
+                            if (response.errorBody() != null) {
+                                errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string();//+ "\n" + "can't send this log : " + logMessage;
+                            }
+                            setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "", "sendGPSDataToServer", "onResponse");
+                            Log.d("tempRequest", "message : " + errorMessage);
+                            mPresenter.onError(R.string.errorSendGpsData);
+                        }
+                    } catch (Exception exception) {
+                        Log.d("noTemp", "in exception");
+                        exception.printStackTrace();
+                        setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "", "sendGPSDataToServer", "onResponse");
+                        mPresenter.onError(R.string.errorSendGpsData);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CreateGpsDataPPCResult> call, Throwable t) {
+                    mPresenter.closeLoading();
+                    Log.d("noTemp", "in onFailure");
+                    setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "", "sendGPSDataToServer", "onFailure");
+                    mPresenter.onError(R.string.errorSendGpsData);
+                }
+            });
+        }
+
+
+
+    }
+
+
+    private boolean insertGpsData(int ccForoshandeh, int ccAfrad, String currentDate , double latitude , double longtitude , int ccMamorPakhsh, int ccMoshtary,long ccDarkhastFaktor)
+    {
+        GPSDataModel gpsDataModel = new GPSDataModel();
+        GPSDataPpcDAO gpsDataDAO = new GPSDataPpcDAO(mPresenter.getAppContext()) ;
+        MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
+
+        MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
+
+        gpsDataModel.setCcAfrad(ccAfrad);
+        gpsDataModel.setCcForoshandeh(ccForoshandeh);
+        gpsDataModel.setCcMasir(moshtaryModel.getCcMasir());
+        gpsDataModel.setTarikh(currentDate);
+        gpsDataModel.setLatitude(latitude);
+        gpsDataModel.setLongitude(longtitude);
+        gpsDataModel.setExtraProp_IsSend(0);
+        gpsDataModel.setDistance(0D);
+        gpsDataModel.setCcMamorPakhsh(ccMamorPakhsh);
+        gpsDataModel.setCcMoshtary(ccMoshtary);
+        gpsDataModel.setCcDarkhastFaktor(ccDarkhastFaktor);
+        return gpsDataDAO.insert(gpsDataModel);
     }
 }

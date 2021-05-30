@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.saphamrah.Adapter.TreasuryAdapter;
-import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.TreasuryListMVP;
 import com.saphamrah.MVP.Presenter.TreasuryListPresenter;
 import com.saphamrah.MVP.View.marjoee.DarkhastFaktorMarjoeeActivity;
@@ -61,6 +60,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
     private FloatingActionButton fabSortByRouting;
     private FloatingActionButton fabShowMap;
     private FloatingActionButton fabHelp;
+    private FloatingActionButton fabUpdateMamorPakhshLocations;
     private final int OPEN_INVOICE_SETTLEMENT = 100;
     private AlertDialog alertDialogLoading;
     private CustomLoadingDialog customLoadingDialog;
@@ -86,6 +86,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
         fabSortByCustomerCode = findViewById(R.id.fabSortByCustomerCode);
         fabSortByRouting = findViewById(R.id.fabSortByRouting);
         fabShowMap = findViewById(R.id.fabShowMap);
+        fabUpdateMamorPakhshLocations = findViewById(R.id.fabUpdateMamorPakhshGpsData);
         lblActivityTitle = findViewById(R.id.lblActivityTitle);
         lblSortTitle = findViewById(R.id.lblSortTitle);
         recyclerViewFaktorRooz = findViewById(R.id.recyclerViewRooz);
@@ -196,6 +197,16 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
                 TreasuryListActivity.this.finish());
 
 
+        fabUpdateMamorPakhshLocations.setOnClickListener(new View.OnClickListener()
+
+        {
+            @Override
+            public void onClick (View v)
+            {
+                showLoading();
+                mPresenter.updateGpsData();
+            }
+        });
     }
 
     @Override
@@ -251,8 +262,8 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
             public void onItemClick(int operation, int position) {
                 if (operation == Constants.SHOW_LOCATION()) {
                     mPresenter.getCustomerLocation(darkhastFaktorMoshtaryForoshandeModels.get(position));
-                } else if (operation == Constants.EDIT()) {
-                    openInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary(), darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
+                } else if (operation == Constants.CLEARING()) {
+                    mPresenter.checkIsLocationSendToServer(darkhastFaktorMoshtaryForoshandeModels.get(position));
                 } else if (operation == Constants.SHOW_IMAGE()) {
                     mPresenter.getFaktorImage(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
                 } else if (operation == Constants.SHOW_FAKTOR_DETAIL()) {
@@ -266,6 +277,9 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
                 } else if (operation == Constants.MARJOEE) {
                     Log.d("MarjoeeKoliFragment", String.valueOf(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor()));
                     startActivityBundle(DarkhastFaktorMarjoeeActivity.class, "marjoee", String.valueOf(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor()), "ccMoshtaryMarjoee", String.valueOf(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary()));
+                } else if (operation == Constants.SAVE_SEND_LOCATION) {
+                    showLoading();
+                    mPresenter.checkMoshtaryKharejAzMahal(darkhastFaktorMoshtaryForoshandeModels.get(position));
 
                 }
             }
@@ -284,7 +298,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
             public void onItemClick(int operation, int position) {
                 if (operation == Constants.SHOW_LOCATION()) {
                     mPresenter.getCustomerLocation(darkhastFaktorMoshtaryForoshandeModels.get(position));
-                } else if (operation == Constants.EDIT()) {
+                } else if (operation == Constants.CLEARING()) {
                     openInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary(), darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
                 } else if (operation == Constants.SHOW_IMAGE()) {
                     mPresenter.getFaktorImage(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
@@ -309,7 +323,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
                     fabMenu.close(true);
                 if (operation == Constants.SHOW_LOCATION()) {
                     mPresenter.getCustomerLocation(darkhastFaktorMoshtaryForoshandeModels.get(position));
-                } else if (operation == Constants.EDIT()) {
+                } else if (operation == Constants.CLEARING()) {
                     openInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary(), darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
                 } else if (operation == Constants.SHOW_IMAGE()) {
                     mPresenter.getFaktorImage(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
@@ -368,6 +382,29 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
         TreasuryListActivity.this.finish();
     }
 
+    @Override
+    public void showHideFabButtons(boolean faktorRooz) {
+        if (faktorRooz) {
+            fabSortByCustomerCode.showButtonInMenu(true);
+            fabSortByCustomerCode.show(true);
+            fabSortByRouting.showButtonInMenu(true);
+            fabSortByRouting.show(true);
+            fabShowMap.showButtonInMenu(true);
+            fabShowMap.show(true);
+            fabUpdateMamorPakhshLocations.show(true);
+            fabUpdateMamorPakhshLocations.showButtonInMenu(true);
+        } else {
+            fabSortByCustomerCode.hideButtonInMenu(true);
+            fabSortByCustomerCode.hide(true);
+            fabSortByRouting.hideButtonInMenu(true);
+            fabSortByRouting.hide(true);
+            fabShowMap.hideButtonInMenu(true);
+            fabShowMap.hide(true);
+            fabUpdateMamorPakhshLocations.hide(true);
+            fabUpdateMamorPakhshLocations.hideButtonInMenu(true);
+
+        }
+    }
 
     @Override
     public void onError(final boolean closeActivity, int errorResId) {
@@ -540,6 +577,18 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
                 exception.printStackTrace();
             }
         }
+    }
+
+
+
+    @Override
+    public void openInvoiceSettlementActivity(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel) {
+        Log.d("treasury", "ccDarkhastFaktor : " + darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor());
+        Intent intent = new Intent(TreasuryListActivity.this, InvoiceSettlementActivity.class);
+        intent.putExtra("ccMoshtary", darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
+        intent.putExtra("ccDarkhastFaktor", darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor());
+        intent.putExtra("sourceActivity", "TreasuryListActivity");
+        startActivityForResult(intent, OPEN_INVOICE_SETTLEMENT);
     }
 
     public void startMVPOps() {

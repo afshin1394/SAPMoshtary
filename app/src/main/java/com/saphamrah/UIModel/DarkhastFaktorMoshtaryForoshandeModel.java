@@ -37,6 +37,8 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     private static final String COLUMN_ExtraProp_IsMarjoeeKamel = "ExtraProp_IsMarjoeeKamel";
     private static final String COLUMN_ExtraProp_Resid = "ExtraProp_Resid";
     private static final String COLUMN_ExtraProp_MablaghDariaftPardakht = "ExtraProp_MablaghDariaftPardakht";
+    private static final String COLUMN_ccMoshtaryGharardad = "ccMoshtaryGharardad";
+    private static final String COLUMN_MoshtaryGharardadccSazmanForosh = "MoshtaryGharardadccSazmanForosh";
 
 
     public static String COLUMN_ccDarkhastFaktor() {
@@ -132,7 +134,12 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     public static String COLUMN_ExtraProp_MablaghDariaftPardakht() {
         return COLUMN_ExtraProp_MablaghDariaftPardakht;
     }
-
+    public static String COLUMN_ccMoshtaryGharardad() {
+        return COLUMN_ccMoshtaryGharardad;
+    }
+    public static String COLUMN_MoshtaryGharardadccSazmanForosh() {
+        return COLUMN_MoshtaryGharardadccSazmanForosh;
+    }
 
     private long ccDarkhastFaktor;
     private int ccForoshandeh;
@@ -166,6 +173,8 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     private int ExtraProp_Resid;
     private int ExtraProp_IsMarjoeeKamel;
     private long ExtraProp_MablaghDariaftPardakht;
+    private int ccMoshtaryGharardad;
+    private int MoshtaryGharardadccSazmanForosh;
 
     public long getCcDarkhastFaktor() {
         return ccDarkhastFaktor;
@@ -447,6 +456,22 @@ public class DarkhastFaktorMoshtaryForoshandeModel
         ExtraProp_MablaghDariaftPardakht = extraProp_MablaghDariaftPardakht;
     }
 
+    public int getCcMoshtaryGharardad() {
+        return ccMoshtaryGharardad;
+    }
+
+    public void setCcMoshtaryGharardad(int ccMoshtaryGharardad) {
+        this.ccMoshtaryGharardad = ccMoshtaryGharardad;
+    }
+
+    public int getMoshtaryGharardadccSazmanForosh() {
+        return MoshtaryGharardadccSazmanForosh;
+    }
+
+    public void setMoshtaryGharardadccSazmanForosh(int MoshtaryGharardadccSazmanForosh) {
+        this.MoshtaryGharardadccSazmanForosh = MoshtaryGharardadccSazmanForosh;
+    }
+
     @NonNull
     @Override
     public String toString()
@@ -481,6 +506,8 @@ public class DarkhastFaktorMoshtaryForoshandeModel
                 ", Sort=" + Sort +
                 ", canEditDarkhast=" + canEditDarkhast +
                 ", CountDarkhastFaktor=" + CountDarkhastFaktor +
+                ", ccMoshtaryGharardad=" + ccMoshtaryGharardad +
+                ", MoshtaryGharardadccSazmanForosh=" + MoshtaryGharardadccSazmanForosh +
                 '}';
     }
 }

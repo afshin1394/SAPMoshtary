@@ -431,6 +431,11 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
         mView.get().oncallTajil(mablaghTajil_Naghd,mandehFaktorPasAzTajil_Naghd , mablaghTajil_Check,mandehFaktorPasAzTajil_Check,canGetTajil);
     }
 
+    @Override
+    public void onVisibilityLayoutTajil(boolean visible) {
+        mView.get().onVisibilityLayoutTajil(visible);
+    }
+
 //    @Override
 //    public void onGetVosolsPishDariaft(ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels)
 //    {

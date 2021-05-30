@@ -132,7 +132,7 @@ public class PishDaryaftAdapter extends RecyclerSwipeAdapter<PishDaryaftAdapter.
             imgAddToRequestList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemClick(Constants.EDIT() , position);
+                    listener.onItemClick(Constants.CLEARING() , position);
                     swipeLayout.close(true);
                 }
             });

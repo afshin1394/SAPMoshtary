@@ -3,7 +3,6 @@ package com.saphamrah.MVP.View;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -192,7 +191,7 @@ public class PishDaryaftActivity extends AppCompatActivity implements PishDaryaf
         this.moshtaryModels = new ArrayList<>();
         this.moshtaryModels.addAll(moshtaryModels);
         adapter = new PishDaryaftAdapter(PishDaryaftActivity.this, moshtaryModels,(operation, position) -> {
-            if (operation == Constants.EDIT()){
+            if (operation == Constants.CLEARING()){
                 openInvoiceSettlement(moshtaryModels.get(position).getCcMoshtary() , 0);
             } else if (operation == Constants.SEND()){
                 showSendAlert(moshtaryModels.get(position).getCcMoshtary() , position);
@@ -214,7 +213,7 @@ public class PishDaryaftActivity extends AppCompatActivity implements PishDaryaf
     public void onGetSearchResult(final ArrayList<MoshtaryModel> moshtaryModels)
     {
         adapter = new PishDaryaftAdapter(PishDaryaftActivity.this, moshtaryModels, (PishDaryaftAdapter.OnItemClickListener) (operation ,position) -> {
-           if (operation == Constants.EDIT()){
+           if (operation == Constants.CLEARING()){
                openInvoiceSettlement(moshtaryModels.get(position).getCcMoshtary() , 0);
            } else if (operation == Constants.SEND()){
                showSendAlert(moshtaryModels.get(position).getCcMoshtary() , position);

@@ -145,7 +145,7 @@ public class MarjoeeAdapter extends RecyclerSwipeAdapter<MarjoeeAdapter.ViewHold
             layEditCount.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     swipe.close(true);
-                    listener.onItemClick(Constants.EDIT(), kalaElamMarjoeeModel , position);
+                    listener.onItemClick(Constants.CLEARING(), kalaElamMarjoeeModel , position);
                 }
             });
         }

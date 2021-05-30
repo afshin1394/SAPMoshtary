@@ -233,6 +233,7 @@ public class MarjoeeKalaPresenter implements MarjoeeKalaMVP.PresenterOps , Marjo
     @Override
     public void onErrorUpdateListKalaForMarjoee(String message)
     {
+        mView.get().closeAlertLoading();
         mView.get().showToast(message, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
     }
 

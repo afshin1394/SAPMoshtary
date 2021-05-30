@@ -38,6 +38,8 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
     private int tedadPishnahadi;
     private boolean kalaYekSetareh;
     private boolean kalaDoSetareh;
+    private int GheymatMasrafKonandehAsli;
+    private int GheymatForoshAsli;
 
 
 
@@ -259,6 +261,23 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
     }
 
 
+    public int getGheymatMasrafKonandehAsli() {
+        return GheymatMasrafKonandehAsli;
+    }
+
+    public void setGheymatMasrafKonandehAsli(int gheymatMasrafKonandehAsli) {
+        GheymatMasrafKonandehAsli = gheymatMasrafKonandehAsli;
+    }
+
+    public int getGheymatForoshAsli() {
+        return GheymatForoshAsli;
+    }
+
+    public void setGheymatForoshAsli(int gheymatForoshAsli) {
+        GheymatForoshAsli = gheymatForoshAsli;
+    }
+
+
     @Override
     public int compareTo(KalaMojodiZaribModel o)
     {
@@ -378,6 +397,8 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
                 ", tedadPishnahadi=" + tedadPishnahadi +
                 ", kalaYekSetareh=" + kalaYekSetareh +
                 ", kalaDoSetareh=" + kalaDoSetareh +
+                ", GheymatMasrafKonandehAsli=" + GheymatMasrafKonandehAsli +
+                ", GheymatForoshAsli=" + GheymatForoshAsli +
                 '}';
     }
 

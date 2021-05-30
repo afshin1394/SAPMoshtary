@@ -3,7 +3,6 @@ package com.saphamrah.MVP.View;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,10 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.saphamrah.Adapter.TreasuryAdapter;
-import com.saphamrah.BaseMVP.TreasuryListMVP;
 import com.saphamrah.BaseMVP.TreasuryListOfflineMVP;
 import com.saphamrah.MVP.Presenter.TreasuryListOfflinePresenter;
-import com.saphamrah.MVP.Presenter.TreasuryListPresenter;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.DarkhastFaktorMoshtaryForoshandeModel;
 import com.saphamrah.Utils.Constants;
@@ -117,7 +114,7 @@ public class TreasuryListOfflineActivity extends AppCompatActivity implements Tr
                 {
                     mPresenter.getCustomerLocation(darkhastFaktorMoshtaryForoshandeModels.get(position));
                 }
-                else if (operation == Constants.EDIT())
+                else if (operation == Constants.CLEARING())
                 {
                     showToast(R.string.offlineEditVosol,Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
                 }

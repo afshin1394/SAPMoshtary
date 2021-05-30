@@ -93,8 +93,26 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     }
 
     @Override
-    public void onDestroy(boolean isChangingConfig)
-    {
+    public void onDestroy(boolean isChangingConfig) {
+
+    }
+
+    @Override
+    public void checkMoshtaryKharejAzMahal(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel) {
+        mModel.checkMohtaryKharejAzMahal(darkhastFaktorMoshtaryForoshandeModel);
+
+    }
+
+    @Override
+    public void updateGpsData() {
+        mModel.updateGpsData();
+    }
+
+    @Override
+    public void checkIsLocationSendToServer(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel) {
+
+
+        mModel.checkIsLocationSendToServer(darkhastFaktorMoshtaryForoshandeModel);
 
     }
 
@@ -252,5 +270,25 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     public void onError(int resId)
     {
         mView.get().showAlertMessage(resId , Constants.FAILED_MESSAGE());
+    }
+
+    @Override
+    public void openInvoiceSettlement(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel,boolean openInvoiceSettlement) {
+        if (openInvoiceSettlement)
+            mView.get().openInvoiceSettlementActivity(darkhastFaktorMoshtaryForoshandeModel);
+        else
+            mView.get().showAlertMessage(R.string.errorMamorPakhshLocationsNotSent, Constants.FAILED_MESSAGE());
+    }
+
+    @Override
+    public void closeLoading() {
+        mView.get().closeLoading();
+    }
+
+
+
+    @Override
+    public void onSuccess(int resId) {
+        mView.get().showAlertMessage(resId,Constants.SUCCESS_MESSAGE());
     }
 }

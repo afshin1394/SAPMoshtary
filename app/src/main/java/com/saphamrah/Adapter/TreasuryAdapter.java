@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.saphamrah.Model.DarkhastFaktorModel;
-import com.saphamrah.PubFunc.DateUtils;
+import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.DarkhastFaktorMoshtaryForoshandeModel;
@@ -151,6 +151,14 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.itemView.findViewById(R.id.layLeft));
         }
 
+        if (models.get(position).getCcDarkhastFaktorNoeForosh() == 1 && (noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD || noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SMART) )
+        {
+            holder.laySaveAndSend.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            holder.laySaveAndSend.setVisibility(View.GONE);
+        }
         holder.bind(position, listener);
         setAnimation(holder.itemView, position);
     }
@@ -192,6 +200,8 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         private RelativeLayout layEditDarkhast;
         private RelativeLayout layMarjoee;
         private LinearLayout lay_for_color;
+        private RelativeLayout laySaveAndSend;
+
 
         public ViewHolder(View view) {
             super(view);
@@ -217,6 +227,8 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             layEditDarkhast = view.findViewById(R.id.layEditDarkhast);
             layMarjoee = view.findViewById(R.id.layMarjoee);
             lay_for_color = view.findViewById(R.id.lay_for_color);
+            laySaveAndSend = view.findViewById(R.id.laySaveAndSendLocation);
+
 
             lblRadif.setTypeface(font);
             lblCodeNameCustomer.setTypeface(font);
@@ -252,7 +264,7 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             });
 
             layEditVosol.setOnClickListener(v -> {
-                listener.onItemClick(Constants.EDIT(), position);
+                listener.onItemClick(Constants.CLEARING(), position);
                 swipeLayout.close(true);
             });
 
@@ -268,6 +280,13 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
                 swipeLayout.close(true);
             });
 
+            laySaveAndSend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClick(Constants.SAVE_SEND_LOCATION, position);
+                    swipeLayout.close(true);
+                }
+            });
 
         }
 

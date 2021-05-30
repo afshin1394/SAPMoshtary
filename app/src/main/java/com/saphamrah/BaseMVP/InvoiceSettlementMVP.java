@@ -47,6 +47,7 @@ public interface InvoiceSettlementMVP
         void onGetVosolsPishDaryaft(ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels);
         void oncallTajil(long mablaghTajil_Naghd , long mandehFaktorPasAzTajil_Naghd ,long mablaghTajil_Check , long mandehFaktorPasAzTajil_Check,boolean canGetTajil);
         void canNotAdd();
+        void onVisibilityLayoutTajil(boolean visible);
     }
 
 
@@ -100,7 +101,7 @@ public interface InvoiceSettlementMVP
         void onGetNoeVosolsMojazMoshtary(ArrayList<ConfigNoeVosolMojazeMoshtaryModel> configNoeVosolMojazeMoshtaryModels);
         void onGetVosolsPishDaryaft(ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels);
         void oncallTajil(long mablaghTajil_Naghd , long mandehFaktorPasAzTajil_Naghd ,long mablaghTajil_Check , long mandehFaktorPasAzTajil_Check , boolean canGetTajil);
-
+        void onVisibilityLayoutTajil(boolean visible);
     }
 
 

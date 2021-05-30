@@ -23,6 +23,7 @@ import com.saphamrah.Model.ForoshandehModel;
 import com.saphamrah.Model.GetImageStringModel;
 import com.saphamrah.Model.JayezehEntekhabiModel;
 import com.saphamrah.Model.JayezehModel;
+import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.KalaMojodiModel;
 import com.saphamrah.Model.MandehMojodyMashinModel;
 import com.saphamrah.Model.MasirModel;
@@ -52,6 +53,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+
+import javax.mail.internet.ParameterList;
 
 import io.reactivex.disposables.Disposable;
 
@@ -2759,6 +2762,8 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
                     {
                         boolean deleteResult = kalaDAO.deleteAll();
                         boolean insertResult = kalaDAO.insertGroup(arrayListData);
+                        for(KalaModel kala : (ArrayList<KalaModel>) arrayListData)
+                            Log.d("getProgram" , "KalaModel = " + kala.toString());
                         if (deleteResult && insertResult)
                         {
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
@@ -2994,7 +2999,13 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
     private void getZaribForoshKala(final int getProgramType , String ccGorohs)
     {
         final KalaZaribForoshDAO kalaZaribForoshDAO = new KalaZaribForoshDAO(mPresenter.getAppContext());
-        kalaZaribForoshDAO.fetchAllKalaZaribForosh(mPresenter.getAppContext(), activityNameForLog, ccGorohs, String.valueOf(ccMarkazForosh), new RetrofitResponse()
+        final ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
+        String ccMarkazForoshKalaZaribForosh = "-1";
+        if(noeMasouliat==1 || noeMasouliat==2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat ==8)
+            ccMarkazForoshKalaZaribForosh = String.valueOf(foroshandehMamorPakhshDAO.getIsSelect().getCcMarkazForosh());
+        else if (noeMasouliat==4 || noeMasouliat==5)
+            ccMarkazForoshKalaZaribForosh = ccMarkazForoshPakhsh;
+        kalaZaribForoshDAO.fetchAllKalaZaribForosh(mPresenter.getAppContext(), activityNameForLog, ccGorohs, ccMarkazForoshKalaZaribForosh, new RetrofitResponse()
         {
             @Override
             public void onSuccess(final ArrayList arrayListData)
@@ -4857,39 +4868,45 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
         Log.i("itemCounter" , "getMarjoeeMamorPakhsh : " + itemCounter);
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
         String ccMoshtary = darkhastFaktorDAO.getCcMoshtaryForZanjire();
-
-        MarjoeeMamorPakhshDAO marjoeeMamorPakhshDAO = new MarjoeeMamorPakhshDAO(mPresenter.getAppContext());
-        marjoeeMamorPakhshDAO.fetchMarjoeeMamorPakhsh(mPresenter.getAppContext(), activityNameForLog, ccMoshtary, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
+        if(noeMasouliat==4 || noeMasouliat==5){
+            MarjoeeMamorPakhshDAO marjoeeMamorPakhshDAO = new MarjoeeMamorPakhshDAO(mPresenter.getAppContext());
+            marjoeeMamorPakhshDAO.fetchMarjoeeMamorPakhsh(mPresenter.getAppContext(), activityNameForLog, ccMoshtary, new RetrofitResponse()
             {
-                Thread thread = new Thread()
+                @Override
+                public void onSuccess(final ArrayList arrayListData)
                 {
-                    @Override
-                    public void run()
+                    Thread thread = new Thread()
                     {
-                        boolean deleteResult = marjoeeMamorPakhshDAO.deleteAll();
-                        boolean insertResult = marjoeeMamorPakhshDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult)
+                        @Override
+                        public void run()
                         {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            getAllMarkazShahrMarkazi(getProgramType);
+                            boolean deleteResult = marjoeeMamorPakhshDAO.deleteAll();
+                            boolean insertResult = marjoeeMamorPakhshDAO.insertGroup(arrayListData);
+                            if (deleteResult && insertResult)
+                            {
+                                sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
+                                getAllMarkazShahrMarkazi(getProgramType);
+                            }
+                            else
+                            {
+                                sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
+                            }
                         }
-                        else
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
-                        }
-                    }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
-            }
-        });
+                    };
+                    thread.start();
+                }
+                @Override
+                public void onFailed(String type, String error)
+                {
+                    mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
+                }
+            });
+        }
+        else{
+            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
+            getAllMarkazShahrMarkazi(getProgramType);
+        }
+
     }
 
     private void getAllMarkazShahrMarkazi(final int getProgramType)
@@ -5024,7 +5041,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
     private void getConfigNoeVosolMojazeMoshtary(int getProgramType){
         Log.i("itemCounter" , "getConfigNoeVosolMojazeMoshtary :" + itemCounter);
         MoshtaryDAO moshtaryDAO = new MoshtaryDAO(BaseApplication.getContext());
-        String moshtarys = moshtaryDAO.getAllccNoeSenf();
+        String moshtarys = "-1,347,348,349,350,351,352,353," + moshtaryDAO.getAllccNoeSenf();
         Log.i("NoeVosolMojazeMoshtary" , "moshtarys :" + moshtarys);
         ConfigNoeVosolMojazeMoshtaryDAO configNoeVosolMojazeMoshtaryDAO = new ConfigNoeVosolMojazeMoshtaryDAO(BaseApplication.getContext());
         configNoeVosolMojazeMoshtaryDAO.fetchConfigNoeVosolMojazeMoshtary(BaseApplication.getContext(), activityNameForLog,moshtarys, new RetrofitResponse() {
@@ -5146,7 +5163,12 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
                         {
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
                             //getParameter(getProgramType);
-                            getAllMoshtaryGharardad(getProgramType,ccForoshandeh);
+                            if(noeMasouliat==1 || noeMasouliat==2 || noeMasouliat==3)
+                                getAllMoshtaryGharardad(getProgramType,String.valueOf(ccForoshandeh));
+                            else if (noeMasouliat==4 || noeMasouliat==5)
+                                getAllMoshtaryGharardad(getProgramType,ccForoshandehString);
+                            else
+                                getAllMoshtaryGharardad(getProgramType,"-1");
                         }
                         else
                         {
@@ -5173,7 +5195,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
      */
     public final String GET_ALL_MOSHTARY_GHARARDAD_TAG = "__GET_ALL_GHARAR_DAD__";
 
-    public void getAllMoshtaryGharardad(final int getProgramType, int ccForoshandeh) {
+    public void getAllMoshtaryGharardad(final int getProgramType, String ccForoshandeh) {
         Log.i(GET_ALL_MOSHTARY_GHARARDAD_TAG, "getAllMoshtaryGhararDad: " + foroshandehMamorPakhshModel.getCcSazmanForosh() + " " + foroshandehMamorPakhshModel.getCcMarkazSazmanForosh());
 
 
@@ -5334,6 +5356,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
 
     private void getMarjoeePakhsh(final int getProgramType , String ccDarkhastFaktors)
     {
+        Log.d("getProgram","ccDarkhastFaktors:" + ccDarkhastFaktors);
         ElamMarjoeeForoshandehDAO elamMarjoeeForoshandehDAO = new ElamMarjoeeForoshandehDAO(mPresenter.getAppContext());
         elamMarjoeeForoshandehDAO.fetchElamMarjoeeForoshandeh(mPresenter.getAppContext(), activityNameForLog ,  ccDarkhastFaktors, new RetrofitResponse() {
             @Override
