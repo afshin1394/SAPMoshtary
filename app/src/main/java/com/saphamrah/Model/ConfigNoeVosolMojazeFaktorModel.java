@@ -25,6 +25,13 @@ public class ConfigNoeVosolMojazeFaktorModel {
     @SerializedName("IsPishDariaft")
     @Expose
     private int IsPishDariaft;
+    @SerializedName("MashmoolTakhfifNaghdi")
+    @Expose
+    private int MashmoolTakhfifNaghdi;
+    @SerializedName("MashmoolDirkardVosol")
+    @Expose
+    private int MashmoolDirkardVosol;
+
 
     // setter and getter
 
@@ -77,6 +84,22 @@ public class ConfigNoeVosolMojazeFaktorModel {
         this.txtNoeVosol = txtNoeVosol;
     }
 
+    public int getMashmoolTakhfifNaghdi() {
+        return MashmoolTakhfifNaghdi;
+    }
+
+    public void setMashmoolTakhfifNaghdi(int mashmoolTakhfifNaghdi) {
+        MashmoolTakhfifNaghdi = mashmoolTakhfifNaghdi;
+    }
+
+    public int getMashmoolDirkardVosol() {
+        return MashmoolDirkardVosol;
+    }
+
+    public void setMashmoolDirkardVosol(int mashmoolDirkardVosol) {
+        MashmoolDirkardVosol = mashmoolDirkardVosol;
+    }
+
     public String getTABLE_NAME() {
         return "ConfigNoeVosolMojazeFaktor";
     }
@@ -102,6 +125,12 @@ public class ConfigNoeVosolMojazeFaktorModel {
     }
     public String getCOLUMN_IsPishDariaft() {
         return "IsPishDariaft";
+    }
+    public String getCOLUMN_MashmoolTakhfifNaghdi() {
+        return "MashmoolTakhfifNaghdi";
+    }
+    public String getCOLUMN_MashmoolDirkardVosol() {
+        return "MashmoolDirkardVosol";
     }
 
 

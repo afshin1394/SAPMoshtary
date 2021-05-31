@@ -17,14 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.saphamrah.Model.ElamMarjoeeForoshandehModel;
-import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
-import com.saphamrah.UIModel.KalaElamMarjoeeModel;
 import com.saphamrah.Utils.Constants;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class MarjoeeForoshandehAdapter extends RecyclerSwipeAdapter<MarjoeeForoshandehAdapter.ViewHolder>
@@ -168,7 +163,7 @@ public class MarjoeeForoshandehAdapter extends RecyclerSwipeAdapter<MarjoeeForos
         {
             layEditTedadMarjoee.setOnClickListener(v -> {
                 swipeLayout.close(true);
-                listener.onItemClick(Constants.EDIT(), elamMarjoeeForoshandehModel , position);
+                listener.onItemClick(Constants.CLEARING(), elamMarjoeeForoshandehModel , position);
             });
             layDeletTedadMarjoee.setOnClickListener(v -> {
                 swipeLayout.close(true);

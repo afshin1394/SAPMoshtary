@@ -70,7 +70,7 @@ public class MoshtaryGharardadDAO {
     }
 
     @SuppressLint("LongLogTag")
-    public void fetchMoshtaryGharardad(final Context context, final String activityNameForLog, int ccSazmanForosh, final RetrofitResponse retrofitResponse) {
+    public void fetchMoshtaryGharardad(final Context context, final String activityNameForLog, String ccForoshandeh, final RetrofitResponse retrofitResponse) {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
 
         Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "fetchMoshtaryGhararDad: " + serverIpModel.getServerIp().trim() + " " + serverIpModel.getPort().trim() + " ");
@@ -82,10 +82,9 @@ public class MoshtaryGharardadDAO {
             Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "fetchMoshtaryGhararDad: " + serverIpModel.getServerIp().trim() + " " + serverIpModel.getPort().trim() + " ");
 
         } else {
-//            185.224.179.114:8050
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
             Log.i("HDAPDJOPWJ", "fetchMoshtaryGhararDad: " + serverIpModel.getPort() + " " + serverIpModel.getServerIp());
-            Call<GetAllMoshtaryGharardadResult> call = apiServiceGet.getMoshtaryGharardad(String.valueOf(ccSazmanForosh));
+            Call<GetAllMoshtaryGharardadResult> call = apiServiceGet.getMoshtaryGharardad(String.valueOf(ccForoshandeh));
 
             Log.i("urlOfCall", "fetchMoshtaryGhararDad: " + call.request().url());
 

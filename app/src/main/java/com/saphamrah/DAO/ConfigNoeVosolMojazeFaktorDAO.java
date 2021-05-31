@@ -307,12 +307,12 @@ public class ConfigNoeVosolMojazeFaktorDAO
         return value;
     }
 
-    public int isTajilFromCodeSabtShode(int NoeVosol)
+    public int isTajilFromCodeSabtShode(int NoeVosolMoshtary, int NoeVosolSabtShodeh)
     {
         int value = 0;
         try
         {
-            String query = "select * from " + modelGetTABLE_NAME.getTABLE_NAME() + " where " + modelGetTABLE_NAME.getCOLUMN_CodeNoeVosol_Tablet() + " = " + NoeVosol ;
+            String query = "select * from " + modelGetTABLE_NAME.getTABLE_NAME() + " where " + modelGetTABLE_NAME.getCOLUMN_CodeNoeVosol_Tablet() + " = " + NoeVosolMoshtary ;
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)

@@ -47,6 +47,7 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
                     " df.MablaghKhalesFaktor, df.MablaghMandeh , df.CodeVazeiat, df.Latitude, df.Longitude, \n" +
                     " df.ExtraProp_IsSend, df.CodeNoeVosolAzMoshtary, df.ExtraProp_ShowFaktorMamorPakhsh, \n" +
                     " df.ExtraProp_IsMarjoeeKamel , df.ExtraProp_Resid, \n" +
+                    " df.ccMoshtaryGharardad, df.MoshtaryGharardadccSazmanForosh, \n" +
                     " f.FullNameForoshandeh, f.ccAfradForoshandeh , df.ExtraProp_MablaghDariaftPardakht , \n" +
                     " m.NameMoshtary, m.CodeMoshtary \n" +
                     " from DarkhastFaktor df left join Moshtary m on df.ccMoshtary = m.ccMoshtary \n" +
@@ -77,6 +78,7 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
                     " df.ccMoshtary, df.ccUser, df.NameNoeVosolAzMoshtary, \n" +
                     " df.MablaghKhalesFaktor, df.MablaghMandeh , df.CodeVazeiat, df.Latitude, df.Longitude, \n" +
                     " df.ExtraProp_IsSend, df.CodeNoeVosolAzMoshtary, df.ExtraProp_ShowFaktorMamorPakhsh, \n" +
+                    " df.ccMoshtaryGharardad, df.MoshtaryGharardadccSazmanForosh, \n" +
                     " f.FullNameForoshandeh, f.ccAfradForoshandeh , \n" +
                     " m.NameMoshtary, m.CodeMoshtary \n" +
                     " from DarkhastFaktor df left join Moshtary m on df.ccMoshtary = m.ccMoshtary \n" +
@@ -247,6 +249,8 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
             darkhastFaktorMoshtaryForoshandeModel.setExtraProp_IsMarjoeeKamel(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_IsMarjoeeKamel())));
             darkhastFaktorMoshtaryForoshandeModel.setExtraProp_Resid(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_Resid())));
             darkhastFaktorMoshtaryForoshandeModel.setExtraProp_MablaghDariaftPardakht(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_MablaghDariaftPardakht())));
+            darkhastFaktorMoshtaryForoshandeModel.setCcMoshtaryGharardad(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccMoshtaryGharardad())));
+            darkhastFaktorMoshtaryForoshandeModel.setMoshtaryGharardadccSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_MoshtaryGharardadccSazmanForosh())));
 
             darkhastFaktorMoshtaryForoshandeModels.add(darkhastFaktorMoshtaryForoshandeModel);
             cursor.moveToNext();
@@ -284,6 +288,8 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
             darkhastFaktorMoshtaryForoshandeModel.setCcMarkazSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccMarkazSazmanForosh())));
             darkhastFaktorMoshtaryForoshandeModel.setCodeNoeVosolAzMoshtary(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_CodeNoeVosolAzMoshtary())));
             darkhastFaktorMoshtaryForoshandeModel.setExtraProp_ShowFaktorMamorPakhsh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_ShowFaktorMamorPakhsh())));
+            darkhastFaktorMoshtaryForoshandeModel.setCcMoshtaryGharardad(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccMoshtaryGharardad())));
+            darkhastFaktorMoshtaryForoshandeModel.setMoshtaryGharardadccSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_MoshtaryGharardadccSazmanForosh())));
 
             darkhastFaktorMoshtaryForoshandeModels.add(darkhastFaktorMoshtaryForoshandeModel);
             cursor.moveToNext();

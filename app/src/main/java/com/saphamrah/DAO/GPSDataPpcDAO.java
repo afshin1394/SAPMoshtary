@@ -429,6 +429,32 @@ Call<GetGPSDataResult> call = apiServiceGet.getGPSDataByccMamorPakhsh(ccMamorPak
         return arrayListGpsDataModel;
     }
 
+    public ArrayList<GPSDataModel> getAllByccMoshtary(int ccMoshtary)
+    {
+        ArrayList<GPSDataModel> arrayListGpsDataModel = new ArrayList<>();
+        String query = "select * from " + GPSDataModel.TableName() + " where " + GPSDataModel.COLUMN_ccMoshtary() + " = " + ccMoshtary + " order by " + GPSDataModel.COLUMN_ccGpsData_PPC();
+
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                arrayListGpsDataModel = cursorToArraylistModel(cursor);
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , GPSDataModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), message, "GPSDataPpcDAO" , "" , "getAllByccMoshtary" , "");
+        }
+        return arrayListGpsDataModel;
+    }
+
     public ArrayList<GPSDataModel> getAllNotSend()
     {
         ArrayList<GPSDataModel> arrayListGpsDataModel = new ArrayList<>();
@@ -550,6 +576,8 @@ Call<GetGPSDataResult> call = apiServiceGet.getGPSDataByccMamorPakhsh(ccMamorPak
         contentValues.put(GPSDataModel.COLUMN_Status() , model.getStatus());
         contentValues.put(GPSDataModel.COLUMN_ElapsedRealtimeNanos() , model.getElapsedRealTimeNanos());
         contentValues.put(GPSDataModel.COLUMN_Provider() , model.getProvider());
+        contentValues.put(GPSDataModel.COLUMN_ccMoshtary() , model.getCcMoshtary());
+        contentValues.put(GPSDataModel.COLUMN_ccDarkhastFaktor() , model.getCcDarkhastFaktor());
 
         return contentValues;
     }
@@ -581,6 +609,8 @@ Call<GetGPSDataResult> call = apiServiceGet.getGPSDataByccMamorPakhsh(ccMamorPak
                 gpsDataModel.setStatus(cursor.getInt(cursor.getColumnIndex(GPSDataModel.COLUMN_Status())));
                 gpsDataModel.setElapsedRealTimeNanos(cursor.getLong(cursor.getColumnIndex(GPSDataModel.COLUMN_ElapsedRealtimeNanos())));
                 gpsDataModel.setProvider(cursor.getString(cursor.getColumnIndex(GPSDataModel.COLUMN_Provider())));
+                gpsDataModel.setCcMoshtary(cursor.getInt(cursor.getColumnIndex(GPSDataModel.COLUMN_ccMoshtary())));
+                gpsDataModel.setCcDarkhastFaktor(cursor.getLong(cursor.getColumnIndex(GPSDataModel.COLUMN_ccDarkhastFaktor())));
 
                 arrayListGpsDataModel.add(gpsDataModel);
                 cursor.moveToNext();

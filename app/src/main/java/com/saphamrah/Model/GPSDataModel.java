@@ -29,6 +29,20 @@ public class GPSDataModel
     private static final String COLUMN_Status = "Status";
     private static final String COLUMN_ElapsedRealtimeNanos = "ElapsedRealtimeNanos";
     private static final String COLUMN_Provider = "Provider";
+    private static final String COLUMN_ccMoshtary = "ccMoshtary";
+    private static final String COLUMN_ccDarkhastFaktor = "ccDarkhastFaktor";
+
+    public static String COLUMN_ccMoshtary() {
+        return COLUMN_ccMoshtary;
+    }
+
+    public static String COLUMN_ccDarkhastFaktor() {
+        return COLUMN_ccDarkhastFaktor;
+    }
+
+
+
+
 
 
     public static String TableName() {
@@ -128,8 +142,33 @@ public class GPSDataModel
     @SerializedName("ccMamorPakhsh")
     @Expose
     private Integer ccMamorPakhsh;
+    @SerializedName("ccDarkhastFaktor")
+    @Expose
+    private long ccDarkhastFaktor;
+
+    @SerializedName("ccMoshtary")
+    @Expose
+    private Integer ccMoshtary;
 
     private int ccAfrad;
+
+    public long getCcDarkhastFaktor() {
+        return ccDarkhastFaktor;
+    }
+
+    public void setCcDarkhastFaktor(long ccDarkhastFaktor) {
+        this.ccDarkhastFaktor = ccDarkhastFaktor;
+    }
+
+    public Integer getCcMoshtary() {
+        return ccMoshtary;
+    }
+
+    public void setCcMoshtary(Integer ccMoshtary) {
+        this.ccMoshtary = ccMoshtary;
+    }
+
+
 
 
     public Integer getCcGpsData_PPC() {

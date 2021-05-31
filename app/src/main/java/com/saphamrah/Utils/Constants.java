@@ -365,6 +365,7 @@ public class Constants
     private static final int EDIT_DARKHAST = 8;
     private static final int SHOW_FAKTOR_DETAIL = 9;
     public static final int MARJOEE = 10;
+    public static final int SAVE_SEND_LOCATION = 11;
 
 
     public static int DELETE() {
@@ -385,7 +386,7 @@ public class Constants
     public static int SHOW_FAKTOR_DETAIL() {
         return SHOW_FAKTOR_DETAIL;
     }
-    public static int EDIT() {
+    public static int CLEARING() {
         return EDIT;
     }
     public static int SHOW_LOCATION() {

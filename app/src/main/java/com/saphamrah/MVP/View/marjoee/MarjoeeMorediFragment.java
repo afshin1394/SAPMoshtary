@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,6 @@ import com.saphamrah.Adapter.marjoee.MarjoeeMorediAdapter;
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.marjoee.MarjoeeMorediMVP;
 import com.saphamrah.MVP.Presenter.marjoee.MarjoeeMorediPresenter;
-import com.saphamrah.Model.ElamMarjoeeForoshandehModel;
 import com.saphamrah.Model.ElatMarjoeeKalaModel;
 import com.saphamrah.Model.MarjoeeMamorPakhshModel;
 import com.saphamrah.PubFunc.PubFunc;
@@ -187,7 +185,7 @@ public class MarjoeeMorediFragment extends Fragment implements MarjoeeMorediMVP.
      */
     private void recyclerSetup(){
         adapter = new MarjoeeMorediAdapter(BaseApplication.getContext() , marjoeeMamorPakhshModelsAdpater , true , (operation, model, position) ->{
-            if (Constants.EDIT() == operation) {
+            if (Constants.CLEARING() == operation) {
                 marjoeeMamorPakhshModelCheckTaeidSabt = model;
                 showEditCountmAlert(model.getCcMarjoeeMamorPakhsh(), model.getNameKala(), model.getTedad3(), position);
             } else if (Constants.DELETE() == operation) {

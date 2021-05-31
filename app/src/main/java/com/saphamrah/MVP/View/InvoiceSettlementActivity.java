@@ -326,7 +326,7 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
         mPresenter.getInfo(ccDarkhastFaktor, from);
         mPresenter.getNoeVosols(ccDarkhastFaktor, getFromShared, from, ccMoshtary);
         if (from == Constants.FROM_TREASURYLIST || from == Constants.FROM_CHECK_BARGASHTI || from == -1) {
-            mPresenter.getVosols(ccDarkhastFaktor);
+            mPresenter.getVosols(ccDarkhastFaktor , code);
         } else if (from == Constants.FROM_PISH_DARYAFT) {
             mPresenter.getVosolsPishDariaft(ccMoshtary);
         }

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,13 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.saphamrah.Model.MarjoeeMamorPakhshModel;
-import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
-import com.saphamrah.UIModel.KalaDarkhastFaktorSatrModel;
 import com.saphamrah.Utils.Constants;
 
-import java.math.BigInteger;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class MarjoeeMorediAdapter extends RecyclerSwipeAdapter<MarjoeeMorediAdapter.MyViewHolder>
@@ -158,7 +153,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder
         {
             layEditTedadMarjoee.setOnClickListener(v -> {
                 swipeLayout.close(true);
-                listener.onItemClick(Constants.EDIT(), model , position);
+                listener.onItemClick(Constants.CLEARING(), model , position);
             });
             layDeletTedadMarjoee.setOnClickListener(v -> {
                 swipeLayout.close(true);

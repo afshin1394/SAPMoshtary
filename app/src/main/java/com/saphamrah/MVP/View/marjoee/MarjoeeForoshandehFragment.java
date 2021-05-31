@@ -95,7 +95,7 @@ public class MarjoeeForoshandehFragment extends Fragment implements MarjoeeForos
         elamMarjoeeForoshandehModelsAdpater = elamMarjoeeForoshandehModels;
         adapter = new MarjoeeForoshandehAdapter(BaseApplication.getContext(), elamMarjoeeForoshandehModelsAdpater, (operation, elamMarjoeeForoshandehModel, position) -> {
 
-            if (Constants.EDIT() == operation) {
+            if (Constants.CLEARING() == operation) {
                 elamMarjoeeForoshandehModelCheckTaeidSabt = elamMarjoeeForoshandehModel;
                 showEditCountmAlert(elamMarjoeeForoshandehModel.getCcElamMarjoeeSatr(), elamMarjoeeForoshandehModel.getNameKala(), elamMarjoeeForoshandehModel.getTedad3(), position);
             } else if (Constants.DELETE() == operation) {

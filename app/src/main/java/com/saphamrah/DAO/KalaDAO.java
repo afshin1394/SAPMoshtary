@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.LogPPCModel;
@@ -81,7 +82,9 @@ public class KalaDAO
             KalaModel.COLUMN_ccVahedShomaresh(),
             KalaModel.COLUMN_NameVahedShomaresh(),
             KalaModel.COLUMN_TarikhEngheza(),
-            KalaModel.COLUMN_ShomarehBach()
+            KalaModel.COLUMN_ShomarehBach(),
+            KalaModel.COLUMN_GheymatForoshAsli()
+
         };
     }
 
@@ -659,6 +662,7 @@ Call<GetMojodyAnbarResult> call = apiServiceGet.getAllKalaAmargar();
         contentValues.put(KalaModel.COLUMN_CodeSort() , kalaModel.getCodeSort());
         contentValues.put(KalaModel.COLUMN_MashmolMaliatAvarez() , kalaModel.getMashmolMaliatAvarez());
         contentValues.put(KalaModel.COLUMN_MablaghForosh() , kalaModel.getMablaghForosh());
+        contentValues.put(KalaModel.COLUMN_LastMablaghForosh() , kalaModel.getLastMablaghForosh());
         contentValues.put(KalaModel.COLUMN_MablaghMasrafKonandeh() , kalaModel.getMablaghMasrafKonandeh());
         contentValues.put(KalaModel.COLUMN_ccGorohKala() , kalaModel.getCcGorohKala());
         contentValues.put(KalaModel.COLUMN_ccBrand() , kalaModel.getCcBrand());
@@ -680,6 +684,7 @@ Call<GetMojodyAnbarResult> call = apiServiceGet.getAllKalaAmargar();
         contentValues.put(KalaModel.COLUMN_NameVahedShomaresh() , kalaModel.getNameVahedShomaresh());
         contentValues.put(KalaModel.COLUMN_TarikhEngheza() , kalaModel.getTarikhEngheza());
         contentValues.put(KalaModel.COLUMN_ShomarehBach() , kalaModel.getShomarehBach());
+        contentValues.put(KalaModel.COLUMN_GheymatForoshAsli() , kalaModel.getGheymatForoshAsli());
 
         return contentValues;
     }
@@ -711,50 +716,55 @@ Call<GetMojodyAnbarResult> call = apiServiceGet.getAllKalaAmargar();
     private ArrayList<KalaModel> cursorToModel(Cursor cursor)
     {
         ArrayList<KalaModel> kalaModels = new ArrayList<>();
+  try {
+      cursor.moveToFirst();
+      while (!cursor.isAfterLast()) {
+          KalaModel kalaModel = new KalaModel();
 
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast())
-        {
-            KalaModel kalaModel = new KalaModel();
+          kalaModel.setRadif(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_Radif())));
+          kalaModel.setCcKalaCode(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccKalaCode())));
+          kalaModel.setCodeKala(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_CodeKala())));
+          kalaModel.setNameKala(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_NameKala())));
+          kalaModel.setTedadMojodyGhabelForosh(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_TedadMojodyGhabelForosh())));
+          kalaModel.setCcTaminKonandeh(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccTaminKonandeh())));
+          kalaModel.setTedadDarKarton(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_TedadDarKarton())));
+          kalaModel.setTedadDarBasteh(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_TedadDarBasteh())));
+          kalaModel.setAdad(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_Adad())));
+          kalaModel.setCodeSort(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_CodeSort())));
+          kalaModel.setMashmolMaliatAvarez(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_MashmolMaliatAvarez())));
+          kalaModel.setMablaghForosh(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_MablaghForosh())));
+          kalaModel.setMablaghMasrafKonandeh(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_MablaghMasrafKonandeh())));
+          kalaModel.setLastMablaghForosh(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_LastMablaghForosh())));
+          kalaModel.setCcGorohKala(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccGorohKala())));
+          kalaModel.setCcBrand(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccBrand())));
+          kalaModel.setMablaghKharid(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_MablaghKharid())));
+          kalaModel.setTol(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_Tol())));
+          kalaModel.setArz(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_Arz())));
+          kalaModel.setErtefa(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_Ertefa())));
+          kalaModel.setCcVahedSize(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccVahedSize())));
+          kalaModel.setVaznKhales(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_VaznKhales())));
+          kalaModel.setVaznNaKhales(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_VaznNaKhales())));
+          kalaModel.setVaznKarton(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_VaznKarton())));
+          kalaModel.setCcVahedVazn(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccVahedVazn())));
+          kalaModel.setBarCode(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_BarCode())));
+          kalaModel.setTarikhTolid(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_TarikhTolid())));
+          kalaModel.setNameVahedVazn(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_NameVahedVazn())));
+          kalaModel.setNameBrand(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_NameBrand())));
+          kalaModel.setNameVahedSize(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_NameVahedSize())));
+          kalaModel.setCcVahedShomaresh(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccVahedShomaresh())));
+          kalaModel.setNameVahedShomaresh(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_NameVahedShomaresh())));
+          kalaModel.setTarikhEngheza(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_TarikhEngheza())));
+          kalaModel.setShomarehBach(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_ShomarehBach())));
+          kalaModel.setGheymatForoshAsli(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_GheymatForoshAsli())));
 
-            kalaModel.setRadif(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_Radif())));
-            kalaModel.setCcKalaCode(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccKalaCode())));
-            kalaModel.setCodeKala(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_CodeKala())));
-            kalaModel.setNameKala(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_NameKala())));
-            kalaModel.setTedadMojodyGhabelForosh(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_TedadMojodyGhabelForosh())));
-            kalaModel.setCcTaminKonandeh(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccTaminKonandeh())));
-            kalaModel.setTedadDarKarton(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_TedadDarKarton())));
-            kalaModel.setTedadDarBasteh(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_TedadDarBasteh())));
-            kalaModel.setAdad(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_Adad())));
-            kalaModel.setCodeSort(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_CodeSort())));
-            kalaModel.setMashmolMaliatAvarez(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_MashmolMaliatAvarez())));
-            kalaModel.setMablaghForosh(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_MablaghForosh())));
-            kalaModel.setMablaghMasrafKonandeh(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_MablaghMasrafKonandeh())));
-            kalaModel.setCcGorohKala(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccGorohKala())));
-            kalaModel.setCcBrand(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccBrand())));
-            kalaModel.setMablaghKharid(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_MablaghKharid())));
-            kalaModel.setTol(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_Tol())));
-            kalaModel.setArz(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_Arz())));
-            kalaModel.setErtefa(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_Ertefa())));
-            kalaModel.setCcVahedSize(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccVahedSize())));
-            kalaModel.setVaznKhales(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_VaznKhales())));
-            kalaModel.setVaznNaKhales(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_VaznNaKhales())));
-            kalaModel.setVaznKarton(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_VaznKarton())));
-            kalaModel.setCcVahedVazn(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccVahedVazn())));
-            kalaModel.setBarCode(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_BarCode())));
-            kalaModel.setTarikhTolid(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_TarikhTolid())));
-            kalaModel.setNameVahedVazn(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_NameVahedVazn())));
-            kalaModel.setNameBrand(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_NameBrand())));
-            kalaModel.setNameVahedSize(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_NameVahedSize())));
-            kalaModel.setCcVahedShomaresh(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccVahedShomaresh())));
-            kalaModel.setNameVahedShomaresh(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_NameVahedShomaresh())));
-            kalaModel.setTarikhEngheza(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_TarikhEngheza())));
-            kalaModel.setShomarehBach(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_ShomarehBach())));
-
-            kalaModels.add(kalaModel);
-            cursor.moveToNext();
-        }
+          kalaModels.add(kalaModel);
+          cursor.moveToNext();
+      }
+  }catch (Exception e){
+      Log.i("takhfifSenfi", "cursorToModel: "+e.getMessage());
+  }
         return kalaModels;
+
     }
 
 

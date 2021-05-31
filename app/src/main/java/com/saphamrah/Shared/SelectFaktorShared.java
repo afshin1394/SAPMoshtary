@@ -460,6 +460,8 @@ public class SelectFaktorShared
         putLong(getMablaghHavaleh(), 0);
         putBoolean(getIsMorajehShodeh() , false);
         putInt(getMinModatHozor() , 0);
+        putInt(getCcMoshtaryGharardad() , 0);
+        putInt(getMoshtaryGharardadccSazmanForosh() , 0);
     }
 
 

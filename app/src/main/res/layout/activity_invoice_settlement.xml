@@ -411,6 +411,7 @@
                                 android:hint="@string/costRial"
                                 android:textColorHint="@color/colorDivider"
                                 android:textSize="@dimen/FontSize16"
+                                android:maxLength="17"
                                 android:textColor="@color/colorTextPrimary"
                                 android:inputType="number"
                                 android:maxLines="1"

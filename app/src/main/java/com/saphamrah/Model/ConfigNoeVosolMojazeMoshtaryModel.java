@@ -28,6 +28,15 @@ public class ConfigNoeVosolMojazeMoshtaryModel {
     @SerializedName("IsPishDariaft")
     @Expose
     private int IsPishDariaft;
+    @SerializedName("ModatVosolMazad")
+    @Expose
+    private int modatVosolMazad;
+    @SerializedName("MashmoolTakhfifNaghdi")
+    @Expose
+    private int MashmoolTakhfifNaghdi;
+    @SerializedName("MashmoolDirkardVosol")
+    @Expose
+    private int MashmoolDirkardVosol;
 
     public int getCcConfigNoeVosolMojazeMoshtary() {
         return ccConfigNoeVosolMojazeMoshtary;
@@ -85,6 +94,30 @@ public class ConfigNoeVosolMojazeMoshtaryModel {
         IsPishDariaft = isPishDariaft;
     }
 
+    public int getModatVosolMazad() {
+        return modatVosolMazad;
+    }
+
+    public void setModatVosolMazad(int modatVosolMazad) {
+        this.modatVosolMazad = modatVosolMazad;
+    }
+
+    public int getMashmoolTakhfifNaghdi() {
+        return MashmoolTakhfifNaghdi;
+    }
+
+    public void setMashmoolTakhfifNaghdi(int mashmoolTakhfifNaghdi) {
+        MashmoolTakhfifNaghdi = mashmoolTakhfifNaghdi;
+    }
+
+    public int getMashmoolDirkardVosol() {
+        return MashmoolDirkardVosol;
+    }
+
+    public void setMashmoolDirkardVosol(int mashmoolDirkardVosol) {
+        MashmoolDirkardVosol = mashmoolDirkardVosol;
+    }
+
     public String getTABLE_NAME() {
         return "ConfigNoeVosolMojazeMoshtary";
     }
@@ -113,6 +146,15 @@ public class ConfigNoeVosolMojazeMoshtaryModel {
     }
     public String getCOLUMN_IsPishDariaft() {
         return "IsPishDariaft";
+    }
+    public String getCOLUMN_modatVosolMazad() {
+        return "ModatVosolMazad";
+    }
+    public String getCOLUMN_MashmoolTakhfifNaghdi() {
+        return "MashmoolTakhfifNaghdi";
+    }
+    public String getCOLUMN_MashmoolDirkardVosol() {
+        return "MashmoolDirkardVosol";
     }
 
 

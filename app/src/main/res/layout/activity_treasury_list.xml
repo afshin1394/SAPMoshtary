@@ -156,6 +156,15 @@
             fab:fab_label="@string/faktorMandeDar"
             fab:fab_colorNormal="@color/colorFabRefresh"
             fab:fab_colorPressed="@color/colorFabRefreshClick"/>
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabUpdateMamorPakhshGpsData"
+            android:src="@drawable/ic_refresh"
+            fab:fab_size="normal"
+            fab:fab_label="@string/updateMamorPakhshLocations"
+            fab:fab_colorNormal="@color/colorFabRefresh"
+            fab:fab_colorPressed="@color/colorFabRefreshClick"/>
     </com.github.clans.fab.FloatingActionMenu>
 
 </RelativeLayout>

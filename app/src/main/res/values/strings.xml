@@ -1049,4 +1049,11 @@
     <string name="errorSabtVariz">خطا در ثبت اطلاعات واریز به بانک</string>
     <string name="errorSabtVarizServer">خطا در ثبت اطلاعات واریز به بانک از سمت سرور</string>
     <string name="errorMablaghEntekhabi">مبلغ انتخابی بیش از حد مجاز است</string>
+    <string name="errorSendDataResend">خطا در ارسال اطلاعات ، دوباره امتحان کنید</string>
+    <string name="updateMamorPakhshLocations">دریافت اطلاعات جغرافیایی</string>
+    <string name="errorGetMamorPakhshLocations">خطا در دریافت اطلاعات جغرافیایی</string>
+    <string name="SuccessGetMamorPakhshLocations"> دریافت اطلاعات جغرافیایی با موفقیت انجام شد</string>
+    <string name="errorMamorPakhshLocationsNotSent"> موقعیت  شما ارسال نشده است  لطفا آن را در محدوده این مشتری ارسال نمایید</string>
+    <string name="errorSendGpsData">خطا در ارسال اطلاعات موقعیت کنونی</string>
+    <string name="SuccessSendGpsData">با موفقیت ارسال شدموقعیت کنونی </string>
 </resources>

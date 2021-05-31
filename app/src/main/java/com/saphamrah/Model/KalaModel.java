@@ -2,6 +2,9 @@ package com.saphamrah.Model;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class KalaModel
 {
 
@@ -19,6 +22,7 @@ public class KalaModel
     private static final String COLUMN_MashmolMaliatAvarez = "MashmolMaliatAvarez";
     private static final String COLUMN_MablaghForosh = "MablaghForosh";
     private static final String COLUMN_MablaghMasrafKonandeh = "MablaghMasrafKonandeh";
+    private static final String COLUMN_LastMablaghForosh = "LastMablaghForosh";
     private static final String COLUMN_ccGorohKala = "ccGorohKala";
     private static final String COLUMN_ccBrand = "ccBrand";
     private static final String COLUMN_MablaghKharid = "MablaghKharid";
@@ -39,6 +43,8 @@ public class KalaModel
     private static final String COLUMN_NameVahedShomaresh = "NameVahedShomaresh";
     private static final String COLUMN_TarikhEngheza = "TarikhEngheza";
     private static final String COLUMN_ShomarehBach = "ShomarehBach";
+    private static final String COLUMN_GheymatForoshAsli="GheymatForoshAsli";
+
 
 
     public static String TableName() {
@@ -82,6 +88,9 @@ public class KalaModel
     }
     public static String COLUMN_MablaghMasrafKonandeh() {
         return COLUMN_MablaghMasrafKonandeh;
+    }
+    public static String COLUMN_LastMablaghForosh() {
+        return COLUMN_LastMablaghForosh;
     }
     public static String COLUMN_ccGorohKala() {
         return COLUMN_ccGorohKala;
@@ -143,6 +152,10 @@ public class KalaModel
     public static String COLUMN_ShomarehBach() {
         return COLUMN_ShomarehBach;
     }
+    public static String COLUMN_GheymatForoshAsli() {
+        return COLUMN_GheymatForoshAsli;
+    }
+
 
 
 
@@ -216,7 +229,6 @@ public class KalaModel
     public float getMablaghMasrafKonandeh(){
         return this.MablaghMasrafKonandeh;
     }
-
 
     private float MablaghKharid;
     public void setMablaghKharid(float MablaghKharid){
@@ -459,11 +471,23 @@ public class KalaModel
     }
 
 
-    @NonNull
+   private int GheymatForoshAsli;
+
+    public int getGheymatForoshAsli() {
+        return GheymatForoshAsli;
+    }
+
+    public void setGheymatForoshAsli(int gheymatForoshAsli) {
+        this.GheymatForoshAsli = gheymatForoshAsli;
+    }
+
+
+
+
     @Override
-    public String toString()
-    {
-        return  "Radif=" + Radif +
+    public String toString() {
+        return "KalaModel{" +
+                "Radif=" + Radif +
                 ", ccKalaCode=" + ccKalaCode +
                 ", CodeKala='" + CodeKala + '\'' +
                 ", NameKala='" + NameKala + '\'' +
@@ -497,9 +521,8 @@ public class KalaModel
                 ", TarikhEngheza='" + TarikhEngheza + '\'' +
                 ", TarikhTolid='" + TarikhTolid + '\'' +
                 ", ShomarehBach='" + ShomarehBach + '\'' +
-                ", Id=" + Id ;
+                ", Id=" + Id +
+                ", gheymatForoshAsli=" + GheymatForoshAsli +
+                '}';
     }
-
-
-
 }

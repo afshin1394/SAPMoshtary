@@ -295,7 +295,7 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
                     "			sum(Mablagh) Mablagh,0 CodeVazeiat, ZamaneTakhsiseFaktor, 0 ccAfradMamorVosol,0 ccMarkazAnbar, " +
                     "			0 AS Tabdil_NaghdBeFish, 0 AS ccTafkikJoze, 0 AS NaghlAzGhabl,0 AS IsForTasviehTakhir, ZamaneTakhsiseFaktorShamsi," +
                     "			0 AS ExtraProp_IsDirkard, 0 AS ExtraProp_ccKardexSatr," +
-                    "			0 ExtraProp_IsBestankari_ForTasviehTakhir, ExtraProp_IsSend, 0 AS ExtraProp_CanDelete, 0 AS ExtraProp_IsTajil, 0 as ExtraProp_ccDarkhastFaktorServer, 0 as ccMarkazForosh, 0 as ccMarkazSazmanForoshSakhtarForosh , 0 as  ExtraProp_ccDaryaftPardakhtCheckBargashty ,  IsTaeedShodeh " +
+                    "			0 ExtraProp_IsBestankari_ForTasviehTakhir, ExtraProp_IsSend, 0 AS ExtraProp_CanDelete, 0 AS ExtraProp_IsTajil, 0 as ExtraProp_ccDarkhastFaktorServer, 0 as ccMarkazForosh, 0 as ccMarkazSazmanForoshSakhtarForosh , 0 as  ExtraProp_ccDaryaftPardakhtCheckBargashty , 0 IsTaeedShodeh " +
                     " 	FROM DariaftPardakhtDarkhastFaktorPPC " +
                     " 	WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeVosol = " + Constants.VALUE_MARJOEE() +
                     " 	GROUP BY CodeNoeVosol, NameNoeVosol, TarikhSanadShamsi, ccDarkhastFaktor" + " ) A" +
@@ -1160,8 +1160,8 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
             dariaftPardakhtDarkhastFaktorPPCModel.setShomarehSanad(cursor.getString(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ShomarehSanad())));
             dariaftPardakhtDarkhastFaktorPPCModel.setTarikhSanad(cursor.getString(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_TarikhSanad())));
             dariaftPardakhtDarkhastFaktorPPCModel.setTarikhSanadShamsi(cursor.getString(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_TarikhSanadShamsi())));
-            dariaftPardakhtDarkhastFaktorPPCModel.setMablaghDariaftPardakht(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_MablaghDariaftPardakht())));
-            dariaftPardakhtDarkhastFaktorPPCModel.setMablagh(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_Mablagh())));
+            dariaftPardakhtDarkhastFaktorPPCModel.setMablaghDariaftPardakht(cursor.getDouble(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_MablaghDariaftPardakht())));
+            dariaftPardakhtDarkhastFaktorPPCModel.setMablagh(cursor.getDouble(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_Mablagh())));
             dariaftPardakhtDarkhastFaktorPPCModel.setCodeVazeiat(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_CodeVazeiat())));
             dariaftPardakhtDarkhastFaktorPPCModel.setZamaneTakhsiseFaktor(cursor.getString(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ZamaneTakhsiseFaktor())));
             dariaftPardakhtDarkhastFaktorPPCModel.setCcAfradErsalKonandeh(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ccAfradErsalKonandeh())));

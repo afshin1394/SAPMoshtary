@@ -92,6 +92,8 @@ public class DarkhastFaktorModel
     private static final String COLUMN_ccNoeMoshtary = "ccNoeMoshtary";
     private static final String COLUMN_IsTajil = "IsTajil";
     private static final String COLUMN_IsTakhir = "IsTakhir";
+    private static final String COLUMN_MoshtaryGharardadccSazmanForosh = "MoshtaryGharardadccSazmanForosh";
+    private static final String COLUMN_ccMoshtaryGharardad = "ccMoshtaryGharardad";
 
 
 
@@ -303,7 +305,11 @@ public class DarkhastFaktorModel
     public static String COLUMN_IsTakhir() {
         return COLUMN_IsTakhir;
     }
-
+    public static String COLUMN_MoshtaryGharardadccSazmanForosh() {
+        return COLUMN_MoshtaryGharardadccSazmanForosh;
+    }public static String COLUMN_ccMoshtaryGharardad() {
+    return COLUMN_ccMoshtaryGharardad;
+}
 
 
     @SerializedName("ccDarkhastFaktor")
@@ -534,6 +540,12 @@ public class DarkhastFaktorModel
     @SerializedName("IsTakhir")
     @Expose
     private int IsTakhir;
+    @SerializedName("MoshtaryGharardadccSazmanForosh")
+    @Expose
+    private int MoshtaryGharardadccSazmanForosh;
+    @SerializedName("ccMoshtaryGharardad")
+    @Expose
+    private int ccMoshtaryGharardad;
 
 
 
@@ -1162,6 +1174,20 @@ public class DarkhastFaktorModel
     {
         this.ccDarkhastFaktorNoeForosh = ccDarkhastFaktorNoeForosh;
     }
+    public int getMoshtaryGharardadccSazmanForosh() {
+        return MoshtaryGharardadccSazmanForosh;
+    }
+
+    public void setMoshtaryGharardadccSazmanForosh(int moshtaryGharardadccSazmanForosh) {
+        MoshtaryGharardadccSazmanForosh = moshtaryGharardadccSazmanForosh;
+    }
+    public int getCcMoshtaryGhardad() {
+        return ccMoshtaryGharardad;
+    }
+
+    public void setCcMoshtaryGhardad(int ccMoshtaryGharardad) {
+        ccMoshtaryGharardad = ccMoshtaryGharardad;
+    }
 
     public String toJsonStringForVosol(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, int ccMarkazForosh, int ccGorohNoeMoshtary, int ccGorohNoeSenf, JSONArray jsonDarkhastFaktorSatrs, JSONArray darkhastFaktorTakhfifModels, float mablaghTakhfifFaktorSatr, JSONArray jsonEmza, JSONArray jsonMoshtaryPhotoPPCChidman, JSONArray jsonDariaftPardakht)
     {
@@ -1209,6 +1235,8 @@ public class DarkhastFaktorModel
             jsonObject.put("ccMarkazAnbar" , foroshandehMamorPakhshModel.getCcMarkazAnbar());
             jsonObject.put("ccMarkazSazmanForosh" , ccMarkazSazmanForosh);
             jsonObject.put("ccMarkazSazmanForoshSakhtarForosh" , ccMarkazSazmanForoshSakhtarForosh);
+            jsonObject.put("ccMoshtaryGharardad" , ccMoshtaryGharardad);
+            jsonObject.put("MoshtaryGharardadccSazmanForosh" , MoshtaryGharardadccSazmanForosh);
             jsonObject.put("UniqID_Tablet" , UniqID_Tablet);
             jsonObject.put("Darajeh" , Darajeh);
             jsonObject.put("DarkhastFaktorTakhfifs" , darkhastFaktorTakhfifModels);
@@ -1273,6 +1301,8 @@ public class DarkhastFaktorModel
             jsonObject.put("ccMarkazAnbar" , foroshandehMamorPakhshModel.getCcMarkazAnbar());
             jsonObject.put("ccMarkazSazmanForosh" , ccMarkazSazmanForosh);
             jsonObject.put("ccMarkazSazmanForoshSakhtarForosh" , ccMarkazSazmanForoshSakhtarForosh);
+            jsonObject.put("ccMoshtaryGharardad" , ccMoshtaryGharardad);
+            jsonObject.put("MoshtaryGharardadccSazmanForosh" , MoshtaryGharardadccSazmanForosh);
             jsonObject.put("UniqID_Tablet" , UniqID_Tablet);
             jsonObject.put("Darajeh" , Darajeh);
 			jsonObject.put("ccDarkhastFaktorNoeForosh" , ccDarkhastFaktorNoeForosh);
@@ -1327,6 +1357,8 @@ public class DarkhastFaktorModel
             jsonObject.put("ccAnbar" , foroshandehMamorPakhshModel.getCcAnbar());
             jsonObject.put("ccMarkazSazmanForosh" , ccMarkazSazmanForosh);
             jsonObject.put("ccMarkazSazmanForoshSakhtarForosh" , ccMarkazSazmanForoshSakhtarForosh);
+            jsonObject.put("ccMoshtaryGharardad" , ccMoshtaryGharardad);
+            jsonObject.put("MoshtaryGharardadccSazmanForosh" , MoshtaryGharardadccSazmanForosh);
             jsonObject.put("UniqID_Tablet" , UniqID_Tablet);
             jsonObject.put("Darajeh" , Darajeh);
 			jsonObject.put("ccDarkhastFaktorNoeForosh" , ccDarkhastFaktorNoeForosh);
@@ -1437,6 +1469,8 @@ public class DarkhastFaktorModel
                 ", showFaktorMamorPakhsh=" + showFaktorMamorPakhsh +
                 ", IsTajil=" + IsTajil +
                 ", IsTakhir=" + IsTakhir +
+                ", ccMoshtaryGharardad=" + ccMoshtaryGharardad +
+                ", MoshtaryGharardadccSazmanForosh=" + MoshtaryGharardadccSazmanForosh+
                 '}';
     }
 

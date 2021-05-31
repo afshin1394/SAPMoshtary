@@ -119,6 +119,8 @@ public class DarkhastFaktorDAO
 			DarkhastFaktorModel.COLUMN_ccDarkhastFaktorNoeForosh(),
 			DarkhastFaktorModel.COLUMN_IsTajil(),
 			DarkhastFaktorModel.COLUMN_IsTakhir(),
+            DarkhastFaktorModel.COLUMN_MoshtaryGharardadccSazmanForosh(),
+            DarkhastFaktorModel.COLUMN_ccMoshtaryGharardad(),
         };
     }
 
@@ -389,6 +391,8 @@ public class DarkhastFaktorDAO
         values.put(DarkhastFaktorModel.COLUMN_ExtraProp_IsSend(), 0);
         values.put(DarkhastFaktorModel.COLUMN_ExtraProp_ShomarehDarkhast(), darkhastFaktorModel.getExtraProp_ShomarehDarkhast());
         values.put(DarkhastFaktorModel.COLUMN_UniqID_Tablet(), darkhastFaktorModel.getUniqID_Tablet());
+        values.put(DarkhastFaktorModel.COLUMN_ccMoshtaryGharardad(), darkhastFaktorModel.getCcMoshtaryGhardad());
+        values.put(DarkhastFaktorModel.COLUMN_MoshtaryGharardadccSazmanForosh(), darkhastFaktorModel.getMoshtaryGharardadccSazmanForosh());
         try
         {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -1225,7 +1229,7 @@ public class DarkhastFaktorDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query = "SELECT DarkhastFaktor.ccMoshtary FROM DarkhastFaktor " +
+            String query = "SELECT DarkhastFaktor.ccDarkhastFaktor FROM DarkhastFaktor " +
                     "LEFT JOIN Moshtary ON Moshtary.ccMoshtary = DarkhastFaktor.ccMoshtary " +
                     "WHERE ccNoeMoshtary = 350 "  ;
             Cursor cursor = db.rawQuery(query, null);
@@ -1507,6 +1511,9 @@ public class DarkhastFaktorDAO
             values.put(DarkhastFaktorModel.COLUMN_ExtraProp_MablaghNahaeeFaktor(), darkhastFaktorModel.getExtraProp_MablaghNahaeeFaktor());
             values.put(DarkhastFaktorModel.COLUMN_ExtraProp_ShomarehDarkhast(), darkhastFaktorModel.getExtraProp_ShomarehDarkhast());
             values.put(DarkhastFaktorModel.COLUMN_UniqID_Tablet(), darkhastFaktorModel.getUniqID_Tablet());
+            values.put(DarkhastFaktorModel.COLUMN_ccMoshtaryGharardad(), darkhastFaktorModel.getCcMoshtaryGhardad());
+            values.put(DarkhastFaktorModel.COLUMN_MoshtaryGharardadccSazmanForosh(), darkhastFaktorModel.getMoshtaryGharardadccSazmanForosh());
+
 
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             db.update(DarkhastFaktorModel.TableName(), values, "ccDarkhastFaktor = ?", new String[]{String.valueOf(darkhastFaktorModel.getCcDarkhastFaktor())});
@@ -1731,6 +1738,8 @@ public class DarkhastFaktorDAO
 		contentValues.put(DarkhastFaktorModel.COLUMN_ccDarkhastFaktorNoeForosh() , darkhastFaktorModel.getCcDarkhastFaktorNoeForosh());
 		contentValues.put(DarkhastFaktorModel.COLUMN_IsTajil() , darkhastFaktorModel.getIsTajil());
 		contentValues.put(DarkhastFaktorModel.COLUMN_IsTakhir() , darkhastFaktorModel.getIsTakhir());
+        contentValues.put(DarkhastFaktorModel.COLUMN_ccMoshtaryGharardad() , darkhastFaktorModel.getCcMoshtaryGhardad());
+        contentValues.put(DarkhastFaktorModel.COLUMN_MoshtaryGharardadccSazmanForosh() , darkhastFaktorModel.getMoshtaryGharardadccSazmanForosh());
 
         return contentValues;
     }
@@ -1812,6 +1821,9 @@ public class DarkhastFaktorDAO
 			darkhastFaktorModel.setCcDarkhastFaktorNoeForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ccDarkhastFaktorNoeForosh())));
 			darkhastFaktorModel.setIsTajil(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_IsTajil())));
 			darkhastFaktorModel.setIsTakhir(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_IsTakhir())));
+            darkhastFaktorModel.setCcMoshtaryGhardad(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ccMoshtaryGharardad())));
+            darkhastFaktorModel.setMoshtaryGharardadccSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_MoshtaryGharardadccSazmanForosh())));
+
 
             darkhastFaktorModels.add(darkhastFaktorModel);
             cursor.moveToNext();
