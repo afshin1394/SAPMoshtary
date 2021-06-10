@@ -122,11 +122,11 @@ public class DiscountCalculation
         MoshtaryModel moshtary = moshtaryDAO.getByccMoshtary(darkhastFaktorModel.getCcMoshtary());
         Log.d("takhfifHajmi" , "getCodeNoeHaml : " + darkhastFaktorModel.getCodeNoeHaml() + " , shebheOmdeh : " + shebheOmdeh + " , noeVosol : " + noeVosol);
 
-        if(noeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD() || noeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_Resid_Naghd() || noeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh())
+        if(noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD() || noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_Resid_Naghd() || noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh())
         {
             noeVosol = 1;
         }
-        else if (noeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_CHECK() || noeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_RESID() || noeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh())
+        else if (noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_CHECK() || noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_RESID() || noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh())
         {
             noeVosol = 2;
         }
