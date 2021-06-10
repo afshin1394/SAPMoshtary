@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE = 4 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest
+    private static final int CURRENT_VERSION_TYPE = 0 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 
@@ -520,6 +520,9 @@ public class Constants
     private static final int CODE_NOE_VOSOL_MOSHTARY_RESID = 1;
     private static final int CODE_NOE_VOSOL_MOSHTARY_CHECK = 2;
     private static final int CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD = 3;
+    private static final int CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh = 5;
+    private static final int CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh = 4;
+    private static final int CODE_NOE_VOSOL_MOSHTARY_Resid_Naghd = 6;
     private static final int CC_CHILD_VOSOL_MOSHTARY_RESID = 4;
     private static final int CC_CHILD_VOSOL_MOSHTARY_CHECK = 5;
     private static final int CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD = 6;
@@ -702,6 +705,18 @@ public class Constants
     public static int CODE_NOE_VOSOL_MOSHTARY_CHECK()
     {
         return CODE_NOE_VOSOL_MOSHTARY_CHECK;
+    }
+    public static int CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh()
+    {
+        return CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh;
+    }
+    public static int CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh()
+    {
+        return CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh;
+    }
+    public static int CODE_NOE_VOSOL_MOSHTARY_Resid_Naghd()
+    {
+        return CODE_NOE_VOSOL_MOSHTARY_Resid_Naghd;
     }
     public static int CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD()
     {
