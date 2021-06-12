@@ -58,11 +58,16 @@ public class AsyncFindServerTask extends AsyncTask<ArrayList<ServerIpModel> , Vo
                     {
                         currentServers.add(serverIpModel);
                     }
+                    else
+                    {
+                        currentServers.add(null);
+                    }
                 }
                 catch (Exception e)
                 {
                     //Log.d("server" , String.valueOf(R.string.errorIPConnected));//e.getLocalizedMessage());
                     e.printStackTrace();
+                    currentServers.add(null);
                 }
             }
 
@@ -112,7 +117,7 @@ public class AsyncFindServerTask extends AsyncTask<ArrayList<ServerIpModel> , Vo
     @Override
     protected void onPostExecute(ArrayList<ServerIpModel> preferredServerModels)
     {
-        for (ServerIpModel serverIpModel:preferredServerModels)
+       // for (ServerIpModel serverIpModel:preferredServerModels)
             delegate.processFinished(((ArrayList) preferredServerModels));
     }
 
