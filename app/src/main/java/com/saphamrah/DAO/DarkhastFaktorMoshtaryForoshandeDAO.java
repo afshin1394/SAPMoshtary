@@ -3,6 +3,7 @@ package com.saphamrah.DAO;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -45,8 +46,7 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
             String query = "select df.ccDarkhastFaktor, df.ccDarkhastFaktorNoeForosh, df.ccMarkazForosh, df.ccSazmanForosh, df.ccMarkazSazmanForosh, df.TarikhFaktor , df.TarikhErsal, df.ShomarehDarkhast, df.ShomarehFaktor, df.ccForoshandeh, df.FaktorRooz, 1 AS CountDarkhastFaktor, \n" +
                     " df.ccMoshtary, df.ccUser, df.NameNoeVosolAzMoshtary, \n" +
                     " df.MablaghKhalesFaktor, df.MablaghMandeh , df.CodeVazeiat, df.Latitude, df.Longitude, \n" +
-                    " df.ExtraProp_IsSend, df.CodeNoeVosolAzMoshtary, df.ExtraProp_ShowFaktorMamorPakhsh, \n" +
-                    " df.ExtraProp_IsMarjoeeKamel , df.ExtraProp_Resid, \n" +
+                    " df.ExtraProp_IsSend, df.CodeNoeVosolAzMoshtary,df.ExtraProp_IsMarjoeeKamel,df.ExtraProp_Resid, df.ExtraProp_ShowFaktorMamorPakhsh , df.ExtraProp_MablaghDariaftPardakht, \n" +
                     " df.ccMoshtaryGharardad, df.MoshtaryGharardadccSazmanForosh, \n" +
                     " f.FullNameForoshandeh, f.ccAfradForoshandeh , df.ExtraProp_MablaghDariaftPardakht , \n" +
                     " m.NameMoshtary, m.CodeMoshtary \n" +
@@ -77,7 +77,7 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
             String query = "select df.ccDarkhastFaktor, df.ccDarkhastFaktorNoeForosh, df.ccMarkazForosh, df.ccSazmanForosh, df.ccMarkazSazmanForosh, df.TarikhFaktor , df.TarikhErsal, df.ShomarehDarkhast, df.ShomarehFaktor, df.ccForoshandeh, df.FaktorRooz, 1 AS CountDarkhastFaktor, \n" +
                     " df.ccMoshtary, df.ccUser, df.NameNoeVosolAzMoshtary, \n" +
                     " df.MablaghKhalesFaktor, df.MablaghMandeh , df.CodeVazeiat, df.Latitude, df.Longitude, \n" +
-                    " df.ExtraProp_IsSend, df.CodeNoeVosolAzMoshtary, df.ExtraProp_ShowFaktorMamorPakhsh, \n" +
+                    " df.ExtraProp_IsSend, df.CodeNoeVosolAzMoshtary,df.ExtraProp_IsMarjoeeKamel,df.ExtraProp_Resid, df.ExtraProp_ShowFaktorMamorPakhsh , df.ExtraProp_MablaghDariaftPardakht, \n" +
                     " df.ccMoshtaryGharardad, df.MoshtaryGharardadccSazmanForosh, \n" +
                     " f.FullNameForoshandeh, f.ccAfradForoshandeh , \n" +
                     " m.NameMoshtary, m.CodeMoshtary \n" +
@@ -140,7 +140,7 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
             String query = "select df.ccDarkhastFaktor, df.ccMarkazForosh, df.ccSazmanForosh, df.ccMarkazSazmanForosh, df.ccDarkhastFaktorNoeForosh, df.TarikhFaktor, df.ShomarehDarkhast, df.ShomarehFaktor, df.ccForoshandeh, df.FaktorRooz, \n" +
                     " df.ccMoshtary, df.ccUser, df.NameNoeVosolAzMoshtary, \n" +
                     " df.MablaghKhalesFaktor, df.MablaghMandeh , df.CodeVazeiat, df.Latitude, df.Longitude, \n" +
-                    " df.ExtraProp_IsSend, df.CodeNoeVosolAzMoshtary, df.ExtraProp_ShowFaktorMamorPakhsh, \n" +
+                    " df.ExtraProp_IsSend, df.CodeNoeVosolAzMoshtary, df.ExtraProp_ShowFaktorMamorPakhsh,df.ccMoshtaryGharardad, \n" +
                     " m.NameMoshtary, m.CodeMoshtary \n" +
                     " from DarkhastFaktor df left join Moshtary m on df.ccMoshtary = m.ccMoshtary  \n" +
                     " where df.ccMoshtary = " + ccMoshtary + " And ForTasviehVosol = 1 AND FaktorRooz = " + faktorRooz +
@@ -148,7 +148,8 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query, null);
             if (cursor != null) {
-                if (cursor.getCount() > 0) {
+                if (cursor.getCount() > 0)
+                {
                     darkhastFaktorMoshtaryForoshandeModels = cursorToModelFaktorInfo(cursor);
                 }
                 cursor.close();
@@ -216,46 +217,51 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
         ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels = new ArrayList<>();
 
         cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel = new DarkhastFaktorMoshtaryForoshandeModel();
+        try {
+            while (!cursor.isAfterLast()) {
+                DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel = new DarkhastFaktorMoshtaryForoshandeModel();
 
-            darkhastFaktorMoshtaryForoshandeModel.setCcDarkhastFaktor(cursor.getLong(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccDarkhastFaktor())));
-            darkhastFaktorMoshtaryForoshandeModel.setCcDarkhastFaktorNoeForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccDarkhastFaktorNoeForosh())));
-            darkhastFaktorMoshtaryForoshandeModel.setTarikhFaktor(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_TarikhFaktor())));
-            darkhastFaktorMoshtaryForoshandeModel.setTarikhErsal(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_TarikhErsal())));
-            darkhastFaktorMoshtaryForoshandeModel.setShomarehDarkhast(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ShomarehDarkhast())));
-            darkhastFaktorMoshtaryForoshandeModel.setShomarehFaktor(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ShomarehFaktor())));
-            darkhastFaktorMoshtaryForoshandeModel.setCcForoshandeh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccForoshandeh())));
-            darkhastFaktorMoshtaryForoshandeModel.setCcMoshtary(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccMoshtary())));
-            darkhastFaktorMoshtaryForoshandeModel.setCcUser(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccUser())));
-            darkhastFaktorMoshtaryForoshandeModel.setFaktorRooz(cursor.getLong(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_FaktorRooz())));
-            darkhastFaktorMoshtaryForoshandeModel.setNameNoeVosolAzMoshtary(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_NameNoeVosolAzMoshtary())));
-            darkhastFaktorMoshtaryForoshandeModel.setMablaghKhalesFaktor(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_MablaghKhalesFaktor())));
-            darkhastFaktorMoshtaryForoshandeModel.setMablaghMandeh(cursor.getLong(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_MablaghMandeh())));
-            darkhastFaktorMoshtaryForoshandeModel.setCodeVazeiat(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_CodeVazeiat())));
-            darkhastFaktorMoshtaryForoshandeModel.setLatitude(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_Latitude())));
-            darkhastFaktorMoshtaryForoshandeModel.setLongitude(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_Longitude())));
-            darkhastFaktorMoshtaryForoshandeModel.setCountDarkhastFaktor(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_CountDarkhastFaktor())));
-            darkhastFaktorMoshtaryForoshandeModel.setExtraProp_IsSend(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_IsSend())));
-            darkhastFaktorMoshtaryForoshandeModel.setFullNameForoshande(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_FullNameForoshandeh())));
-            darkhastFaktorMoshtaryForoshandeModel.setCcAfradForoshandeh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccAfradForoshandeh())));
-            darkhastFaktorMoshtaryForoshandeModel.setCcMarkazForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccMarkazForosh())));
-            darkhastFaktorMoshtaryForoshandeModel.setCcSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccSazmanForosh())));
-            darkhastFaktorMoshtaryForoshandeModel.setCcMarkazSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccMarkazSazmanForosh())));
-            darkhastFaktorMoshtaryForoshandeModel.setFullNameMoshtary(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_NameMoshtary())));
-            darkhastFaktorMoshtaryForoshandeModel.setCodeMoshtary(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_CodeMoshtary())));
-            darkhastFaktorMoshtaryForoshandeModel.setCodeNoeVosolAzMoshtary(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_CodeNoeVosolAzMoshtary())));
-            darkhastFaktorMoshtaryForoshandeModel.setExtraProp_ShowFaktorMamorPakhsh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_ShowFaktorMamorPakhsh())));
-            darkhastFaktorMoshtaryForoshandeModel.setExtraProp_IsMarjoeeKamel(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_IsMarjoeeKamel())));
-            darkhastFaktorMoshtaryForoshandeModel.setExtraProp_Resid(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_Resid())));
-            darkhastFaktorMoshtaryForoshandeModel.setExtraProp_MablaghDariaftPardakht(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_MablaghDariaftPardakht())));
-            darkhastFaktorMoshtaryForoshandeModel.setCcMoshtaryGharardad(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccMoshtaryGharardad())));
-            darkhastFaktorMoshtaryForoshandeModel.setMoshtaryGharardadccSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_MoshtaryGharardadccSazmanForosh())));
-
-            darkhastFaktorMoshtaryForoshandeModels.add(darkhastFaktorMoshtaryForoshandeModel);
-            cursor.moveToNext();
+                darkhastFaktorMoshtaryForoshandeModel.setCcDarkhastFaktor(cursor.getLong(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccDarkhastFaktor())));
+                darkhastFaktorMoshtaryForoshandeModel.setCcDarkhastFaktorNoeForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccDarkhastFaktorNoeForosh())));
+                darkhastFaktorMoshtaryForoshandeModel.setTarikhFaktor(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_TarikhFaktor())));
+                darkhastFaktorMoshtaryForoshandeModel.setTarikhErsal(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_TarikhErsal())));
+                darkhastFaktorMoshtaryForoshandeModel.setShomarehDarkhast(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ShomarehDarkhast())));
+                darkhastFaktorMoshtaryForoshandeModel.setShomarehFaktor(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ShomarehFaktor())));
+                darkhastFaktorMoshtaryForoshandeModel.setCcForoshandeh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccForoshandeh())));
+                darkhastFaktorMoshtaryForoshandeModel.setCcMoshtary(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccMoshtary())));
+                darkhastFaktorMoshtaryForoshandeModel.setCcUser(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccUser())));
+                darkhastFaktorMoshtaryForoshandeModel.setFaktorRooz(cursor.getLong(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_FaktorRooz())));
+                darkhastFaktorMoshtaryForoshandeModel.setNameNoeVosolAzMoshtary(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_NameNoeVosolAzMoshtary())));
+                darkhastFaktorMoshtaryForoshandeModel.setMablaghKhalesFaktor(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_MablaghKhalesFaktor())));
+                darkhastFaktorMoshtaryForoshandeModel.setMablaghMandeh(cursor.getLong(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_MablaghMandeh())));
+                darkhastFaktorMoshtaryForoshandeModel.setCodeVazeiat(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_CodeVazeiat())));
+                darkhastFaktorMoshtaryForoshandeModel.setLatitude(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_Latitude())));
+                darkhastFaktorMoshtaryForoshandeModel.setLongitude(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_Longitude())));
+                darkhastFaktorMoshtaryForoshandeModel.setCountDarkhastFaktor(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_CountDarkhastFaktor())));
+                darkhastFaktorMoshtaryForoshandeModel.setExtraProp_IsSend(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_IsSend())));
+                darkhastFaktorMoshtaryForoshandeModel.setFullNameForoshande(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_FullNameForoshandeh())));
+                darkhastFaktorMoshtaryForoshandeModel.setCcAfradForoshandeh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccAfradForoshandeh())));
+                darkhastFaktorMoshtaryForoshandeModel.setCcMarkazForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccMarkazForosh())));
+                darkhastFaktorMoshtaryForoshandeModel.setCcSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccSazmanForosh())));
+                darkhastFaktorMoshtaryForoshandeModel.setCcMarkazSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccMarkazSazmanForosh())));
+                darkhastFaktorMoshtaryForoshandeModel.setFullNameMoshtary(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_NameMoshtary())));
+                darkhastFaktorMoshtaryForoshandeModel.setCodeMoshtary(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_CodeMoshtary())));
+                darkhastFaktorMoshtaryForoshandeModel.setCodeNoeVosolAzMoshtary(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_CodeNoeVosolAzMoshtary())));
+                darkhastFaktorMoshtaryForoshandeModel.setExtraProp_ShowFaktorMamorPakhsh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_ShowFaktorMamorPakhsh())));
+                darkhastFaktorMoshtaryForoshandeModel.setExtraProp_IsMarjoeeKamel(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_IsMarjoeeKamel())));
+                darkhastFaktorMoshtaryForoshandeModel.setExtraProp_Resid(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_Resid())));
+                darkhastFaktorMoshtaryForoshandeModel.setExtraProp_MablaghDariaftPardakht(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_MablaghDariaftPardakht())));
+                darkhastFaktorMoshtaryForoshandeModel.setCcMoshtaryGharardad(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccMoshtaryGharardad())));
+                darkhastFaktorMoshtaryForoshandeModel.setMoshtaryGharardadccSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_MoshtaryGharardadccSazmanForosh())));
+                darkhastFaktorMoshtaryForoshandeModels.add(darkhastFaktorMoshtaryForoshandeModel);
+                cursor.moveToNext();
+            }
+        }catch (Exception exception){
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), CLASS_NAME, "", "cursorToModel", "cursorToModel");
         }
-        return darkhastFaktorMoshtaryForoshandeModels;
+            return darkhastFaktorMoshtaryForoshandeModels;
     }
 
     private ArrayList<DarkhastFaktorMoshtaryForoshandeModel> cursorToModelFaktorInfo(Cursor cursor) {
@@ -289,7 +295,7 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
             darkhastFaktorMoshtaryForoshandeModel.setCodeNoeVosolAzMoshtary(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_CodeNoeVosolAzMoshtary())));
             darkhastFaktorMoshtaryForoshandeModel.setExtraProp_ShowFaktorMamorPakhsh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_ShowFaktorMamorPakhsh())));
             darkhastFaktorMoshtaryForoshandeModel.setCcMoshtaryGharardad(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccMoshtaryGharardad())));
-            darkhastFaktorMoshtaryForoshandeModel.setMoshtaryGharardadccSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_MoshtaryGharardadccSazmanForosh())));
+//            darkhastFaktorMoshtaryForoshandeModel.setMoshtaryGharardadccSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_MoshtaryGharardadccSazmanForosh())));
 
             darkhastFaktorMoshtaryForoshandeModels.add(darkhastFaktorMoshtaryForoshandeModel);
             cursor.moveToNext();
