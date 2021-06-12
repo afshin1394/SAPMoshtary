@@ -149,7 +149,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:id="@+id/imgSendLocation"
-                        android:src="@drawable/ic_location_settings"
+                        android:src="@drawable/ic_change_pin"
                         android:padding="5dp"
                         android:background="@color/colorBackSendDataSwipe"/>
                     <ImageView
