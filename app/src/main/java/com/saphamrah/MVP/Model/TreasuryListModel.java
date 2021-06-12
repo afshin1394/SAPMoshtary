@@ -23,6 +23,8 @@ import com.saphamrah.DAO.ForoshandehAmoozeshiDeviceNumberDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.GPSDataPpcDAO;
 import com.saphamrah.DAO.KalaMojodiDAO;
+import com.saphamrah.DAO.KardexDAO;
+import com.saphamrah.DAO.KardexSatrDAO;
 import com.saphamrah.DAO.MandehMojodyMashinDAO;
 import com.saphamrah.DAO.MasirDAO;
 import com.saphamrah.DAO.MasirVaznHajmMashinDAO;
@@ -50,6 +52,8 @@ import com.saphamrah.Model.ForoshandehAmoozeshiModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.GPSDataModel;
 import com.saphamrah.Model.KalaMojodiModel;
+import com.saphamrah.Model.KardexModel;
+import com.saphamrah.Model.KardexSatrModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.MandehMojodyMashinModel;
 import com.saphamrah.Model.MasirModel;
@@ -109,8 +113,10 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
     private TreasuryListMVP.RequiredPresenterOps mPresenter;
     SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(BaseApplication.getContext());
-
-
+    KardexDAO kardexDAO = new KardexDAO(BaseApplication.getContext());
+    KardexSatrDAO kardexSatrDAO = new KardexSatrDAO(BaseApplication.getContext());
+    DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(BaseApplication.getContext());
+    DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
     public TreasuryListModel(TreasuryListMVP.RequiredPresenterOps mPresenter)
     {
         this.mPresenter = mPresenter;
@@ -440,10 +446,12 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
     @Override
     public void getDariaftPardakhtForSend(long ccDarkhastFaktor , int position)
     {
-        DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(mPresenter.getAppContext());
+
+        boolean IsMarjoeeKamel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor).getExtraProp_IsMarjoeeKamel()==1?true:false;
+//        boolean haveOtherMarjoee = kardexDAO.deleteByccDarkhastFaktor(String.valueOf(ccDarkhastFaktor))
         ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = dariaftPardakhtPPCDAO.getForSendToSqlByccDarkhastFaktor(ccDarkhastFaktor);
         Log.d("treasury" , "dariaftPardakhtPPCModels.size : " + dariaftPardakhtPPCModels.size());
-        if (dariaftPardakhtPPCModels.size() > 0)
+        if (dariaftPardakhtPPCModels.size() > 0 || IsMarjoeeKamel)
         {
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
             ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
@@ -465,8 +473,8 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                 else
                 {
                     int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
-                    DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-                    DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(dariaftPardakhtPPCModels.get(0).getCcDarkhastFaktor());
+                    //DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
+                    DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
                     ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
                     int codeNoeVosolVajhNaghd = Integer.parseInt(childParameterDAO.getAllByccChildParameter(String.valueOf(Constants.CC_CHILD_CODE_NOE_VOSOL_VAJH_NAGHD())).get(0).getValue());
                     String currentVersionNumber = new PubFunc().new DeviceInfo().getCurrentVersion(mPresenter.getAppContext());
@@ -489,6 +497,8 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         String ccDpdfs = "-1";
         JSONArray jsonArrayDariaftPardakht = new JSONArray();
         JSONArray jsonArrayDariaftPardakhtDarkhastFaktor = new JSONArray();
+        JSONArray jsonArrayKardex = new JSONArray();
+        JSONArray jsonArrayKardexSatr = new JSONArray();
         // get ccMarkazForosh , ccMarkazAnbar , ccMarkazSazmanForoshSakhtarForosh
         int ccMarkazForosh = 0;
         int ccMarkazAnbar = 0;
@@ -521,16 +531,32 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             jsonArrayDariaftPardakhtDarkhastFaktor.put(dpdfModel.toJsonObject(ccMarkazForosh, ccMarkazAnbar, ccMarkazSazmanForoshSakhtarForosh, foroshandehMamorPakhshModel.getCcAfrad()));
         }
 
+        /*
+        * add kardex and kardexSatr to json
+         */
+        KardexModel kardexModel = kardexDAO.getByCcRefrence(darkhastFaktorModel.getCcDarkhastFaktor());
+        jsonArrayKardex.put(kardexModel.toJsonForKardexForSend(kardexModel));
+        ArrayList<KardexSatrModel> kardexSatrModels = kardexSatrDAO.getByCcKardex(kardexModel.getCcKardex());
+
+        for (KardexSatrModel model : kardexSatrModels){
+            jsonArrayKardexSatr.put(model.toJsonForKardexForSend(model));
+        }
+
+
+
         try
         {
             JSONObject jsonObjectTreasury = new JSONObject();
             jsonObjectTreasury.put("DariaftPardakht" , jsonArrayDariaftPardakht);
             jsonObjectTreasury.put("DariaftPardakhtDarkhastFaktor" , jsonArrayDariaftPardakhtDarkhastFaktor);
+            jsonObjectTreasury.put("kardex" , jsonArrayKardex);
+            jsonObjectTreasury.put("kardexSatr" , jsonArrayKardexSatr);
 
             String strJsonObjectTreasury = jsonObjectTreasury.toString();
-            //saveToFile("treasury" + darkhastFaktorModel.getCcDarkhastFaktor() + ".txt" , strJsonObjectTreasury);
+            saveToFile("treasury" + darkhastFaktorModel.getCcDarkhastFaktor() + ".txt" , strJsonObjectTreasury);
 
             Call<CreateDariaftPardakhtPPCJSONResult> call = apiServicePost.createDariaftPardakhtPPCJSON(strJsonObjectTreasury);
+            mPresenter.closeLoading();
             call.enqueue(new Callback<CreateDariaftPardakhtPPCJSONResult>()
             {
                 @Override

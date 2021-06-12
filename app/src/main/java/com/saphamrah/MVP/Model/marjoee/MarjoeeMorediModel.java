@@ -21,6 +21,7 @@ import com.saphamrah.Model.MarjoeeMamorPakhshModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.Utils.Constants;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -124,6 +125,8 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
      */
     private long insertKardexMoredi(MarjoeeMamorPakhshModel entity, int ccMarkazAnbar, int ccMarkazForosh, int ccForoshandeh)
     {
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         KardexModel kardex= new KardexModel();
         try
         {
@@ -135,7 +138,8 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
                     0,
                     ccForoshandeh,
                    entity.getCcMarjoeeMamorPakhsh(),
-                    0
+                    0,
+                    foroshandehMamorPakhshModel.getCcAfrad()
             );
 
             ccKardex =kardexDAO.findccKardexByccMoshtaryAndccMarjoeeMamorPakhsh(entity.getCcMoshtary() , entity.getCcMarjoeeMamorPakhsh());

@@ -9,6 +9,7 @@ import com.saphamrah.DAO.DariaftPardakhtPPCDAO;
 import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
 import com.saphamrah.DAO.ElatMarjoeeKalaDAO;
+import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.KalaDAO;
 import com.saphamrah.DAO.KalaDarkhastFaktorSatrDAO;
 import com.saphamrah.DAO.KardexDAO;
@@ -21,6 +22,7 @@ import com.saphamrah.Model.DariaftPardakhtPPCModel;
 import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.DarkhastFaktorSatrModel;
 import com.saphamrah.Model.ElatMarjoeeKalaModel;
+import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.KardexModel;
 import com.saphamrah.Model.KardexSatrModel;
@@ -30,6 +32,7 @@ import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.UIModel.KalaDarkhastFaktorSatrModel;
 import com.saphamrah.Utils.Constants;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -138,6 +141,8 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
         int ccKardex;
         try
         {
+            ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             KardexDAO kardexDAO= new KardexDAO(BaseApplication.getContext());
             DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
             darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
@@ -146,12 +151,14 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
             CcMoshtary = darkhastFaktorModel.getCcMoshtary();
             kardexModel = kardexDAO.SetForInsert_Kardex(darkhastFaktorModel.getCcMarkazAnbar() ,
                     darkhastFaktorModel.getCcMarkazForosh(),
-                    0 ,
+                    foroshandehMamorPakhshModel.getCcAnbar() ,
                     darkhastFaktorModel.getCcMoshtary() ,
                     1 ,
                     darkhastFaktorModel.getCcForoshandeh() ,
                     ccDarkhastFaktor,
-                    ExtraProp_ccElatMarjoeeKala
+                    ExtraProp_ccElatMarjoeeKala,
+                    foroshandehMamorPakhshDAO.getCCAfrad()
+
             );
 
             kardexModels.add(kardexModel);
@@ -159,7 +166,7 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
             ccKardex = kardexDAO.findccKardexByccRefrence(darkhastFaktorModel.getCcDarkhastFaktor());
             if(ccKardex == 0)
                 kardexDAO.insertGroup(kardexModels);
-
+            ccKardex = kardexDAO.findccKardexByccRefrence(darkhastFaktorModel.getCcDarkhastFaktor());
         }
         catch (Exception e)
         {
@@ -180,7 +187,7 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
             ArrayList<KardexSatrModel> kardexSatrModels = new ArrayList<>();
             for (DarkhastFaktorSatrModel darkhastFaktorSatrModel : items_MarjoeeMamorPakhsh_Kol)
             {
-                KalaModel kalaModel = kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKala());
+                KalaModel kalaModel = kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode());
                 KardexSatrModel model = new KardexSatrModel();
                 model = kardexSatrDAO.setForInsert_KardexSatr(ccKardex,
                         darkhastFaktorSatrModel.getCcTaminKonandeh(),
@@ -272,6 +279,8 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
     {
         try
         {
+            SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_WITH_SPACE());
+            Date tarikhRooz = sdf.parse(sdf.format(new Date()));
             DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO= new DariaftPardakhtDarkhastFaktorPPCDAO(context);
             DariaftPardakhtDarkhastFaktorPPCModel dariaftPardakhtDarkhastFaktorPPC= dariaftPardakhtDarkhastFaktorPPCDAO.SetForInsert_DariaftPardakhtDarkhastFaktorPPC(
                     ccDarkhastFaktor,
@@ -279,7 +288,7 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
                     Constants.VALUE_MARJOEE(),
                     "مرجوعی",
                     "0",
-                    new Date(),
+                    tarikhRooz,
                     "",
                     darkhastFaktorModel.getMablaghKhalesFaktor(),
                     darkhastFaktorModel.getMablaghMandeh(),

@@ -131,4 +131,79 @@ public class NetworkUtils
         return serverIpModel;
     }
 
+    public ServerIpModel postServerFromShared(Context context) {
+        ServerIPShared serverIPShared = new ServerIPShared(context);
+        Log.d("server", "ip : " + serverIPShared.getString(serverIPShared.IP_POST_REQUEST()
+                , "").substring(0, 4));
+        Log.d("server", "post : " + serverIPShared.getString(serverIPShared.PORT_POST_REQUEST()
+                , ""));
+        ServerIpModel serverIpModel = new ServerIpModel();
+        serverIpModel.setServerIp(serverIPShared.getString(serverIPShared.IP_POST_REQUEST()
+                , ""));
+        serverIpModel.setPort(serverIPShared.getString(serverIPShared.PORT_POST_REQUEST()
+                , ""));
+        return serverIpModel;
+    }
+
+    public ServerIpModel multiServerFromShared(Context context){
+        ServerIPShared serverIPShared = new ServerIPShared(context);
+        Log.d("server", "ip : " + serverIPShared.getString(serverIPShared.IP_MULTI_REQUEST()
+                , "").substring(0, 4));
+        Log.d("server", "multi : " + serverIPShared.getString(serverIPShared.PORT_MULTI_REQUEST()
+                , ""));
+        ServerIpModel serverIpModel = new ServerIpModel();
+        serverIpModel.setServerIp(serverIPShared.getString(serverIPShared.IP_MULTI_REQUEST()
+                , ""));
+        serverIpModel.setPort(serverIPShared.getString(serverIPShared.PORT_MULTI_REQUEST()
+                , ""));
+        return serverIpModel;
+    }
+
+    /**
+     * Method is used for checking network availability.
+     * creay By pouria hemati
+     * @param context
+     * @return isNetAvailable: boolean true for Internet availability, false
+     * otherwise
+     */
+    public static boolean isNetworkAvailable(Context context) {
+
+        boolean isNetAvailable = false;
+        if (context != null) {
+
+            final ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            if (mConnectivityManager != null) {
+
+                boolean mobileNetwork = false;
+                boolean wifiNetwork = false;
+
+                boolean mobileNetworkConnected = false;
+                boolean wifiNetworkConnected = false;
+
+                final NetworkInfo mobileInfo = mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+                final NetworkInfo wifiInfo = mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                if (mobileInfo != null) {
+                    mobileNetwork = mobileInfo.isAvailable();
+                }
+
+                if (wifiInfo != null) {
+                    wifiNetwork = wifiInfo.isAvailable();
+                }
+
+                if (wifiNetwork || mobileNetwork) {
+
+                    if (mobileInfo != null) {
+
+                        mobileNetworkConnected = mobileInfo.isConnectedOrConnecting();
+                    }
+                    wifiNetworkConnected = wifiInfo.isConnectedOrConnecting();
+                }
+                isNetAvailable = (mobileNetworkConnected || wifiNetworkConnected);
+            }
+        }
+        return isNetAvailable;
+    }
+
 }

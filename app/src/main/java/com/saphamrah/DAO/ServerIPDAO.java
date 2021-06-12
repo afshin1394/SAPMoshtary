@@ -43,7 +43,8 @@ public class ServerIPDAO
             ServerIpModel.COLUMN_PortServerIP(),
             ServerIpModel.COLUMN_NameServerIP(),
             ServerIpModel.COLUMN_IsTest(),
-            ServerIpModel.COLUMN_Server_Type()
+            ServerIpModel.COLUMN_Server_Type(),
+            ServerIpModel.COLUMN_NameServerPersian()
         };
     }
 
@@ -154,13 +155,39 @@ public class ServerIPDAO
 
     public ArrayList<ServerIpModel> getServerIPwithIsTestFilter(int filter)
     {
-        //String query = "select * from " + ServerIpModel.TableName() + " where " + COLUMN_IsTest + " = " + filter ;
+        String query = "SELECT DISTINCT ServerIP , NameServerPersian FROM " + ServerIpModel.TableName() + " WHERE " + ServerIpModel.COLUMN_IsTest() + " = " + filter ;
         ArrayList<ServerIpModel> arrayListServerIPs = new ArrayList<>();
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            //Cursor cursor = db.rawQuery(query , null);
-            Cursor cursor = db.query(ServerIpModel.TableName(), allColumns(), ServerIpModel.COLUMN_IsTest() + " = " + filter , null , null, null, null, null);
+            Cursor cursor = db.rawQuery(query , null);
+//            Cursor cursor = db.query(ServerIpModel.TableName(), allColumns(), ServerIpModel.COLUMN_IsTest() + " = " + filter , null , null, null, null, null);
+            if (cursor != null)
+            {
+                arrayListServerIPs = cursorToListServer(cursor);
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , ServerIpModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(),message + "\n serverIPs count : " + arrayListServerIPs.size(), "ServerIPDAO" , "" , "getServerIPwithIsTestFilter" , "");
+        }
+        return arrayListServerIPs;
+    }
+
+    public ArrayList<ServerIpModel> getServerISelected(int filter , String ip)
+    {
+        String query = "SELECT DISTINCT * FROM " + ServerIpModel.TableName() + " WHERE " + ServerIpModel.COLUMN_ServerIP() + " = '" + ip + "' AND " + ServerIpModel.COLUMN_IsTest() + " = " + filter;
+        ArrayList<ServerIpModel> arrayListServerIPs = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+//            Cursor cursor = db.query(ServerIpModel.TableName(), allColumns(), ServerIpModel.COLUMN_IsTest() + " = " + filter , null , null, null, null, null);
             if (cursor != null)
             {
                 arrayListServerIPs = cursorToList(cursor);
@@ -230,6 +257,7 @@ public class ServerIPDAO
         contentValues.put(ServerIpModel.COLUMN_NameServerIP() , model.getLocal());
         contentValues.put(ServerIpModel.COLUMN_IsTest() , model.getTest());
         contentValues.put(ServerIpModel.COLUMN_Server_Type() , model.getServerType());
+        contentValues.put(ServerIpModel.COLUMN_NameServerPersian() , model.getNameServerPersian());
 
         return contentValues;
     }
@@ -247,6 +275,24 @@ public class ServerIPDAO
             serverIpModel.setLocal(cursor.getString(cursor.getColumnIndex(ServerIpModel.COLUMN_NameServerIP())));
             serverIpModel.setTest(cursor.getInt(cursor.getColumnIndex(ServerIpModel.COLUMN_IsTest())));
             serverIpModel.setServerType(cursor.getInt(cursor.getColumnIndex(ServerIpModel.COLUMN_Server_Type())));
+            serverIpModel.setNameServerPersian(cursor.getString(cursor.getColumnIndex(ServerIpModel.COLUMN_NameServerPersian())));
+
+            arrayListServerIPs.add(serverIpModel);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return arrayListServerIPs;
+    }
+
+    private ArrayList<ServerIpModel> cursorToListServer(Cursor cursor)
+    {
+        ArrayList<ServerIpModel> arrayListServerIPs = new ArrayList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast())
+        {
+            ServerIpModel serverIpModel = new ServerIpModel();
+            serverIpModel.setServerIp(cursor.getString(cursor.getColumnIndex(ServerIpModel.COLUMN_ServerIP())));
+            serverIpModel.setNameServerPersian(cursor.getString(cursor.getColumnIndex(ServerIpModel.COLUMN_NameServerPersian())));
 
             arrayListServerIPs.add(serverIpModel);
             cursor.moveToNext();

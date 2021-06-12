@@ -20,6 +20,7 @@ import com.saphamrah.DAO.DarkhastFaktorRoozSortDAO;
 import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
 import com.saphamrah.DAO.ForoshandehAmoozeshiDeviceNumberDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
+import com.saphamrah.DAO.GPSDataPpcDAO;
 import com.saphamrah.DAO.KalaMojodiDAO;
 import com.saphamrah.DAO.MandehMojodyMashinDAO;
 import com.saphamrah.DAO.MasirDAO;
@@ -46,6 +47,7 @@ import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.DarkhastFaktorRoozSortModel;
 import com.saphamrah.Model.ForoshandehAmoozeshiModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
+import com.saphamrah.Model.GPSDataModel;
 import com.saphamrah.Model.KalaMojodiModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.MandehMojodyMashinModel;
@@ -82,6 +84,7 @@ import com.saphamrah.WebService.APIServicePost;
 import com.saphamrah.WebService.APIServiceValhalla;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.CreateDariaftPardakhtPPCJSONResult;
+import com.saphamrah.WebService.ServiceResponse.CreateGpsDataPPCResult;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
 
 import org.json.JSONArray;
@@ -217,7 +220,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             int countCanEdit = 0;
             if (noeMasouliat == 4)
             {
-                countCanEdit = darkhastFaktorMoshtaryForoshandeDAO.getCountCanEditDarkhastForMamorPakhshSard(model.getCcMoshtary(), 0 , 99);
+                countCanEdit = darkhastFaktorMoshtaryForoshandeDAO.getCountCanEditDarkhastForMamorPakhshSard(model.getCcMoshtary(), 0 , 6);
             }
             else if (noeMasouliat == 5)
             {
@@ -2399,131 +2402,111 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
 
     private void getRouting(final ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels)
     {
-        try
-        {
-            final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
-            final int noeMasouliat = getNoeMasouliatWithReturnData();
-            String requestId = "";
-            if (foroshandehMamorPakhshModel != null)
-            {
-                requestId = String.valueOf(foroshandehMamorPakhshModel.getCcAfrad());
-            }
-            requestId += " - " + new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
 
-            JSONObject jsonObjectAllData = new JSONObject();
-            JSONArray jsonArrayTargetsLocation = new JSONArray();
-            final ArrayList<DarkhastFaktorMoshtaryForoshandeModel> cantEditDarkhastFaktorMoshtaryForoshandeModels = new ArrayList<>();
-            final ArrayList<DarkhastFaktorMoshtaryForoshandeModel> unEditDarkhastFaktorMoshtaryForoshandeModels = new ArrayList<>();
-            for (DarkhastFaktorMoshtaryForoshandeModel model : darkhastFaktorMoshtaryForoshandeModels)
-            {
-                double[] location = getLocation(model.getCcAfradForoshandeh(), model.getCcMoshtary(), model.getCcUser(), model.getLatitude(), model.getLongitude());
-                model.setLatitude((float) location[0]);
-                model.setLongitude((float) location[1]);
-                //if (canEditDarkhast(noeMasouliat , model))
-                if (model.isCanEditDarkhast())
-                {
-                    unEditDarkhastFaktorMoshtaryForoshandeModels.add(model);
-                    JSONObject jsonObjectTarget = getJsonObjectTargetLocation(model.getLatitude() , model.getLongitude());
-                    if (jsonObjectTarget != null)
-                    {
-                        jsonArrayTargetsLocation.put(jsonObjectTarget);
-                    }
-                    else
-                    {
-                        mPresenter.onErrorGetCustomerLocation(R.string.errorGetCustomerLocation , model.getFullNameMoshtary());
-                        return;
+        try {
+            if (darkhastFaktorMoshtaryForoshandeModels.size() > 0) {
+                final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
+                final int noeMasouliat = getNoeMasouliatWithReturnData();
+                String requestId = "";
+                if (foroshandehMamorPakhshModel != null) {
+                    requestId = String.valueOf(foroshandehMamorPakhshModel.getCcAfrad());
+                }
+                requestId += " - " + new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
+
+                JSONObject jsonObjectAllData = new JSONObject();
+                JSONArray jsonArrayTargetsLocation = new JSONArray();
+                final ArrayList<DarkhastFaktorMoshtaryForoshandeModel> cantEditDarkhastFaktorMoshtaryForoshandeModels = new ArrayList<>();
+                final ArrayList<DarkhastFaktorMoshtaryForoshandeModel> unEditDarkhastFaktorMoshtaryForoshandeModels = new ArrayList<>();
+
+                for (DarkhastFaktorMoshtaryForoshandeModel model : darkhastFaktorMoshtaryForoshandeModels) {
+                    double[] location = getLocation(model.getCcAfradForoshandeh(), model.getCcMoshtary(), model.getCcUser(), model.getLatitude(), model.getLongitude());
+                    model.setLatitude((float) location[0]);
+                    model.setLongitude((float) location[1]);
+                    //if (canEditDarkhast(noeMasouliat , model))
+                    if (model.isCanEditDarkhast()) {
+                        unEditDarkhastFaktorMoshtaryForoshandeModels.add(model);
+                        JSONObject jsonObjectTarget = getJsonObjectTargetLocation(model.getLatitude(), model.getLongitude());
+                        if (jsonObjectTarget != null) {
+                            jsonArrayTargetsLocation.put(jsonObjectTarget);
+                        } else {
+                            mPresenter.onErrorGetCustomerLocation(R.string.errorGetCustomerLocation, model.getFullNameMoshtary());
+                            return;
+                        }
+                    } else {
+                        cantEditDarkhastFaktorMoshtaryForoshandeModels.add(model);
                     }
                 }
-                else
-                {
-                    cantEditDarkhastFaktorMoshtaryForoshandeModels.add(model);
+
+
+                final JSONArray jsonArraySourceLocation = getJsonArraySourceLocation();
+                if (jsonArraySourceLocation == null || jsonArraySourceLocation.length() == 0) {
+                    mPresenter.onError(R.string.errorGetLocation);
+                    return;
                 }
-            }
+                jsonObjectAllData.put("sources", jsonArraySourceLocation);
+                jsonObjectAllData.put("targets", jsonArrayTargetsLocation);
+                jsonObjectAllData.put("costing", "auto");
 
-            final JSONArray jsonArraySourceLocation = getJsonArraySourceLocation();
-            if (jsonArraySourceLocation == null || jsonArraySourceLocation.length() == 0)
-            {
-                mPresenter.onError(R.string.errorGetLocation);
-                return;
-            }
-            jsonObjectAllData.put("sources" , jsonArraySourceLocation);
-            jsonObjectAllData.put("targets" , jsonArrayTargetsLocation);
-            jsonObjectAllData.put("costing" , "auto");
+                Log.d("treasury", "json All data : " + jsonObjectAllData.toString());
 
-            Log.d("treasury" , "json All data : " + jsonObjectAllData.toString());
-
-            RoutingServerShared routingServerShared = new RoutingServerShared(BaseApplication.getContext());
-            String urlOsrm = routingServerShared.getString(RoutingServerShared.IP,"http://91.92.125.244:8002");
-            Log.d("urlOsrm",urlOsrm.substring(0, 11));
-            if (urlOsrm.length() > 0)
-            {
-                APIServiceValhalla apiServiceValhalla = ApiClientGlobal.getInstance().getClientServiceValhalla(urlOsrm);
-                Call<Object> call = apiServiceValhalla.getSourcesToTargets(jsonObjectAllData.toString(), requestId);
-                call.enqueue(new Callback<Object>()
-                {
-                    @Override
-                    public void onResponse(Call<Object> call, Response<Object> response)
-                    {
-                        try
-                        {
-                            Gson gson = new Gson();
-                            if (response.isSuccessful())
-                            {
-                                SourceToTargetSuccessResult result = gson.fromJson(gson.toJson(response.body()), SourceToTargetSuccessResult.class);
-                                if (result != null)
-                                {
-                                    if (result.getSources() != null && result.getSources().size() > 0 && result.getSourcesToTargets() != null && result.getSourcesToTargets().size() > 0)
-                                    {
-                                        sortAndInsertToDatabase(unEditDarkhastFaktorMoshtaryForoshandeModels , cantEditDarkhastFaktorMoshtaryForoshandeModels , result.getSourcesToTargets().get(0), jsonArraySourceLocation.getJSONObject(0).getDouble("lat"), jsonArraySourceLocation.getJSONObject(0).getDouble("lon"), noeMasouliat);
-                                    }
-                                    else
-                                    {
+                RoutingServerShared routingServerShared = new RoutingServerShared(BaseApplication.getContext());
+                String urlOsrm = routingServerShared.getString(RoutingServerShared.IP, "http://91.92.125.244:8002");
+                Log.d("urlOsrm", urlOsrm.substring(0, 11));
+                if (urlOsrm.length() > 0) {
+                    APIServiceValhalla apiServiceValhalla = ApiClientGlobal.getInstance().getClientServiceValhalla(urlOsrm);
+                    Call<Object> call = apiServiceValhalla.getSourcesToTargets(jsonObjectAllData.toString(), requestId);
+                    call.enqueue(new Callback<Object>() {
+                        @Override
+                        public void onResponse(Call<Object> call, Response<Object> response) {
+                            try {
+                                Gson gson = new Gson();
+                                if (response.isSuccessful()) {
+                                    SourceToTargetSuccessResult result = gson.fromJson(gson.toJson(response.body()), SourceToTargetSuccessResult.class);
+                                    if (result != null) {
+                                        if (result.getSources() != null && result.getSources().size() > 0 && result.getSourcesToTargets() != null && result.getSourcesToTargets().size() > 0) {
+                                            sortAndInsertToDatabase(unEditDarkhastFaktorMoshtaryForoshandeModels, cantEditDarkhastFaktorMoshtaryForoshandeModels, result.getSourcesToTargets().get(0), jsonArraySourceLocation.getJSONObject(0).getDouble("lat"), jsonArraySourceLocation.getJSONObject(0).getDouble("lon"), noeMasouliat);
+                                        } else {
+                                            PubFunc.Logger logger = new PubFunc().new Logger();
+                                            logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), "error get sources or sources-to-targets", CLASS_NAME, "", "getRouting", "onResponse");
+                                            mPresenter.onError(R.string.errorGetData);
+                                        }
+                                    } else {
+                                        String endpoint = getEndpoint(call);
                                         PubFunc.Logger logger = new PubFunc().new Logger();
-                                        logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), "error get sources or sources-to-targets", CLASS_NAME, "", "getRouting", "onResponse");
+                                        logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", mPresenter.getAppContext().getString(R.string.resultIsNull), endpoint), CLASS_NAME, "", "getRouting", "onResponse");
                                         mPresenter.onError(R.string.errorGetData);
                                     }
-                                }
-                                else
-                                {
+                                } else {
+                                    SourcesToTargetsFailedResult responseError = gson.fromJson(gson.toJson(response), SourcesToTargetsFailedResult.class);
+
                                     String endpoint = getEndpoint(call);
+                                    String message = String.format("message : %1$s \n code : %2$s * %3$s", responseError.getError(), responseError.getErrorCode(), endpoint);
                                     PubFunc.Logger logger = new PubFunc().new Logger();
-                                    logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", mPresenter.getAppContext().getString(R.string.resultIsNull), endpoint), CLASS_NAME, "", "getRouting", "onResponse");
+                                    logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), message, CLASS_NAME, "", "getRouting", "onResponse");
                                     mPresenter.onError(R.string.errorGetData);
                                 }
-                            }
-                            else
-                            {
-                                SourcesToTargetsFailedResult responseError = gson.fromJson(gson.toJson(response), SourcesToTargetsFailedResult.class);
-
-                                String endpoint = getEndpoint(call);
-                                String message = String.format("message : %1$s \n code : %2$s * %3$s", responseError.getError(), responseError.getErrorCode(), endpoint);
+                            } catch (Exception exception) {
+                                exception.printStackTrace();
                                 PubFunc.Logger logger = new PubFunc().new Logger();
-                                logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), message, CLASS_NAME, "", "getRouting", "onResponse");
+                                logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), exception.toString(), CLASS_NAME, "", "getRouting", "onResponse");
                                 mPresenter.onError(R.string.errorGetData);
                             }
                         }
-                        catch (Exception exception)
-                        {
-                            exception.printStackTrace();
+
+                        @Override
+                        public void onFailure(Call<Object> call, Throwable t) {
+                            String endpoint = getEndpoint(call);
                             PubFunc.Logger logger = new PubFunc().new Logger();
-                            logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), exception.toString(), CLASS_NAME, "", "getRouting", "onResponse");
+                            logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", t.getMessage(), endpoint), CLASS_NAME, "", "getRouting", "onFailure");
                             mPresenter.onError(R.string.errorGetData);
                         }
-                    }
+                    });
+                } else {
+                    mPresenter.onError(R.string.cantFindServer);
+                }
+            } else {
+                mPresenter.onWarning(R.string.emptyList);
 
-                    @Override
-                    public void onFailure(Call<Object> call, Throwable t)
-                    {
-                        String endpoint = getEndpoint(call);
-                        PubFunc.Logger logger = new PubFunc().new Logger();
-                        logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", t.getMessage(), endpoint), CLASS_NAME, "", "getRouting", "onFailure");
-                        mPresenter.onError(R.string.errorGetData);
-                    }
-                });
-            }
-            else
-            {
-                mPresenter.onError(R.string.cantFindServer);
             }
         }
         catch (Exception e)
@@ -2688,4 +2671,186 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
        int sort = systemConfigTabletDAO.getSortList();
        mPresenter.onGetSortList(sort);
     }
+
+    @Override
+    public void checkMoshtaryKharejAzMahal(int noeMasouliat, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel) {
+
+
+        if ((noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD
+                || noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SMART)
+                && darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktorNoeForosh() == 1) {
+            boolean checkDistance = true;
+            ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
+            checkDistance = parameterChildDAO.getValueByccChildParameter(Constants.CHECK_MOSHTARY_MASIR_ROOZ_DISTANCE()).equals("1");
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+            if (checkDistance) {
+                if (isValidCreateFaktor(darkhastFaktorMoshtaryForoshandeModel, foroshandehMamorPakhshModel)) {
+                    sendGps(noeMasouliat, foroshandehMamorPakhshModel, darkhastFaktorMoshtaryForoshandeModel);
+
+                } else {
+
+                    mPresenter.onError(R.string.errorCantRegisterRequest);
+                }
+            } else {
+                sendGps(noeMasouliat, foroshandehMamorPakhshModel, darkhastFaktorMoshtaryForoshandeModel);
+            }
+        }
+    }
+
+    @Override
+    public void checkIsLocationSendToServer(int noeMasouliat, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel) {
+        final Handler handler = new Handler(msg -> {
+            if (msg.arg1 == 1) {
+                mPresenter.onOpenInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModel, true);
+
+            } else if (msg.arg1 == -1) {
+                mPresenter.onOpenInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModel, false);
+            }
+            return true;
+        });
+        Message message = new Message();
+
+        new Thread(() -> {
+
+            UserTypeShared userTypeShared = new UserTypeShared(mPresenter.getAppContext());
+
+            int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE(), 0);
+            if (isTest == 0) {
+
+                if ((darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktorNoeForosh() == 1) &&
+                        (noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SMART
+                                || noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD)) {
+                    GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
+
+                    message.arg1 = 1;
+                    ArrayList<GPSDataModel> gpsDataModels = gpsDataPpcDAO.getAllByccMoshtary(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
+                    if (gpsDataModels.size() > 0) {
+
+                        for (GPSDataModel gpsDataModel : gpsDataModels) {
+                            if (gpsDataModel.getExtraProp_IsSend() == 0) {
+                                message.arg1 = -1;
+                                break;
+                            }
+                        }
+                    } else {
+                        message.arg1 = -1;
+                    }
+
+                } else {
+                    message.arg1 = 1;
+                }
+            } else {
+                message.arg1 = 1;
+
+            }
+            handler.sendMessage(message);
+        }).start();
+    }
+
+    private void sendGps(int noeMasouliat, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel) {
+        String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
+        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
+
+        int ccForoshandehMamorPakhsh = 0;
+        if (noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD || noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SMART) {
+            ccForoshandehMamorPakhsh = foroshandehMamorPakhshModel.getCcMamorPakhsh();
+        } else {
+            ccForoshandehMamorPakhsh = foroshandehMamorPakhshModel.getCcForoshandeh();
+        }
+        insertGpsData(ccForoshandehMamorPakhsh, foroshandehMamorPakhshModel.getCcAfrad(), currentDate, locationProvider.getLatitude(), locationProvider.getLongitude(), foroshandehMamorPakhshModel.getCcMamorPakhsh(), darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary(), darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor());
+        GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
+
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+        String serverIP = serverIpModel.getServerIp();
+        String serverPort = serverIpModel.getPort();
+        if (serverIP.trim().equals("") || serverPort.trim().equals("")) {
+            mPresenter.onError(R.string.errorFindServerIP);
+        } else {
+            final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+            ArrayList<GPSDataModel> gpsDataModels = gpsDataPpcDAO.getAllByccMoshtary(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
+            if (gpsDataModels.size() > 0) {
+                sendGPSDataToServer(apiServicePost, gpsDataModels);
+            }
+        }
+    }
+    private boolean insertGpsData(int ccForoshandeh, int ccAfrad, String currentDate, double latitude, double longtitude, int ccMamorPakhsh, int ccMoshtary, long ccDarkhastFaktor) {
+        GPSDataModel gpsDataModel = new GPSDataModel();
+        GPSDataPpcDAO gpsDataDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
+        MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
+        MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
+        gpsDataModel.setCcAfrad(ccAfrad);
+        gpsDataModel.setCcForoshandeh(ccForoshandeh);
+        gpsDataModel.setCcMasir(moshtaryModel.getCcMasir());
+        gpsDataModel.setTarikh(currentDate);
+        gpsDataModel.setLatitude(latitude);
+        gpsDataModel.setLongitude(longtitude);
+        gpsDataModel.setExtraProp_IsSend(0);
+        gpsDataModel.setDistance(0D);
+        gpsDataModel.setCcMamorPakhsh(ccMamorPakhsh);
+        gpsDataModel.setCcMoshtary(ccMoshtary);
+        gpsDataModel.setCcDarkhastFaktor(ccDarkhastFaktor);
+        return gpsDataDAO.insert(gpsDataModel);
+    }
+
+    private void sendGPSDataToServer(APIServicePost apiServicePost, ArrayList<GPSDataModel> gpsDataModels) {
+        JSONArray jsonArray = new JSONArray();
+        String ccGPSDatas = "-1";
+        for (GPSDataModel model : gpsDataModels) {
+            JSONObject jsonObject = model.toJsonObject();
+            if (jsonObject != null) {
+                jsonArray.put(jsonObject);
+                ccGPSDatas += "," + model.getCcGpsData_PPC();
+            }
+        }
+        //به دلیل اینکه برای استفاده از شناسه موقعیت مکانی های ارسال شده به سرور در کالبک باید متغییر final داشته باشیم و اگر ccGPSDatas را final تعریف کنیم سپس امکان افزودن شناسه های جدید را نداریم، از این فیلد استفاده میکنیم.
+        final String ccGPSDatasFinal = ccGPSDatas;
+        if (jsonArray.length() > 0) {
+            Call<CreateGpsDataPPCResult> call = apiServicePost.createGpsDataPPCResult(jsonArray.toString());
+            call.enqueue(new Callback<CreateGpsDataPPCResult>() {
+                @Override
+                public void onResponse(Call<CreateGpsDataPPCResult> call, Response<CreateGpsDataPPCResult> response) {
+                    try {
+
+                        if (response.isSuccessful() && response.body() != null) {
+                            Log.d("noTemp", "in if success and body not null");
+                            CreateGpsDataPPCResult result = response.body();
+                            if (result.getSuccess()) {
+                                GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
+                                gpsDataPpcDAO.updateIsSend(ccGPSDatasFinal);
+                                mPresenter.onSuccess(R.string.successSendData);
+                            } else {
+                                Log.d("noTemp", "in else not success");
+                                setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "", "sendGPSDataToServer", "onResponse");
+                                mPresenter.onError(R.string.errorSendGpsData);
+                            }
+                        } else {
+                            String errorMessage = "response not successful " + response.message();//+ "\n" + "can't send this log : " + logMessage;
+                            if (response.errorBody() != null) {
+                                errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string();//+ "\n" + "can't send this log : " + logMessage;
+                            }
+                            setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "", "sendGPSDataToServer", "onResponse");
+                            Log.d("tempRequest", "message : " + errorMessage);
+                            mPresenter.onError(R.string.errorSendGpsData);
+                        }
+                    } catch (Exception exception) {
+                        Log.d("noTemp", "in exception");
+                        exception.printStackTrace();
+                        setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "", "sendGPSDataToServer", "onResponse");
+                        mPresenter.onError(R.string.errorSendGpsData);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CreateGpsDataPPCResult> call, Throwable t) {
+
+                    Log.d("noTemp", "in onFailure");
+                    setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "", "sendGPSDataToServer", "onFailure");
+                    mPresenter.onError(R.string.errorSendGpsData);
+                }
+            });
+        }
+
+
+    }
+
 }

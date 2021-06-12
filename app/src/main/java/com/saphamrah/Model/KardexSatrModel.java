@@ -442,4 +442,44 @@ public class KardexSatrModel
         }
     }
 
+    public JSONObject toJsonForKardexForSend(KardexSatrModel model) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("ccKardexSatr", model.getCcKardexSatr());
+            jsonObject.put("ccKardex", model.getCcKardex());
+            jsonObject.put("ccTaminKonandeh", model.getCcTaminKonandeh());
+            jsonObject.put("ccKalaCode", model.getCcKalaCode());
+            jsonObject.put("ShomarehBach", model.getShomarehBach());
+            jsonObject.put("TarikhTolid", model.getTarikhTolid());
+            jsonObject.put("TarikhEngheza", model.getTarikhEngheza());
+            jsonObject.put("Tedad3", model.getTedad3());
+            jsonObject.put("ccElat", model.getCcElat());
+            jsonObject.put("NameElat", model.getNameElat());
+            jsonObject.put("CodeNoeKala", model.getCodeNoeKala());
+            jsonObject.put("CodeKalaOld", model.getCodeKalaOld());
+            jsonObject.put("NameKala", model.getNameKala());
+            jsonObject.put("ccElamMarjoeeForoshandeh", model.getCcElamMarjoeeForoshandeh());
+            jsonObject.put("ccMarjoeeMamorPakhsh", model.getCcElamMarjoeeForoshandeh());
+            jsonObject.put("ccMoshtary", model.getCcMoshtary());
+            jsonObject.put("TarikhTolidShamsi", model.getTarikhTolidShamsi());
+            jsonObject.put("GheymatKharid", model.getGheymatKharid());
+            jsonObject.put("GheymatForosh", model.getGheymatForosh());
+            jsonObject.put("GheymatForoshKhales", model.getGheymatForoshKhales());
+            jsonObject.put("GheymatMasrafKonandeh", model.getGheymatMasrafKonandeh());
+            jsonObject.put("ccAnbarGhesmat", model.getCcAnbarGhesmat());
+            jsonObject.put("GheymatForoshAsli", model.getGheymatForoshAsli());
+            jsonObject.put("ccKala", model.getCcKala());
+
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return jsonObject;
+    }
+
+
+
+
 }

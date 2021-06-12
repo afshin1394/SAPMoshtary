@@ -1255,9 +1255,10 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
             //if (isDirkardFromCodeSabtShode == 1) {
                 if (darkhastFaktorModel.getIsTakhir() == 1) {
                     flag = dariaftPardakhtBargashtyPPCDAO.HaveDirkardDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor());
-                } else {
-                    flag = dariaftPardakhtBargashtyPPCDAO.HaveDirkardBargahsty(bargashtyModel.getCcDariaftPardakht());
                 }
+
+                } else {
+            flag = dariaftPardakhtBargashtyPPCDAO.HaveDirkardBargahsty(bargashtyModel.getCcDariaftPardakht());
             //}
         }
         return flag;
@@ -1374,7 +1375,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
             codeNoeVosol = entity.getCodeNoeVosol();
             if (codeNoeVosol == Integer.parseInt(Constants.VALUE_VAJH_NAGHD()) | codeNoeVosol == Integer.parseInt(Constants.VALUE_IRANCHECK()))
                 diff_days = (ZamaneTakhsiseFaktor.getTime() - tarikhDate.getTime()) / ConvertToDay;
-            if (codeNoeVosol == Integer.parseInt(Constants.VALUE_SANAD_POS()) | codeNoeVosol == Integer.parseInt(Constants.VALUE_FISH_BANKI()))
+            if (codeNoeVosol == Integer.parseInt(Constants.VALUE_POS()) | codeNoeVosol == Integer.parseInt(Constants.VALUE_FISH_BANKI()))
                 diff_days = (tarikhSanad.getTime() - tarikhDate.getTime()) / ConvertToDay;
 
             if (codeNoeVosol == Integer.parseInt(Constants.VALUE_CHECK()) | codeNoeVosol == Integer.parseInt(Constants.VALUE_CHECK_BANKI)) {
@@ -1492,6 +1493,16 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
 
     public void setTajil(DarkhastFaktorModel darkhastFaktorModel, int codeNoeVosol) {
 
+        /*
+          * چک کردن ماکزیموم تعداد روز برای داشتن تعجیل از فروشنده مامور پخش
+          * اگر فاصله ی بین تاریخ ارسال فاکتور با تاریخ روز کوچک تر یا مساوی ماکزیموم مدت تعجیل بود اجازه ی تعجیل داده میشود
+         */
+        int maxModattajil = configNoeVosolMojazeFaktorDAO.getMaxModatTajil(codeNoeVosol , darkhastFaktorModel.getCodeNoeVosolAzMoshtary());
+        Date dateNowDate = new Date();
+        Date tarikhErsalFaktor = DateUtils.convertStringDateToDateClass(darkhastFaktorModel.getTarikhErsal());
+        long difDayForFaktor = DateUtils.getDateDiffAsDay(tarikhErsalFaktor, dateNowDate);
+
+        if (difDayForFaktor <= maxModattajil) {
 
         boolean flag_IsYeksan_dp_SabtShodeh = true;
         boolean flag_HaveTajil = false;
@@ -1509,9 +1520,9 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
         Date tarikhRoozDate = null;
         String tarikhRoozShamsiString = "";
         try {
-            String DateNow = simpleDateFormatShort.format(new Date());
+            String dateNow = simpleDateFormatShort.format(new Date());
             tarikhRoozShamsiString = dateUtils.todayDateWithoutSlash((BaseApplication.getContext()));
-            tarikhRoozDate = simpleDateFormatShort.parse(getProgramShared.getString(getProgramShared.GREGORIAN_DATE_TIME_OF_GET_CONFIG(), DateNow));
+            tarikhRoozDate = simpleDateFormatShort.parse(getProgramShared.getString(getProgramShared.GREGORIAN_DATE_TIME_OF_GET_CONFIG(), dateNow));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -1702,6 +1713,10 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
         }
 
         mPresenter.oncallTajil(mablaghTajil_Naghd, mandehFaktorPasAzTajil_Naghd, mablaghTajil_Check, mandehFaktorPasAzTajil_Check, canGetTajil);
+        }
+        else {
+            canGetTajil = false;
+        }
         mPresenter.onVisibilityLayoutTajil(canGetTajil);
     }
 

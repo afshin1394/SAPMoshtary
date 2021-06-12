@@ -105,7 +105,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
     private VerifyRequestMVP.RequiredPresenterOps mPresenter;
     ParameterChildDAO childParameterDAO = new ParameterChildDAO(BaseApplication.getContext());
-
+    private static final String TAG = "VerifyRequestModel";
     public VerifyRequestModel(VerifyRequestMVP.RequiredPresenterOps mPresenter)
     {
         this.mPresenter = mPresenter;
@@ -557,10 +557,16 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
     {
         Log.d("verifyRequest" , " calculate discount starts");
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
+        int ccMoshtaryGharardad = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtaryGharardad(), -1);
+        int ccMoshtaryGharardadSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getMoshtaryGharardadccSazmanForosh(),-1);
+        int ccMarkazSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getCcMarkazSazmanForosh(),0);
+        Log.i("verifyRequest", "calculateDiscounts: ccMoshtaryGharardad\t"+ccMoshtaryGharardad+"ccMoshtaryGharardadSazmanForosh\t"+ccMoshtaryGharardadSazmanForosh);
+        Log.i("verifyRequest", "calculateDiscounts: ccMarkazSazmanForosh\t"+ccMarkazSazmanForosh);
+
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor() , -1);
         if (ccDarkhastFaktor != -1)
         {
-            AsyncTaskCalculateDiscount asyncTaskCalculateDiscount = new AsyncTaskCalculateDiscount(ccDarkhastFaktor, ccChildParameterNoeVosol, valueNoeVosol, selectFaktorShared, new OnCalculateDiscountResponse()
+            AsyncTaskCalculateDiscount asyncTaskCalculateDiscount = new AsyncTaskCalculateDiscount(ccDarkhastFaktor,ccMoshtaryGharardad,ccMoshtaryGharardadSazmanForosh,ccMarkazSazmanForosh, ccChildParameterNoeVosol, valueNoeVosol, selectFaktorShared, new OnCalculateDiscountResponse()
             {
                 @Override
                 public void onFailedCalculate(int resId)
@@ -1580,13 +1586,14 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         SelectFaktorShared selectFaktorShared;
         int resultOfProccess = 1;
 
-        AsyncTaskCalculateDiscount(long ccDarkhastFaktor , int ccChildParameterNoeVosol , int valueNoeVosol , SelectFaktorShared selectFaktorShared , OnCalculateDiscountResponse onCalculateDiscountResponse)
+        AsyncTaskCalculateDiscount(long ccDarkhastFaktor, int ccMoshtaryGharardad,int ccMoshtaryGharardadSazmanForosh,int ccMarkazSazmanForosh, int ccChildParameterNoeVosol, int valueNoeVosol, SelectFaktorShared selectFaktorShared, OnCalculateDiscountResponse onCalculateDiscountResponse)
         {
             this.ccDarkhastFaktor = ccDarkhastFaktor;
             this.ccChildParameterNoeVosol = ccChildParameterNoeVosol;
             this.valueNoeVosol = valueNoeVosol;
             this.selectFaktorShared = selectFaktorShared;
             this.onCalculateDiscountResponse = onCalculateDiscountResponse;
+            Log.i("verifyRequest", "AsyncTaskCalculateDiscount: ccMoshtaryGharardad \t"+ccMoshtaryGharardad+"ccMoshtaryGharardadSazmanForosh\t"+ccMoshtaryGharardadSazmanForosh+"ccMarkazSazmanForosh"+ccMarkazSazmanForosh);
         }
 
         @Override
@@ -1666,7 +1673,6 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
                 DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
                 Log.d("darkhastFaktor" , "calculateDiscounts : " + darkhastFaktorModel.toString());
-                ccMarkazSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getCcMarkazSazmanForosh() , 0);
 				ArrayList<ParameterChildModel> parameterChildModels = new ParameterChildDAO(mPresenter.getAppContext()).getAllByccParameter(Constants.CC_NOE_BASTE_BANDI() + "," + Constants.CC_NOE_TEDAD_RIAL());
                 Log.d("darkhastfaktor","parameterChildModels : " + parameterChildModels.toString());
                 for (String ccChilParameter : seperatedccChildParameterOfTakhfif)
@@ -1676,7 +1682,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                     if (Integer.parseInt(ccChilParameter) == Constants.CC_CHILD_CODE_TAKHFIF_SENFI())
                     {
                         Log.d("takhfif" , "takhfif Senfi");
-                        mohasebeTakhfifSenfiFaktor(darkhastFaktorModel, parameterChildModels);
+                        mohasebeTakhfifSenfiFaktor(darkhastFaktorModel, parameterChildModels,valueNoeVosol);
                     }
                     else if (Integer.parseInt(ccChilParameter) == Constants.CC_CHILD_CODE_TAKHFIF_NAGHDI())
                     {
@@ -1729,11 +1735,9 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
 
         ///////////////////////// Takhfif Senfi /////////////////////////
-        private boolean mohasebeTakhfifSenfiFaktor(DarkhastFaktorModel darkhastFaktor, ArrayList<ParameterChildModel> parameterChildModels)
-        {
-            try
-            {
-				DiscountCalculation discountCalculation = new DiscountCalculation(parameterChildModels);																										
+        private boolean mohasebeTakhfifSenfiFaktor(DarkhastFaktorModel darkhastFaktor, ArrayList<ParameterChildModel> parameterChildModels,int valueNoeVosol) {
+            try {
+                DiscountCalculation discountCalculation = new DiscountCalculation(parameterChildModels);
                 TakhfifSenfiDAO takhfifSenfiDAO = new TakhfifSenfiDAO(mPresenter.getAppContext());
                 DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
                 TakhfifSenfiSatrDAO takhfifSenfiSatrDAO = new TakhfifSenfiSatrDAO(mPresenter.getAppContext());
@@ -1741,56 +1745,52 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
                 ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrs = darkhastFaktorSatrDAO.getByccDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor());
                 MoshtaryModel moshtary = moshtaryDAO.getByccMoshtary(darkhastFaktor.getCcMoshtary());
-                ArrayList<TakhfifSenfiModel> takhfifSenfis = takhfifSenfiDAO.getByMoshtary(moshtary, ccMarkazSazmanForosh, darkhastFaktor.getCodeNoeHaml(), darkhastFaktor.getCodeNoeVosolAzMoshtary());
 
-                if (darkhastFaktorSatrs.size()== 0 || takhfifSenfis.size()== 0)
-                {
+
+
+                ArrayList<TakhfifSenfiModel> takhfifSenfis = takhfifSenfiDAO.getByMoshtary(moshtary , valueNoeVosol);
+
+                if (darkhastFaktorSatrs.size() == 0 || takhfifSenfis.size() == 0) {
                     return true;
                 }
 
                 KalaDAO kalaDAO = new KalaDAO(mPresenter.getAppContext());
                 //********************************************** Kala.. **********************************************
-                for (DarkhastFaktorSatrModel darkhastFaktorSatr : darkhastFaktorSatrs)
-                {
-                    KalaModel kala= kalaDAO.getByccKalaCode(darkhastFaktorSatr.getCcKalaCode());
-                    for (TakhfifSenfiModel takhfifSenfi : takhfifSenfis)
-                    {
+                for (DarkhastFaktorSatrModel darkhastFaktorSatr : darkhastFaktorSatrs) {
+                    KalaModel kala = kalaDAO.getByccKalaCode(darkhastFaktorSatr.getCcKalaCode());
+                    for (TakhfifSenfiModel takhfifSenfi : takhfifSenfis) {
                         //Satrhaye Takhfif...
                         ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs =
                                 takhfifSenfiSatrDAO.getForFaktor(takhfifSenfi.getCcTakhfifSenfi(),
-                                        new int[]{discountCalculation.getTedadRialTedad(),discountCalculation.getTedadRialRial()},
-                                        new int[]{discountCalculation.getBasteBandiCarton(),discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()},
+                                        new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial()},
+                                        new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()},
                                         DiscountCalculation.NAME_NOE_FIELD_KALA, darkhastFaktorSatr.getCcKalaCode(),
-                                        darkhastFaktorSatr.getTedad3(), darkhastFaktorSatr.getTedad3()/ kala.getTedadDarBasteh(),
-                                        darkhastFaktorSatr.getTedad3()/ kala.getTedadDarKarton(),
+                                        darkhastFaktorSatr.getTedad3(), darkhastFaktorSatr.getTedad3() / kala.getTedadDarBasteh(),
+                                        darkhastFaktorSatr.getTedad3() / kala.getTedadDarKarton(),
                                         darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh(), takhfifSenfi.getNoeTedadRial());
 
-                        for (TakhfifSenfiSatrModel takhfifSenfiSatr : takhfifSenfiSatrs)
-                        {
+                        for (TakhfifSenfiSatrModel takhfifSenfiSatr : takhfifSenfiSatrs) {
                             int zarib = 0;
                             if (takhfifSenfiSatr.getBeEza() == 0)
                                 zarib = 1;
-                            else
-                            {
+                            else {
                                 //Tedad..
-                                if (takhfifSenfi.getNoeTedadRial()== discountCalculation.getTedadRialTedad())
-                                {
-                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza()== discountCalculation.getBasteBandiAdad())
-                                        zarib = (int)(darkhastFaktorSatr.getTedad3()/ takhfifSenfiSatr.getBeEza());
-                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza()== discountCalculation.getBasteBandiBaste())
-                                        zarib = (int)((darkhastFaktorSatr.getTedad3()/ kala.getTedadDarBasteh()) / takhfifSenfiSatr.getBeEza());
-                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza()== discountCalculation.getBasteBandiCarton())
-                                        zarib = (int)((darkhastFaktorSatr.getTedad3()/ kala.getTedadDarKarton())/ takhfifSenfiSatr.getBeEza());
+                                if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialTedad()) {
+                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiAdad())
+                                        zarib = (int) (darkhastFaktorSatr.getTedad3() / takhfifSenfiSatr.getBeEza());
+                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiBaste())
+                                        zarib = (int) ((darkhastFaktorSatr.getTedad3() / kala.getTedadDarBasteh()) / takhfifSenfiSatr.getBeEza());
+                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiCarton())
+                                        zarib = (int) ((darkhastFaktorSatr.getTedad3() / kala.getTedadDarKarton()) / takhfifSenfiSatr.getBeEza());
                                 }//if
                                 //Rial..
-                                else if (takhfifSenfi.getNoeTedadRial()== discountCalculation.getTedadRialRial())
-                                    zarib = (int) (darkhastFaktor.getMablaghKolFaktor()/ takhfifSenfiSatr.getBeEza());
+                                else if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialRial())
+                                    zarib = (int) (darkhastFaktor.getMablaghKolFaktor() / takhfifSenfiSatr.getBeEza());
                             }//else
 
-                            double mablaghTakhfif= (darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh()) * (zarib * takhfifSenfiSatr.getDarsadTakhfif()/100);
+                            double mablaghTakhfif = (darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh()) * (zarib * takhfifSenfiSatr.getDarsadTakhfif() / 100);
                             //Insert In DarkhastFaktorTakhfif & DarkhastFaktorSatrTakhfif..
-                            if (mablaghTakhfif > 0)
-                            {
+                            if (mablaghTakhfif > 0) {
                                 insertFaktorTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfif);
                                 insertFaktorSatrTakhfifSenfi(darkhastFaktorSatr.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfif);
                                 //بروز رسانی مبلغ تخفیف تیتر
@@ -1807,65 +1807,58 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 double sumTedadKartonBrand;
                 double sumMablaghKolBrand; // Sum MablaghKol Darkhast Bar Hasbe Brand..
 
-                ArrayList<DataTableModel> brands= darkhastFaktorSatrDAO.getTedadBeTafkikBrand(darkhastFaktor.getCcDarkhastFaktor() , 0);
-                for (DataTableModel brand : brands)
-                {
-                    ccBrand= Integer.valueOf(brand.getFiled1());
-                    sumTedadBrand= Double.parseDouble(brand.getFiled2());
+                ArrayList<DataTableModel> brands = darkhastFaktorSatrDAO.getTedadBeTafkikBrand(darkhastFaktor.getCcDarkhastFaktor(), -1);
+                for (DataTableModel brand : brands) {
+                    ccBrand = Integer.valueOf(brand.getFiled1());
+                    sumTedadBrand = Double.parseDouble(brand.getFiled2());
                     sumTedadBastehBrand = Double.parseDouble(brand.getFiled3());
                     sumTedadKartonBrand = Double.parseDouble(brand.getFiled4());
                     sumMablaghKolBrand = Double.parseDouble(brand.getFiled5());
 
-                    for (TakhfifSenfiModel takhfifSenfi: takhfifSenfis)
-                    {
+                    for (TakhfifSenfiModel takhfifSenfi : takhfifSenfis) {
                         //Satrhaye Takhfif...
-                        ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs= takhfifSenfiSatrDAO.getForFaktor(takhfifSenfi.getCcTakhfifSenfi(),
-                                new int[]{discountCalculation.getTedadRialTedad(),discountCalculation.getTedadRialRial()},
-                                new int[]{discountCalculation.getBasteBandiCarton(),discountCalculation.getBasteBandiBaste(),discountCalculation.getBasteBandiAdad()},
-                                DiscountCalculation.NAME_NOE_FIELD_BRAND, ccBrand,																																	  
+                        ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs = takhfifSenfiSatrDAO.getForFaktor(takhfifSenfi.getCcTakhfifSenfi(),
+                                new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial()},
+                                new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()},
+                                DiscountCalculation.NAME_NOE_FIELD_BRAND, ccBrand,
                                 sumTedadBrand, sumTedadBastehBrand, sumTedadKartonBrand, sumMablaghKolBrand, takhfifSenfi.getNoeTedadRial());
 
-                        for (TakhfifSenfiSatrModel takhfifSenfiSatr : takhfifSenfiSatrs)
-                        {
-                            int zarib= 0;
-                            if (takhfifSenfiSatr.getBeEza()== 0)
+                        for (TakhfifSenfiSatrModel takhfifSenfiSatr : takhfifSenfiSatrs) {
+                            int zarib = 0;
+                            if (takhfifSenfiSatr.getBeEza() == 0)
                                 zarib = 1;
                             else
                                 //Tedad..
-                                if (takhfifSenfi.getNoeTedadRial()== discountCalculation.getTedadRialTedad())
-                                {
-                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza()== discountCalculation.getBasteBandiAdad())
-                                        zarib = (int)(sumTedadBrand/ takhfifSenfiSatr.getBeEza());
-                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza()== discountCalculation.getBasteBandiBaste())
-                                        zarib = (int)(sumTedadBastehBrand/ takhfifSenfiSatr.getBeEza());
-                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza()== discountCalculation.getBasteBandiCarton())
-                                        zarib = (int)(sumTedadKartonBrand/ takhfifSenfiSatr.getBeEza());
+                                if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialTedad()) {
+                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiAdad())
+                                        zarib = (int) (sumTedadBrand / takhfifSenfiSatr.getBeEza());
+                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiBaste())
+                                        zarib = (int) (sumTedadBastehBrand / takhfifSenfiSatr.getBeEza());
+                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiCarton())
+                                        zarib = (int) (sumTedadKartonBrand / takhfifSenfiSatr.getBeEza());
                                 }//if
                                 //Rial..
-                                else if (takhfifSenfi.getNoeTedadRial()== discountCalculation.getTedadRialRial())
-                                    zarib = (int)(sumMablaghKolBrand/ takhfifSenfiSatr.getBeEza());
+                                else if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialRial())
+                                    zarib = (int) (sumMablaghKolBrand / takhfifSenfiSatr.getBeEza());
 
-                            double mablaghTakhfif= sumMablaghKolBrand * (zarib * takhfifSenfiSatr.getDarsadTakhfif()/ 100);
+                            double mablaghTakhfif = sumMablaghKolBrand * (zarib * takhfifSenfiSatr.getDarsadTakhfif() / 100);
                             //Insert In DarkhastFaktorTakhfif & DarkhastFaktorSatrTakhfif..
                             long sumMablaghTakhfifSatr = 0;
                             String allMablaghTakhfifSatr = "-1";
-                            if (mablaghTakhfif > 0)
-                            {
+                            if (mablaghTakhfif > 0) {
                                 insertFaktorTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfif);
 
-                                for (DarkhastFaktorSatrModel darkhastFaktorSatr : darkhastFaktorSatrs)
-                                {
-                                    KalaModel kala= kalaDAO.getByccKalaCode(darkhastFaktorSatr.getCcKalaCode());
-                                    if (kala.getCcBrand()== ccBrand)
-                                    {
-                                        double mablaghTakhfifSatr = (darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh()) * (takhfifSenfiSatr.getDarsadTakhfif()/ 100);
+                                for (DarkhastFaktorSatrModel darkhastFaktorSatr : darkhastFaktorSatrs) {
+                                    KalaModel kala = kalaDAO.getByccKalaCode(darkhastFaktorSatr.getCcKalaCode());
+                                    if (kala.getCcBrand() == ccBrand) {
+                                        double mablaghTakhfifSatr = (darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh()) * (takhfifSenfiSatr.getDarsadTakhfif() / 100);
                                         sumMablaghTakhfifSatr += Math.round(mablaghTakhfifSatr);
                                         allMablaghTakhfifSatr += "," + allMablaghTakhfifSatr;
                                         insertFaktorSatrTakhfifSenfi(darkhastFaktorSatr.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfifSatr);
                                     }//if
                                 }//for
                                 //بروز رسانی مبلغ تخفیف تیتر
-                                updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor() , takhfifSenfi.getCcTakhfifSenfi(), Math.round(mablaghTakhfif), sumMablaghTakhfifSatr, allMablaghTakhfifSatr);
+                                updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), Math.round(mablaghTakhfif), sumMablaghTakhfifSatr, allMablaghTakhfifSatr);
                             }//if
                         }//for
                     }//for
@@ -1878,57 +1871,50 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 double sumTedadKartonTaminKonandeh;
                 double sumMablaghKolTaminKonandeh; // Sum MablaghKol Darkhast Bar Hasbe TaminKonandeh..
 
-                ArrayList<DataTableModel> taminKonandehs = darkhastFaktorSatrDAO.getTedadBeTafkikTaminKonandeh(darkhastFaktor.getCcDarkhastFaktor(),0);
-                for (DataTableModel taminKonandeh : taminKonandehs)
-                {
-                    ccTaminKonandeh= Integer.parseInt(taminKonandeh.getFiled1());
-                    sumTedadTaminKonandeh= Double.parseDouble(taminKonandeh.getFiled2());
+                ArrayList<DataTableModel> taminKonandehs = darkhastFaktorSatrDAO.getTedadBeTafkikTaminKonandeh(darkhastFaktor.getCcDarkhastFaktor(),-1);
+                for (DataTableModel taminKonandeh : taminKonandehs) {
+                    ccTaminKonandeh = Integer.parseInt(taminKonandeh.getFiled1());
+                    sumTedadTaminKonandeh = Double.parseDouble(taminKonandeh.getFiled2());
                     sumTedadBastehTaminKonandeh = Double.parseDouble(taminKonandeh.getFiled3());
                     sumTedadKartonTaminKonandeh = Double.parseDouble(taminKonandeh.getFiled4());
                     sumMablaghKolTaminKonandeh = Double.parseDouble(taminKonandeh.getFiled5());
 
-                    for (TakhfifSenfiModel takhfifSenfi: takhfifSenfis)
-                    {
+                    for (TakhfifSenfiModel takhfifSenfi : takhfifSenfis) {
                         //Satrhaye Takhfif..
-                        ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs= takhfifSenfiSatrDAO.getForFaktor(takhfifSenfi.getCcTakhfifSenfi(),new int[]{discountCalculation.getTedadRialTedad(),discountCalculation.getTedadRialRial()},
-                                new int[]{discountCalculation.getBasteBandiCarton(),discountCalculation.getBasteBandiBaste(),discountCalculation.getBasteBandiAdad()}, DiscountCalculation.NAME_NOE_FIELD_TAMIN_KONANDE, ccTaminKonandeh,
+                        ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs = takhfifSenfiSatrDAO.getForFaktor(takhfifSenfi.getCcTakhfifSenfi(), new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial()},
+                                new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()}, DiscountCalculation.NAME_NOE_FIELD_TAMIN_KONANDE, ccTaminKonandeh,
                                 sumTedadTaminKonandeh, sumTedadBastehTaminKonandeh, sumTedadKartonTaminKonandeh,
                                 sumMablaghKolTaminKonandeh, takhfifSenfi.getNoeTedadRial());
 
-                        for (TakhfifSenfiSatrModel takhfifSenfiSatr: takhfifSenfiSatrs)
-                        {
+                        for (TakhfifSenfiSatrModel takhfifSenfiSatr : takhfifSenfiSatrs) {
                             int zarib = 0;
-                            if (takhfifSenfiSatr.getBeEza()== 0)
+                            if (takhfifSenfiSatr.getBeEza() == 0)
                                 zarib = 1;
                             else
                                 //Tedad..
-                                if (takhfifSenfi.getNoeTedadRial()== discountCalculation.getTedadRialTedad())
-                                {
-                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza()==  discountCalculation.getBasteBandiAdad())
-                                        zarib = (int)(sumTedadTaminKonandeh/ takhfifSenfiSatr.getBeEza());
-                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza()==  discountCalculation.getBasteBandiBaste())
-                                        zarib = (int)(sumTedadBastehTaminKonandeh/ takhfifSenfiSatr.getBeEza());
-                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza()==  discountCalculation.getBasteBandiCarton())
-                                        zarib= (int)(sumTedadKartonTaminKonandeh/ takhfifSenfiSatr.getBeEza());
+                                if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialTedad()) {
+                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiAdad())
+                                        zarib = (int) (sumTedadTaminKonandeh / takhfifSenfiSatr.getBeEza());
+                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiBaste())
+                                        zarib = (int) (sumTedadBastehTaminKonandeh / takhfifSenfiSatr.getBeEza());
+                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiCarton())
+                                        zarib = (int) (sumTedadKartonTaminKonandeh / takhfifSenfiSatr.getBeEza());
                                 }//if
                                 //Rial..
-                                else if (takhfifSenfi.getNoeTedadRial()== discountCalculation.getTedadRialRial())
-                                    zarib = (int)(sumMablaghKolTaminKonandeh/ takhfifSenfiSatr.getBeEza());
+                                else if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialRial())
+                                    zarib = (int) (sumMablaghKolTaminKonandeh / takhfifSenfiSatr.getBeEza());
 
-                            double mablaghTakhfif= sumMablaghKolTaminKonandeh * (zarib * takhfifSenfiSatr.getDarsadTakhfif()/ 100);
+                            double mablaghTakhfif = sumMablaghKolTaminKonandeh * (zarib * takhfifSenfiSatr.getDarsadTakhfif() / 100);
 
                             //Insert In DarkhastFaktorTakhfif & DarkhastFaktorSatrTakhfif..
-                            if (mablaghTakhfif > 0)
-                            {
+                            if (mablaghTakhfif > 0) {
                                 insertFaktorTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfif);
                                 long sumMablaghTakhfifSatr = 0;
                                 String allMablaghTakhfifSatr = "-1";
-                                for (DarkhastFaktorSatrModel darkhastFaktorSatr: darkhastFaktorSatrs)
-                                {
-                                    KalaModel kala= kalaDAO.getByccKalaCode(darkhastFaktorSatr.getCcKalaCode());
-                                    if (kala.getCcTaminKonandeh()== ccTaminKonandeh)
-                                    {
-                                        double mablaghTakhfifSatr= (darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh()) * (takhfifSenfiSatr.getDarsadTakhfif()/ 100);
+                                for (DarkhastFaktorSatrModel darkhastFaktorSatr : darkhastFaktorSatrs) {
+                                    KalaModel kala = kalaDAO.getByccKalaCode(darkhastFaktorSatr.getCcKalaCode());
+                                    if (kala.getCcTaminKonandeh() == ccTaminKonandeh) {
+                                        double mablaghTakhfifSatr = (darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh()) * (takhfifSenfiSatr.getDarsadTakhfif() / 100);
                                         sumMablaghTakhfifSatr += Math.round(mablaghTakhfifSatr);
                                         allMablaghTakhfifSatr += "," + Math.round(mablaghTakhfifSatr);
                                         insertFaktorSatrTakhfifSenfi(darkhastFaktorSatr.getCcDarkhastFaktorSatr(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfifSatr);
@@ -1936,7 +1922,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                                 }//for
                                 //بروز رسانی مبلغ تخفیف تیتر
                                 //updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor() , takhfifSenfi.getCcTakhfifSenfi());
-                                updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor() , takhfifSenfi.getCcTakhfifSenfi(), Math.round(mablaghTakhfif), sumMablaghTakhfifSatr, allMablaghTakhfifSatr);
+                                updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), Math.round(mablaghTakhfif), sumMablaghTakhfifSatr, allMablaghTakhfifSatr);
                             }//if
                         }//for
                     }//for
@@ -1948,8 +1934,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 double sumTedadKartonGorohKala;
                 double sumMablaghKolGorohKala; // Sum Tedad Darkhast Bar Hasbe GorohKala..
 
-                for (TakhfifSenfiModel takhfifSenfi: takhfifSenfis)
-                {
+                for (TakhfifSenfiModel takhfifSenfi : takhfifSenfis) {
                     sumTedadGorohKala = 0;
                     sumTedadBastehGorohKala = 0;
                     sumTedadKartonGorohKala = 0;
@@ -1958,74 +1943,66 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                     ArrayList<DataTableModel> gorohKalas = darkhastFaktorSatrDAO.getTedadBeTafkikGorohKalaAndTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi());
                     ArrayList<DataTableModel> rowGorohKalas = darkhastFaktorSatrDAO.getRowsBeTafkikGorohKalaAndTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi());
 
-                    for (DataTableModel gorohKala: gorohKalas)
-                    {
-                        sumTedadGorohKala= Double.parseDouble(gorohKala.getFiled2());
+                    for (DataTableModel gorohKala : gorohKalas) {
+                        sumTedadGorohKala = Double.parseDouble(gorohKala.getFiled2());
                         sumTedadBastehGorohKala = Double.parseDouble(gorohKala.getFiled3());
                         sumTedadKartonGorohKala = Double.parseDouble(gorohKala.getFiled4());
                         sumMablaghKolGorohKala = Double.parseDouble(gorohKala.getFiled5());
 
                         //Satrhaye Takhfif..
-                        ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs= takhfifSenfiSatrDAO.getForFaktor(takhfifSenfi.getCcTakhfifSenfi(),new int[]{discountCalculation.getTedadRialTedad(),discountCalculation.getTedadRialRial()},
-                                new int[]{discountCalculation.getBasteBandiCarton(),discountCalculation.getBasteBandiBaste(),discountCalculation.getBasteBandiAdad()}, DiscountCalculation.NAME_NOE_FIELD_GOROH_KALA, Integer.valueOf(gorohKala.getFiled1()),
+                        ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs = takhfifSenfiSatrDAO.getForFaktor(takhfifSenfi.getCcTakhfifSenfi(), new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial()},
+                                new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()}, DiscountCalculation.NAME_NOE_FIELD_GOROH_KALA, Integer.valueOf(gorohKala.getFiled1()),
                                 sumTedadGorohKala, sumTedadBastehGorohKala, sumTedadKartonGorohKala, sumMablaghKolGorohKala, takhfifSenfi.getNoeTedadRial());
 
-                        for (TakhfifSenfiSatrModel takhfifSenfiSatr: takhfifSenfiSatrs)
-                        {
+                        for (TakhfifSenfiSatrModel takhfifSenfiSatr : takhfifSenfiSatrs) {
                             int zarib = 0;
-                            if (takhfifSenfiSatr.getBeEza()== 0)
+                            if (takhfifSenfiSatr.getBeEza() == 0)
                                 zarib = 1;
                             else
                                 //Tedad..
-                                if (takhfifSenfi.getNoeTedadRial()== discountCalculation.getTedadRialTedad())
-                                {
-                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza()== discountCalculation.getBasteBandiAdad())
-                                        zarib = (int)(sumTedadGorohKala/ takhfifSenfiSatr.getBeEza());
-                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza()== discountCalculation.getBasteBandiBaste())
-                                        zarib = (int)(sumTedadBastehGorohKala/ takhfifSenfiSatr.getBeEza());
-                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza()== discountCalculation.getBasteBandiCarton())
-                                        zarib = (int)(sumTedadKartonGorohKala/ takhfifSenfiSatr.getBeEza());
+                                if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialTedad()) {
+                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiAdad())
+                                        zarib = (int) (sumTedadGorohKala / takhfifSenfiSatr.getBeEza());
+                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiBaste())
+                                        zarib = (int) (sumTedadBastehGorohKala / takhfifSenfiSatr.getBeEza());
+                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiCarton())
+                                        zarib = (int) (sumTedadKartonGorohKala / takhfifSenfiSatr.getBeEza());
                                 }//if
                                 //Rial..
-                                else if (takhfifSenfi.getNoeTedadRial()== discountCalculation.getTedadRialRial())
-                                    zarib= (int)(sumMablaghKolGorohKala/ takhfifSenfiSatr.getBeEza());
+                                else if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialRial())
+                                    zarib = (int) (sumMablaghKolGorohKala / takhfifSenfiSatr.getBeEza());
 
-                            double mablaghTakhfif= sumMablaghKolGorohKala * (zarib * takhfifSenfiSatr.getDarsadTakhfif()/ 100);
+                            double mablaghTakhfif = sumMablaghKolGorohKala * (zarib * takhfifSenfiSatr.getDarsadTakhfif() / 100);
                             //Insert In DarkhastFaktorTakhfif & DarkhastFaktorSatrTakhfif..
-                            if (mablaghTakhfif > 0)
-                            {
+                            if (mablaghTakhfif > 0) {
                                 long sumMablaghTakhfifSatr = 0;
                                 String allMablaghTakhfifSatr = "-1";
                                 insertFaktorTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfif);
-                                for (DataTableModel row: rowGorohKalas)
-                                {
+                                for (DataTableModel row : rowGorohKalas) {
                                 /*sumMablaghTakhfifSatr = 0;
                                 allMablaghTakhfifSatr = "-1";*/
-                                    if (row.getFiled2().equals(gorohKala.getFiled1()))
-                                    {
-                                        double mablaghTakhfifSatr= (Double.valueOf(row.getFiled3())* Double.valueOf(row.getFiled4().toString())) * (takhfifSenfiSatr.getDarsadTakhfif()/ 100);
+                                    if (row.getFiled2().equals(gorohKala.getFiled1())) {
+                                        double mablaghTakhfifSatr = (Double.valueOf(row.getFiled3()) * Double.valueOf(row.getFiled4().toString())) * (takhfifSenfiSatr.getDarsadTakhfif() / 100);
                                         sumMablaghTakhfifSatr += Math.round(mablaghTakhfifSatr);
                                         allMablaghTakhfifSatr += "," + Math.round(mablaghTakhfifSatr);
                                         insertFaktorSatrTakhfifSenfi(Long.valueOf(row.getFiled1()), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfifSatr);
                                     }//if
                                 }//for
-                                updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor() , takhfifSenfi.getCcTakhfifSenfi(), Math.round(mablaghTakhfif), sumMablaghTakhfifSatr, allMablaghTakhfifSatr);
+                                updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), Math.round(mablaghTakhfif), sumMablaghTakhfifSatr, allMablaghTakhfifSatr);
                                 //بروز رسانی مبلغ تخفیف تیتر
                                 //updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor() , takhfifSenfi.getCcTakhfifSenfi());
                             }//if
                         }//for
                     }//for
                 }//for
-            }
-            catch (Exception exception)
-            {
+            } catch (Exception exception) {
                 exception.printStackTrace();
                 setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "VerifyRequestModel", "", "mohasebeTakhfifSenfiFaktor", "");
                 //mPresenter.onErrorCalculateDiscount(R.string.errorOperation);
                 //onCalculateDiscountResponse.onFailedCalculate(R.string.errorCalculateDiscount);
                 //onProgressUpdate(-1);
                 resultOfProccess = -1;
-                Log.d("VerifyRequestModel","mohasebeTakhfifSenfiFaktor");
+                Log.d("VerifyRequestModel", "mohasebeTakhfifSenfiFaktor");
                 mPresenter.onErrorCalculateDiscount(R.string.errorCalculateDiscount);
                 return false;
             }
@@ -2033,14 +2010,12 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         }
 
 
-        private boolean insertFaktorTakhfifSenfi(long ccDarkhastFaktor, int ccTakhfifSenfi, String sharhTakhfif, double darsadTakhfif, double mablaghTakhfif/*, int ForJayezeh*/)
-        {
-            try
-            {
+        private boolean insertFaktorTakhfifSenfi(long ccDarkhastFaktor, int ccTakhfifSenfi, String sharhTakhfif, double darsadTakhfif, double mablaghTakhfif/*, int ForJayezeh*/) {
+            try {
                 ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
                 String codeTakhfifSenfi = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_CODE_TAKHFIF_SENFI());
 
-                DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO= new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
+                DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
                 DarkhastFaktorTakhfifModel darkhastFaktorTakhfifModel = new DarkhastFaktorTakhfifModel();
                 darkhastFaktorTakhfifModel.setCcDarkhastFaktor(ccDarkhastFaktor);
                 darkhastFaktorTakhfifModel.setCcTakhfif(ccTakhfifSenfi);
@@ -2052,30 +2027,26 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 darkhastFaktorTakhfifModel.setExtraProp_ForJayezeh(0);
                 darkhastFaktorTakhfifModel.setExtraProp_IsTakhfifMazad(0);
                 darkhastFaktorTakhfifDAO.insert(darkhastFaktorTakhfifModel);
-            }
-            catch (Exception exception)
-            {
+            } catch (Exception exception) {
                 exception.printStackTrace();
                 setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "VerifyRequestModel", "", "insertFaktorTakhfifSenfi", "");
                 //mPresenter.onErrorCalculateDiscount(R.string.errorOperation);
                 //onCalculateDiscountResponse.onFailedCalculate(R.string.errorCalculateDiscount);
                 //onProgressUpdate(-1);
                 resultOfProccess = -1;
-                Log.d("VerifyRequestModel","insertFaktorTakhfifSenfi");
+                Log.d("VerifyRequestModel", "insertFaktorTakhfifSenfi");
                 mPresenter.onErrorCalculateDiscount(R.string.errorCalculateDiscount);
                 return false;
             }
             return true;
         }
 
-        private boolean insertFaktorSatrTakhfifSenfi(long ccDarkhastFaktorSatr, int ccTakhfifSenfi, String sharhTakhfif, double darsadTakhfif, double mablaghTakhfif/*, int ForJayezeh*/)
-        {
-            try
-            {
+        private boolean insertFaktorSatrTakhfifSenfi(long ccDarkhastFaktorSatr, int ccTakhfifSenfi, String sharhTakhfif, double darsadTakhfif, double mablaghTakhfif/*, int ForJayezeh*/) {
+            try {
                 ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
                 String codeTakhfifSenfi = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_CODE_TAKHFIF_SENFI());
 
-                DarkhastFaktorSatrTakhfifDAO darkhastFaktorSatrTakhfifDAO= new DarkhastFaktorSatrTakhfifDAO(mPresenter.getAppContext());
+                DarkhastFaktorSatrTakhfifDAO darkhastFaktorSatrTakhfifDAO = new DarkhastFaktorSatrTakhfifDAO(mPresenter.getAppContext());
                 DarkhastFaktorSatrTakhfifModel darkhastFaktorSatrTakhfifModel = new DarkhastFaktorSatrTakhfifModel();
                 darkhastFaktorSatrTakhfifModel.setCcDarkhastFaktorSatr(ccDarkhastFaktorSatr);
                 darkhastFaktorSatrTakhfifModel.setCcTakhfif(ccTakhfifSenfi);
@@ -2086,16 +2057,14 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 //darkhastFaktorSatrTakhfifModel.setExtraProp_ForJayezeh(ForJayezeh);
                 darkhastFaktorSatrTakhfifModel.setExtraProp_ForJayezeh(0);
                 darkhastFaktorSatrTakhfifDAO.insert(darkhastFaktorSatrTakhfifModel);
-            }
-            catch (Exception exception)
-            {
+            } catch (Exception exception) {
                 exception.printStackTrace();
                 setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "VerifyRequestModel", "", "insertFaktorSatrTakhfif", "");
                 //mPresenter.onErrorCalculateDiscount(R.string.errorOperation);
                 //onCalculateDiscountResponse.onFailedCalculate(R.string.errorCalculateDiscount);
                 //onProgressUpdate(-1);
                 resultOfProccess = -1;
-                Log.d("VerifyRequestModel","insertFaktorSatrTakhfifSenfi");
+                Log.d("VerifyRequestModel", "insertFaktorSatrTakhfifSenfi");
                 mPresenter.onErrorCalculateDiscount(R.string.errorCalculateDiscount);
                 return false;
             }
@@ -2108,7 +2077,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         private void mohasebeTakhfifHajmi(DarkhastFaktorModel darkhastFaktorModel, ArrayList<ParameterChildModel> parameterChildModels)
         {
             DiscountCalculation discountCalculation = new DiscountCalculation(parameterChildModels);
-            ArrayList<TakhfifHajmiTitrSatrModel> takhfifHajmiTitrSatrModels = discountCalculation.getTakhfifHajmis(mPresenter.getAppContext(), darkhastFaktorModel, valueNoeVosol, false, ccMarkazSazmanForosh);
+            ArrayList<TakhfifHajmiTitrSatrModel> takhfifHajmiTitrSatrModels = discountCalculation.getTakhfifHajmis(mPresenter.getAppContext(), darkhastFaktorModel, valueNoeVosol, false);
             int maxOlaviat = new TakhfifHajmiDAO(mPresenter.getAppContext()).getMaxOlaviat();
             for (int i = 0 ; i <= maxOlaviat ; i++)
             {
@@ -2596,7 +2565,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(darkhastFaktorModel.getCcMoshtary());
 
                 TakhfifNaghdyDAO takhfifNaghdyDAO = new TakhfifNaghdyDAO(mPresenter.getAppContext());
-                ArrayList<TakhfifNaghdyModel> takhfifNaghdyModels = takhfifNaghdyDAO.getByMoshtary(moshtaryModel, ccMarkazSazmanForosh, moshtaryModel.getCcNoeMoshtary());
+                ArrayList<TakhfifNaghdyModel> takhfifNaghdyModels = takhfifNaghdyDAO.getByMoshtary(moshtaryModel, moshtaryModel.getCcNoeMoshtary());
                 Log.d("takhfifNaghdi" , "takhfifNaghdyModels.size = " + takhfifNaghdyModels.size());
                 Log.d("takhfifNaghdi" , "moshtaryModel = " + moshtaryModel.toString());
                 if (takhfifNaghdyModels.size()== 0)
@@ -2787,7 +2756,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 //Foroshandeh foroshandeh= foroshandehDAO.GetByccForoshandeh(darkhastFaktor.getccForoshandeh());
                 MoshtaryModel moshtary= moshtaryDAO.getByccMoshtary(darkhastFaktor.getCcMoshtary());
                 Log.d("jayezeh" , "CodeNoeHaml : " + darkhastFaktor.getCodeNoeHaml());
-                ArrayList<JayezehModel> jayezehs = jayezehDAO.getByMoshtary(moshtary, ccMarkazSazmanForosh, darkhastFaktor.getCodeNoeHaml());
+                ArrayList<JayezehModel> jayezehs = jayezehDAO.getByMoshtary(moshtary, darkhastFaktor.getCodeNoeHaml());
 
                 Log.d("jayezeh" , "jayezehs.size : " + jayezehs.size());
                 if (jayezehs.size() == 0)

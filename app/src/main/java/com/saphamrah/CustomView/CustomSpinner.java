@@ -164,5 +164,63 @@ public class CustomSpinner
         }
     }
 
+    public void showSpinnerSingleButton(Activity activity , List<String> itemTitles , final CustomSpinnerResponse response)
+    {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        View myview = activity.getLayoutInflater().inflate(R.layout.spinner_simple_single_button , null);
+        Typeface font = Typeface.createFromAsset(activity.getAssets() , activity.getResources().getString(R.string.fontPath));
+        selectedIndex = 0;
+        ListView listView = myview.findViewById(R.id.lstview);
+        TextView lblEmptyItem = myview.findViewById(R.id.lblEmptyItem);
+        Button btnApply = myview.findViewById(R.id.btnApply);
+
+        lblEmptyItem.setTypeface(font);
+        btnApply.setTypeface(font);
+
+        btnApply.setText(activity.getResources().getString(R.string.apply));
+
+        final SpinnerSimpleAdapter adapter = new SpinnerSimpleAdapter(activity , itemTitles);
+        listView.setAdapter(adapter);
+        listView.setEmptyView(lblEmptyItem);
+        builder.setCancelable(true);
+        builder.setView(myview);
+        builder.create();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                selectedIndex = position;
+                adapter.updateListStatus(selectedIndex);
+            }
+        });
+
+        if (!(activity).isFinishing())
+        {
+            final AlertDialog show = builder.show();
+            try
+            {
+                if (show.getWindow() != null)
+                {
+                    show.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                }
+            }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
+
+            btnApply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    show.dismiss();
+                    response.onApplySingleSelection(selectedIndex);
+                }
+            });
+
+        }
+    }
+
 
 }

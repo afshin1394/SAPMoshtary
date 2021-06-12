@@ -195,6 +195,34 @@ public class KardexSatrDAO
         return kardexSatrModels;
     }
 
+    public ArrayList<KardexSatrModel> getByCcKardex(int ccKardex)
+    {
+        ArrayList<KardexSatrModel> kardexSatrModels = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try
+        {
+            String query = "SELECT * FROM kardexSatr WHERE ccKardex = " + ccKardex;
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    kardexSatrModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , KardexSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KardexSatrDAO" , "" , "getByCcKardex" , "");
+        }
+        return kardexSatrModels;
+    }
+
 
     public KardexSatrModel getByccKardexSatr(int ccKardexSatr)
     {

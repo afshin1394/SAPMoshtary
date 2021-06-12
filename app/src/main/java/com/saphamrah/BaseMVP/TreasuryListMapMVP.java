@@ -37,6 +37,10 @@ public interface TreasuryListMapMVP
         void showToast(int resId, int messageType , int duration);
         void closeLoadingDialog();
         void onGetSortList(int sortList);
+
+        void showLoadingDialog();
+
+        void onOpenInvoiceSettlement(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
     }
 
 
@@ -56,6 +60,10 @@ public interface TreasuryListMapMVP
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
         void getSortList();
+
+        void checkMoshtaryKharejAzMahal(int noeMasouliat, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
+
+        void checkClearingTreasury(int noeMasouliat, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
     }
 
 
@@ -81,6 +89,11 @@ public interface TreasuryListMapMVP
         void onError(int resId);
         void onGetSortList(int sortList);
 
+        void onWarning(int emptyList);
+
+        void onSuccess(int successSendData);
+
+        void onOpenInvoiceSettlement(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel, boolean b);
     }
 
 
@@ -100,6 +113,10 @@ public interface TreasuryListMapMVP
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
         void getSortList();
+
+        void checkMoshtaryKharejAzMahal(int noeMasouliat, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
+
+        void checkIsLocationSendToServer(int noeMasouliat, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
     }
 
 }

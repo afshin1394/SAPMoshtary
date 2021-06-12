@@ -128,6 +128,7 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     @Override
     public void onErrorUseFakeLocation()
     {
+        mView.get().closeLoading();
         mView.get().onError(true , R.string.errorFakeLocation);
     }
 
@@ -173,6 +174,7 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     @Override
     public void onFailedSetDarkhastFaktorShared(int resId)
     {
+        mView.get().closeLoading();
         mView.get().showToast(resId, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
     }
 
@@ -256,6 +258,7 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     @Override
     public void onErrorAccessToLocation()
     {
+        mView.get().closeLoading();
         mView.get().showToast(R.string.errorAccessToLocation, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
     }
 
@@ -263,12 +266,14 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     @Override
     public void onErrorGetCustomerLocation(int resId, String customerName)
     {
+        mView.get().closeLoading();
         mView.get().showAlertMessage(resId , customerName , Constants.FAILED_MESSAGE());
     }
 
     @Override
     public void onError(int resId)
     {
+        mView.get().closeLoading();
         mView.get().showAlertMessage(resId , Constants.FAILED_MESSAGE());
     }
 

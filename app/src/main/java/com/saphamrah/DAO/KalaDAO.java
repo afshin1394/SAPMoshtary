@@ -539,7 +539,11 @@ Call<GetMojodyAnbarResult> call = apiServiceGet.getAllKalaAmargar();
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(KalaModel.TableName(), allColumns(), KalaModel.COLUMN_ccKalaCode() + " = " + ccKalaCode , null, null, null, null);
+            String query = " SELECT * FROM Kala "
+                    + " WHERE ccKalaCode = "+ ccKalaCode
+
+                    + " Limit 1";
+            Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)

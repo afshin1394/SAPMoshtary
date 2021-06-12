@@ -12,6 +12,7 @@ import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.UIModel.JayezehByccKalaCodeModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServiceGet;
@@ -418,12 +419,15 @@ Call<GetAllvJayezehByccMarkazForoshResult> call = apiServiceGet.getJayezeh("1", 
         return jayezehModels;
     }
 
-    public ArrayList<JayezehModel> getByMoshtary(MoshtaryModel moshtary, int ccMarkazSazmanForosh, int codeNoeHaml)
+    public ArrayList<JayezehModel> getByMoshtary(MoshtaryModel moshtary, int codeNoeHaml)
     {
+
         ArrayList<JayezehModel> jayezehModels = new ArrayList<>();
         final int NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY = 1;
         final int NAME_NOE_FIELD_MOSHTARY_CC_GOROH = 2;
         final int GOROH_LINK_NOE_MOSHTARY = 304 ;
+        SelectFaktorShared selectFaktorShared = new SelectFaktorShared(context);
+        int ccMarkazSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getCcMarkazSazmanForosh(),0);
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();

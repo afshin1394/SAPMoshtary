@@ -162,7 +162,7 @@
             android:screenOrientation="sensorPortrait" />
         <activity android:name=".MVP.View.OnlineSupportActivity" />
         <activity android:name=".MVP.View.LogsActivity" />
-        <activity android:name=".MVP.View.SplashActivity">
+        <activity android:name=".MVP.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />

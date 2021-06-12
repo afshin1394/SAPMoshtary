@@ -128,6 +128,8 @@ import java.util.Date;
      */
    private long insertKardexForoshandeh(ElamMarjoeeForoshandehModel entity, int ccMarkazAnbar, int ccMarkazForosh, int ccForoshandeh)
    {
+       ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
+       ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
        KardexModel kardex= new KardexModel();
        try
        {
@@ -138,7 +140,9 @@ import java.util.Date;
                    0,
                    ccForoshandeh,
                    Long.parseLong(ccDarkhastFaktor),
-                   0
+                   0,
+                   foroshandehMamorPakhshModel.getCcAfrad()
+
                    );
 
            ccKardex =kardexDAO.findccKardexByccRefrence(Long.parseLong(entity.getCcDarkhastFaktor()));

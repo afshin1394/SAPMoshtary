@@ -22,15 +22,18 @@ public class ConfigNoeVosolMojazeFaktorModel {
     @SerializedName("txtNoeVosol")
     @Expose
     private String txtNoeVosol;
-    @SerializedName("IsPishDariaft")
-    @Expose
-    private int IsPishDariaft;
+//    @SerializedName("IsPishDariaft")
+//    @Expose
+//    private int IsPishDariaft;
     @SerializedName("MashmoolTakhfifNaghdi")
     @Expose
     private int MashmoolTakhfifNaghdi;
     @SerializedName("MashmoolDirkardVosol")
     @Expose
     private int MashmoolDirkardVosol;
+    @SerializedName("MaxModatTajil")
+    @Expose
+    private int MaxModatTajil;
 
 
     // setter and getter
@@ -60,13 +63,13 @@ public class ConfigNoeVosolMojazeFaktorModel {
         CodeNoeVosolAzMoshtary = codeNoeVosolAzMoshtary;
     }
 
-    public int getIsPishDariaft() {
-        return IsPishDariaft;
-    }
-
-    public void setIsPishDariaft(int isPishDariaft) {
-        IsPishDariaft = isPishDariaft;
-    }
+//    public int getIsPishDariaft() {
+//        return IsPishDariaft;
+//    }
+//
+//    public void setIsPishDariaft(int isPishDariaft) {
+//        IsPishDariaft = isPishDariaft;
+//    }
 
     public int getCodeVazeiat() {
         return CodeVazeiat;
@@ -100,6 +103,14 @@ public class ConfigNoeVosolMojazeFaktorModel {
         MashmoolDirkardVosol = mashmoolDirkardVosol;
     }
 
+    public int getMaxModatTajil() {
+        return MaxModatTajil;
+    }
+
+    public void setMaxModatTajil(int maxModatTajil) {
+        MaxModatTajil = maxModatTajil;
+    }
+
     public String getTABLE_NAME() {
         return "ConfigNoeVosolMojazeFaktor";
     }
@@ -123,14 +134,17 @@ public class ConfigNoeVosolMojazeFaktorModel {
     public String getCOLUMN_txtNoeVosol() {
         return "txtNoeVosol";
     }
-    public String getCOLUMN_IsPishDariaft() {
-        return "IsPishDariaft";
-    }
+//    public String getCOLUMN_IsPishDariaft() {
+//        return "IsPishDariaft";
+//    }
     public String getCOLUMN_MashmoolTakhfifNaghdi() {
         return "MashmoolTakhfifNaghdi";
     }
     public String getCOLUMN_MashmoolDirkardVosol() {
         return "MashmoolDirkardVosol";
+    }
+    public String getCOLUMN_MaxModatTajil() {
+        return "MaxModatTajil";
     }
 
 

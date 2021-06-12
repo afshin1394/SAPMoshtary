@@ -560,7 +560,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             {
                                 Log.d("noTemp" , "in else not success");
                                 setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "" , "sendBarkhordsToServer" , "onResponse");
-                                mPresenter.onErrorSendOtherDataOfFaktor();
+                                mPresenter.onError(R.string.errorSendBarkhordMoshtary);
                             }
                         }
                         else
@@ -572,7 +572,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             }
                             setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "" , "sendBarkhordsToServer" , "onResponse");
                             Log.d("tempRequest" , "message : " + errorMessage);
-                            mPresenter.onErrorSendOtherDataOfFaktor();
+                            mPresenter.onError(R.string.errorSendBarkhordMoshtary);
                         }
                     }
                     catch (Exception exception)
@@ -580,7 +580,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                         Log.d("noTemp" , "in exception");
                         exception.printStackTrace();
                         setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "" , "sendBarkhordsToServer" , "onResponse");
-                        mPresenter.onErrorSendOtherDataOfFaktor();
+                        mPresenter.onError(R.string.errorSendBarkhordMoshtary);
                     }
                 }
 
@@ -589,8 +589,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                 {
                     Log.d("noTemp" , "in onFailure");
                     setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "" , "sendBarkhordsToServer" , "onFailure");
-                    mPresenter.onErrorSendOtherDataOfFaktor();
-                }
+                    mPresenter.onError(R.string.errorSendBarkhordMoshtary);                }
             });
         }
 
@@ -634,7 +633,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             {
                                 Log.d("noTemp" , "in else not success");
                                 setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "" , "sendMojoodigiriToServer" , "onResponse");
-                                mPresenter.onErrorSendOtherDataOfFaktor();
+                                mPresenter.onError(R.string.errorSendMojodiGiri);
                             }
                         }
                         else
@@ -646,7 +645,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             }
                             setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "" , "sendMojoodigiriToServer" , "onResponse");
                             Log.d("tempRequest" , "message : " + errorMessage);
-                            mPresenter.onErrorSendOtherDataOfFaktor();
+                            mPresenter.onError(R.string.errorSendMojodiGiri);
                         }
                     }
                     catch (Exception exception)
@@ -654,7 +653,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                         Log.d("noTemp" , "in exception");
                         exception.printStackTrace();
                         setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "" , "sendMojoodigiriToServer" , "onResponse");
-                        mPresenter.onErrorSendOtherDataOfFaktor();
+                        mPresenter.onError(R.string.errorSendMojodiGiri);
                     }
                 }
 
@@ -663,7 +662,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                 {
                     Log.d("noTemp" , "in onFailure");
                     setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "" , "sendMojoodigiriToServer" , "onFailure");
-                    mPresenter.onErrorSendOtherDataOfFaktor();
+                    mPresenter.onError(R.string.errorSendMojodiGiri);
                 }
             });
         }
@@ -719,7 +718,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             {
                                 Log.d("noTemp" , "in else not success");
                                 setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "" , "sendGPSDataToServer" , "onResponse");
-                                mPresenter.onErrorSendOtherDataOfFaktor();
+                                mPresenter.onError(R.string.errorSendGpsData);
                             }
                         }
                         else
@@ -731,7 +730,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             }
                             setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "" , "sendGPSDataToServer" , "onResponse");
                             Log.d("tempRequest" , "message : " + errorMessage);
-                            mPresenter.onErrorSendOtherDataOfFaktor();
+                            mPresenter.onError(R.string.errorSendGpsData);
                         }
                     }
                     catch (Exception exception)
@@ -739,7 +738,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                         Log.d("noTemp" , "in exception");
                         exception.printStackTrace();
                         setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "" , "sendGPSDataToServer" , "onResponse");
-                        mPresenter.onErrorSendOtherDataOfFaktor();
+                        mPresenter.onError(R.string.errorSendGpsData);
                     }
                 }
 
@@ -748,7 +747,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                 {
                     Log.d("noTemp" , "in onFailure");
                     setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "" , "sendGPSDataToServer" , "onFailure");
-                    mPresenter.onErrorSendOtherDataOfFaktor();
+                    mPresenter.onError(R.string.errorSendGpsData);
                 }
             });
         }
@@ -853,7 +852,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             {
                                 Log.d("noTemp" , "in else not success");
                                 setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "" , "sendGPSDataMashinToServer" , "onResponse");
-                                mPresenter.onErrorSendOtherDataOfFaktor();
+                                mPresenter.onError(R.string.errorSendGpsDataMashin);
                             }
                         }
                         else
@@ -865,7 +864,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             }
                             setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "" , "sendGPSDataMashinToServer" , "onResponse");
                             Log.d("tempRequest" , "message : " + errorMessage);
-                            mPresenter.onErrorSendOtherDataOfFaktor();
+                            mPresenter.onError(R.string.errorSendGpsDataMashin);
                         }
                     }
                     catch (Exception exception)
@@ -873,7 +872,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                         Log.d("noTemp" , "in exception");
                         exception.printStackTrace();
                         setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "" , "sendGPSDataMashinToServer" , "onResponse");
-                        mPresenter.onErrorSendOtherDataOfFaktor();
+                        mPresenter.onError(R.string.errorSendGpsDataMashin);
                     }
                 }
 
@@ -882,7 +881,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                 {
                     Log.d("noTemp" , "in onFailure");
                     setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "" , "sendGPSDataMashinToServer" , "onFailure");
-                    mPresenter.onErrorSendOtherDataOfFaktor();
+                    mPresenter.onError(R.string.errorSendGpsDataMashin);
                 }
             });
         }
@@ -939,7 +938,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             {
                                 Log.d("noTemp" , "in else not success");
                                 setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "" , "sendLogPPCToServer" , "onResponse");
-                                mPresenter.onErrorSendOtherDataOfFaktor();
+                                mPresenter.onError(R.string.errorSendLogData);
                             }
                         }
                         else
@@ -951,7 +950,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                             }
                             setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "" , "sendLogPPCToServer" , "onResponse");
                             Log.d("tempRequest" , "message : " + errorMessage);
-                            mPresenter.onErrorSendOtherDataOfFaktor();
+                            mPresenter.onError(R.string.errorSendLogData);
                         }
                     }
                     catch (Exception exception)
@@ -959,7 +958,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                         Log.d("noTemp" , "in exception");
                         exception.printStackTrace();
                         setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "" , "sendLogPPCToServer" , "onResponse");
-                        mPresenter.onErrorSendOtherDataOfFaktor();
+                        mPresenter.onError(R.string.errorSendLogData);
                     }
                 }
 
@@ -968,7 +967,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                 {
                     Log.d("noTemp" , "in onFailure");
                     setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "" , "sendLogPPCToServer" , "onFailure");
-                    mPresenter.onErrorSendOtherDataOfFaktor();
+                    mPresenter.onError(R.string.errorSendLogData);
                 }
             });
         }
@@ -1857,7 +1856,8 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
             return 1;
         }
 
-        private void sendDarkhastFaktorToServer(final int ccMoshtary, final long ccDarkhastFaktorOld, String jsonStringData ,final int position , final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel)
+        @SuppressLint("LongLogTag")
+        private void sendDarkhastFaktorToServer(final int ccMoshtary, final long ccDarkhastFaktorOld, String jsonStringData , final int position , final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel)
         {
 //            ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
 //            String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()

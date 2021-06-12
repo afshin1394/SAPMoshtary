@@ -376,5 +376,38 @@ public static String COLUMN_ExtraProp_ccElatMarjoeeKala() {
         }
     }
 
+    public JSONObject toJsonForKardexForSend(KardexModel model) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("ccKardex", model.getCcKardex());
+            jsonObject.put("ccMarkazAnbar", model.getCcMarkazAnbar());
+            jsonObject.put("ccMarkazForosh", model.getCcMarkazForosh());
+            jsonObject.put("ccAnbar", model.getCcAnbar());
+            jsonObject.put("CodeNoeForm", model.getCodeNoeForm());
+            jsonObject.put("CodeNoeAmalyat", model.getCodeNoeAmalyat());
+            jsonObject.put("CodeVazeiat", model.getCodeVazeiat());
+            jsonObject.put("CodeNoeAnbar", model.getCodeNoeAnbar());
+            jsonObject.put("ccMoshtary", model.getCcMoshtary());
+            jsonObject.put("MarjoeeKamel", model.getMarjoeeKamel());
+            jsonObject.put("ccForoshandeh", model.getCcForoshandeh());
+            jsonObject.put("ccAfradMamurPakhsh", model.getCcAfradMamurPakhsh());
+            jsonObject.put("ccRefrence", model.getCcRefrence());
+            jsonObject.put("ExtraProp_IsOld", model.getExtraProp_IsOld());
+            jsonObject.put("TarikhForm", model.getTarikhForm());
+            jsonObject.put("TarikhFaktor", model.getTarikhFaktor());
+            jsonObject.put("SumGheymatMarjoee", model.getSumGheymatMarjoee());
+            jsonObject.put("SumTedadMarjoee", model.getSumTedadMarjoee());
+            jsonObject.put("ExtraProp_ccElatMarjoeeKala", model.getExtraProp_ccElatMarjoeeKala());
+
+
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return jsonObject;
+    }
+
 
 }

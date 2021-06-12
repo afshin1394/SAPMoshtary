@@ -14,6 +14,7 @@ import com.saphamrah.Model.TakhfifHajmiTitrSatrModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServiceGet;
 
@@ -483,11 +484,13 @@ Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiServiceGet.getTakhfifH
     }
 
 
-    public ArrayList<TakhfifHajmiTitrSatrModel> getByMoshtaryWithSatr(MoshtaryModel moshtary, int codeNoeHaml, boolean ShebhOmdeh, int CodeNoeVosol, int ccMarkazSazmanForosh)
+    public ArrayList<TakhfifHajmiTitrSatrModel> getByMoshtaryWithSatr(MoshtaryModel moshtary, int codeNoeHaml, boolean ShebhOmdeh, int CodeNoeVosol)
     {
         final int NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY = 1;
         final int NAME_NOE_FIELD_MOSHTARY_CC_GOROH = 2;
         final int GOROH_LINK_NOE_MOSHTARY = 304 ;
+        SelectFaktorShared selectFaktorShared = new SelectFaktorShared(context);
+        int ccMarkazSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getCcMarkazSazmanForosh(),0);
         ArrayList<TakhfifHajmiTitrSatrModel> takhfifHajmiTitrSatrModels = new ArrayList<>();
         try
         {

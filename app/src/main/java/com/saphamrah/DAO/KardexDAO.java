@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.saphamrah.Model.AnbarakAfradModel;
 import com.saphamrah.Model.KardexModel;
 import com.saphamrah.Model.KardexSatrModel;
 import com.saphamrah.PubFunc.PubFunc;
@@ -110,7 +111,7 @@ public class KardexDAO {
         return ccKardex;
     }
 
-    public KardexModel SetForInsert_Kardex(int ccMarkazAnbar, int ccMarkazForosh, int ccAnbarMarjoee, int ccMoshtary, int MarjoeeKamel, int ccForoshandeh, long ccRefrence , int ExtraProp_ccElatMarjoeeKala) {
+    public KardexModel SetForInsert_Kardex(int ccMarkazAnbar, int ccMarkazForosh, int ccAnbarMarjoee, int ccMoshtary, int MarjoeeKamel, int ccForoshandeh, long ccRefrence , int ExtraProp_ccElatMarjoeeKala, int ccAfradMamorPakhsh) {
 
         KardexModel kardex = new KardexModel();
 
@@ -124,7 +125,7 @@ public class KardexDAO {
         kardex.setCcMoshtary(ccMoshtary);
         kardex.setMarjoeeKamel(MarjoeeKamel);
         kardex.setCcForoshandeh(ccForoshandeh);
-        kardex.setCcAfradMamurPakhsh(0);
+        kardex.setCcAfradMamurPakhsh(ccAfradMamorPakhsh);
         kardex.setCcRefrence((int) ccRefrence);
         kardex.setExtraProp_IsOld(0);
         kardex.setExtraProp_ccElatMarjoeeKala(ExtraProp_ccElatMarjoeeKala);
@@ -152,6 +153,27 @@ public class KardexDAO {
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KardexDAO", "", "getAll", "");
         }
         return kardexModels;
+    }
+
+    public KardexModel getByCcRefrence(long ccRefrence){
+        KardexModel kardexModel = new KardexModel();
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(KardexModel.TableName(), allColumns(), KardexModel.COLUMN_ccRefrence() + " = " + ccRefrence, null, null, null, null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    kardexModel = cursorToModels(cursor).get(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll, KardexModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KardexDAO", "", "getByCcRefrence", "");
+        }
+        return kardexModel;
     }
 
     public boolean deleteByccDarkhastFaktor(String ccDarkhastFaktor)

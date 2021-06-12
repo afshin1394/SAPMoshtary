@@ -996,6 +996,7 @@
     <string name="Http_client_error">خطای نرم افزار,لطفا با واحد پشتیبانی تماس بگیرید</string>
     <string name="Http_server_not_found">عدم دسترسی به سرور لطفا با واحد ئشتیبانی تماس بگیرید</string>
     <string name="Http_internet_error">دسترسی به اینترنت را بررسی نمایید</string>
+    <string name="Http_bad_request_error">درخواست شما معتبر نیست</string>
     <string name="Http_internet_quality">کیفیت اینترنت خود را بررسی کنید</string>
     <string name="confirm">ثبت</string>
     <string name="invalidIdentityCode">کد ملی وارد شده در سیستم تعریف نشده است و لطفا با واحد پشتیبانی تماس بگیرید</string>
@@ -1054,6 +1055,11 @@
     <string name="errorGetMamorPakhshLocations">خطا در دریافت اطلاعات جغرافیایی</string>
     <string name="SuccessGetMamorPakhshLocations"> دریافت اطلاعات جغرافیایی با موفقیت انجام شد</string>
     <string name="errorMamorPakhshLocationsNotSent"> موقعیت  شما ارسال نشده است  لطفا آن را در محدوده این مشتری ارسال نمایید</string>
-    <string name="errorSendGpsData">خطا در ارسال اطلاعات موقعیت کنونی</string>
+    <string name="errorSendGpsData">خطا در ارسال اطلاعات موقعیت </string>
     <string name="SuccessSendGpsData">با موفقیت ارسال شدموقعیت کنونی </string>
+    <string name="failConnectServer">لطفا سرور دیگری را انتخاب نمایید</string>
+    <string name="errorSendBarkhordMoshtary">خطا در ارسال اطلاعات برخورد مشتری با فروشنده</string>
+    <string name="errorSendMojodiGiri">خطا در ارسال اطلاعات موجودی گیری</string>
+    <string name="errorSendGpsDataMashin">خطا در ارسال اطلاعات موقعیت ماشین</string>
+    <string name="errorSendLogData">خطا در ارسال لاگ های سیستمی</string>
 </resources>

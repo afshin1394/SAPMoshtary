@@ -1,11 +1,13 @@
 package com.saphamrah.MVP.Presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.saphamrah.BaseMVP.TreasuryListMapMVP;
 import com.saphamrah.MVP.Model.TreasuryListMapModel;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
+import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.DarkhastFaktorMoshtaryForoshandeModel;
 import com.saphamrah.Utils.Constants;
@@ -64,6 +66,7 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
     @Override
     public void getCustomerFaktors(DarkhastFaktorMoshtaryForoshandeModel customerInfo, MoshtaryAddressModel moshtaryAddressModel, String customerPriority)
     {
+        Log.i("getCustomerFaktorsLog", "getCustomerFaktors: "+"customerInfo"+customerInfo  +"moshtaryAddressModel"+ moshtaryAddressModel);
         if (customerInfo != null && customerInfo.getCcMoshtary() > 0)
         {
             mModel.getCustomerFaktors(customerInfo, moshtaryAddressModel, customerPriority);
@@ -167,6 +170,22 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
     @Override
     public void getSortList() {
         mModel.getSortList();
+    }
+
+    @Override
+    public void checkMoshtaryKharejAzMahal(int noeMasouliat, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel) {
+        mView.get().showLoadingDialog();
+        mModel.checkMoshtaryKharejAzMahal(noeMasouliat,darkhastFaktorMoshtaryForoshandeModel);
+    }
+
+    @Override
+    public void checkClearingTreasury(int noeMasouliat, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel) {
+        if ((noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD && darkhastFaktorMoshtaryForoshandeModel.getCodeVazeiat() == 99) || (noeMasouliat == 5 && darkhastFaktorMoshtaryForoshandeModel.getExtraProp_IsSend() == 0 && darkhastFaktorMoshtaryForoshandeModel.getCodeVazeiat() < 6)) {
+            mView.get().showToast(R.string.errorFirstSendFaktor, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        } else {
+            mModel.checkIsLocationSendToServer(noeMasouliat,darkhastFaktorMoshtaryForoshandeModel);
+
+        }
     }
 
 
@@ -361,6 +380,8 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
     public void onSuccessSendDariaftPardakht()
     {
         mView.get().showAlertDialog(R.string.successSendData, false, Constants.SUCCESS_MESSAGE());
+        mView.get().closeLoadingDialog();
+
     }
 
     @Override
@@ -369,10 +390,14 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
         if (pointsOfPolyline.size() > 0)
         {
             mView.get().onSuccessRouting(customerName, pointsOfPolyline, routingResponse);
+            mView.get().closeLoadingDialog();
+
         }
         else
         {
             mView.get().showAlertDialog(R.string.errorRouting, false, Constants.FAILED_MESSAGE());
+            mView.get().closeLoadingDialog();
+
         }
     }
 
@@ -380,11 +405,33 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
     public void onError(int resId)
     {
         mView.get().showToast(resId, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        mView.get().closeLoadingDialog();
     }
 
     @Override
     public void onGetSortList(int sortList) {
         mView.get().onGetSortList(sortList);
+    }
+
+    @Override
+    public void onWarning(int resId) {
+        mView.get().showToast(resId, Constants.INFO_MESSAGE(), Constants.DURATION_SHORT());
+        mView.get().closeLoadingDialog();
+
+    }
+
+    @Override
+    public void onSuccess(int successSendData) {
+        mView.get().closeLoadingDialog();
+        mView.get().showAlertDialog(successSendData, false,Constants.SUCCESS_MESSAGE());
+    }
+
+    @Override
+    public void onOpenInvoiceSettlement(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel, boolean canOpenSettlement) {
+        if (canOpenSettlement)
+            mView.get().onOpenInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModel);
+        else
+            mView.get().showAlertDialog(R.string.errorMamorPakhshLocationsNotSent, false,Constants.FAILED_MESSAGE());
     }
 
 

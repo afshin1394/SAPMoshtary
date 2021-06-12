@@ -5,7 +5,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.saphamrah.Application.BaseApplication;
-import com.saphamrah.MVP.View.SplashActivity;
+import com.saphamrah.MVP.splash.SplashActivity;
 import com.saphamrah.Utils.Constants;
 
 import java.io.BufferedReader;

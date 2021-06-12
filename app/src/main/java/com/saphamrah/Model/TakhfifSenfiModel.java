@@ -6,6 +6,7 @@ public class TakhfifSenfiModel
 {
 
     private static final String TABLE_NAME = "TakhfifSenfi";
+    public static final String COLUMN_Radif ="Radif";
     private static final String COLUMN_ccTakhfifSenfi = "ccTakhfifSenfi";
     private static final String COLUMN_CodeNoe = "CodeNoe";
     private static final String COLUMN_SharhTakhfif = "SharhTakhfif";
@@ -15,11 +16,17 @@ public class TakhfifSenfiModel
     private static final String COLUMN_Darajeh = "Darajeh";
     private static final String COLUMN_ccMarkazSazmanForosh = "ccMarkazSazmanForosh";
     private static final String COLUMN_ccNoeSenf = "ccNoeSenf";
+    private static final String COLUMN_NoeVosol = "NoeVosol";
     private static final String COLUMN_NameNoeSenf = "NameNoeSenf";
+    private static final String COLUMN_NoeGheymat="NoeGheymat";
+    private static final String COLUMN_ccMoshtaryGharardad="ccMoshtaryGharardad";
 
 
     public static String TableName() {
         return TABLE_NAME;
+    }
+    public static String COLUMN_Radif(){
+        return COLUMN_Radif;
     }
     public static String COLUMN_ccTakhfifSenfi() {
         return COLUMN_ccTakhfifSenfi;
@@ -48,11 +55,27 @@ public class TakhfifSenfiModel
     public static String COLUMN_ccNoeSenf() {
         return COLUMN_ccNoeSenf;
     }
-    public static String COLUMN_NameNoeSenf() {
-        return COLUMN_NameNoeSenf;
+    public static String COLUMN_NameNoeSenf(){return COLUMN_NameNoeSenf; }
+    public static String COLUMN_NoeGheymat() {
+        return COLUMN_NoeGheymat;
+    }
+    public static String COLUMN_ccMoshtaryGharardad() {
+        return COLUMN_ccMoshtaryGharardad;
     }
 
+    public static String COLUMN_NoeVosol() {
+        return COLUMN_NoeVosol;
+    }
 
+    private int Radif;
+
+    public int getRadif() {
+        return Radif;
+    }
+
+    public void setRadif(int radif) {
+        Radif = radif;
+    }
 
     private int ccTakhfifSenfi;
     public int getCcTakhfifSenfi() {
@@ -146,12 +169,44 @@ public class TakhfifSenfiModel
         NameNoeSenf = NameNoeSenf;
     }
 
-    @NonNull
+
+    private int ccMoshtaryGharardad;
+
+    public int getCcMoshtrayGharardad() {
+        return ccMoshtaryGharardad;
+    }
+
+    public void setCcMoshtrayGharardad(int ccMoshtrayGharardad) {
+        this.ccMoshtaryGharardad = ccMoshtrayGharardad;
+    }
+
+    private int NoeGheymat;
+
+    public int getNoeGheymat() {
+        return NoeGheymat;
+    }
+
+    public void setNoeGheymat(int noeGheymat) {
+        NoeGheymat = noeGheymat;
+    }
+
+
+
+    private int NoeVosol;
+
+    public int getNoeVosol() {
+        return NoeVosol;
+    }
+
+    public void setNoeVosol(int noeVosol) {
+        NoeVosol = noeVosol;
+    }
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "TakhfifSenfiModel{" +
-                "ccTakhfifSenfi=" + ccTakhfifSenfi +
+                "Radif=" + Radif +
+                ", ccTakhfifSenfi=" + ccTakhfifSenfi +
                 ", CodeNoe=" + CodeNoe +
                 ", SharhTakhfif='" + SharhTakhfif + '\'' +
                 ", NoeTedadRial=" + NoeTedadRial +
@@ -160,7 +215,10 @@ public class TakhfifSenfiModel
                 ", Darajeh=" + Darajeh +
                 ", ccMarkazSazmanForosh=" + ccMarkazSazmanForosh +
                 ", ccNoeSenf=" + ccNoeSenf +
-                ", NameNoeSenf=" + NameNoeSenf +
+                ", NameNoeSenf='" + NameNoeSenf + '\'' +
+                ", ccMoshtaryGharardad=" + ccMoshtaryGharardad +
+                ", NoeGheymat=" + NoeGheymat +
+                ", NoeVosol=" + NoeVosol +
                 '}';
     }
 }

@@ -168,9 +168,9 @@ public class ConfigNoeVosolMojazeFaktorDAO
                 modelGetTABLE_NAME.getCOLUMN_CodeNoeVosol_Tablet(),
                 modelGetTABLE_NAME.getCOLUMN_CodeNoeVosolAzMoshtary(),
                 modelGetTABLE_NAME.getCOLUMN_CodeVazeiat(),
-                modelGetTABLE_NAME.getCOLUMN_IsPishDariaft(),
                 modelGetTABLE_NAME.getCOLUMN_MashmoolTakhfifNaghdi(),
-                modelGetTABLE_NAME.getCOLUMN_MashmoolDirkardVosol()
+                modelGetTABLE_NAME.getCOLUMN_MashmoolDirkardVosol(),
+                modelGetTABLE_NAME.getCOLUMN_MaxModatTajil()
 
 
 
@@ -375,6 +375,45 @@ public class ConfigNoeVosolMojazeFaktorDAO
         return value;
     }
 
+    public int getMaxModatTajil(int codeNoeVosol , int CodeNoeVosolAzMoshtary)
+    {
+        String query = "select MaxModatTajil from ConfigNoeVosolMojazeFaktor where CodeNoeVosol_Tablet =  " + codeNoeVosol +" and CodeNoeVosolAzMoshtary = " + CodeNoeVosolAzMoshtary ;
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    int maxTajil = cursor.getInt(cursor.getColumnIndex(modelGetTABLE_NAME.getCOLUMN_MaxModatTajil()));
+                    cursor.close();
+                    db.close();
+                    return maxTajil;
+                }
+                else
+                {
+                    db.close();
+                    cursor.close();
+                    return 0;
+                }
+            }
+            else
+            {
+                db.close();
+                return 0;
+            }
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(BaseApplication.getContext(),Constants.LOG_EXCEPTION(), exception.toString(), "ConfigNoeVosolMojazFaktor" , "" , "getMaxTedadTajil" , "");
+            return 0;
+        }
+    }
+
     public boolean deleteAll()
     {
         try
@@ -403,9 +442,10 @@ public class ConfigNoeVosolMojazeFaktorDAO
         contentValues.put(faktor.getCOLUMN_CodeNoeVosol_Tablet(),model.getCodeNoeVosol_Tablet());
         contentValues.put(faktor.getCOLUMN_CodeNoeVosolAzMoshtary() , model.getCodeNoeVosolAzMoshtary());
         contentValues.put(faktor.getCOLUMN_CodeVazeiat() , model.getCodeVazeiat());
-        contentValues.put(faktor.getCOLUMN_IsPishDariaft() , model.getIsPishDariaft());
+//        contentValues.put(faktor.getCOLUMN_IsPishDariaft() , model.getIsPishDariaft());
         contentValues.put(faktor.getCOLUMN_MashmoolTakhfifNaghdi() , model.getMashmoolTakhfifNaghdi());
         contentValues.put(faktor.getCOLUMN_MashmoolDirkardVosol() , model.getMashmoolDirkardVosol());
+        contentValues.put(faktor.getCOLUMN_MaxModatTajil() , model.getMaxModatTajil());
 
         return contentValues;
     }
@@ -427,9 +467,10 @@ public class ConfigNoeVosolMojazeFaktorDAO
             configNoeVosolMojazeFaktorModel.setCodeNoeVosolAzMoshtary(cursor.getInt(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_CodeNoeVosolAzMoshtary())));
             configNoeVosolMojazeFaktorModel.setCodeVazeiat(cursor.getInt(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_CodeVazeiat())));
             configNoeVosolMojazeFaktorModel.setTxtNoeVosol(cursor.getString(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_txtNoeVosol())));
-            configNoeVosolMojazeFaktorModel.setIsPishDariaft(cursor.getInt(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_IsPishDariaft())));
+//            configNoeVosolMojazeFaktorModel.setIsPishDariaft(cursor.getInt(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_IsPishDariaft())));
             configNoeVosolMojazeFaktorModel.setMashmoolTakhfifNaghdi(cursor.getInt(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_MashmoolTakhfifNaghdi())));
             configNoeVosolMojazeFaktorModel.setMashmoolDirkardVosol(cursor.getInt(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_MashmoolDirkardVosol())));
+            configNoeVosolMojazeFaktorModel.setMaxModatTajil(cursor.getInt(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_MaxModatTajil())));
 
 
             configNoeVosolMojazeFaktorModels.add(configNoeVosolMojazeFaktorModel);

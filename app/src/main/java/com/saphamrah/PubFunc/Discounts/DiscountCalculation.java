@@ -114,7 +114,7 @@ public class DiscountCalculation
     }
 
 
-    public ArrayList<TakhfifHajmiTitrSatrModel> getTakhfifHajmis(Context context, DarkhastFaktorModel darkhastFaktorModel, int noeVosol, boolean shebheOmdeh, int ccMarkazSazmanForosh)
+    public ArrayList<TakhfifHajmiTitrSatrModel> getTakhfifHajmis(Context context, DarkhastFaktorModel darkhastFaktorModel, int noeVosol, boolean shebheOmdeh)
     {
         TakhfifHajmiDAO takhfifHajmiDAO = new TakhfifHajmiDAO(context);
         MoshtaryDAO moshtaryDAO = new MoshtaryDAO(context);
@@ -126,12 +126,12 @@ public class DiscountCalculation
         {
             noeVosol = 1;
         }
-        else if (noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_CHECK() || noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_RESID() || noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh())
+        else if (noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_CHECK() || noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_RESID() || noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh())
         {
             noeVosol = 2;
         }
 
-        return takhfifHajmiDAO.getByMoshtaryWithSatr(moshtary, darkhastFaktorModel.getCodeNoeHaml(), shebheOmdeh, noeVosol, ccMarkazSazmanForosh);
+        return takhfifHajmiDAO.getByMoshtaryWithSatr(moshtary, darkhastFaktorModel.getCodeNoeHaml(), shebheOmdeh, noeVosol);
     }
 
 
