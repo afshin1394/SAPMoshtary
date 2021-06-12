@@ -397,7 +397,7 @@ public static String COLUMN_ExtraProp_ccElatMarjoeeKala() {
             jsonObject.put("TarikhFaktor", model.getTarikhFaktor());
             jsonObject.put("SumGheymatMarjoee", model.getSumGheymatMarjoee());
             jsonObject.put("SumTedadMarjoee", model.getSumTedadMarjoee());
-            jsonObject.put("ExtraProp_ccElatMarjoeeKala", model.getExtraProp_ccElatMarjoeeKala());
+            jsonObject.put("ccElatMarjoeeKala", model.getExtraProp_ccElatMarjoeeKala());
 
 
 

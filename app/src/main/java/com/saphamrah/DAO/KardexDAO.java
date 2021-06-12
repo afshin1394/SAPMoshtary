@@ -54,6 +54,7 @@ public class KardexDAO {
                         KardexModel.COLUMN_TarikhFaktor(),
                         KardexModel.COLUMN_SumGheymatMarjoee(),
                         KardexModel.COLUMN_SumTedadMarjoee(),
+                        KardexModel.COLUMN_ExtraProp_ccElatMarjoeeKala(),
 
                 };
     }
@@ -317,6 +318,7 @@ public class KardexDAO {
         contentValues.put(KardexModel.COLUMN_TarikhFaktor(),kardexModel.getTarikhFaktor());
         contentValues.put(KardexModel.COLUMN_SumGheymatMarjoee(),kardexModel.getSumGheymatMarjoee());
         contentValues.put(KardexModel.COLUMN_SumTedadMarjoee(),kardexModel.getSumTedadMarjoee());
+        contentValues.put(KardexModel.COLUMN_ExtraProp_ccElatMarjoeeKala(),kardexModel.getExtraProp_ccElatMarjoeeKala());
         return contentValues;
     }
 
@@ -345,6 +347,7 @@ public class KardexDAO {
             kardexModel.setTarikhFaktor(cursor.getString(cursor.getColumnIndex(KardexModel.COLUMN_TarikhFaktor())));
             kardexModel.setSumGheymatMarjoee(cursor.getDouble(cursor.getColumnIndex(KardexModel.COLUMN_SumGheymatMarjoee())));
             kardexModel.setSumTedadMarjoee(cursor.getDouble(cursor.getColumnIndex(KardexModel.COLUMN_SumTedadMarjoee())));
+            kardexModel.setExtraProp_ccElatMarjoeeKala(cursor.getInt(cursor.getColumnIndex(KardexModel.COLUMN_ExtraProp_ccElatMarjoeeKala())));
 
             kardexModels.add(kardexModel);
             cursor.moveToNext();

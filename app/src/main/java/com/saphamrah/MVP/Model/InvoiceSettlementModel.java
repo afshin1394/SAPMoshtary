@@ -1095,7 +1095,8 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
 
 
 
-        } else if (from == Constants.FROM_TREASURYLIST || from == -1) {
+        }
+        else if (from == Constants.FROM_TREASURYLIST || from == -1) {
             boolean deleteResult = false;
             //---------------------------------------------------------------
             deleteResult = dariaftPardakhtPPCDAO.deleteByccDariaftPardakht(dariaftPardakhtDarkhastFaktorPPCModel.getCcDariaftPardakht());
@@ -1132,7 +1133,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
      *  when ccDaryaftPardakht item selected bigger another ccDaryaftPardakht vosols , we can not delete "DirKard"
      */
     private boolean biggerCcDaryaftPardakht(DariaftPardakhtDarkhastFaktorPPCModel dariaftPardakhtDarkhastFaktorPPCModel,long ccDarkhastFaktor){
-        ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels = dariaftPardakhtDarkhastFaktorPPCDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels = dariaftPardakhtDarkhastFaktorPPCDAO.getByccDarkhastFaktorWithoutMarjoee(ccDarkhastFaktor);
 
         boolean biggerCcDaryaftPardakht = false;
         for (int i = 0; i < dariaftPardakhtDarkhastFaktorPPCModels.size(); i++) {

@@ -321,6 +321,37 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
         return dariaftPardakhtDarkhastFaktorPPCModels;
     }
 
+    public ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> getByccDarkhastFaktorWithoutMarjoee(long ccDarkhastFaktor)
+    {
+        ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query =
+                    " 	SELECT * FROM DariaftPardakhtDarkhastFaktorPPC " +
+                    " 	WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeVosol <> " + Constants.VALUE_MARJOEE() +
+                    " ORDER BY ccDariaftPardakhtDarkhastFaktor ";
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    dariaftPardakhtDarkhastFaktorPPCModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DariaftPardakhtDarkhastFaktorPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtDarkhastFaktorPPCDAO" , "" , "getByccDarkhastFaktor" , "");
+        }
+        return dariaftPardakhtDarkhastFaktorPPCModels;
+    }
+
     public ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> getByccDarkhastFaktorForCheckPosition(long ccDarkhastFaktor)
     {
         ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels = new ArrayList<>();
@@ -433,12 +464,12 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
         dariaftPardakhtDarkhastFaktorPPC.setCodeNoeVosol(Integer.parseInt(CodeNoeSanad));
         dariaftPardakhtDarkhastFaktorPPC.setNameNoeVosol(NameNoeVosol);
         dariaftPardakhtDarkhastFaktorPPC.setShomarehSanad(ShomarehSanad);
-        dariaftPardakhtDarkhastFaktorPPC.setTarikhSanad(String.valueOf(TarikhSanad));
+        dariaftPardakhtDarkhastFaktorPPC.setTarikhSanad(new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(TarikhSanad));
         dariaftPardakhtDarkhastFaktorPPC.setTarikhSanadShamsi(TarikhSanadShamsi);
         dariaftPardakhtDarkhastFaktorPPC.setMablaghDariaftPardakht((long)MablaghDariaftPardakht);
         dariaftPardakhtDarkhastFaktorPPC.setMablagh((long)MablaghTakhsis);
         dariaftPardakhtDarkhastFaktorPPC.setCodeVazeiat(0);
-        dariaftPardakhtDarkhastFaktorPPC.setZamaneTakhsiseFaktor(String.valueOf(new Date()));
+        dariaftPardakhtDarkhastFaktorPPC.setZamaneTakhsiseFaktor(new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date()));
         dariaftPardakhtDarkhastFaktorPPC.setZamaneTakhsiseFaktorShamsi(new PubFunc().new DateUtils().gregorianToPersianDateTime(new Date()));
 //        dariaftPardakhtDarkhastFaktorPPC.setCcAfradMamorVosol(mamorPakhsh.get(0).getCcAfrad());
         dariaftPardakhtDarkhastFaktorPPC.setCcMarkazAnbar(ccMarkazAnbar);

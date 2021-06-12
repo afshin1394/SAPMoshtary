@@ -290,7 +290,7 @@ public class DariaftPardakhtPPCDAO
 
         dariaftPardakhtPPC.setCcMarkazAnbar(ccMarkazAnbar);
 //        dariaftPardakhtPPC.setCodeNoeSanad(CodeNoeSanad);
-//        dariaftPardakhtPPC.setNameNoeSanad(NameNoeSanad);
+        dariaftPardakhtPPC.setNameNoeVosol(NameNoeSanad);
         dariaftPardakhtPPC.setCcShomarehHesab(ccShomarehHesab);
         dariaftPardakhtPPC.setSharhShomarehHesab(SharhShomarehHesab);
         dariaftPardakhtPPC.setCodeNoeVosol(Integer.parseInt(CodeNoeSanad));
@@ -321,7 +321,7 @@ public class DariaftPardakhtPPCDAO
         dariaftPardakhtPPC.setIsPishDariaft(IsPishDariaft);
 //        dariaftPardakhtPPC.setccLinkTakhirTajil(0);
 //        dariaftPardakhtPPC.setExtraProp_IsOld(0);
-//        dariaftPardakhtPPC.setccDarkhastFaktor(ccDarkhastFaktor);
+//        dariaftPardakhtPPC.setCcDarkhastFaktor(ccDarkhastFaktor);
 //        dariaftPardakhtPPC.setExtraProp_CodeNoeSanad(CodeNoeSanad);
         dariaftPardakhtPPC.setExtraProp_IsDirkard(IsDirkard);
         dariaftPardakhtPPC.setTabdil_NaghdBeFish(0);
