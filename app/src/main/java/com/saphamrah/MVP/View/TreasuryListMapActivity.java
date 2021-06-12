@@ -127,41 +127,33 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
 
         mPresenter.getSortList();
 
-        fabSortByCustomerCode.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                  if (sortType == Constants.SORT_TREASURY_BY_CUSTOMER_CODE){
-                    customAlertDialog.showToast(TreasuryListMapActivity.this , getResources().getString(R.string.isSelectedSort) ,Constants.FAILED_MESSAGE() , Constants.DURATION_LONG());
-                } else {
-                      alertDialog = customLoadingDialog.showLoadingDialog(TreasuryListMapActivity.this);
-                      fabMenu.close(true);
-                      removePolyline();
-                      map.getOverlays().clear();
-                      map.invalidate();
-                      mPresenter.getCustomers(Constants.SORT_TREASURY_BY_CUSTOMER_CODE);
-                  }
-            }
+        fabSortByCustomerCode.setOnClickListener(v -> {
+              if (sortType == Constants.SORT_TREASURY_BY_CUSTOMER_CODE){
+                customAlertDialog.showToast(TreasuryListMapActivity.this , getResources().getString(R.string.isSelectedSort) ,Constants.FAILED_MESSAGE() , Constants.DURATION_LONG());
+            } else {
+                  alertDialog = customLoadingDialog.showLoadingDialog(TreasuryListMapActivity.this);
+                  fabMenu.close(true);
+                  removePolyline();
+                  map.getOverlays().clear();
+                  map.invalidate();
+                  mPresenter.getCustomers(Constants.SORT_TREASURY_BY_CUSTOMER_CODE);
+              }
         });
 
 
-        fabSortByRouting.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                if (sortType == Constants.SORT_TREASURY_BY_ROUTING){
-                    customAlertDialog.showToast(TreasuryListMapActivity.this , getResources().getString(R.string.isSelectedSort) ,Constants.FAILED_MESSAGE() , Constants.DURATION_LONG());
-                } else {
-                    alertDialog = customLoadingDialog.showLoadingDialog(TreasuryListMapActivity.this);
-                    fabMenu.close(true);
-                    removePolyline();
-                    map.getOverlays().clear();
-                    map.invalidate();
-                    mPresenter.getCustomers(Constants.SORT_TREASURY_BY_ROUTING);
-                }
-
-
+        fabSortByRouting.setOnClickListener(v -> {
+            if (sortType == Constants.SORT_TREASURY_BY_ROUTING){
+                customAlertDialog.showToast(TreasuryListMapActivity.this , getResources().getString(R.string.isSelectedSort) ,Constants.FAILED_MESSAGE() , Constants.DURATION_LONG());
+            } else {
+                alertDialog = customLoadingDialog.showLoadingDialog(TreasuryListMapActivity.this);
+                fabMenu.close(true);
+                removePolyline();
+                map.getOverlays().clear();
+                map.invalidate();
+                mPresenter.getCustomers(Constants.SORT_TREASURY_BY_ROUTING);
             }
+
+
         });
 
         map.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver()
@@ -184,47 +176,31 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         }));
 
 
-        fabMyLocation.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
+        fabMyLocation.setOnClickListener(v -> {
+            double[] location1 = getCurrentLocation();
+            if (location1.length > 0)
             {
-                double[] location = getCurrentLocation();
-                if (location.length > 0)
-                {
-                    showCurrentLocation(location[0] , location[1]);
-                }
+                showCurrentLocation(location1[0] , location1[1]);
             }
         });
 
-        fabRouteActivity.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
+        fabRouteActivity.setOnClickListener(v -> {
+            if (routingResponse == null || routingResponse.length() == 0)
             {
-                if (routingResponse == null || routingResponse.length() == 0)
-                {
-                    showAlertDialog(R.string.errorFirstRouting, false, Constants.FAILED_MESSAGE());
-                }
-                else
-                {
-                    Intent intent = new Intent(TreasuryListMapActivity.this , RouteActivity.class);
-                    intent.putExtra("routing" , routingResponse);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
-                    TreasuryListMapActivity.this.finish();
-                }
+                showAlertDialog(R.string.errorFirstRouting, false, Constants.FAILED_MESSAGE());
             }
-        });
-
-        imgBack.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
+            else
             {
+                Intent intent = new Intent(TreasuryListMapActivity.this , RouteActivity.class);
+                intent.putExtra("routing" , routingResponse);
+                startActivity(intent);
+                overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
                 TreasuryListMapActivity.this.finish();
             }
         });
+
+        imgBack.setOnClickListener(v ->
+                TreasuryListMapActivity.this.finish());
     }
 
     public void route()
@@ -319,6 +295,27 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         mPresenter.getCustomers(sortList);
         sortType = sortList;
         mPresenter.getNoeMasouliat();
+    }
+
+    @Override
+    public void showLoadingDialog() {
+        if (customLoadingDialog!=null)
+            alertDialog = customLoadingDialog.showLoadingDialog(TreasuryListMapActivity.this);
+        else {
+            customAlertDialog = new CustomAlertDialog(TreasuryListMapActivity.this);
+            alertDialog = customLoadingDialog.showLoadingDialog(TreasuryListMapActivity.this);
+        }
+    }
+
+    @Override
+    public void onOpenInvoiceSettlement(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel)
+    {
+        Log.d("treasury", "ccDarkhastFaktor : " + darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor());
+        Intent intent = new Intent(TreasuryListMapActivity.this, InvoiceSettlementActivity.class);
+        intent.putExtra("ccMoshtary", darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
+        intent.putExtra("ccDarkhastFaktor", darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor());
+        intent.putExtra("sourceActivity", "TreasuryListActivity");
+        startActivityForResult(intent, OPEN_INVOICE_SETTLEMENT);
     }
 
     @Override
@@ -574,8 +571,8 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
     {
         customAlertDialog.showMessageAlert(TreasuryListMapActivity.this, closeActivity, "", message, messageType, getString(R.string.apply));
     }
-	
-    @Override																										 
+
+    @Override
     public void showToast(int resId, int messageType, int duration)
     {
         customAlertDialog.showToast(TreasuryListMapActivity.this, getString(resId), messageType, duration);
@@ -607,9 +604,10 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         ImageView imgShowFaktorImage = findViewById(R.id.imgShowFaktorImage);
         ImageView imgShowFaktorDetail = findViewById(R.id.imgFaktorDetail);
         ImageView imgEditDarkhast = findViewById(R.id.imgEditDarkhast);
-        ImageView imgEditTreasury = findViewById(R.id.imgEditTreasury);
+        ImageView imgClearingTreasury = findViewById(R.id.imgClearingTreasury);
         ImageView imgSendTreasury = findViewById(R.id.imgSendTreasury);
         ImageView imgNextFaktor = findViewById(R.id.imgNextFaktor);
+        ImageView imgSendLocation = findViewById(R.id.imgSendLocation);
 
         TreasuryMapFaktorAdapter adapter = new TreasuryMapFaktorAdapter(TreasuryListMapActivity.this, darkhastFaktorMoshtaryForoshandeModels);
         recyclerView.setOnFlingListener(null);
@@ -714,14 +712,15 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         });
 
 
-        imgEditTreasury.setOnClickListener(new View.OnClickListener()
+        imgClearingTreasury.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
                 int position = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                mPresenter.checkEditTreasury(noeMasouliat , darkhastFaktorMoshtaryForoshandeModels.get(position));
+                mPresenter.checkClearingTreasury(noeMasouliat, darkhastFaktorMoshtaryForoshandeModels.get(position));
+//                mPresenter.checkEditTreasury(noeMasouliat , darkhastFaktorMoshtaryForoshandeModels.get(position));
             }
         });
 
@@ -766,6 +765,16 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
                 {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        imgSendLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                mPresenter.checkMoshtaryKharejAzMahal(noeMasouliat,darkhastFaktorMoshtaryForoshandeModels.get(position));
             }
         });
 
