@@ -1065,7 +1065,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
     {
         //---------------------- For Test -----------------
         UserTypeShared userTypeShared = new UserTypeShared(mPresenter.getAppContext());
-        int isTest = 0;//userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
+        int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
         if (isTest == 1)
         {
             return true;

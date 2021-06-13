@@ -676,6 +676,7 @@
     <string name="errorSendDariaftPardakhtMoghayeratVosol">به علت مغایرت در وصول ارسال انجام نگردید. \n لطفا وصول را حذف نموده و دوباره ثبت نمایید.</string>
     <string name="errorSendDariaftPardakhtNameSahebHesab">به علت مغایرت در نام صاحب حساب ارسال انجام نگردید. \n لطفا وصول را حذف نموده و دوباره ثبت نمایید.</string>
     <string name="errorSendDariaftPardakhtMablaghVosolManfi">به علت مبلغ وصول منفی ارسال انجام نگردید. \n لطفا وصول را حذف نموده و دوباره ثبت نمایید.</string>
+    <string name="errorSendDariaftPardakhtDuplicate">امکان ثبت دوباره وجود ندارد.</string>
     <string name="errorMablaghKhalesWasZero">مبلغ خالص فاکتور صفر می باشد.</string>
     <string name="errorModatVosolBiggerThanRaasGiri">مـدت وصــول بیش از مـدت راس گیــری است.</string>
     <string name="errorModatVosolNaghdBiggerThanZero">مـدت وصــول درخواست اشتباه است.</string>
