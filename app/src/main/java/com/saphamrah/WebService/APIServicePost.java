@@ -59,7 +59,7 @@ public interface APIServicePost
     Call<CreateDariaftPardakhtPPCResult> createDariaftPardakht(@Field("") String dariaftPardakht);
 
     @FormUrlEncoded
-    @POST("Api/ApiSales/CreateDariaftPardakhtPPCJSON")
+    @POST("Api/ApiSales/CreateDariaftPardakhtPPCJSONWithKardex")
     Call<CreateDariaftPardakhtPPCJSONResult> createDariaftPardakhtPPCJSON(@Field("") String jsonDariaftPardakht);
     @FormUrlEncoded
     @POST("Api/ApiSales/CreateDariaftPardakhtPPCBargashtyJSON")
