@@ -556,7 +556,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             saveToFile("treasury" + darkhastFaktorModel.getCcDarkhastFaktor() + ".txt" , strJsonObjectTreasury);
 
             Call<CreateDariaftPardakhtPPCJSONResult> call = apiServicePost.createDariaftPardakhtPPCJSON(strJsonObjectTreasury);
-            mPresenter.closeLoading();
+//            mPresenter.closeLoading();
             call.enqueue(new Callback<CreateDariaftPardakhtPPCJSONResult>()
             {
                 @Override
@@ -706,6 +706,10 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         else if (errorCode.trim().equals("-12"))
         {
             mPresenter.onErrorSend(R.string.errorSendDariaftPardakhtMablaghVosolManfi);
+        }
+        else if (errorCode.trim().equals("-13"))
+        {
+            mPresenter.onErrorSend(R.string.errorSendDariaftPardakhtDuplicate);
         }
     }
 
@@ -1061,7 +1065,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
     {
         //---------------------- For Test -----------------
         UserTypeShared userTypeShared = new UserTypeShared(mPresenter.getAppContext());
-        int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
+        int isTest = 0;//userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
         if (isTest == 1)
         {
             return true;
