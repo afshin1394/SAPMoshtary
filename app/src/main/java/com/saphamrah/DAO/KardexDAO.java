@@ -156,14 +156,14 @@ public class KardexDAO {
         return kardexModels;
     }
 
-    public KardexModel getByCcRefrence(long ccRefrence){
-        KardexModel kardexModel = new KardexModel();
+    public ArrayList<KardexModel> getByCcRefrence(long ccRefrence){
+        ArrayList<KardexModel> kardexModel = new ArrayList<>();
         try {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.query(KardexModel.TableName(), allColumns(), KardexModel.COLUMN_ccRefrence() + " = " + ccRefrence, null, null, null, null);
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
-                    kardexModel = cursorToModels(cursor).get(0);
+                    kardexModel = cursorToModels(cursor);
                 }
                 cursor.close();
             }

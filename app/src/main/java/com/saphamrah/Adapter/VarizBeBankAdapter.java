@@ -66,7 +66,7 @@ public class VarizBeBankAdapter extends RecyclerSwipeAdapter<VarizBeBankAdapter.
 
         holder.txtShomareSanad.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.shomareSanad), models.get(position).getExtraProp_ShomarehSanad()));
         holder.txtDateSanad.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.taakhirSanad), tarikhSanad));
-        holder.txtMablagh.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.mablagh), formatter.format(models.get(position).getMablagh()), context.getResources().getString(R.string.rial)));
+        holder.txtMablagh.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.mablagh), formatter.format(models.get(position).getExtraProp_MablaghSabtShode()), context.getResources().getString(R.string.rial)));
         holder.txtBank.setText(String.format("%1$s %2$s - %3$s %4$s", context.getResources().getString(R.string.bank), models.get(position).getExtraProp_NameBankSanad(), context.getResources().getString(R.string.shobe) , models.get(position).getExtraProp_NameShobehSanad()));
         holder.bind(position, listener);
 

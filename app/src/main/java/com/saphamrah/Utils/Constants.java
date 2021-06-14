@@ -1290,12 +1290,17 @@ public class Constants
 
     public static final int MAX_LENGTH_STRING_FILE = 15;
     public static final String SYSTEM_INFO = "systemInfo";
-    public static final String File_Path ="Android/Data";
+    public static final String File_Path ="Auth/Data";
 
     ///////////////////////////// Code Noe Vorod Vosol /////////////////////////////////
     public static final int CODE_NOE_VOROD_VOSOL_FAKTOR = 1;
     public static final int CODE_NOE_VOROD_VOSOL_BARGASHTY = 3;
     public static final int CODE_NOE_VOROD_PISHDARYAFT = 5;
+
+
+    //Noe Vosol TreasuryList
+    public static final int VOSOL_FAKTOR_ROOZ = 0;
+    public static final int VOSOL_MANDE_DAR = 1;
 
 }
 

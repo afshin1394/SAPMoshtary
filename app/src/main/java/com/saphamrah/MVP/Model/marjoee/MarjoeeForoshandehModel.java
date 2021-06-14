@@ -79,7 +79,7 @@ import java.util.Date;
         this.ccDarkhastFaktor = ccDarkhastFaktor;
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
         tedadMarjoeeForInsert = selectedCount;
-        insertKardexForoshandeh( entity, foroshandehMamorPakhshModel.getCcMarkazAnbar(), foroshandehMamorPakhshModel.getCcMarkazForosh(), foroshandehMamorPakhshModel.getCcForoshandeh());
+        insertKardexForoshandeh( entity, foroshandehMamorPakhshModel.getCcMarkazAnbar(), foroshandehMamorPakhshModel.getCcMarkazForosh(), entity.getCcForoshandeh());
         ccKardex =kardexDAO.findccKardexByccRefrence(Long.parseLong(entity.getCcDarkhastFaktor()));
         if(ccKardex > 0) {
                insertKardexSatrForoshandeh(entity, ccKardex);

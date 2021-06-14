@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.BaseMVP.TreasuryListMVP;
 import com.saphamrah.MVP.Model.TreasuryListModel;
+import com.saphamrah.Model.AllMoshtaryForoshandehModel;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.DarkhastFaktorMoshtaryForoshandeModel;
@@ -34,9 +35,9 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     }
 
     @Override
-    public void checkDateAndFakeLocation()
+    public void checkDateAndFakeLocation(int state)
     {
-        mModel.checkDateAndFakeLocation();
+        mModel.checkDateAndFakeLocation(state);
     }
 
     @Override
@@ -116,6 +117,19 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
 
     }
 
+    @Override
+    public void searchCustomer(String searchWord, ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels) {
+        ArrayList<DarkhastFaktorMoshtaryForoshandeModel> searchResultModel = new ArrayList<>();
+        for (DarkhastFaktorMoshtaryForoshandeModel model : darkhastFaktorMoshtaryForoshandeModels)
+        {
+            if (model.getFullNameMoshtary().contains(searchWord))
+            {
+                searchResultModel.add(model);
+            }
+        }
+        mView.get().onGetSearchResult(searchResultModel);
+    }
+
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
 
@@ -133,16 +147,17 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     }
 
     @Override
-    public void onCheckServerTime(boolean valid, String message,int sortList)
+    public void onCheckServerTime(int state,boolean valid, String message,int sortList)
     {
         if (valid)
         {
-            mModel.getTreasuryList(0 , sortList);
+            mModel.getTreasuryList(state , sortList);
         }
         else
         {
             mView.get().onError(true, message);
         }
+
     }
 
     @Override
@@ -176,6 +191,7 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     {
         mView.get().closeLoading();
         mView.get().showToast(resId, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+
     }
 
     @Override
@@ -201,6 +217,7 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     {
         mView.get().showToast(R.string.errorUpdateMandeMojodi, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
     }
+
 
     @Override
     public void onGetFaktorRooz(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , int faktorRooz , int noeMasouliat,int sort)
@@ -294,6 +311,7 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
 
     @Override
     public void onSuccess(int resId) {
+        closeLoading();
         mView.get().showAlertMessage(resId,Constants.SUCCESS_MESSAGE());
     }
 }

@@ -30,13 +30,14 @@ public interface TreasuryListMVP
         void onSuccessSend(int position);
 
         void openInvoiceSettlementActivity(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
+        void onGetSearchResult(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels);
     }
 
 
     interface PresenterOps
     {
         void onConfigurationChanged(TreasuryListMVP.RequiredViewOps view);
-        void checkDateAndFakeLocation();
+        void checkDateAndFakeLocation(int state);
         void getTreasuryList(int faktorRooz, int sortType);
         void getTreasuryListWithRouting(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels);
         void getDariaftPardakhtForSend(long ccDarkhastFaktor , int codeVazeiat , int position);
@@ -51,6 +52,8 @@ public interface TreasuryListMVP
         void updateGpsData();
 
         void checkIsLocationSendToServer(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
+        void searchCustomer(String searchWord , ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels);
+
     }
 
 
@@ -59,7 +62,7 @@ public interface TreasuryListMVP
         Context getAppContext();
         void onConfigurationChanged(TreasuryListMVP.RequiredViewOps view);
         void onErrorUseFakeLocation();
-        void onCheckServerTime(boolean valid, String message , int sort);
+        void onCheckServerTime(int state,boolean valid, String message , int sort);
         void onGetCustomerAddress(double latitude , double longitude);
         void onGetFaktorImage(DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel);
         void onFailedSetDarkhastFaktorShared(int resId);
@@ -82,7 +85,7 @@ public interface TreasuryListMVP
 
     interface ModelOps
     {
-        void checkDateAndFakeLocation();
+        void checkDateAndFakeLocation(int state);
         void getTreasuryList(int faktorRooz, int sortType);
         void getTreasuryListWithRouting(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels);
         void getDariaftPardakhtForSend(long ccDarkhastFaktor , int position);

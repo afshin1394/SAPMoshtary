@@ -90,6 +90,9 @@ public class ElamMarjoeeForoshandehModel {
     @SerializedName("GheymatForoshAsli")
     @Expose
     private float GheymatForoshAsli;
+    @SerializedName("ccForoshandeh")
+    @Expose
+    private int ccForoshandeh;
 
 
 
@@ -310,6 +313,14 @@ public class ElamMarjoeeForoshandehModel {
         GheymatForoshAsli = gheymatForoshAsli;
     }
 
+    public int getCcForoshandeh() {
+        return ccForoshandeh;
+    }
+
+    public void setCcForoshandeh(int ccForoshandeh) {
+        this.ccForoshandeh = ccForoshandeh;
+    }
+
     public String getTABLE_NAME() {
         return "ElamMarjoeeForoshandeh";
     }
@@ -397,6 +408,9 @@ public class ElamMarjoeeForoshandehModel {
     }
     public String getCOLUMN_ExtraProp_TedadMarjoee() {
         return "ExtraProp_TedadMarjoee";
+    }
+    public String getCOLUMN_ccForoshandeh() {
+        return "ccForoshandeh";
     }
 
 

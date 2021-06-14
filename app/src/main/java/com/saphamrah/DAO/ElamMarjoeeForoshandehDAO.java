@@ -193,6 +193,7 @@ public class ElamMarjoeeForoshandehDAO {
                         modelGetTABLE_NAME.getCOLUMN_ccAnbarGhesmat(),
                         modelGetTABLE_NAME.getCOLUMN_GheymatForoshAsli(),
                         modelGetTABLE_NAME.getCOLUMN_ExtraProp_TedadMarjoee(),
+                        modelGetTABLE_NAME.getCOLUMN_ccForoshandeh(),
                 };
     }
 
@@ -366,6 +367,7 @@ public class ElamMarjoeeForoshandehDAO {
         contentValues.put(model.getCOLUMN_GheymatMasrafKonandeh(),elamMarjoeeForoshandehModel.getGheymatMasrafKonandeh());
         contentValues.put(model.getCOLUMN_GheymatForoshAsli(), elamMarjoeeForoshandehModel.getGheymatForoshAsli());
         contentValues.put(model.getCOLUMN_ExtraProp_TedadMarjoee(), elamMarjoeeForoshandehModel.getExtraProp_TedadMarjoee());
+        contentValues.put(model.getCOLUMN_ccForoshandeh(), elamMarjoeeForoshandehModel.getCcForoshandeh());
 
 
 
@@ -411,6 +413,7 @@ public class ElamMarjoeeForoshandehDAO {
             model.setGheymatMasrafKonandeh(cursor.getFloat(cursor.getColumnIndex(model.getCOLUMN_GheymatMasrafKonandeh())));
             model.setGheymatForoshAsli(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_GheymatForoshAsli())));
             model.setExtraProp_TedadMarjoee(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_ExtraProp_TedadMarjoee())));
+            model.setCcForoshandeh(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_ccForoshandeh())));
 
             elamMarjoeeForoshandehModels.add(model);
             cursor.moveToNext();

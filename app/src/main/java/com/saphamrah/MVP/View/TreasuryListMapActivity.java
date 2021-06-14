@@ -32,6 +32,8 @@ import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.TreasuryListMapMVP;
 import com.saphamrah.BuildConfig;
 import com.saphamrah.MVP.Presenter.TreasuryListMapPresenter;
+import com.saphamrah.MVP.View.marjoee.DarkhastFaktorMarjoeeActivity;
+import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -608,7 +610,7 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         ImageView imgSendTreasury = findViewById(R.id.imgSendTreasury);
         ImageView imgNextFaktor = findViewById(R.id.imgNextFaktor);
         ImageView imgSendLocation = findViewById(R.id.imgSendLocation);
-
+        ImageView imgMarjoee = findViewById(R.id.imgMarjoee);
         TreasuryMapFaktorAdapter adapter = new TreasuryMapFaktorAdapter(TreasuryListMapActivity.this, darkhastFaktorMoshtaryForoshandeModels);
         recyclerView.setOnFlingListener(null);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(TreasuryListMapActivity.this , LinearLayoutManager.HORIZONTAL , false);
@@ -645,10 +647,12 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         if (showEditButton)
         {
             imgEditDarkhast.setVisibility(View.VISIBLE);
+            imgMarjoee.setVisibility(View.GONE);
         }
         else
         {
             imgEditDarkhast.setVisibility(View.GONE);
+            imgMarjoee.setVisibility(View.VISIBLE);
         }
 
         imgRoute.setOnClickListener(new View.OnClickListener()
@@ -724,6 +728,14 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
             }
         });
 
+        imgMarjoee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                startActivityBundle(DarkhastFaktorMarjoeeActivity.class, "marjoee", String.valueOf(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor()), "ccMoshtaryMarjoee", String.valueOf(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary()));
+            }
+        });
 
         imgSendTreasury.setOnClickListener(new View.OnClickListener()
         {
@@ -778,6 +790,18 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
             }
         });
 
+        /**
+         * check for marjoee
+         */
+        int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition() + 1;
+        if ((darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) && ((noeMasouliat == 4 && darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && darkhastFaktorMoshtaryForoshandeModels.get(position).getExtraProp_IsSend() == 0 && darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat() < 6))) {
+            imgEditDarkhast.setVisibility(View.VISIBLE);
+            imgMarjoee.setVisibility(View.GONE);
+        } else {
+            imgMarjoee.setVisibility(View.VISIBLE);
+            imgEditDarkhast.setVisibility(View.GONE);
+        }
+
 
     }
 
@@ -798,6 +822,19 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         intent.putExtra("sourceActivity" , "TreasuryListActivity");
         startActivity(intent);
         overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
+    }
+    /**
+     * @param otherActivityClass second class start
+     * @param keyValue1          key value bundle
+     * @param keyValue2          key value bundle
+     * @param bundle1            your object
+     * @param bundle2            your object
+     */
+    private void startActivityBundle(Class<?> otherActivityClass, String keyValue1, String bundle1, String keyValue2, String bundle2) {
+        Intent i = new Intent(TreasuryListMapActivity.this, otherActivityClass);
+        i.putExtra(keyValue1, bundle1);
+        i.putExtra(keyValue2, bundle2);
+        startActivity(i);
     }
 
 

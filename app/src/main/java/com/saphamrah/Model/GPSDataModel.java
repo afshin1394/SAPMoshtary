@@ -328,6 +328,8 @@ public class GPSDataModel
             jsonObject.put(COLUMN_Accurancy() , accurancy);
             jsonObject.put(COLUMN_Bearing() , bearing);
             jsonObject.put(COLUMN_Speed() , speed);
+            jsonObject.put(COLUMN_ccDarkhastFaktor() , ccDarkhastFaktor);
+            jsonObject.put(COLUMN_ccMoshtary() , ccMoshtary);
             return jsonObject;
         }
         catch (Exception e)
@@ -355,6 +357,8 @@ public class GPSDataModel
         jsonObject.addProperty(COLUMN_Accurancy() , accurancy);
         jsonObject.addProperty(COLUMN_Bearing() , bearing);
         jsonObject.addProperty(COLUMN_Speed() , speed);
+        jsonObject.addProperty(COLUMN_ccDarkhastFaktor() , ccDarkhastFaktor);
+        jsonObject.addProperty(COLUMN_ccMoshtary() , ccMoshtary);
         return jsonObject.toString();
     }
 

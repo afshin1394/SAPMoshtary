@@ -123,8 +123,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
     }
 
     @Override
-    public void checkDateAndFakeLocation()
-    {
+    public void checkDateAndFakeLocation(int state) {
         int sortList = systemConfigTabletDAO.getSortList();
         ForoshandehAmoozeshiDeviceNumberDAO foroshandehAmoozeshiDAO = new ForoshandehAmoozeshiDeviceNumberDAO(mPresenter.getAppContext());
         ArrayList<ForoshandehAmoozeshiModel> foroshandehAmoozeshiModelList = foroshandehAmoozeshiDAO.getAll();
@@ -149,13 +148,10 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
  , "");
             String port = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
- , "");
-            if (serverIP.equals("") || port.equals(""))
-            {
-                mPresenter.onCheckServerTime(false, mPresenter.getAppContext().getString(R.string.errorGetDateTimeData) , sortList);
-            }
-            else
-            {
+                    , "");
+            if (serverIP.equals("") || port.equals("")) {
+                mPresenter.onCheckServerTime(state,false, mPresenter.getAppContext().getString(R.string.errorGetDateTimeData), sortList);
+            } else {
                 PubFunc.LoginInfo loginInfo = new PubFunc().new LoginInfo();
                 loginInfo.callLoginInfoService(mPresenter.getAppContext(), serverIP, port, new GetLoginInfoCallback()
                 {
@@ -166,14 +162,14 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                                 mPresenter.getAppContext().getString(R.string.serverTime), serverDateTime, mPresenter.getAppContext().getString(R.string.deviceTime), deviceDateTime,
                                 mPresenter.getAppContext().getString(R.string.timeDiff), Constants.ALLOWABLE_SERVER_LOCAL_TIME_DIFF(),
                                 mPresenter.getAppContext().getString(R.string.second), diff, mPresenter.getAppContext().getString(R.string.second));
-                        mPresenter.onCheckServerTime(validDiffTime, message, sortList);
+                        mPresenter.onCheckServerTime(state,validDiffTime, message, sortList);
                     }
 
                     @Override
                     public void onFailure(String error)
                     {
                         setLogToDB(Constants.LOG_EXCEPTION(), error, "TreasuryListModel", "", "getServerTime", "onFailure");
-                        mPresenter.onCheckServerTime(false, mPresenter.getAppContext().getString(R.string.errorGetDateTimeData), sortList);
+                        mPresenter.onCheckServerTime(state,false, mPresenter.getAppContext().getString(R.string.errorGetDateTimeData), sortList);
                     }
                 });
             }
@@ -182,10 +178,12 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         else
         {
             //this is a test user
-            mPresenter.onCheckServerTime(true, "", sortList);
+            mPresenter.onCheckServerTime(state,true, "", sortList);
         }
 
     }
+
+
 
 
     /**
@@ -534,9 +532,16 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         /*
         * add kardex and kardexSatr to json
          */
-        KardexModel kardexModel = kardexDAO.getByCcRefrence(darkhastFaktorModel.getCcDarkhastFaktor());
-        jsonArrayKardex.put(kardexModel.toJsonForKardexForSend(kardexModel));
-        ArrayList<KardexSatrModel> kardexSatrModels = kardexSatrDAO.getByCcKardex(kardexModel.getCcKardex());
+        ArrayList<KardexModel> kardexModels = kardexDAO.getByCcRefrence(darkhastFaktorModel.getCcDarkhastFaktor());
+        for (KardexModel kardexModel : kardexModels){
+            jsonArrayKardex.put(kardexModel.toJsonForKardexForSend(kardexModel));
+        }
+        ArrayList<KardexSatrModel> kardexSatrModels = new ArrayList<>();
+        if (kardexModels.size() >0){
+            kardexSatrModels = kardexSatrDAO.getByCcKardex(kardexModels.get(0).getCcKardex());
+        }
+
+
 
         for (KardexSatrModel model : kardexSatrModels){
             jsonArrayKardexSatr.put(model.toJsonForKardexForSend(model));
@@ -1862,6 +1867,10 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                         public void run()
                         {
                             boolean deleteResult = gpsDataPpcDAO.deleteAll();
+                            ArrayList<GPSDataModel> gpsDataModels = arrayListData;
+                            for (GPSDataModel gpsDataModel : gpsDataModels ) {
+                                gpsDataModel.setExtraProp_IsSend(1);
+                            }
                             boolean insertResult = gpsDataPpcDAO.insertGroup(arrayListData);
                             if (deleteResult && insertResult)
                             {
@@ -1901,6 +1910,11 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                         public void run()
                         {
                             boolean deleteResult = gpsDataPpcDAO.deleteAll();
+                            ArrayList<GPSDataModel> gpsDataModels = arrayListData;
+                            for (GPSDataModel gpsDataModel : gpsDataModels)
+                            {
+                                gpsDataModel.setExtraProp_IsSend(1);
+                            }
                             boolean insertResult = gpsDataPpcDAO.insertGroup(arrayListData);
                             if (deleteResult && insertResult)
                             {
@@ -2051,7 +2065,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
 
         gpsDataModel.setCcAfrad(ccAfrad);
-        gpsDataModel.setCcForoshandeh(ccForoshandeh);
+        gpsDataModel.setCcForoshandeh(0);
         gpsDataModel.setCcMasir(moshtaryModel.getCcMasir());
         gpsDataModel.setTarikh(currentDate);
         gpsDataModel.setLatitude(latitude);

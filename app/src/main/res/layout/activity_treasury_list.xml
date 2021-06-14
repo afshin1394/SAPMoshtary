@@ -42,6 +42,27 @@
                 android:textSize="@dimen/lblActivitySubTitle"
                 android:layout_gravity="center"/>
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="ltr"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true">
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/toolbar"
+                android:layoutDirection="ltr"/>
+            <com.miguelcatalan.materialsearchview.MaterialSearchView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/searchView"
+                style="@style/MaterialSearchViewStyle"
+                android:layoutDirection="ltr"
+                android:layout_alignParentRight="true"
+                android:hint="@string/searchCustomerName"/>
+        </RelativeLayout>
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -129,6 +150,16 @@
             fab:fab_label="@string/showMap"
             fab:fab_colorNormal="@color/colorFabMap"
             fab:fab_colorPressed="@color/colorFabMapClick"/>
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabSearch"
+            android:src="@drawable/ic_search"
+            fab:fab_size="normal"
+            fab:fab_label="@string/searchCustomerName"
+            fab:fab_colorNormal="@color/colorFabSearch"
+            fab:fab_colorPressed="@color/colorFabSearchClick"
+            android:layout_margin="15dp"/>
         <com.github.clans.fab.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
