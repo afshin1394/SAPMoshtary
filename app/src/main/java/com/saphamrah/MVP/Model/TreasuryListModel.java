@@ -206,14 +206,16 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             {
                 DarkhastFaktorRoozSortDAO darkhastFaktorRoozSortDAO = new DarkhastFaktorRoozSortDAO(mPresenter.getAppContext());
                 int getCountDarkhastFaktorSort = darkhastFaktorRoozSortDAO.getCount();
-                if (getCountDarkhastFaktorSort > 0)
-                {
+                if (getCountDarkhastFaktorSort > 0) {
                     darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getAllOrderByRoutingSort(faktorRooz);
-                }
-                else
-                {
+                    updateAllMablaghMandeh(darkhastFaktorMoshtaryForoshandeModels);
+                    darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getAllOrderByRoutingSort(faktorRooz);
+                } else {
+                    darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getAll(faktorRooz);
+                    updateAllMablaghMandeh(darkhastFaktorMoshtaryForoshandeModels);
                     darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getAll(faktorRooz);
                 }
+
             }
         }
         else if (faktorRooz == 1)
@@ -223,6 +225,10 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         mPresenter.onGetFaktorRooz(darkhastFaktorMoshtaryForoshandeModels , faktorRooz , noeMasouliat,sortType);
     }
 
+    private void updateAllMablaghMandeh(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels) {
+        DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
+        darkhastFaktorDAO.updateMandehDarkhastFaktorList(darkhastFaktorMoshtaryForoshandeModels);
+    }
 
     private int getNoeMasouliatForoshandeh()
     {
@@ -1101,10 +1107,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             {
                 if (moshtary.getExtraProp_IsMoshtaryAmargar() == 0)
                 {
-                    /*MoshtaryAddressDAO moshtaryAddressDAO = new MoshtaryAddressDAO(mPresenter.getAppContext());
-                    MoshtaryAddressModel moshtaryAddress = moshtaryAddressDAO.getTopOneAddress(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());*/
-                    MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(mPresenter.getAppContext());
-                    int countMoshtaryMorajeShode = moshtaryMorajehShodehRoozDAO.getCountByccMoshtary(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
+
                     PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
 
                     float[] distance = new float[2];
@@ -1117,13 +1120,9 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                     Location.distanceBetween(latMoshtary, lngMoshtary, googleLocationProvider.getLatitude(), googleLocationProvider.getLongitude(), distance);
                     Log.d("treasury", "distance[0] : " + distance[0]);
 
-                    int isMorajehShodeh = 0;
-                    if (haveAdamMojoodgiriDarkhast(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary(), 0, 0, countMoshtaryMorajeShode) || countMoshtaryMorajeShode > 0)
-                    {
-                        isMorajehShodeh = 1;
-                    }
 
-                    if (isMorajehShodeh == 0 || foroshandehMamorPakhshModel.getCanGetDarkhastTelephoni() == 0)
+
+                    if (foroshandehMamorPakhshModel.getCanGetDarkhastTelephoni() == 0)
                     {
                         int zaribKharejAzMahalMetr = 0;
                         int GPSEnable = 1;
@@ -1141,7 +1140,13 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                         {
                             if (distance[0] > zaribKharejAzMahalMetr)
                             {
-                                mPresenter.onFailedSetDarkhastFaktorShared(R.string.errorLocationForRequest);
+                                PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(new PubFunc.ConcurrencyEvents() {
+                                    @Override
+                                    public void uiThreadIsReady() {
+                                        mPresenter.onFailedSetDarkhastFaktorShared(R.string.errorLocationForRequest);
+
+                                    }
+                                });
                                 return false;
                             }
                         }
@@ -1830,7 +1835,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
     public void updateGpsData() {
         final GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         final ArrayList<GPSDataModel> gpsDataModels = new ArrayList<>();
 
@@ -1967,10 +1972,13 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
             new Thread(() -> {
                 GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
+                ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
+                ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
                 Message message = new Message();
                 message.arg1 = 1;
                 ArrayList<GPSDataModel> gpsDataModels = gpsDataPpcDAO.getAllByccMoshtary(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
-                if (gpsDataModels.size() > 0) {
+                if (gpsDataModels.size() > 0 || isValidCreateFaktor(darkhastFaktorMoshtaryForoshandeModel, foroshandehMamorPakhshModel))
+                 {
 
                     for (GPSDataModel gpsDataModel : gpsDataModels) {
                         if (gpsDataModel.getExtraProp_IsSend() == 0) {

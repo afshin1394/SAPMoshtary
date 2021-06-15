@@ -13,6 +13,7 @@ import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.RptKalaInfoModel;
 import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.Model.TakhfifHajmiTitrSatrModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -376,14 +377,12 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
             }
             else
             {
-                query += " (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
-                        + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + " and ccKalaCode = " + ccKalaCode +") ) AS MablaghKol ";
+                query += " (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat <= " + (currentOlaviat)
+                        + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
             }
-            query += " , " + ccTakhfifHajmi + " ccTakhfifHajmi"
-                    + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN (SELECT DISTINCT ccKalaCode, ccBrand, TedadDarKarton, TedadDarBasteh FROM Kala) K ON A.ccKalaCode= K.ccKalaCode "
-                    + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " and A.ccKalaCode = " + ccKalaCode + " GROUP BY A.ccDarkhastFaktorSatr, A.ccKalaCode";
-                  //  + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " and A.ccKalaCode = " + ccKalaCode + " GROUP BY A.ccDarkhastFaktorSatr";
-            Log.d("takhfifKala", "query: " + query);
+            query += "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN (SELECT DISTINCT ccKalaCode, ccBrand, TedadDarKarton, TedadDarBasteh FROM Kala) K ON A.ccKalaCode= K.ccKalaCode "
+                    + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " and A.ccKalaCode = " + ccKalaCode + " GROUP BY A.ccKalaCode";
+            //  + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " and A.ccKalaCode = " + ccKalaCode + " GROUP BY A.ccDarkhastFaktorSatr";
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
@@ -444,9 +443,9 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
 //                    " where ccDarkhastFaktor = " + ccDarkhastFaktor + " group by ccKalaCode";
 
             String query = "SELECT ccDarkhastFaktor, ccDarkhastFaktorSatr, SUM(DFS.MablaghForosh) As MablaghForosh , SUM(Tedad3) AS Tedad3 , DFS.ccKala , DFS.ccKalaCode, Kala.VaznKhales AS Vazn\n" +
-                           " From DarkhastFaktorSatr DFS \n" +
-                           " LEFT JOIN (select Distinct cckalacode,VaznKhales from kala) Kala ON Kala.ccKalaCode = DFS.ccKalaCode \n" +
-                           " WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " GROUP BY DFS.ccKalaCode";
+                    " From DarkhastFaktorSatr DFS \n" +
+                    " LEFT JOIN (select Distinct cckalacode,VaznKhales from kala) Kala ON Kala.ccKalaCode = DFS.ccKalaCode \n" +
+                    " WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " GROUP BY DFS.ccKalaCode";
 
             Log.d("DarkhastFaktorSatr","query:"+query );
             SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -1900,6 +1899,59 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         }
         return darkhastFaktorSatrModels;
     }
-    
-    
+    public ArrayList<DataTableModel> getTedadBastehByccGorohKala(long ccDarkhastFaktor, TakhfifHajmiTitrSatrModel takhfifHajmiTitrSatrModel, int ccGorohKala)
+    {
+        ArrayList<DataTableModel> gorohs = new ArrayList<>();
+        int ccTakhfifHajmi=takhfifHajmiTitrSatrModel.getCcTakhfifHajmi();
+        int noeGheymat=takhfifHajmiTitrSatrModel.getNoeGheymat();
+        int currentOlaviat=takhfifHajmiTitrSatrModel.getOlaviat();
+
+        try
+        {
+            String query = "SELECT B.ccGoroh, SUM(A.Tedad3 * 1.0/ TedadDarKarton ) AS TedadBox, SUM(A.Tedad3 * 1.0/ TedadDarBasteh ) AS TedadPackage, \n"
+                    + "  SUM(A.Tedad3 * 1.0) AS Tedad, ";
+            if(currentOlaviat == 0 || currentOlaviat == 1)
+            {
+                query += " SUM(Tedad3 *  MablaghForosh ) AS MablaghKol ";
+            }
+            else
+            {
+                query += " SUM(Tedad3 * MablaghForosh) - (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
+                        + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
+            }
+            query += "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
+                    + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.TedadDarKarton, A.TedadDarBasteh "
+                    + "          FROM Kala A LEFT OUTER JOIN "
+                    + "               (SELECT A.ccKalaCode, B.ccNoeField AS ccGoroh "
+                    + "                  FROM KalaGoroh A LEFT OUTER JOIN TakhfifHajmiSatr B"
+                    + "                       ON A.ccGoroh= B.ccNoeField OR A.ccGorohLink= B.ccNoeField OR A.ccRoot= B.ccNoeField "
+                    + "                  WHERE B.ccTakhfifHajmi= " + ccTakhfifHajmi +  "  and B.ccNoeField=  " + ccGorohKala
+                    + "               )G ON A.ccKalaCode= G.ccKalaCode "
+                    + "       )B ON A.ccKalaCode= B.ccKalaCode"
+                    + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " AND ccGoroh = " + ccGorohKala
+                    + " GROUP BY B.ccGoroh";
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    gorohs = new PubFunc().new DAOUtil().cursorToDataTable(context , cursor);
+                    //tedadKarton = Float.valueOf(gorohs.get(0).getFiled1()) ;
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "getTedadKartonByccGorohKala" , "");
+        }
+        return gorohs;
+    }
+
+
 }

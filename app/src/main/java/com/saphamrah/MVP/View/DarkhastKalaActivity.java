@@ -393,6 +393,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         this.kalaDarkhastFaktorModels.addAll(kalaDarkhastFaktorSatrModels);
         adapter.notifyDataSetChanged();
         adapterRequestKalaListGrid.notifyDataSetChanged();
+        adapterRequestKala.notifyDataSetChanged();
     }
 
     @Override

@@ -213,6 +213,7 @@ public class CustomerAddressDAO
             moshtaryModel.setExtraProp_NoeForoshandeh_First(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ExtraProp_NoeForoshandeh_First())));
             moshtaryModel.setExtraProp_MoshtaryMojazKharejAzMasir(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ExtraProp_MoshtaryMojazKharejAzMasir())));
             moshtaryModel.setExtraProp_Olaviat(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ExtraProp_Olaviat())));
+            moshtaryModel.setCcNoeMoshtary(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ccNoeMoshtary())));
 
 
             moshtaryAddressModel.setCcMoshtaryAddress(cursor.getInt(cursor.getColumnIndex(MoshtaryAddressModel.COLUMN_ccMoshtaryAddress())));

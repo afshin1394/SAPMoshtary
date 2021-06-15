@@ -14,6 +14,7 @@ import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.UIModel.DarkhastFaktorMoshtaryForoshandeModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServiceGet;
 
@@ -1357,6 +1358,9 @@ public class DarkhastFaktorDAO
         }
     }
 
+
+
+
     public boolean updateMandehDarkhastFaktor(long ccDarkhastFaktor)
     {
         try
@@ -1369,6 +1373,36 @@ public class DarkhastFaktorDAO
             Log.d("mablaghMandeh" , "query : " + query);
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "updateMandehDarkhastFaktor" , "");
+            return false;
+        }
+    }
+
+
+    public boolean updateMandehDarkhastFaktorList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels)
+    {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            for (DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel : darkhastFaktorMoshtaryForoshandeModels) {
+                long ccDarkhastFaktor = darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor();
+                String query = " UPDATE DarkhastFaktor "
+                        + " SET MablaghMandeh = MablaghKhalesFaktor -  ifnull((SELECT sum(Mablagh) FROM DariaftPardakhtDarkhastFaktorPPC WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + "),0),  "
+                        + " ExtraProp_MablaghDariaftPardakht = MablaghKhalesFaktor - ( ifnull((SELECT sum(Mablagh) FROM DariaftPardakhtPPC WHERE CodeNoeVosol <> " + Constants.VALUE_MARJOEE() + " AND ccDarkhastFaktor = " + ccDarkhastFaktor + "),0)   "
+                        + " +  ifnull((SELECT sum(Mablagh) FROM DariaftPardakhtDarkhastFaktorPPC WHERE CodeNoeVosol = " + Constants.VALUE_MARJOEE() + " AND ccDarkhastFaktor = " + ccDarkhastFaktor + "),0) )  "
+                        + " Where ccDarkhastFaktor = " + ccDarkhastFaktor;
+                Log.d("mablaghMandeh", "query : " + query);
+                db.execSQL(query);
+            }
             db.close();
             return true;
         }

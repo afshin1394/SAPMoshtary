@@ -339,6 +339,16 @@ public class TakhfifHajmiTitrSatrModel
         this.NameNoeSenf = NameNoeSenf;
     }
 
+    private int NoeGheymat;
+    public int getNoeGheymat()
+    {
+        return NoeGheymat;
+    }
+    public void setNoeGheymat(int NoeGheymat)
+    {
+        this.NoeGheymat = NoeGheymat;
+    }
+
 
     //////////////////// SATR ////////////////////
 
@@ -392,6 +402,7 @@ public class TakhfifHajmiTitrSatrModel
                 ", ccMantaghe=" + ccMantagheh +
                 ", ccNoeSenf=" + ccNoeSenf +
                 ", NameNoeSenf=" + NameNoeSenf +
+                ", NoeGheymat=" + NoeGheymat +
                 '}';
     }
 }
