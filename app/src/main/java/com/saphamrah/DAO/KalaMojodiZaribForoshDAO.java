@@ -55,9 +55,9 @@ public class KalaMojodiZaribForoshDAO
                    "(SELECT k.ccKalaCode, k.CodeKala, k.NameKala, k.ccTaminKonandeh, k.TedadDarKarton, k.TedadDarBasteh, k.Adad, k.MashmolMaliatAvarez, k.ccGorohKala, k.ccBrand, \n" +
                    " k.MablaghKharid, k.Tol, k.Arz, k.Ertefa, k.ccVahedSize, k.VaznKhales, k.VaznNakhales, VaznKarton, k.ccVahedVazn, k.BarCode, k.TarikhTolid, k.TarikhEngheza, \n" +
                    " k.NameVahedVazn, k.NameBrand, k.TedadMojodyGhabelForosh, k.NameVahedSize, k.ccVahedShomaresh,k.NameVahedShomaresh, k.ShomarehBach, k.GheymatForoshAsli, k.MablaghForosh MablaghForoshKala, \n" +
-                   " k.MablaghMasrafKonandeh MablaghMasrafKonandehKala, m.sumTedad, m.ccKalaMojodi, m.Max_MojodyByShomarehBach \n" +
+                   " k.MablaghMasrafKonandeh MablaghMasrafKonandehKala, m.sumTedad, m.ccKalaMojodi, m.sumMax_MojodyByShomarehBach Max_MojodyByShomarehBach \n" +
                    " FROM Kala k \n" +
-                   "              LEFT JOIN (SELECT KalaMojodi.* , SUM(Tedad) sumTedad FROM KalaMojodi where IsAdamForosh = 0 group by ccKalaCode , ShomarehBach, \n" +
+                   "              LEFT JOIN (SELECT KalaMojodi.* , SUM(Tedad) sumTedad, sum(Max_Mojody) sumMax_Mojody, sum(Max_MojodyByShomarehBach) sumMax_MojodyByShomarehBach FROM KalaMojodi where IsAdamForosh = 0 group by ccKalaCode , ShomarehBach, \n" +
                    " GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh) m \n" +
                    "    ON k.ccKalaCode = m.ccKalaCode AND k.ccTaminKonandeh = m.ccTaminkonandeh AND \n" +
                    "       k.ShomarehBach = m.ShomarehBach AND k.MablaghMasrafKonandeh = m.GheymatMasrafKonandeh AND k.MablaghForosh = m.GheymatForosh \n" +
@@ -80,8 +80,8 @@ public class KalaMojodiZaribForoshDAO
        else
            {
            query = "select km.* , IFNULL(ZaribForosh,1)ZaribForosh , Darajeh, o.Olaviat from \n" +
-                   " (select k.* , m.sumTedad, m.GheymatForosh, m.ccKalaMojodi, m.Max_MojodyByShomarehBach \n" +
-                   " from Kala k left join (select KalaMojodi.* , sum(Tedad) sumTedad from KalaMojodi where IsAdamForosh = 0 group by ccKalaCode , ShomarehBach, \n" +
+                   " (select k.* , m.sumTedad, m.GheymatForosh, m.ccKalaMojodi, m.sumMax_MojodyByShomarehBach Max_MojodyByShomarehBach \n" +
+                   " from Kala k left join (select KalaMojodi.* , sum(Tedad) sumTedad, sum(Max_Mojody) sumMax_Mojody, sum(Max_MojodyByShomarehBach) sumMax_MojodyByShomarehBach from KalaMojodi where IsAdamForosh = 0 group by ccKalaCode , ShomarehBach, \n" +
                    " GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh) m \n" +
                    " on k.ccKalaCode = m.ccKalaCode and k.ccTaminKonandeh = m.ccTaminkonandeh and \n" +
                    " k.ShomarehBach = m.ShomarehBach and k.MablaghMasrafKonandeh = m.GheymatMasrafKonandeh and k.MablaghForosh = m.GheymatForosh \n" +
