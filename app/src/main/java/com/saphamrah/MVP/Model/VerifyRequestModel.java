@@ -3148,8 +3148,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             kalaMojodiModel.setCcDarkhastFaktor(ccDarkhastFaktor);
             kalaMojodiModel.setForJayezeh(1);
             kalaMojodiModel.setZamaneSabt(currentDate);
-            kalaMojodiModel.setMax_Mojody(kalaMojodiModelFromDB.getMax_Mojody());
-            kalaMojodiModel.setMax_MojodyByShomarehBach(kalaMojodiModelFromDB.getMax_MojodyByShomarehBach());
+            kalaMojodiModel.setMax_Mojody(-1 * count);
+            kalaMojodiModel.setMax_MojodyByShomarehBach(-1 * count);
             kalaMojodiModel.setCcAfrad(ccAfrad);
             if (kalaMojodiDAO.insert(kalaMojodiModel))
             {

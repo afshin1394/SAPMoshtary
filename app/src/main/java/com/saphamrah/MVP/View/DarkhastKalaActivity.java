@@ -763,43 +763,58 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
                 }
             });
 
-            btnOK.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    lblError.setVisibility(View.GONE);
-                    lblError.setText("");
+            btnOK.setOnClickListener(v -> {
 
-                    if (showCatalog) {
-                        if (((LinearLayoutManager) recyclerView.getLayoutManager()) != null) {
-                            try {
-                                int position = firstVisibleItemPosition;
-                                Log.i("TAG", "onClick: " + position);
-                                if (position >= 0) {
-                                    selectedItem.clear();
-                                    selectedPosition.clear();
-                                    selectedItem.add(arrayListKalaModel.get(position));
-                                    selectedPosition.add(position);
 
-                                }
-                            } catch (Exception exception) {
-                                exception.printStackTrace();
+                lblError.setVisibility(View.GONE);
+                lblError.setText("");
+
+                if (showCatalog) {
+                    if (((LinearLayoutManager) recyclerView.getLayoutManager()) != null) {
+                        try {
+                            int position = firstVisibleItemPosition;
+                            Log.i("TAG", "onClick: " + position);
+                            if (position >= 0) {
+                                selectedItem.clear();
+                                selectedPosition.clear();
+                                selectedItem.add(arrayListKalaModel.get(position));
+                                selectedPosition.add(position);
+
                             }
-                        }
-                    } else {
-
-                        selectedItem.clear();
-                        if (selectedPosition.size() > 0) {
-                            selectedItem.add(arrayListKalaModel.get(selectedPosition.get(0)));
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
                         }
                     }
+                } else {
 
-                    if (selectedPosition.size() == 0 || selectedItem.size() == 0) {
-                        lblError.setVisibility(View.VISIBLE);
-                        lblError.setText(getResources().getString(R.string.errorSelectItem));
-                    } else {
-
-                        mPresenter.checkAddKala(ccMoshtary, selectedPosition.get(0), selectedItem.get(0), edttxtCountCarton.getText().toString().trim(), edttxtCountBaste.getText().toString().trim(), edttxtCountAdad.getText().toString().trim());
+                    selectedItem.clear();
+                    if (selectedPosition.size() > 0) {
+                        selectedItem.add(arrayListKalaModel.get(selectedPosition.get(0)));
                     }
+                }
+
+                if (selectedPosition.size() == 0 || selectedItem.size() == 0) {
+                    lblError.setVisibility(View.VISIBLE);
+                    lblError.setText(getResources().getString(R.string.errorSelectItem));
+                } else {
+//                    if(SelectFaktor.getccGorohNoeMoshtary() != ccMoshtayZanjirei)
+//                    {
+//                        for (Kala_NewFaktor kala_2Gheymaty: CreateFaktorActivity.KalaForNewFaktors)
+//                        {
+//                            if(kala_2Gheymaty.getccKalaCode() == entity.getccKalaCode())
+//                            {
+//                                long DateDiff = entity.getTarikhTolid().getTime() - kala_2Gheymaty.getTarikhTolid().getTime();
+//                                long diffInSec = TimeUnit.MILLISECONDS.toMinutes(DateDiff);
+//
+//                                if (diffInSec > 1 && entity.getTedadFaktor() <= kala_2Gheymaty.getTedadMojodyGhabelForosh() )
+//                                    StrError += "در کالای " + entity.getNameKala() + " از کالا ی قدیمی تر  ثبت نمایید." + "\n";
+//                            }
+//                        }
+//                    }
+
+
+
+                    mPresenter.checkAddKala(ccMoshtary, selectedPosition.get(0), selectedItem.get(0), edttxtCountCarton.getText().toString().trim(), edttxtCountBaste.getText().toString().trim(), edttxtCountAdad.getText().toString().trim());
                 }
             });
 

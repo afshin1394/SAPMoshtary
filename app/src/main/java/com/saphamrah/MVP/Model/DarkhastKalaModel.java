@@ -715,12 +715,12 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
         }
 
         KalaMojodiDAO kalaMojodiDAO = new KalaMojodiDAO(mPresenter.getAppContext());
-        KalaMojodiModel kalaMojodiModelFromDB = kalaMojodiDAO.getOneByccKalaCode(String.valueOf(ccKalaCode));
+        KalaMojodiModel kalaMojodiModelFromDB = kalaMojodiDAO.getOneByccKalaCode(String.valueOf(ccKalaCode),shomareBach,gheymatForoshAsli,gheymatMasrafKonande,ccTaminKonande);
         KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
         kalaMojodiModel.setCcDarkhastFaktor(ccDarkhastFaktor);
         kalaMojodiModel.setCcForoshandeh(ccForoshandeh);
         kalaMojodiModel.setCcKalaCode(ccKalaCode);
-        kalaMojodiModel.setGheymatForosh(gheymatForosh);
+        kalaMojodiModel.setGheymatForosh(gheymatForoshAsli);
         kalaMojodiModel.setGheymatMasrafKonandeh(gheymatMasrafKonande);
         kalaMojodiModel.setTarikhTolid(tarikhTolid);
         kalaMojodiModel.setShomarehBach(shomareBach);
@@ -728,10 +728,11 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
         kalaMojodiModel.setTedad(tedad);
         kalaMojodiModel.setCcTaminKonandeh(ccTaminKonande);
         kalaMojodiModel.setZamaneSabt(currentDate);
-        kalaMojodiModel.setMax_Mojody(kalaMojodiModelFromDB.getMax_Mojody());
-        kalaMojodiModel.setMax_MojodyByShomarehBach(kalaMojodiModelFromDB.getMax_MojodyByShomarehBach());
+        //kalaMojodiModel.setMax_Mojody(kalaMojodiModelFromDB.getMax_Mojody());
+        kalaMojodiModel.setMax_Mojody(tedad);
+        //kalaMojodiModel.setMax_MojodyByShomarehBach(kalaMojodiModelFromDB.getMax_MojodyByShomarehBach());
+        kalaMojodiModel.setMax_MojodyByShomarehBach(tedad);
         kalaMojodiModel.setCcAfrad(foroshandehMamorPakhshModel.getCcAfrad());
-        kalaMojodiModel.setGheymatForosh(gheymatForoshAsli);
         return kalaMojodiDAO.insert(kalaMojodiModel);
     }
 

@@ -1,5 +1,6 @@
 package com.saphamrah.MVP.View;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -26,6 +27,7 @@ import com.saphamrah.BaseMVP.SelectBonusMVP;
 import com.saphamrah.CustomView.CustomSpinner;
 import com.saphamrah.CustomView.CustomTextInputLayout;
 import com.saphamrah.MVP.Presenter.SelectBonusPresenter;
+import com.saphamrah.Model.KalaMojodiModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.DarkhastFaktorJayezehTakhfifModel;
@@ -63,8 +65,8 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
     private EditText editTextMaxTedadJayezeh;
     private RecyclerView recyclerView;
     private CustomTextInputLayout customTextInputLayout;
-
-
+   private ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach = new ArrayList<>();
+   private ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -125,7 +127,10 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
             @Override
             public void onClick(View v)
             {
-                mPresenter.checkInsert(darkhastFaktorTakhfifModels.get(selectedIndexTakhfif).getNoeJayezehTakhfif() ,jayezehEntekhabiMojodiModels, darkhastFaktorTakhfifModels.get(selectedIndexTakhfif), selectedccTakhfif, editTextTakhfifFaktor.getText().toString(), editTextMablaghJayezeh.getText().toString(), editTextMande.getText().toString(), editTextMaxTedadJayezeh.getText().toString());
+
+                mPresenter.checkInsert(darkhastFaktorTakhfifModels.get(selectedIndexTakhfif).getNoeJayezehTakhfif() ,jayezehEntekhabiMojodiModels, darkhastFaktorTakhfifModels.get(selectedIndexTakhfif), selectedccTakhfif, editTextTakhfifFaktor.getText().toString(), editTextMablaghJayezeh.getText().toString(), editTextMande.getText().toString(), editTextMaxTedadJayezeh.getText().toString(),
+                        KalaMojodiModelsMaxShomarehBach  , KalaMojodiModelsMaxMojodi
+                );
             }
         });
 
@@ -231,8 +236,10 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
     }
 
     @Override
-    public void onGetKalaForJayezeh(ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, int noeJayezehTakhfif)
+    public void onGetKalaForJayezeh(ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels , ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach , ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi, int noeJayezehTakhfif)
     {
+        this.KalaMojodiModelsMaxShomarehBach = KalaMojodiModelsMaxShomarehBach;
+        this.KalaMojodiModelsMaxMojodi = KalaMojodiModelsMaxMojodi;
         this.jayezehEntekhabiMojodiModels.clear();
         this.jayezehEntekhabiMojodiModels.addAll(jayezehEntekhabiMojodiModels);
         if (darkhastFaktorTakhfifModels.get(selectedIndexTakhfif).getNoeJayezehTakhfif() == DarkhastFaktorJayezehTakhfifModel.NoeTakhfif())
@@ -322,6 +329,12 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
         customAlertDialog.showToast(SelectBonusActivity.this, getResources().getString(resId), messageType, duration);
     }
 
+    @SuppressLint("ShowToast")
+    @Override
+    public void toastTest(int SelectedCount, int Max_MojodyByShomarehBach, int Max_Mojody, int TedadSefarshDarkhast) {
+        customAlertDialog.showToast(SelectBonusActivity.this, "تعداد جایزه" + SelectedCount + " مکس موجودی بچ" +Max_MojodyByShomarehBach +  "مکس موجودی" +Max_Mojody + "تعداد سفارش درخواست" + TedadSefarshDarkhast, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+
+    }
 
     private void showAlertSelectKala(final ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels)
     {

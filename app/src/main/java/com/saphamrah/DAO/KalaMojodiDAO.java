@@ -294,6 +294,35 @@ public class KalaMojodiDAO
         return kalaMojodiModel;
     }
 
+    public KalaMojodiModel getOneByccKalaCode(String ccKalaCode, String shomareBach , int gheymatForosh,int gheymatMasrafKonande,int ccTaminKonande)
+    {
+        KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(KalaMojodiModel.TableName(), allColumns(), KalaMojodiModel.COLUMN_ccKalaCode() + " = " + ccKalaCode + KalaMojodiModel.COLUMN_ShomarehBach() + " = " + shomareBach +
+                    KalaMojodiModel.COLUMN_GheymatForosh() + " = " + gheymatForosh + KalaMojodiModel.COLUMN_GheymatMasrafKonandeh() + " = " + gheymatMasrafKonande +
+                    KalaMojodiModel.COLUMN_ccTaminKonandeh() + " = " + ccTaminKonande,  null, null, null, KalaMojodiModel.COLUMN_TarikhTolid() + " ASC ", "1");
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    kalaMojodiModel = cursorToModel(cursor).get(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , KalaMojodiModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaMojodiDAO" , "" , "getOneByccKalaCode" , "");
+        }
+        return kalaMojodiModel;
+    }
+
     public List<KalaModel> getMaxMojodiKalaByDarkhastFaktor(long ccDarkhastFaktor)
     {
         List<KalaModel> kalaModels = new ArrayList<>();
@@ -401,6 +430,104 @@ public class KalaMojodiDAO
         return goodsName;
     }
 
+
+    public ArrayList<KalaMojodiModel> getMaxShomarehBach(int ccJayezeh, int ccJayezehSatr){
+        ArrayList<KalaMojodiModel> kalaMojodiModels = new ArrayList<>();
+
+        try
+        {
+
+            String query = "  select  Sum(distinct m.Max_MojodyByShomarehBach)Max_MojodyByShomarehBach , m.ccKalaCode , m.ShomarehBach , m.GheymatForosh ,m.GheymatMasrafKonandeh , m.ccTaminKonandeh  from\n" +
+                    "                     JayezehEntekhabi j inner join KalaMojodi m \n" +
+                    "                     on j.ccKalaCode = m.ccKalaCode \n" +
+                    "                     and j.ccJayezeh = " + ccJayezeh + " \n" +
+                    "                     and j.ccJayezehSatr = " + ccJayezehSatr + " \n" +
+                    "                     group by m.ccKalaCode , m.ShomarehBach, m.ccTaminKonandeh, m.GheymatForosh, m.GheymatMasrafKonandeh \n" +
+                    "                     having sum(m.Tedad) > 0 ";
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    while(!cursor.isAfterLast())
+                    {
+                        KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
+
+                        kalaMojodiModel.setMax_MojodyByShomarehBach(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_Max_MojodyByShomarehBach())));
+                        kalaMojodiModel.setCcKalaCode(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_ccKalaCode())));
+                        kalaMojodiModel.setShomarehBach(cursor.getString(cursor.getColumnIndex(KalaMojodiModel.COLUMN_ShomarehBach())));
+                        kalaMojodiModel.setGheymatForosh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatForosh())));
+                        kalaMojodiModel.setGheymatMasrafKonandeh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatMasrafKonandeh())));
+                        kalaMojodiModel.setCcTaminKonandeh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_ccTaminKonandeh())));
+                        kalaMojodiModels.add(kalaMojodiModel);
+                        cursor.moveToNext();
+                    }
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , KalaMojodiModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaMojodiDAO" , "" , "getMaxShomarehBach" , "");
+        }
+
+        return kalaMojodiModels;
+    }
+
+    public ArrayList<KalaMojodiModel> getMaxMojodi(int ccJayezeh, int ccJayezehSatr){
+        ArrayList<KalaMojodiModel> kalaMojodiModels = new ArrayList<>();
+
+        try
+        {
+
+            String query = "  select  sum(distinct m.Max_Mojody) Max_Mojody, m.ccKalaCode , m.ShomarehBach , m.GheymatForosh ,m.GheymatMasrafKonandeh , m.ccTaminKonandeh  from\n" +
+                    "                     JayezehEntekhabi j inner join KalaMojodi m \n" +
+                    "                     on j.ccKalaCode = m.ccKalaCode \n" +
+                    "                     and j.ccJayezeh = " + ccJayezeh + " \n" +
+                    "                     and j.ccJayezehSatr = " + ccJayezehSatr + " \n" +
+                    "                     group by m.ccKalaCode , m.ShomarehBach, m.ccTaminKonandeh, m.GheymatForosh, m.GheymatMasrafKonandeh \n" +
+                    "                     having sum(m.Tedad) > 0 ";
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    while(!cursor.isAfterLast())
+                    {
+                        KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
+
+                        kalaMojodiModel.setMax_Mojody(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_Max_Mojody())));
+                        kalaMojodiModel.setCcKalaCode(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_ccKalaCode())));
+                        kalaMojodiModel.setShomarehBach(cursor.getString(cursor.getColumnIndex(KalaMojodiModel.COLUMN_ShomarehBach())));
+                        kalaMojodiModel.setGheymatForosh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatForosh())));
+                        kalaMojodiModel.setGheymatMasrafKonandeh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatMasrafKonandeh())));
+                        kalaMojodiModel.setCcTaminKonandeh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_ccTaminKonandeh())));
+                        kalaMojodiModels.add(kalaMojodiModel);
+                        cursor.moveToNext();
+                    }
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , KalaMojodiModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaMojodiDAO" , "" , "getMaxShomarehBach" , "");
+        }
+
+        return kalaMojodiModels;
+    }
     public boolean deleteAll()
     {
         try

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.saphamrah.BaseMVP.SelectBonusMVP;
 import com.saphamrah.DAO.KalaMojodiDAO;
 import com.saphamrah.MVP.Model.SelectBonusModel;
+import com.saphamrah.Model.KalaMojodiModel;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.DarkhastFaktorJayezehTakhfifModel;
 import com.saphamrah.UIModel.JayezehEntekhabiMojodiModel;
@@ -14,6 +15,7 @@ import com.saphamrah.Utils.Constants;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , SelectBonusMVP.RequiredPresenterOps
@@ -85,8 +87,11 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
         mView.get().onCalculateMablaghJayezeh(mablaghJayezeh , fltMandeh, noeJayezehTakhfif);
     }
 
+
+
+
     @Override
-    public void checkInsert(int noeJayezehTakhfif, ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel, int selectedccTakhfif, String mablaghTakhfif, String mablaghJayezeh, String mandeh, String maxTedadJayeze)
+    public void checkInsert(int noeJayezehTakhfif, ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel, int selectedccTakhfif, String mablaghTakhfif, String mablaghJayezeh, String mandeh, String maxTedadJayeze, ArrayList<KalaMojodiModel> kalaMojodiModelsMaxShomarehBach , ArrayList<KalaMojodiModel> kalaMojodiModelsMaxMojodi)
     {
         try
         {
@@ -97,6 +102,7 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
             float fltMandeh = 0.0F;
             float fltMablaghJayezeh = 0.0F;
             float fltMablaghTakhfif = 0.0F;
+            int TedadSefarshDarkhast=0;
             if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeTakhfif())
             {
                 try
@@ -112,9 +118,12 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
             }
             Log.d("bonus" , "intMaxTedadJayezeh : " + intMaxTedadJayezeh);
             Map<Integer,Integer> mapKalaCount = new HashMap<>();
-            for (JayezehEntekhabiMojodiModel model : jayezehEntekhabiMojodiModels)
-            {
+                for (int i = 0; i < jayezehEntekhabiMojodiModels.size(); i++) {
+                    JayezehEntekhabiMojodiModel model = jayezehEntekhabiMojodiModels.get(i);
                 Log.d("bonus" , "model : " + model.toString());
+
+                TedadSefarshDarkhast = model.getMax_MojodyByShomarehBach()-model.getTedad();
+
                 sumTedadJavayezEntekhabi += model.getTedad();
                 sumSelectedCount += model.getSelectedCount();
 
@@ -123,11 +132,28 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
                 countCcKalaCode += model.getSelectedCount();
                 mapKalaCount.put(model.getCcKalaCode() , countCcKalaCode);
 
+                int maxMojodi = 0;
 
+                    for (int j = 0; j <kalaMojodiModelsMaxMojodi.size() ; j++) {
+                       if (jayezehEntekhabiMojodiModels.get(i).getCcKala() == kalaMojodiModelsMaxMojodi.get(j).getCcKalaCode()){
+                           maxMojodi = kalaMojodiModelsMaxMojodi.get(j).getMax_Mojody();
+                       }
+                    }
 
-                Log.d("selectbonus", "Tedad: " + model.getTedad() + " , selectedCount : " + model.getSelectedCount() + " , Max_MojodyByShomarehBach : " + model.getMax_MojodyByShomarehBach() + " , getMax_Mojody : " + model.getMax_Mojody() + " , countCcKalaCode : " + countCcKalaCode);
+                    int maxShomarehBach = 0;
+                    for (int j = 0; j <kalaMojodiModelsMaxShomarehBach.size() ; j++) {
+                        if (jayezehEntekhabiMojodiModels.get(i).getCcKala() == kalaMojodiModelsMaxShomarehBach.get(j).getCcKalaCode()){
+                            if (jayezehEntekhabiMojodiModels.get(i).getShomarehBach().equals(kalaMojodiModelsMaxShomarehBach.get(j).getShomarehBach()))
+                            if (jayezehEntekhabiMojodiModels.get(i).getGheymatForosh() == kalaMojodiModelsMaxShomarehBach.get(j).getGheymatForosh())
+                            if (jayezehEntekhabiMojodiModels.get(i).getGheymatMasrafKonandeh() == kalaMojodiModelsMaxShomarehBach.get(j).getGheymatMasrafKonandeh())
+                            if (jayezehEntekhabiMojodiModels.get(i).getCcTaminKonandeh() == kalaMojodiModelsMaxShomarehBach.get(j).getCcTaminKonandeh())
+                                maxShomarehBach = kalaMojodiModelsMaxShomarehBach.get(j).getMax_MojodyByShomarehBach();
+                        }
+                    }
 
-                if (model.getSelectedCount() > model.getTedad() || model.getSelectedCount() > model.getMax_MojodyByShomarehBach() || countCcKalaCode > model.getMax_Mojody())
+                Log.d("selectbonus", "selectedCount : " + model.getSelectedCount() + " , Max_MojodyByShomarehBach : " + maxShomarehBach + " , getMax_Mojody : " + maxMojodi + " , countCcKalaCode : " + countCcKalaCode + ", TedadSefareshDarkhast:" + TedadSefarshDarkhast);
+              mView.get().toastTest(model.getSelectedCount() , maxShomarehBach , maxMojodi,0);
+              if (model.getSelectedCount() > model.getTedad() || model.getSelectedCount() > maxMojodi || model.getSelectedCount() > maxShomarehBach)
                 {
                     mView.get().onErrorInsert(R.string.errorSelectedBiggerMojodi , model.getNameKala());
                     hasError = true;
@@ -245,9 +271,10 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
     }
 
     @Override
-    public void onGetKalaForJayezeh(ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels , int noeJayezehTakhfif)
+    public void onGetKalaForJayezeh(ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels , ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach ,
+                                    ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi, int noeJayezehTakhfif)
     {
-        mView.get().onGetKalaForJayezeh(jayezehEntekhabiMojodiModels , noeJayezehTakhfif);
+        mView.get().onGetKalaForJayezeh(jayezehEntekhabiMojodiModels,KalaMojodiModelsMaxShomarehBach,KalaMojodiModelsMaxMojodi, noeJayezehTakhfif);
         /*if (jayezehEntekhabiMojodiModels.size() > 0)
         {
 

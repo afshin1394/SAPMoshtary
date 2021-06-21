@@ -247,7 +247,7 @@ public class KalaOlaviatGheymatDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query = "select KalaOlaviatGheymat.*,KalaMojodi.Tedad from KalaOlaviatGheymat \n" +
+            String query = "select KalaOlaviatGheymat.*,SUM(KalaMojodi.Tedad) Tedad from KalaOlaviatGheymat \n" +
                     "       inner join KalaMojodi on KalaMojodi.ccKalaCode = KalaOlaviatGheymat.ccKalaCode and KalaMojodi.GheymatForosh = KalaOlaviatGheymat.GheymatForosh\n" +
                     "where KalaOlaviatGheymat.cckalacode =  " + ccKalaCode + " and Tedad > 0";
             Cursor cursor = db.rawQuery(query , null);
