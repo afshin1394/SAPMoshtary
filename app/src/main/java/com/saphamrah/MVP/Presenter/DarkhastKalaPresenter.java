@@ -164,30 +164,35 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
             }
 
 
+
             boolean checkOlaviat = true;
             boolean checkKalaTekrari = true;
             /*
             چک کردن اولویت کالا در ثبت بر اساس تعداد و درجه ی اولویت
              */
             if (validData){
-                validData = checkKalaOlaviatMablagh(kalaMojodiZaribModel,requestCountSum);
-                checkOlaviat = validData;
+                checkOlaviat = checkKalaOlaviatMablagh(kalaMojodiZaribModel,requestCountSum);
+                if(!checkOlaviat){
+                    mView.get().onErrorAddNewRequestedKala(R.string.errorKalaOlaviat);
+                    validData = false;
+                }
+
             }
             /*
             چک کردن کالای مورد نظر جهت جلوگیری از ثبت با قیمت دیگر
              */
             if (validData){
-                validData = checkKalaOlaviatSabtShode(kalaMojodiZaribModel,ccDarkhastFaktor);
-                checkKalaTekrari =validData;
+                checkKalaTekrari = checkKalaOlaviatSabtShode(kalaMojodiZaribModel,ccDarkhastFaktor);
+
+                if(!checkKalaTekrari){
+                    mView.get().onErrorAddNewRequestedKala(R.string.errorKalaOlaviatTekrari);
+                    validData = false;
+                }
             }
 
             if (validData)
             {
                 mModel.insertNewFaktorSatr(ccMoshtary , position , kalaMojodiZaribModel , requestCountSum);
-            }  else if (!checkOlaviat){
-                mView.get().onErrorAddNewRequestedKala(R.string.errorKalaOlaviat);
-            } else if (!checkKalaTekrari){
-                mView.get().onErrorAddNewRequestedKala(R.string.errorKalaOlaviatTekrari);
             }
         }
         catch (Exception e)
@@ -209,7 +214,7 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
 
         for (KalaOlaviatGheymatModel model : kalaOlaviatGheymatModels){
             if (kalaMojodiZaribModel.getGheymatForosh() == model.getGheymatForosh()){
-                if (model.getOlaviat() > lastOlaviat  && requestCountSum < lastMojodi){
+                if (model.getOlaviat() > lastOlaviat  && requestCountSum <= lastMojodi){
                     canInsertKala = false;
                 }
             }
