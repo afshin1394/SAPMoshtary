@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.BaseMVP.PishDaryaftMVP;
 import com.saphamrah.MVP.Model.PishDaryaftModel;
+import com.saphamrah.Model.AllMoshtaryPishdaryaftModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
@@ -16,7 +17,6 @@ public class PisDaryaftPresenter implements PishDaryaftMVP.PresenterOps , PishDa
 
     private WeakReference<PishDaryaftMVP.RequiredViewOps> mView;
     private PishDaryaftMVP.ModelOps mModel;
-    //private boolean mIsChangingConfig;
 
     public PisDaryaftPresenter(PishDaryaftMVP.RequiredViewOps viewOps)
     {
@@ -52,12 +52,24 @@ public class PisDaryaftPresenter implements PishDaryaftMVP.PresenterOps , PishDa
         mView.get().showAlertMessage(R.string.successSendData , Constants.SUCCESS_MESSAGE());
     }
 
+    @Override
+    public void onUpdateData() {
+        mView.get().closeLoadingDialog();
+    }
 
     @Override
-    public void searchCustomer(String searchWord , ArrayList<MoshtaryModel> moshtaryModels)
+    public void failedUpdate() {
+        mView.get().closeLoadingDialog();
+        mView.get().showToast(R.string.errorGetData, Constants.FAILED_MESSAGE(),Constants.DURATION_LONG());
+    }
+
+
+
+    @Override
+    public void searchCustomer(String searchWord , ArrayList<AllMoshtaryPishdaryaftModel> moshtaryModels)
     {
-        ArrayList<MoshtaryModel> searchResultModel = new ArrayList<>();
-        for (MoshtaryModel model : moshtaryModels)
+        ArrayList<AllMoshtaryPishdaryaftModel> searchResultModel = new ArrayList<>();
+        for (AllMoshtaryPishdaryaftModel model : moshtaryModels)
         {
             if (model.getNameMoshtary().contains(searchWord))
             {
@@ -88,6 +100,11 @@ public class PisDaryaftPresenter implements PishDaryaftMVP.PresenterOps , PishDa
         mModel.getDariaftPardakhtForSend(ccMoshtary,position);
     }
 
+    @Override
+    public void refresh() {
+        mModel.refresh();
+    }
+
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
 
@@ -99,17 +116,16 @@ public class PisDaryaftPresenter implements PishDaryaftMVP.PresenterOps , PishDa
 
 
     @Override
-    public void onGetAllCustomers( ArrayList<MoshtaryModel> moshtaryModels)
+    public void onGetAllCustomers( ArrayList<AllMoshtaryPishdaryaftModel> allMoshtaryPishdaryaftModels)
     {
-        if (moshtaryModels.size() > 0)
+        if (allMoshtaryPishdaryaftModels.size() > 0)
         {
-            mView.get().onGetAllCustomers(moshtaryModels);
+            mView.get().onGetAllCustomers(allMoshtaryPishdaryaftModels);
         }
         else
         {
             mView.get().showToast(R.string.notFoundData, Constants.INFO_MESSAGE(), Constants.DURATION_LONG());
         }
     }
-
 
 }

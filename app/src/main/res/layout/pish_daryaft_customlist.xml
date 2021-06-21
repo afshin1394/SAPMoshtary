@@ -121,34 +121,7 @@
                                 android:layout_marginRight="10dp"/>
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:layoutDirection="rtl"
-                            android:gravity="center_vertical"
-                            android:layout_gravity="center_vertical">
-                            <ImageView
-                                android:layout_width="@dimen/iconSize24"
-                                android:layout_height="@dimen/iconSize24"
-                                android:src="@drawable/ic_vosol_24"
-                                android:layout_gravity="center_vertical" />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/lblNoeVosol"
-                                android:textColor="@color/colorTextSecondary"
-                                android:textSize="@dimen/FontSize14"
-                                android:maxLines="1"
-                                android:ellipsize="end"
-                                android:gravity="center_vertical|right"
-                                android:layoutDirection="rtl"
-                                android:textDirection="rtl"
-                                android:layout_marginRight="10dp"/>
-                        </LinearLayout>
+
 
                         <LinearLayout
                             android:layout_width="match_parent"

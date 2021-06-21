@@ -1,19 +1,24 @@
 package com.saphamrah.MVP.Model;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.PishDaryaftMVP;
+import com.saphamrah.DAO.AllMoshtaryPishdaryaftDAO;
 import com.saphamrah.DAO.DariaftPardakhtPPCDAO;
 import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
+import com.saphamrah.Model.AllMoshtaryPishdaryaftModel;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
 import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -31,49 +36,37 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PishDaryaftModel implements PishDaryaftMVP.ModelOps
-{
-
+public class PishDaryaftModel implements PishDaryaftMVP.ModelOps {
+    private DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(BaseApplication.getContext());
+    private ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
+    private AllMoshtaryPishdaryaftDAO allMoshtaryPishdaryaftDAO = new AllMoshtaryPishdaryaftDAO(BaseApplication.getContext());
     private PishDaryaftMVP.RequiredPresenterOps mPresenter;
-    public PishDaryaftModel(PishDaryaftMVP.RequiredPresenterOps mPresenter)
-    {
+
+    public PishDaryaftModel(PishDaryaftMVP.RequiredPresenterOps mPresenter) {
         this.mPresenter = mPresenter;
     }
 
 
     @Override
-    public void getAllCustomers()
-    {
-
-        MoshtaryDAO moshtaryDAO = new MoshtaryDAO(BaseApplication.getContext());
-        ArrayList<MoshtaryModel> moshtaryModels = moshtaryDAO.getAll();
-        mPresenter.onGetAllCustomers(moshtaryModels);
+    public void getAllCustomers() {
+        ArrayList<AllMoshtaryPishdaryaftModel> allMoshtaryPishdaryaftModels = allMoshtaryPishdaryaftDAO.getAll();
+        mPresenter.onGetAllCustomers(allMoshtaryPishdaryaftModels);
     }
 
 
     @Override
-    public void getDariaftPardakhtForSend(int ccMoshtary , int position)
-    {
-        DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(BaseApplication.getContext());
+    public void getDariaftPardakhtForSend(int ccMoshtary, int position) {
         ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = dariaftPardakhtPPCDAO.getForSendToSqlByccMoshtary(ccMoshtary);
-        Log.d("treasury" , "dariaftPardakhtPPCModels.size : " + dariaftPardakhtPPCModels.size());
-        if (dariaftPardakhtPPCModels.size() > 0)
-        {
-            ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
+        Log.d("treasury", "dariaftPardakhtPPCModels.size : " + dariaftPardakhtPPCModels.size());
+        if (dariaftPardakhtPPCModels.size() > 0) {
             ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
-            if (foroshandehMamorPakhshModel == null)
-            {
+            if (foroshandehMamorPakhshModel == null) {
                 mPresenter.onErrorSend(R.string.errorFindForoshandehMamorPakhsh);
-            }
-            else
-            {
+            } else {
                 ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(BaseApplication.getContext());
-                if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
-                {
+                if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
                     mPresenter.onErrorSend(R.string.errorFindServerIP);
-                }
-                else
-                {
+                } else {
                     int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
                     DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
                     DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(dariaftPardakhtPPCModels.get(0).getCcDarkhastFaktor());
@@ -83,18 +76,70 @@ public class PishDaryaftModel implements PishDaryaftMVP.ModelOps
                     sendDariaftPardakhtToServer(position, serverIpModel, dariaftPardakhtPPCModels, foroshandehMamorPakhshModel, noeMasouliat, darkhastFaktorModel, codeNoeVosolVajhNaghd, currentVersionNumber);
                 }
             }
-        }
-        else
-        {
+        } else {
             mPresenter.onErrorSend(R.string.errorNotExistItemForSend);
         }
+    }
+
+    @Override
+    public void refresh() {
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
+        final Handler handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg)
+            {
+                if (msg.arg1 == 1)
+                {
+                    getAllCustomers();
+                    mPresenter.onUpdateData();
+                }
+                else if (msg.arg1 == -1)
+                {
+                    mPresenter.failedUpdate();
+                }
+                return false;
+            }
+        });
+        allMoshtaryPishdaryaftDAO.fetchAllMoshtaryforoshandeh(BaseApplication.getContext(), "pishDaryaft", foroshandehMamorPakhshModel.getCcForoshandehs(), new RetrofitResponse() {
+            @Override
+            public void onSuccess(ArrayList arrayListData) {
+                Thread thread = new Thread()
+                {
+                    @Override
+                    public void run(){
+
+                        boolean deleteResult = allMoshtaryPishdaryaftDAO.deleteAll();
+                        boolean insertResult = allMoshtaryPishdaryaftDAO.insertGroup(arrayListData);
+                        Message message = new Message();
+                        if (deleteResult && insertResult)
+                        {
+
+                            message.arg1 = 1;
+                        }
+                        else
+                        {
+
+                            message.arg1 = -1;
+
+                        }
+                        handler.sendMessage(message);
+
+                    }
+                };
+                thread.start();
+            }
+
+            @Override
+            public void onFailed(String type, String error) {
+                mPresenter.failedUpdate();
+            }
+        });
     }
 
     /**
      * send to server
      */
-    private void sendDariaftPardakhtToServer(final int position ,ServerIpModel serverIpModel , final ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, final DarkhastFaktorModel darkhastFaktorModel, int codeNoeVosolVajhNaghd, String currentVersionNumber)
-    {
+    private void sendDariaftPardakhtToServer(final int position, ServerIpModel serverIpModel, final ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, final DarkhastFaktorModel darkhastFaktorModel, int codeNoeVosolVajhNaghd, String currentVersionNumber) {
 
         APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
 
@@ -103,14 +148,11 @@ public class PishDaryaftModel implements PishDaryaftMVP.ModelOps
         int ccMarkazForosh = 0;
         int ccMarkazAnbar = 0;
         int ccMarkazSazmanForoshSakhtarForosh = 0;
-        if(noeMasouliat != 4)
-        {
+        if (noeMasouliat != 4) {
             ccMarkazForosh = foroshandehMamorPakhshModel.getCcMarkazForosh();
             ccMarkazAnbar = foroshandehMamorPakhshModel.getCcMarkazAnbar();
             ccMarkazSazmanForoshSakhtarForosh = foroshandehMamorPakhshModel.getCcMarkazSazmanForoshSakhtarForosh();
-        }
-        else
-        {
+        } else {
             ccMarkazForosh = darkhastFaktorModel.getCcMarkazForosh();
             ccMarkazAnbar = darkhastFaktorModel.getCcMarkazAnbar();
             ccMarkazSazmanForoshSakhtarForosh = darkhastFaktorModel.getCcMarkazSazmanForoshSakhtarForosh();
@@ -118,12 +160,11 @@ public class PishDaryaftModel implements PishDaryaftMVP.ModelOps
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
         int ccSazmanForosh = foroshandehMamorPakhshDAO.getIsSelect().getCcSazmanForosh();
         //create JsonArray of DariaftPardakhtPPCModel
-        for (DariaftPardakhtPPCModel dpModel : dariaftPardakhtPPCModels)
-        {
+        for (DariaftPardakhtPPCModel dpModel : dariaftPardakhtPPCModels) {
 
             int codeNoeSanad = 0;
             int codeNoeCheck = 0;
-            jsonArrayDariaftPardakht.put(dpModel.toJsonObjectCheckPishDariaft(ccMarkazForosh, ccMarkazAnbar, ccMarkazSazmanForoshSakhtarForosh, codeNoeSanad, codeNoeCheck, codeNoeVosolVajhNaghd, currentVersionNumber , ccSazmanForosh));
+            jsonArrayDariaftPardakht.put(dpModel.toJsonObjectCheckPishDariaft(ccMarkazForosh, ccMarkazAnbar, ccMarkazSazmanForoshSakhtarForosh, codeNoeSanad, codeNoeCheck, codeNoeVosolVajhNaghd, currentVersionNumber, ccSazmanForosh));
             ccDpdfs += "," + dpModel.getCcDariaftPardakht();
 
         }
@@ -131,77 +172,58 @@ public class PishDaryaftModel implements PishDaryaftMVP.ModelOps
         /**
          * create json string in model
          */
-        try
-        {
-            JSONObject  jsonObjectPishDaryaft = new JSONObject();
-            jsonObjectPishDaryaft.put("DariaftPardakht" , jsonArrayDariaftPardakht);
+        try {
+            JSONObject jsonObjectPishDaryaft = new JSONObject();
+            jsonObjectPishDaryaft.put("DariaftPardakht", jsonArrayDariaftPardakht);
 
             String strJsonObjectCheckPishDariaft = jsonObjectPishDaryaft.toString();
 
             Call<CreateDariaftPardakhtPPCJSONResult> call = apiServicePost.createDariaftPardakhtPPCPishDariaftJSON(strJsonObjectCheckPishDariaft);
-            call.enqueue(new Callback<CreateDariaftPardakhtPPCJSONResult>()
-            {
+            call.enqueue(new Callback<CreateDariaftPardakhtPPCJSONResult>() {
                 @Override
-                public void onResponse(Call<CreateDariaftPardakhtPPCJSONResult> call, Response<CreateDariaftPardakhtPPCJSONResult> response)
-                {
-                    try
-                    {
-                        if (response.isSuccessful() && response.body() != null)
-                        {
+                public void onResponse(Call<CreateDariaftPardakhtPPCJSONResult> call, Response<CreateDariaftPardakhtPPCJSONResult> response) {
+                    try {
+                        if (response.isSuccessful() && response.body() != null) {
                             CreateDariaftPardakhtPPCJSONResult result = response.body();
-                            if (result.getSuccess())
-                            {
-                                if (Integer.parseInt(result.getMessage()) > 0)
-                                {
+                            if (result.getSuccess()) {
+                                if (Integer.parseInt(result.getMessage()) > 0) {
                                     long ccMoshtary = Integer.parseInt(result.getMessage());
                                     DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(BaseApplication.getContext());
                                     for (int i = 0; i < dariaftPardakhtPPCModels.size(); i++) {
                                         dariaftPardakhtPPCDAO.updateSendedPishDaryaft(ccMoshtary, 1);
                                     }
                                     mPresenter.onSuccessSend(position);
-                                }
-                                else
-                                {
+                                } else {
                                     showResultError(Integer.parseInt(result.getMessage()));
                                 }
 
-                            }
-                            else
-                            {
+                            } else {
                                 showResultError(Integer.parseInt(result.getMessage()));
-                                setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "PishDaryaftModel", "" , "sendDariaftPardakhtToServer" , "onResponse");
+                                setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "PishDaryaftModel", "", "sendDariaftPardakhtToServer", "onResponse");
                             }
-                        }
-                        else
-                        {
-                            String errorMessage = "response not successful " + response.message() ;
-                            if (response.errorBody() != null)
-                            {
-                                errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string() ;//+ "\n" + "can't send this log : " + logMessage;
+                        } else {
+                            String errorMessage = "response not successful " + response.message();
+                            if (response.errorBody() != null) {
+                                errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string();//+ "\n" + "can't send this log : " + logMessage;
                             }
-                            setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "PishDaryaftModel", "" , "sendDariaftPardakhtToServer" , "onResponse");
+                            setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "PishDaryaftModel", "", "sendDariaftPardakhtToServer", "onResponse");
                             mPresenter.onErrorSend(R.string.errorOperation);
                         }
-                    }
-                    catch (Exception exception)
-                    {
+                    } catch (Exception exception) {
                         exception.printStackTrace();
-                        setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "PishDaryaftModel", "" , "sendDariaftPardakhtToServer" , "onResponse");
+                        setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "PishDaryaftModel", "", "sendDariaftPardakhtToServer", "onResponse");
                         mPresenter.onErrorSend(R.string.errorOperation);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<CreateDariaftPardakhtPPCJSONResult> call, Throwable t)
-                {
-                    setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "PishDaryaftModel", "" , "sendDariaftPardakhtToServer" , "onFailure");
+                public void onFailure(Call<CreateDariaftPardakhtPPCJSONResult> call, Throwable t) {
+                    setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "PishDaryaftModel", "", "sendDariaftPardakhtToServer", "onFailure");
                     mPresenter.onErrorSend(R.string.errorOperation);
                 }
             });
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             setLogToDB(Constants.LOG_EXCEPTION(), e.toString(), "PishDaryaftModel", "", "sendDariaftPardakhtToServer", "");
         }
@@ -209,27 +231,21 @@ public class PishDaryaftModel implements PishDaryaftMVP.ModelOps
     }
 
     @Override
-    public void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild)
-    {
+    public void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild) {
         PubFunc.Logger logger = new PubFunc().new Logger();
         logger.insertLogToDB(mPresenter.getAppContext(), logType, message, logClass, logActivity, functionParent, functionChild);
     }
 
-    @Override
-    public void onDestroy()
-    {
 
-    }
 
 
     /**
      * show error for send pish daryaft
+     *
      * @param errorCode
      */
-    private void showResultError(int errorCode)
-    {
-        switch (errorCode)
-        {
+    private void showResultError(int errorCode) {
+        switch (errorCode) {
             case -1:
                 mPresenter.onErrorSend(R.string.errorDuplicatedFaktor);
                 break;

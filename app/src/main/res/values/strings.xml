@@ -1063,4 +1063,6 @@
     <string name="errorSendMojodiGiri">خطا در ارسال اطلاعات موجودی گیری</string>
     <string name="errorSendGpsDataMashin">خطا در ارسال اطلاعات موقعیت ماشین</string>
     <string name="errorSendLogData">خطا در ارسال لاگ های سیستمی</string>
+    <string name="errorKalaOlaviat">شما نمی توانید این کالا را به دلیل وجود کالای قدیمی تر ثبت نمایید </string>
+    <string name="errorKalaOlaviatTekrari">شما نمی توانید محصولی را با دو قیمت مختلف ثبت نمایید</string>
 </resources>

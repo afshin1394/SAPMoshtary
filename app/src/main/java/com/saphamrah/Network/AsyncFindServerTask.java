@@ -56,6 +56,7 @@ public class AsyncFindServerTask extends AsyncTask<ArrayList<ServerIpModel> , Vo
                     socket.connect(new InetSocketAddress(serverIpModel.getServerIp() , Integer.parseInt(serverIpModel.getPort())) , timeout);
                     if(socket.isConnected())
                     {
+                        Log.d("ServerIp","serverIpModel :" + serverIpModel.getServerIp() + ":" + serverIpModel.getPort());
                         currentServers.add(serverIpModel);
                     }
                     else
@@ -91,12 +92,13 @@ public class AsyncFindServerTask extends AsyncTask<ArrayList<ServerIpModel> , Vo
             }
             ArrayList<String> allDistinctServerIp =new ArrayList<>(distinctIPList);
             Random random=new Random();
-            Log.d("Rnd","size"+distinctIPList.size());
+            Log.d("ServerIp","size"+distinctIPList.size());
             int randomIpIndex=random.nextInt(distinctIPList.size());
             String preferredIP=allDistinctServerIp.get(randomIpIndex);
 
             for(ServerIpModel serverIpModel:currentServers){
                 if (serverIpModel.getServerIp().equals(preferredIP)){
+                    Log.d("ServerIp","serverIpModel 1 :" + serverIpModel.getServerIp() + ":" + serverIpModel.getPort());
                     preferredServerModels.add(serverIpModel);
                 }
             }

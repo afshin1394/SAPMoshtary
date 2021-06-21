@@ -45,7 +45,7 @@ public class KalaDarkhastFaktorSatrDAO
             String query = "select fs.*, k.CodeKala, k.BarCode, k.Adad, k.TedadDarKarton, k.TedadDarBasteh, k.ccGorohKala, k.NameKala, k.Tol, k.Arz, k.Ertefa, \n" +
                     " k.NameVahedShomaresh, k.NameBrand, k.NameVahedSize, k.NameVahedVazn, k.VaznKarton, k.VaznKhales \n" +
                     " from DarkhastFaktorSatr fs inner join Kala k on k.ccKalaCode = fs.ccKalaCode and k.ShomarehBach = fs.ShomarehBach \n" +
-                    " and k.MablaghForosh = fs.MablaghForosh and k.MablaghMasrafKonandeh = fs.GheymatMasrafKonandeh\n" +
+                    " and k.gheymatForoshAsli = fs.gheymatForoshAsli and k.MablaghMasrafKonandeh = fs.GheymatMasrafKonandeh\n" +
                     " and k.ccTaminKonandeh = fs.ccTaminKonandeh where fs.CodeNoeKala != 2 And ccDarkhastFaktor = " + ccDarkhastFaktor;
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);

@@ -289,6 +289,33 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         return darkhastFaktorSatrModels;
     }
 
+    public ArrayList<DarkhastFaktorSatrModel> getByccKalaCodeAndCcDarkhastFaktor(int ccKalaCode , long ccDarkhastFaktor)
+    {
+        ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(DarkhastFaktorSatrModel.TableName(), allColumns(), DarkhastFaktorSatrModel.COLUMN_ccKalaCode() + " = " + ccKalaCode + " AND ccDarkhastFaktor = " + ccDarkhastFaktor, null, null, null, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    darkhastFaktorSatrModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "getByccKalaCode" , "");
+        }
+        return darkhastFaktorSatrModels;
+    }
+
 
     public ArrayList<DarkhastFaktorSatrModel> getByDarkhastFaktorForMohasebehJayezehTedadi(long ccDarkhastFaktor)
     {

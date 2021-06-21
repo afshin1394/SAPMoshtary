@@ -400,10 +400,6 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     public void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels) {
         this.kalaMojodiZaribModels.clear();
         this.kalaMojodiZaribModels.addAll(kalaMojodiZaribModels);
-
-        //TODO
-
-
         adapterRequestKalaListGrid.notifyDataSetChanged();
         adapterRequestKala.notifyDataSetChanged();
         adapterRequestKalaList.notifyDataSetChanged();

@@ -3,10 +3,15 @@ package com.saphamrah.MVP.Presenter;
 import android.content.Context;
 import android.util.Log;
 
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.DarkhastKalaMVP;
+import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
+import com.saphamrah.DAO.KalaOlaviatGheymatDAO;
 import com.saphamrah.MVP.Model.DarkhastKalaModel;
+import com.saphamrah.Model.DarkhastFaktorSatrModel;
 import com.saphamrah.Model.ElatAdamDarkhastModel;
 import com.saphamrah.Model.KalaModel;
+import com.saphamrah.Model.KalaOlaviatGheymatModel;
 import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -31,7 +36,8 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
     private WeakReference<DarkhastKalaMVP.RequiredViewOps> mView;
     private DarkhastKalaMVP.ModelOps mModel;
     private boolean mIsChangingConfig;
-
+    KalaOlaviatGheymatDAO kalaOlaviatGheymatDAO = new KalaOlaviatGheymatDAO(BaseApplication.getContext());
+    DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(BaseApplication.getContext());
     public DarkhastKalaPresenter(DarkhastKalaMVP.RequiredViewOps viewOps)
     {
         this.mView = new WeakReference<>(viewOps);
@@ -126,6 +132,7 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
             int requestCountAdad = Integer.parseInt(adadCount.length()==0 ? "0" : adadCount);
             int requestCountSum = (requestCountCarton * kalaMojodiZaribModel.getTedadDarKarton()) + (requestCountBaste * kalaMojodiZaribModel.getTedadDarBasteh()) + (requestCountAdad * kalaMojodiZaribModel.getAdad());
             int ccGorohNoeSenf = shared.getInt(shared.getCcGorohNoeSenf() , 0);
+            long ccDarkhastFaktor = shared.getLong(shared.getCcDarkhastFaktor() , 0);
             final int ccNoeSenfMoshtary_NemoonehKala = 345;
             Log.d("DarkhastKala","requestCountCarton:"+requestCountCarton);
             Log.d("DarkhastKala","requestCountBaste:"+requestCountBaste);
@@ -157,9 +164,30 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
             }
 
 
+            boolean checkOlaviat = true;
+            boolean checkKalaTekrari = true;
+            /*
+            چک کردن اولویت کالا در ثبت بر اساس تعداد و درجه ی اولویت
+             */
+            if (validData){
+                validData = checkKalaOlaviatMablagh(kalaMojodiZaribModel,requestCountSum);
+                checkOlaviat = validData;
+            }
+            /*
+            چک کردن کالای مورد نظر جهت جلوگیری از ثبت با قیمت دیگر
+             */
+            if (validData){
+                validData = checkKalaOlaviatSabtShode(kalaMojodiZaribModel,ccDarkhastFaktor);
+                checkKalaTekrari =validData;
+            }
+
             if (validData)
             {
                 mModel.insertNewFaktorSatr(ccMoshtary , position , kalaMojodiZaribModel , requestCountSum);
+            }  else if (!checkOlaviat){
+                mView.get().onErrorAddNewRequestedKala(R.string.errorKalaOlaviat);
+            } else if (!checkKalaTekrari){
+                mView.get().onErrorAddNewRequestedKala(R.string.errorKalaOlaviatTekrari);
             }
         }
         catch (Exception e)
@@ -168,6 +196,48 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
             mView.get().onErrorAddNewRequestedKala(R.string.errorInvalidCount);
         }
     }
+
+    /**
+     * جهت چک کردن اولویت کالا برای کالاهای دو قیمتی
+     * @return
+     */
+    private boolean checkKalaOlaviatMablagh(KalaMojodiZaribModel kalaMojodiZaribModel,int requestCountSum){
+        boolean canInsertKala = true;
+        int lastMojodi = 0;
+        int lastOlaviat = 0;
+        ArrayList<KalaOlaviatGheymatModel> kalaOlaviatGheymatModels = kalaOlaviatGheymatDAO.getByCcKalaCode(kalaMojodiZaribModel.getCcKalaCode());
+
+        for (KalaOlaviatGheymatModel model : kalaOlaviatGheymatModels){
+            if (kalaMojodiZaribModel.getGheymatForosh() == model.getGheymatForosh()){
+                if (model.getOlaviat() > lastOlaviat  && requestCountSum < lastMojodi){
+                    canInsertKala = false;
+                }
+            }
+
+            lastOlaviat = model.getOlaviat();
+            lastMojodi = model.getTedad();
+        }
+        return canInsertKala;
+    }
+
+    /**
+     * چک کردن کالای دو قیمتی برای جلوگیری از ثبت یک کالا با دو قیمت
+     * @param kalaMojodiZaribModel
+     * @return
+     */
+    private boolean checkKalaOlaviatSabtShode(KalaMojodiZaribModel kalaMojodiZaribModel, long ccDarkhastFaktor){
+        boolean canSabt = true;
+        ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels = darkhastFaktorSatrDAO.getByccKalaCodeAndCcDarkhastFaktor(kalaMojodiZaribModel.getCcKalaCode() , ccDarkhastFaktor);
+        if (darkhastFaktorSatrModels.size() > 0 ){
+            for (DarkhastFaktorSatrModel model : darkhastFaktorSatrModels){
+                if (model.getMablaghForosh() != kalaMojodiZaribModel.getGheymatForosh()){
+                    canSabt = false;
+                }
+            }
+        }
+        return canSabt;
+    }
+
 
     @Override
     public void checkRemoveKala(KalaDarkhastFaktorSatrModel kalaDarkhastFaktorModel , int position , int ccMoshtary)

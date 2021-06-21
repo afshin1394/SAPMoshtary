@@ -5371,6 +5371,42 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
                         if (deleteResult && insertResult)
                         {
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
+                            getKalaOlaviatGheymat(getProgramType,anbarakAfrad , ccForoshandeh , ccMamorPakhsh , "-1");
+                        }
+                        else
+                        {
+                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
+                        }
+
+                    }
+                };
+                thread.start();
+            }
+            @Override
+            public void onFailed(String type, String error)
+            {
+                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
+            }
+        });
+    }
+
+    private void getKalaOlaviatGheymat( int getProgramType ,String ccAnbarak,int ccForoshandeh,int ccMamorPakhsh, String ccKalaCode)
+    {
+        Log.d("getProgram","ccDarkhastFaktors:" + ccDarkhastFaktors);
+        KalaOlaviatGheymatDAO kalaOlaviatGheymatDAO = new KalaOlaviatGheymatDAO(mPresenter.getAppContext());
+        kalaOlaviatGheymatDAO.fetchKalaOlaviat(mPresenter.getAppContext(), activityNameForLog ,  ccAnbarak , ccForoshandeh , ccMamorPakhsh , ccKalaCode, new RetrofitResponse() {
+            @Override
+            public void onSuccess(final ArrayList arrayListData)
+            {
+                Thread thread = new Thread()
+                {
+                    @Override
+                    public void run(){
+                        boolean deleteResult = kalaOlaviatGheymatDAO.deleteAll();
+                        boolean insertResult = kalaOlaviatGheymatDAO.insertGroup(arrayListData);
+                        if (deleteResult && insertResult)
+                        {
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
                             getParameter(getProgramType);
                         }
                         else

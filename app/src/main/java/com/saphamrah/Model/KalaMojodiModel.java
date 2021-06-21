@@ -101,6 +101,16 @@ public class KalaMojodiModel
     private int Max_MojodyByShomarehBach;
     private int ccAfrad;
 
+    public int getGheymatForoshAsli() {
+        return gheymatForoshAsli;
+    }
+
+    public void setGheymatForoshAsli(int gheymatForoshAsli) {
+        this.gheymatForoshAsli = gheymatForoshAsli;
+    }
+
+    private int gheymatForoshAsli;
+
 
     public int getCcKalaMojodi() {
         return ccKalaMojodi;

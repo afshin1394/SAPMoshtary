@@ -1,5 +1,7 @@
 package com.saphamrah.Model;
 
+import org.json.JSONObject;
+
 public class MarjoeeKamelImageModel
 {
 
@@ -52,5 +54,18 @@ public class MarjoeeKamelImageModel
     }
 
 
+    public JSONObject toJsonForMarjoeeKamelImageForSend(MarjoeeKamelImageModel model) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("ccKardex", model.getCcKardex());
+            jsonObject.put("ccMoshtary", model.getCcMoshtary());
+            jsonObject.put("Image", model.getImage());
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return jsonObject;
+    }
 
 }

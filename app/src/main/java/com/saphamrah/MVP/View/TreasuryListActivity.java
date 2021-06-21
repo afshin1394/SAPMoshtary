@@ -336,6 +336,9 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
                     openInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary(), darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
                 } else if (operation == Constants.SHOW_IMAGE()) {
                     mPresenter.getFaktorImage(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
+                } else if (operation == Constants.MARJOEE) {
+                    Log.d("MarjoeeKoliFragment", String.valueOf(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor()));
+                    startActivityBundle(DarkhastFaktorMarjoeeActivity.class, "marjoee", String.valueOf(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor()), "ccMoshtaryMarjoee", String.valueOf(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary()));
                 } else if (operation == Constants.SEND()) {
                     showSendAlert(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor(), darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat(), position);
                 }

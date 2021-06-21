@@ -178,6 +178,10 @@ public interface APIServiceGet
     @GET("Api/ApiGlobal/GetAllMarkaz_ShahrMarkazi")
     Call<GetAllMarkazShahrMarkaziResult> getAllMarkazShahrMarkazi();
 
+    @GET("Api/apitablet/GetKalaOlaviatGheymat")
+    Call<GetKalaOlaviatGheymatResult> getKalaOlaviatGheymat(@Query("ccAnbarak") String ccAnbarak , @Query("ccForoshandeh") int ccForoshandeh, @Query("ccMamorPakhsh") int ccMamorPakhsh, @Query("ccKalaCode") String ccKalaCode);
+
+
 
     //J
     @GET("Api/ApiSales/GetJayezeh")
@@ -369,6 +373,9 @@ public interface APIServiceGet
 
     @GET("Api/ApiTablet/GetAllMoshtaryForoshandeh")
     Call<GetAllMoshtaryForoshandehResult> getAllMoshtaryForoshandeh(@Query("ccForoshandeh") String ccForoshandeh);
+
+    @GET("Api/ApiTablet/GetAllMoshtaryPishDaryaft")
+    Call<GetAllMoshtaryPishdaryaftResult> getAllMoshtaryPishDaryaft(@Query("ccForoshandeh") String ccForoshandeh);
 
     @GET("Api/ApiSales/GetAllrpt_ListMoavaghForoshandeh")
     Call<GetAllrptListMoavaghForoshandehResult> getAllrptListMoavaghForoshandeh(@Query("ccForoshandeh") String ccForoshandeh);

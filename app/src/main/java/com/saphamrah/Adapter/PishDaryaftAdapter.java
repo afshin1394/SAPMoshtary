@@ -19,6 +19,7 @@ import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.DAO.ParameterChildDAO;
+import com.saphamrah.Model.AllMoshtaryPishdaryaftModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
@@ -30,11 +31,11 @@ public class PishDaryaftAdapter extends RecyclerSwipeAdapter<PishDaryaftAdapter.
 
     private final OnItemClickListener listener;
     private Context context;
-    private ArrayList<MoshtaryModel> moshtaryModels;
+    private ArrayList<AllMoshtaryPishdaryaftModel> moshtaryModels;
     private int lastPosition = -1;
     ParameterChildDAO childParameterDAO = new ParameterChildDAO(BaseApplication.getContext());
 
-    public PishDaryaftAdapter(Context context, ArrayList<MoshtaryModel> moshtaryModels, OnItemClickListener listener)
+    public PishDaryaftAdapter(Context context, ArrayList<AllMoshtaryPishdaryaftModel> moshtaryModels, OnItemClickListener listener)
     {
         this.listener = listener;
         this.context = context;
@@ -53,23 +54,22 @@ public class PishDaryaftAdapter extends RecyclerSwipeAdapter<PishDaryaftAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position)
     {
-        String noeVosolName = childParameterDAO.getTextByParameterNameAndValue(Constants.NOE_VOSOL_MOSHTARY() , String.valueOf(moshtaryModels.get(position).getCodeNoeVosolAzMoshtary()));
-        Log.i("PishDaryaft" , "PishDaryaftAdapter : "  + noeVosolName);
+
+
         holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left , holder.itemView.findViewById(R.id.layLeft));
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right , holder.itemView.findViewById(R.id.layRight));
 
         holder.lblRadif.setText(String.valueOf(position + 1));
         holder.lblCustomerFullNameCode.setText(String.format("%1$s - %2$s" , moshtaryModels.get(position).getCodeMoshtary() ,  moshtaryModels.get(position).getNameMoshtary()));
-        holder.lblCustomerNoeVosol.setText(noeVosolName);
-        String telephone = moshtaryModels.get(position).getMobile();
+        String telephone = moshtaryModels.get(position).getTelephone();
         if (telephone.trim().equals("") || telephone.trim().equals("0"))
         {
             holder.lblCustomerPhone.setText("---");
         }
         else
         {
-            holder.lblCustomerPhone.setText(moshtaryModels.get(position).getMobile());
+            holder.lblCustomerPhone.setText(moshtaryModels.get(position).getTelephone());
         }
         holder.bind(position , listener);
 
@@ -101,7 +101,7 @@ public class PishDaryaftAdapter extends RecyclerSwipeAdapter<PishDaryaftAdapter.
         private SwipeLayout swipeLayout;
         private TextView lblRadif;
         private TextView lblCustomerFullNameCode;
-        private TextView lblCustomerNoeVosol;
+
         private TextView lblCustomerPhone;
         private ImageView imgCustomerPhone;
         private ImageView imgAddToRequestList;
@@ -115,7 +115,7 @@ public class PishDaryaftAdapter extends RecyclerSwipeAdapter<PishDaryaftAdapter.
             swipeLayout = itemView.findViewById(R.id.swipe);
             lblRadif = view.findViewById(R.id.lblRadif);
             lblCustomerFullNameCode = view.findViewById(R.id.lblCustomerFullNameCode);
-            lblCustomerNoeVosol = view.findViewById(R.id.lblNoeVosol);
+
             lblCustomerPhone = view.findViewById(R.id.lblTelephone);
             imgCustomerPhone = view.findViewById(R.id.imgCustomerPhone);
             imgAddToRequestList = view.findViewById(R.id.imgAddToRequestList);
@@ -123,7 +123,7 @@ public class PishDaryaftAdapter extends RecyclerSwipeAdapter<PishDaryaftAdapter.
 
             lblRadif.setTypeface(font);
             lblCustomerFullNameCode.setTypeface(font);
-            lblCustomerNoeVosol.setTypeface(font);
+
             lblCustomerPhone.setTypeface(font);
         }
 

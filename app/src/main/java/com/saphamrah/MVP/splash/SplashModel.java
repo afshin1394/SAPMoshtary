@@ -297,7 +297,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
 
                     ServerIpModel serverIpModel = (ServerIpModel) object;
 
-                    Log.i("serverType", "processFinished: " + serverIpModel.getServerType());
+                    Log.i("serverType", "processFinished: " + serverIpModel.getServerType() + ", " + serverIpModel.getServerIp() +":"+ serverIpModel.getPort());
 /***********************************************************   X server has divided webservice base URls for get post and multi *******************************************************/
 
 
@@ -306,18 +306,19 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
                             case Constants.POST_REQUEST:
                                 serverIPShared.putString(serverIPShared.IP_POST_REQUEST(), serverIpModel.getServerIp());
                                 serverIPShared.putString(serverIPShared.PORT_POST_REQUEST(), serverIpModel.getPort());
-
+                                Log.i("serverType","POST_REQUEST");
                                 break;
 
                             case Constants.MULTI_REQUEST:
                                 serverIPShared.putString(serverIPShared.IP_MULTI_REQUEST(), serverIpModel.getServerIp());
                                 serverIPShared.putString(serverIPShared.PORT_MULTI_REQUEST(), serverIpModel.getPort());
-
+                                Log.i("serverType","MULTI_REQUEST");
                                 break;
 
                             case Constants.GET_REQUESTS:
                                 serverIPShared.putString(serverIPShared.IP_GET_REQUEST(), serverIpModel.getServerIp());
                                 serverIPShared.putString(serverIPShared.PORT_GET_REQUEST(), serverIpModel.getPort());
+                                Log.i("serverType","GET_REQUESTS");
                                 break;
 
                         }

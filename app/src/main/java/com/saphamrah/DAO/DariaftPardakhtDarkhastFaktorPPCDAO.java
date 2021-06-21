@@ -580,10 +580,10 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
                 exception.printStackTrace();
             }
         }
-       // int TedadRoozMazad= 10;//todo mazad
+        int TedadRoozMazad= 10;//todo mazad
 
-        //modatVosol +=1;
-       // modatVosol += TedadRoozMazad;
+        modatVosol +=1;
+        modatVosol += TedadRoozMazad;
         tedadRoozRaasGiri = (int) Math.round(((modatVosol * mablaghFaktor) - sumMablaghTakhsisDiffdays ) / mablaghMandeh);
         tarikhSarResid = new PubFunc().new DateUtils().addDay(tarikhErsal , tedadRoozRaasGiri);
         return tarikhSarResid;

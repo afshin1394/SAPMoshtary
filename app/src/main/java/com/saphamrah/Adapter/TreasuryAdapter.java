@@ -82,7 +82,7 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             e.printStackTrace();
         }
 
-        if ((models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) && ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6 && faktorRooz))) {
+        if ((models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) && ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6))) {
             holder.layEditDarkhast.setVisibility(View.VISIBLE);
             holder.layMarjoee.setVisibility(View.GONE);
         } else {
@@ -90,14 +90,14 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             holder.layEditDarkhast.setVisibility(View.GONE);
         }
 
-        /**
-         * check show marjoee
-         */
-        if (models.get(position).getFaktorRooz() == 1){
-            holder.layMarjoee.setVisibility(View.GONE);
-        } else {
-            holder.layMarjoee.setVisibility(View.VISIBLE);
-        }
+//        /**
+//         * check show marjoee
+//         */
+//        if (models.get(position).getFaktorRooz() == 1){
+//            holder.layMarjoee.setVisibility(View.GONE);
+//        } else {
+//            holder.layMarjoee.setVisibility(View.VISIBLE);
+//        }
 
         /**
          * set color for layout

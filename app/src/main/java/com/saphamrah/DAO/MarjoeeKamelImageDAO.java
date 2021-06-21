@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.saphamrah.Model.KardexModel;
 import com.saphamrah.Model.MarjoeeKamelImageModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -105,7 +106,30 @@ public class MarjoeeKamelImageDAO
         return marjoeeKamelImageModels;
     }
 
-    public boolean deleteAll()
+    public ArrayList<MarjoeeKamelImageModel> getByCcKardex(long cckardex) {
+        ArrayList<MarjoeeKamelImageModel> models = new ArrayList<>();
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(KardexModel.TableName(), allColumns(), MarjoeeKamelImageModel.COLUMN_ccKardex() + " = " + cckardex, null, null, null, null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    models = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll, KardexModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "MarjoeeKamelImageDAO", "", "getByCcKardex", "");
+        }
+
+        return models;
+    }
+
+
+        public boolean deleteAll()
     {
         try
         {

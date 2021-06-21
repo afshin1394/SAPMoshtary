@@ -23,11 +23,14 @@ import com.saphamrah.Adapter.GetProgramItemsStatusAdapter;
 import com.saphamrah.Adapter.PishDaryaftAdapter;
 import com.saphamrah.BaseMVP.PishDaryaftMVP;
 import com.saphamrah.MVP.Presenter.PisDaryaftPresenter;
+import com.saphamrah.MVP.Presenter.VarizNaghdBeBankPresenter;
+import com.saphamrah.Model.AllMoshtaryPishdaryaftModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
 import com.saphamrah.Utils.CustomAlertDialogResponse;
+import com.saphamrah.Utils.CustomLoadingDialog;
 import com.saphamrah.Utils.StateMaintainer;
 
 import java.util.ArrayList;
@@ -45,28 +48,15 @@ public class PishDaryaftActivity extends AppCompatActivity implements PishDaryaf
     private final String TAG = this.getClass().getSimpleName();
     private StateMaintainer stateMaintainer = new StateMaintainer(this.getSupportFragmentManager() , TAG , PishDaryaftActivity.this);
     private PishDaryaftMVP.PresenterOps mPresenter;
-
     private CustomAlertDialog customAlertDialog;
     private PishDaryaftAdapter adapter;
-    private ArrayList<MoshtaryModel> moshtaryModels;
+    private ArrayList<AllMoshtaryPishdaryaftModel> moshtaryModels = new ArrayList<>();
     private boolean searchMode;
-
-    private List<Integer> getCustomerInfoItemsStatus;
-    private ViewRevealAnimator viewRevealAnimator;
-    private RecyclerView recyclerViewGetProgramItems;
-    private ProgressBar progressBar;
-    private TextView lblPassedItemCounter;
-    private TextView lblProgressPercentage;
-    private ShineButton imgGetProgramResultFailed;
-    private ShineButton imgGetProgramResultSuccess;
-    private TextView lblGetProgramResult;
-    private Button btnGetProgramResultClose;
-    private GetProgramItemsStatusAdapter alertAdapter;
-    private AlertDialog show;
     private int getCustomerInfoItemCount;
     private int selectedccMasir;
     private final int OPEN_INVOICE_SETTLEMENT = 100;
-
+    private AlertDialog alertDialogLoading;
+    private CustomLoadingDialog customLoadingDialog;
     // find View
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -91,6 +81,19 @@ public class PishDaryaftActivity extends AppCompatActivity implements PishDaryaf
         searchMode = true;
     }
 
+    @OnClick(R.id.fabRefresh)
+    public void fabRefresh(){
+        fabMenu.close(true);
+        alertDialogLoading = customLoadingDialog.showLoadingDialog(PishDaryaftActivity.this);
+        mPresenter.refresh();
+    }
+
+    @Override
+    public Context getAppContext()
+    {
+        return PishDaryaftActivity.this;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -101,12 +104,13 @@ public class PishDaryaftActivity extends AppCompatActivity implements PishDaryaf
         // set font
         Calligrapher calligrapher = new Calligrapher(this);
         calligrapher.setFont(this, getResources().getString(R.string.fontPath), true);
+        mPresenter = new PisDaryaftPresenter(this);
+        customLoadingDialog = new CustomLoadingDialog();
 
 
         searchView.setVoiceSearch(false);
         searchView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
         removeToolbar();
-
 
         customAlertDialog = new CustomAlertDialog(PishDaryaftActivity.this);
         moshtaryModels = new ArrayList<>();
@@ -114,10 +118,7 @@ public class PishDaryaftActivity extends AppCompatActivity implements PishDaryaf
         getCustomerInfoItemCount = getResources().getStringArray(R.array.getCustomerInfo).length;
         selectedccMasir = -1;
 
-        startMVPOps();
-
         mPresenter.getAllCustomers();
-
 
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
@@ -174,22 +175,18 @@ public class PishDaryaftActivity extends AppCompatActivity implements PishDaryaf
 
     }
 
-    @Override
-    public Context getAppContext()
-    {
-        return PishDaryaftActivity.this;
-    }
+
 
 
     /**
      * set adapter for show all customers
-     * @param moshtaryModels
+     * @param allMoshtaryPishdaryaftModels
      */
     @Override
-    public void onGetAllCustomers(ArrayList<MoshtaryModel> moshtaryModels)
+    public void onGetAllCustomers(ArrayList<AllMoshtaryPishdaryaftModel> allMoshtaryPishdaryaftModels)
     {
-        this.moshtaryModels = new ArrayList<>();
-        this.moshtaryModels.addAll(moshtaryModels);
+        this.moshtaryModels.clear();
+        this.moshtaryModels.addAll(allMoshtaryPishdaryaftModels);
         adapter = new PishDaryaftAdapter(PishDaryaftActivity.this, moshtaryModels,(operation, position) -> {
             if (operation == Constants.CLEARING()){
                 openInvoiceSettlement(moshtaryModels.get(position).getCcMoshtary() , 0);
@@ -210,7 +207,7 @@ public class PishDaryaftActivity extends AppCompatActivity implements PishDaryaf
      * @param moshtaryModels
      */
     @Override
-    public void onGetSearchResult(final ArrayList<MoshtaryModel> moshtaryModels)
+    public void onGetSearchResult(final ArrayList<AllMoshtaryPishdaryaftModel> moshtaryModels)
     {
         adapter = new PishDaryaftAdapter(PishDaryaftActivity.this, moshtaryModels, (PishDaryaftAdapter.OnItemClickListener) (operation ,position) -> {
            if (operation == Constants.CLEARING()){
@@ -252,6 +249,17 @@ public class PishDaryaftActivity extends AppCompatActivity implements PishDaryaf
         customAlertDialog.showMessageAlert(this, false, "", getResources().getString(resId), messageType, getResources().getString(R.string.apply));
     }
 
+    @Override
+    public void closeLoadingDialog() {
+        if (alertDialogLoading != null) {
+            try {
+                alertDialogLoading.dismiss();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "RptFaktorTozieNashodeActivity", "closeLoadingDialog", "");
+            }
+        }
+    }
 
 
     @Override
@@ -271,66 +279,6 @@ public class PishDaryaftActivity extends AppCompatActivity implements PishDaryaf
         intent.putExtra("ccDarkhastFaktor" , ccDarkhastFaktor);
         intent.putExtra("sourceActivity" , "PishDaryaftActivity");
         startActivityForResult(intent , OPEN_INVOICE_SETTLEMENT);
-    }
-
-
-
-    public void startMVPOps()
-    {
-        try
-        {
-            if ( stateMaintainer.firstTimeIn() )
-            {
-                initialize(this);
-            }
-            else
-            {
-                reinitialize(this);
-            }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace();
-            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "CustomersListActivity", "startMVPOps", "");
-        }
-    }
-
-
-    private void initialize(PishDaryaftMVP.RequiredViewOps view )
-    {
-        try
-        {
-            mPresenter = new PisDaryaftPresenter(view);
-            stateMaintainer.put(PishDaryaftMVP.PresenterOps.class.getSimpleName(), mPresenter);
-        }
-        catch (Exception exception)
-        {
-            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "CustomersListActivity", "initialize", "");
-        }
-    }
-
-
-    private void reinitialize(PishDaryaftMVP.RequiredViewOps view)
-    {
-        try
-        {
-            mPresenter = stateMaintainer.get(PishDaryaftMVP.PresenterOps.class.getSimpleName());
-            if ( mPresenter == null )
-            {
-                initialize( view );
-            }
-            else
-            {
-                mPresenter.onConfigurationChanged(view);
-            }
-        }
-        catch (Exception exception)
-        {
-            if (mPresenter != null)
-            {
-                mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "CustomersListActivity", "reinitialize", "");
-            }
-        }
     }
 
 

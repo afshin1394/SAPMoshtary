@@ -141,7 +141,7 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
                     " df.ccMoshtary, df.ccUser, df.NameNoeVosolAzMoshtary, \n" +
                     " df.MablaghKhalesFaktor, df.MablaghMandeh , df.CodeVazeiat, df.Latitude, df.Longitude, \n" +
                     " df.ExtraProp_IsSend, df.CodeNoeVosolAzMoshtary, df.ExtraProp_ShowFaktorMamorPakhsh,df.ccMoshtaryGharardad, \n" +
-                    " m.NameMoshtary, m.CodeMoshtary \n" +
+                    " m.NameMoshtary, m.CodeMoshtary,m.ccMoshtaryGharardad \n" +
                     " from DarkhastFaktor df left join Moshtary m on df.ccMoshtary = m.ccMoshtary  \n" +
                     " where df.ccMoshtary = " + ccMoshtary + " And ForTasviehVosol = 1 AND FaktorRooz = " + faktorRooz +
                     " order by df.CodeMoshtary";
