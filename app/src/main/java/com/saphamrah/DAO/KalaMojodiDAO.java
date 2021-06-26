@@ -296,13 +296,20 @@ public class KalaMojodiDAO
 
     public KalaMojodiModel getOneByccKalaCode(String ccKalaCode, String shomareBach , int gheymatForosh,int gheymatMasrafKonande,int ccTaminKonande)
     {
+
         KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(KalaMojodiModel.TableName(), allColumns(), KalaMojodiModel.COLUMN_ccKalaCode() + " = " + ccKalaCode + KalaMojodiModel.COLUMN_ShomarehBach() + " = " + shomareBach +
-                    KalaMojodiModel.COLUMN_GheymatForosh() + " = " + gheymatForosh + KalaMojodiModel.COLUMN_GheymatMasrafKonandeh() + " = " + gheymatMasrafKonande +
-                    KalaMojodiModel.COLUMN_ccTaminKonandeh() + " = " + ccTaminKonande,  null, null, null, KalaMojodiModel.COLUMN_TarikhTolid() + " ASC ", "1");
+            String query = "SELECT * FROM " + KalaMojodiModel.TableName() + " WHERE ccKalaCode = " + ccKalaCode +  " AND GheymatForosh = " + gheymatForosh
+                         + " AND GheymatMasrafKonandeh = " + gheymatMasrafKonande + " AND ccTaminKonandeh = " + ccTaminKonande ;
+            if(shomareBach.equals(""))
+                    query +=  " AND ShomarehBach = '' " ;
+            else
+                    query += " AND ShomarehBach = " + shomareBach;
+            query +=  " ORDER BY TarikhTolid ASC limit 1 "  ;
+
+            Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)
@@ -335,7 +342,7 @@ public class KalaMojodiDAO
             String query = "SELECT dfs.ccKalaCode, k.CodeKala, k.NameKala, (select Max_Mojody from KalaMojodi km \n" +
                     "where km.ccKalaCode = dfs.ccKalaCode) As TedadMojodi \n" +
                     "from DarkhastFaktorSatr dfs \n" +
-                    "LEFT JOIN Kala k ON k.cckalacode=dfs.cckalacode and k.ShomarehBach=dfs.ShomarehBach AND k.ccTaminKonandeh = dfs.ccTaminKonandeh AND k.MablaghForosh = dfs.MablaghForosh AND k.MablaghMasrafKonandeh = dfs.GheymatMasrafKonandeh \n"+
+                    "LEFT JOIN Kala k ON k.cckalacode=dfs.cckalacode and k.ShomarehBach = dfs.ShomarehBach AND k.ccTaminKonandeh = dfs.ccTaminKonandeh AND k.MablaghForosh = dfs.GheymatForoshAsli AND k.MablaghMasrafKonandeh = dfs.GheymatMasrafKonandeh \n"+
                     "where ccDarkhastFaktor = " + ccDarkhastFaktor +   " \n " +
                     "group by dfs.ccKalaCode \n" +
                     "having  TedadMojodi < SUM(Tedad3)";
