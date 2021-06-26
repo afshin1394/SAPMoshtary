@@ -1604,31 +1604,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
             String ccChildParametersOfTakhfif = "";
             Log.d("vosol","ccChildParameterNoeVosol Takhfif: "+ ccChildParameterNoeVosol);
-//todo takhfif barasas noevosolmoshtary dar pegah
-//            if (ccChildParameterNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD())
-//            {
-//                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
-//            }
-//            else if (ccChildParameterNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh())
-//            {
-//                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
-//            }
-//            else if (ccChildParameterNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh())
-//            {
-//                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
-//            }
-//            else if (ccChildParameterNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_CHECK())
-//            {
-//                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_CHECK());
-//            }
-//            else if (ccChildParameterNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_RESID())
-//            {
-//                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_RESID());
-//            }
-//            else if (ccChildParameterNoeVosol == Constants.CC_CHILD_VOSOL_MOSHTARY_Resid_Naghd())
-//            {
-//                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_RESID());
-//            }
+
             if (valueNoeVosol == Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD())))
             {
                 ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
@@ -2250,7 +2226,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                                         new int[]{discountCalculation.getTedadRialTedad(),discountCalculation.getTedadRialRial(),discountCalculation.getTedadRialVazn()},
                                         new int[]{discountCalculation.getBasteBandiCarton(),discountCalculation.getBasteBandiBaste(),discountCalculation.getBasteBandiAdad()},
                                         DiscountCalculation.NAME_NOE_FIELD_GOROH_KALA, Integer.valueOf(gorohKala.getFiled1()),
-                                        sumTedadGorohKala, sumTedadBastehGorohKala, sumTedadKartonGorohKala, sumMablaghKolGorohKala, takhfifHajmiTitrSatrModel.getNoeTedadRial(),0);
+                                        sumTedadGorohKala, sumTedadBastehGorohKala, sumTedadKartonGorohKala, sumMablaghKolGorohKala, takhfifHajmiTitrSatrModel.getNoeTedadRial(),0,0);
                                 //TODO:Vazn
 
                                 for (TakhfifHajmiSatrModel takhfifHajmiSatr : takhfifHajmiSatrs)
