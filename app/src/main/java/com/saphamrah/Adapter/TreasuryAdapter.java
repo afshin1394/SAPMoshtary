@@ -161,6 +161,10 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         }
         holder.bind(position, listener);
         setAnimation(holder.itemView, position);
+
+        if (models.get(position).getExtraProp_SendLocation() == 1){
+            holder.laySaveAndSend.setVisibility(View.GONE);
+        }
     }
 
 

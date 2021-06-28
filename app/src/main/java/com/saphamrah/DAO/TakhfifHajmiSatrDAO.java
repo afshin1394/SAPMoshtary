@@ -333,12 +333,12 @@ Call<GetAllvTakhfifHajmiSatrResult> call = apiServiceGet.getTakhfifHajmiSatr("2"
      * @param noeTedadRial
      * @return
      */
-    public ArrayList<TakhfifHajmiSatrModel> getForFaktor(int ccTakhfifHajmi, int[] noeTedadRialArray, int[] codeNoeBasteBandiArray, int nameNoeField, int ccNoeField, double tedad, double tedadBasteh, double tedadKarton, double mablaghKol, int noeTedadRial, double Vazn)
+    public ArrayList<TakhfifHajmiSatrModel> getForFaktor(int ccTakhfifHajmi, int[] noeTedadRialArray, int[] codeNoeBasteBandiArray, int nameNoeField, int ccNoeField, double tedad, double tedadBasteh, double tedadKarton, double mablaghKol, int noeTedadRial, double vazn, long tedadAghlam)
     {
         ArrayList<TakhfifHajmiSatrModel> takhfifHajmiSatrs = new ArrayList<>();
         try
         {
-            Log.d("takhfifHajmi" , "ccTakhfifHajmi:" + ccTakhfifHajmi +"noeTedadRial : " + noeTedadRial + " , noeTedadRialArray[0] : " + noeTedadRialArray[0] + " , noeTedadRialArray[1]" + noeTedadRialArray[1] + " , noeTedadRialArray[2]" + noeTedadRialArray[2]);
+            Log.d("takhfifHajmi" , "ccTakhfifHajmi:" + ccTakhfifHajmi +"noeTedadRial : " + noeTedadRial + " , noeTedadRialArray[0] : " + noeTedadRialArray[0] + " , noeTedadRialArray[1]" + noeTedadRialArray[1] + " , noeTedadRialArray[2]" + noeTedadRialArray[2] + " , noeTedadRialArray[2]" + noeTedadRialArray[2]);
             String StrSQL= "SELECT * FROM TakhfifHajmiSatr WHERE ccTakhfifHajmi= " + ccTakhfifHajmi + " AND NameNoeField= " + nameNoeField + " AND ccNoeField= " + ccNoeField;
             if (noeTedadRial == noeTedadRialArray[0])//(noeTedadRial== NoeTedadRial.Tedad.getValue())
             {
@@ -352,7 +352,11 @@ Call<GetAllvTakhfifHajmiSatrResult> call = apiServiceGet.getTakhfifHajmiSatr("2"
             }
             if (noeTedadRial == noeTedadRialArray[2])//(noeTedadRial== NoeTedadRial.Rial.getValue())
             {
-                StrSQL +=" AND Az<= " + Vazn + " AND " + Vazn + "<= Ta";
+                StrSQL +=" AND Az<= " + vazn + " AND " + vazn + "<= Ta";
+            }
+            if(noeTedadRial == noeTedadRialArray[3])
+            {
+                StrSQL +=" AND Az<= " + tedadAghlam + " AND " + tedadAghlam + "<= Ta";
             }
             Log.d("takhfifHajmi" , "query : " + StrSQL);
             SQLiteDatabase db = dbHelper.getReadableDatabase();

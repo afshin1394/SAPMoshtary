@@ -2223,7 +2223,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                                 }
                                 //Satrhaye Takhfif..
                                 ArrayList<TakhfifHajmiSatrModel> takhfifHajmiSatrs = takhfifHajmiSatrDAO.getForFaktor(takhfifHajmiTitrSatrModel.getCcTakhfifHajmi() ,
-                                        new int[]{discountCalculation.getTedadRialTedad(),discountCalculation.getTedadRialRial(),discountCalculation.getTedadRialVazn()},
+                                        new int[]{discountCalculation.getTedadRialTedad(),discountCalculation.getTedadRialRial(),discountCalculation.getTedadRialVazn(),discountCalculation.getTedadRialAghlam()},
                                         new int[]{discountCalculation.getBasteBandiCarton(),discountCalculation.getBasteBandiBaste(),discountCalculation.getBasteBandiAdad()},
                                         DiscountCalculation.NAME_NOE_FIELD_GOROH_KALA, Integer.valueOf(gorohKala.getFiled1()),
                                         sumTedadGorohKala, sumTedadBastehGorohKala, sumTedadKartonGorohKala, sumMablaghKolGorohKala, takhfifHajmiTitrSatrModel.getNoeTedadRial(),0,0);

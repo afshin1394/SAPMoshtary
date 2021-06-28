@@ -305,7 +305,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
                     startActivityBundle(DarkhastFaktorMarjoeeActivity.class, "marjoee", String.valueOf(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor()), "ccMoshtaryMarjoee", String.valueOf(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary()));
                 } else if (operation == Constants.SAVE_SEND_LOCATION) {
                     showLoading();
-                    mPresenter.checkMoshtaryKharejAzMahal(darkhastFaktorMoshtaryForoshandeModels.get(position));
+                    mPresenter.checkMoshtaryKharejAzMahal(darkhastFaktorMoshtaryForoshandeModels.get(position),position);
 
                 }
             }
@@ -492,6 +492,12 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
     @Override
     public void onSuccessSend(int position) {
         mPresenter.getTreasuryList(faktorRooz, sort);
+    }
+
+    @Override
+    public void onSuccessLocation(int position) {
+        darkhastFaktorMoshtaryForoshandeModels.get(position).setExtraProp_SendLocation(1);
+        adapter.notifyItemChanged(position);
     }
 
     /**

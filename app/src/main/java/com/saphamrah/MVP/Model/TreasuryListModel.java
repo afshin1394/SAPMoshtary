@@ -26,6 +26,7 @@ import com.saphamrah.DAO.KalaMojodiDAO;
 import com.saphamrah.DAO.KardexDAO;
 import com.saphamrah.DAO.KardexSatrDAO;
 import com.saphamrah.DAO.MandehMojodyMashinDAO;
+import com.saphamrah.DAO.MarjoeeKamelImageDAO;
 import com.saphamrah.DAO.MasirDAO;
 import com.saphamrah.DAO.MasirVaznHajmMashinDAO;
 import com.saphamrah.DAO.MaxFaktorMandehDarDAO;
@@ -56,6 +57,7 @@ import com.saphamrah.Model.KardexModel;
 import com.saphamrah.Model.KardexSatrModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.MandehMojodyMashinModel;
+import com.saphamrah.Model.MarjoeeKamelImageModel;
 import com.saphamrah.Model.MasirModel;
 import com.saphamrah.Model.MasirVaznHajmMashinModel;
 import com.saphamrah.Model.MaxFaktorMandehDarModel;
@@ -117,6 +119,8 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
     KardexSatrDAO kardexSatrDAO = new KardexSatrDAO(BaseApplication.getContext());
     DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(BaseApplication.getContext());
     DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
+    GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(BaseApplication.getContext());
+    ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
     public TreasuryListModel(TreasuryListMVP.RequiredPresenterOps mPresenter)
     {
         this.mPresenter = mPresenter;
@@ -196,6 +200,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         DarkhastFaktorMoshtaryForoshandeDAO darkhastFaktorMoshtaryForoshandeDAO = new DarkhastFaktorMoshtaryForoshandeDAO(mPresenter.getAppContext());
         ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels = new ArrayList<>();
         int noeMasouliat = getNoeMasouliatForoshandeh();
+        ArrayList<GPSDataModel> gpsDataModels = gpsDataPpcDAO.getAll();
         if (faktorRooz == 0)
         {
             if (sortType == Constants.SORT_TREASURY_BY_CUSTOMER_CODE)
@@ -210,10 +215,24 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                     darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getAllOrderByRoutingSort(faktorRooz);
                     updateAllMablaghMandeh(darkhastFaktorMoshtaryForoshandeModels);
                     darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getAllOrderByRoutingSort(faktorRooz);
+                    for (int i = 0; i < darkhastFaktorMoshtaryForoshandeModels.size(); i++) {
+                        for (int j = 0; j < gpsDataModels.size(); j++) {
+                            if (darkhastFaktorMoshtaryForoshandeModels.get(i).getCcDarkhastFaktor() == gpsDataModels.get(j).getCcDarkhastFaktor()){
+                                darkhastFaktorMoshtaryForoshandeModels.get(i).setExtraProp_SendLocation(1);
+                            }
+                        }
+                    }
                 } else {
                     darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getAll(faktorRooz);
                     updateAllMablaghMandeh(darkhastFaktorMoshtaryForoshandeModels);
                     darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getAll(faktorRooz);
+                    for (int i = 0; i < darkhastFaktorMoshtaryForoshandeModels.size(); i++) {
+                        for (int j = 0; j < gpsDataModels.size(); j++) {
+                            if (darkhastFaktorMoshtaryForoshandeModels.get(i).getCcDarkhastFaktor() == gpsDataModels.get(j).getCcDarkhastFaktor()){
+                                darkhastFaktorMoshtaryForoshandeModels.get(i).setExtraProp_SendLocation(1);
+                            }
+                        }
+                    }
                 }
 
             }
@@ -486,6 +505,25 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                 }
             }
         }
+        else if (IsMarjoeeKamel) {
+            ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
+            if (foroshandehMamorPakhshModel == null) {
+                mPresenter.onErrorSend(R.string.errorFindForoshandehMamorPakhsh);
+            } else {
+                ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+                String ip = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+                        , "");
+                String port = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+                        , "");
+                if (ip.equals("") || port.equals("")) {
+                    mPresenter.onErrorSend(R.string.errorFindServerIP);
+                } else {
+                    DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+                    sendMarjoeeKamelToserver(position , darkhastFaktorModel);
+                }
+            }
+        }
         else
         {
             mPresenter.onErrorSend(R.string.errorNotExistItemForSend);
@@ -619,6 +657,111 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                     mPresenter.onErrorSend(R.string.errorOperation);
                 }
             });
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            setLogToDB(Constants.LOG_EXCEPTION(), e.toString(), "TreasuryListModel", "", "sendDariaftPardakhtToServer", "");
+        }
+
+    }
+
+    private void sendMarjoeeKamelToserver(final int position , final DarkhastFaktorModel darkhastFaktorModel)
+    {
+        ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+        MarjoeeKamelImageDAO marjoeeKamelImageDAO = new MarjoeeKamelImageDAO(mPresenter.getAppContext());
+        APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+
+        JSONArray jsonArrayKardex = new JSONArray();
+        JSONArray jsonArrayKardexSatr = new JSONArray();
+        JSONArray jsonArrayImageMarjoee = new JSONArray();
+
+        /*
+         * add kardex and kardexSatr and marjoee Image to json
+         */
+        ArrayList<KardexModel> kardexModels = kardexDAO.getByCcRefrence(darkhastFaktorModel.getCcDarkhastFaktor());
+        for (KardexModel kardexModel : kardexModels){
+            jsonArrayKardex.put(kardexModel.toJsonForKardexForSend(kardexModel));
+        }
+        ArrayList<KardexSatrModel> kardexSatrModels = new ArrayList<>();
+        ArrayList<MarjoeeKamelImageModel> marjoeeKamelImageModels = new ArrayList<>();
+        if (kardexModels.size() >0){
+            kardexSatrModels = kardexSatrDAO.getByCcKardex(kardexModels.get(0).getCcKardex());
+            marjoeeKamelImageModels = marjoeeKamelImageDAO.getByCcKardex(kardexModels.get(0).getCcKardex());
+        }
+        for (KardexSatrModel model : kardexSatrModels){
+            jsonArrayKardexSatr.put(model.toJsonForKardexForSend(model));
+        }
+        for (MarjoeeKamelImageModel model : marjoeeKamelImageModels){
+            jsonArrayImageMarjoee.put(model.toJsonForMarjoeeKamelImageForSend(model));
+        }
+
+
+
+        try
+        {
+            JSONObject jsonObjectTreasury = new JSONObject();
+            jsonObjectTreasury.put("kardex" , jsonArrayKardex);
+            jsonObjectTreasury.put("kardexSatr" , jsonArrayKardexSatr);
+            jsonObjectTreasury.put("MarjoeeKamelImage" , jsonArrayImageMarjoee);
+
+            String strJsonObjectTreasury = jsonObjectTreasury.toString();
+            saveToFile("treasury" + darkhastFaktorModel.getCcDarkhastFaktor() + ".txt" , strJsonObjectTreasury);
+
+            Call<CreateDariaftPardakhtPPCJSONResult> call = apiServicePost.createDariaftPardakhtPPCJSON(strJsonObjectTreasury);
+            mPresenter.closeLoading();
+//            call.enqueue(new Callback<CreateDariaftPardakhtPPCJSONResult>()
+//            {
+//                @Override
+//                public void onResponse(Call<CreateDariaftPardakhtPPCJSONResult> call, Response<CreateDariaftPardakhtPPCJSONResult> response)
+//                {
+//                    try
+//                    {
+//                        if (response.isSuccessful() && response.body() != null)
+//                        {
+//                            CreateDariaftPardakhtPPCJSONResult result = response.body();
+//                            if (result.getSuccess())
+//                            {
+//                                DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
+//                                darkhastFaktorDAO.updateSendedDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcDarkhastFaktor(), 1);
+//                                dariaftPardakhtDarkhastFaktorPPCDAO.updateSendedDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcDarkhastFaktor(), 1);
+//                                DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(mPresenter.getAppContext());
+//                                dariaftPardakhtPPCDAO.updateSendedDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcDarkhastFaktor(), 1);
+//                                mPresenter.onSuccessSend(position);
+//                            }
+//                            else
+//                            {
+//                                showErrorMessageOfSend(result.getMessage());
+//                                setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TreasuryListModel", "" , "sendDariaftPardakhtToServer" , "onResponse");
+//                            }
+//                        }
+//                        else
+//                        {
+//                            String errorMessage = "response not successful " + response.message() ;
+//                            if (response.errorBody() != null)
+//                            {
+//                                errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string() ;//+ "\n" + "can't send this log : " + logMessage;
+//                            }
+//                            setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TreasuryListModel", "" , "sendDariaftPardakhtToServer" , "onResponse");
+//                            mPresenter.onErrorSend(R.string.errorOperation);
+//                        }
+//                    }
+//                    catch (Exception exception)
+//                    {
+//                        exception.printStackTrace();
+//                        setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TreasuryListModel", "" , "sendDariaftPardakhtToServer" , "onResponse");
+//                        mPresenter.onErrorSend(R.string.errorOperation);
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<CreateDariaftPardakhtPPCJSONResult> call, Throwable t)
+//                {
+//                    setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TreasuryListModel", "" , "sendDariaftPardakhtToServer" , "onFailure");
+//                    mPresenter.onErrorSend(R.string.errorOperation);
+//                }
+//            });
 
         }
         catch (Exception e)
@@ -1770,7 +1913,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
      * {@link TreasuryListModel insertGPSDataMashinPPC(PubFunc.LocationProvider, long, int, ForoshandehMamorPakhshModel, int, String)}
      **/
     @Override
-    public void checkMohtaryKharejAzMahal(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel)
+    public void checkMohtaryKharejAzMahal(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel,int position)
     {
 
         if ((getNoeMasouliatForoshandeh() == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD
@@ -1785,7 +1928,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             {
                 if (isValidCreateFaktor(darkhastFaktorMoshtaryForoshandeModel, foroshandehMamorPakhshModel))
                 {
-                    sendGps(foroshandehMamorPakhshModel,darkhastFaktorMoshtaryForoshandeModel);
+                    sendGps(foroshandehMamorPakhshModel,darkhastFaktorMoshtaryForoshandeModel , position);
 
                 }
                 else
@@ -1796,13 +1939,13 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             }
             else
             {
-                sendGps(foroshandehMamorPakhshModel,darkhastFaktorMoshtaryForoshandeModel);
+                sendGps(foroshandehMamorPakhshModel,darkhastFaktorMoshtaryForoshandeModel , position);
             }
         }
 
     }
 
-    private void sendGps(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel,DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel){
+    private void sendGps(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel,DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel , int position){
         String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
         PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
         int noeMasouliat = getNoeMasouliatForoshandeh();
@@ -1826,15 +1969,14 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
             ArrayList<GPSDataModel> gpsDataModels = gpsDataPpcDAO.getAllByccMoshtary(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
             if (gpsDataModels.size() > 0) {
-                sendGPSDataToServer(apiServicePost,gpsDataModels);
+                sendGPSDataToServer(apiServicePost,gpsDataModels , position);
             }
         }
     }
 
     @Override
     public void updateGpsData() {
-        final GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
-        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
+
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         final ArrayList<GPSDataModel> gpsDataModels = new ArrayList<>();
@@ -2001,7 +2143,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
     }
 
-    private void sendGPSDataToServer(APIServicePost apiServicePost, ArrayList<GPSDataModel> gpsDataModels) {
+    private void sendGPSDataToServer(APIServicePost apiServicePost, ArrayList<GPSDataModel> gpsDataModels, int position) {
         JSONArray jsonArray = new JSONArray();
         String ccGPSDatas = "-1";
         for (GPSDataModel model : gpsDataModels) {
@@ -2026,7 +2168,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                             if (result.getSuccess()) {
                                 GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
                                 gpsDataPpcDAO.updateIsSend(ccGPSDatasFinal);
-                                mPresenter.onSuccess(R.string.successSendData);
+                                mPresenter.onSuccessLocation(R.string.successSendData,position);
                             } else {
                                 Log.d("noTemp", "in else not success");
                                 setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "", "sendGPSDataToServer", "onResponse");

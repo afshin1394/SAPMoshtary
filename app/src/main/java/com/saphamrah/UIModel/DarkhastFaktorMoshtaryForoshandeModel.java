@@ -175,6 +175,7 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     private long ExtraProp_MablaghDariaftPardakht;
     private int ccMoshtaryGharardad;
     private int MoshtaryGharardadccSazmanForosh;
+    private int ExtraProp_SendLocation = 0;
 
     public long getCcDarkhastFaktor() {
         return ccDarkhastFaktor;
@@ -470,6 +471,14 @@ public class DarkhastFaktorMoshtaryForoshandeModel
 
     public void setMoshtaryGharardadccSazmanForosh(int MoshtaryGharardadccSazmanForosh) {
         this.MoshtaryGharardadccSazmanForosh = MoshtaryGharardadccSazmanForosh;
+    }
+
+    public int getExtraProp_SendLocation() {
+        return ExtraProp_SendLocation;
+    }
+
+    public void setExtraProp_SendLocation(int extraProp_SendLocation) {
+        ExtraProp_SendLocation = extraProp_SendLocation;
     }
 
     @NonNull

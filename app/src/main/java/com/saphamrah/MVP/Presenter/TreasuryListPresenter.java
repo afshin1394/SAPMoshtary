@@ -99,8 +99,8 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     }
 
     @Override
-    public void checkMoshtaryKharejAzMahal(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel) {
-        mModel.checkMohtaryKharejAzMahal(darkhastFaktorMoshtaryForoshandeModel);
+    public void checkMoshtaryKharejAzMahal(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel,int position) {
+        mModel.checkMohtaryKharejAzMahal(darkhastFaktorMoshtaryForoshandeModel , position);
 
     }
 
@@ -313,5 +313,12 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     public void onSuccess(int resId) {
         closeLoading();
         mView.get().showAlertMessage(resId,Constants.SUCCESS_MESSAGE());
+    }
+
+    @Override
+    public void onSuccessLocation(int resId, int position) {
+        closeLoading();
+        mView.get().showAlertMessage(resId,Constants.SUCCESS_MESSAGE());
+        mView.get().onSuccessLocation(position);
     }
 }

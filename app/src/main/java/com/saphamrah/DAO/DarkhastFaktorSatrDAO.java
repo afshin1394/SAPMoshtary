@@ -873,7 +873,7 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
                 query += " SUM(Tedad3 * MablaghForosh) - (select sum(MablaghTakhfif) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
                         + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
             }
-            query += " ,SUM(Tedad3 * B.VaznKhales) AS Vazn "
+            query += " ,SUM(Tedad3 * B.VaznKhales) AS Vazn, COUNT(ccDarkhastFaktorSatr) AS TedadAghlam "
                     + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN (SELECT DISTINCT ccKalaCode, ccBrand, TedadDarKarton, TedadDarBasteh, VaznKhales FROM Kala)B ON A.ccKalaCode= B.ccKalaCode "
                     + " WHERE ccDarkhastFaktor= ? " + " GROUP BY B.ccBrand";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -954,7 +954,7 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
                         query += " SUM(Tedad3 * MablaghForosh) - (select sum(MablaghTakhfif) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
                                 + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
                     }
-                    query += " ,SUM(Tedad3 * B.VaznKhales) AS Vazn "
+                    query += " ,SUM(Tedad3 * B.VaznKhales) AS Vazn, COUNT(ccDarkhastFaktorSatr) AS TedadAghlam "
                             + " FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
                     + " (SELECT DISTINCT ccKalaCode, ccTaminKonandeh, TedadDarKarton, TedadDarBasteh, VaznKhales FROM Kala)B ON A.ccKalaCode= B.ccKalaCode "
                     + " WHERE ccDarkhastFaktor= ? "
@@ -1164,20 +1164,22 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
                         + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
             }
             query += " , MAX(TedadDarKarton) AS TedadDarKarton, MAX(TedadDarBasteh) AS TedadDarBasteh, SUM(Tedad3 * VaznKhales) AS Vazn"
+                    + " , COUNT(ccDarkhastFaktorSatr) TedadAghlam "
                     + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
                     + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.TedadDarKarton, A.TedadDarBasteh, A.VaznKhales "
                     + "          FROM Kala A LEFT OUTER JOIN "
                     + "               (SELECT A.ccKalaCode, B.ccNoeField AS ccGoroh "
                     + "                  FROM KalaGoroh A LEFT OUTER JOIN TakhfifHajmiSatr B"
                     + "                       ON A.ccGoroh= B.ccNoeField OR A.ccGorohLink= B.ccNoeField OR A.ccRoot= B.ccNoeField "
-                    + "                  WHERE B.ccTakhfifHajmi= ? "
+                    + "                  WHERE B.ccTakhfifHajmi= " + ccTakhfifHajmi
                     + "               )G ON A.ccKalaCode= G.ccKalaCode "
                     + "       )B ON A.ccKalaCode= B.ccKalaCode"
-                    + " WHERE ccDarkhastFaktor= ? AND ccGoroh Is Not Null "
+                    + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " AND ccGoroh Is Not Null "
                     + " GROUP BY B.ccGoroh";
             Log.d("faktorSatr" , "query : " + query);
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.rawQuery(query , new String[]{String.valueOf(ccTakhfifHajmi), String.valueOf(ccDarkhastFaktor)});
+            //Cursor cursor = db.rawQuery(query , new String[]{String.valueOf(ccTakhfifHajmi), String.valueOf(ccDarkhastFaktor)});
+            Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)

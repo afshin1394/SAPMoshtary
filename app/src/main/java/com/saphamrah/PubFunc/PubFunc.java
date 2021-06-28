@@ -2096,6 +2096,17 @@ get mac address in android 10
                                     dataTableModel.setFiled8(cursor.getString(7)== null ? "0" : cursor.getString(7));
                                 }
                             }
+                            if (cursor.getColumnCount()> 8)
+                            {
+                                if (cursor.getType(8)== Cursor.FIELD_TYPE_FLOAT)
+                                {
+                                    dataTableModel.setFiled9(cursor.getString(8)== null ? "0" : String.valueOf(cursor.getDouble(8)));
+                                }
+                                else
+                                {
+                                    dataTableModel.setFiled9(cursor.getString(8)== null ? "0" : cursor.getString(8));
+                                }
+                            }
 
 
                             dataTableModels.add(dataTableModel);

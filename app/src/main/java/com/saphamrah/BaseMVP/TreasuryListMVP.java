@@ -28,6 +28,7 @@ public interface TreasuryListMVP
         void showLoading();
         void closeLoading();
         void onSuccessSend(int position);
+        void onSuccessLocation(int position);
 
         void openInvoiceSettlementActivity(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
         void onGetSearchResult(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels);
@@ -47,7 +48,7 @@ public interface TreasuryListMVP
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
 
-        void checkMoshtaryKharejAzMahal(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
+        void checkMoshtaryKharejAzMahal(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel, int position);
 
         void updateGpsData();
 
@@ -78,6 +79,7 @@ public interface TreasuryListMVP
         void onErrorGetCustomerLocation(int resId , String customerName);
         void onError(int resId);
         void onSuccess(int resId);
+        void onSuccessLocation(int resId,int position);
         void openInvoiceSettlement(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel,boolean openInvoiceSettlement);
         void closeLoading();
     }
@@ -94,7 +96,7 @@ public interface TreasuryListMVP
         void setDarkhastFaktorShared(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
-        void checkMohtaryKharejAzMahal(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
+        void checkMohtaryKharejAzMahal(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel,int position);
         void updateGpsData();
         void checkIsLocationSendToServer(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
     }

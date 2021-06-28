@@ -53,11 +53,11 @@ public class CalculateHajmiDiscountKala extends DiscountCalculation
                 KalaModel kala = kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode());
 
                 ArrayList<TakhfifHajmiSatrModel> takhfifHajmiSatrs = takhfifHajmiSatrDAO.getForFaktor(takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),
-                        new int[]{getTedadRialTedad(),getTedadRialRial(),getTedadRialVazn()},
+                        new int[]{getTedadRialTedad(),getTedadRialRial(),getTedadRialVazn(),getTedadRialAghlam()},
                         new int[]{getBasteBandiCarton(),getBasteBandiBaste(),getBasteBandiAdad()},
                         NAME_NOE_FIELD_KALA, darkhastFaktorSatrModel.getCcKalaCode(), darkhastFaktorSatrModel.getTedad3(),
                         darkhastFaktorSatrModel.getTedad3()/ kala.getTedadDarBasteh(),darkhastFaktorSatrModel.getTedad3()/ kala.getTedadDarKarton(),
-                        darkhastFaktorSatrModel.getTedad3()* darkhastFaktorSatrModel.getMablaghForosh(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), ((darkhastFaktorSatrModel.getTedad3()* darkhastFaktorSatrModel.getVazn())/1000.0));
+                        darkhastFaktorSatrModel.getTedad3()* darkhastFaktorSatrModel.getMablaghForosh(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), ((darkhastFaktorSatrModel.getTedad3()* darkhastFaktorSatrModel.getVazn())/1000.0),0);
 
                 for (TakhfifHajmiSatrModel takhfifHajmiSatrModel : takhfifHajmiSatrs)
                 {
@@ -77,14 +77,15 @@ public class CalculateHajmiDiscountKala extends DiscountCalculation
                         Log.d("takhfifKala", "sumTedadDarBaste : " + sumTedadDarBaste);
                         Log.d("takhfifKala", "takhfifHajmiSatrModel : " + takhfifHajmiSatrModel);
                         zarib = calculateZarib(takhfifHajmiSatrModel.getBeEza(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(),
-                                sumTedadDarKarton, sumTedadDarBaste, Integer.parseInt(model.getFiled3()), Double.parseDouble(model.getFiled6()), ((darkhastFaktorSatrModel.getTedad3()* darkhastFaktorSatrModel.getVazn())/1000.0));
+                                sumTedadDarKarton, sumTedadDarBaste, Integer.parseInt(model.getFiled3()), Double.parseDouble(model.getFiled6()), ((darkhastFaktorSatrModel.getTedad3()* darkhastFaktorSatrModel.getVazn())/1000.0),0);
                         Log.d("takhfifKala" , "MablaghKolFaktor : " + darkhastFaktorModel.getMablaghKolFaktor());
                         Log.d("takhfifKala" , "zarib : " + zarib);
 
                         int tedad = calculateTedad(takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(), kalaMohasebeh.getTedadDarKarton(), kalaMohasebeh.getTedadDarBasteh(), Double.parseDouble(model.getFiled3()));
+                        Log.d("takhfifKala" , "tedad : " + tedad);
                         long MablaghTakhfifDarkhast = Math.round(Double.valueOf(model.getFiled6()));
 
-                        Log.d("takhfifKala","CcTakhfifHajmi :" + takhfifHajmiSatrModel.getCcTakhfifHajmi() + " , Filed7: " + Integer.valueOf(model.getFiled7()));
+                        Log.d("takhfifKala","CcTakhfifHajmi :" + takhfifHajmiSatrModel.getCcTakhfifHajmi() );
                         Log.d("takhfifKala","MablaghTakhfifDarkhast :" + MablaghTakhfifDarkhast);
                         if(takhfifHajmiTitrSatrModel.getOlaviat() == 0 || takhfifHajmiTitrSatrModel.getOlaviat() == 1 )//|| (takhfifHajmiTitrSatrModel.getCcTakhfifHajmi() == Integer.valueOf(model.getFiled7())))
                         {
@@ -244,10 +245,10 @@ public class CalculateHajmiDiscountKala extends DiscountCalculation
             {
                 // Satrhaye Takhfif...
                 List<TakhfifHajmiSatrModel> takhfifHajmiSatrs = takhfifHajmiSatrDAO.getForFaktor(takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),
-                        new int[]{getTedadRialTedad(),getTedadRialRial(),getTedadRialVazn()},
+                        new int[]{getTedadRialTedad(),getTedadRialRial(),getTedadRialVazn(),getTedadRialAghlam()},
                         new int[]{getBasteBandiCarton(),getBasteBandiBaste(),getBasteBandiAdad()},
                         NAME_NOE_FIELD_KALA, darkhastFaktorSatr.getCcKalaCode(), darkhastFaktorSatr.getTedad3(),
-                        darkhastFaktorSatr.getTedad3() / kala.getTedadDarBasteh(), darkhastFaktorSatr.getTedad3() / kala.getTedadDarKarton(), darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), ((darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getVazn())/1000.0));
+                        darkhastFaktorSatr.getTedad3() / kala.getTedadDarBasteh(), darkhastFaktorSatr.getTedad3() / kala.getTedadDarKarton(), darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), ((darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getVazn())/1000.0),0);
 
                 for (TakhfifHajmiSatrModel takhfifHajmiSatr : takhfifHajmiSatrs)
                 {
@@ -255,7 +256,7 @@ public class CalculateHajmiDiscountKala extends DiscountCalculation
                     int zarib=0;
                     int tedad=0;
                     KalaModel kalaMohasebeh = kalaDAO.getByccKalaCode(takhfifHajmiSatr.getCcGorohMohasebeh());
-                    zarib = calculateZarib(takhfifHajmiSatr.getBeEza(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatr.getCodeNoeBastehBandyBeEza(), kala.getTedadDarKarton(), kala.getTedadDarBasteh(), kala.getAdad(), darkhastFaktorModel.getMablaghKolFaktor(),((darkhastFaktorSatr.getTedad3()* darkhastFaktorSatr.getVazn())/1000.0));
+                    zarib = calculateZarib(takhfifHajmiSatr.getBeEza(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatr.getCodeNoeBastehBandyBeEza(), kala.getTedadDarKarton(), kala.getTedadDarBasteh(), kala.getAdad(), darkhastFaktorModel.getMablaghKolFaktor(),((darkhastFaktorSatr.getTedad3()* darkhastFaktorSatr.getVazn())/1000.0),0);
                     Log.d("takhfifKalaMantaghe" , "zarib : " + zarib);
 
                     tedad = calculateTedad(takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatr.getCodeNoeBastehBandy(), kalaMohasebeh.getTedadDarKarton(), kalaMohasebeh.getTedadDarBasteh(), kalaMohasebeh.getAdad());

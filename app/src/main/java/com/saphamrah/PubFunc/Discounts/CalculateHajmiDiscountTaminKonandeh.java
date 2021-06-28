@@ -42,6 +42,7 @@ public class CalculateHajmiDiscountTaminKonandeh extends DiscountCalculation
             long sumTedadKartonTaminKonandeh;
             long sumMablaghKolTaminKonandeh;// Sum MablaghKol Darkhast Bar Hasbe TaminKonandeh..
             long sumVaznTaminKonandeh;
+            int tedadAghlam;
 
             int ccTaminKonandehMohasebeh;
             long sumTedadTaminKonandehMohasebeh; // Sum Tedad3 Darkhast Bar Hasbe TaminKonandeh Mohasebeh..
@@ -66,6 +67,7 @@ public class CalculateHajmiDiscountTaminKonandeh extends DiscountCalculation
                 sumTedadKartonTaminKonandeh = Long.valueOf(taminKonandeh.getFiled4());
                 sumMablaghKolTaminKonandeh = Math.round(Double.valueOf(taminKonandeh.getFiled5()));
                 sumVaznTaminKonandeh = Math.round(Double.valueOf(taminKonandeh.getFiled6()));
+                tedadAghlam = Integer.valueOf(taminKonandeh.getFiled7());
 
                 mablaghVahed = Math.round(sumMablaghKolTaminKonandeh / sumTedadTaminKonandeh);
 
@@ -75,9 +77,9 @@ public class CalculateHajmiDiscountTaminKonandeh extends DiscountCalculation
                 Log.d("takhfifTaminKonandeh", "takhfifHajmiTitrSatrModel.getOlaviat() : " + takhfifHajmiTitrSatrModel.getOlaviat());
 
                 ArrayList<TakhfifHajmiSatrModel> takhfifHajmiSatrs = takhfifHajmiSatrDAO.getForFaktor(takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),
-                        new int[]{getTedadRialTedad(), getTedadRialRial(), getTedadRialVazn()}, new int[]{getBasteBandiCarton(), getBasteBandiBaste(), getBasteBandiAdad()},
+                        new int[]{getTedadRialTedad(), getTedadRialRial(), getTedadRialVazn(), getTedadRialAghlam()}, new int[]{getBasteBandiCarton(), getBasteBandiBaste(), getBasteBandiAdad()},
                         NAME_NOE_FIELD_TAMIN_KONANDE, ccTaminKonandeh, sumTedadTaminKonandeh, sumTedadBastehTaminKonandeh, sumTedadKartonTaminKonandeh ,
-                        sumMablaghKolTaminKonandeh, takhfifHajmiTitrSatrModel.getNoeTedadRial(),(sumVaznTaminKonandeh/1000.0));
+                        sumMablaghKolTaminKonandeh, takhfifHajmiTitrSatrModel.getNoeTedadRial(),(sumVaznTaminKonandeh/1000.0),tedadAghlam);
                 //TODO:Vazn
                 for (DataTableModel brand : brandByccTaminKonandeh)
                 {
@@ -103,7 +105,7 @@ public class CalculateHajmiDiscountTaminKonandeh extends DiscountCalculation
                         Log.d("takhfifTaminKonandeh", "mablaghVahedMohasebeh : " + mablaghVahed);
 
                         int zarib = calculateZarib(takhfifHajmiSatrModel.getBeEza(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(),
-                                sumTedadKartonTaminKonandeh, sumTedadBastehTaminKonandeh, sumTedadTaminKonandeh, sumMablaghKolTaminKonandeh, (sumVaznTaminKonandeh/1000.0));
+                                sumTedadKartonTaminKonandeh, sumTedadBastehTaminKonandeh, sumTedadTaminKonandeh, sumMablaghKolTaminKonandeh, (sumVaznTaminKonandeh/1000.0),tedadAghlam);
                         int tedad = calculateTedad(takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(), sumTedadKartonTaminKonandehMohasebeh, sumTedadBastehTaminKonandehMohasebeh, 1);
                         Log.d("takhfifTaminKonandeh", "brand.getFiled5() : " + brand.getFiled5() + "sumMablaghKolTaminKonandehMohasebeh:" + sumMablaghKolTaminKonandehMohasebeh);
 
@@ -158,6 +160,7 @@ public class CalculateHajmiDiscountTaminKonandeh extends DiscountCalculation
         long sumTedadKartonTaminKonandeh=0;
         long sumMablaghKolTaminKonandeh=0; // Sum MablaghKol Darkhast Bar
         long sumVaznTaminKonandeh=0;
+        int tedadAghlam=0;
 
         KalaDAO kalaDAO = new KalaDAO(context);
         DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(context);
@@ -173,6 +176,7 @@ public class CalculateHajmiDiscountTaminKonandeh extends DiscountCalculation
             sumTedadKartonTaminKonandeh = Long.valueOf(taminKonandeh.getFiled4());
             sumMablaghKolTaminKonandeh = Long.valueOf(taminKonandeh.getFiled5());
             sumVaznTaminKonandeh = Long.valueOf(taminKonandeh.getFiled6());
+            tedadAghlam=Integer.valueOf(taminKonandeh.getFiled7());
             // --------------------------------------------------------------------------
             List<DataTableModel> brandByccTaminKonandeh = darkhastFaktorSatrDAO.getBrandByccTaminKonandeh(darkhastFaktorModel.getCcDarkhastFaktor(), ccTaminKonandeh, takhfifHajmiTitrSatrModel.getOlaviat());
             for (DataTableModel brand : brandByccTaminKonandeh)
@@ -181,13 +185,13 @@ public class CalculateHajmiDiscountTaminKonandeh extends DiscountCalculation
                 {
                     // Satrhaye Takhfif..
                     List<TakhfifHajmiSatrModel> takhfifHajmiSatrs = takhfifHajmiSatrDAO.getForFaktor(takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),
-                            new int[]{getTedadRialTedad(), getTedadRialRial(), getTedadRialVazn()}, new int[]{getBasteBandiCarton(), getBasteBandiBaste(), getBasteBandiAdad()},
+                            new int[]{getTedadRialTedad(), getTedadRialRial(), getTedadRialVazn(), getTedadRialAghlam()}, new int[]{getBasteBandiCarton(), getBasteBandiBaste(), getBasteBandiAdad()},
                             NAME_NOE_FIELD_TAMIN_KONANDE, ccTaminKonandeh, sumTedadTaminKonandeh, sumTedadBastehTaminKonandeh, sumTedadKartonTaminKonandeh,
-                            sumMablaghKolTaminKonandeh, takhfifHajmiTitrSatrModel.getNoeTedadRial(),sumVaznTaminKonandeh);
+                            sumMablaghKolTaminKonandeh, takhfifHajmiTitrSatrModel.getNoeTedadRial(),sumVaznTaminKonandeh,tedadAghlam);
                     //TODO:Vazn
                     for (TakhfifHajmiSatrModel takhfifHajmiSatr : takhfifHajmiSatrs)
                     {
-                        int zarib = calculateZarib(takhfifHajmiSatr.getBeEza(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatr.getCodeNoeBastehBandyBeEza(), sumTedadKartonTaminKonandeh, sumTedadBastehTaminKonandeh, sumTedadTaminKonandeh, sumMablaghKolTaminKonandeh, (sumVaznTaminKonandeh/1000.0));
+                        int zarib = calculateZarib(takhfifHajmiSatr.getBeEza(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatr.getCodeNoeBastehBandyBeEza(), sumTedadKartonTaminKonandeh, sumTedadBastehTaminKonandeh, sumTedadTaminKonandeh, sumMablaghKolTaminKonandeh, (sumVaznTaminKonandeh/1000.0),tedadAghlam);
                         long mablaghTakhfif = Math.round(sumMablaghKolTaminKonandeh * (zarib * takhfifHajmiSatr.getDarsadTakhfif() / 100));
                         // Insert In DarkhastFaktorTakhfif &
                         // DarkhastFaktorSatrTakhfif..

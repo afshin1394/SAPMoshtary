@@ -39,6 +39,7 @@ public class CalculateHajmiDiscountBrand extends DiscountCalculation
             long sumTedadKartonBrand;
             long sumMablaghKolBrand; // Sum MablaghKol Darkhast Bar Hasbe Brand..
             long sumVaznBrand=0;
+            int tedadAghlam=0;
 
             int ccBrandMohasebeh;
             long sumTedadBrandMohasebeh; // Sum Tedad3 Darkhast Bar Hasbe Brand Mohasebeh..
@@ -65,14 +66,16 @@ public class CalculateHajmiDiscountBrand extends DiscountCalculation
                 sumTedadKartonBrand = Long.valueOf(brand.getFiled4());
                 sumMablaghKolBrand = Math.round(Double.valueOf(brand.getFiled5()));
                 sumVaznBrand = Math.round(Double.valueOf(brand.getFiled6()));
+                tedadAghlam = Integer.valueOf(brand.getFiled7());
+
 
                 mablaghVahed = Math.round(sumMablaghKolBrand / sumTedadBrand);
 
                 Log.d("takhfifBrand", "mablaghVahed : " + mablaghVahed);
 
                 ArrayList<TakhfifHajmiSatrModel> takhfifHajmiSatrs = takhfifHajmiSatrDAO.getForFaktor(takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),
-                        new int[]{getTedadRialTedad(), getTedadRialRial(), getTedadRialVazn()}, new int[]{getBasteBandiCarton(), getBasteBandiBaste(), getBasteBandiAdad()},
-                        NAME_NOE_FIELD_BRAND, ccBrand, sumTedadBrand, sumTedadBastehBrand, sumTedadKartonBrand, sumMablaghKolBrand, takhfifHajmiTitrSatrModel.getNoeTedadRial(),(sumVaznBrand/1000.0));
+                        new int[]{getTedadRialTedad(), getTedadRialRial(), getTedadRialVazn(), getTedadRialAghlam()}, new int[]{getBasteBandiCarton(), getBasteBandiBaste(), getBasteBandiAdad()},
+                        NAME_NOE_FIELD_BRAND, ccBrand, sumTedadBrand, sumTedadBastehBrand, sumTedadKartonBrand, sumMablaghKolBrand, takhfifHajmiTitrSatrModel.getNoeTedadRial(),(sumVaznBrand/1000.0),tedadAghlam);
                 //TODO : Vazn
 
                 for (TakhfifHajmiSatrModel takhfifHajmiSatrModel : takhfifHajmiSatrs)
@@ -101,7 +104,7 @@ public class CalculateHajmiDiscountBrand extends DiscountCalculation
                     Log.d("takhfifBrand", "sumMablaghKolBrandMohasebeh : " + sumMablaghKolBrandMohasebeh);
                     Log.d("takhfifBrand", "mablaghVahed : " + mablaghVahed);
 
-                    zarib = calculateZarib(takhfifHajmiSatrModel.getBeEza(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(), sumTedadKartonBrand, sumTedadBastehBrand, sumTedadBrand, sumMablaghKolBrand,(sumVaznBrand/1000.0));
+                    zarib = calculateZarib(takhfifHajmiSatrModel.getBeEza(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(), sumTedadKartonBrand, sumTedadBastehBrand, sumTedadBrand, sumMablaghKolBrand,(sumVaznBrand/1000.0),tedadAghlam);
                     int tedad = calculateTedad(takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(), sumTedadKartonBrandMohasebeh, sumTedadBastehBrandMohasebeh, 1);
                     Mablagh =  calculateMablagh(takhfifHajmiTitrSatrModel.getNoeTedadRial(), (int) takhfifHajmiSatrModel.getBeEza(), (long) sumMablaghKolBrandMohasebeh, (long) mablaghVahed, takhfifHajmiSatrModel.getCcNoeField(), takhfifHajmiSatrModel.getCcGorohMohasebeh());
                     long mablaghTakhfif = calculateMablaghTakhfif(Mablagh, mablaghVahed, zarib, takhfifHajmiSatrModel.getBeEza(), takhfifHajmiSatrModel.getDarsadTakhfif(), takhfifHajmiTitrSatrModel.getNoeTedadRial());
@@ -147,6 +150,7 @@ public class CalculateHajmiDiscountBrand extends DiscountCalculation
         double sumTedadKartonBrand=0;
         double sumMablaghKolBrand=0; // Sum MablaghKol Darkhast Bar Hasbe
         double sumVaznBrand=0;
+        int tedadAghlam=0;
 
         KalaDAO kalaDAO = new KalaDAO(context);
         TakhfifHajmiSatrDAO takhfifHajmiSatrDAO = new TakhfifHajmiSatrDAO(context);
@@ -161,17 +165,18 @@ public class CalculateHajmiDiscountBrand extends DiscountCalculation
             sumTedadKartonBrand = Double.valueOf(brand.getFiled4());
             sumMablaghKolBrand = Double.valueOf(brand.getFiled5());
             sumVaznBrand = Double.valueOf(brand.getFiled6());
+            tedadAghlam = Integer.valueOf(brand.getFiled7());
 
             if (takhfifHajmiTitrSatrModel.getCcMantagheh() == ccMantaghehMoshtary)// check ccMantaghehTakhfif by ccMahaleh Moshtary
             {
                 // Satrhaye Takhfif...
                 List<TakhfifHajmiSatrModel> takhfifHajmiSatrs = takhfifHajmiSatrDAO.getForFaktor(takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),
-                        new int[]{getTedadRialTedad(), getTedadRialRial(),getTedadRialVazn()}, new int[]{getBasteBandiCarton(), getBasteBandiBaste(), getBasteBandiAdad()},
-                        NAME_NOE_FIELD_BRAND, ccBrand, sumTedadBrand, sumTedadBastehBrand, sumTedadKartonBrand, sumMablaghKolBrand, takhfifHajmiTitrSatrModel.getNoeTedadRial(),(sumVaznBrand/1000.0));
+                        new int[]{getTedadRialTedad(), getTedadRialRial(),getTedadRialVazn(), getTedadRialAghlam()}, new int[]{getBasteBandiCarton(), getBasteBandiBaste(), getBasteBandiAdad()},
+                        NAME_NOE_FIELD_BRAND, ccBrand, sumTedadBrand, sumTedadBastehBrand, sumTedadKartonBrand, sumMablaghKolBrand, takhfifHajmiTitrSatrModel.getNoeTedadRial(),(sumVaznBrand/1000.0),tedadAghlam);
                 //TODO:Vazn
                 for (TakhfifHajmiSatrModel takhfifHajmiSatr : takhfifHajmiSatrs)
                 {
-                    int zarib = calculateZarib(takhfifHajmiSatr.getBeEza(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatr.getCodeNoeBastehBandyBeEza(), sumTedadKartonBrand, sumTedadBastehBrand, sumTedadBrand, sumMablaghKolBrand,(sumVaznBrand/1000.0));
+                    int zarib = calculateZarib(takhfifHajmiSatr.getBeEza(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatr.getCodeNoeBastehBandyBeEza(), sumTedadKartonBrand, sumTedadBastehBrand, sumTedadBrand, sumMablaghKolBrand,(sumVaznBrand/1000.0),tedadAghlam);
                     long mablaghTakhfif = Math.round(sumMablaghKolBrand * (zarib * takhfifHajmiSatr.getDarsadTakhfif() / 100));
                     // Insert In DarkhastFaktorTakhfif &
                     // DarkhastFaktorSatrTakhfif..

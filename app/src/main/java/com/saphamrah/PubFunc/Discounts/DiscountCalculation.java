@@ -135,7 +135,7 @@ public class DiscountCalculation
     }
 
 
-    public int calculateZarib(double beEza, int noeTedadRialTakhfif, int codeNoeBasteBandiTakhfif, double tedadCarton, double tedadBaste, double tedadAdad, double sumMablagh, double sumVazn)
+    public int calculateZarib(double beEza, int noeTedadRialTakhfif, int codeNoeBasteBandiTakhfif, double tedadCarton, double tedadBaste, double tedadAdad, double sumMablagh, double sumVazn, double tedadAghlam)
     {
         Log.d("Takhfif" , "beEza : " + beEza + " , codeNoeBasteBandiTakhfif : " + codeNoeBasteBandiTakhfif + " , tedadBaste : " + tedadBaste + " , tedadCarton : " + tedadCarton);
         Log.d("Takhfif" , " , noeTedadRialTakhfif : " + noeTedadRialTakhfif + " , basteBandiAdad : " + basteBandiAdad + " , basteBandiBaste : " + basteBandiBaste + " , basteBandiCarton : " + basteBandiCarton);
@@ -168,6 +168,10 @@ public class DiscountCalculation
             {
                 zarib = (int) (sumVazn / beEza);
                 Log.d("Takhfif", "rial-vazn - zarib" + zarib + " ,noeTedadRialTakhfif:" + noeTedadRialTakhfif + " , tedadRialRial:" + tedadRialRial + " , tedadRialVazn:" + tedadRialVazn);
+            }
+            else if (noeTedadRialTakhfif == tedadRialAghlam)
+            {
+                zarib = (int) (tedadAghlam / beEza);
             }
 
         }
@@ -204,7 +208,7 @@ public class DiscountCalculation
         return tedad;
     }
 
-    public long calculateMablaghVahed(int noeTedadRialTakhfif, int tedad, long vazn, long MablaghKol)
+    public long calculateMablaghVahed(int noeTedadRialTakhfif, int tedad, long vazn, long MablaghKol, long tedadAghlam)
     {
         long mablaghVahed = 0;
         Log.d("takhfifKala", MablaghKol + " - " + vazn + " - " + tedad);
@@ -226,6 +230,12 @@ public class DiscountCalculation
             if(vaznKilogeram>0)
                 mablaghVahed = Math.round(MablaghKol / vaznKilogeram);
             Log.d("takhfifKala","calculateMablaghVahed : " + mablaghVahed + "- tedadRialVazn: " + " - " + tedadRialVazn + " - " + vaznKilogeram);
+        }
+        else if(noeTedadRialTakhfif == tedadRialAghlam)
+        {
+            if(tedadAghlam>0)
+                mablaghVahed = Math.round(MablaghKol / tedadAghlam);
+            Log.d("takhfifKala","calculateMablaghVahed : " + mablaghVahed + "- tedadRialAghlam: " + " - " + tedadRialAghlam + " - ");
         }
         return mablaghVahed;
     }
@@ -253,6 +263,11 @@ public class DiscountCalculation
             Mablagh = MablaghVahed * beEza;
             Log.d("takhfifKala","First==Second: - tedadRialVazn:  " +tedadRialVazn + "-" + beEza);
         }
+        else if(beEza>0 && First==Second && noeTedadRialTakhfif == tedadRialAghlam)
+        {
+            Mablagh = MablaghVahed * beEza;
+            Log.d("takhfifKala","First==Second: - tedadRialVazn:  " +tedadRialAghlam + "-" + beEza);
+        }
         else if(beEza>0 && First!=Second && noeTedadRialTakhfif == tedadRialTedad)
         {
             Mablagh = MablaghKol;
@@ -267,6 +282,11 @@ public class DiscountCalculation
         {
             Mablagh = MablaghKol;
             Log.d("takhfifKala","First==Second - tedadRialVazn: " + MablaghKol + "-" + tedadRialVazn + "-" + beEza);
+        }
+        else if(beEza>0 && First!=Second && noeTedadRialTakhfif == tedadRialAghlam)
+        {
+            Mablagh = MablaghKol;
+            Log.d("takhfifKala","First==Second - tedadRialVazn: " + MablaghKol + "-" + tedadRialAghlam + "-" + beEza);
         }
         return Mablagh;
     }
@@ -321,6 +341,19 @@ public class DiscountCalculation
                 {
                     mablaghTakhfif = (long) (sumMablagh * (zarib * darsadTakhfif / 100));
                     Log.d("takhfifHajmi" , "tedadRialVazn" + "beEza:" + beEza + "sumMablagh : " + sumMablagh + ",zarib:" + zarib +" ,darsadTakhfif:" + darsadTakhfif  );
+                }
+            }
+            else if (noeTedadRial == tedadRialAghlam)
+            {
+                if (beEza == 0)
+                {
+                    mablaghTakhfif = (long) (sumMablagh * (darsadTakhfif / 100));
+                    Log.d("takhfifHajmi" , "tedadRialAghlam" + "beEza:" + beEza + "sumMablagh : " + sumMablagh  +" ,darsadTakhfif:" + darsadTakhfif  );
+                }
+                else
+                {
+                    mablaghTakhfif = (long) (sumMablagh * (zarib * darsadTakhfif / 100));
+                    Log.d("takhfifHajmi" , "tedadRialAghlam" + "beEza:" + beEza + "sumMablagh : " + sumMablagh + ",zarib:" + zarib +" ,darsadTakhfif:" + darsadTakhfif  );
                 }
             }
         }
