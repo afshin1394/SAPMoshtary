@@ -4516,7 +4516,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
         final ElamMarjoeePPCDAO elamMarjoeePPCDAO = new ElamMarjoeePPCDAO(mPresenter.getAppContext());
         if (noeMasouliat == 4 || noeMasouliat == 5)
         {
-            Log.d("getprogram", "fetch elam marjoee");
+            Log.d("getprogram", "fetch elam marjoee" + ccDarkhastFaktorPakhsh);
             elamMarjoeePPCDAO.fetchMarjoee(mPresenter.getAppContext(), activityNameForLog, ccDarkhastFaktorPakhsh, new RetrofitResponse()
             {
                 @Override
@@ -4867,7 +4867,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
     {
         Log.i("itemCounter" , "getMarjoeeMamorPakhsh : " + itemCounter);
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
-        String ccMoshtary = darkhastFaktorDAO.getCcMoshtaryForZanjire();
+        String ccMoshtary = darkhastFaktorDAO.getCcdarkhastFaktorsForZanjirei();
         if(noeMasouliat==4 || noeMasouliat==5){
             MarjoeeMamorPakhshDAO marjoeeMamorPakhshDAO = new MarjoeeMamorPakhshDAO(mPresenter.getAppContext());
             marjoeeMamorPakhshDAO.fetchMarjoeeMamorPakhsh(mPresenter.getAppContext(), activityNameForLog, ccMoshtary, new RetrofitResponse()

@@ -865,6 +865,10 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         {
             mPresenter.onErrorSend(R.string.errorSendDariaftPardakhtDuplicate);
         }
+        else if (errorCode.trim().equals("-14"))
+        {
+            mPresenter.onErrorSend(R.string.errorSendDariaftPardakhtMarjoee);
+        }
     }
 
 

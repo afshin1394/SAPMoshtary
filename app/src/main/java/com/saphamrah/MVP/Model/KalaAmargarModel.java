@@ -36,7 +36,8 @@ public class KalaAmargarModel implements KalaAmargarMVP.ModelOps
     @Override
     public void getAllGoods(int ccPorseshnameh)
     {
-        List<KalaModel> kalaModels = new KalaDAO(mPresenter.getAppContext()).getAll();
+       KalaDAO kalaDAO = new KalaDAO(mPresenter.getAppContext());
+        ArrayList<KalaModel> kalaModels = kalaDAO.getAll();
         Map<Integer,Integer> porseshnamehShomareshModels = new PorseshnamehShomareshDAO(mPresenter.getAppContext()).getGoodsCountByPorseshnameh(ccPorseshnameh);
 
         for (Integer ccKala : porseshnamehShomareshModels.keySet())

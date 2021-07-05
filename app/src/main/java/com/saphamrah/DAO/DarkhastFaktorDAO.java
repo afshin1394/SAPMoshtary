@@ -1230,7 +1230,7 @@ public class DarkhastFaktorDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query = "SELECT DarkhastFaktor.ccDarkhastFaktor FROM DarkhastFaktor " +
+            String query = "SELECT DarkhastFaktor.ccMoshtary FROM DarkhastFaktor " +
                     "LEFT JOIN Moshtary ON Moshtary.ccMoshtary = DarkhastFaktor.ccMoshtary " +
                     "WHERE ccNoeMoshtary = 350 "  ;
             Cursor cursor = db.rawQuery(query, null);
@@ -1280,7 +1280,7 @@ public class DarkhastFaktorDAO
                     cursor.moveToFirst();
                     while (!cursor.isAfterLast()) {
 
-                        ccDarkhastFaktor += " , " + cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ccDarkhastFaktor()));
+                        ccDarkhastFaktor += "," + cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ccDarkhastFaktor()));
 
                         cursor.moveToNext();
                     }

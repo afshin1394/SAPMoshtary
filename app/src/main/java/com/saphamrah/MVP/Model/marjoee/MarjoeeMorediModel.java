@@ -98,7 +98,7 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
         if(ccKardex > 0) {
             insertKardexSatrMoredi(model, ccKardex , elatMarjoee);
         }
-        insertUpdateDariaftPardakht(model.getCcMoshtary(), model.getNameMoshtary(), (tedadMarjoeeForInsert * model.getMablaghForoshKhales()) );
+        insertUpdateDariaftPardakht(model.getCcMoshtary(), model.getNameMoshtary(), (tedadMarjoeeForInsert * model.getMablaghForosh()) );
 
         boolean updateTedadMarjoee = marjoeeMamorPakhshDAO.updateTedadMarjoee(model.getCcMarjoeeMamorPakhsh() ,
                 model.getShomarehBach(),
@@ -276,7 +276,7 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
 //            darkhastFaktorDAO.updateMandehDarkhastFaktor(ccMarjoeeMamorPakhsh);
 //            double MablaghMandehFaktor = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor).getMablaghMandeh();
 //
-            double MablaghMarjoee= kardexSatr.getGheymatForoshKhales() * kardexSatr.getTedad3();
+            double MablaghMarjoee= kardexSatr.getGheymatForosh() * kardexSatr.getTedad3();
             double MablaghDariaftPardakhtDarkhastFaktor = MablaghMarjoee< 0?MablaghMarjoee:0;
             //--------------------------------------
             dariaftPardakhtDarkhastFaktorPPC= dariaftPardakhtDarkhastFaktorPPCDAO.SetForInsert_DariaftPardakhtDarkhastFaktorPPC(

@@ -10,6 +10,8 @@ import android.util.Log;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.TakhfifSenfiModel;
+import com.saphamrah.Model.TakhfifSenfiSatrModel;
+import com.saphamrah.Model.TakhfifSenfiTitrSatrModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -63,6 +65,19 @@ public class TakhfifSenfiDAO {
                         TakhfifSenfiModel.COLUMN_NameNoeSenf(),
                         TakhfifSenfiModel.COLUMN_NoeGheymat(),
                         TakhfifSenfiModel.COLUMN_ccMoshtaryGharardad(),
+                        TakhfifSenfiModel.COLUMN_ccGorohTakidi(),
+                        TakhfifSenfiModel.COLUMN_ccMantagheh(),
+                        TakhfifSenfiModel.COLUMN_CodeNoeHaml(),
+                        TakhfifSenfiModel.COLUMN_ForJayezeh(),
+                        TakhfifSenfiModel.COLUMN_IsPelekani(),
+                        TakhfifSenfiModel.COLUMN_NameNoeField(),
+                        TakhfifSenfiModel.COLUMN_NoeVosol(),
+                        TakhfifSenfiModel.COLUMN_Olaviat(),
+                        TakhfifSenfiModel.COLUMN_txtNoeVosol()
+
+
+
+
 
 
                 };
@@ -337,79 +352,89 @@ public class TakhfifSenfiDAO {
         return takhfifSenfiModels;
     }
 
-    public ArrayList<TakhfifSenfiModel> getByMoshtary(MoshtaryModel moshtaryModel, int codeNoeVosol) {
+    public ArrayList<TakhfifSenfiTitrSatrModel> getByMoshtaryWithSatr(MoshtaryModel moshtary, int codeNoeHaml, boolean ShebhOmdeh, int CodeNoeVosol)
+    {
         final int NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY = 1;
         final int NAME_NOE_FIELD_MOSHTARY_CC_GOROH = 2;
-        final int GOROH_LINK_NOE_MOSHTARY = 304;
-        ArrayList<TakhfifSenfiModel> TakhfifSenfis = new ArrayList<>();
-
+        final int GOROH_LINK_NOE_MOSHTARY = 304 ;
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(context);
-        int ccMarkazSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getCcMarkazSazmanForosh(), 0);
-        int ccMoshtaryGharardadSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getMoshtaryGharardadccSazmanForosh(),0);
+        int ccMarkazSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getCcMarkazSazmanForosh(),0);
         int ccMoshtaryGharardad = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtaryGharardad(),0);
-        Log.d("takhfifSenfi","codeNoeVosol :" + codeNoeVosol);
-        if(codeNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD() || codeNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_Resid_Naghd() || codeNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh())
+        ArrayList<TakhfifSenfiTitrSatrModel> takhfifSenfiTitrSatrModels = new ArrayList<>();
+        try
         {
-            codeNoeVosol = 1;
-        }
-        else if (codeNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_CHECK() || codeNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_RESID() || codeNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh())
-        {
-            codeNoeVosol = 2;
-        }
-        String noeVosols = "0 ," + codeNoeVosol;
-        Log.d("takhfifSenfi","noeVosols :" + noeVosols);
-        Log.i(TAG, "mohasebeTakhfifSenfiFaktor: ccMoshtaryGharardad\t" + ccMoshtaryGharardad + "ccMoshtaryGharardadSazmanForosh\t" + ccMoshtaryGharardadSazmanForosh + "takhfifSenfisSize\t" + "ccMarkazSazmanForosh\t" + ccMarkazSazmanForosh);
 
-        try {
-            MoshtaryDAO moshtaryDAO = new MoshtaryDAO(context);
 
-            int ccMoshtaryParent = moshtaryDAO.getByccMoshtary(moshtaryModel.getCcMoshtary()).getccMoshtaryParent();
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String strQry = null;
-
-            //اگر نوع مشتری زنجیره ای باشد بر اساس سازمان فروش قرارداد تخفیفات را بارگذاری میکنیم
-            if (moshtaryModel.getCcNoeMoshtary() == 350) {
-
-                strQry = "select * from takhfifsenfi\n" +
-                        "where ccMarkazSazmanForosh = " + ccMoshtaryGharardadSazmanForosh + " AND ( (NameNoeFieldMoshtary=" + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary=" + moshtaryModel.getCcMoshtary() + ")\n" +
-                        "                                      OR (NameNoeFieldMoshtary=" + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary=" + ccMoshtaryParent + ")\n" +
-                        "                                      OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_GOROH + " AND ccNoeFieldMoshtary IN(" + moshtaryModel.getCcNoeMoshtary() + "," + GOROH_LINK_NOE_MOSHTARY + ") AND ccNoeSenf in (" + moshtaryModel.getCcNoeSenf() + " , 0)))\n" +
-                        "                                      AND (Darajeh in (" + moshtaryModel.getDarajeh() + ", 0 ))\n" +
-                        "                                      AND  (ccMoshtaryGharardad in (" + ccMoshtaryGharardad + " , 0 )) " +
-                        "                                      AND NoeVosol IN(" + noeVosols + ")";
-
+            String ccNoeFieldMoshtarys =  moshtary.getCcNoeMoshtary() + "," + GOROH_LINK_NOE_MOSHTARY;
+            int ccNoeSenfMoshtary = moshtary.getCcNoeSenf();
+            int ccMoshtaryParent = moshtary.getccMoshtaryParent();
+            String noeVosols =  "0 ," + CodeNoeVosol;
+            String query = "select t.* , ts.NameNoeField from TakhfifSenfi t inner join (select distinct(NameNoeField) , ccTakhfifSenfi from TakhfifSenfiSatr ) ts on t.ccTakhfifSenfi = ts.ccTakhfifSenfi where ";
+            if(!ShebhOmdeh)
+            {
+                query += " ((NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= " + moshtary.getCcMoshtary() + ")"
+                        + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= "+ccMoshtaryParent+")"
+                        + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_GOROH + " AND ccNoeFieldMoshtary IN(" + ccNoeFieldMoshtarys + ") AND ccNoeSenf in (" + ccNoeSenfMoshtary + " , 0)))"
+                        + " AND CodeNoeHaml= " + codeNoeHaml + " AND NoeVosol IN(" + noeVosols + ") AND (Darajeh in ( " + moshtary.getDarajeh() + " , 0 ) AND ccMarkazSazmanForosh = "+ ccMarkazSazmanForosh +")"
+                        + " AND (ccMoshtaryGharardad in (" + ccMoshtaryGharardad + " , 0 ))" ;
             }
-            //اگر نوع مشتری  غیر زنجیره ای باشد بر اساس مرکز سازمان فروش  تخفیفات را بارگذاری میکنیم
-            else {
-                strQry = "select * from takhfifsenfi \n" +
-                        "where ccMarkazSazmanForosh = " + ccMarkazSazmanForosh + " AND ( (NameNoeFieldMoshtary=" + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary=" + moshtaryModel.getCcMoshtary() + ")\n" +
-                        "                                      OR (NameNoeFieldMoshtary=" + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary=" + ccMoshtaryParent + ")\n" +
-                        "                                      OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_GOROH + " AND ccNoeFieldMoshtary IN(" + moshtaryModel.getCcNoeMoshtary() + "," + GOROH_LINK_NOE_MOSHTARY + ") AND ccNoeSenf in (" + moshtaryModel.getCcNoeSenf() + " , 0)))\n" +
-                        "                                     AND (Darajeh in (" + moshtaryModel.getDarajeh() + ", 0 ))\n" +
-                        "                                     AND (ccMoshtaryGharardad in (" + ccMoshtaryGharardad + " , 0 ))" +
-                        "                                     AND NoeVosol IN(" + noeVosols + ")";
+            else
+            {
+                query += " ((NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= " + moshtary.getCcMoshtary() + ")"
+                        + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= "+ccMoshtaryParent+")"
+                        + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_GOROH + " AND ccNoeFieldMoshtary IN(" + ccNoeFieldMoshtarys + ") AND ccNoeSenf in (" + ccNoeSenfMoshtary + " , 0)))"
+                        + " AND CodeNoeHaml= " + codeNoeHaml + " AND ccTakhfifSenfi<>1620  AND NoeVosol IN(" + noeVosols + ") AND (Darajeh in ( " + moshtary.getDarajeh() + " , 0) AND ccMarkazSazmanForosh = "+ ccMarkazSazmanForosh +")";
             }
-
-            Log.d("takhfifSenfi","strQry :" + strQry);
-            Cursor cursor = db.rawQuery(strQry, null);
-            Log.i(TAG, " getByMoshtary cursor.getCount():" + cursor.getCount());
-            if (cursor != null) {
-                if (cursor.getCount() > 0) {
-                    TakhfifSenfis = cursorToModel(cursor);
+            Log.d("TakhfifSatr" , "query : " + query);
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    takhfifSenfiTitrSatrModels = cursorToModelTitrSatr(cursor);
                 }
-
-                Log.d(TAG, "getByMoshtary cursor.getCount(): " + cursor.getCount());
-
                 cursor.close();
             }
             db.close();
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace();
             PubFunc.Logger logger = new PubFunc().new Logger();
-            String message = context.getResources().getString(R.string.errorSelectAll, TakhfifSenfiModel.TableName()) + "\n" + exception.toString();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "TakhfifSenfiDAO", "", "getByMoshtary", "");
+            String message = context.getResources().getString(R.string.errorSelectAll , TakhfifSenfiModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "TakhfifSenfiDAO" , "" , "getByMoshtaryWithSatr" , "");
         }
-        return TakhfifSenfis;
+        return takhfifSenfiTitrSatrModels;
+    }
+
+    public int getMaxOlaviat()
+    {
+        int maxOlaviat = -1;
+        try
+        {
+            String query = "select MAX(" + TakhfifSenfiModel.COLUMN_Olaviat() + ") from " + TakhfifSenfiModel.TableName();
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    maxOlaviat = cursor.getInt(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , TakhfifSenfiModel.TableName()) + "\n" + e.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "TakhfifSenfiDAO" , "" , "getDistinctOlaviat" , "");
+        }
+        return maxOlaviat;
     }
 
     public boolean deleteAll() {
@@ -429,22 +454,33 @@ public class TakhfifSenfiDAO {
 
     private static ContentValues modelToContentvalue(TakhfifSenfiModel takhfifSenfiModel) {
         ContentValues contentValues = new ContentValues();
-
-        if (takhfifSenfiModel.getCcTakhfifSenfi() > 0) {
-            contentValues.put(TakhfifSenfiModel.COLUMN_ccTakhfifSenfi(), takhfifSenfiModel.getCcTakhfifSenfi());
+        if (takhfifSenfiModel.getCcTakhfifSenfi() > 0)
+        {
+            contentValues.put(TakhfifSenfiModel.COLUMN_ccTakhfifSenfi() , takhfifSenfiModel.getCcTakhfifSenfi());
         }
-        contentValues.put(TakhfifSenfiModel.COLUMN_CodeNoe(), takhfifSenfiModel.getCodeNoe());
-        contentValues.put(TakhfifSenfiModel.COLUMN_SharhTakhfif(), takhfifSenfiModel.getSharhTakhfif());
-        contentValues.put(TakhfifSenfiModel.COLUMN_NoeTedadRial(), takhfifSenfiModel.getNoeTedadRial());
-        contentValues.put(TakhfifSenfiModel.COLUMN_NameNoeFieldMoshtary(), takhfifSenfiModel.getNameNoeFieldMoshtary());
-        contentValues.put(TakhfifSenfiModel.COLUMN_ccNoeFieldMoshtary(), takhfifSenfiModel.getCcNoeFieldMoshtary());
-        contentValues.put(TakhfifSenfiModel.COLUMN_Darajeh(), takhfifSenfiModel.getDarajeh());
-        contentValues.put(TakhfifSenfiModel.COLUMN_ccMarkazSazmanForosh(), takhfifSenfiModel.getCcMarkazSazmanForosh());
-        contentValues.put(TakhfifSenfiModel.COLUMN_ccNoeSenf(), takhfifSenfiModel.getCcNoeSenf());
-        contentValues.put(TakhfifSenfiModel.COLUMN_NameNoeSenf(), takhfifSenfiModel.getNameNoeSenf());
+        if (takhfifSenfiModel.getRadif() > 0)
+        {
+            contentValues.put(TakhfifSenfiModel.COLUMN_Radif() , takhfifSenfiModel.getRadif());
+        }
+        contentValues.put(TakhfifSenfiModel.COLUMN_CodeNoe() , takhfifSenfiModel.getCodeNoe());
+        contentValues.put(TakhfifSenfiModel.COLUMN_SharhTakhfif() , takhfifSenfiModel.getSharhTakhfif());
+        contentValues.put(TakhfifSenfiModel.COLUMN_NoeTedadRial() , takhfifSenfiModel.getNoeTedadRial());
+        contentValues.put(TakhfifSenfiModel.COLUMN_NameNoeFieldMoshtary() , takhfifSenfiModel.getNameNoeFieldMoshtary());
+        contentValues.put(TakhfifSenfiModel.COLUMN_ccNoeFieldMoshtary() , takhfifSenfiModel.getCcNoeFieldMoshtary());
+        contentValues.put(TakhfifSenfiModel.COLUMN_CodeNoeHaml() , takhfifSenfiModel.getCodeNoeHaml());
+        contentValues.put(TakhfifSenfiModel.COLUMN_Darajeh() , takhfifSenfiModel.getDarajeh());
+        contentValues.put(TakhfifSenfiModel.COLUMN_ForJayezeh() , takhfifSenfiModel.getForJayezeh());
+        contentValues.put(TakhfifSenfiModel.COLUMN_NoeVosol() , takhfifSenfiModel.getNoeVosol());
+        contentValues.put(TakhfifSenfiModel.COLUMN_txtNoeVosol() , takhfifSenfiModel.getTxtNoeVosol());
+        contentValues.put(TakhfifSenfiModel.COLUMN_ccGorohTakidi() , takhfifSenfiModel.getCcGorohTakidi());
+        contentValues.put(TakhfifSenfiModel.COLUMN_ccMarkazSazmanForosh() , takhfifSenfiModel.getCcMarkazSazmanForosh());
+        contentValues.put(TakhfifSenfiModel.COLUMN_Olaviat() , takhfifSenfiModel.getOlaviat());
+        contentValues.put(TakhfifSenfiModel.COLUMN_IsPelekani() , takhfifSenfiModel.getIsPelekani());
+        contentValues.put(TakhfifSenfiModel.COLUMN_ccMantagheh() , takhfifSenfiModel.getCcMantagheh());
+        contentValues.put(TakhfifSenfiModel.COLUMN_ccNoeSenf() , takhfifSenfiModel.getCcNoeSenf());
+        contentValues.put(TakhfifSenfiModel.COLUMN_NameNoeSenf() , takhfifSenfiModel.getNameNoeSenf());
         contentValues.put(TakhfifSenfiModel.COLUMN_ccMoshtaryGharardad(), takhfifSenfiModel.getCcMoshtrayGharardad());
         contentValues.put(TakhfifSenfiModel.COLUMN_NoeGheymat(), takhfifSenfiModel.getNoeGheymat());
-        contentValues.put(TakhfifSenfiModel.COLUMN_NoeVosol(), takhfifSenfiModel.getNoeVosol());
 
 
 
@@ -466,13 +502,23 @@ public class TakhfifSenfiDAO {
             takhfifSenfiModel.setNoeTedadRial(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_NoeTedadRial())));
             takhfifSenfiModel.setNameNoeFieldMoshtary(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_NameNoeFieldMoshtary())));
             takhfifSenfiModel.setCcNoeFieldMoshtary(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_ccNoeFieldMoshtary())));
+            takhfifSenfiModel.setCodeNoeHaml(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_CodeNoeHaml())));
             takhfifSenfiModel.setDarajeh(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_Darajeh())));
+            takhfifSenfiModel.setForJayezeh(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_ForJayezeh())));
+            takhfifSenfiModel.setNoeVosol(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_NoeVosol())));
+            takhfifSenfiModel.setTxtNoeVosol(cursor.getString(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_txtNoeVosol())));
+            takhfifSenfiModel.setCcGorohTakidi(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_ccGorohTakidi())));
             takhfifSenfiModel.setCcMarkazSazmanForosh(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_ccMarkazSazmanForosh())));
+            takhfifSenfiModel.setOlaviat(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_Olaviat())));
+            takhfifSenfiModel.setIsPelekani(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_IsPelekani())));
+            takhfifSenfiModel.setCcMantagheh(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_ccMantagheh())));
             takhfifSenfiModel.setCcNoeSenf(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_ccNoeSenf())));
+            takhfifSenfiModel.setCcTakhfifSenfi(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_ccTakhfifSenfi())));
+            takhfifSenfiModel.setCcMarkazSazmanForosh(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_ccMarkazSazmanForosh())));
             takhfifSenfiModel.setNameNoeSenf(cursor.getString(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_NameNoeSenf())));
             takhfifSenfiModel.setNoeGheymat(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_NoeGheymat())));
             takhfifSenfiModel.setCcMoshtrayGharardad(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_ccMoshtaryGharardad())));
-            takhfifSenfiModel.setNoeVosol(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_NoeVosol())));
+
 
 
 
@@ -482,5 +528,42 @@ public class TakhfifSenfiDAO {
         return takhfifSenfiModels;
     }
 
+    private ArrayList<TakhfifSenfiTitrSatrModel> cursorToModelTitrSatr(Cursor cursor)
+    {
+        ArrayList<TakhfifSenfiTitrSatrModel> takhfifSenfiTitrSatrModels = new ArrayList<>();
 
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast())
+        {
+            TakhfifSenfiTitrSatrModel takhfifSenfiTitrSatrModel = new TakhfifSenfiTitrSatrModel();
+
+            //////////// TITR ////////////
+            takhfifSenfiTitrSatrModel.setRadif(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_Radif())));
+            takhfifSenfiTitrSatrModel.setCcTakhfifSenfi(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_ccTakhfifSenfi())));
+            takhfifSenfiTitrSatrModel.setCodeNoe(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_CodeNoe())));
+            takhfifSenfiTitrSatrModel.setSharhTakhfif(cursor.getString(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_SharhTakhfif())));
+            takhfifSenfiTitrSatrModel.setNoeTedadRial(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_NoeTedadRial())));
+            takhfifSenfiTitrSatrModel.setNameNoeFieldMoshtary(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_NameNoeFieldMoshtary())));
+            takhfifSenfiTitrSatrModel.setCcNoeFieldMoshtary(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_ccNoeFieldMoshtary())));
+            takhfifSenfiTitrSatrModel.setCodeNoeHaml(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_CodeNoeHaml())));
+            takhfifSenfiTitrSatrModel.setDarajeh(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_Darajeh())));
+            takhfifSenfiTitrSatrModel.setForJayezeh(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_ForJayezeh())));
+            takhfifSenfiTitrSatrModel.setNoeVosol(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_NoeVosol())));
+            takhfifSenfiTitrSatrModel.setTxtNoeVosol(cursor.getString(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_txtNoeVosol())));
+            takhfifSenfiTitrSatrModel.setCcGorohTakidi(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_ccGorohTakidi())));
+            takhfifSenfiTitrSatrModel.setOlaviat(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_Olaviat())));
+            takhfifSenfiTitrSatrModel.setIsPelekani(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_IsPelekani())));
+            takhfifSenfiTitrSatrModel.setCcMantagheh(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_ccMantagheh())));
+            takhfifSenfiTitrSatrModel.setCcNoeSenf(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_ccNoeSenf())));
+            takhfifSenfiTitrSatrModel.setNameNoeSenf(cursor.getString(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_NameNoeSenf())));
+            takhfifSenfiTitrSatrModel.setNoeGheymat(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_NoeGheymat())));
+
+            //////////// SATR ////////////
+            takhfifSenfiTitrSatrModel.setNameNoeField(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiSatrModel.COLUMN_NameNoeField())));
+
+            takhfifSenfiTitrSatrModels.add(takhfifSenfiTitrSatrModel);
+            cursor.moveToNext();
+        }
+        return takhfifSenfiTitrSatrModels;
+    }
 }

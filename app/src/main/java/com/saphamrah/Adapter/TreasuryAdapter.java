@@ -90,14 +90,14 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             holder.layEditDarkhast.setVisibility(View.GONE);
         }
 
-//        /**
-//         * check show marjoee
-//         */
-//        if (models.get(position).getFaktorRooz() == 1){
-//            holder.layMarjoee.setVisibility(View.GONE);
-//        } else {
-//            holder.layMarjoee.setVisibility(View.VISIBLE);
-//        }
+        /**
+         * check show location faktor rooz
+         */
+        if (models.get(position).getFaktorRooz() == 1){
+            holder.laySaveAndSend.setVisibility(View.GONE);
+        } else {
+            holder.laySaveAndSend.setVisibility(View.VISIBLE);
+        }
 
         /**
          * set color for layout

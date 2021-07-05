@@ -38,8 +38,8 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
     private int tedadPishnahadi;
     private boolean kalaYekSetareh;
     private boolean kalaDoSetareh;
-    private int GheymatMasrafKonandehAsli;
-    private int GheymatForoshAsli;
+    private float GheymatMasrafKonandehAsli;
+    private float GheymatForoshAsli;
 
 
 
@@ -261,19 +261,19 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
     }
 
 
-    public int getGheymatMasrafKonandehAsli() {
+    public float getGheymatMasrafKonandehAsli() {
         return GheymatMasrafKonandehAsli;
     }
 
-    public void setGheymatMasrafKonandehAsli(int gheymatMasrafKonandehAsli) {
+    public void setGheymatMasrafKonandehAsli(float gheymatMasrafKonandehAsli) {
         GheymatMasrafKonandehAsli = gheymatMasrafKonandehAsli;
     }
 
-    public int getGheymatForoshAsli() {
+    public float getGheymatForoshAsli() {
         return GheymatForoshAsli;
     }
 
-    public void setGheymatForoshAsli(int gheymatForoshAsli) {
+    public void setGheymatForoshAsli(float gheymatForoshAsli) {
         GheymatForoshAsli = gheymatForoshAsli;
     }
 

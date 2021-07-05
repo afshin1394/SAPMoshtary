@@ -13,6 +13,8 @@ public class SelectVosolShared {
     private String listVosolFaktorRoozByCodePosition = "f3435yhhg6jyh";
     private String listVosolFaktorRoozByRoutingPosition = "f3435yhhg6jyh";
     private String listVosolMandehDarPosition = "f343sggrgwwdwd";
+    private String listVosolCcDarkhastFaktor = "f343sggrasdasd";
+
 
 
     public SelectVosolShared(Context context)
@@ -65,6 +67,41 @@ public class SelectVosolShared {
         }
     }
 
+    public boolean putLong(String key , long value)
+    {
+        try
+        {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putLong(key , value);
+            editor.apply();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString() + "\n key : " + key + " , value : " + value, "SelectVosolShared", "", "putInt", "");
+            return false;
+        }
+    }
+
+
+
+    public long getLong(String key , long defaultValue)
+    {
+        try
+        {
+            return sharedPreferences.getLong(key , defaultValue);
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), exception.toString() + "\n key : " + key + " , defaultValue : " + defaultValue, "SelectVosolShared", "", "getInt", "");
+            return defaultValue;
+        }
+    }
+
     public void removePositions()
     {
         try
@@ -73,6 +110,7 @@ public class SelectVosolShared {
             editor.remove(listVosolFaktorRoozByCodePosition);
             editor.remove(listVosolFaktorRoozByRoutingPosition);
             editor.remove(listVosolMandehDarPosition);
+            editor.remove(listVosolCcDarkhastFaktor);
             editor.apply();
         }
         catch (Exception e)
@@ -84,6 +122,22 @@ public class SelectVosolShared {
     }
 
     public void removePosition(String key)
+    {
+        try
+        {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(key);
+            editor.apply();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), e.toString(), "SelectVosolShared", "", "remove", "");
+        }
+    }
+
+    public void removeCcDarkhastFaktor(String key)
     {
         try
         {
@@ -112,5 +166,9 @@ public class SelectVosolShared {
 
     public String getListVosolMandehDarPosition() {
         return listVosolMandehDarPosition;
+    }
+
+    public String getListVosolCcDarkhastFaktor() {
+        return listVosolCcDarkhastFaktor;
     }
 }

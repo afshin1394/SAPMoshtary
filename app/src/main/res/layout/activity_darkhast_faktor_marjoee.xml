@@ -55,12 +55,14 @@
             fab:layout_constraintBottom_toBottomOf="parent"
             android:layoutDirection="ltr"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true">
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/_50sdp">
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/toolbar"
-                android:layoutDirection="ltr"/>
+                android:layoutDirection="ltr"
+                />
             <com.miguelcatalan.materialsearchview.MaterialSearchView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

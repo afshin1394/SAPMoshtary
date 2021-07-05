@@ -49,6 +49,7 @@ public class DariaftPardakhtPPCModel
     private static final String COLUMN_NaghlAzGhabl = "NaghlAzGhabl";
     private static final String COLUMN_ccBrand = "ccBrand";
     private static final String COLUMN_ExtraProp_IsDirkard = "ExtraProp_IsDirkard";
+    private static final String COLUMN_ExtraProp_IsTajil = "ExtraProp_IsTajil";
     private static final String COLUMN_ExtraProp_IsSend = "ExtraProp_IsSend";
     private static final String COLUMN_ccAfradErsalKonandeh = "ccAfradErsalKonandeh";
     private static final String COLUMN_IsCheckMoshtary = "IsCheckMoshtary";
@@ -154,6 +155,9 @@ public class DariaftPardakhtPPCModel
     }
     public static String COLUMN_ExtraProp_IsDirkard() {
         return COLUMN_ExtraProp_IsDirkard;
+    }
+    public static String COLUMN_ExtraProp_IsTajil() {
+        return COLUMN_ExtraProp_IsTajil;
     }
     public static String COLUMN_ExtraProp_IsSend() {
         return COLUMN_ExtraProp_IsSend;
@@ -304,6 +308,7 @@ public class DariaftPardakhtPPCModel
     }
 
     private int ExtraProp_IsDirkard;
+    private int ExtraProp_IsTajil;
     private int ExtraProp_IsSend;
 
 
@@ -542,6 +547,14 @@ public class DariaftPardakhtPPCModel
 
     public void setExtraProp_IsDirkard(int extraProp_IsDirkard) {
         ExtraProp_IsDirkard = extraProp_IsDirkard;
+    }
+
+    public int getExtraProp_IsTajil() {
+        return ExtraProp_IsTajil;
+    }
+
+    public void setExtraProp_IsTajil(int extraProp_IsTajil) {
+        ExtraProp_IsTajil = extraProp_IsTajil;
     }
 
     public int getExtraProp_IsSend() {

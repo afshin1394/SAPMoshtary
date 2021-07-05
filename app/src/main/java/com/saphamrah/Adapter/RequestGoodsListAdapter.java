@@ -54,6 +54,7 @@ public class RequestGoodsListAdapter extends RecyclerSwipeAdapter<RequestGoodsLi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position)
     {
+
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right , null);
         String mablaghForosh = formatter.format((int)kalaMojodiZaribModels.get(position).getGheymatForosh());

@@ -1186,7 +1186,7 @@ public class DarkhastFaktorModel
     }
 
     public void setCcMoshtaryGhardad(int ccMoshtaryGharardad) {
-        ccMoshtaryGharardad = ccMoshtaryGharardad;
+        this.ccMoshtaryGharardad = ccMoshtaryGharardad;
     }
 
     public String toJsonStringForVosol(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, int ccMarkazForosh, int ccGorohNoeMoshtary, int ccGorohNoeSenf, JSONArray jsonDarkhastFaktorSatrs, JSONArray darkhastFaktorTakhfifModels, float mablaghTakhfifFaktorSatr, JSONArray jsonEmza, JSONArray jsonMoshtaryPhotoPPCChidman, JSONArray jsonDariaftPardakht)

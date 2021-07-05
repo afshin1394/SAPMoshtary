@@ -83,7 +83,8 @@ public class KalaDAO
             KalaModel.COLUMN_NameVahedShomaresh(),
             KalaModel.COLUMN_TarikhEngheza(),
             KalaModel.COLUMN_ShomarehBach(),
-            KalaModel.COLUMN_GheymatForoshAsli()
+            KalaModel.COLUMN_GheymatForoshAsli(),
+            KalaModel.COLUMN_GheymatMasrafKonandehAsli()
 
         };
     }
@@ -312,11 +313,11 @@ Call<GetMojodyAnbarResult> call = apiServiceGet.getAllKalaAmargar();
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(KalaModel.TableName(), allColumns(), null, null, null, null, null);
-            if (cursor != null)
-            {
-                if (cursor.getCount() > 0)
-                {
+            String query = "SELECT * FROM Kala";
+            Cursor cursor = db.rawQuery(query, null);
+//            Cursor cursor = db.query(KalaModel.TableName(), allColumns(), null, null, null, null, null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
                     kalaModels = cursorToModel(cursor);
                 }
                 cursor.close();
@@ -689,6 +690,7 @@ Call<GetMojodyAnbarResult> call = apiServiceGet.getAllKalaAmargar();
         contentValues.put(KalaModel.COLUMN_TarikhEngheza() , kalaModel.getTarikhEngheza());
         contentValues.put(KalaModel.COLUMN_ShomarehBach() , kalaModel.getShomarehBach());
         contentValues.put(KalaModel.COLUMN_GheymatForoshAsli() , kalaModel.getGheymatForoshAsli());
+        contentValues.put(KalaModel.COLUMN_GheymatMasrafKonandehAsli() , kalaModel.getGheymatMasrafKonandehAsli());
 
         return contentValues;
     }
@@ -760,6 +762,7 @@ Call<GetMojodyAnbarResult> call = apiServiceGet.getAllKalaAmargar();
           kalaModel.setTarikhEngheza(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_TarikhEngheza())));
           kalaModel.setShomarehBach(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_ShomarehBach())));
           kalaModel.setGheymatForoshAsli(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_GheymatForoshAsli())));
+          kalaModel.setGheymatMasrafKonandehAsli(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_GheymatMasrafKonandehAsli())));
 
           kalaModels.add(kalaModel);
           cursor.moveToNext();

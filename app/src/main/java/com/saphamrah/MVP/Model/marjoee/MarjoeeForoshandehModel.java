@@ -84,7 +84,7 @@ import java.util.Date;
         if(ccKardex > 0) {
                insertKardexSatrForoshandeh(entity, ccKardex);
            }
-        insertUpdateDariaftPardakht(entity.getCcMoshtary(), entity.getNameMoshtary(), (tedadMarjoeeForInsert * entity.getGheymatForoshKhales()) );
+        insertUpdateDariaftPardakht(entity.getCcMoshtary(), entity.getNameMoshtary(), (tedadMarjoeeForInsert * entity.getGheymatForosh()) );
 
        boolean updateTedadMarjoee = elamMarjoeeForoshandehDAO.updateTedadMarjoee(entity.getCcDarkhastFaktor() ,
                entity.getShomarehBach(),
@@ -276,7 +276,7 @@ import java.util.Date;
             darkhastFaktorDAO.updateMandehDarkhastFaktor(Long.parseLong(ccDarkhastFaktor));
             double MablaghMandehFaktor = darkhastFaktorDAO.getByccDarkhastFaktor(Long.parseLong(ccDarkhastFaktor)).getMablaghMandeh();
 
-            double MablaghMarjoee= kardexSatr.getGheymatForoshKhales() * kardexSatr.getTedad3();
+            double MablaghMarjoee= kardexSatr.getGheymatForosh() * kardexSatr.getTedad3();
             double MablaghDariaftPardakhtDarkhastFaktor = MablaghMarjoee < MablaghMandehFaktor ? MablaghMarjoee : MablaghMandehFaktor;
             //--------------------------------------
             dariaftPardakhtDarkhastFaktorPPC= dariaftPardakhtDarkhastFaktorPPCDAO.SetForInsert_DariaftPardakhtDarkhastFaktorPPC(

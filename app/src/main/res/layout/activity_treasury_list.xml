@@ -48,7 +48,8 @@
             android:layout_height="wrap_content"
             android:layoutDirection="ltr"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true">
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/_50sdp">
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

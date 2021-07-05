@@ -57,30 +57,32 @@ public class DarkhastFaktorSatrDAO
     private String[] allColumns()
     {
         return new String[]
-        {
-            DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktorSatr(),
-            DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktor(),
-            DarkhastFaktorSatrModel.COLUMN_ccTaminKonandeh(),
-            DarkhastFaktorSatrModel.COLUMN_ccKala(),
-            DarkhastFaktorSatrModel.COLUMN_ccKalaCode(),
-            DarkhastFaktorSatrModel.COLUMN_Tedad3(),
-            DarkhastFaktorSatrModel.COLUMN_CodeNoeKala(),
-            DarkhastFaktorSatrModel.COLUMN_ShomarehBach(),
-            DarkhastFaktorSatrModel.COLUMN_TarikhTolid(),
-            DarkhastFaktorSatrModel.COLUMN_MablaghForosh(),
-            DarkhastFaktorSatrModel.COLUMN_MablaghForoshKhalesKala(),
-            DarkhastFaktorSatrModel.COLUMN_MablaghTakhfifNaghdiVahed(),
-            DarkhastFaktorSatrModel.COLUMN_Maliat(),
-            DarkhastFaktorSatrModel.COLUMN_Avarez(),
-            DarkhastFaktorSatrModel.COLUMN_ccAfrad(),
-            DarkhastFaktorSatrModel.COLUMN_ExtraProp_IsOld(),
-            DarkhastFaktorSatrModel.COLUMN_TarikhEngheza(),
-            DarkhastFaktorSatrModel.COLUMN_ccAnbarMarjoee(),
-            DarkhastFaktorSatrModel.COLUMN_ccAnbarGhesmat(),
-            DarkhastFaktorSatrModel.COLUMN_MablaghKharid(),
-            DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandeh(),
-            DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli()
-        };
+                {
+                        DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktorSatr(),
+                        DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktor(),
+                        DarkhastFaktorSatrModel.COLUMN_ccTaminKonandeh(),
+                        DarkhastFaktorSatrModel.COLUMN_ccKala(),
+                        DarkhastFaktorSatrModel.COLUMN_ccKalaCode(),
+                        DarkhastFaktorSatrModel.COLUMN_Tedad3(),
+                        DarkhastFaktorSatrModel.COLUMN_CodeNoeKala(),
+                        DarkhastFaktorSatrModel.COLUMN_ShomarehBach(),
+                        DarkhastFaktorSatrModel.COLUMN_TarikhTolid(),
+                        DarkhastFaktorSatrModel.COLUMN_MablaghForosh(),
+                        DarkhastFaktorSatrModel.COLUMN_MablaghForoshKhalesKala(),
+                        DarkhastFaktorSatrModel.COLUMN_MablaghTakhfifNaghdiVahed(),
+                        DarkhastFaktorSatrModel.COLUMN_Maliat(),
+                        DarkhastFaktorSatrModel.COLUMN_Avarez(),
+                        DarkhastFaktorSatrModel.COLUMN_ccAfrad(),
+                        DarkhastFaktorSatrModel.COLUMN_ExtraProp_IsOld(),
+                        DarkhastFaktorSatrModel.COLUMN_TarikhEngheza(),
+                        DarkhastFaktorSatrModel.COLUMN_ccAnbarMarjoee(),
+                        DarkhastFaktorSatrModel.COLUMN_ccAnbarGhesmat(),
+                        DarkhastFaktorSatrModel.COLUMN_MablaghKharid(),
+                        DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandeh(),
+                        DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli(),
+                        DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli()
+
+                };
     }
 
     public void fetchDarkhastFaktorSatr(final Context context, final String activityNameForLog, String noeHavaleFaktor, final String ccDarkhastFaktors, final RetrofitResponse retrofitResponse)
@@ -391,8 +393,14 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         return goodsName;
     }
 
-    public ArrayList<DataTableModel> getByccDarkhastFaktorAndccKalaCode(long ccDarkhastFaktor , int ccKalaCode, int currentOlaviat, int ccTakhfifHajmi)
+    public ArrayList<DataTableModel> getByccDarkhastFaktorAndccKalaCode(long ccDarkhastFaktor , int ccKalaCode, int currentOlaviat, int ccTakhfifHajmi , int noeGheymat)
     {
+        String gheymat="";
+        if (noeGheymat == 1) {
+            gheymat = "MablaghForosh";
+        } else {
+            gheymat = "GheymatMasrafKonandeh";
+        }
         ArrayList<DataTableModel> dataTableModels = new ArrayList<>();
         try
         {
@@ -400,7 +408,7 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
             String query = "SELECT A.ccDarkhastFaktorSatr, K.ccKalaCode, SUM(A.Tedad3) AS Tedad, SUM(A.Tedad3/ TedadDarKarton) AS TedadBox, SUM(A.Tedad3/ TedadDarBasteh) AS TedadPackage, ";
             if(currentOlaviat == 0 || currentOlaviat == 1)
             {
-                query += " SUM(Tedad3 * MablaghForosh) AS MablaghKol ";
+                query += " SUM(Tedad3 * " + gheymat + ") AS MablaghKol ";
             }
             else
             {
@@ -462,6 +470,56 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
     }
 
     public ArrayList<DarkhastFaktorSatrModel> getByccDarkhastFaktorForTakhfifHajmiKala(long ccDarkhastFaktor)
+    {
+        ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels = new ArrayList<>();
+        try
+        {
+//            String query = "select ccDarkhastFaktor, ccDarkhastFaktorSatr, sum(MablaghForosh) As MablaghForosh , sum(Tedad3) AS Tedad3 , ccKala , ccKalaCode from DarkhastFaktorSatr \n" +
+//                    " where ccDarkhastFaktor = " + ccDarkhastFaktor + " group by ccKalaCode";
+
+            String query = "SELECT ccDarkhastFaktor, ccDarkhastFaktorSatr, SUM(DFS.MablaghForosh) As MablaghForosh , SUM(Tedad3) AS Tedad3 , DFS.ccKala , DFS.ccKalaCode, Kala.VaznKhales AS Vazn\n" +
+                    " From DarkhastFaktorSatr DFS \n" +
+                    " LEFT JOIN (select Distinct cckalacode,VaznKhales from kala) Kala ON Kala.ccKalaCode = DFS.ccKalaCode \n" +
+                    " WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " GROUP BY DFS.ccKalaCode";
+
+            Log.d("DarkhastFaktorSatr","query:"+query );
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast())
+                    {
+                        DarkhastFaktorSatrModel darkhastFaktorSatrModel = new DarkhastFaktorSatrModel();
+                        darkhastFaktorSatrModel.setCcDarkhastFaktor(cursor.getLong(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktor())));
+                        darkhastFaktorSatrModel.setCcDarkhastFaktorSatr(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktorSatr())));
+                        darkhastFaktorSatrModel.setMablaghForosh(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_MablaghForosh())));
+                        darkhastFaktorSatrModel.setTedad3(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_Tedad3())));
+                        darkhastFaktorSatrModel.setCcKalaCode(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ccKalaCode())));
+                        darkhastFaktorSatrModel.setCcKala(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ccKala())));
+                        darkhastFaktorSatrModel.setVazn(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_Vazn())));
+
+                        darkhastFaktorSatrModels.add(darkhastFaktorSatrModel);
+                        cursor.moveToNext();
+                    }
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "getByccDarkhastFaktorForTakhfifHajmiKala" , "");
+        }
+        return darkhastFaktorSatrModels;
+    }
+
+    public ArrayList<DarkhastFaktorSatrModel> getByccDarkhastFaktorForTakhfifSenfiKala(long ccDarkhastFaktor)
     {
         ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels = new ArrayList<>();
         try
@@ -594,6 +652,47 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         return gorohs;
     }
 
+    public List<DataTableModel> getTedadAghlamBeTafkikGorohKalaAndTakhfifSenfiAndNoeMoshtary(long ccDarkhastFaktor, int ccTakhfifSenfi, int HadeaghalTedadKarton)
+    {
+        List<DataTableModel> gorohs= new ArrayList<>();
+        try
+        {
+
+            String StrSQL= "SELECT Main.ccGoroh,sum(Main.TedadAghlam),Sum(Main.MablaghKol) "
+                    + " FROM (SELECT B.ccGoroh,CASE WHEN Tedad3 >= (B.Tedad1*?) THEN Count(A.ccKalaCode) ELSE 0 END AS TedadAghlam, SUM(Tedad3 * MablaghForosh) AS MablaghKol "
+                    + "              FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
+                    + "                     (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.Tedad1 "
+                    + "                        FROM Kala A LEFT OUTER JOIN "
+                    + "                             (SELECT A.ccKalaCode, B.ccNoeField AS ccGoroh  "
+                    + "                                FROM KalaGoroh A LEFT OUTER JOIN TakhfifSenfiSatr B "
+                    + "                                     ON A.ccGoroh= B.ccNoeField OR A.ccGorohLink= B.ccNoeField OR A.ccRoot= B.ccNoeField "
+                    + "                                WHERE B.ccTakhfifSenfi= ? "
+                    + "                            )G ON A.ccKalaCode= G.ccKalaCode "
+                    + "                     )B ON A.ccKalaCode= B.ccKalaCode "
+                    + "               WHERE ccDarkhastFaktor= ? AND ccGoroh Is Not Null "
+                    + "               GROUP BY B.ccGoroh,B.Tedad1,Tedad3) Main "
+                    + "                 GROUP BY Main.ccGoroh";
+
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(StrSQL, new String[]{String.valueOf(HadeaghalTedadKarton), String.valueOf(ccTakhfifSenfi), String.valueOf(ccDarkhastFaktor)});
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    gorohs = new PubFunc().new DAOUtil().cursorToDataTable(context , cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception e)
+        {
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorSatrModel.TableName()) + "\n" + e.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "getTedadBeTafkikGorohKalaAndJayezeh" , "");
+        }
+        return gorohs;
+    }
 
     public List<DataTableModel> getTedadAghlamBeTafkikGorohKalaAndTakhfifHajmi(long ccDarkhastFaktor, int ccTakhfifHajmi)
     {
@@ -633,6 +732,43 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         return gorohs;
     }
 
+    public List<DataTableModel> getTedadAghlamBeTafkikGorohKalaAndTakhfifSenfi(long ccDarkhastFaktor, int ccTakhfifSenfi)
+    {
+        List<DataTableModel> gorohs= new ArrayList<>();
+        try
+        {
+            String StrSQL= "SELECT B.ccGoroh, COUNT(A.ccKalaCode) AS TedadAghlam, SUM(Tedad3 * MablaghForosh) AS MablaghKol "
+                    + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
+                    + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh "
+                    + "          FROM Kala A LEFT OUTER JOIN "
+                    + "               (SELECT A.ccKalaCode, B.ccNoeField AS ccGoroh "
+                    + "                  FROM KalaGoroh A LEFT OUTER JOIN TakhfifSenfiSatr B"
+                    + "                       ON A.ccGoroh= B.ccNoeField OR A.ccGorohLink= B.ccNoeField OR A.ccRoot= B.ccNoeField "
+                    + "                  WHERE B.ccTakhfifSenfi= ? "
+                    + "               )G ON A.ccKalaCode= G.ccKalaCode "
+                    + "       )B ON A.ccKalaCode= B.ccKalaCode"
+                    + " WHERE ccDarkhastFaktor= ? AND ccGoroh Is Not Null "
+                    + " GROUP BY B.ccGoroh";
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(StrSQL, new String[]{String.valueOf(ccTakhfifSenfi), String.valueOf(ccDarkhastFaktor)});
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    gorohs = new PubFunc().new DAOUtil().cursorToDataTable(context , cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception e)
+        {
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorSatrModel.TableName()) + "\n" + e.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "getTedadBeTafkikGorohKalaAndJayezeh" , "");
+        }
+        return gorohs;
+    }
 
     public int getCountByccDarkhastFaktor(long ccDarkhastFaktor)
     {
@@ -858,19 +994,25 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         return count;
     }
 
-    public ArrayList<DataTableModel> getTedadBeTafkikBrand(long ccDarkhastFaktor , int currentOlaviat)
+    public ArrayList<DataTableModel> getTedadBeTafkikBrand(long ccDarkhastFaktor , int currentOlaviat, int noeGheymat)
     {
+        String gheymat="";
+        if (noeGheymat == 1) {
+            gheymat = "MablaghForosh";
+        } else {
+            gheymat = "GheymatMasrafKonandeh";
+        }
         ArrayList<DataTableModel> brands = new ArrayList<>();
         try
         {
             String query = "SELECT B.ccBrand, SUM(A.Tedad3) AS Tedad, SUM(A.Tedad3/ TedadDarKarton) AS TedadBox, SUM(A.Tedad3/ TedadDarBasteh) AS TedadPackage, ";
             if(currentOlaviat == 0 || currentOlaviat == 1)
             {
-                query += " SUM(Tedad3 * MablaghForosh) AS MablaghKol ";
+                query += " SUM(Tedad3 * " + gheymat + " ) AS MablaghKol ";
             }
             else
             {
-                query += " SUM(Tedad3 * MablaghForosh) - (select sum(MablaghTakhfif) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
+                query += " SUM(Tedad3 *  " + gheymat + " ) - (select sum(MablaghTakhfif) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
                         + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
             }
             query += " ,SUM(Tedad3 * B.VaznKhales) AS Vazn, COUNT(ccDarkhastFaktorSatr) AS TedadAghlam "
@@ -898,19 +1040,25 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         return brands;
     }
 
-    public ArrayList<DataTableModel> getTedadBeTafkikBrandMohasebeh(long ccDarkhastFaktor , int currentOlaviat, int ccBrand)
+    public ArrayList<DataTableModel> getTedadBeTafkikBrandMohasebeh(long ccDarkhastFaktor , int currentOlaviat, int ccBrand, int noeGheymat)
     {
+        String gheymat="";
+        if (noeGheymat == 1) {
+            gheymat = "MablaghForosh";
+        } else {
+            gheymat = "GheymatMasrafKonandeh";
+        }
         ArrayList<DataTableModel> brands = new ArrayList<>();
         try
         {
             String query = "SELECT B.ccBrand, SUM(A.Tedad3) AS Tedad, SUM(A.Tedad3/ TedadDarKarton) AS TedadBox, SUM(A.Tedad3/ TedadDarBasteh) AS TedadPackage, ";
             if(currentOlaviat == 0 || currentOlaviat == 1)
             {
-                query += " SUM(Tedad3 * MablaghForosh) AS MablaghKol ";
+                query += " SUM(Tedad3 * " + gheymat + " ) AS MablaghKol ";
             }
             else
             {
-                query += " SUM(Tedad3 * MablaghForosh) - (select sum(MablaghTakhfif) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
+                query += " SUM(Tedad3 *  " + gheymat + " ) - (select sum(MablaghTakhfif) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
                         + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
             }
             query += "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN (SELECT DISTINCT ccKalaCode, ccBrand, TedadDarKarton, TedadDarBasteh FROM Kala)B ON A.ccKalaCode= B.ccKalaCode "
@@ -938,20 +1086,26 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         return brands;
     }
 
-    public ArrayList<DataTableModel> getTedadBeTafkikTaminKonandeh(long ccDarkhastFaktor, int currentOlaviat)
+    public ArrayList<DataTableModel> getTedadBeTafkikTaminKonandeh(long ccDarkhastFaktor, int currentOlaviat, int noeGheymat)
     {
         ArrayList<DataTableModel> taminKonandehs = new ArrayList<>();
         try
         {
+            String gheymat="";
+            if (noeGheymat == 1) {
+                gheymat = "MablaghForosh";
+            } else {
+                gheymat = "GheymatMasrafKonandeh";
+            }
             String query = "SELECT B.ccTaminKonandeh, SUM(A.Tedad3)AS Tedad, SUM(A.Tedad3/ TedadDarKarton)AS TedadBox, "
                     + " SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage,";
                     if(currentOlaviat == 0 || currentOlaviat == 1)
                     {
-                        query += " SUM(Tedad3 * MablaghForosh) AS MablaghKol ";
+                        query += " SUM(Tedad3 * " + gheymat + ") AS MablaghKol ";
                     }
                     else
                     {
-                        query += " SUM(Tedad3 * MablaghForosh) - (select sum(MablaghTakhfif) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
+                        query += " SUM(Tedad3 * " + gheymat + ") - (select sum(MablaghTakhfif) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
                                 + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
                     }
                     query += " ,SUM(Tedad3 * B.VaznKhales) AS Vazn, COUNT(ccDarkhastFaktorSatr) AS TedadAghlam "
@@ -981,8 +1135,14 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         return taminKonandehs;
     }
 
-    public ArrayList<DataTableModel> getBrandByccTaminKonandeh(long ccDarkhastFaktor, int ccTaminKonandeh, int currentOlaviat)
+    public ArrayList<DataTableModel> getBrandByccTaminKonandeh(long ccDarkhastFaktor, int ccTaminKonandeh, int currentOlaviat, int noeGheymat)
     {
+        String gheymat="";
+        if (noeGheymat == 1) {
+            gheymat = "MablaghForosh";
+        } else {
+            gheymat = "GheymatMasrafKonandeh";
+        }
         ArrayList<DataTableModel> brands = new ArrayList<>();
         try
         {
@@ -990,11 +1150,11 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
                     + " SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage, ";
             if(currentOlaviat == 0 || currentOlaviat == 1)
             {
-                query += " SUM(Tedad3 * MablaghForosh) AS MablaghKol ";
+                query += " SUM(Tedad3 * " + gheymat + " ) AS MablaghKol ";
             }
             else
             {
-                query += " SUM(Tedad3 * MablaghForosh) - (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat <= " + (currentOlaviat)
+                query += " SUM(Tedad3 *  " + gheymat + " ) - (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat <= " + (currentOlaviat)
                         + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
 //                query += " (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat <= " + (currentOlaviat)
 //                        + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
@@ -1026,8 +1186,14 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         return brands;
     }
 
-    public ArrayList<DataTableModel> getBrandByccTaminKonandehMohasebeh(long ccDarkhastFaktor, int ccTaminKonandeh, int currentOlaviat)
+    public ArrayList<DataTableModel> getBrandByccTaminKonandehMohasebeh(long ccDarkhastFaktor, int ccTaminKonandeh, int currentOlaviat, int noeGheymat)
     {
+        String gheymat="";
+        if (noeGheymat == 1) {
+            gheymat = "MablaghForosh";
+        } else {
+            gheymat = "GheymatMasrafKonandeh";
+        }
         ArrayList<DataTableModel> brands = new ArrayList<>();
         try
         {
@@ -1035,11 +1201,11 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
                     + " SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage,";
                     if(currentOlaviat == 0 || currentOlaviat == 1)
                     {
-                        query += " SUM(Tedad3 * MablaghForosh) AS MablaghKol ";
+                        query += " SUM(Tedad3 * " + gheymat + " ) AS MablaghKol ";
                     }
                     else
                     {
-                        query += " SUM(Tedad3 * MablaghForosh) - (select sum(MablaghTakhfif) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
+                        query += " SUM(Tedad3 * " + gheymat + " ) - (select sum(MablaghTakhfif) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
                                 + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
                     }
 
@@ -1147,8 +1313,14 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
     }
 
 
-    public ArrayList<DataTableModel> getTedadBeTafkikGorohKalaAndTakhfifHajmi(long ccDarkhastFaktor, int ccTakhfifHajmi, int currentOlaviat)
+    public ArrayList<DataTableModel> getTedadBeTafkikGorohKalaAndTakhfifHajmi(long ccDarkhastFaktor, int ccTakhfifHajmi, int currentOlaviat, int noeGheymat)
     {
+        String gheymat="";
+        if (noeGheymat == 1) {
+            gheymat = "MablaghForosh";
+        } else {
+            gheymat = "GheymatMasrafKonandeh";
+        }
         ArrayList<DataTableModel> gorohs = new ArrayList<>();
         try
         {
@@ -1156,11 +1328,11 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
                     + "       SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage, ";
             if(currentOlaviat == 0 || currentOlaviat == 1)
             {
-                query += " SUM(Tedad3 * MablaghForosh) AS MablaghKol ";
+                query += " SUM(Tedad3 * " + gheymat + " ) AS MablaghKol ";
             }
             else
             {
-                query += " SUM(Tedad3 * MablaghForosh) - (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
+                query += " SUM(Tedad3 * " + gheymat + " ) - (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
                         + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
             }
             query += " , MAX(TedadDarKarton) AS TedadDarKarton, MAX(TedadDarBasteh) AS TedadDarBasteh, SUM(Tedad3 * VaznKhales) AS Vazn"
@@ -1199,8 +1371,15 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         }
         return gorohs;
     }
-    public ArrayList<DataTableModel> getTedadBeTafkikGorohKalaMohasebehAndTakhfifHajmi(long ccDarkhastFaktor, int ccTakhfifHajmiSatr, int ccGorohMohasebeh, int currentOlaviat)
+
+    public ArrayList<DataTableModel> getTedadBeTafkikGorohKalaAndTakhfifSenfi(long ccDarkhastFaktor, int ccTakhfifSenfi, int currentOlaviat, int noeGheymat)
     {
+        String gheymat="";
+        if (noeGheymat == 1) {
+            gheymat = "MablaghForosh";
+        } else {
+            gheymat = "GheymatMasrafKonandeh";
+        }
         ArrayList<DataTableModel> gorohs = new ArrayList<>();
         try
         {
@@ -1208,11 +1387,69 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
                     + "       SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage, ";
             if(currentOlaviat == 0 || currentOlaviat == 1)
             {
-                query += " SUM(Tedad3 * MablaghForosh) AS MablaghKol ";
+                query += " SUM(Tedad3 * " + gheymat + " ) AS MablaghKol ";
             }
             else
             {
-                query += " SUM(Tedad3 * MablaghForosh) - (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
+                query += " SUM(Tedad3 * " + gheymat + " ) - (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
+                        + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
+            }
+            query += " , MAX(TedadDarKarton) AS TedadDarKarton, MAX(TedadDarBasteh) AS TedadDarBasteh, SUM(Tedad3 * VaznKhales) AS Vazn"
+                    + " , COUNT(ccDarkhastFaktorSatr) TedadAghlam "
+                    + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
+                    + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.TedadDarKarton, A.TedadDarBasteh, A.VaznKhales "
+                    + "          FROM Kala A LEFT OUTER JOIN "
+                    + "               (SELECT A.ccKalaCode, B.ccNoeField AS ccGoroh "
+                    + "                  FROM KalaGoroh A LEFT OUTER JOIN TakhfifSenfiSatr B"
+                    + "                       ON A.ccGoroh= B.ccNoeField OR A.ccGorohLink= B.ccNoeField OR A.ccRoot= B.ccNoeField "
+                    + "                  WHERE B.ccTakhfifSenfi= " + ccTakhfifSenfi
+                    + "               )G ON A.ccKalaCode= G.ccKalaCode "
+                    + "       )B ON A.ccKalaCode= B.ccKalaCode"
+                    + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " AND ccGoroh Is Not Null "
+                    + " GROUP BY B.ccGoroh";
+            Log.d("faktorSatr" , "query : " + query);
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    gorohs = new PubFunc().new DAOUtil().cursorToDataTable(context , cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "getTedadBeTafkikGorohKalaAndTakhfifSenfi" , "");
+        }
+        return gorohs;
+    }
+
+    public ArrayList<DataTableModel> getTedadBeTafkikGorohKalaMohasebehAndTakhfifHajmi(long ccDarkhastFaktor, int ccTakhfifHajmiSatr, int ccGorohMohasebeh, int currentOlaviat, int noeGheymat)
+    {
+        String gheymat="";
+        if (noeGheymat == 1) {
+            gheymat = "MablaghForosh";
+        } else {
+            gheymat = "GheymatMasrafKonandeh";
+        }
+        ArrayList<DataTableModel> gorohs = new ArrayList<>();
+        try
+        {
+            String query = "SELECT B.ccGoroh, SUM(A.Tedad3)AS Tedad, SUM(A.Tedad3/ TedadDarKarton)AS TedadBox, "
+                    + "       SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage, ";
+            if(currentOlaviat == 0 || currentOlaviat == 1)
+            {
+                query += " SUM(Tedad3 * " + gheymat + " ) AS MablaghKol ";
+            }
+            else
+            {
+                query += " SUM(Tedad3 * " + gheymat + " ) - (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
                         + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
             }
             query += " , MAX(TedadDarKarton) AS TedadDarKarton, MAX(TedadDarBasteh) AS TedadDarBasteh"
@@ -1250,14 +1487,76 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         return gorohs;
     }
 
-
-    public ArrayList<DataTableModel> getRowsBeTafkikGorohKalaAndTakhfifHajmi(long ccDarkhastFaktor, int ccTakhfifHajmi)
+    public ArrayList<DataTableModel> getTedadBeTafkikGorohKalaMohasebehAndTakhfifSenfi(long ccDarkhastFaktor, int ccTakhfifSenfiSatr, int ccGorohMohasebeh, int currentOlaviat, int noeGheymat)
     {
+        String gheymat="";
+        if (noeGheymat == 1) {
+            gheymat = "MablaghForosh";
+        } else {
+            gheymat = "GheymatMasrafKonandeh";
+        }
+        ArrayList<DataTableModel> gorohs = new ArrayList<>();
+        try
+        {
+            String query = "SELECT B.ccGoroh, SUM(A.Tedad3)AS Tedad, SUM(A.Tedad3/ TedadDarKarton)AS TedadBox, "
+                    + "       SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage, ";
+            if(currentOlaviat == 0 || currentOlaviat == 1)
+            {
+                query += " SUM(Tedad3 * " + gheymat + " ) AS MablaghKol ";
+            }
+            else
+            {
+                query += " SUM(Tedad3 *  " + gheymat + " ) - (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
+                        + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
+            }
+            query += " , MAX(TedadDarKarton) AS TedadDarKarton, MAX(TedadDarBasteh) AS TedadDarBasteh"
+                    + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
+                    + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.TedadDarKarton, A.TedadDarBasteh "
+                    + "          FROM Kala A LEFT OUTER JOIN "
+                    + "               (SELECT A.ccKalaCode, B.ccGorohMohasebeh AS ccGoroh "
+                    + "                  FROM KalaGoroh A LEFT OUTER JOIN TakhfifSenfiSatr B"
+                    + "                       ON A.ccGoroh= B.ccGorohMohasebeh OR A.ccGorohLink= B.ccGorohMohasebeh OR A.ccRoot= B.ccGorohMohasebeh "
+                    + "                  WHERE B.ccTakhfifSenfiSatr= ? AND B.ccGorohMohasebeh=? "
+                    + "               )G ON A.ccKalaCode= G.ccKalaCode "
+                    + "       )B ON A.ccKalaCode= B.ccKalaCode"
+                    + " WHERE ccDarkhastFaktor= ? AND ccGoroh Is Not Null "
+                    + " GROUP BY B.ccGoroh";
+            Log.d("faktorGorohMoh" , "query : " + query + "ccTakhfifSenfiSatr:" + ccTakhfifSenfiSatr + "ccGorohMohasebeh:" + ccGorohMohasebeh + "ccDarkhastFaktor:" + ccDarkhastFaktor);
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , new String[]{String.valueOf(ccTakhfifSenfiSatr), String.valueOf(ccGorohMohasebeh), String.valueOf(ccDarkhastFaktor)});
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    gorohs = new PubFunc().new DAOUtil().cursorToDataTable(context , cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "getTedadBeTafkikGorohKalaAndTakhfifHajmi" , "");
+        }
+        return gorohs;
+    }
+
+    public ArrayList<DataTableModel> getRowsBeTafkikGorohKalaAndTakhfifHajmi(long ccDarkhastFaktor, int ccTakhfifHajmi, int noeGheymat)
+    {
+        String gheymat="";
+        if (noeGheymat == 1) {
+            gheymat = "A.MablaghForosh";
+        } else {
+            gheymat = "A.GheymatMasrafKonandeh";
+        }
         ArrayList<DataTableModel> gorohs = new ArrayList<>();
 
         try
         {
-            String query = "SELECT A.ccDarkhastFaktorSatr, B.ccGoroh, A.MablaghForosh, A.Tedad3 "
+            String query = "SELECT A.ccDarkhastFaktorSatr, B.ccGoroh, " + gheymat + " MablaghForosh, A.Tedad3 "
                     + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
                     + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.TedadDarKarton, A.TedadDarBasteh "
                     + "          FROM Kala A LEFT OUTER JOIN "
@@ -1289,13 +1588,19 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         }
         return gorohs;
     }
-    public ArrayList<DataTableModel> getRowsBeTafkikGorohKalaMohasebehAndTakhfifHajmi(long ccDarkhastFaktor, int ccTakhfifHajmi, int currentOlaviat)
+    public ArrayList<DataTableModel> getRowsBeTafkikGorohKalaMohasebehAndTakhfifHajmi(long ccDarkhastFaktor, int ccTakhfifHajmi, int currentOlaviat, int noeGheymat)
     {
+        String gheymat="";
+        if (noeGheymat == 1) {
+            gheymat = "A.MablaghForosh";
+        } else {
+            gheymat = "A.GheymatMasrafKonandeh";
+        }
         ArrayList<DataTableModel> gorohs = new ArrayList<>();
 
         try
         {
-            String query = "SELECT A.ccDarkhastFaktorSatr, B.ccGoroh, A.MablaghForosh, A.Tedad3 ,((SELECT SUM(MablaghTakhfif) from DarkhastFaktorSatrTakhfif WHERE ccDarkhastFaktorSatr=A.ccDarkhastFaktorSatr AND ExtraProp_Olaviat < "+currentOlaviat+"))"
+            String query = "SELECT A.ccDarkhastFaktorSatr, B.ccGoroh, " + gheymat + " MablaghForosh, A.Tedad3 ,((SELECT SUM(MablaghTakhfif) from DarkhastFaktorSatrTakhfif WHERE ccDarkhastFaktorSatr=A.ccDarkhastFaktorSatr AND ExtraProp_Olaviat < "+currentOlaviat+"))"
                     + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
                     + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.TedadDarKarton, A.TedadDarBasteh "
                     + "          FROM Kala A LEFT OUTER JOIN "
@@ -1331,14 +1636,68 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         return gorohs;
     }
 
-    public ArrayList<DataTableModel> getTedadBeTafkikGorohKalaAndTakhfifSenfi(long ccDarkhastFaktor, int ccTakhfifSenfi)
+    public ArrayList<DataTableModel> getRowsBeTafkikGorohKalaMohasebehAndTakhfifSenfi(long ccDarkhastFaktor, int ccTakhfifSenfi, int currentOlaviat, int noeGheymat)
     {
+        String gheymat="";
+        if (noeGheymat == 1) {
+            gheymat = "A.MablaghForosh";
+        } else {
+            gheymat = "A.GheymatMasrafKonandeh";
+        }
+        ArrayList<DataTableModel> gorohs = new ArrayList<>();
+
+        try
+        {
+            String query = "SELECT A.ccDarkhastFaktorSatr, B.ccGoroh, " + gheymat + " MablaghForosh, A.Tedad3 ,((SELECT SUM(MablaghTakhfif) from DarkhastFaktorSatrTakhfif WHERE ccDarkhastFaktorSatr=A.ccDarkhastFaktorSatr AND ExtraProp_Olaviat < "+currentOlaviat+"))"
+                    + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
+                    + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.TedadDarKarton, A.TedadDarBasteh "
+                    + "          FROM Kala A LEFT OUTER JOIN "
+                    + "               (SELECT A.ccKalaCode, B.ccGorohMohasebeh AS ccGoroh "
+                    + "                  FROM KalaGoroh A LEFT OUTER JOIN TakhfifSenfiSatr B "
+                    + "                       ON A.ccGoroh= B.ccGorohMohasebeh OR A.ccGorohLink= B.ccGorohMohasebeh OR A.ccRoot= B.ccGorohMohasebeh "
+                    + "                 WHERE B.ccTakhfifSenfi= ? "
+                    + "               )G ON A.ccKalaCode= G.ccKalaCode "
+                    + "       )B ON A.ccKalaCode= B.ccKalaCode "
+                    + " WHERE ccDarkhastFaktor= ? AND  B.ccGoroh IS NOT NULL "
+                    + " ORDER BY B.ccGoroh ASC,A.MablaghForosh DESC, A.Tedad3 DESC";
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Log.d("faktorsatrGorohMoh" , "query : " + query);
+            Cursor cursor = db.rawQuery(query , new String[]{String.valueOf(ccTakhfifSenfi), String.valueOf(ccDarkhastFaktor)});
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    gorohs = new PubFunc().new DAOUtil().cursorToDataTable(context , cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "getRowsBeTafkikGorohKalaAndTakhfifSenfi" , "");
+        }
+        return gorohs;
+    }
+
+    public ArrayList<DataTableModel> getTedadBeTafkikGorohKalaAndTakhfifSenfi(long ccDarkhastFaktor, int ccTakhfifSenfi, int noeGheymat)
+    {
+        String gheymat="";
+        if (noeGheymat == 1) {
+            gheymat = "A.MablaghForosh";
+        } else {
+            gheymat = "A.GheymatMasrafKonandeh";
+        }
         ArrayList<DataTableModel> gorohs = new ArrayList<>();
 
         try
         {
             String query = "SELECT B.ccGoroh, SUM(A.Tedad3)AS Tedad, SUM(A.Tedad3/ TedadDarKarton)AS TedadBox, "
-                    + "       SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage, SUM(Tedad3 * MablaghForosh) AS MablaghKol "
+                    + "       SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage, "
+                    + " SUM(Tedad3 * " + gheymat + " ) AS MablaghKol "
                     + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
                     + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.TedadDarKarton, A.TedadDarBasteh "
                     + "          FROM Kala A LEFT OUTER JOIN "
@@ -1463,12 +1822,18 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         return sumMablagh;
     }
 
-    public ArrayList<DataTableModel> getRowsBeTafkikGorohKalaAndTakhfifSenfi(long ccDarkhastFaktor, int ccTakhfifSenfi)
+    public ArrayList<DataTableModel> getRowsBeTafkikGorohKalaAndTakhfifSenfi(long ccDarkhastFaktor, int ccTakhfifSenfi, int noeGheymat)
     {
+        String gheymat="";
+        if (noeGheymat == 1) {
+            gheymat = "MablaghForosh";
+        } else {
+            gheymat = "GheymatMasrafKonandeh";
+        }
         ArrayList<DataTableModel> gorohs = new ArrayList<>();
         try
         {
-            String query = "SELECT A.ccDarkhastFaktorSatr, B.ccGoroh, A.MablaghForosh, A.Tedad3 "
+            String query = "SELECT A.ccDarkhastFaktorSatr, B.ccGoroh, " + gheymat + " MablaghForosh, A.Tedad3 "
                     + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
                     + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.TedadDarKarton, A.TedadDarBasteh "
                     + "          FROM Kala A LEFT OUTER JOIN "
@@ -1742,8 +2107,9 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         }
     }
 
-    public boolean delete(long ccDarkhastFaktor , int ccTaminKonandeh , int ccKala , int ccKalaCode , String shomareBach, long mablaghForosh)
+    public boolean delete(long ccDarkhastFaktor , int ccTaminKonandeh , int ccKala , int ccKalaCode , String shomareBach, float gheymatForoshAsli, float gheymatMasrafKonandehAsli)
     {
+
         try
         {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -1752,7 +2118,9 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
                     " and " + DarkhastFaktorSatrModel.COLUMN_ccKala() + " = " + ccKala +
                     " and " + DarkhastFaktorSatrModel.COLUMN_ccKalaCode() + " = " + ccKalaCode +
                     " and " + DarkhastFaktorSatrModel.COLUMN_ShomarehBach() + " = '" + shomareBach + "'" +
-                    " and " + DarkhastFaktorSatrModel.COLUMN_MablaghForosh() + " = '" + mablaghForosh + "'", null);
+                    " and " + DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli() + " = '" + gheymatMasrafKonandehAsli + "'" +
+                    " and " + DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli() + " = '" + gheymatForoshAsli + "'"
+                    , null);
             db.close();
             return true;
         }
@@ -1865,28 +2233,28 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         {
             contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktorSatr() , darkhastFaktorSatrModel.getCcDarkhastFaktorSatr());
         }
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktor() , darkhastFaktorSatrModel.getCcDarkhastFaktor());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccTaminKonandeh() , darkhastFaktorSatrModel.getCcTaminKonandeh());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccKala() , darkhastFaktorSatrModel.getCcKala());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccKalaCode() , darkhastFaktorSatrModel.getCcKalaCode());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_Tedad3() , darkhastFaktorSatrModel.getTedad3());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_CodeNoeKala() , darkhastFaktorSatrModel.getCodeNoeKala());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ShomarehBach() , darkhastFaktorSatrModel.getShomarehBach());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_TarikhTolid() , darkhastFaktorSatrModel.getTarikhTolid());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_MablaghForosh() , darkhastFaktorSatrModel.getMablaghForosh());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_MablaghForoshKhalesKala() , darkhastFaktorSatrModel.getMablaghForoshKhalesKala());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_MablaghTakhfifNaghdiVahed() , darkhastFaktorSatrModel.getMablaghTakhfifNaghdiVahed());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_Maliat() , darkhastFaktorSatrModel.getMaliat());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_Avarez() , darkhastFaktorSatrModel.getAvarez());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccAfrad() , darkhastFaktorSatrModel.getCcAfrad());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ExtraProp_IsOld() , darkhastFaktorSatrModel.getExtraProp_IsOld());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_TarikhEngheza() , darkhastFaktorSatrModel.getTarikhEngheza());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccAnbarMarjoee() , darkhastFaktorSatrModel.getCcAnbarMarjoee());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccAnbarGhesmat() , darkhastFaktorSatrModel.getCcAnbarGhesmat());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_MablaghKharid() , darkhastFaktorSatrModel.getMablaghKharid());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandeh() , darkhastFaktorSatrModel.getGheymatMasrafKonandeh());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli() , darkhastFaktorSatrModel.getGheymatForoshAsli());
-
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktor(), darkhastFaktorSatrModel.getCcDarkhastFaktor());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccTaminKonandeh(), darkhastFaktorSatrModel.getCcTaminKonandeh());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccKala(), darkhastFaktorSatrModel.getCcKala());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccKalaCode(), darkhastFaktorSatrModel.getCcKalaCode());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_Tedad3(), darkhastFaktorSatrModel.getTedad3());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_CodeNoeKala(), darkhastFaktorSatrModel.getCodeNoeKala());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ShomarehBach(), darkhastFaktorSatrModel.getShomarehBach());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_TarikhTolid(), darkhastFaktorSatrModel.getTarikhTolid());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_MablaghForosh(), darkhastFaktorSatrModel.getMablaghForosh());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_MablaghForoshKhalesKala(), darkhastFaktorSatrModel.getMablaghForoshKhalesKala());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_MablaghTakhfifNaghdiVahed(), darkhastFaktorSatrModel.getMablaghTakhfifNaghdiVahed());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_Maliat(), darkhastFaktorSatrModel.getMaliat());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_Avarez(), darkhastFaktorSatrModel.getAvarez());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccAfrad(), darkhastFaktorSatrModel.getCcAfrad());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ExtraProp_IsOld(), darkhastFaktorSatrModel.getExtraProp_IsOld());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_TarikhEngheza(), darkhastFaktorSatrModel.getTarikhEngheza());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccAnbarMarjoee(), darkhastFaktorSatrModel.getCcAnbarMarjoee());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccAnbarGhesmat(), darkhastFaktorSatrModel.getCcAnbarGhesmat());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_MablaghKharid(), darkhastFaktorSatrModel.getMablaghKharid());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandeh(), darkhastFaktorSatrModel.getGheymatMasrafKonandeh());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli(), darkhastFaktorSatrModel.getGheymatForoshAsli());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli(), darkhastFaktorSatrModel.getGheymatMasrafKonandehAsli());
         return contentValues;
     }
 
@@ -1922,7 +2290,7 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
             darkhastFaktorSatrModel.setMablaghKharid(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_MablaghKharid())));
             darkhastFaktorSatrModel.setGheymatMasrafKonandeh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandeh())));
             darkhastFaktorSatrModel.setGheymatForoshAsli(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli())));
-
+            darkhastFaktorSatrModel.setGheymatMasrafKonandehAsli(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli())));
             darkhastFaktorSatrModels.add(darkhastFaktorSatrModel);
             cursor.moveToNext();
         }

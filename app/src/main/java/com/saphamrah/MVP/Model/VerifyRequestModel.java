@@ -1,10 +1,8 @@
 package com.saphamrah.MVP.Model;
 
 
-import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
 
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.VerifyRequestMVP;
@@ -34,12 +32,9 @@ import com.saphamrah.DAO.ModatVosolDAO;
 import com.saphamrah.DAO.MoshtaryAddressDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.DAO.MoshtaryEtebarSazmanForoshDAO;
-import com.saphamrah.DAO.MoshtaryMorajehShodehRoozDAO;
-import com.saphamrah.DAO.MoshtaryRotbehDAO;
 import com.saphamrah.DAO.NoeVosolMoshtaryDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.DAO.RptKalaInfoDAO;
-import com.saphamrah.DAO.RptMandehdarDAO;
 import com.saphamrah.DAO.TaghvimTatilDAO;
 import com.saphamrah.DAO.TakhfifHajmiDAO;
 import com.saphamrah.DAO.TakhfifHajmiSatrDAO;
@@ -64,12 +59,10 @@ import com.saphamrah.Model.JayezehSatrModel;
 import com.saphamrah.Model.KalaGorohModel;
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.KalaMojodiModel;
-import com.saphamrah.Model.MarkazShahrMarkaziModel;
 import com.saphamrah.Model.ModatVosolModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.Model.MoshtaryEtebarSazmanForoshModel;
 import com.saphamrah.Model.MoshtaryModel;
-import com.saphamrah.Model.MoshtaryMorajehShodehRoozModel;
 import com.saphamrah.Model.NoeVosolMoshtaryModel;
 import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.RptKalaInfoModel;
@@ -79,11 +72,16 @@ import com.saphamrah.Model.TakhfifHajmiTitrSatrModel;
 import com.saphamrah.Model.TakhfifNaghdyModel;
 import com.saphamrah.Model.TakhfifSenfiModel;
 import com.saphamrah.Model.TakhfifSenfiSatrModel;
-import com.saphamrah.PubFunc.Discounts.CalculateHajmiDiscountBrand;
-import com.saphamrah.PubFunc.Discounts.CalculateHajmiDiscountGorohKala;
-import com.saphamrah.PubFunc.Discounts.CalculateHajmiDiscountKala;
-import com.saphamrah.PubFunc.Discounts.CalculateHajmiDiscountTaminKonandeh;
+import com.saphamrah.Model.TakhfifSenfiTitrSatrModel;
+import com.saphamrah.PubFunc.Discounts.TakhfifHajmi.CalculateHajmiDiscountBrand;
+import com.saphamrah.PubFunc.Discounts.TakhfifHajmi.CalculateHajmiDiscountGorohKala;
+import com.saphamrah.PubFunc.Discounts.TakhfifHajmi.CalculateHajmiDiscountKala;
 import com.saphamrah.PubFunc.Discounts.DiscountCalculation;
+import com.saphamrah.PubFunc.Discounts.TakhfifHajmi.CalculateHajmiDiscountTaminKonandeh;
+import com.saphamrah.PubFunc.Discounts.TakhfifSenfi.CalculateSenfiDiscountBrand;
+import com.saphamrah.PubFunc.Discounts.TakhfifSenfi.CalculateSenfiDiscountGorohKala;
+import com.saphamrah.PubFunc.Discounts.TakhfifSenfi.CalculateSenfiDiscountKala;
+import com.saphamrah.PubFunc.Discounts.TakhfifSenfi.CalculateSenfiDiscountTaminKonandeh;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -1658,7 +1656,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                     if (Integer.parseInt(ccChilParameter) == Constants.CC_CHILD_CODE_TAKHFIF_SENFI())
                     {
                         Log.d("takhfif" , "takhfif Senfi");
-                        mohasebeTakhfifSenfiFaktor(darkhastFaktorModel, parameterChildModels,valueNoeVosol);
+                        mohasebeTakhfifSenfi(darkhastFaktorModel, parameterChildModels);
                     }
                     else if (Integer.parseInt(ccChilParameter) == Constants.CC_CHILD_CODE_TAKHFIF_NAGHDI())
                     {
@@ -1711,279 +1709,279 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
 
         ///////////////////////// Takhfif Senfi /////////////////////////
-        private boolean mohasebeTakhfifSenfiFaktor(DarkhastFaktorModel darkhastFaktor, ArrayList<ParameterChildModel> parameterChildModels,int valueNoeVosol) {
-            try {
-                DiscountCalculation discountCalculation = new DiscountCalculation(parameterChildModels);
-                TakhfifSenfiDAO takhfifSenfiDAO = new TakhfifSenfiDAO(mPresenter.getAppContext());
-                DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
-                TakhfifSenfiSatrDAO takhfifSenfiSatrDAO = new TakhfifSenfiSatrDAO(mPresenter.getAppContext());
-                MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
-
-                ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrs = darkhastFaktorSatrDAO.getByccDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor());
-                MoshtaryModel moshtary = moshtaryDAO.getByccMoshtary(darkhastFaktor.getCcMoshtary());
-
-
-
-                ArrayList<TakhfifSenfiModel> takhfifSenfis = takhfifSenfiDAO.getByMoshtary(moshtary , valueNoeVosol);
-
-                if (darkhastFaktorSatrs.size() == 0 || takhfifSenfis.size() == 0) {
-                    return true;
-                }
-
-                KalaDAO kalaDAO = new KalaDAO(mPresenter.getAppContext());
-                //********************************************** Kala.. **********************************************
-                for (DarkhastFaktorSatrModel darkhastFaktorSatr : darkhastFaktorSatrs) {
-                    KalaModel kala = kalaDAO.getByccKalaCode(darkhastFaktorSatr.getCcKalaCode());
-                    for (TakhfifSenfiModel takhfifSenfi : takhfifSenfis) {
-                        //Satrhaye Takhfif...
-                        ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs =
-                                takhfifSenfiSatrDAO.getForFaktor(takhfifSenfi.getCcTakhfifSenfi(),
-                                        new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial()},
-                                        new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()},
-                                        DiscountCalculation.NAME_NOE_FIELD_KALA, darkhastFaktorSatr.getCcKalaCode(),
-                                        darkhastFaktorSatr.getTedad3(), darkhastFaktorSatr.getTedad3() / kala.getTedadDarBasteh(),
-                                        darkhastFaktorSatr.getTedad3() / kala.getTedadDarKarton(),
-                                        darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh(), takhfifSenfi.getNoeTedadRial());
-
-                        for (TakhfifSenfiSatrModel takhfifSenfiSatr : takhfifSenfiSatrs) {
-                            int zarib = 0;
-                            if (takhfifSenfiSatr.getBeEza() == 0)
-                                zarib = 1;
-                            else {
-                                //Tedad..
-                                if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialTedad()) {
-                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiAdad())
-                                        zarib = (int) (darkhastFaktorSatr.getTedad3() / takhfifSenfiSatr.getBeEza());
-                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiBaste())
-                                        zarib = (int) ((darkhastFaktorSatr.getTedad3() / kala.getTedadDarBasteh()) / takhfifSenfiSatr.getBeEza());
-                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiCarton())
-                                        zarib = (int) ((darkhastFaktorSatr.getTedad3() / kala.getTedadDarKarton()) / takhfifSenfiSatr.getBeEza());
-                                }//if
-                                //Rial..
-                                else if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialRial())
-                                    zarib = (int) (darkhastFaktor.getMablaghKolFaktor() / takhfifSenfiSatr.getBeEza());
-                            }//else
-
-                            double mablaghTakhfif = (darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh()) * (zarib * takhfifSenfiSatr.getDarsadTakhfif() / 100);
-                            //Insert In DarkhastFaktorTakhfif & DarkhastFaktorSatrTakhfif..
-                            if (mablaghTakhfif > 0) {
-                                insertFaktorTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfif);
-                                insertFaktorSatrTakhfifSenfi(darkhastFaktorSatr.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfif);
-                                //بروز رسانی مبلغ تخفیف تیتر
-                                //updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor() , takhfifSenfi.getCcTakhfifSenfi());
-                            }
-                        }//for
-                    }//for
-                }//for
-
-                //********************************************** Brand.. **********************************************
-                int ccBrand;
-                double sumTedadBrand; // Sum Tedad3 Darkhast Bar Hasbe Brand..
-                double sumTedadBastehBrand;
-                double sumTedadKartonBrand;
-                double sumMablaghKolBrand; // Sum MablaghKol Darkhast Bar Hasbe Brand..
-
-                ArrayList<DataTableModel> brands = darkhastFaktorSatrDAO.getTedadBeTafkikBrand(darkhastFaktor.getCcDarkhastFaktor(), -1);
-                for (DataTableModel brand : brands) {
-                    ccBrand = Integer.valueOf(brand.getFiled1());
-                    sumTedadBrand = Double.parseDouble(brand.getFiled2());
-                    sumTedadBastehBrand = Double.parseDouble(brand.getFiled3());
-                    sumTedadKartonBrand = Double.parseDouble(brand.getFiled4());
-                    sumMablaghKolBrand = Double.parseDouble(brand.getFiled5());
-
-                    for (TakhfifSenfiModel takhfifSenfi : takhfifSenfis) {
-                        //Satrhaye Takhfif...
-                        ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs = takhfifSenfiSatrDAO.getForFaktor(takhfifSenfi.getCcTakhfifSenfi(),
-                                new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial()},
-                                new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()},
-                                DiscountCalculation.NAME_NOE_FIELD_BRAND, ccBrand,
-                                sumTedadBrand, sumTedadBastehBrand, sumTedadKartonBrand, sumMablaghKolBrand, takhfifSenfi.getNoeTedadRial());
-
-                        for (TakhfifSenfiSatrModel takhfifSenfiSatr : takhfifSenfiSatrs) {
-                            int zarib = 0;
-                            if (takhfifSenfiSatr.getBeEza() == 0)
-                                zarib = 1;
-                            else
-                                //Tedad..
-                                if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialTedad()) {
-                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiAdad())
-                                        zarib = (int) (sumTedadBrand / takhfifSenfiSatr.getBeEza());
-                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiBaste())
-                                        zarib = (int) (sumTedadBastehBrand / takhfifSenfiSatr.getBeEza());
-                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiCarton())
-                                        zarib = (int) (sumTedadKartonBrand / takhfifSenfiSatr.getBeEza());
-                                }//if
-                                //Rial..
-                                else if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialRial())
-                                    zarib = (int) (sumMablaghKolBrand / takhfifSenfiSatr.getBeEza());
-
-                            double mablaghTakhfif = sumMablaghKolBrand * (zarib * takhfifSenfiSatr.getDarsadTakhfif() / 100);
-                            //Insert In DarkhastFaktorTakhfif & DarkhastFaktorSatrTakhfif..
-                            long sumMablaghTakhfifSatr = 0;
-                            String allMablaghTakhfifSatr = "-1";
-                            if (mablaghTakhfif > 0) {
-                                insertFaktorTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfif);
-
-                                for (DarkhastFaktorSatrModel darkhastFaktorSatr : darkhastFaktorSatrs) {
-                                    KalaModel kala = kalaDAO.getByccKalaCode(darkhastFaktorSatr.getCcKalaCode());
-                                    if (kala.getCcBrand() == ccBrand) {
-                                        double mablaghTakhfifSatr = (darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh()) * (takhfifSenfiSatr.getDarsadTakhfif() / 100);
-                                        sumMablaghTakhfifSatr += Math.round(mablaghTakhfifSatr);
-                                        allMablaghTakhfifSatr += "," + allMablaghTakhfifSatr;
-                                        insertFaktorSatrTakhfifSenfi(darkhastFaktorSatr.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfifSatr);
-                                    }//if
-                                }//for
-                                //بروز رسانی مبلغ تخفیف تیتر
-                                updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), Math.round(mablaghTakhfif), sumMablaghTakhfifSatr, allMablaghTakhfifSatr);
-                            }//if
-                        }//for
-                    }//for
-                }//for
-
-                //********************************************** TaminKonandeh **********************************************
-                int ccTaminKonandeh;
-                double sumTedadTaminKonandeh; // Sum Tedad3 Darkhast Bar Hasbe TaminKonandeh..
-                double sumTedadBastehTaminKonandeh;
-                double sumTedadKartonTaminKonandeh;
-                double sumMablaghKolTaminKonandeh; // Sum MablaghKol Darkhast Bar Hasbe TaminKonandeh..
-
-                ArrayList<DataTableModel> taminKonandehs = darkhastFaktorSatrDAO.getTedadBeTafkikTaminKonandeh(darkhastFaktor.getCcDarkhastFaktor(),-1);
-                for (DataTableModel taminKonandeh : taminKonandehs) {
-                    ccTaminKonandeh = Integer.parseInt(taminKonandeh.getFiled1());
-                    sumTedadTaminKonandeh = Double.parseDouble(taminKonandeh.getFiled2());
-                    sumTedadBastehTaminKonandeh = Double.parseDouble(taminKonandeh.getFiled3());
-                    sumTedadKartonTaminKonandeh = Double.parseDouble(taminKonandeh.getFiled4());
-                    sumMablaghKolTaminKonandeh = Double.parseDouble(taminKonandeh.getFiled5());
-
-                    for (TakhfifSenfiModel takhfifSenfi : takhfifSenfis) {
-                        //Satrhaye Takhfif..
-                        ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs = takhfifSenfiSatrDAO.getForFaktor(takhfifSenfi.getCcTakhfifSenfi(), new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial()},
-                                new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()}, DiscountCalculation.NAME_NOE_FIELD_TAMIN_KONANDE, ccTaminKonandeh,
-                                sumTedadTaminKonandeh, sumTedadBastehTaminKonandeh, sumTedadKartonTaminKonandeh,
-                                sumMablaghKolTaminKonandeh, takhfifSenfi.getNoeTedadRial());
-
-                        for (TakhfifSenfiSatrModel takhfifSenfiSatr : takhfifSenfiSatrs) {
-                            int zarib = 0;
-                            if (takhfifSenfiSatr.getBeEza() == 0)
-                                zarib = 1;
-                            else
-                                //Tedad..
-                                if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialTedad()) {
-                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiAdad())
-                                        zarib = (int) (sumTedadTaminKonandeh / takhfifSenfiSatr.getBeEza());
-                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiBaste())
-                                        zarib = (int) (sumTedadBastehTaminKonandeh / takhfifSenfiSatr.getBeEza());
-                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiCarton())
-                                        zarib = (int) (sumTedadKartonTaminKonandeh / takhfifSenfiSatr.getBeEza());
-                                }//if
-                                //Rial..
-                                else if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialRial())
-                                    zarib = (int) (sumMablaghKolTaminKonandeh / takhfifSenfiSatr.getBeEza());
-
-                            double mablaghTakhfif = sumMablaghKolTaminKonandeh * (zarib * takhfifSenfiSatr.getDarsadTakhfif() / 100);
-
-                            //Insert In DarkhastFaktorTakhfif & DarkhastFaktorSatrTakhfif..
-                            if (mablaghTakhfif > 0) {
-                                insertFaktorTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfif);
-                                long sumMablaghTakhfifSatr = 0;
-                                String allMablaghTakhfifSatr = "-1";
-                                for (DarkhastFaktorSatrModel darkhastFaktorSatr : darkhastFaktorSatrs) {
-                                    KalaModel kala = kalaDAO.getByccKalaCode(darkhastFaktorSatr.getCcKalaCode());
-                                    if (kala.getCcTaminKonandeh() == ccTaminKonandeh) {
-                                        double mablaghTakhfifSatr = (darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh()) * (takhfifSenfiSatr.getDarsadTakhfif() / 100);
-                                        sumMablaghTakhfifSatr += Math.round(mablaghTakhfifSatr);
-                                        allMablaghTakhfifSatr += "," + Math.round(mablaghTakhfifSatr);
-                                        insertFaktorSatrTakhfifSenfi(darkhastFaktorSatr.getCcDarkhastFaktorSatr(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfifSatr);
-                                    }//if
-                                }//for
-                                //بروز رسانی مبلغ تخفیف تیتر
-                                //updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor() , takhfifSenfi.getCcTakhfifSenfi());
-                                updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), Math.round(mablaghTakhfif), sumMablaghTakhfifSatr, allMablaghTakhfifSatr);
-                            }//if
-                        }//for
-                    }//for
-                }//for
-
-                //********************************************** GorohKala.. **********************************************
-                double sumTedadGorohKala; // Sum Tedad Darkhast Bar Hasbe GorohKala..
-                double sumTedadBastehGorohKala;
-                double sumTedadKartonGorohKala;
-                double sumMablaghKolGorohKala; // Sum Tedad Darkhast Bar Hasbe GorohKala..
-
-                for (TakhfifSenfiModel takhfifSenfi : takhfifSenfis) {
-                    sumTedadGorohKala = 0;
-                    sumTedadBastehGorohKala = 0;
-                    sumTedadKartonGorohKala = 0;
-                    sumMablaghKolGorohKala = 0.0;
-
-                    ArrayList<DataTableModel> gorohKalas = darkhastFaktorSatrDAO.getTedadBeTafkikGorohKalaAndTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi());
-                    ArrayList<DataTableModel> rowGorohKalas = darkhastFaktorSatrDAO.getRowsBeTafkikGorohKalaAndTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi());
-
-                    for (DataTableModel gorohKala : gorohKalas) {
-                        sumTedadGorohKala = Double.parseDouble(gorohKala.getFiled2());
-                        sumTedadBastehGorohKala = Double.parseDouble(gorohKala.getFiled3());
-                        sumTedadKartonGorohKala = Double.parseDouble(gorohKala.getFiled4());
-                        sumMablaghKolGorohKala = Double.parseDouble(gorohKala.getFiled5());
-
-                        //Satrhaye Takhfif..
-                        ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs = takhfifSenfiSatrDAO.getForFaktor(takhfifSenfi.getCcTakhfifSenfi(), new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial()},
-                                new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()}, DiscountCalculation.NAME_NOE_FIELD_GOROH_KALA, Integer.valueOf(gorohKala.getFiled1()),
-                                sumTedadGorohKala, sumTedadBastehGorohKala, sumTedadKartonGorohKala, sumMablaghKolGorohKala, takhfifSenfi.getNoeTedadRial());
-
-                        for (TakhfifSenfiSatrModel takhfifSenfiSatr : takhfifSenfiSatrs) {
-                            int zarib = 0;
-                            if (takhfifSenfiSatr.getBeEza() == 0)
-                                zarib = 1;
-                            else
-                                //Tedad..
-                                if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialTedad()) {
-                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiAdad())
-                                        zarib = (int) (sumTedadGorohKala / takhfifSenfiSatr.getBeEza());
-                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiBaste())
-                                        zarib = (int) (sumTedadBastehGorohKala / takhfifSenfiSatr.getBeEza());
-                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiCarton())
-                                        zarib = (int) (sumTedadKartonGorohKala / takhfifSenfiSatr.getBeEza());
-                                }//if
-                                //Rial..
-                                else if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialRial())
-                                    zarib = (int) (sumMablaghKolGorohKala / takhfifSenfiSatr.getBeEza());
-
-                            double mablaghTakhfif = sumMablaghKolGorohKala * (zarib * takhfifSenfiSatr.getDarsadTakhfif() / 100);
-                            //Insert In DarkhastFaktorTakhfif & DarkhastFaktorSatrTakhfif..
-                            if (mablaghTakhfif > 0) {
-                                long sumMablaghTakhfifSatr = 0;
-                                String allMablaghTakhfifSatr = "-1";
-                                insertFaktorTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfif);
-                                for (DataTableModel row : rowGorohKalas) {
-                                /*sumMablaghTakhfifSatr = 0;
-                                allMablaghTakhfifSatr = "-1";*/
-                                    if (row.getFiled2().equals(gorohKala.getFiled1())) {
-                                        double mablaghTakhfifSatr = (Double.valueOf(row.getFiled3()) * Double.valueOf(row.getFiled4().toString())) * (takhfifSenfiSatr.getDarsadTakhfif() / 100);
-                                        sumMablaghTakhfifSatr += Math.round(mablaghTakhfifSatr);
-                                        allMablaghTakhfifSatr += "," + Math.round(mablaghTakhfifSatr);
-                                        insertFaktorSatrTakhfifSenfi(Long.valueOf(row.getFiled1()), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfifSatr);
-                                    }//if
-                                }//for
-                                updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), Math.round(mablaghTakhfif), sumMablaghTakhfifSatr, allMablaghTakhfifSatr);
-                                //بروز رسانی مبلغ تخفیف تیتر
-                                //updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor() , takhfifSenfi.getCcTakhfifSenfi());
-                            }//if
-                        }//for
-                    }//for
-                }//for
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "VerifyRequestModel", "", "mohasebeTakhfifSenfiFaktor", "");
-                //mPresenter.onErrorCalculateDiscount(R.string.errorOperation);
-                //onCalculateDiscountResponse.onFailedCalculate(R.string.errorCalculateDiscount);
-                //onProgressUpdate(-1);
-                resultOfProccess = -1;
-                Log.d("VerifyRequestModel", "mohasebeTakhfifSenfiFaktor");
-                mPresenter.onErrorCalculateDiscount(R.string.errorCalculateDiscount);
-                return false;
-            }
-            return true;
-        }
+//        private boolean mohasebeTakhfifSenfiFaktor(DarkhastFaktorModel darkhastFaktor, ArrayList<ParameterChildModel> parameterChildModels,int valueNoeVosol) {
+//            try {
+//                DiscountCalculation discountCalculation = new DiscountCalculation(parameterChildModels);
+//                TakhfifSenfiDAO takhfifSenfiDAO = new TakhfifSenfiDAO(mPresenter.getAppContext());
+//                DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
+//                TakhfifSenfiSatrDAO takhfifSenfiSatrDAO = new TakhfifSenfiSatrDAO(mPresenter.getAppContext());
+//                MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
+//
+//                ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrs = darkhastFaktorSatrDAO.getByccDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor());
+//                MoshtaryModel moshtary = moshtaryDAO.getByccMoshtary(darkhastFaktor.getCcMoshtary());
+//
+//
+//
+//                ArrayList<TakhfifSenfiModel> takhfifSenfis = takhfifSenfiDAO.getByMoshtary(moshtary , valueNoeVosol);
+//
+//                if (darkhastFaktorSatrs.size() == 0 || takhfifSenfis.size() == 0) {
+//                    return true;
+//                }
+//
+//                KalaDAO kalaDAO = new KalaDAO(mPresenter.getAppContext());
+//                //********************************************** Kala.. **********************************************
+//                for (DarkhastFaktorSatrModel darkhastFaktorSatr : darkhastFaktorSatrs) {
+//                    KalaModel kala = kalaDAO.getByccKalaCode(darkhastFaktorSatr.getCcKalaCode());
+//                    for (TakhfifSenfiModel takhfifSenfi : takhfifSenfis) {
+//                        //Satrhaye Takhfif...
+//                        ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs =
+//                                takhfifSenfiSatrDAO.getForFaktor(takhfifSenfi.getCcTakhfifSenfi(),
+//                                        new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial()},
+//                                        new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()},
+//                                        DiscountCalculation.NAME_NOE_FIELD_KALA, darkhastFaktorSatr.getCcKalaCode(),
+//                                        darkhastFaktorSatr.getTedad3(), darkhastFaktorSatr.getTedad3() / kala.getTedadDarBasteh(),
+//                                        darkhastFaktorSatr.getTedad3() / kala.getTedadDarKarton(),
+//                                        darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh(), takhfifSenfi.getNoeTedadRial(),0);
+//
+//                        for (TakhfifSenfiSatrModel takhfifSenfiSatr : takhfifSenfiSatrs) {
+//                            int zarib = 0;
+//                            if (takhfifSenfiSatr.getBeEza() == 0)
+//                                zarib = 1;
+//                            else {
+//                                //Tedad..
+//                                if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialTedad()) {
+//                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiAdad())
+//                                        zarib = (int) (darkhastFaktorSatr.getTedad3() / takhfifSenfiSatr.getBeEza());
+//                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiBaste())
+//                                        zarib = (int) ((darkhastFaktorSatr.getTedad3() / kala.getTedadDarBasteh()) / takhfifSenfiSatr.getBeEza());
+//                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiCarton())
+//                                        zarib = (int) ((darkhastFaktorSatr.getTedad3() / kala.getTedadDarKarton()) / takhfifSenfiSatr.getBeEza());
+//                                }//if
+//                                //Rial..
+//                                else if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialRial())
+//                                    zarib = (int) (darkhastFaktor.getMablaghKolFaktor() / takhfifSenfiSatr.getBeEza());
+//                            }//else
+//
+//                            double mablaghTakhfif = (darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh()) * (zarib * takhfifSenfiSatr.getDarsadTakhfif() / 100);
+//                            //Insert In DarkhastFaktorTakhfif & DarkhastFaktorSatrTakhfif..
+//                            if (mablaghTakhfif > 0) {
+//                                insertFaktorTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfif);
+//                                insertFaktorSatrTakhfifSenfi(darkhastFaktorSatr.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfif);
+//                                //بروز رسانی مبلغ تخفیف تیتر
+//                                //updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor() , takhfifSenfi.getCcTakhfifSenfi());
+//                            }
+//                        }//for
+//                    }//for
+//                }//for
+//
+//                //********************************************** Brand.. **********************************************
+//                int ccBrand;
+//                double sumTedadBrand; // Sum Tedad3 Darkhast Bar Hasbe Brand..
+//                double sumTedadBastehBrand;
+//                double sumTedadKartonBrand;
+//                double sumMablaghKolBrand; // Sum MablaghKol Darkhast Bar Hasbe Brand..
+//
+//                ArrayList<DataTableModel> brands = darkhastFaktorSatrDAO.getTedadBeTafkikBrand(darkhastFaktor.getCcDarkhastFaktor(), -1, 1);
+//                for (DataTableModel brand : brands) {
+//                    ccBrand = Integer.valueOf(brand.getFiled1());
+//                    sumTedadBrand = Double.parseDouble(brand.getFiled2());
+//                    sumTedadBastehBrand = Double.parseDouble(brand.getFiled3());
+//                    sumTedadKartonBrand = Double.parseDouble(brand.getFiled4());
+//                    sumMablaghKolBrand = Double.parseDouble(brand.getFiled5());
+//
+//                    for (TakhfifSenfiModel takhfifSenfi : takhfifSenfis) {
+//                        //Satrhaye Takhfif...
+//                        ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs = takhfifSenfiSatrDAO.getForFaktor(takhfifSenfi.getCcTakhfifSenfi(),
+//                                new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial()},
+//                                new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()},
+//                                DiscountCalculation.NAME_NOE_FIELD_BRAND, ccBrand,
+//                                sumTedadBrand, sumTedadBastehBrand, sumTedadKartonBrand, sumMablaghKolBrand, takhfifSenfi.getNoeTedadRial(),0);
+//
+//                        for (TakhfifSenfiSatrModel takhfifSenfiSatr : takhfifSenfiSatrs) {
+//                            int zarib = 0;
+//                            if (takhfifSenfiSatr.getBeEza() == 0)
+//                                zarib = 1;
+//                            else
+//                                //Tedad..
+//                                if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialTedad()) {
+//                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiAdad())
+//                                        zarib = (int) (sumTedadBrand / takhfifSenfiSatr.getBeEza());
+//                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiBaste())
+//                                        zarib = (int) (sumTedadBastehBrand / takhfifSenfiSatr.getBeEza());
+//                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiCarton())
+//                                        zarib = (int) (sumTedadKartonBrand / takhfifSenfiSatr.getBeEza());
+//                                }//if
+//                                //Rial..
+//                                else if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialRial())
+//                                    zarib = (int) (sumMablaghKolBrand / takhfifSenfiSatr.getBeEza());
+//
+//                            double mablaghTakhfif = sumMablaghKolBrand * (zarib * takhfifSenfiSatr.getDarsadTakhfif() / 100);
+//                            //Insert In DarkhastFaktorTakhfif & DarkhastFaktorSatrTakhfif..
+//                            long sumMablaghTakhfifSatr = 0;
+//                            String allMablaghTakhfifSatr = "-1";
+//                            if (mablaghTakhfif > 0) {
+//                                insertFaktorTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfif);
+//
+//                                for (DarkhastFaktorSatrModel darkhastFaktorSatr : darkhastFaktorSatrs) {
+//                                    KalaModel kala = kalaDAO.getByccKalaCode(darkhastFaktorSatr.getCcKalaCode());
+//                                    if (kala.getCcBrand() == ccBrand) {
+//                                        double mablaghTakhfifSatr = (darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh()) * (takhfifSenfiSatr.getDarsadTakhfif() / 100);
+//                                        sumMablaghTakhfifSatr += Math.round(mablaghTakhfifSatr);
+//                                        allMablaghTakhfifSatr += "," + allMablaghTakhfifSatr;
+//                                        insertFaktorSatrTakhfifSenfi(darkhastFaktorSatr.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfifSatr);
+//                                    }//if
+//                                }//for
+//                                //بروز رسانی مبلغ تخفیف تیتر
+//                                updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), Math.round(mablaghTakhfif), sumMablaghTakhfifSatr, allMablaghTakhfifSatr);
+//                            }//if
+//                        }//for
+//                    }//for
+//                }//for
+//
+//                //********************************************** TaminKonandeh **********************************************
+//                int ccTaminKonandeh;
+//                double sumTedadTaminKonandeh; // Sum Tedad3 Darkhast Bar Hasbe TaminKonandeh..
+//                double sumTedadBastehTaminKonandeh;
+//                double sumTedadKartonTaminKonandeh;
+//                double sumMablaghKolTaminKonandeh; // Sum MablaghKol Darkhast Bar Hasbe TaminKonandeh..
+//
+//                ArrayList<DataTableModel> taminKonandehs = darkhastFaktorSatrDAO.getTedadBeTafkikTaminKonandeh(darkhastFaktor.getCcDarkhastFaktor(),-1,1);
+//                for (DataTableModel taminKonandeh : taminKonandehs) {
+//                    ccTaminKonandeh = Integer.parseInt(taminKonandeh.getFiled1());
+//                    sumTedadTaminKonandeh = Double.parseDouble(taminKonandeh.getFiled2());
+//                    sumTedadBastehTaminKonandeh = Double.parseDouble(taminKonandeh.getFiled3());
+//                    sumTedadKartonTaminKonandeh = Double.parseDouble(taminKonandeh.getFiled4());
+//                    sumMablaghKolTaminKonandeh = Double.parseDouble(taminKonandeh.getFiled5());
+//
+//                    for (TakhfifSenfiModel takhfifSenfi : takhfifSenfis) {
+//                        //Satrhaye Takhfif..
+//                        ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs = takhfifSenfiSatrDAO.getForFaktor(takhfifSenfi.getCcTakhfifSenfi(), new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial()},
+//                                new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()}, DiscountCalculation.NAME_NOE_FIELD_TAMIN_KONANDE, ccTaminKonandeh,
+//                                sumTedadTaminKonandeh, sumTedadBastehTaminKonandeh, sumTedadKartonTaminKonandeh,
+//                                sumMablaghKolTaminKonandeh, takhfifSenfi.getNoeTedadRial(),0);
+//
+//                        for (TakhfifSenfiSatrModel takhfifSenfiSatr : takhfifSenfiSatrs) {
+//                            int zarib = 0;
+//                            if (takhfifSenfiSatr.getBeEza() == 0)
+//                                zarib = 1;
+//                            else
+//                                //Tedad..
+//                                if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialTedad()) {
+//                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiAdad())
+//                                        zarib = (int) (sumTedadTaminKonandeh / takhfifSenfiSatr.getBeEza());
+//                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiBaste())
+//                                        zarib = (int) (sumTedadBastehTaminKonandeh / takhfifSenfiSatr.getBeEza());
+//                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiCarton())
+//                                        zarib = (int) (sumTedadKartonTaminKonandeh / takhfifSenfiSatr.getBeEza());
+//                                }//if
+//                                //Rial..
+//                                else if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialRial())
+//                                    zarib = (int) (sumMablaghKolTaminKonandeh / takhfifSenfiSatr.getBeEza());
+//
+//                            double mablaghTakhfif = sumMablaghKolTaminKonandeh * (zarib * takhfifSenfiSatr.getDarsadTakhfif() / 100);
+//
+//                            //Insert In DarkhastFaktorTakhfif & DarkhastFaktorSatrTakhfif..
+//                            if (mablaghTakhfif > 0) {
+//                                insertFaktorTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfif);
+//                                long sumMablaghTakhfifSatr = 0;
+//                                String allMablaghTakhfifSatr = "-1";
+//                                for (DarkhastFaktorSatrModel darkhastFaktorSatr : darkhastFaktorSatrs) {
+//                                    KalaModel kala = kalaDAO.getByccKalaCode(darkhastFaktorSatr.getCcKalaCode());
+//                                    if (kala.getCcTaminKonandeh() == ccTaminKonandeh) {
+//                                        double mablaghTakhfifSatr = (darkhastFaktorSatr.getTedad3() * darkhastFaktorSatr.getMablaghForosh()) * (takhfifSenfiSatr.getDarsadTakhfif() / 100);
+//                                        sumMablaghTakhfifSatr += Math.round(mablaghTakhfifSatr);
+//                                        allMablaghTakhfifSatr += "," + Math.round(mablaghTakhfifSatr);
+//                                        insertFaktorSatrTakhfifSenfi(darkhastFaktorSatr.getCcDarkhastFaktorSatr(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfifSatr);
+//                                    }//if
+//                                }//for
+//                                //بروز رسانی مبلغ تخفیف تیتر
+//                                //updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor() , takhfifSenfi.getCcTakhfifSenfi());
+//                                updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), Math.round(mablaghTakhfif), sumMablaghTakhfifSatr, allMablaghTakhfifSatr);
+//                            }//if
+//                        }//for
+//                    }//for
+//                }//for
+//
+//                //********************************************** GorohKala.. **********************************************
+//                double sumTedadGorohKala; // Sum Tedad Darkhast Bar Hasbe GorohKala..
+//                double sumTedadBastehGorohKala;
+//                double sumTedadKartonGorohKala;
+//                double sumMablaghKolGorohKala; // Sum Tedad Darkhast Bar Hasbe GorohKala..
+//
+//                for (TakhfifSenfiModel takhfifSenfi : takhfifSenfis) {
+//                    sumTedadGorohKala = 0;
+//                    sumTedadBastehGorohKala = 0;
+//                    sumTedadKartonGorohKala = 0;
+//                    sumMablaghKolGorohKala = 0.0;
+//
+//                    ArrayList<DataTableModel> gorohKalas = darkhastFaktorSatrDAO.getTedadBeTafkikGorohKalaAndTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi());
+//                    ArrayList<DataTableModel> rowGorohKalas = darkhastFaktorSatrDAO.getRowsBeTafkikGorohKalaAndTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi());
+//
+//                    for (DataTableModel gorohKala : gorohKalas) {
+//                        sumTedadGorohKala = Double.parseDouble(gorohKala.getFiled2());
+//                        sumTedadBastehGorohKala = Double.parseDouble(gorohKala.getFiled3());
+//                        sumTedadKartonGorohKala = Double.parseDouble(gorohKala.getFiled4());
+//                        sumMablaghKolGorohKala = Double.parseDouble(gorohKala.getFiled5());
+//
+//                        //Satrhaye Takhfif..
+//                        ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs = takhfifSenfiSatrDAO.getForFaktor(takhfifSenfi.getCcTakhfifSenfi(), new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial()},
+//                                new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()}, DiscountCalculation.NAME_NOE_FIELD_GOROH_KALA, Integer.valueOf(gorohKala.getFiled1()),
+//                                sumTedadGorohKala, sumTedadBastehGorohKala, sumTedadKartonGorohKala, sumMablaghKolGorohKala, takhfifSenfi.getNoeTedadRial(),0);
+//
+//                        for (TakhfifSenfiSatrModel takhfifSenfiSatr : takhfifSenfiSatrs) {
+//                            int zarib = 0;
+//                            if (takhfifSenfiSatr.getBeEza() == 0)
+//                                zarib = 1;
+//                            else
+//                                //Tedad..
+//                                if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialTedad()) {
+//                                    if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiAdad())
+//                                        zarib = (int) (sumTedadGorohKala / takhfifSenfiSatr.getBeEza());
+//                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiBaste())
+//                                        zarib = (int) (sumTedadBastehGorohKala / takhfifSenfiSatr.getBeEza());
+//                                    else if (takhfifSenfiSatr.getCodeNoeBastehBandyBeEza() == discountCalculation.getBasteBandiCarton())
+//                                        zarib = (int) (sumTedadKartonGorohKala / takhfifSenfiSatr.getBeEza());
+//                                }//if
+//                                //Rial..
+//                                else if (takhfifSenfi.getNoeTedadRial() == discountCalculation.getTedadRialRial())
+//                                    zarib = (int) (sumMablaghKolGorohKala / takhfifSenfiSatr.getBeEza());
+//
+//                            double mablaghTakhfif = sumMablaghKolGorohKala * (zarib * takhfifSenfiSatr.getDarsadTakhfif() / 100);
+//                            //Insert In DarkhastFaktorTakhfif & DarkhastFaktorSatrTakhfif..
+//                            if (mablaghTakhfif > 0) {
+//                                long sumMablaghTakhfifSatr = 0;
+//                                String allMablaghTakhfifSatr = "-1";
+//                                insertFaktorTakhfifSenfi(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfif);
+//                                for (DataTableModel row : rowGorohKalas) {
+//                                /*sumMablaghTakhfifSatr = 0;
+//                                allMablaghTakhfifSatr = "-1";*/
+//                                    if (row.getFiled2().equals(gorohKala.getFiled1())) {
+//                                        double mablaghTakhfifSatr = (Double.valueOf(row.getFiled3()) * Double.valueOf(row.getFiled4().toString())) * (takhfifSenfiSatr.getDarsadTakhfif() / 100);
+//                                        sumMablaghTakhfifSatr += Math.round(mablaghTakhfifSatr);
+//                                        allMablaghTakhfifSatr += "," + Math.round(mablaghTakhfifSatr);
+//                                        insertFaktorSatrTakhfifSenfi(Long.valueOf(row.getFiled1()), takhfifSenfi.getCcTakhfifSenfi(), takhfifSenfi.getSharhTakhfif(), takhfifSenfiSatr.getDarsadTakhfif(), mablaghTakhfifSatr);
+//                                    }//if
+//                                }//for
+//                                updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor(), takhfifSenfi.getCcTakhfifSenfi(), Math.round(mablaghTakhfif), sumMablaghTakhfifSatr, allMablaghTakhfifSatr);
+//                                //بروز رسانی مبلغ تخفیف تیتر
+//                                //updateMablaghTakhfifDarkhastFaktor(darkhastFaktor.getCcDarkhastFaktor() , takhfifSenfi.getCcTakhfifSenfi());
+//                            }//if
+//                        }//for
+//                    }//for
+//                }//for
+//            } catch (Exception exception) {
+//                exception.printStackTrace();
+//                setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "VerifyRequestModel", "", "mohasebeTakhfifSenfiFaktor", "");
+//                //mPresenter.onErrorCalculateDiscount(R.string.errorOperation);
+//                //onCalculateDiscountResponse.onFailedCalculate(R.string.errorCalculateDiscount);
+//                //onProgressUpdate(-1);
+//                resultOfProccess = -1;
+//                Log.d("VerifyRequestModel", "mohasebeTakhfifSenfiFaktor");
+//                mPresenter.onErrorCalculateDiscount(R.string.errorCalculateDiscount);
+//                return false;
+//            }
+//            return true;
+//        }
 
 
         private boolean insertFaktorTakhfifSenfi(long ccDarkhastFaktor, int ccTakhfifSenfi, String sharhTakhfif, double darsadTakhfif, double mablaghTakhfif/*, int ForJayezeh*/) {
@@ -2151,6 +2149,107 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             }
         }
 
+        private void mohasebeTakhfifSenfi(DarkhastFaktorModel darkhastFaktorModel, ArrayList<ParameterChildModel> parameterChildModels)
+        {
+            DiscountCalculation discountCalculation = new DiscountCalculation(parameterChildModels);
+            ArrayList<TakhfifSenfiTitrSatrModel> takhfifSenfiTitrSatrModels = discountCalculation.getTakhfifSenfis(mPresenter.getAppContext(), darkhastFaktorModel, valueNoeVosol, false);
+            int maxOlaviat = new TakhfifSenfiDAO(mPresenter.getAppContext()).getMaxOlaviat();
+            for (int i = 0 ; i <= maxOlaviat ; i++)
+            {
+                Log.d("takhfif" , "olaviat : " + maxOlaviat + " , i : " + i + " , takhfifSenfi.Size : " + takhfifSenfiTitrSatrModels.size());
+                for (TakhfifSenfiTitrSatrModel takhfifSenfiTitrSatrModel : takhfifSenfiTitrSatrModels)
+                {
+                    Log.d("takhfif" , "olaviat takhfif : " + takhfifSenfiTitrSatrModel.getOlaviat());
+                    if (takhfifSenfiTitrSatrModel.getOlaviat() == i)
+                    {
+                        Log.d("takhfif" , "takhfifSenfiTitrSatrModel.getCcGorohTakidi() : " + takhfifSenfiTitrSatrModel.getCcGorohTakidi());
+                        Log.d("takhfif" , "takhfifSenfi : " + takhfifSenfiTitrSatrModel.toString());
+                        if (takhfifSenfiTitrSatrModel.getNameNoeField() == DiscountCalculation.NAME_NOE_FIELD_KALA && takhfifSenfiTitrSatrModel.getCcGorohTakidi() == 0)
+                        {
+                            Log.d("takhfifSenfi" , "noe field : kala");
+                            CalculateSenfiDiscountKala calculateSenfiDiscountKala = new CalculateSenfiDiscountKala(mPresenter.getAppContext());
+                            if (takhfifSenfiTitrSatrModel.getIsPelekani() == 0 && takhfifSenfiTitrSatrModel.getCcMantagheh() == 0)
+                            {
+                                resultOfProccess = calculateSenfiDiscountKala.calculateDiscount(darkhastFaktorModel, takhfifSenfiTitrSatrModel) ? 1 : -1;
+                                Log.d("VerifyRequestModel","calculateDiscount-resultOfProccess" +resultOfProccess);
+                            }
+                            else if (takhfifSenfiTitrSatrModel.getIsPelekani() == 1 && takhfifSenfiTitrSatrModel.getCcMantagheh() == 0)
+                            {
+                                resultOfProccess = calculateSenfiDiscountKala.calculatePelekaniDiscount(darkhastFaktorModel, takhfifSenfiTitrSatrModel) ? 1 : -1;
+                                Log.d("VerifyRequestModel","calculatePelekaniDiscount-resultOfProccess" +resultOfProccess);
+                            }
+                            else if (takhfifSenfiTitrSatrModel.getIsPelekani() == 0 && takhfifSenfiTitrSatrModel.getCcMantagheh() != 0)
+                            {
+                                resultOfProccess = calculateSenfiDiscountKala.calculateMantaghe(darkhastFaktorModel, takhfifSenfiTitrSatrModel) ? 1 : -1;
+                                Log.d("VerifyRequestModel","calculateMantaghe-resultOfProccess" +resultOfProccess);
+                            }
+                        }
+                        else if (takhfifSenfiTitrSatrModel.getNameNoeField() == DiscountCalculation.NAME_NOE_FIELD_GOROH_KALA)
+                        {
+                            Log.d("takhfifSenfi" , "noe field : goroh kala");
+                            CalculateSenfiDiscountGorohKala calculateSenfiDiscountGorohKala = new CalculateSenfiDiscountGorohKala(mPresenter.getAppContext());
+                            if (takhfifSenfiTitrSatrModel.getCcGorohTakidi() == 0 && takhfifSenfiTitrSatrModel.getIsPelekani() == 0 && takhfifSenfiTitrSatrModel.getCcMantagheh() == 0)
+                            {
+                                resultOfProccess = calculateSenfiDiscountGorohKala.calculateDiscount(darkhastFaktorModel, takhfifSenfiTitrSatrModel) ? 1 : -1;
+                                Log.d("VerifyRequestModel","GorohKala-calculateDiscount-resultOfProccess" +resultOfProccess);
+                            }
+                            else if (takhfifSenfiTitrSatrModel.getCcGorohTakidi() == 0 && takhfifSenfiTitrSatrModel.getIsPelekani() == 1 && takhfifSenfiTitrSatrModel.getCcMantagheh() == 0)
+                            {
+                                resultOfProccess = calculateSenfiDiscountGorohKala.calculatePelekani(darkhastFaktorModel, takhfifSenfiTitrSatrModel) ? 1 : -1;
+                                Log.d("VerifyRequestModel","GorohKala-calculatePelekani-resultOfProccess" +resultOfProccess);
+                            }
+                            else if (takhfifSenfiTitrSatrModel.getCcGorohTakidi() == 0 && takhfifSenfiTitrSatrModel.getIsPelekani() == 0 && takhfifSenfiTitrSatrModel.getCcMantagheh() != 0)
+                            {
+                                int ccMantaghe = new MoshtaryAddressDAO(mPresenter.getAppContext()).getByccMoshtary(darkhastFaktorModel.getCcMoshtary()).get(0).getCcMahaleh();
+                                resultOfProccess = calculateSenfiDiscountGorohKala.calculateMantaghe(darkhastFaktorModel, takhfifSenfiTitrSatrModel, ccMantaghe) ? 1 : -1;
+                                Log.d("VerifyRequestModel","GorohKala-calculateMantaghe-resultOfProccess" +resultOfProccess);
+                            }
+                            else if (takhfifSenfiTitrSatrModel.getCcGorohTakidi() != 0 && takhfifSenfiTitrSatrModel.getIsPelekani() == 0 && takhfifSenfiTitrSatrModel.getCcMantagheh() == 0)
+                            {
+                                Log.d("takhfifSenfi" , "noe field : kala Takidi");
+                                //resultOfProccess = calculateSenfiDiscountGorohKala.calculateDiscountTakidi(darkhastFaktorModel, takhfifSenfiTitrSatrModel) ? 1 : -1;
+                                //todo Takidi
+                                //resultOfProccess = calculateGorohKalaTakidi(takhfifSenfiTitrSatrModel, darkhastFaktorModel, discountCalculation) ? 1 : -1;
+                                Log.d("VerifyRequestModel","GorohKala-calculateGorohKalaTakidi-resultOfProccess" +resultOfProccess);
+                            }
+                        }
+                        else if (takhfifSenfiTitrSatrModel.getNameNoeField() == DiscountCalculation.NAME_NOE_FIELD_BRAND && takhfifSenfiTitrSatrModel.getCcGorohTakidi() == 0)
+                        {
+                            Log.d("takhfifSenfi" , "noe field : brand");
+                            CalculateSenfiDiscountBrand calculateSenfiDiscountBrand = new CalculateSenfiDiscountBrand(mPresenter.getAppContext());
+                            if (takhfifSenfiTitrSatrModel.getCcMantagheh() == 0)
+                            {
+                                resultOfProccess = calculateSenfiDiscountBrand.calculateDiscount(darkhastFaktorModel, takhfifSenfiTitrSatrModel) ? 1 : -1;
+                                Log.d("VerifyRequestModel","Brand-calculateDiscount-resultOfProccess" +resultOfProccess);
+                            }
+                            else if (takhfifSenfiTitrSatrModel.getCcMantagheh() != 0)
+                            {
+                                int ccMantaghe = new MoshtaryAddressDAO(mPresenter.getAppContext()).getByccMoshtary(darkhastFaktorModel.getCcMoshtary()).get(0).getCcMahaleh();
+                                resultOfProccess = calculateSenfiDiscountBrand.calculateMantaghe(darkhastFaktorModel, takhfifSenfiTitrSatrModel, ccMantaghe) ? 1 : -1;
+                                Log.d("VerifyRequestModel","Brand-calculateSenfiDiscountBrand-resultOfProccess" +resultOfProccess);
+                            }
+                        }
+                        else if (takhfifSenfiTitrSatrModel.getNameNoeField() == DiscountCalculation.NAME_NOE_FIELD_TAMIN_KONANDE && takhfifSenfiTitrSatrModel.getCcGorohTakidi() == 0)
+                        {
+
+                            CalculateSenfiDiscountTaminKonandeh calculateSenfiDiscountTaminKonandeh = new CalculateSenfiDiscountTaminKonandeh(mPresenter.getAppContext() , parameterChildModels);
+                            if (takhfifSenfiTitrSatrModel.getCcMantagheh() == 0)
+                            {
+                                Log.d("takhfifSenfi" , "noe field : tamin konande");
+                                resultOfProccess = calculateSenfiDiscountTaminKonandeh.calculateDiscount(darkhastFaktorModel, takhfifSenfiTitrSatrModel) ? 1 : -1;
+                                Log.d("VerifyRequestModel","TaminKonandeh-calculateDiscount-resultOfProccess" +resultOfProccess);
+                            }
+                            else if (takhfifSenfiTitrSatrModel.getCcMantagheh() != 0)
+                            {
+                                int ccMantaghe = new MoshtaryAddressDAO(mPresenter.getAppContext()).getByccMoshtary(darkhastFaktorModel.getCcMoshtary()).get(0).getCcMahaleh();
+                                resultOfProccess = calculateSenfiDiscountTaminKonandeh.calculateMantaghe(darkhastFaktorModel, takhfifSenfiTitrSatrModel, ccMantaghe) ? 1 : -1;
+                                Log.d("VerifyRequestModel","TaminKonandeh-calculateMantaghe-resultOfProccess" +resultOfProccess);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         private boolean calculateGorohKalaTakidi(TakhfifHajmiTitrSatrModel takhfifHajmiTitrSatrModel, DarkhastFaktorModel darkhastFaktorModel, DiscountCalculation discountCalculation)
         {
@@ -2194,8 +2293,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                     if (tedadKalaTakidi >= 1)
                     {
                         //-----------------------------------------
-                        ArrayList<DataTableModel> gorohKalas= darkhastFaktorSatrDAO.getTedadBeTafkikGorohKalaAndTakhfifHajmi(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), takhfifHajmiTitrSatrModel.getOlaviat());
-                        ArrayList<DataTableModel> rowGorohKalas= darkhastFaktorSatrDAO.getRowsBeTafkikGorohKalaAndTakhfifHajmi(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getCcTakhfifHajmi());
+                        ArrayList<DataTableModel> gorohKalas= darkhastFaktorSatrDAO.getTedadBeTafkikGorohKalaAndTakhfifHajmi(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), takhfifHajmiTitrSatrModel.getOlaviat(),takhfifHajmiTitrSatrModel.getNoeGheymat());
+                        ArrayList<DataTableModel> rowGorohKalas= darkhastFaktorSatrDAO.getRowsBeTafkikGorohKalaAndTakhfifHajmi(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),takhfifHajmiTitrSatrModel.getNoeGheymat());
 
                         for (DataTableModel gorohKala : gorohKalas)
                         {

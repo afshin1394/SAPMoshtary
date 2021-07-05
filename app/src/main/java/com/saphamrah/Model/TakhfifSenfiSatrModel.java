@@ -16,6 +16,15 @@ public class TakhfifSenfiSatrModel
     private static final String COLUMN_BeEza = "BeEza";
     private static final String COLUMN_CodeNoeBastehBandyBeEza = "CodeNoeBastehBandyBeEza";
     private static final String COLUMN_DarsadTakhfif = "DarsadTakhfif";
+    private static final String COLUMN_GheymatForosh = "GheymatForosh";
+    private static final String COLUMN_MinTedadAghlam = "MinTedadAghlam";
+    private static final String COLUMN_MinRial = "MinRial";
+    private static final String COLUMN_ccGorohMohasebeh = "ccGorohMohasebeh";
+
+
+
+
+
 
 
 
@@ -52,7 +61,18 @@ public class TakhfifSenfiSatrModel
     public static String COLUMN_DarsadTakhfif() {
         return COLUMN_DarsadTakhfif;
     }
-
+    public static String COLUMN_GheymatForosh() {
+        return COLUMN_GheymatForosh;
+    }
+    public static String COLUMN_MinTedadAghlam() {
+        return COLUMN_MinTedadAghlam;
+    }
+    public static String COLUMN_MinRial() {
+        return COLUMN_MinRial;
+    }
+    public static String COLUMN_ccGorohMohasebeh() {
+        return COLUMN_ccGorohMohasebeh;
+    }
 
 
     private int ccTakhfifSenfiSatr;
@@ -143,6 +163,48 @@ public class TakhfifSenfiSatrModel
     public void setDarsadTakhfif(double darsadTakhfif) {
         DarsadTakhfif = darsadTakhfif;
     }
+
+    private double GheymatForosh;
+    public double getGheymatForosh()
+    {
+        return GheymatForosh;
+    }
+    public void setGheymatForosh(double gheymatForosh)
+    {
+        GheymatForosh = gheymatForosh;
+    }
+
+
+    private int MinTedadAghlam;
+    public int getMinTedadAghlam()
+    {
+        return MinTedadAghlam;
+    }
+    public void setMinTedadAghlam(int minTedadAghlam)
+    {
+        MinTedadAghlam = minTedadAghlam;
+    }
+
+    private double MinRial;
+    public double getMinRial()
+    {
+        return MinRial;
+    }
+    public void setMinRial(double minRial)
+    {
+        MinRial = minRial;
+    }
+
+    private int ccGorohMohasebeh;
+    public int getCcGorohMohasebeh()
+    {
+        return ccGorohMohasebeh;
+    }
+    public void setCcGorohMohasebeh(int ccGorohMohasebeh)
+    {
+        this.ccGorohMohasebeh = ccGorohMohasebeh;
+    }
+
 
 
     @NonNull

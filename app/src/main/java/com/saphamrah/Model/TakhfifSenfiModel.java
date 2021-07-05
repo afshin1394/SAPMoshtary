@@ -20,6 +20,15 @@ public class TakhfifSenfiModel
     private static final String COLUMN_NameNoeSenf = "NameNoeSenf";
     private static final String COLUMN_NoeGheymat="NoeGheymat";
     private static final String COLUMN_ccMoshtaryGharardad="ccMoshtaryGharardad";
+    private static final String COLUMN_ccMantagheh = "ccMantagheh";
+    private static final String COLUMN_IsPelekani = "IsPelekani";
+    private static final String COLUMN_Olaviat = "Olaviat";
+    private static final String COLUMN_ccGorohTakidi = "ccGorohTakidi";
+    private static final String COLUMN_txtNoeVosol = "txtNoeVosol";
+    private static final String COLUMN_ForJayezeh = "ForJayezeh";
+    private static final String COLUMN_CodeNoeHaml = "CodeNoeHaml";
+    private static final String COLUMN_NameNoeField = "NameNoeField";
+
 
 
     public static String TableName() {
@@ -65,6 +74,40 @@ public class TakhfifSenfiModel
 
     public static String COLUMN_NoeVosol() {
         return COLUMN_NoeVosol;
+    }
+
+
+    public static String COLUMN_ccMantagheh() {
+        return COLUMN_ccMantagheh;
+    }
+
+    public static String COLUMN_IsPelekani() {
+        return COLUMN_IsPelekani;
+    }
+
+    public static String COLUMN_Olaviat() {
+        return COLUMN_Olaviat;
+    }
+
+
+    public static String COLUMN_txtNoeVosol() {
+        return COLUMN_txtNoeVosol;
+    }
+
+    public static String COLUMN_ForJayezeh() {
+        return COLUMN_ForJayezeh;
+    }
+
+    public static String COLUMN_CodeNoeHaml() {
+        return COLUMN_CodeNoeHaml;
+    }
+
+    public static String COLUMN_NameNoeField() {
+        return COLUMN_NameNoeField;
+    }
+
+    public static String COLUMN_ccGorohTakidi() {
+        return COLUMN_ccGorohTakidi;
     }
 
     private int Radif;
@@ -166,7 +209,7 @@ public class TakhfifSenfiModel
         return NameNoeSenf;
     }
     public void setNameNoeSenf(String NameNoeSenf) {
-        NameNoeSenf = NameNoeSenf;
+        this.NameNoeSenf = NameNoeSenf;
     }
 
 
@@ -180,14 +223,27 @@ public class TakhfifSenfiModel
         this.ccMoshtaryGharardad = ccMoshtrayGharardad;
     }
 
+
+
+    private int Olaviat;
+    public int getOlaviat() {
+        return Olaviat;
+    }
+
+
+    public void setOlaviat(int olaviat) {
+        this.Olaviat = olaviat;
+    }
+
     private int NoeGheymat;
 
     public int getNoeGheymat() {
         return NoeGheymat;
     }
 
-    public void setNoeGheymat(int noeGheymat) {
-        NoeGheymat = noeGheymat;
+
+    public void setNoeGheymat(int NoeGheymat) {
+        this.NoeGheymat = NoeGheymat;
     }
 
 
@@ -201,6 +257,250 @@ public class TakhfifSenfiModel
     public void setNoeVosol(int noeVosol) {
         NoeVosol = noeVosol;
     }
+
+    private int nameNoeField;
+    public int getNameNoeField() {
+        return nameNoeField;
+    }
+    public void setNameNoeField(int nameNoeField) {
+        this.nameNoeField = nameNoeField;
+    }
+
+
+
+    private int CodeNoeTakhfif;
+    public void setCodeNoeTakhfif(int CodeNoeTakhfif){
+        this.CodeNoeTakhfif = CodeNoeTakhfif;
+    }
+    public int getCodeNoeTakhfif(){
+        return this.CodeNoeTakhfif;
+    }
+
+
+
+
+
+
+
+    private String FromDate;
+    public void setFromDate(String FromDate){
+        this.FromDate = FromDate;
+    }
+    public String getFromDate(){
+        return this.FromDate;
+    }
+
+
+    private String FromDateWithoutSlash;
+    public void setFromDateWithoutSlash(String FromDateWithoutSlash){
+        this.FromDateWithoutSlash = FromDateWithoutSlash;
+    }
+    public String getFromDateWithoutSlash(){
+        return this.FromDateWithoutSlash;
+    }
+
+
+    private String EndDate;
+    public void setEndDate(String EndDate){
+        this.EndDate = EndDate;
+    }
+    public String getEndDate(){
+        return this.EndDate;
+    }
+
+
+    private String EndDateWithoutSlash;
+    public void setEndDateWithoutSlash(String EndDateWithoutSlash){
+        this.EndDateWithoutSlash = EndDateWithoutSlash;
+    }
+    public String getEndDateWithoutSlash(){
+        return this.EndDateWithoutSlash;
+    }
+
+
+
+
+
+    private String txtNoeTedadRial;
+    public void setTxtNoeTedadRial(String txtNoeTedadRial){
+        this.txtNoeTedadRial = txtNoeTedadRial;
+    }
+    public String getTxtNoeTedadRial(){
+        return this.txtNoeTedadRial;
+    }
+
+
+
+
+
+    private String txtNameNoeFieldMoshtary;
+    public void setTxtNameNoeFieldMoshtary(String txtNameNoeFieldMoshtary){
+        this.txtNameNoeFieldMoshtary = txtNameNoeFieldMoshtary;
+    }
+    public String getTxtNameNoeFieldMoshtary(){
+        return this.txtNameNoeFieldMoshtary;
+    }
+
+
+
+
+
+    private int ccMoshtary;
+    public void setCcMoshtary(int ccMoshtary){
+        this.ccMoshtary = ccMoshtary;
+    }
+    public int getCcMoshtary(){
+        return this.ccMoshtary;
+    }
+
+
+    private String NameMoshtary;
+    public void setNameMoshtary(String NameMoshtary){
+        this.NameMoshtary = NameMoshtary;
+    }
+    public String getNameMoshtary(){
+        return this.NameMoshtary;
+    }
+
+
+    private int ccGoroh;
+    public void setCcGoroh(int ccGoroh){
+        this.ccGoroh = ccGoroh;
+    }
+    public int getCcGoroh(){
+        return this.ccGoroh;
+    }
+
+
+    private String NameGoroh;
+    public void setNameGoroh(String NameGoroh){
+        this.NameGoroh = NameGoroh;
+    }
+    public String getNameGoroh(){
+        return this.NameGoroh;
+    }
+
+
+    private String NameGorohText;
+    public void setNameGorohText(String NameGorohText){
+        this.NameGorohText = NameGorohText;
+    }
+    public String getNameGorohText(){
+        return this.NameGorohText;
+    }
+
+
+    private int CodeNoeHaml;
+    public void setCodeNoeHaml(int CodeNoeHaml){
+        this.CodeNoeHaml = CodeNoeHaml;
+    }
+    public int getCodeNoeHaml(){
+        return this.CodeNoeHaml;
+    }
+
+
+    private int BeHesab;
+    public void setBeHesab(int BeHesab){
+        this.BeHesab = BeHesab;
+    }
+    public int getBeHesab(){
+        return this.BeHesab;
+    }
+
+
+    private String NameBeHesab;
+    public void setNameBeHesab(String NameBeHesab){
+        this.NameBeHesab = NameBeHesab;
+    }
+    public String getNameBeHesab(){
+        return this.NameBeHesab;
+    }
+
+
+    private int SahmHesab;
+    public void setSahmHesab(int SahmHesab){
+        this.SahmHesab = SahmHesab;
+    }
+    public int getSahmHesab(){
+        return this.SahmHesab;
+    }
+
+
+
+
+
+    private int ForJayezeh;
+    public void setForJayezeh(int ForJayezeh){
+        this.ForJayezeh = ForJayezeh;
+    }
+    public int getForJayezeh(){
+        return this.ForJayezeh;
+    }
+
+
+    private int ForReport;
+    public void setForReport(int ForReport){
+        this.ForReport = ForReport;
+    }
+    public int getForReport(){
+        return this.ForReport;
+    }
+
+
+
+
+
+    private String txtNoeVosol;
+    public void setTxtNoeVosol(String txtNoeVosol){
+        this.txtNoeVosol = txtNoeVosol;
+    }
+    public String getTxtNoeVosol(){
+        return this.txtNoeVosol;
+    }
+
+
+    private int Id;
+    public void setId(int Id){
+        this.Id = Id;
+    }
+    public int getId(){
+        return this.Id;
+    }
+
+
+    private int ccGorohTakidi;
+    public int getCcGorohTakidi()
+    {
+        return ccGorohTakidi;
+    }
+    public void setCcGorohTakidi(int ccGorohTakidi)
+    {
+        this.ccGorohTakidi = ccGorohTakidi;
+    }
+
+
+
+    private int IsPelekani;
+    public int getIsPelekani()
+    {
+        return IsPelekani;
+    }
+    public void setIsPelekani(int isPelekani)
+    {
+        IsPelekani = isPelekani;
+    }
+
+
+    private int ccMantagheh;
+    public int getCcMantagheh()
+    {
+        return ccMantagheh;
+    }
+    public void setCcMantagheh(int ccMantagheh)
+    {
+        this.ccMantagheh = ccMantagheh;
+    }
+
 
     @Override
     public String toString() {

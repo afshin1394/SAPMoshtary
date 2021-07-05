@@ -342,7 +342,7 @@ public class KalaMojodiDAO
             String query = "SELECT dfs.ccKalaCode, k.CodeKala, k.NameKala, (select Max_Mojody from KalaMojodi km \n" +
                     "where km.ccKalaCode = dfs.ccKalaCode) As TedadMojodi \n" +
                     "from DarkhastFaktorSatr dfs \n" +
-                    "LEFT JOIN Kala k ON k.cckalacode=dfs.cckalacode and k.ShomarehBach = dfs.ShomarehBach AND k.ccTaminKonandeh = dfs.ccTaminKonandeh AND k.MablaghForosh = dfs.GheymatForoshAsli AND k.MablaghMasrafKonandeh = dfs.GheymatMasrafKonandeh \n"+
+                    "LEFT JOIN Kala k ON k.cckalacode=dfs.cckalacode and k.ShomarehBach = dfs.ShomarehBach AND k.ccTaminKonandeh = dfs.ccTaminKonandeh AND k.MablaghForosh = dfs.GheymatForoshAsli AND k.MablaghMasrafKonandeh = dfs.GheymatMasrafKonandehAsli \n"+
                     "where ccDarkhastFaktor = " + ccDarkhastFaktor +   " \n " +
                     "group by dfs.ccKalaCode \n" +
                     "having  TedadMojodi < SUM(Tedad3)";

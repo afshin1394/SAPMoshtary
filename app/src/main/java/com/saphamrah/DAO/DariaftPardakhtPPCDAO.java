@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 
+import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.KardexSatrModel;
@@ -84,6 +85,7 @@ public class DariaftPardakhtPPCDAO
             DariaftPardakhtPPCModel.COLUMN_NaghlAzGhabl(),
             DariaftPardakhtPPCModel.COLUMN_ccBrand(),
             DariaftPardakhtPPCModel.COLUMN_ExtraProp_IsDirkard(),
+            DariaftPardakhtPPCModel.COLUMN_ExtraProp_IsTajil(),
             DariaftPardakhtPPCModel.COLUMN_ExtraProp_IsSend(),
             DariaftPardakhtPPCModel.COLUMN_ccAfradErsalKonandeh(),
             DariaftPardakhtPPCModel.COLUMN_IsCheckMoshtary(),
@@ -325,7 +327,7 @@ public class DariaftPardakhtPPCDAO
 //        dariaftPardakhtPPC.setExtraProp_CodeNoeSanad(CodeNoeSanad);
         dariaftPardakhtPPC.setExtraProp_IsDirkard(IsDirkard);
         dariaftPardakhtPPC.setTabdil_NaghdBeFish(0);
-//        dariaftPardakhtPPC.setExtraProp_IsTajil(IsTajil);
+        dariaftPardakhtPPC.setExtraProp_IsTajil(IsTajil);
         dariaftPardakhtPPC.setCodeNoeVosol(CodeNoeVosol);
         dariaftPardakhtPPC.setCcMoshtary(ccMoshtary);
 
@@ -891,6 +893,37 @@ public class DariaftPardakhtPPCDAO
         }
     }
 
+    public boolean deleteDirKardAndTajil(long ccDarkhastFaktor , long ccDariaftPardakht )
+    {
+        String query = "";
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        query = "delete from " + DariaftPardakhtPPCModel.TableName() + " where  ExtraProp_IsTajil = 1 AND CodeNoeVosol = " + Constants.VALUE_SANAD_TAJIL +" ";
+        if (ccDarkhastFaktor > 0 ) {
+            query+="  AND ccDarkhastFaktor= " + ccDarkhastFaktor;
+        }
+        else
+        {
+            query+= "  AND ExtraProp_ccDaryaftPardakhtCheckBargashty = " + ccDariaftPardakht;
+        }
+        try
+        {
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDelete , DariaftPardakhtDarkhastFaktorPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtPPCDAO" , "" , "deleteByccDariaftPardakht" , "");
+            return false;
+        }
+
+
+    }
+
 
     private static ContentValues modelToContentvalue(DariaftPardakhtPPCModel dariaftPardakhtPPCModel)
     {
@@ -931,6 +964,7 @@ public class DariaftPardakhtPPCDAO
         contentValues.put(DariaftPardakhtPPCModel.COLUMN_NaghlAzGhabl() , dariaftPardakhtPPCModel.getNaghlAzGhabl());
         contentValues.put(DariaftPardakhtPPCModel.COLUMN_ccBrand() , dariaftPardakhtPPCModel.getCcBrand());
         contentValues.put(DariaftPardakhtPPCModel.COLUMN_ExtraProp_IsDirkard() , dariaftPardakhtPPCModel.getExtraProp_IsDirkard());
+        contentValues.put(DariaftPardakhtPPCModel.COLUMN_ExtraProp_IsTajil() , dariaftPardakhtPPCModel.getExtraProp_IsTajil());
         contentValues.put(DariaftPardakhtPPCModel.COLUMN_ExtraProp_IsSend() , dariaftPardakhtPPCModel.getExtraProp_IsSend());
         contentValues.put(DariaftPardakhtPPCModel.COLUMN_ccBrand() , dariaftPardakhtPPCModel.getCcBrand());
         contentValues.put(DariaftPardakhtPPCModel.COLUMN_ccAfradErsalKonandeh() , dariaftPardakhtPPCModel.getCcAfradErsalKonandeh());
@@ -983,6 +1017,7 @@ public class DariaftPardakhtPPCDAO
             dariaftPardakhtPPCModel.setNaghlAzGhabl(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_NaghlAzGhabl())));
             dariaftPardakhtPPCModel.setCcBrand(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_ccBrand())));
             dariaftPardakhtPPCModel.setExtraProp_IsDirkard(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_ExtraProp_IsDirkard())));
+            dariaftPardakhtPPCModel.setExtraProp_IsTajil(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_ExtraProp_IsTajil())));
             dariaftPardakhtPPCModel.setExtraProp_IsSend(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_ExtraProp_IsSend())));
             dariaftPardakhtPPCModel.setCcAfradErsalKonandeh(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_ccAfradErsalKonandeh())));
             dariaftPardakhtPPCModel.setIsCheckMoshtary(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_IsCheckMoshtary())));

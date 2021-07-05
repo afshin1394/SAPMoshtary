@@ -44,6 +44,7 @@ public class KalaDarkhastFaktorSatrModel
     private float GheymatMasrafKonandeh;
     private String darkhastFaktorSatrTakhfifs;
     private float GheymatForoshAsli;
+    private float GheymatMasrafKonandehAsli;
     private boolean ExtraProp_IsOld;
     // Kala
     private String NameKala;
@@ -509,10 +510,17 @@ public class KalaDarkhastFaktorSatrModel
     }
 
 
-    @NonNull
+    public float getGheymatMasrafKonandehAsli() {
+        return GheymatMasrafKonandehAsli;
+    }
+
+    public void setGheymatMasrafKonandehAsli(float gheymatMasrafKonandehAsli) {
+        GheymatMasrafKonandehAsli = gheymatMasrafKonandehAsli;
+    }
+
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "KalaDarkhastFaktorSatrModel{" +
                 "ccDarkhastFaktor=" + ccDarkhastFaktor +
                 ", ccDarkhastFaktorSatr=" + ccDarkhastFaktorSatr +
@@ -552,6 +560,7 @@ public class KalaDarkhastFaktorSatrModel
                 ", GheymatMasrafKonandeh=" + GheymatMasrafKonandeh +
                 ", darkhastFaktorSatrTakhfifs='" + darkhastFaktorSatrTakhfifs + '\'' +
                 ", GheymatForoshAsli=" + GheymatForoshAsli +
+                ", GheymatMasrafKonandehAsli=" + GheymatMasrafKonandehAsli +
                 ", ExtraProp_IsOld=" + ExtraProp_IsOld +
                 ", NameKala='" + NameKala + '\'' +
                 ", codeKala='" + codeKala + '\'' +

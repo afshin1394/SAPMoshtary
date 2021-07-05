@@ -11,6 +11,7 @@ import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.TakhfifHajmiModel;
 import com.saphamrah.Model.TakhfifHajmiSatrModel;
 import com.saphamrah.Model.TakhfifHajmiTitrSatrModel;
+import com.saphamrah.Model.TakhfifSenfiModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -709,6 +710,8 @@ Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiServiceGet.getTakhfifH
             takhfifHajmiModel.setCcNoeSenf(cursor.getInt(cursor.getColumnIndex(TakhfifHajmiModel.COLUMN_ccNoeSenf())));
             takhfifHajmiModel.setNameNoeSenf(cursor.getString(cursor.getColumnIndex(TakhfifHajmiModel.COLUMN_NameNoeSenf())));
 
+
+
             takhfifHajmiModels.add(takhfifHajmiModel);
             cursor.moveToNext();
         }
@@ -744,6 +747,8 @@ Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiServiceGet.getTakhfifH
 			takhfifHajmiTitrSatrModel.setCcMantagheh(cursor.getInt(cursor.getColumnIndex(TakhfifHajmiModel.COLUMN_ccMantagheh())));
             takhfifHajmiTitrSatrModel.setCcNoeSenf(cursor.getInt(cursor.getColumnIndex(TakhfifHajmiModel.COLUMN_ccNoeSenf())));
             takhfifHajmiTitrSatrModel.setNameNoeSenf(cursor.getString(cursor.getColumnIndex(TakhfifHajmiModel.COLUMN_NameNoeSenf())));
+            takhfifHajmiTitrSatrModel.setNoeGheymat(cursor.getInt(cursor.getColumnIndex(TakhfifSenfiModel.COLUMN_NoeGheymat())));
+
 
             //////////// SATR ////////////
             takhfifHajmiTitrSatrModel.setNameNoeField(cursor.getInt(cursor.getColumnIndex(TakhfifHajmiSatrModel.COLUMN_NameNoeField())));

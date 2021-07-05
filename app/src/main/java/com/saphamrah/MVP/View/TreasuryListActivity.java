@@ -25,6 +25,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.saphamrah.Adapter.TreasuryAdapter;
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.TreasuryListMVP;
 import com.saphamrah.MVP.Presenter.TreasuryListPresenter;
 import com.saphamrah.MVP.View.marjoee.DarkhastFaktorMarjoeeActivity;
@@ -50,6 +51,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
     private final String ACTIVITY_NAME = "TreasuryListActivity";
     private TreasuryAdapter adapter;
     private int state;
+    SelectVosolShared selectVosolShared = new SelectVosolShared(BaseApplication.getContext());
 
 
     private int faktorRooz; // 0 -> today , 1 -> last
@@ -279,13 +281,13 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
      */
     private void recyclerFaktorRooz() {
         //hold the position of last selected FaktorRooz
-        SelectVosolShared selectVosolShared = new SelectVosolShared(TreasuryListActivity.this);
 
         adapter = new TreasuryAdapter(TreasuryListActivity.this, this.darkhastFaktorMoshtaryForoshandeModels, true, noeMasouliat, new TreasuryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int operation, int position) {
-                selectVosolShared.removePosition(selectVosolShared.getListVosolFaktorRoozByCodePosition());
-                selectVosolShared.putInt(selectVosolShared.getListVosolFaktorRoozByCodePosition(), position);
+                selectVosolShared.removeCcDarkhastFaktor(selectVosolShared.getListVosolCcDarkhastFaktor());
+                selectVosolShared.putLong(selectVosolShared.getListVosolCcDarkhastFaktor(), darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
+               closeFabAndSearch();
                 if (operation == Constants.SHOW_LOCATION()) {
                     mPresenter.getCustomerLocation(darkhastFaktorMoshtaryForoshandeModels.get(position));
                 } else if (operation == Constants.CLEARING()) {
@@ -316,20 +318,20 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
         recyclerViewFaktorRooz.setItemAnimator(new DefaultItemAnimator());
         recyclerViewFaktorRooz.addItemDecoration(new DividerItemDecoration(TreasuryListActivity.this, 0));
         recyclerViewFaktorRooz.setAdapter(adapter);
-        recyclerViewFaktorRooz.scrollToPosition(selectVosolShared.getInt(selectVosolShared.getListVosolFaktorRoozByCodePosition(), 0));
+        int position = getPositionCcDrakhastFaktorShared();
+        recyclerViewFaktorRooz.scrollToPosition(position);
     }
 
     private void recylerFaktorMandeDar() {
         //hold the position of last selected MandehDar
-        SelectVosolShared selectVosolShared = new SelectVosolShared(TreasuryListActivity.this);
 
         adapter = new TreasuryAdapter(TreasuryListActivity.this, this.darkhastFaktorMoshtaryForoshandeModels, false, noeMasouliat, new TreasuryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int operation, int position) {
-                selectVosolShared.removePosition(selectVosolShared.getListVosolMandehDarPosition());
-                selectVosolShared.putInt(selectVosolShared.getListVosolMandehDarPosition(), position);
+                selectVosolShared.removeCcDarkhastFaktor(selectVosolShared.getListVosolCcDarkhastFaktor());
+                selectVosolShared.putLong(selectVosolShared.getListVosolCcDarkhastFaktor(), darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
                 Log.i("ListWithRouting", "onItemClick:recylerFaktorMandeDar position:" + position + "recylerFaktorMandeDar" + selectVosolShared.getInt(selectVosolShared.getListVosolMandehDarPosition(), 0));
-
+                closeFabAndSearch();
                 if (operation == Constants.SHOW_LOCATION()) {
                     mPresenter.getCustomerLocation(darkhastFaktorMoshtaryForoshandeModels.get(position));
                 } else if (operation == Constants.CLEARING()) {
@@ -350,21 +352,20 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
         recyclerViewFaktorMandeDar.setItemAnimator(new DefaultItemAnimator());
         recyclerViewFaktorMandeDar.addItemDecoration(new DividerItemDecoration(TreasuryListActivity.this, 0));
         recyclerViewFaktorMandeDar.setAdapter(adapter);
-        recyclerViewFaktorMandeDar.scrollToPosition(selectVosolShared.getInt(selectVosolShared.getListVosolMandehDarPosition(), 0));
+        int position = getPositionCcDrakhastFaktorShared();
+        recyclerViewFaktorMandeDar.scrollToPosition(position);
 
     }
 
     private void recyclerTreasuryListWithRouting() {
-        SelectVosolShared selectVosolShared = new SelectVosolShared(TreasuryListActivity.this);
         adapter = new TreasuryAdapter(TreasuryListActivity.this, this.darkhastFaktorMoshtaryForoshandeModels, true, noeMasouliat, new TreasuryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int operation, int position) {
-                selectVosolShared.removePosition(selectVosolShared.getListVosolFaktorRoozByRoutingPosition());
-                selectVosolShared.putInt(selectVosolShared.getListVosolFaktorRoozByRoutingPosition(), position);
+                selectVosolShared.removeCcDarkhastFaktor(selectVosolShared.getListVosolCcDarkhastFaktor());
+                selectVosolShared.putLong(selectVosolShared.getListVosolCcDarkhastFaktor(), darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
                 Log.i("ListWithRouting", "onItemClick: position:" + position + "VosolFaktorRoozByRoutingPosition" + selectVosolShared.getInt(selectVosolShared.getListVosolFaktorRoozByRoutingPosition(), 0));
 
-                if (fabMenu.isOpened())
-                    fabMenu.close(true);
+                closeFabAndSearch();
                 if (operation == Constants.SHOW_LOCATION()) {
                     mPresenter.getCustomerLocation(darkhastFaktorMoshtaryForoshandeModels.get(position));
                 } else if (operation == Constants.CLEARING()) {
@@ -391,7 +392,27 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
         recyclerViewFaktorRooz.addItemDecoration(new DividerItemDecoration(TreasuryListActivity.this, 0));
         recyclerViewFaktorRooz.setAdapter(adapter);
         Log.i("ListWithRouting", "onItemClick:VosolFaktorRoozByRoutingPosition" + selectVosolShared.getInt(selectVosolShared.getListVosolFaktorRoozByRoutingPosition(), 0));
-        recyclerViewFaktorRooz.scrollToPosition(selectVosolShared.getInt(selectVosolShared.getListVosolFaktorRoozByRoutingPosition(), 0));
+        int position = getPositionCcDrakhastFaktorShared();
+        recyclerViewFaktorRooz.scrollToPosition(position);
+    }
+
+    private void closeFabAndSearch(){
+        if (fabMenu.isOpened())
+            fabMenu.close(true);
+
+//        if (searchView.isSearchOpen())
+//            searchView.closeSearch();
+    }
+
+    private int getPositionCcDrakhastFaktorShared(){
+        int position = 0;
+        long ccDakhastFaktor = selectVosolShared.getLong(selectVosolShared.getListVosolCcDarkhastFaktor(), 0);
+        for (int i = 0; i < darkhastFaktorMoshtaryForoshandeModels.size(); i++) {
+            if (ccDakhastFaktor == darkhastFaktorMoshtaryForoshandeModels.get(i).getCcDarkhastFaktor())
+                position = i;
+        }
+
+        return position;
     }
 
     @Override

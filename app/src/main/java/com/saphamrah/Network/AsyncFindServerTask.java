@@ -50,13 +50,14 @@ public class AsyncFindServerTask extends AsyncTask<ArrayList<ServerIpModel> , Vo
             for (int i = 0 ; i < arrayList.size() ; i++)
             {
                 ServerIpModel serverIpModel = arrayList.get(i);
+                Log.d("ServerIp","serverIpModel :" + serverIpModel.getServerIp() + ":" + serverIpModel.getPort());
                 try
                 {
                     Socket socket = new Socket();
                     socket.connect(new InetSocketAddress(serverIpModel.getServerIp() , Integer.parseInt(serverIpModel.getPort())) , timeout);
                     if(socket.isConnected())
                     {
-                        Log.d("ServerIp","serverIpModel :" + serverIpModel.getServerIp() + ":" + serverIpModel.getPort());
+                        Log.d("ServerIp","serverIpModel connected :" + serverIpModel.getServerIp() + ":" + serverIpModel.getPort());
                         currentServers.add(serverIpModel);
                     }
                     else

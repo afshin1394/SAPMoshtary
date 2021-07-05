@@ -39,7 +39,7 @@ public class KalaMojodiZaribForoshDAO
         }
     }
 
-    public ArrayList<KalaMojodiZaribModel> getAllByMoshtary(String darajeh, int noeMoshtary, int ccSazmanForosh)
+    public ArrayList<KalaMojodiZaribModel> getAllByMoshtary(String darajeh, int noeMoshtary, int ccSazmanForosh, int ccMoshtaryGharardad)
     {
         ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = new ArrayList<>();
         String query = null;
@@ -54,13 +54,13 @@ public class KalaMojodiZaribForoshDAO
            query = " SELECT km.*,mgk.mablaghforosh GheymatForosh,mgk.MablaghMasrafKonandeh,mgk.ControlMablagh, ZaribForosh , Darajeh, o.Olaviat FROM \n" +
                    "(SELECT k.ccKalaCode, k.CodeKala, k.NameKala, k.ccTaminKonandeh, k.TedadDarKarton, k.TedadDarBasteh, k.Adad, k.MashmolMaliatAvarez, k.ccGorohKala, k.ccBrand, \n" +
                    " k.MablaghKharid, k.Tol, k.Arz, k.Ertefa, k.ccVahedSize, k.VaznKhales, k.VaznNakhales, VaznKarton, k.ccVahedVazn, k.BarCode, k.TarikhTolid, k.TarikhEngheza, \n" +
-                   " k.NameVahedVazn, k.NameBrand, k.TedadMojodyGhabelForosh, k.NameVahedSize, k.ccVahedShomaresh,k.NameVahedShomaresh, k.ShomarehBach, k.GheymatForoshAsli, k.MablaghForosh MablaghForoshKala, \n" +
+                   " k.NameVahedVazn, k.NameBrand, k.TedadMojodyGhabelForosh, k.NameVahedSize, k.ccVahedShomaresh,k.NameVahedShomaresh, k.ShomarehBach, k.GheymatForoshAsli,k.GheymatMasrafKonandehAsli, k.MablaghForosh MablaghForoshKala, \n" +
                    " k.MablaghMasrafKonandeh MablaghMasrafKonandehKala, m.sumTedad, m.ccKalaMojodi, m.sumMax_MojodyByShomarehBach Max_MojodyByShomarehBach \n" +
                    " FROM Kala k \n" +
                    "              LEFT JOIN (SELECT KalaMojodi.* , SUM(Tedad) sumTedad, sum(Max_Mojody) sumMax_Mojody, sum(Max_MojodyByShomarehBach) sumMax_MojodyByShomarehBach FROM KalaMojodi where IsAdamForosh = 0 group by ccKalaCode , ShomarehBach, \n" +
                    " GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh) m \n" +
                    "    ON k.ccKalaCode = m.ccKalaCode AND k.ccTaminKonandeh = m.ccTaminkonandeh AND \n" +
-                   "       k.ShomarehBach = m.ShomarehBach AND k.MablaghMasrafKonandeh = m.GheymatMasrafKonandeh AND k.MablaghForosh = m.GheymatForosh \n" +
+                   "       k.ShomarehBach = m.ShomarehBach AND k.GheymatMasrafKonandehAsli = m.GheymatMasrafKonandeh AND k.GheymatForoshAsli = m.GheymatForosh \n" +
                    " WHERE k.TedadMojodyGhabelForosh > 0 \n" +
                    " ORDER BY codekala DESC ) km \n" +
                    " LEFT JOIN (SELECT * FROM KalaZaribForosh z  WHERE ccGorohMoshtary =   " + noeMoshtary + " AND z.Darajeh IN ( 0," + darajeh + ")) z  ON km.ccKalaCode = z.ccKalaCode \n" +
@@ -72,7 +72,7 @@ public class KalaMojodiZaribForoshDAO
                    "            WHEN    mgk.ControlMablagh = 0 \n" +
                    "            THEN 1=1 \n" +
                    "       END) \n" +
-                   " WHERE km.sumTedad > 0 AND mgk.ExtraPropCcSazmanForosh =  "+ ccSazmanForosh +"\n AND IFNULL(zaribforosh,0)<>0" +
+                   " WHERE km.sumTedad > 0 AND mgk.ExtraPropCcSazmanForosh =  "+ ccSazmanForosh +"\n AND IFNULL(zaribforosh,0)<>0 AND mgk.ccMoshtaryGharardad = "+ccMoshtaryGharardad+
                    " ORDER BY o.Olaviat";
 
 
@@ -96,6 +96,8 @@ public class KalaMojodiZaribForoshDAO
            }
         try
         {
+            Log.i("getAllByMoshtary", "query: "+ query);
+
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
@@ -128,13 +130,13 @@ public class KalaMojodiZaribForoshDAO
             query = " SELECT km.*,mgk.mablaghforosh GheymatForosh,mgk.MablaghMasrafKonandeh,mgk.ControlMablagh, ZaribForosh , Darajeh, o.Olaviat FROM \n" +
                     "(SELECT k.ccKalaCode, k.CodeKala, k.NameKala, k.ccTaminKonandeh, k.TedadDarKarton, k.TedadDarBasteh, k.Adad, k.MashmolMaliatAvarez, k.ccGorohKala, k.ccBrand, \n" +
                     " k.MablaghKharid, k.Tol, k.Arz, k.Ertefa, k.ccVahedSize, k.VaznKhales, k.VaznNakhales, VaznKarton, k.ccVahedVazn, k.BarCode, k.TarikhTolid, k.TarikhEngheza, \n" +
-                    " k.NameVahedVazn, k.NameBrand, k.TedadMojodyGhabelForosh, k.NameVahedSize, k.ccVahedShomaresh,k.NameVahedShomaresh, k.ShomarehBach, k.GheymatForoshAsli, k.MablaghForosh MablaghForoshKala, \n" +
+                    " k.NameVahedVazn, k.NameBrand, k.TedadMojodyGhabelForosh, k.NameVahedSize, k.ccVahedShomaresh,k.NameVahedShomaresh, k.ShomarehBach, k.GheymatForoshAsli,k.GheymatMasrafKonandehAsli , k.MablaghForosh MablaghForoshKala, \n" +
                     " k.MablaghMasrafKonandeh MablaghMasrafKonandehKala, m.sumTedad, m.ccKalaMojodi, m.sumMax_MojodyByShomarehBach Max_MojodyByShomarehBach \n" +
                     " FROM Kala k \n" +
-                    "              LEFT JOIN (SELECT KalaMojodi.* , SUM(Tedad) sumTedad , sum(Max_Mojody) sumMax_Mojody, sum(Max_MojodyByShomarehBach) sumMax_MojodyByShomarehBach  FROM KalaMojodi where IsAdamForosh = 0 group by ccKalaCode , ShomarehBach, \n" +
+                    "              LEFT JOIN (SELECT KalaMojodi.* , SUM(Tedad) sumTedad , sum(Max_Mojody) sumMax_Mojody, sum(Max_MojodyByShomarehBach) sumMax_MojodyByShomarehBach  FROM KalaMojodi where  ccKalaCode = " + ccKalaCode + " AND  IsAdamForosh = 0 group by ccKalaCode , ShomarehBach, \n" +
                     " GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh) m \n" +
                     "    ON k.ccKalaCode = m.ccKalaCode AND k.ccTaminKonandeh = m.ccTaminkonandeh AND \n" +
-                    "       k.ShomarehBach = m.ShomarehBach AND k.MablaghMasrafKonandeh = m.GheymatMasrafKonandeh AND k.GheymatForoshAsli = m.GheymatForosh \n" +
+                    "       k.ShomarehBach = m.ShomarehBach AND k.GheymatMasrafKonandehAsli = m.GheymatMasrafKonandeh AND k.GheymatForoshAsli = m.GheymatForosh \n" +
                     " WHERE k.TedadMojodyGhabelForosh > 0 \n" +
                     " ORDER BY codekala DESC ) km \n" +
                     " LEFT JOIN (SELECT * FROM KalaZaribForosh z  WHERE ccGorohMoshtary =   " + noeMoshtary + " AND z.Darajeh IN ( 0," + darajeh + ")) z  ON km.ccKalaCode = z.ccKalaCode \n" +
@@ -170,6 +172,8 @@ public class KalaMojodiZaribForoshDAO
         }
         try
         {
+
+            Log.d("KalaMojodiZarib","query: " + query);
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
@@ -221,6 +225,8 @@ public class KalaMojodiZaribForoshDAO
             kalaMojodiZaribModel.setErtefa(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_Ertefa())));
             kalaMojodiZaribModel.setMashmolMaliatAvarez(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_MashmolMaliatAvarez())));
             kalaMojodiZaribModel.setGheymatForoshAsli(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_GheymatForoshAsli())));
+            kalaMojodiZaribModel.setGheymatMasrafKonandehAsli(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_GheymatMasrafKonandehAsli())));
+
             // KalaMojodi
             kalaMojodiZaribModel.setCcKalaMojodi(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_ccKalaMojodi())));
             kalaMojodiZaribModel.setTedad(cursor.getInt(cursor.getColumnIndex("sumTedad")));

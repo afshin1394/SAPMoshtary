@@ -44,6 +44,7 @@ public class KalaModel
     private static final String COLUMN_TarikhEngheza = "TarikhEngheza";
     private static final String COLUMN_ShomarehBach = "ShomarehBach";
     private static final String COLUMN_GheymatForoshAsli="GheymatForoshAsli";
+    private static final String COLUMN_GheymatMasrafKonandehAsli="GheymatMasrafKonandehAsli";
 
 
 
@@ -154,6 +155,9 @@ public class KalaModel
     }
     public static String COLUMN_GheymatForoshAsli() {
         return COLUMN_GheymatForoshAsli;
+    }
+    public static String COLUMN_GheymatMasrafKonandehAsli() {
+        return COLUMN_GheymatMasrafKonandehAsli;
     }
 
 
@@ -482,7 +486,15 @@ public class KalaModel
     }
 
 
+    private float GheymatMasrafKonandehAsli;
 
+    public float getGheymatMasrafKonandehAsli() {
+        return GheymatMasrafKonandehAsli;
+    }
+
+    public void setGheymatMasrafKonandehAsli(float GheymatMasrafKonandehAsli) {
+        this.GheymatMasrafKonandehAsli = GheymatMasrafKonandehAsli;
+    }
 
     @Override
     public String toString() {
@@ -523,6 +535,8 @@ public class KalaModel
                 ", ShomarehBach='" + ShomarehBach + '\'' +
                 ", Id=" + Id +
                 ", gheymatForoshAsli=" + GheymatForoshAsli +
+                ", GheymatMasrafKonanadehAsli=" + GheymatMasrafKonandehAsli +
+
                 '}';
     }
 }

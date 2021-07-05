@@ -59,6 +59,7 @@ public class ElamMarjoeeForoshandehDAO {
    */
     public void fetchElamMarjoeeForoshandeh(final Context context, final String activityNameForLog , String ccDarkhastFaktors , final RetrofitResponse retrofitResponse)
     {
+        Log.d("getProgram", "Marjoee Pakhsh: " + ccDarkhastFaktors);
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
         {

@@ -1065,4 +1065,5 @@
     <string name="errorSendLogData">خطا در ارسال لاگ های سیستمی</string>
     <string name="errorKalaOlaviat">شما نمی توانید این کالا را به دلیل وجود کالای قدیمی تر ثبت نمایید </string>
     <string name="errorKalaOlaviatTekrari">شما نمی توانید محصولی را با دو قیمت مختلف ثبت نمایید</string>
+    <string name="errorSendDariaftPardakhtMarjoee">وصول با موفقیت ثبت گردید ، مرجوعی قبلا ارسال گردیده است با واحد انبار مراجعه فرمایید</string>
 </resources>

@@ -8,6 +8,7 @@ import com.saphamrah.BaseMVP.DarkhastKalaMVP;
 import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
 import com.saphamrah.DAO.KalaOlaviatGheymatDAO;
 import com.saphamrah.MVP.Model.DarkhastKalaModel;
+import com.saphamrah.MVP.View.DarkhastKalaActivity;
 import com.saphamrah.Model.DarkhastFaktorSatrModel;
 import com.saphamrah.Model.ElatAdamDarkhastModel;
 import com.saphamrah.Model.KalaModel;
@@ -107,12 +108,12 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
     }
 
     @Override
-    public void getAllKalaWithMojodiZarib(int ccMoshtary)
+    public void getAllKalaWithMojodiZarib(int ccMoshtary, boolean firstTime, DarkhastKalaActivity.AddItemType type)
     {
         if (ccMoshtary > 0)
         {
             mView.get().showAlertLoading();
-            mModel.getAllKalaWithMojodiZarib(ccMoshtary, true, true, true);
+            mModel.getAllKalaWithMojodiZarib(ccMoshtary, true, true, true,firstTime,type);
         }
         else
         {
@@ -198,6 +199,7 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
         catch (Exception e)
         {
             e.printStackTrace();
+            Log.d("exception", "exception1 : " + e.getStackTrace()[0].getClass()+ "****" + e.getStackTrace()[0].getMethodName()+ "****" +e.getStackTrace()[0].getLineNumber()+ "****" );
             mView.get().onErrorAddNewRequestedKala(R.string.errorInvalidCount);
         }
     }
@@ -412,17 +414,18 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
     }
 
     @Override
-    public void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels)
+    public void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels, boolean firstTime, DarkhastKalaActivity.AddItemType type)
     {
         Log.d("DarkhastKala", "on get kala in presenter");
         mView.get().closeAlertLoading();
         if (kalaMojodiZaribModels.size() > 0)
         {
-            mView.get().onGetAllKalaWithMojodiZarib(kalaMojodiZaribModels);
+            mView.get().onGetAllKalaWithMojodiZarib(kalaMojodiZaribModels,firstTime,type);
         }
         else
         {
-            mView.get().showAlertDialog(R.string.notFoundKalaMojodiInAnbarak, Constants.FAILED_MESSAGE(), true);
+            mView.get().onGetAllKalaWithMojodiZarib(new ArrayList<KalaMojodiZaribModel>(),firstTime,type);
+//            mView.get().showAlertDialog(R.string.notFoundKalaMojodiInAnbarak, Constants.FAILED_MESSAGE(), true);
         }
     }
 

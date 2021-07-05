@@ -9,6 +9,7 @@ import com.saphamrah.DAO.DarkhastFaktorTakhfifDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.DAO.TakhfifHajmiDAO;
+import com.saphamrah.DAO.TakhfifSenfiDAO;
 import com.saphamrah.Model.DarkhastFaktorJayezehModel;
 import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.DarkhastFaktorSatrTakhfifModel;
@@ -16,6 +17,8 @@ import com.saphamrah.Model.DarkhastFaktorTakhfifModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.TakhfifHajmiTitrSatrModel;
+import com.saphamrah.Model.TakhfifSenfiModel;
+import com.saphamrah.Model.TakhfifSenfiTitrSatrModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.Utils.Constants;
 
@@ -70,7 +73,8 @@ public class DiscountCalculation
 
 
     public DiscountCalculation(Context context)
-    {}
+    {
+    }
 
     public DiscountCalculation(ArrayList<ParameterChildModel> parameterChildModels)
     {
@@ -134,7 +138,25 @@ public class DiscountCalculation
         return takhfifHajmiDAO.getByMoshtaryWithSatr(moshtary, darkhastFaktorModel.getCodeNoeHaml(), shebheOmdeh, noeVosol);
     }
 
+    public ArrayList<TakhfifSenfiTitrSatrModel> getTakhfifSenfis(Context context, DarkhastFaktorModel darkhastFaktorModel, int noeVosol, boolean shebheOmdeh)
+    {
+        TakhfifSenfiDAO takhfifSenfiDAO = new TakhfifSenfiDAO(context);
+        MoshtaryDAO moshtaryDAO = new MoshtaryDAO(context);
 
+        MoshtaryModel moshtary = moshtaryDAO.getByccMoshtary(darkhastFaktorModel.getCcMoshtary());
+        Log.d("takhfifSenfi" , "getCodeNoeHaml : " + darkhastFaktorModel.getCodeNoeHaml() + " , shebheOmdeh : " + shebheOmdeh + " , noeVosol : " + noeVosol);
+
+        if(noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD() || noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_Resid_Naghd() || noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh())
+        {
+            noeVosol = 1;
+        }
+        else if (noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_CHECK() || noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_RESID() || noeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh())
+        {
+            noeVosol = 2;
+        }
+
+        return takhfifSenfiDAO.getByMoshtaryWithSatr(moshtary, darkhastFaktorModel.getCodeNoeHaml(), shebheOmdeh, noeVosol);
+    }
     public int calculateZarib(double beEza, int noeTedadRialTakhfif, int codeNoeBasteBandiTakhfif, double tedadCarton, double tedadBaste, double tedadAdad, double sumMablagh, double sumVazn, double tedadAghlam)
     {
         Log.d("Takhfif" , "beEza : " + beEza + " , codeNoeBasteBandiTakhfif : " + codeNoeBasteBandiTakhfif + " , tedadBaste : " + tedadBaste + " , tedadCarton : " + tedadCarton);
@@ -387,7 +409,7 @@ public class DiscountCalculation
     }
 
 
-    public boolean insertFaktorTakhfifHajmi(Context context, long ccDarkhastFaktor, String codeTakhfif, int ccTakhfifHajmi, String sharhTakhfif, double darsadTakhfif, long mablaghTakhfif, int ForJayezeh)
+    public boolean insertFaktorTakhfif(Context context, long ccDarkhastFaktor, String codeTakhfif, int ccTakhfif, String sharhTakhfif, double darsadTakhfif, long mablaghTakhfif, int ForJayezeh)
     {
         try
         {
@@ -395,7 +417,7 @@ public class DiscountCalculation
             DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(context);
             DarkhastFaktorTakhfifModel model = new DarkhastFaktorTakhfifModel();
             model.setCcDarkhastFaktor(ccDarkhastFaktor);
-            model.setCcTakhfif(ccTakhfifHajmi);
+            model.setCcTakhfif(ccTakhfif);
             model.setSharhTakhfif(sharhTakhfif);
             model.setCodeNoeTakhfif(Integer.parseInt(codeTakhfif));
             model.setDarsadTakhfif((float) darsadTakhfif);
@@ -414,7 +436,7 @@ public class DiscountCalculation
     }
 
 
-    public boolean insertFaktorSatrTakhfifHajmi(Context context, long ccDarkhastFaktorSatr, String codeTakhfifHajmi, int ccTakhfifHajmi, String sharhTakhfif, double darsadTakhfif, long mablaghTakhfif, int ForJayezeh, int olaviat)
+    public boolean insertFaktorSatrTakhfif(Context context, long ccDarkhastFaktorSatr, String codeTakhfif, int ccTakhfif, String sharhTakhfif, double darsadTakhfif, long mablaghTakhfif, int ForJayezeh, int olaviat)
     {
         try
         {
@@ -422,9 +444,9 @@ public class DiscountCalculation
             DarkhastFaktorSatrTakhfifModel darkhastFaktorSatrTakhfifModel = new DarkhastFaktorSatrTakhfifModel();
 
             darkhastFaktorSatrTakhfifModel.setCcDarkhastFaktorSatr(ccDarkhastFaktorSatr);
-            darkhastFaktorSatrTakhfifModel.setCcTakhfif(ccTakhfifHajmi);
+            darkhastFaktorSatrTakhfifModel.setCcTakhfif(ccTakhfif);
             darkhastFaktorSatrTakhfifModel.setSharhTakhfif(sharhTakhfif);
-            darkhastFaktorSatrTakhfifModel.setCodeNoeTakhfif(Integer.parseInt(codeTakhfifHajmi));
+            darkhastFaktorSatrTakhfifModel.setCodeNoeTakhfif(Integer.parseInt(codeTakhfif));
             darkhastFaktorSatrTakhfifModel.setDarsadTakhfif((float) darsadTakhfif);
             darkhastFaktorSatrTakhfifModel.setMablaghTakhfif(mablaghTakhfif);
             darkhastFaktorSatrTakhfifModel.setExtraProp_ForJayezeh(ForJayezeh);
