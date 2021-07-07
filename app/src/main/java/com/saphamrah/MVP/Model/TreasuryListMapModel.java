@@ -1315,10 +1315,10 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
         //---------------------- For Test -----------------
         UserTypeShared userTypeShared = new UserTypeShared(mPresenter.getAppContext());
         int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
-        if (isTest == 1)
-        {
-            return true;
-        }
+//        if (isTest == 1)
+//        {
+//            return true;
+//        }
 
         //SystemConfigDAO systemConfigDAO = new SystemConfigDAO(mPresenter.getAppContext());
         //SystemConfigModel systemConfig = systemConfigDAO.getAll().get(0);
@@ -2699,6 +2699,9 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
 
     @Override
     public void checkIsLocationSendToServer(int noeMasouliat, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel) {
+        UserTypeShared userTypeShared = new UserTypeShared(mPresenter.getAppContext());
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
+
         final Handler handler = new Handler(msg -> {
             if (msg.arg1 == 1) {
                 mPresenter.onOpenInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModel, true);
@@ -2706,45 +2709,53 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             } else if (msg.arg1 == -1) {
                 mPresenter.onOpenInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModel, false);
             }
-            return true;
+            return false;
         });
         Message message = new Message();
-
+        message.arg1 = 1;
         new Thread(() -> {
-
-            UserTypeShared userTypeShared = new UserTypeShared(mPresenter.getAppContext());
-
             int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE(), 0);
-            if (isTest == 0) {
 
-                if ((darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktorNoeForosh() == 1) &&
-                        (noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SMART
-                                || noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD)) {
-                    GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
+            if ((darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktorNoeForosh() == 1) &&
+                    (getNoeMasouliatForoshandeh() == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SMART
+                            || getNoeMasouliatForoshandeh() == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD)
+                    && isTest != 1) {
 
-                    message.arg1 = 1;
-                    ArrayList<GPSDataModel> gpsDataModels = gpsDataPpcDAO.getAllByccMoshtary(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
-                    if (gpsDataModels.size() > 0) {
 
-                        for (GPSDataModel gpsDataModel : gpsDataModels) {
-                            if (gpsDataModel.getExtraProp_IsSend() == 0) {
-                                message.arg1 = -1;
-                                break;
-                            }
+                GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
+
+                ArrayList<GPSDataModel> gpsDataModels = gpsDataPpcDAO.getAllByccMoshtary(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
+                if (gpsDataModels.size() > 0 && isValidCreateFaktor(darkhastFaktorMoshtaryForoshandeModel, foroshandehMamorPakhshModel)) {
+
+                    for (GPSDataModel gpsDataModel : gpsDataModels) {
+                        if (gpsDataModel.getExtraProp_IsSend() == 0) {
+                            message.arg1 = -1;
+                            break;
                         }
-                    } else {
-                        message.arg1 = -1;
                     }
-
                 } else {
-                    message.arg1 = 1;
+                    message.arg1 = -1;
                 }
+
+
             } else {
                 message.arg1 = 1;
-
             }
             handler.sendMessage(message);
+
         }).start();
+    }
+
+    private int getNoeMasouliatForoshandeh()
+    {
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
+        int noeMasouliat = -1;
+        if (foroshandehMamorPakhshModel != null)
+        {
+            noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+        }
+        return noeMasouliat;
     }
 
     private void sendGps(int noeMasouliat, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel) {

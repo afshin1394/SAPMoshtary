@@ -2098,33 +2098,33 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
     @Override
     public void checkIsLocationSendToServer(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel) {
         UserTypeShared userTypeShared = new UserTypeShared(mPresenter.getAppContext());
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
 
-        int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE(), 0);
+        final Handler handler = new Handler(msg -> {
+            if (msg.arg1 == 1) {
+                mPresenter.openInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModel, true);
 
-        if ((darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktorNoeForosh() == 1) &&
-                (getNoeMasouliatForoshandeh() == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SMART
-                        || getNoeMasouliatForoshandeh() == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD)
-        && isTest!=1 ) {
-            final Handler handler = new Handler(msg -> {
-                if (msg.arg1 == 1) {
-                    mPresenter.openInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModel, true);
+            } else if (msg.arg1 == -1) {
+                mPresenter.openInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModel, false);
+            }
+            return false;
+        });
+        Message message = new Message();
+        message.arg1 = 1;
+        new Thread(() -> {
+            int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE(), 0);
 
-                } else if (msg.arg1 == -1) {
-                    mPresenter.openInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModel, false);
-                }
-                return false;
-            });
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
+            if ((darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktorNoeForosh() == 1) &&
+                    (getNoeMasouliatForoshandeh() == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SMART
+                            || getNoeMasouliatForoshandeh() == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD)
+                    && isTest != 1) {
 
 
-            new Thread(() -> {
                 GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
-                ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-                ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
-                Message message = new Message();
-                message.arg1 = 1;
+
                 ArrayList<GPSDataModel> gpsDataModels = gpsDataPpcDAO.getAllByccMoshtary(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
-                if (gpsDataModels.size() > 0 || isValidCreateFaktor(darkhastFaktorMoshtaryForoshandeModel, foroshandehMamorPakhshModel))
-                 {
+                if (gpsDataModels.size() > 0 && isValidCreateFaktor(darkhastFaktorMoshtaryForoshandeModel, foroshandehMamorPakhshModel)) {
 
                     for (GPSDataModel gpsDataModel : gpsDataModels) {
                         if (gpsDataModel.getExtraProp_IsSend() == 0) {
@@ -2136,15 +2136,13 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                     message.arg1 = -1;
                 }
 
-                handler.sendMessage(message);
-            }).start();
-        }
-        else
-        {
-            mPresenter.openInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModel, true);
-        }
 
+            } else {
+                message.arg1 = 1;
+            }
+            handler.sendMessage(message);
 
+        }).start();
     }
 
     private void sendGPSDataToServer(APIServicePost apiServicePost, ArrayList<GPSDataModel> gpsDataModels, int position) {
