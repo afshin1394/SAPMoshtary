@@ -110,6 +110,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
     private TreasuryListMapMVP.RequiredPresenterOps mPresenter;
     private String CLASS_NAME = "TreasuryListMapModel";
     SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(BaseApplication.getContext());
+    DarkhastFaktorMoshtaryForoshandeDAO darkhastFaktorMoshtaryForoshandeDAO = new DarkhastFaktorMoshtaryForoshandeDAO(BaseApplication.getContext());
 
 
     public TreasuryListMapModel(TreasuryListMapMVP.RequiredPresenterOps mPresenter)
@@ -207,35 +208,31 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
     }
 
     @Override
-    public void getCustomersOrderByRouting()
-    {
-        DarkhastFaktorMoshtaryForoshandeDAO darkhastFaktorMoshtaryForoshandeDAO = new DarkhastFaktorMoshtaryForoshandeDAO(mPresenter.getAppContext());
+    public void getCustomersOrderByRouting() {
         ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getDistinctCustomers(0);
         int noeMasouliat = getNoeMasouliatWithReturnData();
-        for (DarkhastFaktorMoshtaryForoshandeModel model : darkhastFaktorMoshtaryForoshandeModels)
-        {
+        for (DarkhastFaktorMoshtaryForoshandeModel model : darkhastFaktorMoshtaryForoshandeModels) {
             double[] location = getLocation(model.getCcAfradForoshandeh(), model.getCcMoshtary(), model.getCcUser(), model.getLatitude(), model.getLongitude());
             model.setLatitude((float) location[0]);
             model.setLongitude((float) location[1]);
             int countCanEdit = 0;
-            if (noeMasouliat == 4)
-            {
-                countCanEdit = darkhastFaktorMoshtaryForoshandeDAO.getCountCanEditDarkhastForMamorPakhshSard(model.getCcMoshtary(), 0 , 6);
+            int codeVaziatt = 0;
+            if (model.getCcDarkhastFaktorNoeForosh() == 1){
+                codeVaziatt = 6;
+            } else if (model.getCcDarkhastFaktorNoeForosh() == 2){
+                codeVaziatt = 99;
             }
-            else if (noeMasouliat == 5)
-            {
-                countCanEdit = darkhastFaktorMoshtaryForoshandeDAO.getCountCanEditDarkhastForMamorPakhshSmart(model.getCcMoshtary(), 0 , 0, 6);
+            if (noeMasouliat == 4) {
+                countCanEdit = darkhastFaktorMoshtaryForoshandeDAO.getCountCanEditDarkhastForMamorPakhshSard(model.getCcMoshtary(), 0, codeVaziatt);
+            } else if (noeMasouliat == 5) {
+                countCanEdit = darkhastFaktorMoshtaryForoshandeDAO.getCountCanEditDarkhastForMamorPakhshSmart(model.getCcMoshtary(), 0, 0, codeVaziatt);
             }
-            if (countCanEdit == 0)
-            {
+            if (countCanEdit == 0) {
                 model.setCanEditDarkhast(false);
-            }
-            else
-            {
+            } else {
                 model.setCanEditDarkhast(true);
             }
         }
-        //PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
         getRouting(darkhastFaktorMoshtaryForoshandeModels);
     }
 
@@ -245,7 +242,6 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
         MoshtaryAddressDAO moshtaryAddressDAO = new MoshtaryAddressDAO(BaseApplication.getContext());
         ArrayList<MoshtaryAddressModel> moshtaryAddressModels = new ArrayList<>();
         ArrayList<Integer> ccMoshtarys = new ArrayList<>();
-        DarkhastFaktorMoshtaryForoshandeDAO darkhastFaktorMoshtaryForoshandeDAO = new DarkhastFaktorMoshtaryForoshandeDAO(mPresenter.getAppContext());
         ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getDistinctCustomers(0);
         ArrayList<DarkhastFaktorMoshtaryForoshandeModel> arrayListCanEditCustomerDarkhast = new ArrayList<>();
         ArrayList<DarkhastFaktorMoshtaryForoshandeModel> arrayListAllDarkhastEdited = new ArrayList<>();
