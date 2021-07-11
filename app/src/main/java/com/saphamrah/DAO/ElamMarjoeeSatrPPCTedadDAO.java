@@ -45,7 +45,7 @@ public class ElamMarjoeeSatrPPCTedadDAO
         };
     }
 
-    public void insertGroup(ArrayList<ElamMarjoeeSatrPPCTedadModel> elamMarjoeeSatrPPCTedadModels)
+    public boolean insertGroup(ArrayList<ElamMarjoeeSatrPPCTedadModel> elamMarjoeeSatrPPCTedadModels)
     {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try
@@ -59,6 +59,7 @@ public class ElamMarjoeeSatrPPCTedadDAO
             db.setTransactionSuccessful();
             db.endTransaction();
             db.close();
+            return true;
         }
         catch (Exception exception)
         {
@@ -74,6 +75,7 @@ public class ElamMarjoeeSatrPPCTedadDAO
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorGroupInsert , ElamMarjoeeSatrPPCTedadModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "ElamMarjoeeSatrPPCTedadDAO" , "" , "insertGroup" , "");
+            return false;
         }
     }
 

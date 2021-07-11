@@ -17,6 +17,7 @@ public class SystemConfigTabletModel
     private static final String COLUMN_NoeNaghshe="NoeNaghshe";
     private static final String COLUMN_GoodsNumberEachPage="GoodsShowNumberEachPage";
     private static final String COLUMN_SortTreasuryList="SortTreasuryList";
+    private static final String COLUMN_GetProgramService="GetProgramService";
     /*private static final String COLUMN_DateServer = "DateServer";
     private static final String COLUMN_CrispID = "CrispID";*/
 
@@ -55,6 +56,7 @@ public class SystemConfigTabletModel
     }
 
     public static String COLUMN_SortTreasuryList(){ return COLUMN_SortTreasuryList;}
+    public static String COLUMN_GetProgramService(){ return COLUMN_GetProgramService;}
 /*public static String COLUMN_DateServer() {
         return COLUMN_DateServer;
     }
@@ -184,6 +186,16 @@ public class SystemConfigTabletModel
 
     public void setSortTreasuryList(int sortTreasuryList) {
         this.sortTreasuryList = sortTreasuryList;
+    }
+
+    private int getProgramService;
+
+    public int getGetProgramService() {
+        return getProgramService;
+    }
+
+    public void setGetProgramService(int getProgramService) {
+        this.getProgramService = getProgramService;
     }
 
     @Override

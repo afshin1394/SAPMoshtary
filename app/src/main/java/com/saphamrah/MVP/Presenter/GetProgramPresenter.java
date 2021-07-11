@@ -4,14 +4,19 @@ import android.content.Context;
 import android.util.Log;
 
 import com.saphamrah.BaseMVP.GetProgramMVP;
+import com.saphamrah.DAO.SystemConfigTabletDAO;
 import com.saphamrah.MVP.Model.GetProgramModel;
+import com.saphamrah.MVP.Model.GetProgramModelRx;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.R;
+import com.saphamrah.Repository.BargashtyRepository;
 import com.saphamrah.Utils.Constants;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProgramMVP.RequiredPresenterOps
 {
@@ -24,7 +29,18 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
     public GetProgramPresenter(GetProgramMVP.RequiredViewOps viewOps)
     {
         this.mView = new WeakReference<>(viewOps);
-        mModel = new GetProgramModel(this);
+        SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(getAppContext());
+        int getProgramService = systemConfigTabletDAO.getProgramService();
+
+        switch (getProgramService){
+            case Constants.GET_PROGRAM_RETROFIT:
+                mModel = new GetProgramModel(this);
+                break;
+            case Constants.GET_PROGRAM_RX:
+                mModel = new GetProgramModelRx(this);
+                break;
+        }
+
     }
 
 
@@ -201,6 +217,12 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
 
     }
 
+    @Override
+    public void getProgramServiceType() {
+        mModel.getProgramServiceType();
+
+    }
+
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
 
@@ -365,6 +387,10 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
         mView.get().showResourceError(closeActivity, R.string.errorGetDataTitle, R.string.errorGetData, Constants.FAILED_MESSAGE(), R.string.apply);
     }
 
+    @Override
+    public void onGetProgramServiceType(int service) {
+        mView.get().onGetProgramType(service);
+    }
 
 
 }

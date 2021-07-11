@@ -515,28 +515,28 @@ public class SplashPresenter implements SplashMVP.PresenterOps, SplashMVP.Requir
             }
             else if (appVersion >= intStableVersion && appVersion < intLastVersion)
             {
-                String downloadUrl = "";
-                for (ParameterChildModel childParameterModel : childParameterModelsDownloadUrls)
-                {
-                    if (childParameterModel.getCcParameterChild() == Constants.CC_CHILD_DOWNLOAD_URL_ASLI())
-                    {
-                        downloadUrl = childParameterModel.getValue();
-                        break;
-                    }
-                }
+                String downloadUrl = result.getURL();
+//                for (ParameterChildModel childParameterModel : childParameterModelsDownloadUrls)
+//                {
+//                    if (childParameterModel.getCcParameterChild() == Constants.CC_CHILD_DOWNLOAD_URL_ASLI())
+//                    {
+//                        downloadUrl = childParameterModel.getValue();
+//                        break;
+//                    }
+//                }
                 mView.get().newVersionReleased(downloadUrl);
             }
             else if (appVersion < intStableVersion)
             {
-                String downloadUrl = "";
-                for (ParameterChildModel childParameterModel : childParameterModelsDownloadUrls)
-                {
-                    if (childParameterModel.getCcParameterChild() == Constants.CC_CHILD_DOWNLOAD_URL_ASLI())
-                    {
-                        downloadUrl = childParameterModel.getValue();
-                        break;
-                    }
-                }
+                String downloadUrl = result.getURL();
+//                for (ParameterChildModel childParameterModel : childParameterModelsDownloadUrls)
+//                {
+//                    if (childParameterModel.getCcParameterChild() == Constants.CC_CHILD_DOWNLOAD_URL_ASLI())
+//                    {
+//                        downloadUrl = childParameterModel.getValue();
+//                        break;
+//                    }
+//                }
                 mView.get().forceUpdate(downloadUrl);
             }
             else if (today < serverDate)
@@ -545,15 +545,15 @@ public class SplashPresenter implements SplashMVP.PresenterOps, SplashMVP.Requir
             }
             else
             {
-                String downloadUrl = "";
-                for (ParameterChildModel childParameterModel : childParameterModelsDownloadUrls)
-                {
-                    if (childParameterModel.getCcParameterChild() == Constants.CC_CHILD_DOWNLOAD_URL_ASLI())
-                    {
-                        downloadUrl = childParameterModel.getValue();
-                        break;
-                    }
-                }
+                String downloadUrl = result.getURL();
+//                for (ParameterChildModel childParameterModel : childParameterModelsDownloadUrls)
+//                {
+//                    if (childParameterModel.getCcParameterChild() == Constants.CC_CHILD_DOWNLOAD_URL_ASLI())
+//                    {
+//                        downloadUrl = childParameterModel.getValue();
+//                        break;
+//                    }
+//                }
                 mView.get().forceUpdate(downloadUrl);
             }
         }

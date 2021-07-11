@@ -10,6 +10,7 @@ import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.Utils.CollectionUtils;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServiceGet;
 
@@ -278,6 +279,27 @@ Call<GetEtebarResult> call = apiServiceGet.getEtebar(ccForoshandeh , ccAnbarak, 
             String message = context.getResources().getString(R.string.errorDeleteAll , EtebarModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "EtebarDAO" , "" , "deleteByccForoshanhde" , "");
             return false;
+        }
+    }
+
+
+    public ArrayList<String> deleteByccForoshanhdeString(String ccForoshandeh)
+    {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.delete(EtebarModel.TableName(), EtebarModel.COLUMN_ccForoshandeh() + " in (" + ccForoshandeh + ")", null);
+            db.close();
+
+            return new CollectionUtils().convertStringToStringArray(ccForoshandeh);
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , EtebarModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "EtebarDAO" , "" , "deleteByccForoshanhde" , "");
+            return null;
         }
     }
 

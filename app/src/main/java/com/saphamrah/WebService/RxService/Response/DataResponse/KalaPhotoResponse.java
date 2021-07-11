@@ -1,7 +1,5 @@
 package com.saphamrah.WebService.RxService.Response.DataResponse;
 
-import androidx.annotation.NonNull;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.saphamrah.WebService.RxService.Response.BaseResponse;

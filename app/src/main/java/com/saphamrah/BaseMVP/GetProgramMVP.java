@@ -5,6 +5,7 @@ import android.content.Context;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface GetProgramMVP
 {
@@ -25,6 +26,8 @@ public interface GetProgramMVP
         void showResourceError(boolean closeActivity, int titleResId, int messageResId, int messageType, int buttonTextResId);
         void showServerMessage(boolean closeActivity, int titleResId, String message, int messageType, int buttonTextResId);
         void showToast(int resId, int messageType , int duration);
+
+        void onGetProgramType(int service);
     }
 
 
@@ -41,6 +44,8 @@ public interface GetProgramMVP
         void checkUpdateEtebarForoshandeh(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel);
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
+
+        void getProgramServiceType();
     }
 
 
@@ -65,6 +70,7 @@ public interface GetProgramMVP
         void onFailedUpdateEtebarForoshandeh(int itemIndex , String errorMessage);
         void onConfigurationChanged(GetProgramMVP.RequiredViewOps view);
         void onNetworkError(boolean closeActivity);
+        void onGetProgramServiceType(int service);
     }
 
 
@@ -81,6 +87,11 @@ public interface GetProgramMVP
         void updateEtebarForoshandeh(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
+
+        void clearRam();
+        void releaseResources();
+
+        void getProgramServiceType();
     }
 
 }

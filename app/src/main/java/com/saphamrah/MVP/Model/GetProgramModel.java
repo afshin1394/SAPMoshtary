@@ -510,6 +510,23 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
     public void onDestroy()
     {}
 
+    @Override
+    public void clearRam() {
+
+    }
+
+    @Override
+    public void releaseResources() {
+
+    }
+
+    @Override
+    public void getProgramServiceType() {
+        SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(mPresenter.getAppContext());
+        int service = systemConfigTabletDAO.getProgramService();
+        mPresenter.onGetProgramServiceType(service);
+    }
+
 
     ////////////////////////// GET PROGRAM //////////////////////////
 
@@ -5288,11 +5305,11 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
         MoshtaryGharardadKalaDAO moshtaryGharardadKalaDAO = new MoshtaryGharardadKalaDAO(mPresenter.getAppContext());
 
         boolean deleteAll = moshtaryGharardadKalaDAO.deleteAll();
-        boolean insertGroup = moshtaryGharardadKalaDAO.insertGroup(moshtaryGharardadArrayLists);
+        boolean insertGroup = moshtaryGharardadKalaDAO.insertGroupAll(moshtaryGharardadArrayLists);
         if (deleteAll && insertGroup) {
             Log.i(__GET_ALL_KALA_MOSAVAB__, "run: " + deleteAll + " " + insertGroup);
             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
-            getMarjoeePakhsh(getProgramType , ccDarkhastFaktors);
+            getMarjoeePakhsh(getProgramType , ccDarkhastFaktorPakhsh);
 
         } else {
 

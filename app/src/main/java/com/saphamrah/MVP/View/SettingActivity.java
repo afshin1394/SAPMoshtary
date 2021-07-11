@@ -45,6 +45,7 @@ public class SettingActivity extends AppCompatActivity implements SettingMVP.Req
     private EditText edttxtPrintType;
     private EditText editTextMapService;
     private EditText editTextNumberGoodsEachPage;
+    private EditText editTextGetProgram;
     private EditText edtTxtSortTreasuryList;
 
 
@@ -64,6 +65,8 @@ public class SettingActivity extends AppCompatActivity implements SettingMVP.Req
         editTextMapService = findViewById(R.id.txtMapService);
         edtTxtSortTreasuryList = findViewById(R.id.txtSortTreasuryList);
         editTextNumberGoodsEachPage= findViewById(R.id.txtGoodView);
+        editTextGetProgram = findViewById(R.id.txtGetProgramService);
+
         Button btnClearData = findViewById(R.id.btnClearData);
 
         startMVPOps();
@@ -178,6 +181,13 @@ public class SettingActivity extends AppCompatActivity implements SettingMVP.Req
                 mPresenter.getGoodsShowItemNumber();
             }
         });
+        editTextGetProgram.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.getProgramService();
+            }
+        });
+
         editTextNumberGoodsEachPage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
@@ -185,6 +195,17 @@ public class SettingActivity extends AppCompatActivity implements SettingMVP.Req
                 if (hasFocus)
                 {
                     mPresenter.getGoodsShowItemNumber();
+                }
+            }
+        });
+
+        editTextGetProgram.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                changeDrawableLeftTint(editTextGetProgram , hasFocus);
+                if (hasFocus)
+                {
+                    mPresenter.getProgramService();
                 }
             }
         });
@@ -227,7 +248,7 @@ public class SettingActivity extends AppCompatActivity implements SettingMVP.Req
     }
 
     @Override
-    public void onGetSetting(String printerPaperSizeTitle, String printerTypeTitle, String printType,String mapServiceType,String goodItemsCountType,String sortTreasuryList)
+    public void onGetSetting(String printerPaperSizeTitle, String printerTypeTitle, String printType,String mapServiceType,String goodItemsCountType,String sortTreasuryList,String getProgramService)
     {
         if (printerPaperSizeTitle != null && printerPaperSizeTitle.trim().length() > 0)
         {
@@ -249,6 +270,9 @@ public class SettingActivity extends AppCompatActivity implements SettingMVP.Req
         }
         if (sortTreasuryList !=null && sortTreasuryList.trim().length()>0){
             edtTxtSortTreasuryList.setText(sortTreasuryList);
+        }
+        if (getProgramService !=null && getProgramService.trim().length()>0){
+            editTextGetProgram.setText(getProgramService);
         }
     }
 
@@ -389,6 +413,27 @@ public class SettingActivity extends AppCompatActivity implements SettingMVP.Req
             {
                 edtTxtSortTreasuryList.setText(arrayListTitles.get(selectedIndex));
                 mPresenter.checkSortTreasuryList(arrayListStringValues.get(selectedIndex));
+                // BaseApplication.MAP_TYPE=Integer.parseInt(arrayListStringValues.get(selectedIndex));
+            }
+
+            @Override
+            public void onApplyMultiSelection(ArrayList<Integer> selectedIndexes)
+            {
+
+            }
+        });
+    }
+
+    @Override
+    public void onGetProgramService(ArrayList<String> arrayListTitle, ArrayList<String> arrayListValue) {
+        CustomSpinner customSpinner = new CustomSpinner();
+        customSpinner.showSpinner(SettingActivity.this, arrayListTitle, new CustomSpinnerResponse()
+        {
+            @Override
+            public void onApplySingleSelection(int selectedIndex)
+            {
+                editTextGetProgram.setText(arrayListTitle.get(selectedIndex));
+                mPresenter.checkGetProgramService(arrayListValue.get(selectedIndex));
                 // BaseApplication.MAP_TYPE=Integer.parseInt(arrayListStringValues.get(selectedIndex));
             }
 

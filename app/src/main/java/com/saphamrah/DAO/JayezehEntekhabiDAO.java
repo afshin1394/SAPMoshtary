@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.saphamrah.Model.JayezehEntekhabiModel;
+import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
@@ -384,7 +385,34 @@ Call<GetAllvJayezehEntekhabiResult> call = apiServiceGet.getAllvJayezehEntekhabi
             return false;
         }
     }
+    public Boolean updateMablaghForoshAll(ArrayList<KalaModel> kalaModels) {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            for (int i = 0; i < kalaModels.size(); i++) {
+             int ccKalaCode = kalaModels.get(i).getCcKalaCode();
+             double mablaghForosh = kalaModels.get(i).getMablaghForosh();
 
+
+                String query = "UPDATE " + JayezehEntekhabiModel.TableName() +
+                        " SET " + JayezehEntekhabiModel.COLUMN_MablaghForosh() + " = " + mablaghForosh +
+                        " WHERE " + JayezehEntekhabiModel.COLUMN_ccKalaCode() + " = " + ccKalaCode;
+                db.execSQL(query);
+
+            }
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , JayezehEntekhabiModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "JayezehEntekhabiDAO" , "" , "updateMablaghForosh" , "");
+            return false;
+        }
+
+    }
 
     public boolean updateMablaghForosh(double mablaghForosh, int ccKalaCode)
     {
@@ -395,7 +423,7 @@ Call<GetAllvJayezehEntekhabiResult> call = apiServiceGet.getAllvJayezehEntekhabi
                     " SET " + JayezehEntekhabiModel.COLUMN_MablaghForosh() + " = " + mablaghForosh +
                     " WHERE " + JayezehEntekhabiModel.COLUMN_ccKalaCode() + " = " + ccKalaCode ;
             db.execSQL(query);
-            db.close();
+//            db.close();
             return true;
         }
         catch (Exception exception)

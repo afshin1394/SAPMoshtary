@@ -329,7 +329,33 @@ public class TakhfifSenfiDAO {
             return ccTakhfifs;
         }
     }
+    public boolean insertGroupConditional(ArrayList<TakhfifSenfiModel> takhfifSenfiModels) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try {
+            db.beginTransaction();
+            for (TakhfifSenfiModel takhfifSenfiModel : takhfifSenfiModels) {
 
+                ContentValues contentValues = modelToContentvalue(takhfifSenfiModel);
+                db.insertOrThrow(TakhfifSenfiModel.TableName(), null, contentValues);
+            }
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            db.close();
+            return true;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            if (db.inTransaction()) {
+                db.endTransaction();
+            }
+            if (db.isOpen()) {
+                db.close();
+            }
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorGroupInsert, TakhfifSenfiModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "TakhfifSenfiDAO", "", "insertGroup", "");
+            return false;
+        }
+    }
 
     public ArrayList<TakhfifSenfiModel> getAll() {
         ArrayList<TakhfifSenfiModel> takhfifSenfiModels = new ArrayList<>();

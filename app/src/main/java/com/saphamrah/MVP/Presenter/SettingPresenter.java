@@ -210,6 +210,27 @@ public class SettingPresenter implements SettingMVP.PresenterOps , SettingMVP.Re
         mModel.getSortTreasuryList();
     }
 
+    @Override
+    public void getProgramService() {
+        mModel.getProgramService();
+    }
+
+    @Override
+    public void checkGetProgramService(String mapTypeValue) {
+        try
+        {
+
+            int getProgramService = Integer.parseInt(mapTypeValue.trim());
+            mModel.saveGetProgramService(getProgramService);
+        }
+        catch (Exception e)
+        {
+            mView.get().showToast(R.string.invalidGetProgramService, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+            e.printStackTrace();
+            checkInsertLogToDB(Constants.LOG_EXCEPTION(), e.toString(), "SettingPresenter", "", "checkGetProgramService*value=" + mapTypeValue, "");
+        }
+    }
+
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
 
@@ -227,9 +248,9 @@ public class SettingPresenter implements SettingMVP.PresenterOps , SettingMVP.Re
     }
 
     @Override
-    public void onGetSetting(String printerPaperSizeTitle, String printerTypeTitle, String printType,String mapServiceType,String goodItemsCountType , String sortTreasuryList)
+    public void onGetSetting(String printerPaperSizeTitle, String printerTypeTitle, String printType,String mapServiceType,String goodItemsCountType , String sortTreasuryList,String getProgramService)
     {
-        mView.get().onGetSetting(printerPaperSizeTitle, printerTypeTitle, printType,mapServiceType,goodItemsCountType , sortTreasuryList);
+        mView.get().onGetSetting(printerPaperSizeTitle, printerTypeTitle, printType,mapServiceType,goodItemsCountType , sortTreasuryList,getProgramService);
     }
 
     @Override
@@ -332,7 +353,18 @@ public class SettingPresenter implements SettingMVP.PresenterOps , SettingMVP.Re
     }
 
     @Override
+    public void onFailedUpdateGetProgramService() {
+        mView.get().showToast(R.string.updateFailed, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+
+    }
+
+    @Override
     public void onGetSortTreasuryList(ArrayList<String> arrayListTitles, ArrayList<String> arrayListStringValues) {
         mView.get().onGetSortTreasuryList(arrayListTitles , arrayListStringValues);
+    }
+
+    @Override
+    public void onGetProgramService(ArrayList<String> arrayListTitle, ArrayList<String> arrayListValue) {
+        mView.get().onGetProgramService(arrayListTitle , arrayListValue);
     }
 }

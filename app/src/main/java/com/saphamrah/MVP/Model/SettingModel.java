@@ -39,12 +39,14 @@ public class SettingModel implements SettingMVP.ModelOps
             String[] arrayMapServiceType=mPresenter.getAppContext().getResources().getStringArray(R.array.mapServiceTypeItems);
             String[] arrayGoodsNumberType=mPresenter.getAppContext().getResources().getStringArray(R.array.GoodsNumberItems);
             String[] arraySortTreasuryList=mPresenter.getAppContext().getResources().getStringArray(R.array.sortTreasuryListTypeItems);
+            String[] arrayGetProgramService=mPresenter.getAppContext().getResources().getStringArray(R.array.getProgramServiceItems);
             String printerPaperSize = "";
             String printerType = "";
             String printType = "";
             String mapServiceType = "";
             String goodsNumber="";
             String sortTreasuryList="";
+            String getProgramService="";
 
             try
             {
@@ -111,7 +113,19 @@ public class SettingModel implements SettingMVP.ModelOps
                         break;
                     }
                 }
-                mPresenter.onGetSetting(printerPaperSize, printerType, printType,mapServiceType,goodsNumber,sortTreasuryList);
+
+                for (String str :arrayGetProgramService)
+                {
+
+                    JSONObject jsonObject=new JSONObject(str);
+
+                    if (jsonObject.getString("value").trim().equals(String.valueOf(systemConfigTabletModels.get(0).getGetProgramService())))
+                    {
+                        getProgramService=jsonObject.getString("title");
+                        break;
+                    }
+                }
+                mPresenter.onGetSetting(printerPaperSize, printerType, printType,mapServiceType,goodsNumber,sortTreasuryList,getProgramService);
             }
             catch (Exception e)
             {
@@ -329,5 +343,36 @@ public class SettingModel implements SettingMVP.ModelOps
         }
 
         mPresenter.onGetSortTreasuryList(arrayListTitle , arrayListValue);
+    }
+
+    @Override
+    public void getProgramService() {
+        ArrayList<String> arrayListTitle = new ArrayList<>();
+        ArrayList<String> arrayListValue = new ArrayList<>();
+        String[] arrayGetProgramTypes = mPresenter.getAppContext().getResources().getStringArray(R.array.getProgramServiceItems);
+        for (String str : arrayGetProgramTypes)
+        {
+            try
+            {
+                JSONObject jsonObject = new JSONObject(str);
+                arrayListTitle.add(jsonObject.getString("title"));
+                arrayListValue.add(jsonObject.getString("value"));
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                setLogToDB(Constants.LOG_EXCEPTION(), e.toString(), "SettingModel", "SettingActivity", "getProgramService", "");
+            }
+        }
+
+        mPresenter.onGetProgramService(arrayListTitle , arrayListValue);
+    }
+
+    @Override
+    public void saveGetProgramService(int getProgramService) {
+        if (!systemConfigTabletDAO.updateGetProgramService(getProgramService))
+        {
+            mPresenter.onFailedUpdateGetProgramService();
+        }
     }
 }

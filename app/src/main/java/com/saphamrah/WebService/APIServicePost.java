@@ -172,4 +172,7 @@ public interface APIServicePost
     @POST("Api/ApiSales/CreateKardexJSON ")
     Call<MarjoeeKardexResult> marjoeeKardex(@Field("") String jsonStringData);
 
+    @FormUrlEncoded
+    @POST("Api/ApiSales/CreateKardexWithJSON")
+    Call<MarjoeeKardexResult> createKardexWithJson(@Field("") String jsonStringData);
 }

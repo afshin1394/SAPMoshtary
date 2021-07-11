@@ -25,6 +25,8 @@ public class TakhfifHajmiModel
     private static final String COLUMN_ccMantagheh = "ccMantagheh";
     private static final String COLUMN_ccNoeSenf = "ccNoeSenf";
     private static final String COLUMN_NameNoeSenf = "NameNoeSenf";
+    private static final String COLUMN_NoeGheymat = "NoeGheymat";
+
 
 
     public static String TableName() {
@@ -87,6 +89,7 @@ public class TakhfifHajmiModel
     public static String COLUMN_NameNoeSenf() {
         return COLUMN_NameNoeSenf;
     }
+    public static String COLUMN_NoeGheymat(){return COLUMN_NoeGheymat; }
 
 
 
@@ -428,7 +431,17 @@ public class TakhfifHajmiModel
         this.NameNoeSenf = NameNoeSenf;
     }
 
-    @NonNull
+
+    private int  NoeGheymat;
+    public int getNoeGheymat() {
+        return this.NoeGheymat;
+    }
+
+
+    public void setNoeGheymat(int NoeGheymat) {
+        this.NoeGheymat = NoeGheymat;
+    }
+
     @Override
     public String toString()
     {
@@ -468,7 +481,8 @@ public class TakhfifHajmiModel
                 ", IsPelekani=" + IsPelekani +
                 ", ccMantagheh=" + ccMantagheh +
                 ", ccNoeSenf=" + ccNoeSenf +
-                ", NameNoeSenf=" + NameNoeSenf +
+                ", NameNoeSenf='" + NameNoeSenf + '\'' +
+                ", NoeGheymat=" + NoeGheymat +
                 '}';
     }
 }

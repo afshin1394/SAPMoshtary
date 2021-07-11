@@ -46,7 +46,7 @@ public class MarjoeeKamelImageDAO
         };
     }
 
-    public void insertGroup(ArrayList<MarjoeeKamelImageModel> marjoeeKamelImageModels)
+    public boolean insertGroup(ArrayList<MarjoeeKamelImageModel> marjoeeKamelImageModels)
     {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try
@@ -60,6 +60,7 @@ public class MarjoeeKamelImageDAO
             db.setTransactionSuccessful();
             db.endTransaction();
             db.close();
+            return true;
         }
         catch (Exception exception)
         {
@@ -75,6 +76,7 @@ public class MarjoeeKamelImageDAO
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorInsert , MarjoeeKamelImageModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "MarjoeeKamelImageDAO" , "" , "insertGroup" , "");
+            return false;
         }
     }
 

@@ -11,7 +11,7 @@ public interface SettingMVP
     interface RequiredViewOps
     {
         Context getAppContext();
-        void onGetSetting(String printerPaperSizeTitle, String printerTypeTitle, String printType, String mapServiceType, String goodsNumberItem,String sortTreasuryList);
+        void onGetSetting(String printerPaperSizeTitle, String printerTypeTitle, String printType, String mapServiceType, String goodsNumberItem,String sortTreasuryList,String getProgramService);
         void onGetPaperSizesForPrint(ArrayList<String> arrayListTitles, ArrayList<String> arrayListValues);
         void onGetPrinterTypes(ArrayList<String> arrayListTitles, ArrayList<String> arrayListValues);
         void onGetPrintTypes(ArrayList<String> arrayListTitles, ArrayList<String> arrayListValues);
@@ -21,6 +21,7 @@ public interface SettingMVP
         void showToast(int resId, int messageType, int duration);
         void showAlertDialog(int resId, int messageType);
         void onGetSortTreasuryList(ArrayList<String> arrayListTitles, ArrayList<String> arrayListStringValues);
+        void onGetProgramService(ArrayList<String> arrayListTitle, ArrayList<String> arrayListValue);
     }
 
 
@@ -46,13 +47,15 @@ public interface SettingMVP
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
         void getSortTreasuryList();
+        void getProgramService();
+        void checkGetProgramService(String s);
     }
 
 
     interface RequiredPresenterOps
     {
         Context getAppContext();
-        void onGetSetting(String printerPaperSizeTitle, String printerTypeTitle, String printType, String mapServiceType, String goodsNumberItem ,String sortTreasuryList);
+        void onGetSetting(String printerPaperSizeTitle, String printerTypeTitle, String printType, String mapServiceType, String goodsNumberItem ,String sortTreasuryList,String getProgramService);
         void onGetPaperSizesForPrint(ArrayList<String> arrayListTitles, ArrayList<String> arrayListValues);
         void onGetPrinterTypes(ArrayList<String> arrayListTitles, ArrayList<String> arrayListValues);
         void onGetPrintTypes(ArrayList<String> arrayListTitles, ArrayList<String> arrayListValues);
@@ -66,7 +69,11 @@ public interface SettingMVP
         void onFailedUpdateSortTreasuryList();
         void onFailedUpdatePrintType();
         void onFailedUpdateGoodsShowNumber();
+        void onFailedUpdateGetProgramService();
         void onGetSortTreasuryList(ArrayList<String> arrayListTitles, ArrayList<String> arrayListStringValues);
+        void onGetProgramService(ArrayList<String> arrayListTitle, ArrayList<String> arrayListValue);
+
+
     }
 
 
@@ -90,6 +97,8 @@ public interface SettingMVP
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
         void getSortTreasuryList();
+        void getProgramService();
+        void saveGetProgramService(int getProgramService);
     }
 
 

@@ -905,6 +905,40 @@ public class DarkhastFaktorDAO
         return mablaghKolFaktor;
     }
 
+    public ArrayList<Integer> getccMarkazSazmanForoshSakhtarForoshAll()
+    {
+        ArrayList<Integer> ccMarkazSazmanForoshSakhtarForosh = new ArrayList<>();
+
+        try
+        {
+            String query = "select " + DarkhastFaktorModel.COLUMN_ccMarkazSazmanForoshSakhtarForosh() + " from " + DarkhastFaktorModel.TableName() ;
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+                        ccMarkazSazmanForoshSakhtarForosh.add( cursor.getInt(0));
+                        cursor.moveToNext();
+                    }
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "getccMarkazSazmanForoshSakhtarForosh" , "");
+        }
+        return ccMarkazSazmanForoshSakhtarForosh;
+    }
+
+
     public int getccMarkazSazmanForoshSakhtarForosh()
     {
         int ccMarkazSazmanForoshSakhtarForosh = 0;
@@ -1300,6 +1334,37 @@ public class DarkhastFaktorDAO
 
     }
 
+    public String getccDarkhastFaktorsByNoeFaktorHavaleRooz(int ccNoeFaktorHavale)
+    {
+        String ccDarkhastFaktors = "";
+        try
+        {
+            //select group_concat(ccDarkhastFaktor) from DarkhastFaktor where ccDarkhastFaktorNoeForosh =
+            String query = "select group_concat(" + DarkhastFaktorModel.COLUMN_ccDarkhastFaktor() + ") from " + DarkhastFaktorModel.TableName() +
+                    " where " + DarkhastFaktorModel.COLUMN_FaktorRooz() + " = " + 0 +
+                    " AND " + DarkhastFaktorModel.COLUMN_ccDarkhastFaktorNoeForosh() + " = " + ccNoeFaktorHavale;
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    ccDarkhastFaktors = cursor.getString(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorModel.TableName()) + "\n" + e.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "getccDarkhastFaktorsByNoeFaktorHavale" , "");
+        }
+        return ccDarkhastFaktors == null ? "" : ccDarkhastFaktors;
+    }
 
     public boolean deleteAll()
     {

@@ -84,10 +84,16 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
 
         if ((models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) && ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6))) {
             holder.layEditDarkhast.setVisibility(View.VISIBLE);
-            holder.layMarjoee.setVisibility(View.GONE);
         } else {
-            holder.layMarjoee.setVisibility(View.VISIBLE);
             holder.layEditDarkhast.setVisibility(View.GONE);
+        }
+
+
+//        if ((models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) && (models.get(position).getFaktorRooz() == 1) && ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6))) {
+        if ((models.get(position).getCcDarkhastFaktorNoeForosh() ==DarkhastFaktorModel.ccNoeFaktor) && (noeMasouliat==4 || noeMasouliat==5)){
+                holder.layMarjoee.setVisibility(View.VISIBLE);
+        } else {
+            holder.layMarjoee.setVisibility(View.GONE);
         }
 
         /**

@@ -7,23 +7,34 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.saphamrah.BaseMVP.marjoee.DarkhastFaktorMarjoeeMVP;
+import com.saphamrah.MVP.Presenter.marjoee.DarkhastFaktorMarjoeePresenter;
+import com.saphamrah.MVP.View.TemporaryRequestsListActivity;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.CustomAlertDialog;
+import com.saphamrah.Utils.CustomLoadingDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.anwarshahriar.calligrapher.Calligrapher;
 
-public class DarkhastFaktorMarjoeeActivity extends AppCompatActivity {
+public class DarkhastFaktorMarjoeeActivity extends AppCompatActivity implements DarkhastFaktorMarjoeeMVP.RequiredViewOps {
     private final String TAG = this.getClass().getSimpleName();
     private String ccDarkhastFaktor;
     private String ccMoshtary;
+    private DarkhastFaktorMarjoeePresenter mPresenter;
+    private CustomAlertDialog customAlertDialog;
+    private AlertDialog alertDialogLoading;
+    private CustomLoadingDialog customLoadingDialog;
+
     @BindView(R.id.lblActivityTitle)
     TextView lblActivityTitle;
     @BindView(R.id.fabMenu)
@@ -41,14 +52,20 @@ public class DarkhastFaktorMarjoeeActivity extends AppCompatActivity {
     private IOnclickSabtMarjoee iOnclickSabtMarjoee;
     private IOnclickSearchNameKalaMarjoee iOnclickSearchNameKalaMarjoee;
 
-
+    @OnClick(R.id.fabSend)
+    public void fabSend(){
+        showLoading();
+        mPresenter.sendMarjoee(Long.parseLong(ccDarkhastFaktor));
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_darkhast_faktor_marjoee);
         ButterKnife.bind(this);
-
+        mPresenter = new DarkhastFaktorMarjoeePresenter(this);
+        customAlertDialog = new CustomAlertDialog(this);
+        customLoadingDialog = new CustomLoadingDialog();
         // get bundle
         Intent in = getIntent();
         Bundle content_search = in.getExtras();
@@ -237,5 +254,35 @@ public class DarkhastFaktorMarjoeeActivity extends AppCompatActivity {
             finish();
         }
 
+    }
+
+    @Override
+    public void showToast(int resId, int messageType, int duration) {
+        customAlertDialog.showToast(this, getResources().getString(resId), messageType, duration);
+
+    }
+
+    @Override
+    public void showLoading() {
+        if (alertDialogLoading == null) {
+            alertDialogLoading = customLoadingDialog.showLoadingDialog(this);
+        }
+    }
+
+    @Override
+    public void closeLoading() {
+        if (alertDialogLoading != null) {
+            try {
+                alertDialogLoading.dismiss();
+                alertDialogLoading = null;
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onSuccessSend() {
+        customAlertDialog.showMessageAlert(this, false, "", getResources().getString(R.string.successSendData), Constants.SUCCESS_MESSAGE(), getResources().getString(R.string.apply));
     }
 }

@@ -1066,4 +1066,21 @@
     <string name="errorKalaOlaviat">شما نمی توانید این کالا را به دلیل وجود کالای قدیمی تر ثبت نمایید </string>
     <string name="errorKalaOlaviatTekrari">شما نمی توانید محصولی را با دو قیمت مختلف ثبت نمایید</string>
     <string name="errorSendDariaftPardakhtMarjoee">وصول با موفقیت ثبت گردید ، مرجوعی قبلا ارسال گردیده است با واحد انبار مراجعه فرمایید</string>
+
+    <string name="getProgramServiceManagement">مدیریت سرویس دریافت برنامه</string>
+    <string name="getProgramService">سرویس دریافت برنامه</string>
+    <string name="ChooseGetProgramService">در صورت تمایل می توانید نوع سرویس دریافت برنامه خود را انتخاب نمایید</string>
+    <string name="invalidGetProgramService">نوع سرویس دریافت انتخاب شده مجاز نمی باشد</string>
+
+    <string name="errorShareImage">برای اشتراک گذاری ابتدا دکمه ی چاپ را بزنید</string>
+    <string name="errorHaveNotImageForPrint">تصویر فاکتور برای چاپ وجود ندارد</string>
+
+    // error send data
+    <string name="errorSendDataToServer">خطا در ارسال اطلاعات به سرور</string>
+    <string name="errorFromServer">خطای 500 از سمت سرور</string>
+    <string name="errorException">خطایی رخ داده است دوباره تلاش کنید</string>
+    <string name="sendMarjoee">ارسال مرجوعی</string>
+    <string name="errorSendUnknow">خطای رخ داده است.</string>
+    <string name="errorSendMarjoeeDubliacte">مرجوعی قبلا ارسال گردیده است . به واحد انبار مراجعه نمایید</string>
+
 </resources>

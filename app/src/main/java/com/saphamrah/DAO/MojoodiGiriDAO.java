@@ -60,7 +60,7 @@ public class MojoodiGiriDAO
     }
 
 
-    public void insertGroup(ArrayList<MojoodiGiriModel> mojoodiGiriModels)
+    public boolean insertGroup(ArrayList<MojoodiGiriModel> mojoodiGiriModels)
     {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try
@@ -74,6 +74,7 @@ public class MojoodiGiriDAO
             db.setTransactionSuccessful();
             db.endTransaction();
             db.close();
+            return true;
         }
         catch (Exception exception)
         {
@@ -89,6 +90,7 @@ public class MojoodiGiriDAO
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorGroupInsert , MojoodiGiriModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "MojoodiGiriDAO" , "" , "insertGroup" , "");
+            return false;
         }
     }
 

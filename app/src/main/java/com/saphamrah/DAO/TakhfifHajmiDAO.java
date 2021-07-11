@@ -73,7 +73,8 @@ public class TakhfifHajmiDAO
 			TakhfifHajmiModel.COLUMN_IsPelekani(),
 			TakhfifHajmiModel.COLUMN_ccMantagheh(),
             TakhfifHajmiModel.COLUMN_ccNoeSenf(),
-            TakhfifHajmiModel.COLUMN_NameNoeSenf()
+            TakhfifHajmiModel.COLUMN_NameNoeSenf(),
+            TakhfifHajmiModel.COLUMN_NoeGheymat()
         };
     }
 
@@ -348,7 +349,7 @@ Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiServiceGet.getTakhfifH
     }
 
 
-    /*public boolean insertGroup(ArrayList<TakhfifHajmiModel> takhfifHajmiModels)
+    public boolean insertGroupConditional(ArrayList<TakhfifHajmiModel> takhfifHajmiModels)
     {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try
@@ -380,7 +381,7 @@ Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiServiceGet.getTakhfifH
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "TakhfifHajmiDAO" , "" , "insertGroup" , "");
             return false;
         }
-    }*/
+    }
 
 
     public String insertGroup(ArrayList<TakhfifHajmiModel> takhfifHajmiModels)
@@ -677,6 +678,7 @@ Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiServiceGet.getTakhfifH
 		contentValues.put(TakhfifHajmiModel.COLUMN_ccMantagheh() , takhfifHajmiModel.getCcMantagheh());
         contentValues.put(TakhfifHajmiModel.COLUMN_ccNoeSenf() , takhfifHajmiModel.getCcNoeSenf());
         contentValues.put(TakhfifHajmiModel.COLUMN_NameNoeSenf() , takhfifHajmiModel.getNameNoeSenf());
+        contentValues.put(TakhfifHajmiModel.COLUMN_NoeGheymat() , takhfifHajmiModel.getNoeGheymat());
 
         return contentValues;
     }
@@ -709,8 +711,7 @@ Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiServiceGet.getTakhfifH
 			takhfifHajmiModel.setCcMantagheh(cursor.getInt(cursor.getColumnIndex(TakhfifHajmiModel.COLUMN_ccMantagheh())));
             takhfifHajmiModel.setCcNoeSenf(cursor.getInt(cursor.getColumnIndex(TakhfifHajmiModel.COLUMN_ccNoeSenf())));
             takhfifHajmiModel.setNameNoeSenf(cursor.getString(cursor.getColumnIndex(TakhfifHajmiModel.COLUMN_NameNoeSenf())));
-
-
+            takhfifHajmiModel.setNoeGheymat(cursor.getInt(cursor.getColumnIndex(TakhfifHajmiModel.COLUMN_NoeGheymat())));
 
             takhfifHajmiModels.add(takhfifHajmiModel);
             cursor.moveToNext();
@@ -752,6 +753,7 @@ Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiServiceGet.getTakhfifH
 
             //////////// SATR ////////////
             takhfifHajmiTitrSatrModel.setNameNoeField(cursor.getInt(cursor.getColumnIndex(TakhfifHajmiSatrModel.COLUMN_NameNoeField())));
+
 
             takhfifHajmiTitrSatrModels.add(takhfifHajmiTitrSatrModel);
             cursor.moveToNext();

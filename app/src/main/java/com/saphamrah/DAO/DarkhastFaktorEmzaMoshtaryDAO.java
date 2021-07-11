@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
+import com.saphamrah.Model.MarjoeeKamelImageModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
@@ -71,6 +72,39 @@ public class DarkhastFaktorEmzaMoshtaryDAO
         }
     }
 
+    public boolean insertGroup(ArrayList<DarkhastFaktorEmzaMoshtaryModel> darkhastFaktorEmzaMoshtaryModels)
+    {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try
+        {
+            db.beginTransaction();
+            for (DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel : darkhastFaktorEmzaMoshtaryModels)
+            {
+                ContentValues contentValues = modelToContentvalue(darkhastFaktorEmzaMoshtaryModel);
+                db.insertOrThrow(DarkhastFaktorEmzaMoshtaryModel.TableName() , null , contentValues);
+            }
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            if (db.inTransaction())
+            {
+                db.endTransaction();
+            }
+            if (db.isOpen())
+            {
+                db.close();
+            }
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorInsert , DarkhastFaktorEmzaMoshtaryModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorEmzaMoshtaryDAO" , "" , "insertGroup" , "");
+            return false;
+        }
+    }
 
     public ArrayList<DarkhastFaktorEmzaMoshtaryModel> getAll()
     {
@@ -271,6 +305,7 @@ public class DarkhastFaktorEmzaMoshtaryDAO
         }
         return darkhastFaktorEmzaMoshtaryModels;
     }
+
 
 
 }

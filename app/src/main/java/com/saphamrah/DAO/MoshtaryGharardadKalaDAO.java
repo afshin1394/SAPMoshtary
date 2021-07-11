@@ -188,7 +188,7 @@ public class MoshtaryGharardadKalaDAO {
         return cursor.getCount();
     }
 
-    public boolean insertGroup(ArrayList<ArrayList<MoshtaryGharardadKalaModel> > moshtaryGharardadKalaModels) {
+    public boolean insertGroupAll(ArrayList<ArrayList<MoshtaryGharardadKalaModel> > moshtaryGharardadKalaModels) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
             db.beginTransaction();
@@ -218,7 +218,33 @@ public class MoshtaryGharardadKalaDAO {
     }
 
 
+    public boolean insertGroup(ArrayList<MoshtaryGharardadKalaModel>  moshtaryGharardadKalaModels) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try {
+            db.beginTransaction();
+                for (MoshtaryGharardadKalaModel moshtaryGharardadKalaModel : moshtaryGharardadKalaModels) {
+                    ContentValues contentValues = modelToContentvalue(moshtaryGharardadKalaModel);
+                    db.insertOrThrow(MoshtaryGharardadKalaModel.TableName(), null, contentValues);
 
+            }
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            db.close();
+            return true;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            if (db.inTransaction()) {
+                db.endTransaction();
+            }
+            if (db.isOpen()) {
+                db.close();
+            }
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorGroupInsert, MoshtaryGharardadKalaModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "MoshtaryGharardadDAO", "", "insertGroup", "");
+            return false;
+        }
+    }
 
     public boolean deleteAll() {
 

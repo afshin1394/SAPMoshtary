@@ -50,7 +50,7 @@ public class MoshtaryTaghiratDAO
     }
 
 
-    public void insertGroup(ArrayList<MoshtaryTaghiratModel> moshtaryTaghiratModels)
+    public boolean insertGroup(ArrayList<MoshtaryTaghiratModel> moshtaryTaghiratModels)
     {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try
@@ -64,6 +64,7 @@ public class MoshtaryTaghiratDAO
             db.setTransactionSuccessful();
             db.endTransaction();
             db.close();
+            return true;
         }
         catch (Exception exception)
         {
@@ -79,6 +80,7 @@ public class MoshtaryTaghiratDAO
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorGroupInsert , MoshtaryTaghiratModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "MoshtaryTaghiratDAO" , "" , "insertGroup" , "");
+            return false;
         }
     }
 

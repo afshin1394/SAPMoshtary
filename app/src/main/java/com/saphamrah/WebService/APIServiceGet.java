@@ -238,6 +238,9 @@ public interface APIServiceGet
     @GET("Api/ApiTablet/GetParameterChild")
     Call<GetParameterChildResult> getParameterChild(@Query("Noe_Titr_Satr") String noeTitrSatr , @Query("ccMarkazSazmanForosh") String ccMarkazSazmanForosh, @Query("ccMarkazAnbar") String ccMarkazAnbar, @Query("DateProgram") String DateProgram);
 
+    @GET("Api/apisales/GetPrintFaktor")
+    Call<GetPrintFaktorResult> getPrintFaktor(@Query("ccAfrad") int ccAfrad);
+
     //R
     @GET("reverse")
     Call<LocationToAddressResult> reverseLocationToAddress(@Query("format") String format, @Query("lat") String lat, @Query("lon") String lon, @Query("zoom") String zoom);

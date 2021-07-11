@@ -83,6 +83,7 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
     private AlertDialog show;
     private int getProgramItemCount;
     private int noeMasouliat;
+    private int service;
 
 
     /*
@@ -104,7 +105,7 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
 
         ImageView imgBack = findViewById(R.id.imgBack);
         lstview = findViewById(R.id.lstview);
-
+        mPresenter.getProgramServiceType();
         mPresenter.getAllForoshandehMamorPakhsh();
 
 //        foroshandehMamorPakhshModel.setBtnGetProgramClickListener(new View.OnClickListener() {
@@ -243,7 +244,15 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
             JSONObject jsonObject = new JSONObject();
             if (getProgramType == Constants.GET_PROGRAM_FULL()) {
                 if (noeMasouliat != 7) {
-                    jsonObject = new JSONObject(getResources().getStringArray(R.array.getProgramItems)[itemIndex]);
+                    switch (service){
+                        case Constants.GET_PROGRAM_RETROFIT:
+                            jsonObject = new JSONObject(getResources().getStringArray(R.array.getProgramItems)[itemIndex]);
+                            break;
+
+                        case Constants.GET_PROGRAM_RX:
+                            jsonObject = new JSONObject(getResources().getStringArray(R.array.getProgramItemsRx)[itemIndex]);
+                            break;
+                    }
                 } else {
                     jsonObject = new JSONObject(getResources().getStringArray(R.array.getProgramAmargarItems)[itemIndex]);
                 }
@@ -336,7 +345,15 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
     public void onGetNoeMasouliat(int noeMasouliat) {
         this.noeMasouliat = noeMasouliat;
         if (noeMasouliat != 7) {
-            getProgramItemCount = getResources().getStringArray(R.array.getProgramItems).length;
+            switch (service){
+                case Constants.GET_PROGRAM_RETROFIT:
+                    getProgramItemCount = getResources().getStringArray(R.array.getProgramItems).length;
+                    break;
+
+                case Constants.GET_PROGRAM_RX:
+                    getProgramItemCount = getResources().getStringArray(R.array.getProgramItemsRx).length;
+                    break;
+            }
             getProgramItemsStatus = initializeItemsStatus();
             showItemStatusList(Constants.GET_PROGRAM_FULL());
         } else {
@@ -530,6 +547,13 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
         customAlertDialog.showToast(GetProgramActivity.this, getResources().getString(resId), messageType, duration);
     }
 
+
+
+    @Override
+    public void onGetProgramType(int service) {
+      this.service = service;
+    }
+
     public void showItemStatusList(int getProgramType) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(GetProgramActivity.this);
         View myview = getLayoutInflater().inflate(R.layout.alert_recyclerlist_without_btn, null);
@@ -547,20 +571,28 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
         List<String> itemsTitle = new ArrayList<>();
         if (getProgramType == Constants.GET_PROGRAM_FULL()) {
             if (noeMasouliat != 7) {
-                itemsTitle = Arrays.asList(getResources().getStringArray(R.array.getProgramItems));
+                switch (service){
+                    case Constants.GET_PROGRAM_RETROFIT:
+                        itemsTitle = Arrays.asList(getAppContext(). getResources().getStringArray(R.array.getProgramItems));
+                        break;
+
+                    case Constants.GET_PROGRAM_RX:
+                        itemsTitle = Arrays.asList(getAppContext(). getResources().getStringArray(R.array.getProgramItemsRx));
+                        break;
+                }
             } else {
-                itemsTitle = Arrays.asList(getResources().getStringArray(R.array.getProgramAmargarItems));
+                itemsTitle = Arrays.asList(getAppContext().getResources().getStringArray(R.array.getProgramAmargarItems));
             }
         } else if (getProgramType == Constants.GET_PROGRAM_UPDATE_KALA()) {
-            itemsTitle = Arrays.asList(getResources().getStringArray(R.array.updateKalaModatVosol));
+            itemsTitle = Arrays.asList(getAppContext().getResources().getStringArray(R.array.updateKalaModatVosol));
         } else if (getProgramType == Constants.GET_PROGRAM_UPDATE_JAYEZE()) {
-            itemsTitle = Arrays.asList(getResources().getStringArray(R.array.updateJayezehTakhfif));
+            itemsTitle = Arrays.asList(getAppContext().getResources().getStringArray(R.array.updateJayezehTakhfif));
         } else if (getProgramType == Constants.GET_PROGRAM_UPDATE_MOSHTARY()) {
-            itemsTitle = Arrays.asList(getResources().getStringArray(R.array.updateCustomers));
+            itemsTitle = Arrays.asList(getAppContext().getResources().getStringArray(R.array.updateCustomers));
         } else if (getProgramType == Constants.GET_PROGRAM_UPDATE_PARAMETERS()) {
-            itemsTitle = Arrays.asList(getResources().getStringArray(R.array.updateParameters));
+            itemsTitle = Arrays.asList(getAppContext().getResources().getStringArray(R.array.updateParameters));
         } else if (getProgramType == Constants.GET_PROGRAM_UPDATE_ETEBAR_FOROSHANDEH()) {
-            itemsTitle = Arrays.asList(getResources().getStringArray(R.array.updateEtebarForoshandeh));
+            itemsTitle = Arrays.asList(getAppContext().getResources().getStringArray(R.array.updateEtebarForoshandeh));
         }
 
         alertAdapter = new GetProgramItemsStatusAdapter(GetProgramActivity.this, getProgramItemsStatus, itemsTitle);

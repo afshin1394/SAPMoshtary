@@ -3,6 +3,7 @@ package com.saphamrah.DAO;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -376,6 +377,45 @@ Call<GetMojodyAnbarResult> call = apiServiceGet.getAllKalaAmargar();
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorSelectAll , KalaModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, LogPPCModel.LOG_EXCEPTION, message, "KalaDAO" , "" , "getAll" , "");
+        }
+        return kalaModels;
+    }
+    public ArrayList<KalaModel> getKalaByMaxMojodyAll(ArrayList<Integer> ccKalaCodes) {
+        ArrayList<KalaModel> kalaModels = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        try
+        {
+
+
+            for (int i = 0; i < kalaModels.size(); i++) {
+                int ccKalaCode = kalaModels.get(i).getCcKalaCode();
+
+                String query = " SELECT * FROM  " + KalaModel.TableName() +
+                        " WHERE " + KalaModel.COLUMN_ccKalaCode() + " = " + ccKalaCode +
+                        " ORDER BY " + KalaModel.COLUMN_TedadMojodyGhabelForosh() + " DESC " +
+                        " LIMIT 1";
+
+                Cursor cursor = db.rawQuery(query, null);
+                if (cursor != null) {
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        if (cursor.getCount() != 0) {
+                            kalaModels.add(cursorToModel(cursor).get(0));
+//                        kalaModel = cursorToModel(cursor).get(0);
+                        }
+                    }
+
+                }
+                cursor.close();
+            }
+
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , KalaModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaDAO" , "" , "getKalaByMaxMojody" , "");
         }
         return kalaModels;
     }

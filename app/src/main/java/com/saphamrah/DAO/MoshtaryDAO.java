@@ -981,7 +981,51 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
         }
         return ccMasir;
     }
-	
+
+    public int getCcMasirByCcForoshandeh(int ccForoshandeh){
+        int ccMasir = -1;
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery("select "+MoshtaryModel.COLUMN_ccMasir() + " from "+MoshtaryModel.TableName()+"where"+MoshtaryModel.COLUMN_ccForoshandeh()+" = "+ccForoshandeh,null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    ccMasir = cursor.getInt(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll, MoshtaryModel.TableName()) + "\n" + e.toString();
+            logger.insertLogToDB(context, LogPPCModel.LOG_EXCEPTION, message, "MoshtaryDAO", "", "getCcMasirByCcForoshandeh", "");
+        }
+        return ccMasir;
+    }
+
+    public int getCcMasirByCodeMoshtary(int codeMoshtary){
+        int ccMasir = -1;
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery("select "+MoshtaryModel.COLUMN_ccMasir() + " from "+MoshtaryModel.TableName()+"where"+MoshtaryModel.COLUMN_CodeMoshtary()+" = "+codeMoshtary,null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    ccMasir = cursor.getInt(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll, MoshtaryModel.TableName()) + "\n" + e.toString();
+            logger.insertLogToDB(context, LogPPCModel.LOG_EXCEPTION, message, "MoshtaryDAO", "", "getCcMasirByCodeMoshtary", "");
+        }
+        return ccMasir;
+    }
+
     public boolean deleteAll()
     {
         try

@@ -70,7 +70,7 @@ public class KardexSatrDAO
     }
 
 
-    public void insertGroup(ArrayList<KardexSatrModel> kardexSatrModels)
+    public boolean insertGroup(ArrayList<KardexSatrModel> kardexSatrModels)
     {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try
@@ -84,6 +84,7 @@ public class KardexSatrDAO
             db.setTransactionSuccessful();
             db.endTransaction();
             db.close();
+            return true;
         }
         catch (Exception exception)
         {
@@ -99,6 +100,7 @@ public class KardexSatrDAO
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorGroupInsert , KardexSatrModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KardexSatrDAO" , "" , "insertGroup" , "");
+            return false;
         }
     }
 

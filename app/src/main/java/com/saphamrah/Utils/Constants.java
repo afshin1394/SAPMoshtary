@@ -366,6 +366,7 @@ public class Constants
     private static final int SHOW_FAKTOR_DETAIL = 9;
     public static final int MARJOEE = 10;
     public static final int SAVE_SEND_LOCATION = 11;
+    public static final int SHARE = 12;
 
 
     public static int DELETE() {
@@ -1301,6 +1302,10 @@ public class Constants
     //Noe Vosol TreasuryList
     public static final int VOSOL_FAKTOR_ROOZ = 0;
     public static final int VOSOL_MANDE_DAR = 1;
+
+    //GetProgram
+    public static final int GET_PROGRAM_RETROFIT = 1;
+    public static final int GET_PROGRAM_RX = 2;
 
 }
 

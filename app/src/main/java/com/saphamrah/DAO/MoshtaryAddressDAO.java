@@ -638,6 +638,25 @@ Call<GetAllvMoshtaryAddressResult> call = apiServiceGet.getMoshtaryAddressByNoeM
         }
     }
 
+    public boolean deleteByccMoshtaries(String ccMoshtaries)
+    {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.delete(MoshtaryAddressModel.TableName(), MoshtaryAddressModel.COLUMN_ccMoshtary() + " in (" + ccMoshtaries+ ")" , null);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDelete , MoshtaryAddressModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "MoshtaryAddressDAO" , "" , "deleteByccMoshtaries" , "");
+            return false;
+        }
+    }
+
     public boolean updateccAddressAndSendToSQL(int ccMoshtaryAddress , int newccAddress)
     {
         try

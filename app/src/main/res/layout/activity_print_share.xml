@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layoutDirection="rtl"
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/paddingTitle"
+        android:elevation="@dimen/elevationActivityTitle"
+        fab:layout_constraintLeft_toLeftOf="parent"
+        fab:layout_constraintRight_toRightOf="parent"
+        fab:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/lblActivityTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/lblActivityTitle"
+            android:layout_centerInParent="true"
+            fab:layout_constraintLeft_toLeftOf="parent"
+            fab:layout_constraintRight_toRightOf="parent"
+            fab:layout_constraintTop_toTopOf="parent"
+            fab:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        fab:layout_constraintLeft_toLeftOf="parent"
+        fab:layout_constraintRight_toRightOf="parent"
+        fab:layout_constraintTop_toBottomOf="@+id/layTitle"
+        fab:layout_constraintBottom_toBottomOf="parent"
+        android:scrollbars="vertical"
+        android:layoutDirection="rtl"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/layTitle">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fabMenu"
+        android:layout_width="154dp"
+        android:layout_height="168dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        fab:layout_constraintBottom_toBottomOf="parent"
+        fab:layout_constraintLeft_toLeftOf="parent"
+        fab:menu_animationDelayPerItem="50"
+        fab:menu_backgroundColor="@android:color/transparent"
+        fab:menu_buttonSpacing="0dp"
+        fab:menu_colorNormal="@color/colorFabMenu"
+        fab:menu_colorPressed="@color/colorFabMenuClick"
+        fab:menu_colorRipple="#99FFFFFF"
+        fab:menu_fab_size="normal"
+        fab:menu_icon="@drawable/ic_menu"
+        fab:menu_labels_colorNormal="@color/colorWhite"
+        fab:menu_labels_colorPressed="@color/colorWhite"
+        fab:menu_labels_colorRipple="@color/colorWhite"
+        fab:menu_labels_customFont="@string/fontPath"
+        fab:menu_labels_ellipsize="none"
+        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        fab:menu_labels_margin="0dp"
+        fab:menu_labels_maxLines="-1"
+        fab:menu_labels_padding="8dp"
+        fab:menu_labels_paddingBottom="4dp"
+        fab:menu_labels_paddingLeft="8dp"
+        fab:menu_labels_paddingRight="8dp"
+        fab:menu_labels_paddingTop="4dp"
+        fab:menu_labels_position="right"
+        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+        fab:menu_labels_singleLine="false"
+        fab:menu_labels_textColor="@color/colorTextPrimary"
+        fab:menu_labels_textSize="14sp"
+        fab:menu_openDirection="up"
+        fab:menu_shadowColor="#66000000"
+        fab:menu_shadowRadius="4dp"
+        fab:menu_shadowXOffset="1dp"
+        fab:menu_shadowYOffset="3dp"
+        fab:menu_showShadow="true">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabSearch"
+            android:src="@drawable/ic_bluetooth"
+            fab:fab_size="normal"
+            fab:fab_label="@string/searchPrinter"
+            fab:fab_colorNormal="@color/colorFabSearchPrinter"
+            fab:fab_colorPressed="@color/colorFabSearchPrinter"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_refresh"
+            fab:fab_colorNormal="@color/colorFabRefresh"
+            fab:fab_colorPressed="@color/colorFabRefreshClick"
+            fab:fab_label="@string/refresh"
+            fab:fab_size="normal" />
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
