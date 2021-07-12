@@ -253,13 +253,16 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             model.setLatitude((float) location[0]);
             model.setLongitude((float) location[1]);
             int countCanEdit = 0;
-            if (noeMasouliat == 4)
-            {
-                countCanEdit = darkhastFaktorMoshtaryForoshandeDAO.getCountCanEditDarkhastForMamorPakhshSard(model.getCcMoshtary(), 0 , 99);
-            }
-            else if (noeMasouliat == 5)
-            {
-                countCanEdit = darkhastFaktorMoshtaryForoshandeDAO.getCountCanEditDarkhastForMamorPakhshSmart(model.getCcMoshtary(), 0 , 0, 6);
+            int statusCode=0;
+            if((noeMasouliat==4 || noeMasouliat==5) && model.getCcDarkhastFaktorNoeForosh()==1)
+                statusCode=6;
+            else if( (noeMasouliat==4 || noeMasouliat==5) && model.getCcDarkhastFaktorNoeForosh()==2)
+                statusCode=99;
+
+                if (noeMasouliat == 4) {
+                countCanEdit = darkhastFaktorMoshtaryForoshandeDAO.getCountCanEditDarkhastForMamorPakhshSard(model.getCcMoshtary(), 0, statusCode);
+            } else if (noeMasouliat == 5) {
+                countCanEdit = darkhastFaktorMoshtaryForoshandeDAO.getCountCanEditDarkhastForMamorPakhshSmart(model.getCcMoshtary(), 0, 0, statusCode);
             }
             if (countCanEdit == 0)
             {
@@ -1150,7 +1153,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
         {
             RoutingServerShared routingServerShared = new RoutingServerShared(BaseApplication.getContext());
             String urlOsrm = routingServerShared.getString(RoutingServerShared.IP,"http://91.92.125.244:8002");
-            Log.d("urlOsrm",urlOsrm.substring(0, 11));
+            Log.d("urlOsrm",urlOsrm);
             if (urlOsrm.length() > 0)
             {
                 APIServiceValhalla apiServiceValhalla = ApiClientGlobal.getInstance().getClientServiceValhalla(urlOsrm);

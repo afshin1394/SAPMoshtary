@@ -1857,6 +1857,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
         else if (ccNoeMoshtary != Constants.CC_CHILD_GOROH_MOSHTARY_KHORDE())
             Zarib_SaghfTakhfif = MaxTakhfifNaghdiGheirKhorde;
 
+
         MablaghFaktorByZarib_SaghfTakhfif = (darkhastFaktor.getMablaghKhalesFaktor() * Zarib_SaghfTakhfif) / 100;
         Mablagh_Takhfif = darkhastFaktor.getMablaghKhalesFaktor() * Zarib_Tajil * ModatVosol;
 

@@ -173,6 +173,7 @@
         <activity android:name=".MVP.View.MapActivity" />
         <activity android:name=".MVP.View.SpeedTestActivity" />
         <activity android:name=".MVP.View.MainActivity" />
+        <activity android:name=".MVP.View.PrintAndShareActivity" />
 
 
         <provider
@@ -192,6 +193,16 @@
         </receiver>
 
         <service android:name=".Service.GpsTracker" />
+
+        <provider
+            android:name=".Utils.GenericFileProvider"
+            android:authorities="${applicationId}.com.saphamrah"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>
