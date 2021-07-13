@@ -63,4 +63,13 @@ public class GetAllMoshtaryGharardadKalaResult {
     public void setTotalCount(Integer totalCount) {
         this.totalCount = totalCount;
     }
+
+
+
+    public void setExtraPropccSazmanForosh(int extraPropccSazmanForosh) {
+        if (data!=null)
+            for (MoshtaryGharardadKalaModel moshtaryGharardadKalaModel : data) {
+                moshtaryGharardadKalaModel.setExtraprop_ccSazmanForosh(extraPropccSazmanForosh);
+            }
+    }
 }

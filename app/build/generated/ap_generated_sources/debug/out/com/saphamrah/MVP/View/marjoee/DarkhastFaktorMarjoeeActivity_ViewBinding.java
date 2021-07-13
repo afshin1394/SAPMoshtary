@@ -27,6 +27,8 @@ public class DarkhastFaktorMarjoeeActivity_ViewBinding implements Unbinder {
 
   private View view7f09015f;
 
+  private View view7f090161;
+
   private View view7f0900a0;
 
   @UiThread
@@ -87,6 +89,14 @@ public class DarkhastFaktorMarjoeeActivity_ViewBinding implements Unbinder {
         target.fabSearchNameKala();
       }
     });
+    view = Utils.findRequiredView(source, R.id.fabSend, "method 'fabSend'");
+    view7f090161 = view;
+    view.setOnClickListener(new DebouncingOnClickListener() {
+      @Override
+      public void doClick(View p0) {
+        target.fabSend();
+      }
+    });
     view = Utils.findRequiredView(source, R.id.btn_back, "method 'btn_back'");
     view7f0900a0 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
@@ -122,6 +132,8 @@ public class DarkhastFaktorMarjoeeActivity_ViewBinding implements Unbinder {
     view7f090158 = null;
     view7f09015f.setOnClickListener(null);
     view7f09015f = null;
+    view7f090161.setOnClickListener(null);
+    view7f090161 = null;
     view7f0900a0.setOnClickListener(null);
     view7f0900a0 = null;
   }

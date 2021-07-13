@@ -58,7 +58,7 @@ public class JayezehEntekhabiMojodiDAO
                     " order by codekala desc) km \n" +
                     " on j.ccKalaCode = km.ccKalaCode and km.sumTedad > 0 and j.ccTakhfifHajmi = " + ccTakhfifHajmi +
                     " group by km.ccKalaCode, km.ShomarehBach, km.ccTaminKonandeh, km.GheymatForosh, km.GheymatMasrafKonandeh";
-            Log.d("bonus" , "query : " + query);
+            Log.d("jayezeh" , "query : " + query);
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
@@ -87,9 +87,10 @@ public class JayezehEntekhabiMojodiDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query = "select * , sum(m.Tedad) sumTedad, (select ) from JayezehEntekhabi j inner join KalaMojodi m \n" +
+            String query = "select * , sum(m.Tedad) sumTedad from JayezehEntekhabi j inner join KalaMojodi m \n" +
                     " on j.ccKalaCode = m.ccKalaCode and j.ccJayezeh = " + ccJayezeh + " and j.ccJayezehSatr = " + ccJayezehSatr +
                     " group by  m.ccKalaCode, m.ShomarehBach, m.ccTaminKonandeh, m.GheymatForosh, m.GheymatMasrafKonandeh having sum(m.Tedad) > 0";
+            Log.d("jayezeh" , "query : " + query);
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {

@@ -1376,7 +1376,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
     ) {
 
         Observable.fromIterable(masirModels)
-                .flatMap(masirModel -> Observable.just(masirModel))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<MasirModel>() {
                     @Override
@@ -1870,9 +1869,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
     private void getCcMoshtaries(int getProgramType, ArrayList<MoshtaryModel> moshtaryModels) {
         Observable.fromIterable(moshtaryModels)
-                .flatMap(moshtaryModel -> {
-                    return Observable.just(moshtaryModel);
-                }).subscribe(new Observer<MoshtaryModel>() {
+                .subscribe(new Observer<MoshtaryModel>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 compositeDisposable.add(d);
@@ -4308,10 +4305,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
      **/
     private void updateCcAnbarakAfrad(int getProgramType, ArrayList<AnbarakAfradModel> anbarakAfradModels) {
         Observable.fromIterable(anbarakAfradModels)
-                .flatMap(anbarakAfradModel -> {
-                    return Observable.just(anbarakAfradModel);
-                })
-
                 .map(anbarakAfradModel -> {
 
                     return anbarakAfrad += anbarakAfradModel.getCcAnbarak();
@@ -5011,7 +5004,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                 .subscribe(deleteKalaMojodi1 -> {
                     if (deleteKalaMojodi1) {
                         Observable.fromIterable(mandehMojodyMashinModels)
-                                .flatMap(mandehMojodyMashinModel -> Observable.just(mandehMojodyMashinModel))
                                 .map(mandehMojodyMashinModel -> {
                                     KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
 
@@ -5235,7 +5227,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
      **/
     private void getAllCcJayezeh(int getProgramType, ArrayList<JayezehModel> jayezehModels, ArrayList<JayezehEntekhabiModel> jayezehEntekhabiModels) {
         Observable.fromIterable(jayezehModels)
-                .flatMap(jayezehModel -> Observable.just(jayezehModel))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JayezehModel>() {
@@ -5247,7 +5238,9 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                     @Override
                     public void onNext(@NonNull JayezehModel jayezehModel) {
 
+
                         ccJayezehs += "," + jayezehModel.getCcJayezeh();
+                        ccJayezehList.add(String.valueOf(jayezehModel.getCcJayezeh()));
                         Log.i("RxJavaRequest", +itemCounter + "getAllCcJayezeh onNext: " + ccJayezehs);
 
                     }
@@ -6030,7 +6023,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
 
         Observable.fromIterable(takhfifHajmiModels)
-                .flatMap(takhfifHajmiModel -> Observable.just(takhfifHajmiModel))
                 .filter(takhfifHajmiModel -> !ccTakhfifHajmiList.contains(String.valueOf(takhfifHajmiModel.getCcTakhfifHajmi())))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -6066,7 +6058,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
     private void getccTakhfifSenfiRx(ArrayList<TakhfifSenfiModel> takhfifSenfiTitrModels) {
         Observable.fromIterable(takhfifSenfiTitrModels)
-                .flatMap(takhfifSenfiModel -> Observable.just(takhfifSenfiModel))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<TakhfifSenfiModel>() {
@@ -9630,7 +9621,9 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         ArrayList<MoshtaryGharardadKalaModel> moshtaryGharardadKalaModels = new ArrayList<>();
         final int[] webCounter = {itemCounter};
         Observable.fromIterable(moshtaryGharardadModels)
-                .flatMap(moshtaryGharardadModel -> apiServiceRxjava.getMoshtaryGharardadKala(String.valueOf(moshtaryGharardadModel.getCcSazmanForosh()), String.valueOf(moshtaryGharardadModel.getCcMoshtaryGharardad())))
+                .flatMap(moshtaryGharardadModel ->  apiServiceRxjava.getMoshtaryGharardadKala(String.valueOf(moshtaryGharardadModel.getCcSazmanForosh()), String.valueOf(moshtaryGharardadModel.getCcMoshtaryGharardad()))
+                        .doOnNext(getAllMoshtaryGharardadKalaResultResponse -> getAllMoshtaryGharardadKalaResultResponse.body().setExtraPropccSazmanForosh(moshtaryGharardadModel.getCcSazmanForosh()))
+                )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Response<GetAllMoshtaryGharardadKalaResult>>() {
@@ -9641,10 +9634,8 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
                     @Override
                     public void onNext(@NonNull Response<GetAllMoshtaryGharardadKalaResult> getAllMoshtaryGharardadKalaResultResponse) {
-
                         if (getAllMoshtaryGharardadKalaResultResponse.isSuccessful()) {
                             moshtaryGharardadKalaModels.addAll(getAllMoshtaryGharardadKalaResultResponse.body().getData());
-
                         }
 
                     }

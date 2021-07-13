@@ -9,11 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.Transformation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.daimajia.swipe.SwipeLayout;
@@ -53,6 +56,7 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.treasury_customlist, parent, false);
 
+
         return new ViewHolder(view);
     }
 
@@ -61,7 +65,10 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         DecimalFormat formatter = new DecimalFormat("#,###,###");
 
+
+
         holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+
 
         holder.lblRadif.setText(String.valueOf(position + 1));
         holder.lblCodeNameCustomer.setText(String.format("%1$s - %2$s", models.get(position).getCodeMoshtary(), models.get(position).getFullNameMoshtary()));
@@ -69,10 +76,12 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         holder.lblMablaghKhalesFaktor.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.mablaghKhales), formatter.format((int) models.get(position).getMablaghKhalesFaktor()), context.getResources().getString(R.string.rial)));
         holder.lblMablaghMandehFaktor.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.mande), formatter.format(models.get(position).getMablaghMandeh()), context.getResources().getString(R.string.rial)));
         holder.lblNameNoeVosol.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.noeVosol), models.get(position).getNameNoeVosolAzMoshtary()));
-
-        holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.shomareDarkhast), models.get(position).getShomarehDarkhast()));
-        if (models.get(position).getShomarehFaktor() != 0)
-        holder.lblShomarehFaktor.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.shomareFaktor), models.get(position).getShomarehFaktor()));
+        if (models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) {
+            holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.shomareDarkhast), models.get(position).getShomarehDarkhast()));
+        }
+        else {
+            holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.shomareFaktor), models.get(position).getShomarehFaktor()));
+        }
 
         try {
             Date date = sdf.parse(models.get(position).getTarikhErsal());
@@ -88,6 +97,12 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             holder.layEditDarkhast.setVisibility(View.GONE);
         }
 
+
+        if (models.size() >0) {
+            if (models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeFaktor) {
+                holder.layLeft.getLayoutParams().width = 66;
+            }
+        }
 
 //        if ((models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) && (models.get(position).getFaktorRooz() == 1) && ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6))) {
         if ((models.get(position).getCcDarkhastFaktorNoeForosh() ==DarkhastFaktorModel.ccNoeFaktor) && (noeMasouliat==4 || noeMasouliat==5)){
@@ -129,7 +144,12 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         if (models.get(position).getExtraProp_IsSend() == 0) {
             holder.layStatusRight.setBackgroundResource(R.drawable.radius_layout_red_right);
             holder.layStatusLeft.setBackgroundResource(R.drawable.radius_layout_red_left);
-        } else {
+        }
+        if (models.get(position).getExtraProp_SendLocation() == 1) {
+            holder.layStatusRight.setBackgroundResource(R.drawable.radius_layout_purple_right);
+            holder.layStatusLeft.setBackgroundResource(R.drawable.radius_layout_purple_left);
+        }
+        if (models.get(position).getExtraProp_IsSend() == 1){
             holder.layStatusRight.setBackgroundResource(R.drawable.radius_layout_green_right);
             holder.layStatusLeft.setBackgroundResource(R.drawable.radius_layout_green_right);
         }
@@ -171,8 +191,46 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         if (models.get(position).getExtraProp_SendLocation() == 1){
             holder.laySaveAndSend.setVisibility(View.GONE);
         }
-    }
 
+        /**
+         * this is just for show details vosol
+         * 0 == gone
+         * 1 == visible
+         */
+        if (models.get(position).getExtraProp_OpenView() == 1){
+            expand(holder.lay_second_treasuryList,position);
+            holder.expand_btn.setRotation(0);
+        } else {
+            holder.lay_second_treasuryList.setVisibility(View.GONE);
+            holder.expand_btn.setRotation(180);
+        }
+
+        /**
+         * click listener for open and close details
+         */
+        holder.lay_expand_btn.setOnClickListener(v -> {
+            if (holder.lay_second_treasuryList.getVisibility() == View.GONE) {
+                expand(holder.lay_second_treasuryList , position);
+                holder.expand_btn.setRotation(0);
+            } else {
+                collapse(holder.lay_second_treasuryList , position);
+                holder.expand_btn.setRotation(180);
+
+            }
+        });
+
+        /**
+         * set have marjoee
+         * 0 == have not marjoee
+         * 1 == have marjoee
+         */
+        if (models.get(position).getExtraProp_HaveMarjoee() == 1){
+            holder.imgHaveMarjoee.setBackgroundResource(R.drawable.ic_success);
+        } else {
+            holder.imgHaveMarjoee.setBackgroundResource(R.drawable.ic_error);
+        }
+
+    }
 
     @Override
     public int getItemCount() {
@@ -199,9 +257,9 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         private TextView lblMablaghKhalesFaktor;
         private TextView lblMablaghMandehFaktor;
         private TextView lblShomarehDarkhast;
-        private TextView lblShomarehFaktor;
         private TextView lblTarikhErsal;
         private TextView lblNameNoeVosol;
+        private TextView lblHaveMarjoee;
         private RelativeLayout layShowLocation;
         private RelativeLayout layFaktor;
         private RelativeLayout layFaktorDetail;
@@ -209,8 +267,13 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         private RelativeLayout layEditVosol;
         private RelativeLayout layEditDarkhast;
         private RelativeLayout layMarjoee;
-        private LinearLayout lay_for_color;
+        private ConstraintLayout lay_for_color;
         private RelativeLayout laySaveAndSend;
+        private LinearLayout lay_expand_btn;
+        private ImageView expand_btn;
+        private ConstraintLayout lay_second_treasuryList;
+        private ImageView imgHaveMarjoee;
+        private LinearLayout layLeft;
 
 
         public ViewHolder(View view) {
@@ -226,9 +289,9 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             lblMablaghKhalesFaktor = view.findViewById(R.id.lblMablaghKhalesFaktor);
             lblMablaghMandehFaktor = view.findViewById(R.id.lblMablaghMandehFaktor);
             lblShomarehDarkhast = view.findViewById(R.id.lblShomarehDarkhast);
-            lblShomarehFaktor = view.findViewById(R.id.lblShomarehFaktor);
             lblTarikhErsal = view.findViewById(R.id.lblTarikhErsal);
             lblNameNoeVosol = view.findViewById(R.id.lblNameNoeVosol);
+            lblHaveMarjoee = view.findViewById(R.id.lblHaveMarjoee);
             layShowLocation = view.findViewById(R.id.layShowLocation);
             layFaktor = view.findViewById(R.id.layFaktorImage);
             layFaktorDetail = view.findViewById(R.id.layFaktorDetail);
@@ -238,7 +301,11 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             layMarjoee = view.findViewById(R.id.layMarjoee);
             lay_for_color = view.findViewById(R.id.lay_for_color);
             laySaveAndSend = view.findViewById(R.id.laySaveAndSendLocation);
-
+            lay_expand_btn = view.findViewById(R.id.lay_expand_btn);
+            expand_btn = view.findViewById(R.id.expand_btn);
+            lay_second_treasuryList = view.findViewById(R.id.lay_second_treasuryList);
+            imgHaveMarjoee = view.findViewById(R.id.imgHaveMarjoee);
+            layLeft = view.findViewById(R.id.layLeft);
 
             lblRadif.setTypeface(font);
             lblCodeNameCustomer.setTypeface(font);
@@ -246,9 +313,13 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             lblMablaghKhalesFaktor.setTypeface(font);
             lblMablaghMandehFaktor.setTypeface(font);
             lblShomarehDarkhast.setTypeface(font);
-            lblShomarehFaktor.setTypeface(font);
             lblNameNoeVosol.setTypeface(font);
             lblTarikhErsal.setTypeface(font);
+            lblHaveMarjoee.setTypeface(font);
+
+
+
+
         }
 
         void bind(final int position, final OnItemClickListener listener) {
@@ -312,5 +383,63 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         return R.id.swipe;
     }
 
+
+    public void expand(final View v , int position) {
+        int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
+        int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
+        final int targetHeight = v.getMeasuredHeight();
+
+        // Older versions of android (pre API 21) cancel animations for views with a height of 0.
+        v.getLayoutParams().height = 1;
+        v.setVisibility(View.VISIBLE);
+        Animation a = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                v.getLayoutParams().height = interpolatedTime == 1
+                        ? ViewGroup.LayoutParams.WRAP_CONTENT
+                        : (int)(targetHeight * interpolatedTime);
+                v.requestLayout();
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        // Expansion speed of 1dp/ms
+        a.setDuration(400);
+        v.startAnimation(a);
+        models.get(position).setExtraProp_OpenView(1);
+    }
+
+    public void collapse(final View v ,int position) {
+        final int initialHeight = v.getMeasuredHeight();
+
+        Animation a = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                if(interpolatedTime == 1){
+                    v.setVisibility(View.GONE);
+                }else{
+                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        // Collapse speed of 1dp/ms
+        a.setDuration(400);
+        v.startAnimation(a);
+        models.get(position).setExtraProp_OpenView(0);
+    }
 
 }

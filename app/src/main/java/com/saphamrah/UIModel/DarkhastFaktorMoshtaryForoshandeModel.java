@@ -177,6 +177,20 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     private int MoshtaryGharardadccSazmanForosh;
     private int ExtraProp_SendLocation = 0;
 
+    /**
+     * this is just for show details vosol
+     * 0 == gone
+     * 1 == visible
+     */
+    private int ExtraProp_OpenView = 0;
+
+    /**
+     * this is just for show have marjoee
+     * 0 == gone
+     * 1 == visible
+     */
+    private int ExtraProp_HaveMarjoee = 0;
+
     public long getCcDarkhastFaktor() {
         return ccDarkhastFaktor;
     }
@@ -479,6 +493,22 @@ public class DarkhastFaktorMoshtaryForoshandeModel
 
     public void setExtraProp_SendLocation(int extraProp_SendLocation) {
         ExtraProp_SendLocation = extraProp_SendLocation;
+    }
+
+    public int getExtraProp_OpenView() {
+        return ExtraProp_OpenView;
+    }
+
+    public void setExtraProp_OpenView(int extraProp_OpenView) {
+        ExtraProp_OpenView = extraProp_OpenView;
+    }
+
+    public int getExtraProp_HaveMarjoee() {
+        return ExtraProp_HaveMarjoee;
+    }
+
+    public void setExtraProp_HaveMarjoee(int extraProp_HaveMarjoee) {
+        ExtraProp_HaveMarjoee = extraProp_HaveMarjoee;
     }
 
     @NonNull

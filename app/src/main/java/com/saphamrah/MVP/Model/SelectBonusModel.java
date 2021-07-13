@@ -169,8 +169,8 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
                     kalaMojodiModel.setCcDarkhastFaktor(ccDarkhastFaktor);
                     kalaMojodiModel.setForJayezeh(1);
                     kalaMojodiModel.setZamaneSabt(currentDate);
-                    kalaMojodiModel.setMax_Mojody(model.getMax_Mojody());
-                    kalaMojodiModel.setMax_MojodyByShomarehBach(model.getMax_MojodyByShomarehBach());
+                    kalaMojodiModel.setMax_Mojody(-1 * model.getSelectedCount());
+                    kalaMojodiModel.setMax_MojodyByShomarehBach(-1 * model.getSelectedCount());
                     kalaMojodiModel.setCcAfrad(FinalCCAfrad);
                     if (kalaMojodiDAO.insert(kalaMojodiModel)) {
                         Log.d("bonus", "model.getGheymatForosh() : " + model.getGheymatForosh());
