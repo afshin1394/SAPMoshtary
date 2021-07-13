@@ -1376,7 +1376,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
     ) {
 
         Observable.fromIterable(masirModels)
-                .flatMap(masirModel -> Observable.just(masirModel))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<MasirModel>() {
                     @Override
@@ -1870,9 +1869,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
     private void getCcMoshtaries(int getProgramType, ArrayList<MoshtaryModel> moshtaryModels) {
         Observable.fromIterable(moshtaryModels)
-                .flatMap(moshtaryModel -> {
-                    return Observable.just(moshtaryModel);
-                }).subscribe(new Observer<MoshtaryModel>() {
+            .subscribe(new Observer<MoshtaryModel>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 compositeDisposable.add(d);
@@ -4308,9 +4305,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
      **/
     private void updateCcAnbarakAfrad(int getProgramType, ArrayList<AnbarakAfradModel> anbarakAfradModels) {
         Observable.fromIterable(anbarakAfradModels)
-                .flatMap(anbarakAfradModel -> {
-                    return Observable.just(anbarakAfradModel);
-                })
+
 
                 .map(anbarakAfradModel -> {
 
@@ -5011,7 +5006,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                 .subscribe(deleteKalaMojodi1 -> {
                     if (deleteKalaMojodi1) {
                         Observable.fromIterable(mandehMojodyMashinModels)
-                                .flatMap(mandehMojodyMashinModel -> Observable.just(mandehMojodyMashinModel))
                                 .map(mandehMojodyMashinModel -> {
                                     KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
 
@@ -5235,7 +5229,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
      **/
     private void getAllCcJayezeh(int getProgramType, ArrayList<JayezehModel> jayezehModels, ArrayList<JayezehEntekhabiModel> jayezehEntekhabiModels) {
         Observable.fromIterable(jayezehModels)
-                .flatMap(jayezehModel -> Observable.just(jayezehModel))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JayezehModel>() {
@@ -5248,6 +5241,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                     public void onNext(@NonNull JayezehModel jayezehModel) {
 
                         ccJayezehs += "," + jayezehModel.getCcJayezeh();
+                        ccJayezehList.add(String.valueOf(jayezehModel.getCcJayezeh()));
                         Log.i("RxJavaRequest", +itemCounter + "getAllCcJayezeh onNext: " + ccJayezehs);
 
                     }
@@ -5331,6 +5325,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                         ArrayList<String> ccJayezeArrayList = new ArrayList<String>();
                         ccJayezeArrayList.addAll(ccJayezehList);
                         ccJayezehs = new CollectionUtils().convertStringArrayToString(ccJayezeArrayList);
+                        Log.i("RxJavaRequest", "onComplete: ccJayezehs"+ccJayezehs);
                         getJayezehSatrRx(getProgramType, ccJayezehs);
 
 //
@@ -5509,6 +5504,8 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                         if (deleteResult && insertResult) {
                             for (Object model : arrayListData) {
                                 ccJayezehs += "," + ((JayezehModel) model).getCcJayezeh();
+                                int ccJayezeh =((JayezehModel) model).getCcJayezeh();
+                                ccJayezehList.add(String.valueOf(ccJayezeh));
                             }
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), counter);
                             getJayezehSatr(getProgramType, ccJayezehs);
@@ -6030,7 +6027,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
 
         Observable.fromIterable(takhfifHajmiModels)
-                .flatMap(takhfifHajmiModel -> Observable.just(takhfifHajmiModel))
                 .filter(takhfifHajmiModel -> !ccTakhfifHajmiList.contains(String.valueOf(takhfifHajmiModel.getCcTakhfifHajmi())))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -6066,7 +6062,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
     private void getccTakhfifSenfiRx(ArrayList<TakhfifSenfiModel> takhfifSenfiTitrModels) {
         Observable.fromIterable(takhfifSenfiTitrModels)
-                .flatMap(takhfifSenfiModel -> Observable.just(takhfifSenfiModel))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<TakhfifSenfiModel>() {
@@ -7093,6 +7088,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
     }
 
 
+
     private void updateDarkhastFaktorVaziatTable(int getProgramType
             , ArrayList<RptDarkhastFaktorVazeiatPPCModel> rptDarkhastFaktorVazeiatPPCModels,
                                                  ArrayList<TaghiratVersionPPCModel> taghiratVersionPPCModels,
@@ -7145,6 +7141,9 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
     }
 
+
+
+
     private void updateTaghiratVersionPpcTable(int getProgramType, ArrayList<TaghiratVersionPPCModel> taghiratVersionPPCModels,
                                                ArrayList<MoshtaryChidmanModel> moshtaryChidmanModels,
                                                ArrayList<AllMoshtaryForoshandehModel> moshtaryForoshandehModels
@@ -7193,6 +7192,8 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         compositeDisposable.add(deleteAllDisposable);
     }
 
+
+
     private void updateMoshtaryChidemanTable(int getProgramType, ArrayList<MoshtaryChidmanModel> moshtaryChidmanModels
             , ArrayList<AllMoshtaryForoshandehModel> moshtaryForoshandehModels
             , ArrayList<RptForoshModel> rptForoshModels
@@ -7235,6 +7236,8 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                 });
         compositeDisposable.add(deleteAllDisposable);
     }
+
+
 
     private void updateMoshtaryForoshandehTables(int getProgramType, ArrayList<AllMoshtaryForoshandehModel> moshtaryForoshandehModels
             , ArrayList<RptForoshModel> rptForoshModels
@@ -7281,6 +7284,8 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         compositeDisposable.add(deleteAllDisposable);
     }
 
+
+
     private void updateRptAmarForoshTable(int getProgramType, ArrayList<RptForoshModel> rptForoshModels
             , ArrayList<RptMandehdarModel> mandehdarModels
             , ArrayList<RptSanadModel> rptSanadModels
@@ -7325,6 +7330,9 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         compositeDisposable.add(deleteAllDisposable);
     }
 
+
+
+
     private void updateRptMandehDarTable(
             int getProgramType,
             ArrayList<RptMandehdarModel> rptMandehDarModels,
@@ -7367,6 +7375,9 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         compositeDisposable.add(deleteAllDisposable);
     }
 
+
+
+
     private void updateRptSanadTable(int getProgramType,
                                      ArrayList<RptSanadModel> rptSanadModels,
                                      ArrayList<RptHadafForoshModel> rptHadafForoshModels) {
@@ -7405,6 +7416,9 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                 });
         compositeDisposable.add(deleteAllDisposable);
     }
+
+
+
 
     private void updateRptHadafForoshTable(int getProgramType, ArrayList<RptHadafForoshModel> rptHadafForoshModels) {
         if (noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_SARD || noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_GARM || noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_SMART) {
@@ -9577,6 +9591,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
                     @Override
                     public void onNext(@NonNull Response<GetAllMoshtaryGharardadResult> getAllMoshtaryGharardadResultResponse) {
+
                         updateMoshtaryGhararadTable(getProgramType, getAllMoshtaryGharardadResultResponse.body().getData());
                     }
 
@@ -9630,7 +9645,9 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         ArrayList<MoshtaryGharardadKalaModel> moshtaryGharardadKalaModels = new ArrayList<>();
         final int[] webCounter = {itemCounter};
         Observable.fromIterable(moshtaryGharardadModels)
-                .flatMap(moshtaryGharardadModel -> apiServiceRxjava.getMoshtaryGharardadKala(String.valueOf(moshtaryGharardadModel.getCcSazmanForosh()), String.valueOf(moshtaryGharardadModel.getCcMoshtaryGharardad())))
+                .flatMap(moshtaryGharardadModel ->  apiServiceRxjava.getMoshtaryGharardadKala(String.valueOf(moshtaryGharardadModel.getCcSazmanForosh()), String.valueOf(moshtaryGharardadModel.getCcMoshtaryGharardad()))
+                .doOnNext(getAllMoshtaryGharardadKalaResultResponse -> getAllMoshtaryGharardadKalaResultResponse.body().setExtraPropccSazmanForosh(moshtaryGharardadModel.getCcSazmanForosh()))
+                )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Response<GetAllMoshtaryGharardadKalaResult>>() {
@@ -9641,10 +9658,8 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
                     @Override
                     public void onNext(@NonNull Response<GetAllMoshtaryGharardadKalaResult> getAllMoshtaryGharardadKalaResultResponse) {
-
                         if (getAllMoshtaryGharardadKalaResultResponse.isSuccessful()) {
                             moshtaryGharardadKalaModels.addAll(getAllMoshtaryGharardadKalaResultResponse.body().getData());
-
                         }
 
                     }
@@ -9658,10 +9673,14 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                     @Override
                     public void onComplete() {
                         updateMoshtaryGharardadKalaTable(getProgramType, moshtaryGharardadKalaModels);
+
                     }
                 });
 
     }
+
+
+
 
     private void updateMoshtaryGharardadKalaTable(int getProgramType, ArrayList<MoshtaryGharardadKalaModel> moshtaryGharardadKalaModels) {
         MoshtaryGharardadKalaRepository moshtaryGharardadKalaRepository = new MoshtaryGharardadKalaRepository(mPresenter.getAppContext());
