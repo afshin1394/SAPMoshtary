@@ -1192,7 +1192,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         int ccAfradForoshandeh = 0;
         int ccAfradMamorPakhsh = 0;
         int ccAfradRanandeh = 0;
-        if(noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_GARM || noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_SMART || (noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_SARD && ccDarkhastFaktorNoeForosh == DarkhastFaktorModel.ccNoeFaktor))
+        if(noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_GARM || noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_SMART || (noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_SARD && ccDarkhastFaktorNoeForosh == Constants.ccNoeFaktor))
         {
             AnbarakAfradDAO anbarakAfradDAO = new AnbarakAfradDAO(mPresenter.getAppContext());
             ccAfradForoshandeh = ccAfradForoshandehMamorPakhsh;
@@ -1786,7 +1786,7 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
             DarkhastFaktorAfradForoshModel darkhastFaktorAfradForoshModel = insertDarkhastFaktorAfradForosh(noeMasouliat, darkhastFaktorModel.getCcDarkhastFaktorNoeForosh(), darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcForoshandeh(), foroshandehMamorPakhshModel.getCcAfrad(), foroshandehMamorPakhshModel.getCcAfradModir());
 
 
-                if ( (noeMasouliat == 1 || noeMasouliat == 3  || noeMasouliat == 6 || noeMasouliat ==8) && foroshandehMamorPakhshModel.getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale )
+                if ( (noeMasouliat == 1 || noeMasouliat == 3  || noeMasouliat == 6 || noeMasouliat ==8) && foroshandehMamorPakhshModel.getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale )
                 {
 
                     JSONArray jsonDarkhastHavaleSatrs = new JSONArray();

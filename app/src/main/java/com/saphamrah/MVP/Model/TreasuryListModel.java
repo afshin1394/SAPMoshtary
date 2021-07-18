@@ -211,6 +211,20 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             if (sortType == Constants.SORT_TREASURY_BY_CUSTOMER_CODE)
             {
                 darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getAll(faktorRooz);
+                for (int i = 0; i < darkhastFaktorMoshtaryForoshandeModels.size(); i++) {
+                    // set send location
+                    for (int j = 0; j < gpsDataModels.size(); j++) {
+                        if (darkhastFaktorMoshtaryForoshandeModels.get(i).getCcDarkhastFaktor() == gpsDataModels.get(j).getCcDarkhastFaktor()){
+                            darkhastFaktorMoshtaryForoshandeModels.get(i).setExtraProp_SendLocation(1);
+                        }
+                    }
+                    // set have marjoee
+                    for (int j = 0; j < elamMarjoeeForoshandehModels.size(); j++) {
+                        if (darkhastFaktorMoshtaryForoshandeModels.get(i).getCcDarkhastFaktor() == Long.parseLong(elamMarjoeeForoshandehModels.get(j).getCcDarkhastFaktor())){
+                            darkhastFaktorMoshtaryForoshandeModels.get(i).setExtraProp_HaveMarjoee(1);
+                        }
+                    }
+                }
             }
             else
             {
@@ -220,6 +234,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                     darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getAllOrderByRoutingSort(faktorRooz);
                     updateAllMablaghMandeh(darkhastFaktorMoshtaryForoshandeModels);
                     darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getAllOrderByRoutingSort(faktorRooz);
+                    //Todo Pouria
                     for (int i = 0; i < darkhastFaktorMoshtaryForoshandeModels.size(); i++) {
                         // set send location
                         for (int j = 0; j < gpsDataModels.size(); j++) {

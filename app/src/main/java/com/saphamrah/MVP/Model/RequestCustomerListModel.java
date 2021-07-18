@@ -1095,7 +1095,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 Log.d("kharejAzMahal" , "getExtraProp_IsMoshtaryAmargar : " + moshtary.getExtraProp_IsMoshtaryAmargar());
                 Log.d("kharejAzMahal" , "CanVisitKharejAzMahal_Polygon : " + CanVisitKharejAzMahal_Polygon + " , needCheckKharejAzMahal:" + needCheckKharejAzMahal);
 
-                if (needCheckKharejAzMahal && CanVisitKharejAzMahal_Polygon == 0)//SelectFaktorShared.getccGorohNoeMoshtary() != 350) && CanVisitKharejAzMahal_Polygon == 0)
+                if (needCheckKharejAzMahal && CanVisitKharejAzMahal_Polygon == 0)
                 {
                     if (moshtary.getExtraProp_IsMoshtaryAmargar() == 0)
                     {

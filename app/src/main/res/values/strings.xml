@@ -1058,7 +1058,7 @@
     <string name="errorMamorPakhshLocationsNotSent"> موقعیت  شما ارسال نشده است  لطفا آن را در محدوده این مشتری ارسال نمایید</string>
     <string name="errorSendGpsData">خطا در ارسال اطلاعات موقعیت </string>
     <string name="SuccessSendGpsData">با موفقیت ارسال شدموقعیت کنونی </string>
-    <string name="failConnectServer">لطفا سرور دیگری را انتخاب نمایید</string>
+    <string name="failConnectServer">لطفا گزینه دیگری را انتخاب نمایید</string>
     <string name="errorSendBarkhordMoshtary">خطا در ارسال اطلاعات برخورد مشتری با فروشنده</string>
     <string name="errorSendMojodiGiri">خطا در ارسال اطلاعات موجودی گیری</string>
     <string name="errorSendGpsDataMashin">خطا در ارسال اطلاعات موقعیت ماشین</string>

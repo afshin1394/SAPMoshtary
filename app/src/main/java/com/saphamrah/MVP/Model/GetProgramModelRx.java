@@ -2637,27 +2637,27 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
     private void getDarkhastFaktorSatrRx(int getProgramType) {
         DarkhastFaktorRepository darkhastFaktorRepository = new DarkhastFaktorRepository(mPresenter.getAppContext());
         final Map<Integer, Boolean> mapResult = new HashMap<>();
-        Disposable getccDarkhastFaktorsByNoeFaktorHavaleRooz = darkhastFaktorRepository.getccDarkhastFaktorsByNoeFaktorHavaleRooz(DarkhastFaktorModel.ccNoeFaktor)
+        Disposable getccDarkhastFaktorsByNoeFaktorHavaleRooz = darkhastFaktorRepository.getccDarkhastFaktorsByNoeFaktorHavaleRooz(Constants.ccNoeFaktor)
                 .subscribe(s -> {
                     String ccDarkhastFaktorNoeFaktor = s;
-                    Disposable getccDarkhastFaktorsByNoeFaktorHavale = darkhastFaktorRepository.getccDarkhastFaktorsByNoeFaktorHavale(DarkhastFaktorModel.ccNoeHavale)
+                    Disposable getccDarkhastFaktorsByNoeFaktorHavale = darkhastFaktorRepository.getccDarkhastFaktorsByNoeFaktorHavale(Constants.ccNoeHavale)
                             .subscribe(s1 -> {
                                 String ccDarkhastFaktorNoeHavale = s1;
 
-                                mapResult.put(DarkhastFaktorModel.ccNoeFaktor, true);
-                                mapResult.put(DarkhastFaktorModel.ccNoeHavale, true);
+                                mapResult.put(Constants.ccNoeFaktor, true);
+                                mapResult.put(Constants.ccNoeHavale, true);
                                 DarkhastFaktorSatrRepository darkhastFaktorSatrRepository = new DarkhastFaktorSatrRepository(mPresenter.getAppContext());
                                 Disposable deleteAll = darkhastFaktorSatrRepository.deleteAll().subscribe(new Consumer<Boolean>() {
                                     @Override
                                     public void accept(Boolean deleteAll) {
                                         if (!ccDarkhastFaktorNoeFaktor.trim().equals("")) {
-                                            getDarkhastFaktorSatrNoe(deleteAll, DarkhastFaktorModel.ccNoeFaktor, ccDarkhastFaktorNoeFaktor, mapResult);
+                                            getDarkhastFaktorSatrNoe(deleteAll, Constants.ccNoeFaktor, ccDarkhastFaktorNoeFaktor, mapResult);
 
                                         }
                                         if (!ccDarkhastFaktorNoeHavale.trim().equals("")) {
-                                            getDarkhastFaktorSatrNoe(deleteAll, DarkhastFaktorModel.ccNoeHavale, ccDarkhastFaktorNoeHavale, mapResult);
+                                            getDarkhastFaktorSatrNoe(deleteAll, Constants.ccNoeHavale, ccDarkhastFaktorNoeHavale, mapResult);
                                         }
-                                        if (mapResult.get(DarkhastFaktorModel.ccNoeFaktor) && mapResult.get(DarkhastFaktorModel.ccNoeHavale)) {
+                                        if (mapResult.get(Constants.ccNoeFaktor) && mapResult.get(Constants.ccNoeHavale)) {
                                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                                             Log.i("RxJavaRequest", "getDarkhastFaktorSatr itemCounter" + itemCounter);
                                             getForoshandehsPakhshRx(getProgramType);
@@ -2703,7 +2703,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
                         if (getDarkhastFaktorSatrResultResponse.isSuccessful()) {
 //                            darkhastFaktorSatrModels.addAll(getDarkhastFaktorSatrResultResponse.body().getData());
-                            updateDarkhastFaktorSatrTable(deleteAll, DarkhastFaktorModel.ccNoeHavale, mapResult, getDarkhastFaktorSatrResultResponse.body().getData());
+                            updateDarkhastFaktorSatrTable(deleteAll, Constants.ccNoeHavale, mapResult, getDarkhastFaktorSatrResultResponse.body().getData());
                         }
                     }
 
@@ -2732,20 +2732,20 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
                     @Override
                     public void onNext(@NonNull Boolean insertGroup) {
-                        if (Noe == DarkhastFaktorModel.ccNoeFaktor) {
+                        if (Noe == Constants.ccNoeFaktor) {
                             if (insertGroup && deleteAll) {
-                                mapResult.put(DarkhastFaktorModel.ccNoeFaktor, true);
+                                mapResult.put(Constants.ccNoeFaktor, true);
                             } else {
-                                mapResult.put(DarkhastFaktorModel.ccNoeFaktor, false);
+                                mapResult.put(Constants.ccNoeFaktor, false);
                             }
 
 
                         }
-                        if (Noe == DarkhastFaktorModel.ccNoeHavale) {
+                        if (Noe == Constants.ccNoeHavale) {
                             if (insertGroup && deleteAll) {
-                                mapResult.put(DarkhastFaktorModel.ccNoeHavale, true);
+                                mapResult.put(Constants.ccNoeHavale, true);
                             } else {
-                                mapResult.put(DarkhastFaktorModel.ccNoeHavale, false);
+                                mapResult.put(Constants.ccNoeHavale, false);
                             }
                         }
                     }

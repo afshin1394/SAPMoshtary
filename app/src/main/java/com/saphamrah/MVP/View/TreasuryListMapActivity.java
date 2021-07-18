@@ -794,7 +794,7 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
          * check for marjoee
          */
         int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition() + 1;
-        if ((darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) && ((noeMasouliat == 4 && darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && darkhastFaktorMoshtaryForoshandeModels.get(position).getExtraProp_IsSend() == 0 && darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat() < 6))) {
+        if ((darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale) && ((noeMasouliat == 4 && darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && darkhastFaktorMoshtaryForoshandeModels.get(position).getExtraProp_IsSend() == 0 && darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat() < 6))) {
             imgEditDarkhast.setVisibility(View.VISIBLE);
             imgMarjoee.setVisibility(View.GONE);
         } else {

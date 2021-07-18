@@ -368,7 +368,7 @@ public class KardexSatrDAO
         }
     }
 
-    public boolean deleteByccKardex(int ccKardex)
+    public boolean deleteByccKardex(long ccKardex)
     {
         String query = "delete from " + KardexSatrModel.TableName() + " where " + KardexSatrModel.COLUMN_ccKardex() + " = " + ccKardex;
         try

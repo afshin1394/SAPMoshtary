@@ -18,9 +18,7 @@ import java.util.Date;
 public class DarkhastFaktorModel
 {
 
-    //type of ccDarkhastFaktorNoeForosh
-    public final static int ccNoeFaktor = 1;
-    public final static int ccNoeHavale = 2;
+
 
 
     private static final String TABLE_NAME = "DarkhastFaktor";

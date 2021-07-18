@@ -76,7 +76,7 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         holder.lblMablaghKhalesFaktor.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.mablaghKhales), formatter.format((int) models.get(position).getMablaghKhalesFaktor()), context.getResources().getString(R.string.rial)));
         holder.lblMablaghMandehFaktor.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.mande), formatter.format(models.get(position).getMablaghMandeh()), context.getResources().getString(R.string.rial)));
         holder.lblNameNoeVosol.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.noeVosol), models.get(position).getNameNoeVosolAzMoshtary()));
-        if (models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) {
+        if (models.get(position).getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale) {
             holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.shomareDarkhast), models.get(position).getShomarehDarkhast()));
         }
         else {
@@ -91,21 +91,21 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             e.printStackTrace();
         }
 
-        if ((models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) && ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6))) {
+        if ((models.get(position).getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale) && ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6))) {
             holder.layEditDarkhast.setVisibility(View.VISIBLE);
         } else {
             holder.layEditDarkhast.setVisibility(View.GONE);
         }
 
 
-        if (models.size() >0) {
-            if (models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeFaktor) {
-                holder.layLeft.getLayoutParams().width = 66;
-            }
-        }
+//        if (models.size() >0) {
+//            if (models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeFaktor) {
+//                holder.layLeft.getLayoutParams().width = 66;
+//            }
+//        }
 
 //        if ((models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) && (models.get(position).getFaktorRooz() == 1) && ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6))) {
-        if ((models.get(position).getCcDarkhastFaktorNoeForosh() ==DarkhastFaktorModel.ccNoeFaktor) && (noeMasouliat==4 || noeMasouliat==5)){
+        if ((models.get(position).getCcDarkhastFaktorNoeForosh() ==Constants.ccNoeFaktor) && (noeMasouliat==4 || noeMasouliat==5)){
                 holder.layMarjoee.setVisibility(View.VISIBLE);
         } else {
             holder.layMarjoee.setVisibility(View.GONE);
@@ -164,7 +164,7 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             holder.layEditVosol.setVisibility(View.GONE);
             holder.laySendVosol.setVisibility(View.GONE);
         } else {
-            if (models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) {
+            if (models.get(position).getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale) {
                 holder.layEditVosol.setVisibility(View.VISIBLE);
             }
             holder.laySendVosol.setVisibility(View.VISIBLE);

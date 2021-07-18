@@ -190,7 +190,7 @@ public class MarjoeeMorediFragment extends Fragment implements MarjoeeMorediMVP.
                 showEditCountmAlert(model.getCcMarjoeeMamorPakhsh(), model.getNameKala(), model.getTedad3(), position);
             } else if (Constants.DELETE() == operation) {
                 marjoeeMamorPakhshModelCheckTaeidSabt = model;
-                mPresenter.checkTaeidSabtMarjoee(marjoeeMamorPakhshModelCheckTaeidSabt, model.getCcMarjoeeMamorPakhsh(), 0, 0, position , null);
+                mPresenter.checkTaeidSabtMarjoee(marjoeeMamorPakhshModelCheckTaeidSabt, Long.valueOf(ccDarkhastFaktor), 0, 0, position , null);
                 mPresenter.deleteMarjoee(model.getCcMarjoeeMamorPakhsh() , model.getCcMoshtary());
             }
         });
@@ -299,7 +299,7 @@ public class MarjoeeMorediFragment extends Fragment implements MarjoeeMorediMVP.
                     if (elatMarjoee.size() > 0) {
 
                         if (selectedCount > 0 && selectedCount <= marjoeeMamorPakhshModelsAdpater.get(position).getTedad3()) {
-                            mPresenter.checkTaeidSabtMarjoee(marjoeeMamorPakhshModelCheckTaeidSabt, ccMarjoeeMamorPakhsh, itemCount, selectedCount, position , elatMarjoee);
+                            mPresenter.checkTaeidSabtMarjoee(marjoeeMamorPakhshModelCheckTaeidSabt, Long.valueOf(ccDarkhastFaktor), itemCount, selectedCount, position , elatMarjoee);
                             show.dismiss();
                         } else if (selectedCount == 0) {
                             lblError.setVisibility(View.VISIBLE);

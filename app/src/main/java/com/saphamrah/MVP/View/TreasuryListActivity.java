@@ -261,6 +261,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
     public void onGetFaktorMandeDar(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> arrayListDarkhastFaktorMoshtaryForoshandeModels, int noeMasouliat) {
         this.darkhastFaktorMoshtaryForoshandeModels.clear();
         this.darkhastFaktorMoshtaryForoshandeModels.addAll(arrayListDarkhastFaktorMoshtaryForoshandeModels);
+        this.noeMasouliat = noeMasouliat;
         this.state = Constants.VOSOL_MANDE_DAR;
         recylerFaktorMandeDar();
 

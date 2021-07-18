@@ -6,6 +6,7 @@ import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.marjoee.MarjoeeMorediMVP;
 import com.saphamrah.DAO.DariaftPardakhtDarkhastFaktorPPCDAO;
 import com.saphamrah.DAO.DariaftPardakhtPPCDAO;
+import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.DAO.ElatMarjoeeKalaDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.KardexDAO;
@@ -13,6 +14,7 @@ import com.saphamrah.DAO.KardexSatrDAO;
 import com.saphamrah.DAO.MarjoeeMamorPakhshDAO;
 import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
+import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.ElatMarjoeeKalaModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.KardexModel;
@@ -32,7 +34,7 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
     private int ccMarjoeeMamorPakhsh;
     private int tedadMarjoeeForInsert = 0;
     private int ccKardexSatr = 0;
-    private int ccKardex = 0;
+    private long ccKardex = 0;
     ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
     KardexSatrDAO kardexSatrDAO= new KardexSatrDAO(BaseApplication.getContext());
     KardexDAO kardexDAO= new KardexDAO(BaseApplication.getContext());
@@ -61,7 +63,7 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
     public void getElatMarjoeeMoredi() {
 
         ElatMarjoeeKalaDAO elatMarjoeeKalaDAO = new ElatMarjoeeKalaDAO(BaseApplication.getContext());
-        ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels = elatMarjoeeKalaDAO.getElatMarjoeePakhsh();
+        ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels = elatMarjoeeKalaDAO.getElatMarjoeeForosh();
         ArrayList<String> elatAdamDarkhastTitles = new ArrayList<>();
         for (ElatMarjoeeKalaModel model : elatMarjoeeKalaModels)
         {
@@ -89,12 +91,12 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
     }
 
     @Override
-    public void checkTaeidSabtMarjoee(MarjoeeMamorPakhshModel model, int ccMarjoeeMamorPakhsh, int itemCount, int selectedCount, int position , ArrayList<ElatMarjoeeKalaModel> elatMarjoee) {
+    public void checkTaeidSabtMarjoee(MarjoeeMamorPakhshModel model, long ccRefrence, int itemCount, int selectedCount, int position , ArrayList<ElatMarjoeeKalaModel> elatMarjoee) {
         this.ccMarjoeeMamorPakhsh = ccMarjoeeMamorPakhsh;
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
         tedadMarjoeeForInsert = selectedCount;
-        insertKardexMoredi( model, foroshandehMamorPakhshModel.getCcMarkazAnbar(), foroshandehMamorPakhshModel.getCcMarkazForosh(), foroshandehMamorPakhshModel.getCcForoshandeh());
-        ccKardex =kardexDAO.findccKardexByccMoshtaryAndccMarjoeeMamorPakhsh(model.getCcMoshtary() , ccMarjoeeMamorPakhsh);
+        ccKardex = insertKardexMoredi( model, foroshandehMamorPakhshModel.getCcMarkazAnbar(), ccRefrence);
+        //ccKardex =kardexDAO.findccKardexByccMoshtaryAndccMarjoeeMamorPakhsh(model.getCcMoshtary() , ccMarjoeeMamorPakhsh);
         if(ccKardex > 0) {
             insertKardexSatrMoredi(model, ccKardex , elatMarjoee);
         }
@@ -119,30 +121,31 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
      *  insert kardex moredi
      * @param entity
      * @param ccMarkazAnbar
-     * @param ccMarkazForosh
-     * @param ccForoshandeh
      * @return
      */
-    private long insertKardexMoredi(MarjoeeMamorPakhshModel entity, int ccMarkazAnbar, int ccMarkazForosh, int ccForoshandeh)
+    private long insertKardexMoredi(MarjoeeMamorPakhshModel entity, int ccMarkazAnbar, long ccRefrence)
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         KardexModel kardex= new KardexModel();
+        DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccRefrence);
+
         try
         {
             kardex = kardexDAO.SetForInsert_Kardex(ccMarkazAnbar,
-                    ccMarkazForosh,
-                    // TODO :: check entry
-                    0,
+                    darkhastFaktorModel.getCcMarkazForosh(),
+                    entity.getCcAnbarMarjoee(),
                     entity.getCcMoshtary(),
                     0,
-                    ccForoshandeh,
-                   entity.getCcMarjoeeMamorPakhsh(),
+                    darkhastFaktorModel.getCcForoshandeh(),
+                    ccRefrence,
                     0,
                     foroshandehMamorPakhshModel.getCcAfrad()
             );
 
-            ccKardex =kardexDAO.findccKardexByccMoshtaryAndccMarjoeeMamorPakhsh(entity.getCcMoshtary() , entity.getCcMarjoeeMamorPakhsh());
+            //ccKardex =kardexDAO.findccKardexByccMoshtaryAndccMarjoeeMamorPakhsh(entity.getCcMoshtary() , entity.getCcMarjoeeMamorPakhsh());
+            ccKardex =kardexDAO.findccKardexByccRefrence(ccRefrence);
             if(ccKardex == 0)
                 ccKardex= kardexDAO.insert(kardex);
         }

@@ -43,8 +43,8 @@ public class MarjoeeMorediPresenter implements MarjoeeMorediMVP.PresenterOps, Ma
     }
 
     @Override
-    public void checkTaeidSabtMarjoee(MarjoeeMamorPakhshModel model, int ccMarjoeeMamorPakhsh, int itemCount, int selectedCount, int position ,ArrayList<ElatMarjoeeKalaModel> elatMarjoee) {
-       mModel.checkTaeidSabtMarjoee(model  , ccMarjoeeMamorPakhsh , itemCount , selectedCount , position , elatMarjoee);
+    public void checkTaeidSabtMarjoee(MarjoeeMamorPakhshModel model, long ccRefrence, int itemCount, int selectedCount, int position ,ArrayList<ElatMarjoeeKalaModel> elatMarjoee) {
+       mModel.checkTaeidSabtMarjoee(model  , ccRefrence , itemCount , selectedCount , position , elatMarjoee);
     }
 
     @Override

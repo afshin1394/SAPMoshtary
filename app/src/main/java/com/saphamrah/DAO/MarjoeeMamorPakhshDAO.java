@@ -395,6 +395,7 @@ public class MarjoeeMamorPakhshDAO
             MarjoeeMamorPakhshModel model = new MarjoeeMamorPakhshModel();
             model.setCcMarjoeeMamorPakhsh(cursor.getInt(cursor.getColumnIndex(model.getCOLUM_ccMarjoeeMamorPakhsh())));
             model.setCcKala(cursor.getInt(cursor.getColumnIndex(model.getCOLUM_ccKala())));
+            model.setCcKalaCode(cursor.getInt(cursor.getColumnIndex(model.getCOLUM_ccKalaCode())));
             model.setCodeKalaOld(cursor.getString(cursor.getColumnIndex(model.getCOLUM_CodeKalaOld())));
             model.setNameKala(cursor.getString(cursor.getColumnIndex(model.getCOLUM_NameKala())));
             model.setCcTaminKonandeh(cursor.getInt(cursor.getColumnIndex(model.getCOLUM_ccTaminKonandeh())));

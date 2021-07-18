@@ -1562,17 +1562,17 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
         Log.d("getProgram" , "ccDarkhastFaktors : " + ccDarkhastFaktors);
         final DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-        String ccDarkhastFaktorNoeFaktor = darkhastFaktorDAO.getccDarkhastFaktorsByNoeFaktorHavale(DarkhastFaktorModel.ccNoeFaktor);
-        String ccDarkhastFaktorNoeHavale = darkhastFaktorDAO.getccDarkhastFaktorsByNoeFaktorHavale(DarkhastFaktorModel.ccNoeHavale);
+        String ccDarkhastFaktorNoeFaktor = darkhastFaktorDAO.getccDarkhastFaktorsByNoeFaktorHavale(Constants.ccNoeFaktor);
+        String ccDarkhastFaktorNoeHavale = darkhastFaktorDAO.getccDarkhastFaktorsByNoeFaktorHavale(Constants.ccNoeHavale);
         final Map<Integer, Boolean> mapResult = new HashMap<>();
-        mapResult.put(DarkhastFaktorModel.ccNoeFaktor, true);
-        mapResult.put(DarkhastFaktorModel.ccNoeHavale, true);
+        mapResult.put(Constants.ccNoeFaktor, true);
+        mapResult.put(Constants.ccNoeHavale, true);
         final boolean deleteResult = darkhastFaktorSatrDAO.deleteAll();
         Log.d("getProgram","ccDarkhastFaktorNoeFaktor:"+ccDarkhastFaktorNoeFaktor+ " , ccDarkhastFaktorNoeHavale:" + ccDarkhastFaktorNoeHavale);
         if (!ccDarkhastFaktorNoeFaktor.trim().equals(""))
         {
             Log.d("getProgram","ccDarkhastFaktorNoeFaktor:"+ccDarkhastFaktorNoeFaktor);
-            darkhastFaktorSatrDAO.fetchDarkhastFaktorSatr(mPresenter.getAppContext(), activityNameForLog, String.valueOf(DarkhastFaktorModel.ccNoeFaktor), ccDarkhastFaktorNoeFaktor, new RetrofitResponse()
+            darkhastFaktorSatrDAO.fetchDarkhastFaktorSatr(mPresenter.getAppContext(), activityNameForLog, String.valueOf(Constants.ccNoeFaktor), ccDarkhastFaktorNoeFaktor, new RetrofitResponse()
             {
                 @Override
                 public void onSuccess(final ArrayList arrayListData)
@@ -1582,16 +1582,16 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
                         @Override
                         public void run()
                         {
-                            Log.d("getProgram","insert faktor:" +String.valueOf(DarkhastFaktorModel.ccNoeFaktor) + "-" + arrayListData.toString());
+                            Log.d("getProgram","insert faktor:" +String.valueOf(Constants.ccNoeFaktor) + "-" + arrayListData.toString());
                             //boolean deleteResult = darkhastFaktorSatrDAO.deleteAll();
                             boolean insertResult = darkhastFaktorSatrDAO.insertGroup(arrayListData);
                             if (deleteResult && insertResult)
                             {
-                                mapResult.put(DarkhastFaktorModel.ccNoeFaktor, true);
+                                mapResult.put(Constants.ccNoeFaktor, true);
                             }
                             else
                             {
-                                mapResult.put(DarkhastFaktorModel.ccNoeFaktor, false);
+                                mapResult.put(Constants.ccNoeFaktor, false);
                             }
                         }
                     };
@@ -1608,7 +1608,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
         if (!ccDarkhastFaktorNoeHavale.trim().equals(""))
         {
             Log.d("getProgram","ccDarkhastFaktorNoeHavale:"+ccDarkhastFaktorNoeHavale);
-            darkhastFaktorSatrDAO.fetchDarkhastFaktorSatr(mPresenter.getAppContext(), activityNameForLog, String.valueOf(DarkhastFaktorModel.ccNoeHavale), ccDarkhastFaktorNoeHavale, new RetrofitResponse()
+            darkhastFaktorSatrDAO.fetchDarkhastFaktorSatr(mPresenter.getAppContext(), activityNameForLog, String.valueOf(Constants.ccNoeHavale), ccDarkhastFaktorNoeHavale, new RetrofitResponse()
             {
                 @Override
                 public void onSuccess(final ArrayList arrayListData)
@@ -1618,17 +1618,17 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
                         @Override
                         public void run()
                         {
-                            Log.d("getProgram","insert Havaleh:" + String.valueOf(DarkhastFaktorModel.ccNoeHavale + "-" + arrayListData.toString()));
+                            Log.d("getProgram","insert Havaleh:" + String.valueOf(Constants.ccNoeHavale + "-" + arrayListData.toString()));
                             //boolean deleteResult = darkhastFaktorSatrDAO.deleteAll();
                             boolean insertResult = darkhastFaktorSatrDAO.insertGroup(arrayListData);
                             if (deleteResult && insertResult)
                             {
-                                mapResult.put(DarkhastFaktorModel.ccNoeHavale, true);
+                                mapResult.put(Constants.ccNoeHavale, true);
                                 Log.d("getProgram","deleteResult success:" +deleteResult+", insertResult:"+ insertResult);
                             }
                             else
                             {
-                                mapResult.put(DarkhastFaktorModel.ccNoeHavale, false);
+                                mapResult.put(Constants.ccNoeHavale, false);
                             }
 
                         }
@@ -1643,7 +1643,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
             });
         }
 
-        if (mapResult.get(DarkhastFaktorModel.ccNoeFaktor) && mapResult.get(DarkhastFaktorModel.ccNoeHavale))
+        if (mapResult.get(Constants.ccNoeFaktor) && mapResult.get(Constants.ccNoeHavale))
         {
             Log.d("getProgram","ccDarkhastFaktorNoeHavale Success");
             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
