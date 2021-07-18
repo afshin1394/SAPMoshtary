@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
@@ -42,7 +43,8 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
     private boolean faktorRooz;
     private int noeMasouliat;
     private PubFunc.DateUtils dateUtils = new PubFunc().new DateUtils();
-    SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_MILISECONDS());
+    private SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_MILISECONDS());
+    private DecimalFormat formatter = new DecimalFormat("#,###,###");
     public TreasuryAdapter(Context context, ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, boolean faktorRooz, int noeMasouliat, OnItemClickListener listener) {
         this.listener = listener;
         this.context = context;
@@ -63,11 +65,10 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        DecimalFormat formatter = new DecimalFormat("#,###,###");
-
-
+        int countSwipeLayout = 3;
 
         holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.itemView.findViewById(R.id.layRight));
 
 
         holder.lblRadif.setText(String.valueOf(position + 1));
@@ -82,7 +83,6 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         else {
             holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.shomareFaktor), models.get(position).getShomarehFaktor()));
         }
-
         try {
             Date date = sdf.parse(models.get(position).getTarikhErsal());
             String tarikhErsal = (String) DateFormat.format(Constants.DATE_SHORT_FORMAT_WITH_SLASH() , date);
@@ -91,28 +91,26 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             e.printStackTrace();
         }
 
+        /*
+        ****** layout Edit Darkhast ******
+         */
         if ((models.get(position).getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale) && ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6))) {
             holder.layEditDarkhast.setVisibility(View.VISIBLE);
         } else {
             holder.layEditDarkhast.setVisibility(View.GONE);
         }
-
-
-//        if (models.size() >0) {
-//            if (models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeFaktor) {
-//                holder.layLeft.getLayoutParams().width = 66;
-//            }
-//        }
-
-//        if ((models.get(position).getCcDarkhastFaktorNoeForosh() == DarkhastFaktorModel.ccNoeHavale) && (models.get(position).getFaktorRooz() == 1) && ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6))) {
+        /*
+         ****** layout marjoee ******
+         */
         if ((models.get(position).getCcDarkhastFaktorNoeForosh() ==Constants.ccNoeFaktor) && (noeMasouliat==4 || noeMasouliat==5)){
                 holder.layMarjoee.setVisibility(View.VISIBLE);
         } else {
             holder.layMarjoee.setVisibility(View.GONE);
+            countSwipeLayout -= 1;
         }
 
-        /**
-         * check show location faktor rooz
+        /*
+         ****** check show location ******
          */
         if (models.get(position).getFaktorRooz() == 1){
             holder.laySaveAndSend.setVisibility(View.GONE);
@@ -120,10 +118,47 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             holder.laySaveAndSend.setVisibility(View.VISIBLE);
         }
 
+        /*
+         ****** check show faktor mamorPakhsh ******
+         */
+        if (models.get(position).getExtraProp_ShowFaktorMamorPakhsh() == 0) {
+            holder.layFaktorDetail.setVisibility(View.VISIBLE);
+        } else {
+            holder.layFaktorDetail.setVisibility(View.GONE);
+        }
+
+        /*
+         ****** check show EdirVosol and SendVosol ******
+         */
+        if ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6)) {
+            holder.layEditVosol.setVisibility(View.GONE);
+            holder.laySendVosol.setVisibility(View.GONE);
+            countSwipeLayout -=1;
+        } else {
+            if (models.get(position).getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale) {
+                holder.layEditVosol.setVisibility(View.VISIBLE);
+            }
+            holder.laySendVosol.setVisibility(View.VISIBLE);
+        }
+
+        /**
+         * set width for SwipeLayout
+         */
+        if (models.size() >0) {
+            if (countSwipeLayout == 3){
+                holder.layLeft.getLayoutParams().width = (int) BaseApplication.getContext().getResources().getDimension(R.dimen.treasury_swipeLayout_width_three);
+            }
+            else if (countSwipeLayout == 2){
+                holder.layLeft.getLayoutParams().width = (int) BaseApplication.getContext().getResources().getDimension(R.dimen.treasury_swipeLayout_width_two);
+            }
+            else if (countSwipeLayout == 1) {
+                holder.layLeft.getLayoutParams().width = (int) BaseApplication.getContext().getResources().getDimension(R.dimen.treasury_swipeLayout_width_one);
+            }
+        }
+
         /**
          * set color for layout
          */
-
         if (models.get(position).getExtraProp_IsMarjoeeKamel() == 1) {
             holder.lay_for_color.setBackgroundResource(R.color.marjoeeKamel);
         } else if (models.get(position).getExtraProp_Resid() == 1) {
@@ -141,6 +176,9 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         }
 
 
+        /**
+         *  set color for lay status
+         */
         if (models.get(position).getExtraProp_IsSend() == 0) {
             holder.layStatusRight.setBackgroundResource(R.drawable.radius_layout_red_right);
             holder.layStatusLeft.setBackgroundResource(R.drawable.radius_layout_red_left);
@@ -154,23 +192,8 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             holder.layStatusLeft.setBackgroundResource(R.drawable.radius_layout_green_right);
         }
 
-        if (models.get(position).getExtraProp_ShowFaktorMamorPakhsh() == 0) {
-            holder.layFaktorDetail.setVisibility(View.VISIBLE);
-        } else {
-            holder.layFaktorDetail.setVisibility(View.GONE);
-        }
 
-        if ((noeMasouliat == 4 && models.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && models.get(position).getExtraProp_IsSend() == 0 && models.get(position).getCodeVazeiat() < 6)) {
-            holder.layEditVosol.setVisibility(View.GONE);
-            holder.laySendVosol.setVisibility(View.GONE);
-        } else {
-            if (models.get(position).getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale) {
-                holder.layEditVosol.setVisibility(View.VISIBLE);
-            }
-            holder.laySendVosol.setVisibility(View.VISIBLE);
-        }
 
-        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.itemView.findViewById(R.id.layRight));
         if (holder.layEditVosol.getVisibility() == View.GONE && holder.laySendVosol.getVisibility() == View.GONE && holder.layEditDarkhast.getVisibility() == View.GONE) {
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, null);
         } else {
@@ -185,9 +208,11 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         {
             holder.laySaveAndSend.setVisibility(View.GONE);
         }
-        holder.bind(position, listener);
-        setAnimation(holder.itemView, position);
 
+
+        /**
+         * hide layout location when send location
+         */
         if (models.get(position).getExtraProp_SendLocation() == 1){
             holder.laySaveAndSend.setVisibility(View.GONE);
         }
@@ -229,6 +254,10 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         } else {
             holder.imgHaveMarjoee.setBackgroundResource(R.drawable.ic_error);
         }
+
+
+        holder.bind(position, listener);
+        setAnimation(holder.itemView, position);
 
     }
 

@@ -92,4 +92,10 @@
 	<dimen name="drawablePadding">8dp</dimen>
     <dimen name="marginSize15dp">15dp</dimen>										 
 
+    <dimen name="treasury_swipeLayout_width_one">70dp</dimen>
+    <dimen name="treasury_swipeLayout_width_two">140dp</dimen>
+    <dimen name="treasury_swipeLayout_width_three">210dp</dimen>
+
+
+
 </resources>
