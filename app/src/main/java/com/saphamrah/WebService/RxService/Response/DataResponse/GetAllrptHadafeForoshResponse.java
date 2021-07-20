@@ -14,7 +14,7 @@ public class GetAllrptHadafeForoshResponse extends BaseResponse {
     private ArrayList<RptHadafForoshModel> rptHadafForoshModels = null;
 
 
-    public ArrayList<RptHadafForoshModel> getrptHadafForoshModels() {
+    public ArrayList<RptHadafForoshModel> getData() {
         return rptHadafForoshModels;
     }
     public void setData(ArrayList<RptHadafForoshModel> rptHadafForoshModels) {
