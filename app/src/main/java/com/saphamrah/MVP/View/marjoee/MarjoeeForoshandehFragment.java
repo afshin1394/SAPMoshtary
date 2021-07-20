@@ -41,7 +41,7 @@ public class MarjoeeForoshandehFragment extends Fragment implements MarjoeeForos
     private final String TAG = this.getClass().getSimpleName();
     private StateMaintainer stateMaintainer;
     private MarjoeeForoshandehMVP.PresenterOps mPresenter;
-    private String ccDarkhastFaktor;
+    private long ccDarkhastFaktor;
     private String ccMoshtary;
     private CustomAlertDialog customAlertDialog;
 
@@ -73,13 +73,13 @@ public class MarjoeeForoshandehFragment extends Fragment implements MarjoeeForos
         calligrapher.setFont(getActivity(), getResources().getString(R.string.fontPath), true);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            ccDarkhastFaktor = getArguments().getString("marjoee");
+            ccDarkhastFaktor = Long.parseLong(getArguments().getString("marjoee"));
             ccMoshtary = getArguments().getString("ccMoshtaryMarjoee");
         }
         stateMaintainer = new StateMaintainer(getFragmentManager(), TAG, BaseApplication.getContext());
         startMVPOps();
         customAlertDialog = new CustomAlertDialog(getActivity());
-        mPresenter.getMarjoee(Long.parseLong(ccDarkhastFaktor));
+        mPresenter.getMarjoee(ccDarkhastFaktor);
         mPresenter.getForoshandehMamorPakhshInfo();
 
     }

@@ -713,7 +713,7 @@ public class DariaftPardakhtPPCDAO
         }
     }
 
-    public boolean deleteMarjoeeForoshandehByccDarkhastFaktor(String ccDarkhastFaktor)
+    public boolean deleteMarjoeeForoshandehByccDarkhastFaktor(long ccDarkhastFaktor)
     {
         String query = "delete from " + DariaftPardakhtPPCModel.TableName() + " where " + DariaftPardakhtPPCModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor;
         try

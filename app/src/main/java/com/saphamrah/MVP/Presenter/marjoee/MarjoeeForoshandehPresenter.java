@@ -47,12 +47,12 @@ public class MarjoeeForoshandehPresenter implements MarjoeeForoshandehMVP.Presen
     }
 
     @Override
-    public void checkTaeidSabtMarjoee( ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,String ccDarkhastFaktor, int ccElamMarjoeeSatr, int itemCount, int selectedCount, int position) {
+    public void checkTaeidSabtMarjoee( ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,long ccDarkhastFaktor, int ccElamMarjoeeSatr, int itemCount, int selectedCount, int position) {
         mModel.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt , ccDarkhastFaktor , ccElamMarjoeeSatr , itemCount , selectedCount,position);
     }
 
     @Override
-    public void deleteMarjoee(String ccDarkhastFaktor) {
+    public void deleteMarjoee(long ccDarkhastFaktor) {
         mModel.deleteMarjoee(ccDarkhastFaktor);
     }
 

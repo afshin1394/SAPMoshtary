@@ -129,7 +129,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             Date dtGregorianGetProgramDate = sdf.parse(gregorianGetProgramDate);
             //---------------------- For Test -----------------
 
-            int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
+            int isTest = 0;//userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
             Log.d("date" , "istest : " + isTest);
             if (isTest == 1)
             {
@@ -1065,7 +1065,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             }
             //---------------------- For Test -----------------
             UserTypeShared userTypeShared = new UserTypeShared(weakReferenceContext.get());
-            int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
+            int isTest = 0;//userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
             Log.d("kharejAzMasir" , "istest : " + isTest);
             if (isTest == 1)
             {
@@ -1138,12 +1138,13 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                             Log.d("kharejAzMahal" , "CanGetDarkhastTelephoni: " + foroshandehMamorPakhshModel.getCanGetDarkhastTelephoni());
 
                             if(!IsMoshtaryJadid(ccMoshtary)) {
-                                if (isMorajehShodeh == 0 || foroshandehMamorPakhshModel.getCanGetDarkhastTelephoni() == 0) {
-                                    if (GPSEnable == 1 /*& SelectFaktor.getccGorohNoeSenf() != ccNoeSenfMoshtary_BedonSenf*/) {
-                                        if (distance[0] > zaribKharejAzMahalMetr) {
-                                            //mPresenter.onErrorSelectCustomer(R.string.errorLocationForRequest);
-                                            Log.d("kharejAzMahal" , "systemConfig.getZaribKharejAzMahalMetr() : " + zaribKharejAzMahalMetr + " - " + distance[0]);
-                                            return -2;
+                                if(moshtary.getKharejAzMahal()==0) {
+                                    if (isMorajehShodeh == 0 || foroshandehMamorPakhshModel.getCanGetDarkhastTelephoni() == 0) {
+                                        if (GPSEnable == 1 /*& SelectFaktor.getccGorohNoeSenf() != ccNoeSenfMoshtary_BedonSenf*/) {
+                                            if (distance[0] > zaribKharejAzMahalMetr) {
+                                                Log.d("kharejAzMahal", "systemConfig.getZaribKharejAzMahalMetr() : " + zaribKharejAzMahalMetr + " - " + distance[0]);
+                                                return -2;
+                                            }
                                         }
                                     }
                                 }

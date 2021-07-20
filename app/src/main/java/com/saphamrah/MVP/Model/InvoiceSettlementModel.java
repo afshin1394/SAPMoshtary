@@ -169,11 +169,11 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
             mPresenter.onGetNoeVosolsMojazMoshtary(configNoeVosolMojazeMoshtaryModels);
 
         } else if (from == Constants.FROM_TREASURYLIST) {
-            ArrayList<ConfigNoeVosolMojazeFaktorModel> configNoeVosolMojazeFaktorModels = configNoeVosolMojazeFaktorDAO.getByNoeVosol(darkhastFaktorModel.getCodeNoeVosolAzMoshtary());
+            ArrayList<ConfigNoeVosolMojazeFaktorModel> configNoeVosolMojazeFaktorModels = configNoeVosolMojazeFaktorDAO.getByNoeVosol(darkhastFaktorModel.getCodeNoeVosolAzMoshtary() , darkhastFaktorModel.getMablaghKhalesFaktor());
             mPresenter.onGetNoeVosols(configNoeVosolMojazeFaktorModels);
         } else { // From SabtDarkhast
 
-            ArrayList<ConfigNoeVosolMojazeFaktorModel> configNoeVosolMojazeFaktorModels = configNoeVosolMojazeFaktorDAO.getByNoeVosol(darkhastFaktorModel.getCodeNoeVosolAzMoshtary());
+            ArrayList<ConfigNoeVosolMojazeFaktorModel> configNoeVosolMojazeFaktorModels = configNoeVosolMojazeFaktorDAO.getByNoeVosol(darkhastFaktorModel.getCodeNoeVosolAzMoshtary(), darkhastFaktorModel.getMablaghKhalesFaktor());
             mPresenter.onGetNoeVosols(configNoeVosolMojazeFaktorModels);
         }
     }
@@ -221,24 +221,25 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
     }
 
     @Override
-    public void checkInsert(int ccMoshtary, long ccDarkhastFaktor, int codeNoeVosolMoshtary, int flagInputHesab, String mablaghMandeh, String nameNoevosol, DariaftPardakhtPPCModel dariaftPardakhtPPCModel) {
+    public void checkInsert(int ccMoshtary, long ccDarkhastFaktor, int codeNoeVosolSelected, int flagInputHesab, String mablaghMandeh, String nameNoevosol, DariaftPardakhtPPCModel dariaftPardakhtPPCModel) {
         boolean hasError = false;
         long ccDariaftPardakht = 0;
         long ccDpdfNewInsert = 0;
         int valueVajhNaghd = Integer.parseInt(Constants.VALUE_VAJH_NAGHD());
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_SHORT_FORMAT_WITH_SLASH());
+
         if (ccDarkhastFaktor == -1) {
             mPresenter.onErrorCheckInsert(R.string.errorFindccDarkhastFaktor);
             hasError = true;
-            return;
         }
 
         DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+
         if (darkhastFaktorModel.getCcDarkhastFaktor() == 0) {
             mPresenter.onErrorCheckInsert(R.string.errorFindDarkhastFaktor);
             hasError = true;
-            return;
         }
-        strCodeNoeVosol = String.valueOf(codeNoeVosolMoshtary);
+        strCodeNoeVosol = String.valueOf(codeNoeVosolSelected);
         if (strCodeNoeVosol.equals(Constants.VALUE_POS()) || strCodeNoeVosol.equals(Constants.VALUE_CHECK()) || strCodeNoeVosol.equals(Constants.VALUE_FISH_BANKI())) {
             if (dariaftPardakhtPPCModel.getShomarehSanad().length() == 0) {
                 mPresenter.onErrorCheckInsert(R.string.errorInputNumber);
@@ -257,12 +258,10 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
             }
             dariaftPardakhtPPCModel.setNameSahebHesab(nameMoshtary);
 
-            SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_SHORT_FORMAT_WITH_SLASH());
-
-            int tedadRoozForRotbeh  = getTedadRoozForRotbeh(moshtaryModel.getDarajeh(),codeNoeVosolMoshtary,moshtaryModel.getCcNoeMoshtary());
-            Log.d("settlement", "darkhastFaktorModel.getCodeNoeVosolAzMoshtary() : " + darkhastFaktorModel.getCodeNoeVosolAzMoshtary());
-            Log.d("settlement", "valueVajhNaghd : " + valueVajhNaghd);
-            Log.d("settlement", "tedadRoozForRotbeh : " + tedadRoozForRotbeh);
+            int tedadRoozForRotbeh  = getTedadRoozForRotbeh(moshtaryModel.getDarajeh(),codeNoeVosolSelected,moshtaryModel.getCcNoeMoshtary());
+            Log.d("invoice", "darkhastFaktorModel.getCodeNoeVosolAzMoshtary() : " + darkhastFaktorModel.getCodeNoeVosolAzMoshtary());
+            Log.d("invoice", "valueVajhNaghd : " + valueVajhNaghd);
+            Log.d("invoice", "tedadRoozForRotbeh : " + tedadRoozForRotbeh);
             if (strCodeNoeVosol.equals(Constants.VALUE_POS()) || strCodeNoeVosol.equals(Constants.VALUE_FISH_BANKI()) /*|| darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == valueVajhNaghd*/) {
                 Date tarikhRooz = sdf.parse(sdf.format(new Date()));
                 Date tarikhSanad = sdf.parse(dateUtils.persianWithSlashToGregorianSlash(dariaftPardakhtPPCModel.getTarikhSanadShamsi()));
@@ -292,22 +291,25 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                     if (dpdfDAO.getCountShomarehSanad(dariaftPardakhtPPCModel.getShomarehSanad(), dariaftPardakhtPPCModel.getMablagh()) > 0) {
                         mPresenter.onErrorCheckInsert(R.string.errorDuplicateNumber);
                         hasError = true;
+                        return;
                     }
                 }
             }
 
             if (strCodeNoeVosol.equals(Constants.VALUE_CHECK())) {
-                String errors = "";
+                Date tarikhErsalFaktor = DateUtils.convertStringDateToDateClass(darkhastFaktorModel.getTarikhErsal());
 
-                Date dateTarikhSarResidForCheck = sdf.parse(getTarikhSarResidForCheck(darkhastFaktorModel, codeNoeVosolMoshtary, Double.parseDouble(mablaghMandeh))[1]);
+
+                Date dateTarikhSarResidForCheck = sdf.parse(getTarikhSarResidForCheck(darkhastFaktorModel, codeNoeVosolSelected, Double.parseDouble(mablaghMandeh))[1]);
 
                 Date tarikhSanad = sdf.parse(dateUtils.persianWithSlashToGregorianSlash(dariaftPardakhtPPCModel.getTarikhSanadShamsi()));
                 Log.d("invoice", "flagInputHesab : " + flagInputHesab);
                 Log.d("invoice", "shomareHesab len : " + dariaftPardakhtPPCModel.getShomarehHesabSanad().trim().length());
                 Log.d("invoice", "shomareHesab : " + dariaftPardakhtPPCModel.getShomarehHesabSanad());
                 if (flagInputHesab == 0 && dariaftPardakhtPPCModel.getCcShomarehHesab() == 0) {
-                    errors += mPresenter.getAppContext().getResources().getString(R.string.errorShomareHesab);
+                    mPresenter.onErrorCheckInsert(R.string.errorShomareHesab);
                     hasError = true;
+                    return;
                 } else if (flagInputHesab == 0 && dariaftPardakhtPPCModel.getCcShomarehHesab() != 0) {
                     Log.d("invoice", "CcShomarehHesab : " + dariaftPardakhtPPCModel.getCcShomarehHesab());
                     nameMoshtary = new MoshtaryShomarehHesabDAO(mPresenter.getAppContext()).getNameMoshtaryByccMoshtaryShomareHesab(dariaftPardakhtPPCModel.getCcShomarehHesab());
@@ -321,60 +323,75 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                     }
                 } else if (flagInputHesab == 1) {
                     if (dariaftPardakhtPPCModel.getCcBankSanad() == 0) {
-                        errors += mPresenter.getAppContext().getResources().getString(R.string.errorBank);
+                        mPresenter.onErrorCheckInsert(R.string.errorBank);
                         hasError = true;
+                        return;
                     }
                     if (dariaftPardakhtPPCModel.getCodeShobehSanad().trim().length() == 0) {
-                        errors += mPresenter.getAppContext().getResources().getString(R.string.errorCodeShobe);
+                        mPresenter.onErrorCheckInsert(R.string.errorCodeShobe);
                         hasError = true;
+                        return;
                     }
                     if (dariaftPardakhtPPCModel.getNameShobehSanad().trim().length() == 0) {
-                        errors += mPresenter.getAppContext().getResources().getString(R.string.errorNameShobe);
+                        mPresenter.onErrorCheckInsert(R.string.errorNameShobe);
                         hasError = true;
+                        return;
                     }
                     if (dariaftPardakhtPPCModel.getShomarehHesabSanad().trim().length() == 0) {
-                        errors += mPresenter.getAppContext().getResources().getString(R.string.errorInputHesab);
+                        mPresenter.onErrorCheckInsert(R.string.errorInputHesab);
                         hasError = true;
+                        return;
                     }
                 }
-                Log.d("check", "tarikhSanad.getTime() : " + tarikhSanad.getTime());
-                Log.d("check", "tarikhSanad : " + tarikhSanad);
-                Log.d("check", "tarikhSanad.getTime() : " + tarikhSanad.getTime());
-                Log.d("check", "tedadRoozForRotbeh : " + tedadRoozForRotbeh);
-                Log.d("check", "dateTarikhSarResidForCheck : " + dateTarikhSarResidForCheck);
-                Log.d("check", "new PubFunc().new DateUtils().addDay(dateTarikhSarResidForCheck , tedadRoozForRotbeh).getTime() : " + dateUtils.addDay(dateTarikhSarResidForCheck, tedadRoozForRotbeh).getTime());
-                Log.d("check", "new PubFunc().new DateUtils().addDay(dateTarikhSarResidForCheck , tedadRoozForRotbeh) : " + dateUtils.addDay(dateTarikhSarResidForCheck, tedadRoozForRotbeh));
+                Log.d("invoice", "tarikhSanad.getTime() : " + tarikhSanad.getTime());
+                Log.d("invoice", "tarikhSanad : " + tarikhSanad);
+                Log.d("invoice", "tarikhSanad.getTime() : " + tarikhSanad.getTime());
+                Log.d("invoice", "tedadRoozForRotbeh : " + tedadRoozForRotbeh);
+                Log.d("invoice", "dateTarikhSarResidForCheck : " + dateTarikhSarResidForCheck);
+                Log.d("invoice", "TarikhErsalFaktor : " + tarikhErsalFaktor);
+                Log.d("invoice", "new PubFunc().new DateUtils().addDay(dateTarikhSarResidForCheck , tedadRoozForRotbeh).getTime() : " + dateUtils.addDay(dateTarikhSarResidForCheck, tedadRoozForRotbeh).getTime());
+                Log.d("invoice", "new PubFunc().new DateUtils().addDay(dateTarikhSarResidForCheck , tedadRoozForRotbeh) : " + dateUtils.addDay(dateTarikhSarResidForCheck, tedadRoozForRotbeh));
 
                 int tedadRoozMazad = 10;
                 if (tarikhSanad.getTime()  > dateUtils.addDay(dateTarikhSarResidForCheck, tedadRoozForRotbeh + tedadRoozMazad ).getTime()) {
-                    errors += mPresenter.getAppContext().getResources().getString(R.string.errorInvalidDate);
+                    mPresenter.onErrorCheckInsert(R.string.errorInvalidDate);
                     hasError = true;
+                    return;
                 }
-                if (errors.trim().length() > 0) {
-                    mPresenter.onErrorCheckInsert(errors);
+
+
+                if (darkhastFaktorModel.getCodeNoeVosolAzMoshtary()==Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD() && tarikhSanad.getTime()  > tarikhErsalFaktor.getTime()) {
+                    mPresenter.onErrorCheckInsert(R.string.errorInvalidDate);
                     hasError = true;
+                    return;
                 }
+
+
             }
 
             if (strCodeNoeVosol.equals(Constants.VALUE_FISH_BANKI()) && dariaftPardakhtPPCModel.getCcBankSanad() == 0) {
                 mPresenter.onErrorCheckInsert(R.string.errorBank);
                 hasError = true;
                 return;
+
             }
 
             else if (strCodeNoeVosol.equals(Constants.VALUE_POS()) && dariaftPardakhtPPCModel.getCcBankSanad() == 0) {
                 mPresenter.onErrorCheckInsert(R.string.errorAssignPosForSeller);
                 hasError = true;
+                return;
             }
 
             if (!strCodeNoeVosol.equals(Constants.VALUE_RESID()) && !strCodeNoeVosol.equals(Constants.VALUE_IRANCHECK())) {
                 if (dariaftPardakhtPPCModel.getMablagh() == 0) {
                     mPresenter.onErrorCheckInsert(R.string.errorInputMablagh);
                     hasError = true;
+                    return;
                 } else {
                     if (dariaftPardakhtPPCModel.getMablagh() <= 0) {
                         mPresenter.onErrorCheckInsert(R.string.errorNegativeInputMablagh);
                         hasError = true;
+                        return;
                     }
                 }
             }
@@ -385,6 +402,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                 if (strCodeNoeVosol.equals(Constants.VALUE_POS()) && strCodeNoeVosol.equals(Constants.VALUE_FISH_BANKI()) && strCodeNoeVosol.equals(Constants.VALUE_VAJH_NAGHD())) {
                     mPresenter.onErrorCheckInsert(R.string.errorInvalidSelectedNoeVosol);
                     hasError = true;
+                    return;
                 }
             }
             DariaftPardakhtDarkhastFaktorPPCDAO dpdarkhastfaktorppcDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(mPresenter.getAppContext());
@@ -398,17 +416,19 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                 if (CodeNoeVosolSabtShode == valueResid && !strCodeNoeVosol.equals(Constants.VALUE_RESID())) {
                     mPresenter.onErrorCheckInsert(R.string.errorDuplicateResidForVosol);
                     hasError = true;
+                    return;
                 }
                 if (CodeNoeVosolSabtShode != valueResid && strCodeNoeVosol.equals(Constants.VALUE_RESID())) {
                     mPresenter.onErrorCheckInsert(R.string.errorDuplicateVosolForResid);
                     hasError = true;
+                    return;
                 }
             }
 
 
             if (!hasError) {
-                Log.d("dariaftPardakht", "ccshomarehesabe before insert : " + dariaftPardakhtPPCModel.getCcShomarehHesab());
-                ccDariaftPardakht = insertDariaftPardakht(ccMoshtary, ccDarkhastFaktor, codeNoeVosolMoshtary, mablaghMandeh, nameNoevosol, dariaftPardakhtPPCModel, 0, 0, 0, Constants.FROM_TREASURYLIST);
+                Log.d("invoice", "ccshomarehesabe before insert : " + dariaftPardakhtPPCModel.getCcShomarehHesab());
+                ccDariaftPardakht = insertDariaftPardakht(ccMoshtary, ccDarkhastFaktor, codeNoeVosolSelected, mablaghMandeh, nameNoevosol, dariaftPardakhtPPCModel, 0, 0, 0, Constants.FROM_TREASURYLIST);
                 if (ccDariaftPardakht > 0) {
                     if (isValidDariaftPardakhtDarkhastFaktor((long) darkhastFaktorModel.getMablaghKhalesFaktor(), ccDariaftPardakht, strCodeNoeVosol, mablaghMandeh, darkhastFaktorModel.getCcDarkhastFaktor())) {
                         ccDpdfNewInsert = insertDariaftPardakhtDarkhastFaktor(ccDariaftPardakht, dariaftPardakhtPPCModel, strCodeNoeVosol, 0, 0, 0);
@@ -429,14 +449,16 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                     insertDirkardVosol(darkhastFaktorModel, null);
                 }
 
-                callTajil(ccDarkhastFaktor,codeNoeVosolMoshtary);
+                callTajil(ccDarkhastFaktor,codeNoeVosolSelected);
 
                 if (canGetTajil) {
-                    Insert_Tajil(codeNoeVosolMoshtary, darkhastFaktorModel);
+                    Insert_Tajil(codeNoeVosolSelected, darkhastFaktorModel);
                 }
-                }
+
                 mPresenter.onSuccessInsert(setMablaghMandehFaktor(ccDarkhastFaktor));
                 getVosols(ccDarkhastFaktor);
+            }
+
 
         } catch (Exception exception) {
             exception.printStackTrace();

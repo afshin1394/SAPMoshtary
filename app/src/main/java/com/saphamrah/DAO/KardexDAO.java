@@ -179,7 +179,7 @@ public class KardexDAO {
         return kardexModel;
     }
 
-    public boolean deleteByccDarkhastFaktor(String ccDarkhastFaktor)
+    public boolean deleteByccDarkhastFaktor(long ccDarkhastFaktor)
     {
         String query = "delete from " + KardexModel.TableName() + " where " + KardexModel.COLUMN_ccRefrence() + " = " + ccDarkhastFaktor;
         try

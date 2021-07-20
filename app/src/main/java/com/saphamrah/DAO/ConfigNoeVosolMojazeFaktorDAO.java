@@ -170,7 +170,8 @@ public class ConfigNoeVosolMojazeFaktorDAO
                 modelGetTABLE_NAME.getCOLUMN_CodeVazeiat(),
                 modelGetTABLE_NAME.getCOLUMN_MashmoolTakhfifNaghdi(),
                 modelGetTABLE_NAME.getCOLUMN_MashmoolDirkardVosol(),
-                modelGetTABLE_NAME.getCOLUMN_MaxModatTajil()
+                modelGetTABLE_NAME.getCOLUMN_MaxModatTajil(),
+                modelGetTABLE_NAME.getCOLUMN_MinMablaghForIsShow()
 
 
 
@@ -246,12 +247,12 @@ public class ConfigNoeVosolMojazeFaktorDAO
         return configNoeVosolMojazeFaktorModels;
     }
 
-    public ArrayList<ConfigNoeVosolMojazeFaktorModel> getByNoeVosol(int NoeVosol)
+    public ArrayList<ConfigNoeVosolMojazeFaktorModel> getByNoeVosol(int NoeVosol , double mablaghKhalesFaktor)
     {
         ArrayList<ConfigNoeVosolMojazeFaktorModel> configNoeVosolMojazeFaktorModels = new ArrayList<>();
         try
         {
-            String query = "select * from ConfigNoeVosolMojazeFaktor where CodeNoeVosolAzMoshtary = " + NoeVosol + " order by CodeNoeVosol_Tablet";
+            String query = "select * from ConfigNoeVosolMojazeFaktor where CodeNoeVosolAzMoshtary = " + NoeVosol + " AND (MinMablaghForIsShow = -1 or MinMablaghForIsShow <= " + mablaghKhalesFaktor + ") order by CodeNoeVosol_Tablet";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
@@ -446,6 +447,7 @@ public class ConfigNoeVosolMojazeFaktorDAO
         contentValues.put(faktor.getCOLUMN_MashmoolTakhfifNaghdi() , model.getMashmoolTakhfifNaghdi());
         contentValues.put(faktor.getCOLUMN_MashmoolDirkardVosol() , model.getMashmoolDirkardVosol());
         contentValues.put(faktor.getCOLUMN_MaxModatTajil() , model.getMaxModatTajil());
+        contentValues.put(faktor.getCOLUMN_MinMablaghForIsShow() , model.getMinMablaghForIsShow());
 
         return contentValues;
     }
@@ -471,6 +473,7 @@ public class ConfigNoeVosolMojazeFaktorDAO
             configNoeVosolMojazeFaktorModel.setMashmoolTakhfifNaghdi(cursor.getInt(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_MashmoolTakhfifNaghdi())));
             configNoeVosolMojazeFaktorModel.setMashmoolDirkardVosol(cursor.getInt(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_MashmoolDirkardVosol())));
             configNoeVosolMojazeFaktorModel.setMaxModatTajil(cursor.getInt(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_MaxModatTajil())));
+            configNoeVosolMojazeFaktorModel.setMinMablaghForIsShow(cursor.getInt(cursor.getColumnIndex(configNoeVosolMojazeFaktorModel.getCOLUMN_MinMablaghForIsShow())));
 
 
             configNoeVosolMojazeFaktorModels.add(configNoeVosolMojazeFaktorModel);

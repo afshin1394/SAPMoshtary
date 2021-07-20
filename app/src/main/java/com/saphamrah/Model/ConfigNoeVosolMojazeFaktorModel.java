@@ -34,6 +34,9 @@ public class ConfigNoeVosolMojazeFaktorModel {
     @SerializedName("MaxModatTajil")
     @Expose
     private int MaxModatTajil;
+    @SerializedName("MinMablaghForIsShow")
+    @Expose
+    private long MinMablaghForIsShow;
 
 
     // setter and getter
@@ -111,6 +114,14 @@ public class ConfigNoeVosolMojazeFaktorModel {
         MaxModatTajil = maxModatTajil;
     }
 
+    public long getMinMablaghForIsShow() {
+        return MinMablaghForIsShow;
+    }
+
+    public void setMinMablaghForIsShow(long minMablaghForIsShow) {
+        MinMablaghForIsShow = minMablaghForIsShow;
+    }
+
     public String getTABLE_NAME() {
         return "ConfigNoeVosolMojazeFaktor";
     }
@@ -145,6 +156,9 @@ public class ConfigNoeVosolMojazeFaktorModel {
     }
     public String getCOLUMN_MaxModatTajil() {
         return "MaxModatTajil";
+    }
+    public String getCOLUMN_MinMablaghForIsShow() {
+        return "MinMablaghForIsShow";
     }
 
 

@@ -980,7 +980,7 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
 
 
 
-    public boolean deleteMarjoeeForoshandehByccDarkhastFaktor(String ccDarkhastFaktor)
+    public boolean deleteMarjoeeForoshandehByccDarkhastFaktor(long ccDarkhastFaktor)
     {
         String query = "delete from " + DariaftPardakhtDarkhastFaktorPPCModel.TableName() + " where " + DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " AND " + DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_CodeNoeVosol() + " = " + Constants.VALUE_MARJOEE();
         try

@@ -1481,7 +1481,7 @@ public class DarkhastFaktorDAO
         }
     }
 
-    public void updateMarjoee(String ccDarkhastFaktor, int Marjoee)
+    public void updateMarjoee(long ccDarkhastFaktor, int Marjoee)
     {
         try
         {
