@@ -53,7 +53,8 @@ public class ElatMarjoeeKalaDAO
             ElatMarjoeeKalaModel.COLUMN_Sharh(),
             ElatMarjoeeKalaModel.COLUMN_CodeNoeElat(),
             ElatMarjoeeKalaModel.COLUMN_IsZayeat(),
-                ElatMarjoeeKalaModel.COLUMN_GetImage()
+                ElatMarjoeeKalaModel.COLUMN_GetImage(),
+                ElatMarjoeeKalaModel.COLUMN_IsZayeatTolid()
         };
     }
 
@@ -221,7 +222,7 @@ Call<GetAllElatMarjoeeKalaResult> call = apiServiceGet.getElatMarjoeeKala();
 
         try {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(ElatMarjoeeKalaModel.TableName(), allColumns(), ElatMarjoeeKalaModel.COLUMN_CodeNoeElat() + "=" + 1, null, null, null, null);
+            Cursor cursor = db.query(ElatMarjoeeKalaModel.TableName(), allColumns(), ElatMarjoeeKalaModel.COLUMN_CodeNoeElat() + "=" + 2, null, null, null, null);
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
                     elatMarjoeeKalaModels = cursorToModel(cursor);
@@ -243,7 +244,7 @@ Call<GetAllElatMarjoeeKalaResult> call = apiServiceGet.getElatMarjoeeKala();
 
         try {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(ElatMarjoeeKalaModel.TableName(), allColumns(), ElatMarjoeeKalaModel.COLUMN_CodeNoeElat() + "=" + 2, null, null, null, null);
+            Cursor cursor = db.query(ElatMarjoeeKalaModel.TableName(), allColumns(), ElatMarjoeeKalaModel.COLUMN_CodeNoeElat() + "=" + 1, null, null, null, null);
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
                     elatMarjoeeKalaModels = cursorToModel(cursor);
@@ -294,6 +295,7 @@ Call<GetAllElatMarjoeeKalaResult> call = apiServiceGet.getElatMarjoeeKala();
             elatMarjoeeKalaModel.setCodeNoeElat(cursor.getInt(cursor.getColumnIndex(ElatMarjoeeKalaModel.COLUMN_CodeNoeElat())));
             elatMarjoeeKalaModel.setIsZayeat(cursor.getInt(cursor.getColumnIndex(ElatMarjoeeKalaModel.COLUMN_IsZayeat())));
             elatMarjoeeKalaModel.setGetImage(cursor.getInt(cursor.getColumnIndex(ElatMarjoeeKalaModel.COLUMN_GetImage())));
+            elatMarjoeeKalaModel.setIsZayeatTolid(cursor.getInt(cursor.getColumnIndex(ElatMarjoeeKalaModel.COLUMN_IsZayeatTolid())));
 
             elatMarjoeeKalaModels.add(elatMarjoeeKalaModel);
             cursor.moveToNext();
@@ -313,6 +315,7 @@ Call<GetAllElatMarjoeeKalaResult> call = apiServiceGet.getElatMarjoeeKala();
         contentValues.put(ElatMarjoeeKalaModel.COLUMN_CodeNoeElat() , elatMarjoeeKalaModel.getCodeNoeElat());
         contentValues.put(ElatMarjoeeKalaModel.COLUMN_IsZayeat() , elatMarjoeeKalaModel.getIsZayeat());
         contentValues.put(ElatMarjoeeKalaModel.COLUMN_GetImage() , elatMarjoeeKalaModel.getGetImage());
+        contentValues.put(ElatMarjoeeKalaModel.COLUMN_IsZayeatTolid() , elatMarjoeeKalaModel.getIsZayeatTolid());
 
         return contentValues;
     }

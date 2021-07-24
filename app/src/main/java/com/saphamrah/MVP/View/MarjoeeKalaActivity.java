@@ -406,9 +406,11 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
 
                     if (selectedKala.size() > 0 && selectedKala.get(0) != null)
                     {
-                        if (elatMarjoee.get(0).getIsZayeat()==1 && selectedKala.get(0).getIsKalaZayeatTolid()==1)
+                        if (elatMarjoee.get(0).getIsZayeatTolid()==1 && selectedKala.get(0).getIsKalaZayeatTolid()==1)
                             isZayeatTolid=true;
-                        if(!isZayeatTolid && elatMarjoee.get(0).getIsZayeat()==1)
+
+
+                        if(!isZayeatTolid)
                         {
                             lblError.setVisibility(View.VISIBLE);
                             lblError.setText(getResources().getString(R.string.errorSelectElatMarjooeZayeatTolid));

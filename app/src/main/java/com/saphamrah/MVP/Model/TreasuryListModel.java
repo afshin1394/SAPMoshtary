@@ -1748,7 +1748,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             boolean checkDistance = true;
             ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
             checkDistance = parameterChildDAO.getValueByccChildParameter(Constants.CHECK_MOSHTARY_MASIR_ROOZ_DISTANCE()).equals("1");
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
             if (checkDistance)
             {
                 if (isValidCreateFaktor(darkhastFaktorMoshtaryForoshandeModel, foroshandehMamorPakhshModel))

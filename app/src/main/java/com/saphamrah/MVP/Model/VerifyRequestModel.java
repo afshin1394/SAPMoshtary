@@ -235,8 +235,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         ArrayList<ParameterChildModel> NoeVosolsDarkhasts = new ArrayList<ParameterChildModel>();
         Log.d("vosol", "model noeVosolMoshtaryModels  : " + noeVosolMoshtaryModels.size());
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO =new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
-        int MaxtedadResid = foroshandehMamorPakhshDAO.getOne().getMaxResidCheck();
-        int MaxtedadResidNaghd = foroshandehMamorPakhshDAO.getOne().getMaxResidNaghd();
+        int MaxtedadResid = foroshandehMamorPakhshDAO.getIsSelect().getMaxResidCheck();
+        int MaxtedadResidNaghd = foroshandehMamorPakhshDAO.getIsSelect().getMaxResidNaghd();
 
         for (NoeVosolMoshtaryModel model : noeVosolMoshtaryModels) {
             Log.d("vosol", "model NoeVosolMoshtaryModel: " + model.toString());

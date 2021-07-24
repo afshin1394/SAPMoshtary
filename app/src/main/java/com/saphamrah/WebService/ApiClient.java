@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient
 {
 
-    private static final int TIME_OUT = 90;
+    private static final int TIME_OUT = 120;
     private static Retrofit retrofit = null;
 
 

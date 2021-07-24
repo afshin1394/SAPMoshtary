@@ -284,7 +284,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
     public void sendTempRequest(final int position, final CustomerDarkhastFaktorModel customerDarkhastFaktorModel) {
         Log.i("sendTempRequest", "sendTempRequest: ");
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        int noeMasouliate = foroshandehMamorPakhshDAO.getOne().getNoeMasouliat();
+        int noeMasouliate = foroshandehMamorPakhshDAO.getIsSelect().getNoeMasouliat();
         Log.i("noeMasouliat", "sendTempRequest: " + noeMasouliate);
         checkMandehMojodi(customerDarkhastFaktorModel, noeMasouliate, position);
 

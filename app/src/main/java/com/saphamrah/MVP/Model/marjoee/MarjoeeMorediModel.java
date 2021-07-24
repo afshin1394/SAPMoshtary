@@ -93,7 +93,7 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
     @Override
     public void checkTaeidSabtMarjoee(MarjoeeMamorPakhshModel model, long ccRefrence, int itemCount, int selectedCount, int position , ArrayList<ElatMarjoeeKalaModel> elatMarjoee) {
         this.ccMarjoeeMamorPakhsh = ccMarjoeeMamorPakhsh;
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         tedadMarjoeeForInsert = selectedCount;
         ccKardex = insertKardexMoredi( model, foroshandehMamorPakhshModel.getCcMarkazAnbar(), ccRefrence);
         //ccKardex =kardexDAO.findccKardexByccMoshtaryAndccMarjoeeMamorPakhsh(model.getCcMoshtary() , ccMarjoeeMamorPakhsh);

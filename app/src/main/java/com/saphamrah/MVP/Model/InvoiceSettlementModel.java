@@ -951,7 +951,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
             DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(mPresenter.getAppContext());
 
             ForoshandehMamorPakhshDAO foroshandehmamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehmamorPakhshDAO.getOne();
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehmamorPakhshDAO.getIsSelect();
             SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
             String currentDate = sdf.format(new Date());
             double mablaghTakhsis = 0;

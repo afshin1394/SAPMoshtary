@@ -175,6 +175,10 @@ public interface APIServiceGet
     @GET("Api/ApiSales/GetAllvKalaZaribForoshWithMarkazForosh")
     Call<GetAllvKalaZaribForoshResult> getAllvKalaZaribForosh(@Query("ccGorohs") String ccGorohs , @Query("ccMarkazForosh") String ccMarkazForosh);
 
+
+    @GET("Api/ApiSales/GetKalaZaribForosh")
+    Call<GetAllvKalaZaribForoshResult> getKalaZaribForosh(@Query("ccAnbarak") int ccAnbarak , @Query("ccForoshandeh") int ccForoshandeh, @Query("ccMamorPakhsh") int ccMamorPakhsh,@Query("ccGorohs") String ccGorohs);
+
     @GET("Api/ApiGlobal/GetAllMarkaz_ShahrMarkazi")
     Call<GetAllMarkazShahrMarkaziResult> getAllMarkazShahrMarkazi();
 

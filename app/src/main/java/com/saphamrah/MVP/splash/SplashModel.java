@@ -648,7 +648,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
                                     if(selectCcforoshandeh!=0 && foroshandehMamorPakhshDAO.getByccForoshandeh(selectCcforoshandeh)!=null)
                                         foroshandehMamorPakhshDAO.updateIsSelect(selectCcforoshandeh);
                                     else
-                                        foroshandehMamorPakhshDAO.updateIsSelect(foroshandehMamorPakhshDAO.getOne().getCcForoshandeh());
+                                        foroshandehMamorPakhshDAO.updateIsSelect(foroshandehMamorPakhshDAO.getSplash().getCcForoshandeh());
                                     mPresenter.onGetForoshandehMamorPakhsh(true, false);
                                 } else {
                                     mPresenter.onGetEmptyForoshandehMamorPakhsh(deviceIMEI);

@@ -59,7 +59,7 @@ public class PishDaryaftModel implements PishDaryaftMVP.ModelOps {
         ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = dariaftPardakhtPPCDAO.getForSendToSqlByccMoshtary(ccMoshtary);
         Log.d("treasury", "dariaftPardakhtPPCModels.size : " + dariaftPardakhtPPCModels.size());
         if (dariaftPardakhtPPCModels.size() > 0) {
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             if (foroshandehMamorPakhshModel == null) {
                 mPresenter.onErrorSend(R.string.errorFindForoshandehMamorPakhsh);
             } else {

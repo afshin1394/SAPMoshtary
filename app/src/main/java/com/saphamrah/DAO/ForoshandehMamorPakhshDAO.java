@@ -390,7 +390,7 @@ public class ForoshandehMamorPakhshDAO
 //        return foroshandehMamorPakhshModel;
 //    }
 
-    public ForoshandehMamorPakhshModel getOne()
+    public ForoshandehMamorPakhshModel getSplash()
     {
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = null;
         String query = "select * from " + ForoshandehMamorPakhshModel.TableName() + " limit 1";

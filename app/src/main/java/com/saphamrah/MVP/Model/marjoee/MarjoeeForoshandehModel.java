@@ -60,7 +60,7 @@ import java.util.Date;
     public void getForoshandehMamorPakhshInfo()
     {
 
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         if (foroshandehMamorPakhshModel != null)
         {
             int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
@@ -78,7 +78,7 @@ import java.util.Date;
     @Override
     public void checkTaeidSabtMarjoee(ElamMarjoeeForoshandehModel entity  , long ccDarkhastFaktor, int ccElamMarjoeeSatr, int itemCount, int selectedCount, int position) {
         this.ccDarkhastFaktor = ccDarkhastFaktor;
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         tedadMarjoeeForInsert = selectedCount;
         insertKardexForoshandeh( entity, foroshandehMamorPakhshModel.getCcMarkazAnbar(), ccDarkhastFaktor);
         ccKardex =kardexDAO.findccKardexByccRefrence(Long.parseLong(entity.getCcDarkhastFaktor()));

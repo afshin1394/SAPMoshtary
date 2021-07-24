@@ -74,7 +74,7 @@ public class CheckBargashtiModel implements CheckBargashtiMVP.ModelOps
         if (dariaftPardakhtPPCModels.size() > 0)
         {
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
-            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getOne();
+            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             if (foroshandehMamorPakhshModel == null)
             {
                 mPresenter.onErrorSend(R.string.errorFindForoshandehMamorPakhsh);
@@ -296,7 +296,7 @@ public class CheckBargashtiModel implements CheckBargashtiMVP.ModelOps
     public void updateListBargashty()
     {
 
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(BaseApplication.getContext()).getOne();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(BaseApplication.getContext()).getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
 
         final Handler handler = new Handler(new Handler.Callback() {

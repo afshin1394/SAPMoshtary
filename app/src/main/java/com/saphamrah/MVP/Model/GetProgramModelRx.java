@@ -698,7 +698,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         ccGorohss = "347";
         ccAfrad = foroshandehMamorPakhshModel.getCcAfrad();
         anbarakAfrad = "-1";
-        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne());
+        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect());
         itemCounter = 0;
         getProgramItemCount = mPresenter.getAppContext().getResources().getStringArray(R.array.updateKalaModatVosol).length;
         handler = new Handler(new Handler.Callback() {
@@ -726,7 +726,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         ccMarkazForosh = foroshandehMamorPakhshModel.getCcMarkazForosh();
         ccMarkazSazmanForosh = foroshandehMamorPakhshModel.getCcMarkazSazmanForosh();
         itemCounter = 0;
-        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne());
+        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect());
         getProgramItemCount = mPresenter.getAppContext().getResources().getStringArray(R.array.updateJayezehTakhfif).length;
         handler = new Handler(new Handler.Callback() {
             @Override
@@ -754,7 +754,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         getProgramItemCount = mPresenter.getAppContext().getResources().getStringArray(R.array.updateCustomers).length;
         ccMoshtarys = "-1,";
         ccMasirs = "-1";
-        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne());
+        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect());
         this.date = date;
         handler = new Handler(new Handler.Callback() {
             @Override
@@ -10889,12 +10889,34 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
     private void getZaribForoshKala(final int getProgramType, String ccGorohs) {
         final KalaZaribForoshDAO kalaZaribForoshDAO = new KalaZaribForoshDAO(mPresenter.getAppContext());
         final ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        String ccMarkazForoshKalaZaribForosh = "-1";
-        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 8)
-            ccMarkazForoshKalaZaribForosh = String.valueOf(foroshandehMamorPakhshDAO.getIsSelect().getCcMarkazForosh());
-        else if (noeMasouliat == 4 || noeMasouliat == 5)
-            ccMarkazForoshKalaZaribForosh = ccMarkazForoshPakhsh;
-        kalaZaribForoshDAO.fetchAllKalaZaribForosh(mPresenter.getAppContext(), activityNameForLog, ccGorohs, ccMarkazForoshKalaZaribForosh, new RetrofitResponse() {
+        int ccForoshandeh = foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh();
+
+
+        if (noeMasouliat == 1 || noeMasouliat == 6 || noeMasouliat ==8)//1-Foroshandeh-Sard
+        {
+            anbarakAfrad = "0";
+            ccMamorPakhsh = 0;
+        }
+        else if(noeMasouliat == 2 || noeMasouliat == 3)//2-Foroshandeh-Garm //3-Foroshandeh-Smart
+        {
+            ccMamorPakhsh = 0;
+        }
+        else if (noeMasouliat == 4 || noeMasouliat == 5)//4-MamorPakhsh-Sard // 5-MamorPakhsh-Smart
+        {
+            ccForoshandeh = 0;
+        }
+        else //6-SarparastForoshandeh 7-Amargar
+        {
+            ccForoshandeh = 0;
+            ccMamorPakhsh = 0;
+        }
+        kalaZaribForoshDAO.fetchKalaZaribForosh(mPresenter.getAppContext(), activityNameForLog,
+                Integer.parseInt(anbarakAfrad),
+                ccForoshandeh,
+                ccMamorPakhsh,
+                ccGorohs,
+                new RetrofitResponse()
+                {
             @Override
             public void onSuccess(final ArrayList arrayListData) {
                 Thread thread = new Thread() {
