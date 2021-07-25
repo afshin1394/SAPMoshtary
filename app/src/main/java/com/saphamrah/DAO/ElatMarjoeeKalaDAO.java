@@ -222,7 +222,7 @@ Call<GetAllElatMarjoeeKalaResult> call = apiServiceGet.getElatMarjoeeKala();
 
         try {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(ElatMarjoeeKalaModel.TableName(), allColumns(), ElatMarjoeeKalaModel.COLUMN_CodeNoeElat() + "=" + 2, null, null, null, null);
+            Cursor cursor = db.query(ElatMarjoeeKalaModel.TableName(), allColumns(), ElatMarjoeeKalaModel.COLUMN_CodeNoeElat() + "=" + 1, null, null, null, null);
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
                     elatMarjoeeKalaModels = cursorToModel(cursor);
@@ -244,7 +244,7 @@ Call<GetAllElatMarjoeeKalaResult> call = apiServiceGet.getElatMarjoeeKala();
 
         try {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(ElatMarjoeeKalaModel.TableName(), allColumns(), ElatMarjoeeKalaModel.COLUMN_CodeNoeElat() + "=" + 1, null, null, null, null);
+            Cursor cursor = db.query(ElatMarjoeeKalaModel.TableName(), allColumns(), ElatMarjoeeKalaModel.COLUMN_CodeNoeElat() + "=" + 2, null, null, null, null);
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
                     elatMarjoeeKalaModels = cursorToModel(cursor);

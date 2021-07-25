@@ -25,7 +25,7 @@ public interface MarjoeeMorediMVP
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void getMarjoeeMoredi(int ccMoshtary);
         void checkTaeidSabtMarjoee(MarjoeeMamorPakhshModel model , long ccRefrence, int itemCount, int selectedCount , int position,ArrayList<ElatMarjoeeKalaModel> elatMarjoee);
-        void deleteMarjoee(int ccMarjoeeMamorPakhsh, int ccMoshtary);
+        void deleteMarjoee(int ccMarjoeeMamorPakhsh, int ccMoshtary,int ccKalaCode);
         void getElatMarjoeeMoredi();
         void searchNameKala(String searchWord ,ArrayList<MarjoeeMamorPakhshModel> marjoeeMamorPakhshModelsAdpater);
 
@@ -46,7 +46,7 @@ public interface MarjoeeMorediMVP
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void getMarjoeeMoredi(int ccMoshtary);
         void checkTaeidSabtMarjoee(MarjoeeMamorPakhshModel model , long ccRefrence, int itemCount, int selectedCount , int position,ArrayList<ElatMarjoeeKalaModel> elatMarjoee);
-        void deleteMarjoee(int ccMarjoeeMamorPakhsh, int ccMoshtary);
+        void deleteMarjoee(int ccMarjoeeMamorPakhsh, int ccMoshtary,int ccKalaCode);
         void getElatMarjoeeMoredi();
         void searchNameKala(String searchWord ,ArrayList<MarjoeeMamorPakhshModel> marjoeeMamorPakhshModelsAdpater);
     }

@@ -48,8 +48,8 @@ public class MarjoeeMorediPresenter implements MarjoeeMorediMVP.PresenterOps, Ma
     }
 
     @Override
-    public void deleteMarjoee(int ccMarjoeeMamorPakhsh , int ccMoshtary) {
-        mModel.deleteMarjoee(ccMarjoeeMamorPakhsh , ccMoshtary);
+    public void deleteMarjoee(int ccMarjoeeMamorPakhsh , int ccMoshtary,int ccKalaCode) {
+        mModel.deleteMarjoee(ccMarjoeeMamorPakhsh , ccMoshtary,ccKalaCode);
     }
 
     @Override

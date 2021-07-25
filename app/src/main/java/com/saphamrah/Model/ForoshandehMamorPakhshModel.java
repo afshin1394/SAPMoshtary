@@ -59,6 +59,8 @@ public class ForoshandehMamorPakhshModel
 	private static final String COLUMN_CheckOlaviatMoshtary = "CheckOlaviatMoshtary";																					 
 	private static final String COLUMN_FromDateKharejAzMahal = "FromDateKharejAzMahal";
 	private static final String COLUMN_EndDateKharejAzMahal = "EndDateKharejAzMahal";
+	private static final String COLUMN_ccAnbarMarjoee = "ccAnbarMarjoee";
+	private static final String COLUMN_CodeAnbarMarjoee= "CodeNoeAnbarMarjoee";
 
 
     public static String TableName() {
@@ -208,6 +210,12 @@ public class ForoshandehMamorPakhshModel
     public static String COLUMN_EndDateKharejAzMahal() {
         return COLUMN_EndDateKharejAzMahal;
     }
+    public static String COLUMN_ccAnbarMarjoee() {
+        return COLUMN_ccAnbarMarjoee;
+    }
+    public static String COLUMN_CodeNoeAnbarMarjoee() {
+        return COLUMN_CodeAnbarMarjoee;
+    }
 
 
 
@@ -356,6 +364,12 @@ public class ForoshandehMamorPakhshModel
     @SerializedName("EndDateKharejAzMahal")
     @Expose
     private String EndDateKharejAzMahal;
+    @SerializedName("ccAnbarMarjoee")
+    @Expose
+    private int ccAnbarMarjoee;
+    @SerializedName("CodeNoeAnbarMarjoee")
+    @Expose
+    private int CodeNoeAnbarMarjoee;
 
     private Integer extraPropIsSelect;
 
@@ -706,6 +720,22 @@ public class ForoshandehMamorPakhshModel
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public int getCcAnbarMarjoee() {
+        return ccAnbarMarjoee;
+    }
+
+    public void setCcAnbarMarjoee(int ccAnbarMarjoee) {
+        this.ccAnbarMarjoee = ccAnbarMarjoee;
+    }
+
+    public int getCodeNoeAnbarMarjoee() {
+        return CodeNoeAnbarMarjoee;
+    }
+
+    public void setCodeNoeAnbarMarjoee(int codeNoeAnbarMarjoee) {
+        CodeNoeAnbarMarjoee = codeNoeAnbarMarjoee;
     }
 
     public Integer getExtraPropIsSelect() {

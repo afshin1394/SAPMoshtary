@@ -54,7 +54,9 @@
         android:layoutDirection="rtl"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
-        android:layout_below="@+id/layTitle">
+        android:layout_below="@+id/layTitle"
+        android:paddingBottom="75dp"
+        android:clipToPadding="false">
 
     </androidx.recyclerview.widget.RecyclerView>
 

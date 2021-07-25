@@ -151,13 +151,14 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
             CcMoshtary = darkhastFaktorModel.getCcMoshtary();
             kardexModel = kardexDAO.SetForInsert_Kardex(darkhastFaktorModel.getCcMarkazAnbar() ,
                     darkhastFaktorModel.getCcMarkazForosh(),
-                    foroshandehMamorPakhshModel.getCcAnbar() ,
+                    foroshandehMamorPakhshModel.getCcAnbarMarjoee() ,
                     darkhastFaktorModel.getCcMoshtary() ,
                     1 ,
                     darkhastFaktorModel.getCcForoshandeh() ,
                     ccDarkhastFaktor,
                     ExtraProp_ccElatMarjoeeKala,
-                    foroshandehMamorPakhshDAO.getCCAfrad()
+                    foroshandehMamorPakhshDAO.getCCAfrad(),
+                    foroshandehMamorPakhshDAO.getIsSelect().getCodeNoeAnbarMarjoee()
 
             );
 

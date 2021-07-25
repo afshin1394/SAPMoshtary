@@ -114,7 +114,7 @@ public class KardexDAO {
         return ccKardex;
     }
 
-    public KardexModel SetForInsert_Kardex(int ccMarkazAnbar, int ccMarkazForosh, int ccAnbarMarjoee, int ccMoshtary, int MarjoeeKamel, int ccForoshandeh, long ccRefrence , int ExtraProp_ccElatMarjoeeKala, int ccAfradMamorPakhsh) {
+    public KardexModel SetForInsert_Kardex(int ccMarkazAnbar, int ccMarkazForosh, int ccAnbarMarjoee, int ccMoshtary, int MarjoeeKamel, int ccForoshandeh, long ccRefrence , int ExtraProp_ccElatMarjoeeKala, int ccAfradMamorPakhsh, int codeNoeAnbar) {
 
         KardexModel kardex = new KardexModel();
 
@@ -124,7 +124,7 @@ public class KardexDAO {
         kardex.setCodeNoeForm(10);
         kardex.setCodeNoeAmalyat(1);
         kardex.setCodeVazeiat(1);
-        kardex.setCodeNoeAnbar(4);
+        kardex.setCodeNoeAnbar(codeNoeAnbar);
         kardex.setCcMoshtary(ccMoshtary);
         kardex.setMarjoeeKamel(MarjoeeKamel);
         kardex.setCcForoshandeh(ccForoshandeh);

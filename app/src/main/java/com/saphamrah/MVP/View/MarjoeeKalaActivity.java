@@ -399,6 +399,7 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
                     txtinputCount.setError(null);
 
                     boolean isZayeatTolid = false;
+                    boolean isZayeat = false;
 
                     Log.d("marjoeeKala","selectedKala.size:"+ selectedKala.size());
                     Log.d("marjoeeKala","getCcElatMarjoeeKala: "+ elatMarjoee.get(0).getCcElatMarjoeeKala());
@@ -410,7 +411,8 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
                             isZayeatTolid=true;
 
 
-                        if(!isZayeatTolid)
+
+                        if(!isZayeatTolid && elatMarjoee.get(0).getIsZayeatTolid()==1)
                         {
                             lblError.setVisibility(View.VISIBLE);
                             lblError.setText(getResources().getString(R.string.errorSelectElatMarjooeZayeatTolid));

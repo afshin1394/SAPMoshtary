@@ -191,7 +191,7 @@ public class MarjoeeMorediFragment extends Fragment implements MarjoeeMorediMVP.
             } else if (Constants.DELETE() == operation) {
                 marjoeeMamorPakhshModelCheckTaeidSabt = model;
                 mPresenter.checkTaeidSabtMarjoee(marjoeeMamorPakhshModelCheckTaeidSabt, Long.valueOf(ccDarkhastFaktor), 0, 0, position , null);
-                mPresenter.deleteMarjoee(model.getCcMarjoeeMamorPakhsh() , model.getCcMoshtary());
+                mPresenter.deleteMarjoee(model.getCcMarjoeeMamorPakhsh() , model.getCcMoshtary(),model.getCcKalaCode());
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(BaseApplication.getContext(), LinearLayoutManager.VERTICAL, false));

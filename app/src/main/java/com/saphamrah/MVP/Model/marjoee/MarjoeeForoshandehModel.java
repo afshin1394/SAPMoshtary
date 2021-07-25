@@ -36,6 +36,10 @@ import java.util.Date;
     KardexDAO kardexDAO= new KardexDAO(BaseApplication.getContext());
     ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
     ElamMarjoeeForoshandehDAO elamMarjoeeForoshandehDAO =new ElamMarjoeeForoshandehDAO(BaseApplication.getContext());
+    DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO= new DariaftPardakhtPPCDAO(BaseApplication.getContext());
+    DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO= new DariaftPardakhtDarkhastFaktorPPCDAO(BaseApplication.getContext());
+    DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext()) ;
+
     public MarjoeeForoshandehModel(MarjoeeForoshandehMVP.RequiredPresenterOps mPresenter)
     {
         this.mPresenter = mPresenter;
@@ -100,20 +104,19 @@ import java.util.Date;
     }
 
     @Override
-    public void deleteMarjoee(long ccDarkhastFaktor) {
-        KardexSatrDAO kardexSatrDAO= new KardexSatrDAO(BaseApplication.getContext());
-        kardexSatrDAO.deleteByccKardex(ccKardex);
+    public void deleteMarjoee(long ccDarkhastFaktor ,int ccKalaCode) {
 
-        KardexDAO kardexDAO= new KardexDAO(BaseApplication.getContext());
+        kardexSatrDAO.deleteByccKardexAndccKalaCode(ccKardex,ccKalaCode);
+
+        int countKardexSatr = kardexSatrDAO.getByCcKardex(ccKardex).size();
+
+        if (countKardexSatr == 0)
         kardexDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
 
-        DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO= new DariaftPardakhtPPCDAO(BaseApplication.getContext());
         dariaftPardakhtPPCDAO.deleteMarjoeeForoshandehByccDarkhastFaktor(ccDarkhastFaktor);
 
-        DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO= new DariaftPardakhtDarkhastFaktorPPCDAO(BaseApplication.getContext());
         dariaftPardakhtDarkhastFaktorPPCDAO.deleteMarjoeeForoshandehByccDarkhastFaktor(ccDarkhastFaktor);
 
-        DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext()) ;
         darkhastFaktorDAO.updateMarjoee(ccDarkhastFaktor, 0);
 
     }
@@ -138,13 +141,14 @@ import java.util.Date;
        {
            kardex = kardexDAO.SetForInsert_Kardex(ccMarkazAnbar,
                    darkhastFaktorModel.getCcMarkazForosh(),
-                   entity.getCcAnbar(),
+                   foroshandehMamorPakhshModel.getCcAnbarMarjoee(),
                    entity.getCcMoshtary(),
                    0,
                    darkhastFaktorModel.getCcForoshandeh(),
                    ccRefrence,
                    0,
-                   foroshandehMamorPakhshModel.getCcAfrad()
+                   foroshandehMamorPakhshModel.getCcAfrad(),
+                   foroshandehMamorPakhshModel.getCodeNoeAnbarMarjoee()
 
                    );
 

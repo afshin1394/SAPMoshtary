@@ -99,7 +99,10 @@ public class ForoshandehMamorPakhshDAO
             ForoshandehMamorPakhshModel.COLUMN_ccAnbarak(),
 			ForoshandehMamorPakhshModel.COLUMN_CheckOlaviatMoshtary(),
 			ForoshandehMamorPakhshModel.COLUMN_FromDateKharejAzMahal(),
-			ForoshandehMamorPakhshModel.COLUMN_EndDateKharejAzMahal()
+			ForoshandehMamorPakhshModel.COLUMN_EndDateKharejAzMahal(),
+			ForoshandehMamorPakhshModel.COLUMN_ccAnbarMarjoee(),
+			ForoshandehMamorPakhshModel.COLUMN_CodeNoeAnbarMarjoee()
+
         };
     }
 
@@ -584,6 +587,8 @@ public class ForoshandehMamorPakhshDAO
 				foroshandehMamorPakhshModel.setCheckOlaviatMoshtary(cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_CheckOlaviatMoshtary())));																																									 
 				foroshandehMamorPakhshModel.setFromDateKharejAzMahal(cursor.getString(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_FromDateKharejAzMahal())));
 				foroshandehMamorPakhshModel.setEndDateKharejAzMahal(cursor.getString(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_EndDateKharejAzMahal())));
+				foroshandehMamorPakhshModel.setCcAnbarMarjoee(cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_ccAnbarMarjoee())));
+				foroshandehMamorPakhshModel.setCodeNoeAnbarMarjoee(cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_CodeNoeAnbarMarjoee())));
 
                 foroshandehMamorPakhshModels.add(foroshandehMamorPakhshModel);
                 cursor.moveToNext();
@@ -644,6 +649,8 @@ public class ForoshandehMamorPakhshDAO
 		contentValues.put(ForoshandehMamorPakhshModel.COLUMN_CheckOlaviatMoshtary() , model.getCheckOlaviatMoshtary());																													   
 		contentValues.put(ForoshandehMamorPakhshModel.COLUMN_FromDateKharejAzMahal() , model.getFromDateKharejAzMahal());
 		contentValues.put(ForoshandehMamorPakhshModel.COLUMN_EndDateKharejAzMahal() , model.getEndDateKharejAzMahal());
+		contentValues.put(ForoshandehMamorPakhshModel.COLUMN_ccAnbarMarjoee() , model.getCcAnbarMarjoee());
+		contentValues.put(ForoshandehMamorPakhshModel.COLUMN_CodeNoeAnbarMarjoee() , model.getCodeNoeAnbarMarjoee());
 
         return contentValues;
     }

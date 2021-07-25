@@ -595,7 +595,8 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query = "select count(" + DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_CcDariaftPardakhtDarkhastFaktor() + ") from " + DariaftPardakhtDarkhastFaktorPPCModel.TableName() + " where NaghlAzGhabl = 0  AND ShomarehSanad = " + shomarehSanad;
+//            String query = "select count(" + DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_CcDariaftPardakhtDarkhastFaktor() + ") from " + DariaftPardakhtDarkhastFaktorPPCModel.TableName() + " where NaghlAzGhabl = 0  AND ShomarehSanad = " + shomarehSanad;
+            String query = "select count(" + DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_CcDariaftPardakhtDarkhastFaktor() + ") from " + DariaftPardakhtDarkhastFaktorPPCModel.TableName() + " where  ShomarehSanad = " + shomarehSanad;
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {

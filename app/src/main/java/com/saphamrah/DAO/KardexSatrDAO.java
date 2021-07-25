@@ -197,7 +197,7 @@ public class KardexSatrDAO
         return kardexSatrModels;
     }
 
-    public ArrayList<KardexSatrModel> getByCcKardex(int ccKardex)
+    public ArrayList<KardexSatrModel> getByCcKardex(long ccKardex)
     {
         ArrayList<KardexSatrModel> kardexSatrModels = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -368,9 +368,9 @@ public class KardexSatrDAO
         }
     }
 
-    public boolean deleteByccKardex(long ccKardex)
+    public boolean deleteByccKardexAndccKalaCode(long ccKardex,int ccKalaCode)
     {
-        String query = "delete from " + KardexSatrModel.TableName() + " where " + KardexSatrModel.COLUMN_ccKardex() + " = " + ccKardex;
+        String query = "delete from " + KardexSatrModel.TableName() + " where " + KardexSatrModel.COLUMN_ccKardex() + " = " + ccKardex + " And ccKalaCode = " + ccKalaCode;
         try
         {
             SQLiteDatabase db = dbHelper.getWritableDatabase();

@@ -52,8 +52,8 @@ public class MarjoeeForoshandehPresenter implements MarjoeeForoshandehMVP.Presen
     }
 
     @Override
-    public void deleteMarjoee(long ccDarkhastFaktor) {
-        mModel.deleteMarjoee(ccDarkhastFaktor);
+    public void deleteMarjoee(long ccDarkhastFaktor,int ccKalaCode) {
+        mModel.deleteMarjoee(ccDarkhastFaktor, ccKalaCode);
     }
 
 

@@ -101,7 +101,7 @@ public class MarjoeeForoshandehFragment extends Fragment implements MarjoeeForos
             } else if (Constants.DELETE() == operation) {
                 elamMarjoeeForoshandehModelCheckTaeidSabt = elamMarjoeeForoshandehModel;
                 mPresenter.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt, ccDarkhastFaktor, elamMarjoeeForoshandehModel.getCcElamMarjoeeSatr(), 0, 0, position);
-                mPresenter.deleteMarjoee(ccDarkhastFaktor);
+                mPresenter.deleteMarjoee(ccDarkhastFaktor,elamMarjoeeForoshandehModel.getCcKalaCode());
             }
 
 

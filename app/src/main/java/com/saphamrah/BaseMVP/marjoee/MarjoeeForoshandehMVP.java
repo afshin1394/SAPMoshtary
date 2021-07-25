@@ -24,7 +24,7 @@ public interface MarjoeeForoshandehMVP
         void getMarjoee(long ccDarkhastFaktor);
         void getForoshandehMamorPakhshInfo();
         void checkTaeidSabtMarjoee( ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,long ccDarkhastFaktor, int ccElamMarjoeeSatr, int itemCount, int selectedCount , int position);
-        void deleteMarjoee(long ccDarkhastFaktor);
+        void deleteMarjoee(long ccDarkhastFaktor,int ccKalaCode);
     }
 
 
@@ -42,7 +42,7 @@ public interface MarjoeeForoshandehMVP
         void getMarjoee(long ccDarkhastFaktor);
         void getForoshandehMamorPakhshInfo();
         void checkTaeidSabtMarjoee( ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,long ccDarkhastFaktor, int ccElamMarjoeeSatr, int itemCount, int selectedCount, int position);
-        void deleteMarjoee(long ccDarkhastFaktor);
+        void deleteMarjoee(long ccDarkhastFaktor,int ccKalaCode);
     }
 
 }
