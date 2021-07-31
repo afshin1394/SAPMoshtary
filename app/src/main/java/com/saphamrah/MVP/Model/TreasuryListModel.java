@@ -1431,6 +1431,10 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             shared.putBoolean(shared.getHaveMojoodiGiri(), haveMojoodiGiri);
 
             //------------------------------------- MoshtaryGoroh..-------------------------------------
+            shared.putInt(shared.getCcGorohNoeMoshtary(), moshtary.getCcNoeMoshtary());
+            shared.putInt(shared.getCcGorohNoeSenf(), moshtary.getCcNoeSenf());
+
+
             NoeMoshtaryRialKharidDAO moshtaryRialKharidDAO = new NoeMoshtaryRialKharidDAO(mPresenter.getAppContext());
 
             long hadaghalMablaghKharid = moshtaryRialKharidDAO.getMablaghByccMoshtary(moshtary.getCcNoeMoshtary(), moshtary.getDarajeh());
