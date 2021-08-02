@@ -6,6 +6,8 @@ import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.Utils.Constants;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -24,6 +26,7 @@ public class RxHttpErrorHandler {
         return upstream -> upstream
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorResumeNext(Observable.empty())
+                .timeout(2, TimeUnit.MINUTES)
                 .doOnNext((Consumer<Response<T>>) t -> {
                     Log.i("ObservableTransformer", "doOnNext: code" + t.code() + "body" + t.raw().body());
                     String errorBody = "";

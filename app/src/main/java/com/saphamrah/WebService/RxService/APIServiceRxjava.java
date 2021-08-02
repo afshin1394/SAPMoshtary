@@ -204,7 +204,7 @@ public interface APIServiceRxjava {
     Observable<Response<GetMarjoeeForoshandehByDarkhastFaktorSatrResult>>getMarjoeeForoshandehByDarkhastFaktorSatr(@Query("Noe_Titr_Satr") String noeTitrSatr , @Query("ccDarkhastHavaleh") String ccDarkhastHavaleh);
 
     @GET("Api/ApiSales/GetNoeVosolMoshtary")
-    Observable<Response<NoeVosolMoshtaryResult>>getNoeVosolMoshtary(@Query("ccMarkazSazmanForosh") int ccMarkazSazmanForosh);
+    Observable<Response<NoeVosolMoshtaryResult>> getNoeVosolMoshtary(@Query("ccMarkazSazmanForosh") String ccMarkazSazmanForosh , @Query("ccNoeMoshtarys") String ccNoeMoshtarys);
 
 
     @GET("Api/ApiSales/GetGPSDataByccMamorPakhsh")

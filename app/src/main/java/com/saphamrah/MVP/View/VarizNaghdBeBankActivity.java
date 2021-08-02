@@ -442,7 +442,7 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
         if (checkData()) {
             if (!haveShomarehSanad){
                 if (selectedVarizBeBankModels.size() > 0) {
-                    mPresenter.updateDaoAll(Integer.parseInt(editTextFishBankiNumber.getText().toString()),
+                    mPresenter.updateDaoAll(ccBank,
                             nameShobehBank,
                             codeShobe,
                             editTextShomarehHesab.getText().toString(),
@@ -455,7 +455,7 @@ public class VarizNaghdBeBankActivity extends AppCompatActivity implements Variz
 
                     );
                 } else {
-                    mPresenter.updateDaoAll(Integer.parseInt(editTextFishBankiNumber.getText().toString()),
+                    mPresenter.updateDaoAll(ccBank,
                             nameShobehBank,
                             codeShobe,
                             editTextShomarehHesab.getText().toString(),

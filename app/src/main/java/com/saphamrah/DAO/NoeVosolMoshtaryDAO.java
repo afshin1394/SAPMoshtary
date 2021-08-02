@@ -53,7 +53,7 @@ public class NoeVosolMoshtaryDAO
     /*
     fetch = request server and get result
      */
-    public void fetchNoeVosolMoshtary(final Context context , final String activityNameForLog, int ccMarkazSazmanForosh, final RetrofitResponse retrofitResponse)
+    public void fetchNoeVosolMoshtary(final Context context , final String activityNameForLog, String ccMarkazSazmanForosh,String ccNoeMoshtarys, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
@@ -67,7 +67,7 @@ public class NoeVosolMoshtaryDAO
         else
         {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-            Call<NoeVosolMoshtaryResult> call = apiServiceGet.getNoeVosolMoshtary(ccMarkazSazmanForosh);
+            Call<NoeVosolMoshtaryResult> call = apiServiceGet.getNoeVosolMoshtary(ccMarkazSazmanForosh,ccNoeMoshtarys);
             call.enqueue(new Callback<NoeVosolMoshtaryResult>()
             {
                 @Override

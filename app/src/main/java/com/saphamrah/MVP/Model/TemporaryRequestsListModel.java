@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.TemporaryRequestsListMVP;
 import com.saphamrah.DAO.AdamDarkhastDAO;
 import com.saphamrah.DAO.AnbarakAfradDAO;
@@ -1444,6 +1445,27 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         void onSuccess(int flag);
     }
 
+    private  boolean checkMablaghMandehFaktor(CustomerDarkhastFaktorModel customerDarkhastFaktorModel){
+        boolean check = true;
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
+        double mablaghMandehFaktor = -1 ;
+        int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+        DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
+        int codeNoeVosolFaktor = darkhastFaktorDAO.getByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor()).getCodeNoeVosolAzMoshtary();
+        mablaghMandehFaktor = darkhastFaktorDAO.getMablaghMandeh(customerDarkhastFaktorModel.getCcDarkhastFaktor());
+
+
+        if((noeMasouliat == 2 || noeMasouliat == 4 ||noeMasouliat == 5 )
+        && (codeNoeVosolFaktor==Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD() || codeNoeVosolFaktor==Constants.CODE_NOE_VOSOL_MOSHTARY_CHECK())
+        && mablaghMandehFaktor>0)
+        {
+            check=false;
+            mPresenter.onErrorSendRequest(R.string.errorRemainBiggerThanZeroForNagh, "");
+
+        }
+        return check;
+    }
+
     private void controlInsertFaktor(String uniqID_Tablet , String ccMoshtary , String ccForoshandeh , final OnControlFaktor onControlFaktor)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
@@ -2674,57 +2696,39 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
 
     private void sendTempFaktor(CustomerDarkhastFaktorModel customerDarkhastFaktorModel, int position) {
         if (checkDateTime()) {
-            /*ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getOne();
-            int noeMasouliat = new PubFunc().new ForoshandehMamorPakhsh().getNoeMasouliat(foroshandehMamorPakhshModel);*/
-            /*if (noeMasouliat != 5)
-            {*/
-
-            controlInsertFaktor(customerDarkhastFaktorModel.getUniqID_Tablet(), String.valueOf(customerDarkhastFaktorModel.getCcMoshtary()), String.valueOf(customerDarkhastFaktorModel.getCcForoshandeh()), new OnControlFaktor() {
-                @Override
-                public void onError(int resErrorId) {
-                    mPresenter.onError(resErrorId);
-                }
-
-                @Override
-                public void onSuccess(int flag) {
-                    if (flag == 1) {
-                        mPresenter.onErrorSendRequest(R.string.errorResend, "");
-                    } else {
-                        AsyncTaskSendRequest asyncTaskSendRequest = new AsyncTaskSendRequest(mPresenter.getAppContext(), customerDarkhastFaktorModel, position);
-                        asyncTaskSendRequest.sendRequestResponse = new SendRequestResponse() {
-                            @Override
-                            public void onError(int resId) {
-                                mPresenter.onErrorSendRequest(resId, "");
-                            }
-
-                            @Override
-                            public void onSuccess(int position, long ccDarkhastFaktorNew) {
-                                mPresenter.onSuccessSendRequest(position, ccDarkhastFaktorNew);
-
-
-                            }
-                        };
-                        asyncTaskSendRequest.execute();
-                    }
-                }
-            });
-            /*}
-            else
+            if(checkMablaghMandehFaktor(customerDarkhastFaktorModel))
             {
-                AsyncTaskSendRequest asyncTaskSendRequest = new AsyncTaskSendRequest(mPresenter.getAppContext(),customerDarkhastFaktorModel , position);
-                asyncTaskSendRequest.sendRequestResponse = new SendRequestResponse() {
+                controlInsertFaktor(customerDarkhastFaktorModel.getUniqID_Tablet(), String.valueOf(customerDarkhastFaktorModel.getCcMoshtary()), String.valueOf(customerDarkhastFaktorModel.getCcForoshandeh()), new OnControlFaktor() {
                     @Override
-                    public void onError(int resId) {
-                        mPresenter.onErrorSendRequest(resId);
+                    public void onError(int resErrorId) {
+                        mPresenter.onError(resErrorId);
                     }
 
                     @Override
-                    public void onSuccess(int position , long ccDarkhastFaktorNew) {
-                        mPresenter.onSuccessSendRequest(position, ccDarkhastFaktorNew);
+                    public void onSuccess(int flag) {
+                        if (flag == 1) {
+                            mPresenter.onErrorSendRequest(R.string.errorResend, "");
+                        } else {
+                            AsyncTaskSendRequest asyncTaskSendRequest = new AsyncTaskSendRequest(mPresenter.getAppContext(), customerDarkhastFaktorModel, position);
+                            asyncTaskSendRequest.sendRequestResponse = new SendRequestResponse() {
+                                @Override
+                                public void onError(int resId) {
+                                    mPresenter.onErrorSendRequest(resId, "");
+                                }
+
+                                @Override
+                                public void onSuccess(int position, long ccDarkhastFaktorNew) {
+                                    mPresenter.onSuccessSendRequest(position, ccDarkhastFaktorNew);
+
+
+                                }
+                            };
+                            asyncTaskSendRequest.execute();
+                        }
                     }
-                };
-                asyncTaskSendRequest.execute();
-            }*/
+                });
+            }
+
 
 
         } else {
@@ -2732,85 +2736,7 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
         }
     }
 
-    @SuppressLint("LongLogTag")
-//    private Message searchForContradictions(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels, ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels, CustomerDarkhastFaktorModel customerDarkhastFaktorModel, int position) {
-//        HashMap<Integer, MandehMojodyMashinModel> hashMapMandehMojodi = populateDarkhastFaktorHash(mandehMojodyMashinModels);
-//        HashMap<Integer , Integer > hashMapSumEachGood = populateSumEachGoodHash(mandehMojodyMashinModels);
-//
-//        Message message = new Message();
-//        Bundle bundle = new Bundle();
-//        KalaDAO kalaDAO = new KalaDAO(mPresenter.getAppContext());
-//        String allContradictKala="";
-//
-//        for (DarkhastFaktorSatrModel darkhastFaktorSatrModel : darkhastFaktorSatrModels) {
-//
-//            Log.i("searchForContradictions", "searchForContradictions: darkhastFaktorSatrModel:" + darkhastFaktorSatrModel.toString());
-//
-//            /**check if Exists**/
-//
-//            if (!hashMapMandehMojodi.containsKey(darkhastFaktorSatrModel.getCcKalaCode())) {
-//                Log.i("searchForContradictions", "searchForContradictions: error !hashMap.containsKey(darkhastFaktorSatrModel.getCcKalaCode()");
-//
-//
-//                KalaModel kalaModel =kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode());
-//                Log.i("ccKalaCodeee", "searchForContradictions: "+kalaModel.toString());
-//                allContradictKala+=kalaModel.getNameKala()+" ";
-//
-//            }
-//
-//           if (hashMapSumEachGood.containsKey(darkhastFaktorSatrModel.getCcKalaCode()))
-//           {
-//               if (darkhastFaktorSatrModel.getTedad3() > hashMapSumEachGood.get(darkhastFaktorSatrModel.getCcKalaCode()))
-//               {
-//                   Log.i("searchForContradictions", "searchForContradictions: error MojodiSumCCkala > tedad dar darkhastFaktor");
-//                   KalaModel kalaModel =kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode());
-//                   allContradictKala += kalaModel.getNameKala()+" ";
-//               }
-//           }
-//
-//
-//            for (MandehMojodyMashinModel mandehMojodyMashinModel : mandehMojodyMashinModels) {
-//                Log.i("searchForContradictions", "searchForContradictions: mandehMojodyMashinModel: " + mandehMojodyMashinModel.toString());
-//
-//
-//                if (darkhastFaktorSatrModel.getCcKalaCode() == mandehMojodyMashinModel.getCcKalaCode() &&
-//                        darkhastFaktorSatrModel.getShomarehBach().equals(mandehMojodyMashinModel.getShomarehBach()) &&
-//                        darkhastFaktorSatrModel.getCcTaminKonandeh() == mandehMojodyMashinModel.getCcTaminKonandeh() &&
-//                        darkhastFaktorSatrModel.getMablaghForosh() == mandehMojodyMashinModel.getGheymatForosh() &&
-//                        darkhastFaktorSatrModel.getGheymatMasrafKonandeh() == mandehMojodyMashinModel.getGheymatMasrafKonandeh()) {
-//                    if (darkhastFaktorSatrModel.getTedad3() > mandehMojodyMashinModel.getMax_MojodyByShomarehBach()) {
-//
-//                        Log.i("searchForContradictions", "searchForContradictions: error");
-//
-//
-//                        Log.i("nameKala", "searchForContradictions: " + kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode()).getNameKala());
-//                        allContradictKala+=kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode()).getNameKala()+" ";
-//
-//                    }
-//                }
-//            }
-//
-//        }
-//
-//
-//        Log.i("allContradictKala", "searchForContradictions: "+allContradictKala);
-//        switch (allContradictKala) {
-//
-//            case "":
-//                message.what=1;
-//                Log.i("OnsearchForContradictions", "onSuccess: contradiction in:" + message.getData().getString("Data"));
-//                break;
-//            default:
-//                message.what=2;
-//                bundle.putString("Data", allContradictKala);
-//                message.setData(bundle);
-//                Log.i("OnsearchForContradictions", "onSuccess: contradiction in:" + message.getData().getString("Data"));
-//                break;
-//
-//        }
-//        return message;
-//
-//    }
+
     //**fixed**//
     public HashMap<Integer, Integer> populateSumTedadEachCcKalaHash(ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels) {
         HashMap<Integer, Integer> hashMap = new HashMap<>();

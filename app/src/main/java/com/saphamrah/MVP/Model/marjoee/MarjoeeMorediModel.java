@@ -104,7 +104,7 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
         if(ccKardex > 0) {
             insertKardexSatrMoredi(model, ccKardex , elatMarjoee);
         }
-        insertUpdateDariaftPardakht(model.getCcMoshtary(), model.getNameMoshtary(), (tedadMarjoeeForInsert * model.getMablaghForosh()) );
+        insertUpdateDariaftPardakht(model, (tedadMarjoeeForInsert * model.getMablaghForosh()) );
 
         boolean updateTedadMarjoee = marjoeeMamorPakhshDAO.updateTedadMarjoee(model.getCcMarjoeeMamorPakhsh() ,
                 model.getShomarehBach(),
@@ -216,13 +216,13 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
 
     /**
      * insert update daryaft moredi
-     * @param ccMoshtary
-     * @param NameMoshtary
      * @param Mablagh
      * @return
      */
-    private long insertUpdateDariaftPardakht(int ccMoshtary, String NameMoshtary, double Mablagh)
+    private long insertUpdateDariaftPardakht(MarjoeeMamorPakhshModel model, double Mablagh)
     {
+        int ccMoshtary = model.getCcMoshtary();
+        String nameMoshtary = model.getNameMoshtary();
         DariaftPardakhtPPCModel dariaftPardakhtPPC= new DariaftPardakhtPPCModel();
         DariaftPardakhtPPCDAO dariaftPardakhtDAO= new DariaftPardakhtPPCDAO(BaseApplication.getContext());
         long ccDariaftPardakht;
@@ -235,7 +235,7 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
                     "مرجوعی",
                     0,
                     "",
-                    NameMoshtary,
+                    nameMoshtary,
                     0,
                     "",
                     "",

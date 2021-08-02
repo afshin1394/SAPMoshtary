@@ -163,7 +163,7 @@ public interface APIServiceGet
     Call<GetMarjoeeForoshandehByDarkhastFaktorSatrResult> getMarjoeeForoshandehByDarkhastFaktorSatr(@Query("Noe_Titr_Satr") String noeTitrSatr , @Query("ccDarkhastHavaleh") String ccDarkhastHavaleh);
 
     @GET("Api/ApiSales/GetNoeVosolMoshtary")
-    Call<NoeVosolMoshtaryResult> getNoeVosolMoshtary(@Query("ccMarkazSazmanForosh") int ccMarkazSazmanForosh);
+    Call<NoeVosolMoshtaryResult> getNoeVosolMoshtary(@Query("ccMarkazSazmanForosh") String ccMarkazSazmanForosh , @Query("ccNoeMoshtarys") String ccNoeMoshtarys);
 
     //K
     @GET("Api/ApiTablet/GetKalaOlaviat")

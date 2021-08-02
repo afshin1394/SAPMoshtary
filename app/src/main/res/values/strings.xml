@@ -1082,5 +1082,7 @@
     <string name="sendMarjoee">ارسال مرجوعی</string>
     <string name="errorSendUnknow">خطای رخ داده است.</string>
     <string name="errorSendMarjoeeDubliacte">مرجوعی قبلا ارسال گردیده است . به واحد انبار مراجعه نمایید</string>
+    <string name="selectCamera">دوربین</string>
+    <string name="selectGallery">گالری</string>
 
 </resources>

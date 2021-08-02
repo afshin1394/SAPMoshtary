@@ -188,6 +188,7 @@ public class VarizNaghdBeBankModel implements VarizNaghdBeBankMVP.ModelOps {
             {
                 APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
                 Call<VarizBeBankResult> call = apiServicePost.varizVajehNaghdBeBank(strVariz);
+
                 call.enqueue(new Callback<VarizBeBankResult>()
                 {
                     @Override

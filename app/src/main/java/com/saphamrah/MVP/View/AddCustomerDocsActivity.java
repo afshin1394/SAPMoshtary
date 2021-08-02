@@ -1,14 +1,17 @@
 package com.saphamrah.MVP.View;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,20 +34,29 @@ import com.saphamrah.Utils.StateMaintainer;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.anwarshahriar.calligrapher.Calligrapher;
 
 
 public class AddCustomerDocsActivity extends AppCompatActivity implements AddCustomerDocsMVP.RequiredViewOps
 {
 
-    private ImageView imgSelectNationalCard;
-    private ImageView imgSelectJavazeKasb;
-    private ImageView imgSelectDasteCheck;
+
     private final int REQUEST_CODE_NATIONAL_CARD = 1;
     private final int REQUEST_CODE_JAVAZE_KASB = 2;
     private final int REQUEST_CODE_DASTE_CHECK = 3;
+    /**
+     * 1 == camera
+     * 2 == gallery
+     */
+    private int choiceUploadImage = 0;
+
     private boolean nationalCardStatus;
     private boolean javazehKasbStatus;
     private boolean dastehCheckStatus;
@@ -57,27 +69,88 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
     private final String TAG = this.getClass().getSimpleName();
     private StateMaintainer stateMaintainer;
 
+
+    @BindView(R.id.imgBack)
+    ImageView imgviewBack;
+    @BindView(R.id.imgNationalCard)
+    ImageView imgSelectNationalCard;
+    @BindView(R.id.imgJavazeKasb)
+    ImageView imgSelectJavazeKasb;
+    @BindView(R.id.imgDasteCheck)
+    ImageView imgSelectDasteCheck;
+
+
+    @OnClick(R.id.lblSelectNationalCodeCamera)
+    public void selectNationalCodeCamera(){
+        if (isOld)
+        {
+            showToast(R.string.errorCantAddForSendedCustomer, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        } else {
+            openCamera(REQUEST_CODE_NATIONAL_CARD);
+        }
+    }
+    @OnClick(R.id.lblSelectNationalCodeGallery)
+    public void selectNationalCodeGallery(){
+        if (isOld)
+        {
+            showToast(R.string.errorCantAddForSendedCustomer, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }else {
+            openGallery(REQUEST_CODE_NATIONAL_CARD);
+        }
+    }
+    @OnClick(R.id.lblSelectJavazeKasbCamera)
+    public void selectJavazeKasbCamera(){
+        if (isOld)
+        {
+            showToast(R.string.errorCantAddForSendedCustomer, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }else {
+            openCamera(REQUEST_CODE_JAVAZE_KASB);
+        }
+    }
+    @OnClick(R.id.lblSelectJavazeKasbGallery)
+    public void selectJavazeKasbGallery(){
+        if (isOld)
+        {
+            showToast(R.string.errorCantAddForSendedCustomer, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }else {
+            openGallery(REQUEST_CODE_JAVAZE_KASB);
+        }
+    }
+    @OnClick(R.id.lblSelectDasteCheckCamera)
+    public void selectDasteCheckCamera(){
+        if (isOld)
+        {
+            showToast(R.string.errorCantAddForSendedCustomer, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }else {
+            openCamera(REQUEST_CODE_DASTE_CHECK);
+        }
+    }
+    @OnClick(R.id.lblSelectDasteCheckGallery)
+    public void selectDasteCheckGallery(){
+        if (isOld)
+        {
+            showToast(R.string.errorCantAddForSendedCustomer, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }else {
+            openGallery(REQUEST_CODE_DASTE_CHECK);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_customer_docs);
+        ButterKnife.bind(this);
 
         Calligrapher calligrapher = new Calligrapher(this);
         calligrapher.setFont(this, getResources().getString(R.string.fontPath), true);
 
-        ImageView imgviewBack = findViewById(R.id.imgBack);
-        imgSelectNationalCard = findViewById(R.id.imgNationalCard);
-        imgSelectJavazeKasb = findViewById(R.id.imgJavazeKasb);
-        imgSelectDasteCheck = findViewById(R.id.imgDasteCheck);
-        TextView lblNationalCard = findViewById(R.id.lblSelectNationalCode);
-        TextView lblJavazeKasb = findViewById(R.id.lblSelectJavazeKasb);
-        TextView lblDasteCheck = findViewById(R.id.lblSelectDasteCheck);
+
 
         customAlertDialog = new CustomAlertDialog(AddCustomerDocsActivity.this);
 
         stateMaintainer = new StateMaintainer(getSupportFragmentManager() , TAG , AddCustomerDocsActivity.this);
-        startMVPOps();
+        mPresenter = new AddCustomerDocsPresenter(this);
 
         Intent intent = getIntent();
         ccMoshtary = intent.getIntExtra("ccmoshtary" , -1);
@@ -88,101 +161,30 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
 
         mPresenter.getImageStatus(ccMoshtary);
 
-        lblNationalCard.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if (isOld)
-                {
-                    showToast(R.string.errorCantAddForSendedCustomer, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
-                }
-                else
-                {
-                    openCamera(REQUEST_CODE_NATIONAL_CARD);
-                }
-            }
-        });
 
-        lblJavazeKasb.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if (isOld)
-                {
-                    showToast(R.string.errorCantAddForSendedCustomer, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
-                }
-                else
-                {
-                    openCamera(REQUEST_CODE_JAVAZE_KASB);
-                }
-            }
-        });
+        imgSelectNationalCard.setOnClickListener(v -> mPresenter.getNationalCardImage(ccMoshtary));
 
-        lblDasteCheck.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if (isOld)
-                {
-                    showToast(R.string.errorCantAddForSendedCustomer, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
-                }
-                else
-                {
-                    openCamera(REQUEST_CODE_DASTE_CHECK);
-                }
-            }
-        });
+        imgSelectJavazeKasb.setOnClickListener(v -> mPresenter.getJavazeKasbImage(ccMoshtary));
 
+        imgSelectDasteCheck.setOnClickListener(v -> mPresenter.getDasteCheckImage(ccMoshtary));
 
-        imgSelectNationalCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.getNationalCardImage(ccMoshtary);
-            }
-        });
-
-        imgSelectJavazeKasb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.getJavazeKasbImage(ccMoshtary);
-            }
-        });
-
-        imgSelectDasteCheck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.getDasteCheckImage(ccMoshtary);
-            }
-        });
-
-
-        imgviewBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddCustomerDocsActivity.this.finish();
-            }
-        });
+        imgviewBack.setOnClickListener(v -> AddCustomerDocsActivity.this.finish());
 
 
     }
 
 
-    /*private void openCamera(int requestCode)
-    {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null)
-        {
-            startActivityForResult(intent , requestCode);
-        }
-    }*/
-
+    public void openGallery(int requestCode){
+        choiceUploadImage =2;
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto , requestCode);
+    }
 
 
     public void openCamera(int requestCode)
     {
+        choiceUploadImage =1;
         if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY))
         {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -221,6 +223,8 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
     }
 
 
+
+
     Bitmap bitmap;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -230,8 +234,11 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
         {
             try
             {
-                //Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+                if (choiceUploadImage == 1){
+                    bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+                } else if (choiceUploadImage == 2){
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                }
                 if (requestCode == REQUEST_CODE_NATIONAL_CARD)
                 {
                     mPresenter.checkNationalCardImage(ccMoshtary , new PubFunc().new ImageUtils().convertBitmapToByteArray(AddCustomerDocsActivity.this, bitmap , 50));
@@ -411,63 +418,6 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
     {
         CustomAlertDialog customAlertDialog = new CustomAlertDialog((Activity) AddCustomerDocsActivity.this);
         customAlertDialog.showToast(AddCustomerDocsActivity.this, getResources().getString(resId), messageType, duration);
-    }
-
-
-    private void startMVPOps()
-    {
-        try
-        {
-            if ( stateMaintainer.firstTimeIn() )
-            {
-                initialize(this);
-            }
-            else
-            {
-                reinitialize(this);
-            }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace();
-            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", AddCustomerDocsActivity.class.getSimpleName(), "startMVPOps", "");
-        }
-    }
-
-    private void initialize(AddCustomerDocsMVP.RequiredViewOps view )
-    {
-        try
-        {
-            mPresenter = new AddCustomerDocsPresenter(view);
-            stateMaintainer.put(AddCustomerDocsMVP.PresenterOps.class.getSimpleName(), mPresenter);
-        }
-        catch (Exception exception)
-        {
-            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", AddCustomerDocsActivity.class.getSimpleName(), "initialize", "");
-        }
-    }
-
-    private void reinitialize(AddCustomerDocsMVP.RequiredViewOps view)
-    {
-        try
-        {
-            mPresenter = stateMaintainer.get(AddCustomerDocsMVP.PresenterOps.class.getSimpleName());
-            if ( mPresenter == null )
-            {
-                initialize( view );
-            }
-            else
-            {
-                mPresenter.onConfigurationChanged(view);
-            }
-        }
-        catch (Exception exception)
-        {
-            if (mPresenter != null)
-            {
-                mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", AddCustomerDocsActivity.class.getSimpleName(), "reinitialize", "");
-            }
-        }
     }
 
 

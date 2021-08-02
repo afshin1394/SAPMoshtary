@@ -47,14 +47,14 @@ public class MarjoeeForoshandehPresenter implements MarjoeeForoshandehMVP.Presen
     }
 
     @Override
-    public void checkTaeidSabtMarjoee( ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,long ccDarkhastFaktor, int ccElamMarjoeeSatr, int itemCount, int selectedCount, int position) {
-        mModel.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt , ccDarkhastFaktor , ccElamMarjoeeSatr , itemCount , selectedCount,position);
+    public void checkTaeidSabtMarjoee( ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,long ccDarkhastFaktor, int itemCount, int selectedCount, int position,boolean insert) {
+        mModel.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt , ccDarkhastFaktor  , itemCount , selectedCount,position,insert);
     }
 
-    @Override
-    public void deleteMarjoee(long ccDarkhastFaktor,int ccKalaCode) {
-        mModel.deleteMarjoee(ccDarkhastFaktor, ccKalaCode);
-    }
+//    @Override
+//    public void deleteMarjoee(long ccDarkhastFaktor,int ccKalaCode) {
+////        mModel.deleteMarjoee(ccDarkhastFaktor, ccKalaCode);
+//    }
 
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
@@ -73,8 +73,8 @@ public class MarjoeeForoshandehPresenter implements MarjoeeForoshandehMVP.Presen
     }
 
     @Override
-    public void onTaeidSabtMarjoee(int selectedCount, int position) {
-        mView.get().onTaeidSabtMarjoee(selectedCount,position);
+    public void onTaeidSabtMarjoee(int ccKardexSatr,int selectedCount, int position) {
+        mView.get().onTaeidSabtMarjoee(ccKardexSatr,selectedCount,position);
     }
 
 

@@ -297,7 +297,7 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
                     "			0 AS ExtraProp_IsDirkard, 0 AS ExtraProp_ccKardexSatr," +
                     "			0 ExtraProp_IsBestankari_ForTasviehTakhir, ExtraProp_IsSend, 0 AS ExtraProp_CanDelete, 0 AS ExtraProp_IsTajil, 0 as ExtraProp_ccDarkhastFaktorServer, 0 as ccMarkazForosh, 0 as ccMarkazSazmanForoshSakhtarForosh , 0 as  ExtraProp_ccDaryaftPardakhtCheckBargashty , 0 IsTaeedShodeh " +
                     " 	FROM DariaftPardakhtDarkhastFaktorPPC " +
-                    " 	WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeVosol = " + Constants.VALUE_MARJOEE() +
+                    " 	WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeVosol = " + Constants.VALUE_MARJOEE() + " AND "+DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_Mablagh() + " <> 0  AND "+ DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_MablaghDariaftPardakht() + " <> 0 "+
                     " 	GROUP BY CodeNoeVosol, NameNoeVosol, TarikhSanadShamsi, ccDarkhastFaktor" + " ) A" +
                     " ORDER BY ccDariaftPardakhtDarkhastFaktor ";
             Cursor cursor = db.rawQuery(query , null);
@@ -981,9 +981,9 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
 
 
 
-    public boolean deleteMarjoeeForoshandehByccDarkhastFaktor(long ccDarkhastFaktor)
+    public boolean deleteMarjoeeForoshandehByccDarkhastFaktor(int ccKardexSatr,long ccDarkhastFaktor,String codeNoeVosol)
     {
-        String query = "delete from " + DariaftPardakhtDarkhastFaktorPPCModel.TableName() + " where " + DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " AND " + DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_CodeNoeVosol() + " = " + Constants.VALUE_MARJOEE();
+        String query = "delete from " + DariaftPardakhtDarkhastFaktorPPCModel.TableName() + " where " + DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " AND " + DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_CodeNoeVosol() + " = " + codeNoeVosol + " AND "+ DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ExtraProp_ccKardexSatr() + " = "+ ccKardexSatr;
         try
         {
             SQLiteDatabase db = dbHelper.getWritableDatabase();

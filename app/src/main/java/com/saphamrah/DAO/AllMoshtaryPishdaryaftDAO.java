@@ -58,7 +58,10 @@ public class AllMoshtaryPishdaryaftDAO
             AllMoshtaryPishdaryaftModel.COLUMN_NameMasir(),
             AllMoshtaryPishdaryaftModel.COLUMN_ccForoshandeh(),
             AllMoshtaryPishdaryaftModel.COLUMN_Latitude(),
-            AllMoshtaryPishdaryaftModel.COLUMN_Longitude()
+            AllMoshtaryPishdaryaftModel.COLUMN_Longitude(),
+            AllMoshtaryPishdaryaftModel.COLUMN_Darajeh(),
+            AllMoshtaryPishdaryaftModel.COLUMN_ccNoeMoshtary()
+
         };
     }
 
@@ -221,7 +224,32 @@ public class AllMoshtaryPishdaryaftDAO
         return AllMoshtaryPishdaryaftModels;
     }
 
-
+    public AllMoshtaryPishdaryaftModel getByccMoshtary(int ccMoshtary)
+    {
+        AllMoshtaryPishdaryaftModel moshtaryModel = new AllMoshtaryPishdaryaftModel();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(AllMoshtaryPishdaryaftModel.TableName(), allColumns(),  "ccMoshtary= ?", new String[]{String.valueOf(ccMoshtary)}, null, null,  null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    moshtaryModel = cursorToModel(cursor).get(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , AllMoshtaryPishdaryaftModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "AllMoshtaryPishdaryaftDAO" , "" , "getByccMoshtary" , "");
+        }
+        return moshtaryModel;
+    }
 
     public boolean deleteAll()
     {
@@ -256,6 +284,8 @@ public class AllMoshtaryPishdaryaftDAO
         contentValues.put(AllMoshtaryPishdaryaftModel.COLUMN_ccForoshandeh() , AllMoshtaryPishdaryaftModel.getCcForoshandeh());
         contentValues.put(AllMoshtaryPishdaryaftModel.COLUMN_Latitude() , AllMoshtaryPishdaryaftModel.getLatitude());
         contentValues.put(AllMoshtaryPishdaryaftModel.COLUMN_Longitude() , AllMoshtaryPishdaryaftModel.getLongitude());
+        contentValues.put(AllMoshtaryPishdaryaftModel.COLUMN_ccNoeMoshtary() , AllMoshtaryPishdaryaftModel.getCcNoeMoshtary());
+        contentValues.put(AllMoshtaryPishdaryaftModel.COLUMN_Darajeh() , AllMoshtaryPishdaryaftModel.getDarajeh());
 
         return contentValues;
     }
@@ -279,6 +309,8 @@ public class AllMoshtaryPishdaryaftDAO
             AllMoshtaryPishdaryaftModel.setCcForoshandeh(cursor.getInt(cursor.getColumnIndex(AllMoshtaryPishdaryaftModel.COLUMN_ccForoshandeh())));
             AllMoshtaryPishdaryaftModel.setLatitude(cursor.getInt(cursor.getColumnIndex(AllMoshtaryPishdaryaftModel.COLUMN_Latitude())));
             AllMoshtaryPishdaryaftModel.setLongitude(cursor.getInt(cursor.getColumnIndex(AllMoshtaryPishdaryaftModel.COLUMN_Longitude())));
+            AllMoshtaryPishdaryaftModel.setDarajeh(cursor.getInt(cursor.getColumnIndex(AllMoshtaryPishdaryaftModel.COLUMN_Darajeh())));
+            AllMoshtaryPishdaryaftModel.setCcNoeMoshtary(cursor.getInt(cursor.getColumnIndex(AllMoshtaryPishdaryaftModel.COLUMN_ccNoeMoshtary())));
 
             AllMoshtaryPishdaryaftModels.add(AllMoshtaryPishdaryaftModel);
             cursor.moveToNext();

@@ -323,7 +323,7 @@ public class DariaftPardakhtPPCDAO
         dariaftPardakhtPPC.setIsPishDariaft(IsPishDariaft);
 //        dariaftPardakhtPPC.setccLinkTakhirTajil(0);
 //        dariaftPardakhtPPC.setExtraProp_IsOld(0);
-//        dariaftPardakhtPPC.setCcDarkhastFaktor(ccDarkhastFaktor);
+        dariaftPardakhtPPC.setCcDarkhastFaktor(ccDarkhastFaktor);
 //        dariaftPardakhtPPC.setExtraProp_CodeNoeSanad(CodeNoeSanad);
         dariaftPardakhtPPC.setExtraProp_IsDirkard(IsDirkard);
         dariaftPardakhtPPC.setTabdil_NaghdBeFish(0);
@@ -713,9 +713,9 @@ public class DariaftPardakhtPPCDAO
         }
     }
 
-    public boolean deleteMarjoeeForoshandehByccDarkhastFaktor(long ccDarkhastFaktor)
+    public boolean deleteMarjoeeForoshandehByccDarkhastFaktor(long ccDarkhastFaktor,String codeNoeVosol)
     {
-        String query = "delete from " + DariaftPardakhtPPCModel.TableName() + " where " + DariaftPardakhtPPCModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor;
+        String query = "delete from " + DariaftPardakhtPPCModel.TableName() + " where " + DariaftPardakhtPPCModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor +" AND "+DariaftPardakhtPPCModel.COLUMN_CodeNoeVosol() + " = "+ codeNoeVosol;
         try
         {
             SQLiteDatabase db = dbHelper.getWritableDatabase();

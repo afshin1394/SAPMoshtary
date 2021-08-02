@@ -228,8 +228,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         Log.d("vosol", "model childParameterModelsVosols : " + CodeNoeVosolMoshtary);
         Log.d("vosol", "model childParameterModelsVosols 0 : " + NameCodeNoeVosolMoshtary);
 
-        MoshtaryDAO moshtaryDAO = new MoshtaryDAO(BaseApplication.getContext());
-        MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
+//        MoshtaryDAO moshtaryDAO = new MoshtaryDAO(BaseApplication.getContext());
+//        MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
         ArrayList<NoeVosolMoshtaryModel> noeVosolMoshtaryModels = noeVosolMoshtaryDAO.getByccNoeVosolMoshtary(CodeNoeVosolMoshtary , selectFaktorShared.getInt(selectFaktorShared.getCcMarkazSazmanForosh(),-1) , selectFaktorShared.getInt(selectFaktorShared.getCcGorohNoeMoshtary(),-1) , selectFaktorShared.getInt(selectFaktorShared.getMoshtaryDarajeh(),-1) );
         ParameterChildModel parameterChildModel = new ParameterChildModel();
         ArrayList<ParameterChildModel> NoeVosolsDarkhasts = new ArrayList<ParameterChildModel>();

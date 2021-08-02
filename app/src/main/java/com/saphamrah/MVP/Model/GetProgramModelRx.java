@@ -8358,7 +8358,12 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
     private void getDetailedApis(int getProgramType) {
 
-
+        String ccMarkazSazmanForoshSend = "";
+        if (noeMasouliat == 4 || noeMasouliat == 5 ){
+            ccMarkazSazmanForoshSend = ccMarkazSazmanForoshPakhsh;
+        } else {
+            ccMarkazSazmanForoshSend = String.valueOf(ccMarkazSazmanForosh);
+        }
         String allccMoshtary = ccMoshtarys;
         if (noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD || noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SMART) {
             allccMoshtary = ccMoshtaryPakhsh;
@@ -8401,7 +8406,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                         .doOnNext(getMahalCodePostiResultResponse -> ++webCounter[0])
 
 
-                , apiServiceRxjava.getNoeVosolMoshtary(ccMarkazSazmanForosh)
+                , apiServiceRxjava.getNoeVosolMoshtary(ccMarkazSazmanForoshSend,ccGorohss)
                         .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, ACTIVITY_NAME, "getDetailedApis", "getNoeVosolMoshtary"))
                         .subscribeOn(Schedulers.io())
                         .doOnNext(noeVosolMoshtaryResultResponse -> ++webCounter[0])
@@ -9582,7 +9587,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
     private void getNoeVosolMoshtary(final int getProgramType, int ccMarkazSazmanForosh) {
         final NoeVosolMoshtaryDAO noeVosolMoshtaryDAO = new NoeVosolMoshtaryDAO(mPresenter.getAppContext());
-        noeVosolMoshtaryDAO.fetchNoeVosolMoshtary(mPresenter.getAppContext(), activityNameForLog, ccMarkazSazmanForosh, new RetrofitResponse() {
+        noeVosolMoshtaryDAO.fetchNoeVosolMoshtary(mPresenter.getAppContext(), activityNameForLog, String.valueOf(ccMarkazSazmanForosh),ccGorohss, new RetrofitResponse() {
             @Override
             public void onSuccess(final ArrayList arrayListData) {
                 Thread thread = new Thread() {

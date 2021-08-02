@@ -16,6 +16,8 @@ public class AllMoshtaryPishdaryaftModel
     private static final String COLUMN_ccForoshandeh = "ccForoshandeh";
     private static final String COLUMN_Latitude = "Latitude";
     private static final String COLUMN_Longitude = "Longitude";
+    private static final String COLUMN_Darajeh = "Darajeh";
+    private static final String COLUMN_ccNoeMoshtary = "ccNoeMoshtary";
 
 
     public static String TableName() {
@@ -50,6 +52,12 @@ public class AllMoshtaryPishdaryaftModel
     }
     public static String COLUMN_Longitude() {
         return COLUMN_Longitude;
+    }
+    public static String COLUMN_Darajeh() {
+        return COLUMN_Darajeh;
+    }
+    public static String COLUMN_ccNoeMoshtary() {
+        return COLUMN_ccNoeMoshtary;
     }
 
 
@@ -153,6 +161,24 @@ public class AllMoshtaryPishdaryaftModel
         Longitude = longitude;
     }
 
+    private int Darajeh;
+    public int getDarajeh() {
+        return Darajeh;
+    }
+
+    public void setDarajeh(int darajeh) {
+        Darajeh = darajeh;
+    }
+
+    private int ccNoeMoshtary;
+
+    public int getCcNoeMoshtary() {
+        return ccNoeMoshtary;
+    }
+
+    public void setCcNoeMoshtary(int ccNoeMoshtary) {
+        this.ccNoeMoshtary = ccNoeMoshtary;
+    }
 
     @NonNull
     @Override
@@ -169,6 +195,8 @@ public class AllMoshtaryPishdaryaftModel
                 ", Id=" + Id +
                 ", Latitude=" + Latitude +
                 ", Longitude=" + Longitude +
+                ", Darajeh=" + Darajeh +
+                ", ccNoeMoshtary=" + ccNoeMoshtary +
                 '}';
     }
 }

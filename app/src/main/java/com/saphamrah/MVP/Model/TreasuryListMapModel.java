@@ -111,6 +111,8 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
     private String CLASS_NAME = "TreasuryListMapModel";
     SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(BaseApplication.getContext());
     DarkhastFaktorMoshtaryForoshandeDAO darkhastFaktorMoshtaryForoshandeDAO = new DarkhastFaktorMoshtaryForoshandeDAO(BaseApplication.getContext());
+    DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(BaseApplication.getContext());
+    DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
 
 
     public TreasuryListMapModel(TreasuryListMapMVP.RequiredPresenterOps mPresenter)
@@ -584,371 +586,11 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             }
         }
     }
-    //    @Override
-//    public void setDarkhastFaktorShared(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel)
-//    {
-//        DarkhastFaktorDAO darkhastfaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-//        darkhastfaktorDAO.deleteAllFaktorTaeedNashode();
-//
-//        // if value of this variable equal to false, then ignore checks
-//        boolean checkMojazForDarkhast = true;
-//        boolean checkEtebarCheckBargashty = true;
-//        boolean checkMojazForResid = true;
-//        boolean checkFaktorErsalNashode = true;
-//        boolean checkCheckBargashty = true;
-//        boolean checkTimeDarkhast = true;
-//        boolean checkMasahateMaghaze = true;
-//        boolean checkAnbarak = true;
-//        boolean checkMoshtaryForoshande = true;
-//        boolean checkDistance = true;
-//        boolean updateMandeMojodi = true;
-//
-//        Log.d("treasury" , "ccdarkhastfaktor : " + darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor());
-//
-//        DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
-//        int countDarkhastFaktorSatr = darkhastFaktorSatrDAO.getCountByccDarkhastFaktor(darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor());
-//        if (countDarkhastFaktorSatr <= 0)
-//        {
-//            mPresenter.onFailedSetDarkhastFaktorShared(R.string.errorGetDarkhastFaktorSatrInfo);
-//            return;
-//        }
-//
-//        ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
-//        ArrayList<ParameterChildModel> childParameterModels = childParameterDAO.getAllByccParameter(Constants.REQUEST_CUSTOMER_CCPARAMETER_OF_CHECKS() + "," + Constants.UPDATE_MANDE_MOJODI());
-//        for (ParameterChildModel model : childParameterModels)
-//        {
-//            Log.d("parameter" , model.toString());
-//            if (model.getCcParameterChild() == Constants.CHECK_MOSHTARY_MASIR_ROOZ_MOJAZ_FOR_DARKHAST())
-//            {
-//                checkMojazForDarkhast = model.getValue().trim().equals("1");
-//            }
-//            else if (model.getCcParameterChild() == Constants.CHECK_MOSHTARY_MASIR_ROOZ_ETEBAR_CHECK_BARGASHTY())
-//            {
-//                checkEtebarCheckBargashty = model.getValue().trim().equals("1");
-//            }
-//            else if (model.getCcParameterChild() == Constants.CHECK_MOSHTARY_MASIR_ROOZ_MOJAZ_FOR_RESID())
-//            {
-//                checkMojazForResid = model.getValue().trim().equals("1");
-//            }
-//            else if (model.getCcParameterChild() == Constants.CHECK_MOSHTARY_MASIR_ROOZ_FAKTOR_ERSAL_NASHODEH())
-//            {
-//                checkFaktorErsalNashode = model.getValue().trim().equals("1");
-//            }
-//            else if (model.getCcParameterChild() == Constants.CHECK_MOSHTARY_MASIR_ROOZ_CHECK_BARGASHTY())
-//            {
-//                checkCheckBargashty = model.getValue().trim().equals("1");
-//            }
-//            else if (model.getCcParameterChild() == Constants.CHECK_MOSHTARY_MASIR_ROOZ_TIME_DARKHAST())
-//            {
-//                checkTimeDarkhast = model.getValue().trim().equals("1");
-//            }
-//            else if (model.getCcParameterChild() == Constants.CHECK_MOSHTARY_MASIR_ROOZ_MASAHAT_MAGHAZEH())
-//            {
-//                checkMasahateMaghaze = model.getValue().trim().equals("1");
-//            }
-//            else if (model.getCcParameterChild() == Constants.CHECK_MOSHTARY_MASIR_ROOZ_ANBARAK())
-//            {
-//                checkAnbarak = model.getValue().trim().equals("1");
-//            }
-//            else if (model.getCcParameterChild() == Constants.CHECK_MOSHTARY_MASIR_ROOZ_MOSHTARY_FOROSHANDEH())
-//            {
-//                checkMoshtaryForoshande = model.getValue().trim().equals("1");
-//            }
-//            else if (model.getCcParameterChild() == Constants.CHECK_MOSHTARY_MASIR_ROOZ_DISTANCE())
-//            {
-//                checkDistance = model.getValue().trim().equals("1");
-//            }
-//            else if (model.getCcParameterChild() == Constants.UPDATE_MANDE_MOJODI_MASIR_ROOZ())
-//            {
-//                updateMandeMojodi = model.getValue().trim().equals("1");
-//            }
-//        }
-//
-//        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-//        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
-//        int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
-//        boolean isMojazForDarkhast = foroshandehMamorPakhshModel.getIsMojazForSabtDarkhast() == 1;
-//        boolean isEtebarCheckBargashty = true;
-//        boolean isEtebarAsnad = true;
-//        boolean isMojazForResid = true;
-//
-//
-//
-//        // Foroshandeh Etebar
-//        ForoshandehEtebarDAO foroshandehEtebarDAO = new ForoshandehEtebarDAO(mPresenter.getAppContext());
-//        ForoshandehEtebarModel foroshandehEtebarModel = foroshandehEtebarDAO.getByccForoshandeh(foroshandehMamorPakhshModel.getCcForoshandeh());
-//
-//        BargashtyDAO bargashtyDAO = new BargashtyDAO(mPresenter.getAppContext());
-//        //EtebarBargashty
-//        long rialBargahsty = foroshandehEtebarModel.getRialBargashty();
-//        int tedadBargahsty = foroshandehEtebarModel.getTedadBargashty();
-//        long modatBargashty = foroshandehEtebarModel.getModatBargashty();
-//
-//        // EtebarAsnad
-//        long RialAsnad = foroshandehEtebarModel.getRialAsnad();
-//        int TedadAsnad = foroshandehEtebarModel.getTedadAsnad();
-//        int ModatAsnad = foroshandehEtebarModel.getModatAsnad();
-//
-//        long etebarRialAsnadForoshandeh = foroshandehEtebarModel.getEtebarRialAsnadMoshtary() + foroshandehEtebarModel.getEtebarRialAsnadShakhsi();
-//        int etebarTedadAsnadForoshandeh = foroshandehEtebarModel.getEtebarTedadAsnadMoshtary() + foroshandehEtebarModel.getEtebarTedadAsnadShakhsi();
-//        int etebarModatAsnadForoshandeh = foroshandehEtebarModel.getEtebarModatAsnadMoshtary() + foroshandehEtebarModel.getEtebarModatAsnadShakhsi();
-//
-//        // EtebarMoavagh
-//
-//        long rialMoavaghForoshandeh = foroshandehEtebarModel.getRialMoavagh();
-//        int tedadMoavaghForoshandeh = foroshandehEtebarModel.getTedadMoavagh();
-//        int modatMoavaghForoshandeh = foroshandehEtebarModel.getModatMoavagh();
-//
-//        //saghf etebar
-//        long saghfEtebarRiali = foroshandehEtebarModel.getSaghfEtebarRiali() - (rialBargahsty + RialAsnad + rialMoavaghForoshandeh);
-//        int saghfEtebarTedadi = foroshandehEtebarModel.getSaghfEtebarTedadi() - (tedadBargahsty + TedadAsnad + tedadMoavaghForoshandeh);
-//        long saghfEtebarModat = foroshandehEtebarModel.getSaghfEtebarModat() - (modatBargashty + ModatAsnad + modatMoavaghForoshandeh);
-//
-//        Log.d("vosol" , "rialBargahsty : " + rialBargahsty);
-//        Log.d("vosol" , "etebarForoshandeh.getRialBargashty() : " + foroshandehEtebarModel.getRialBargashty());
-//        Log.d("vosol" , "tedadBargahsty : " + tedadBargahsty);
-//        Log.d("vosol" , "etebarForoshandeh.getTedadBargashty() : " + foroshandehEtebarModel.getTedadBargashty());
-//        Log.d("vosol" , "modatBargashty : " + modatBargashty);
-//        Log.d("vosol" , "etebarForoshandeh.getModatBargashty() : " + foroshandehEtebarModel.getModatBargashty());
-//
-//        /*if(rialBargahsty > etebarForoshandeh.getRialBargashty() || tedadBargahsty > etebarForoshandeh.getTedadBargashty() || modatBargashty > etebarForoshandeh.getModatBargashty())
-//        {
-//            isEtebarCheckBargashty = false;
-//        }*/
-//
-//        // check etebar bargashty
-//        Log.d("requestCustomer1","rialBargahsty:" + rialBargahsty + " foroshandehEtebarModel.getRialBargashty():" + foroshandehEtebarModel.getRialBargashty() + " saghfEtebarRiali:" + saghfEtebarRiali);
-//        if(rialBargahsty >= foroshandehEtebarModel.getEtebarRialBargashty() || rialBargahsty >= saghfEtebarRiali)
-//        {
-//            isEtebarCheckBargashty = false;
-//            Log.d("requestCustomer2","isEtebarCheckBargashty:" + isEtebarCheckBargashty);
-//        }
-//        Log.d("requestCustomer1","tedadBargahsty:" + tedadBargahsty + " foroshandehEtebarModel.getTedadBargashty():" + foroshandehEtebarModel.getTedadBargashty() + " saghfEtebarTedadi:" + saghfEtebarTedadi);
-//        if(tedadBargahsty >= foroshandehEtebarModel.getEtebarTedadBargashty() || tedadBargahsty >= saghfEtebarTedadi)
-//        {
-//            isEtebarCheckBargashty = false;
-//            Log.d("requestCustomer2","isEtebarCheckBargashty:" + isEtebarCheckBargashty);
-//        }
-//        Log.d("requestCustomer1","modatBargashty:" + modatBargashty + " foroshandehEtebarModel.getModatBargashty():" + foroshandehEtebarModel.getModatBargashty() + " saghfEtebarModat:" + saghfEtebarModat);
-//        if(modatBargashty >= foroshandehEtebarModel.getEtebarModatBargashty() || modatBargashty >= saghfEtebarModat)
-//        {
-//            isEtebarCheckBargashty = false;
-//            Log.d("requestCustomer2","isEtebarCheckBargashty:" + isEtebarCheckBargashty);
-//        }
-//
-//        // check etebar asnad
-//        Log.d("requestCustomer1","sumRialAsnad:" + RialAsnad + " rialAsnadForoshandeh:" + etebarRialAsnadForoshandeh + " saghfEtebarRiali:" + saghfEtebarRiali);
-//        if(RialAsnad >= etebarRialAsnadForoshandeh || RialAsnad >= saghfEtebarRiali)
-//        {
-//            isEtebarAsnad = false;
-//            Log.d("requestCustomer2","isEtebarAsnad:" + isEtebarAsnad);
-//        }
-//        Log.d("requestCustomer1","sumTedadAsnad:" + TedadAsnad + " tedadAsnadForoshandeh:" + etebarTedadAsnadForoshandeh + " saghfEtebarTedadi:" + saghfEtebarTedadi);
-//        if(TedadAsnad >= etebarTedadAsnadForoshandeh || TedadAsnad >= saghfEtebarTedadi)
-//        {
-//            isEtebarAsnad = false;
-//            Log.d("requestCustomer2","isEtebarAsnad:" + isEtebarAsnad);
-//        }
-//        Log.d("requestCustomer1","sumModatAsnad:" + ModatAsnad + " modatAsnadForoshandeh:" + etebarModatAsnadForoshandeh + " saghfEtebarModat:" + saghfEtebarModat);
-//        if(ModatAsnad >= etebarModatAsnadForoshandeh || ModatAsnad >= saghfEtebarModat)
-//        {
-//            isEtebarAsnad = false;
-//            Log.d("requestCustomer2","isEtebarAsnad:" + isEtebarAsnad);
-//        }
-//
-//
-//        // check etebar moavagh
-//        Log.d("requestCustomer1","rialMoavaghForoshandeh:" + rialMoavaghForoshandeh + " foroshandehEtebarModel.getRialMoavagh():" + foroshandehEtebarModel.getRialMoavagh() + " saghfEtebarRiali:" + saghfEtebarRiali);
-//        if(rialMoavaghForoshandeh >= foroshandehEtebarModel.getEtebarRialMoavagh() || rialMoavaghForoshandeh >= saghfEtebarRiali)
-//        {
-//            isMojazForResid = false;
-//            Log.d("requestCustomer1","isMojazForResid:" + isMojazForResid);
-//        }
-//
-//        Log.d("requestCustomer2","tedadMoavaghForoshandeh:" + tedadMoavaghForoshandeh + " foroshandehEtebarModel.getTedadMoavagh():" + foroshandehEtebarModel.getTedadMoavagh() + " saghfEtebarTedadi:" + saghfEtebarTedadi);
-//        if(tedadMoavaghForoshandeh >= foroshandehEtebarModel.getEtebarTedadMoavagh() || tedadMoavaghForoshandeh >= saghfEtebarTedadi)
-//        {
-//            isMojazForResid = false;
-//            Log.d("requestCustomer2","isMojazForResid:" + isMojazForResid);
-//        }
-//
-//        Log.d("requestCustomer3","modatMoavaghForoshandeh:" + modatMoavaghForoshandeh + " foroshandehEtebarModel.getModatMoavagh():" + foroshandehEtebarModel.getModatMoavagh() + " saghfEtebarModat:" + saghfEtebarModat);
-//        if(modatMoavaghForoshandeh >= foroshandehEtebarModel.getEtebarModatMoavagh() || modatMoavaghForoshandeh >= saghfEtebarModat)
-//        {
-//            isMojazForResid = false;
-//            Log.d("requestCustomer3","isMojazForResid:" + isMojazForResid);
-//        }
-//
-//        /*isMojazForResid = false;
-//        isMojazForResid = etebarForoshandeh.getFlagSabtNaghd() == 1;
-//        if(noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3)
-//        {
-//            isMojazForResid = etebarForoshandeh.getFlagSabtNaghd() == 1;
-//        }*/
-//
-//        boolean moshtaryForoshandehFlag = false;
-//        MoshtaryAfradDAO moshtaryafradDAO = new MoshtaryAfradDAO(mPresenter.getAppContext());
-//        Log.d("treasury" , "getCcMoshtary : " + darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
-//        ArrayList<MoshtaryAfradModel> moshtaryAfradModels = moshtaryafradDAO.getByccMoshtary(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
-//        if (moshtaryAfradModels.size() > 0)
-//        {
-//            if(moshtaryAfradModels.get(0).getCcAfrad() == foroshandehMamorPakhshModel.getCcAfrad())
-//            {
-//                moshtaryForoshandehFlag = true;
-//                //SelectFaktor.setMoshtaryForoshandehFlag(true);
-//            }
-//        }
-//
-//        int ccSazmanForosh = foroshandehMamorPakhshModel.getCcSazmanForosh();
-//        int tedadBargashti = bargashtyDAO.getCountByccMoshtaryAndSazmanForosh(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary(), ccSazmanForosh);
-//        MoshtaryEtebarSazmanForoshDAO moshtaryetebarsazmanforoshDAO = new MoshtaryEtebarSazmanForoshDAO(mPresenter.getAppContext());
-//        int tedadEtebarCheckBargashti = moshtaryetebarsazmanforoshDAO.getByccMoshtary(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary()).getTedadBargashty();
-//        Log.d("customer" , "getByccMoshtary : " + moshtaryetebarsazmanforoshDAO.getByccMoshtary(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary()).toString());
-//        Log.d("customer" , "ccMoshtary : " + darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
-//        int countDarkhastFaktorErsalNashodeh = darkhastfaktorDAO.getCountErsalNashode();
-//        Log.d("customer" , "count ersal nashode : " + countDarkhastFaktorErsalNashodeh);
-//
-//        if(checkMojazForDarkhast && !isMojazForDarkhast)// & PubFuncs.DeviceInfo_TestBarnameh(context) == false)
-//        {
-//            mPresenter.onFailedSetDarkhastFaktorShared(R.string.cantMojazForDarkhast);
-//            //Toast.makeText(context, ".\n", Toast.LENGTH_LONG).show();
-//        }
-//        else
-//        {
-//            int ccAnbarakActive = foroshandehMamorPakhshDAO.getAll().get(0).getCcAnbarak();
-//            AnbarakAfradDAO anbarakafradDAO = new AnbarakAfradDAO(mPresenter.getAppContext());
-//            int ccAnbarakFeli = anbarakafradDAO.getAll().get(0).getCcAnbarak();
-//
-//            PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
-//
-//
-//            Log.d("getCustomer" , "checkCheckBargashty : " + checkCheckBargashty + " , tedadBargashti : " + tedadBargashti + " , tedadEtebarCheckBargashti : " + tedadEtebarCheckBargashti);
-//
-//            if(checkFaktorErsalNashode && countDarkhastFaktorErsalNashodeh > 0)
-//            {
-//                mPresenter.onFailedSetDarkhastFaktorShared(R.string.errorFaktorErsalNashode);
-//                //Toast.makeText(context, "به علت عدم ارسال درخواست مشتری شما قادر به ثبت درخواست نمی باشید.\nلطفا تمامی درخواست ها را ارسال نمائید.", Toast.LENGTH_LONG).show();
-//            }
-//            else if(checkCheckBargashty && tedadBargashti > tedadEtebarCheckBargashti)
-//            {
-//                mPresenter.onFailedSetDarkhastFaktorShared(R.string.errorCheckBargashtyMoshtary);
-//                //Toast.makeText(context, "به علت چک برگشتی مشتری شما قادر به ثبت درخواست نمی باشید.\n", Toast.LENGTH_LONG).show();
-//            }
-//            else if(checkTimeDarkhast && !checkDateTime(childParameterModels))
-//            {
-//                //find start rest time for show
-//                //Toast.makeText(context, "شما قادر به ثبت درخواست بعد از ساعت 23:45 نمی باشید.\n", Toast.LENGTH_LONG).show();
-//                //String startRestTime = "23:45";
-//                //for (ChildParameterModel model : childParameterModels)
-//                //{
-//                //  if (model.getCcChildParameter() == Constants.CHECK_MOSHTARY_MASIR_ROOZ_CC_START_REST_TIME())
-//                //{
-//                //  startRestTime = model.getValue();
-//                //}
-//                //}
-//                mPresenter.onFailedSetDarkhastFaktorShared(R.string.errorTimeLimitForRequest);
-//            }
-//            else if (checkMasahateMaghaze && new MoshtaryDAO(mPresenter.getAppContext()).getByccMoshtary(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary()).getMasahatMaghazeh() == 0)
-//            {
-//                //Toast.makeText(context, "شما قادر به ثبت درخواست نمی باشید.لطفا مساحت مغازه  مشتری را بروزرسانی نمایید.\n", Toast.LENGTH_LONG).show();
-//                mPresenter.onFailedSetDarkhastFaktorShared(R.string.errorMasahateMaghazeForRequest);
-//            }
-//            else if(checkAnbarak && ccAnbarakActive != ccAnbarakFeli)
-//            {
-//                //Toast.makeText(context, "به علت تغییر انبارک شما قادر به ثبت درخواست نمی باشید.لطفا مجددا دریافت برنامه نمایید.\n", Toast.LENGTH_LONG).show();
-//                mPresenter.onFailedSetDarkhastFaktorShared(R.string.errorAnbarakForRequest);
-//            }
-//            /*else if (!googleLocationProvider.getHasAccess())
-//            {
-//                mPresenter.onFailedSetDarkhastFaktorShared(R.string.errorAccessToLocation);
-//            }*/
-//            else
-//            {
-//                int codeNoeVosol = darkhastFaktorMoshtaryForoshandeModel.getCodeNoeVosolAzMoshtary();
-//                int ccChildParameterNoeVosol = -1;
-//                if (codeNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD())
-//                {
-//                    ccChildParameterNoeVosol = Constants.CC_VOSOL_IS_VAJH_NAGHD();
-//                }
-//                else if (codeNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_CHECK())
-//                {
-//                    ccChildParameterNoeVosol = Constants.CC_VOSOL_IS_CHECK();
-//                }
-//                else if (codeNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_RESID())
-//                {
-//                    ccChildParameterNoeVosol = Constants.CC_VOSOL_IS_RESID();
-//                }
-//
-//                boolean canCreateFaktor = true;
-//                Log.d("treasury" , "checkDistance : " + checkDistance);
-//                if (checkDistance)
-//                {
-//                    canCreateFaktor = isValidCreateFaktor(darkhastFaktorMoshtaryForoshandeModel , foroshandehMamorPakhshModel);
-//                }
-//                if (canCreateFaktor)
-//                {
-//                    if(noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 4 || noeMasouliat == 5)//بروزرسانی موجودی انبارک
-//                    {
-//                        if (updateMandeMojodi)
-//                        {
-//                            updateMandehMojodi(noeMasouliat, darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor(), darkhastFaktorMoshtaryForoshandeModel.getTarikhFaktor(), String.valueOf(foroshandehMamorPakhshModel.getCcMamorPakhsh()), String.valueOf(darkhastFaktorMoshtaryForoshandeModel.getCcForoshandeh()), String.valueOf(foroshandehMamorPakhshModel.getCcAfrad()) ,String.valueOf(darkhastFaktorMoshtaryForoshandeModel.getCcSazmanForosh()));
-//                        }
-//                    }
-//
-//                    /////////////////////
-//
-//                    Log.d("vosol" , "checkMojazForResid : " + checkMojazForResid);
-//                    Log.d("vosol" , "isMojazForResid : " + isMojazForResid);
-//                    Log.d("vosol" , "checkMoshtaryForoshande : " + checkMoshtaryForoshande);
-//                    Log.d("vosol" , "moshtaryForoshandehFlag : " + moshtaryForoshandehFlag);
-//                    Log.d("vosol" , "checkEtebarCheckBargashty : " + checkEtebarCheckBargashty);
-//                    Log.d("vosol" , "isEtebarCheckBargashty : " + isEtebarCheckBargashty);
-//                    if(checkMojazForResid && codeNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_RESID())
-//                    {
-//                        if (isMojazForResid)
-//                        {
-//                            ccChildParameterNoeVosol = Constants.CC_VOSOL_IS_RESID();
-//                        }
-//                        else
-//                        {
-//                            ccChildParameterNoeVosol = Constants.CC_VOSOL_IS_CHECK();
-//                            mPresenter.onWarningSetDarkhastFaktorShared(R.string.cantMojazForResid);
-//                            Log.d("vosol" , "not allow resid");
-//                            //Toast.makeText(context, "به علت بسته شدن اعتبار فروشنده، شما تنها قادر به ثبت وصول وجه نقد و چک می باشید.\n", Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//                    else if (codeNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_CHECK())
-//                    {
-//                        ccChildParameterNoeVosol = Constants.CC_VOSOL_IS_CHECK();
-//                        mPresenter.onWarningSetDarkhastFaktorShared(R.string.cantMojazForResid);
-//                        Log.d("vosol" , "not allow resid");
-//                        //Toast.makeText(context, "به علت بسته شدن اعتبار فروشنده، شما تنها قادر به ثبت وصول وجه نقد و چک می باشید.\n", Toast.LENGTH_LONG).show();
-//                    }
-//                    if(checkMoshtaryForoshande && moshtaryForoshandehFlag)
-//                    {
-//                        ccChildParameterNoeVosol = Constants.CC_VOSOL_IS_MOSHTARY_FOROSHANDE();
-//                        //Toast.makeText(context, " شما برای مشتری به نام خود تنها قادر به ثبت وصول وجه نقد می باشید.\n", Toast.LENGTH_LONG).show();
-//                        mPresenter.onWarningSetDarkhastFaktorShared(R.string.onlyVajhNaghdForYourCustomer);
-//                    }
-//                    if(checkEtebarCheckBargashty && (!isEtebarCheckBargashty || !isEtebarAsnad))
-//                    {
-//                        ccChildParameterNoeVosol = Constants.CC_VOSOL_IS_ETEBAR_CHECK_BARGASHTY();
-//                        //Toast.makeText(context, "به علت بسته شدن اعتبار فروشنده، شما تنها قادر به ثبت وصول وجه نقد می باشید.\n", Toast.LENGTH_LONG).show();
-//                        Log.d("vosol" , "check bargashty");
-//                        mPresenter.onWarningSetDarkhastFaktorShared(R.string.onlyVajhNaghdForCloseEtebar);
-//                    }
-//
-//                    setRequestInfoShared(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary(), darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor(), darkhastFaktorMoshtaryForoshandeModel.getCcForoshandeh(), darkhastFaktorMoshtaryForoshandeModel.getCcMarkazSazmanForosh(), moshtaryForoshandehFlag , isMojazForResid , isEtebarCheckBargashty , ccChildParameterNoeVosol, googleLocationProvider);
-//                }
-//            }
-//        }
-//    }
 
 
     @Override
     public void sendDariaftPardakht(long ccDarkhastFaktor)
     {
-        DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(mPresenter.getAppContext());
         ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = dariaftPardakhtPPCDAO.getForSendToSqlByccDarkhastFaktor(ccDarkhastFaktor);
         Log.d("treasury" , "dariaftPardakhtPPCModels.size : " + dariaftPardakhtPPCModels.size());
         if (dariaftPardakhtPPCModels.size() > 0)
@@ -961,14 +603,11 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             }
             else
             {
-//                ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
-//                String ip = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
-// , "");
-//                String port = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
-// , "");
-                ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
-                String ip=serverIpModel.getServerIp();
-                String port=serverIpModel.getPort();
+                ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+                String ip = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+                        , "");
+                String port = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+                        , "");
                 if (ip.equals("") || port.equals(""))
                 {
                     mPresenter.onError(R.string.errorFindServerIP);
@@ -976,12 +615,12 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
                 else
                 {
                     int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
-                    DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-                    DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(dariaftPardakhtPPCModels.get(0).getCcDarkhastFaktor());
+                    //DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
+                    DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
                     ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
                     int codeNoeVosolVajhNaghd = Integer.parseInt(childParameterDAO.getAllByccChildParameter(String.valueOf(Constants.CC_CHILD_CODE_NOE_VOSOL_VAJH_NAGHD())).get(0).getValue());
                     String currentVersionNumber = new PubFunc().new DeviceInfo().getCurrentVersion(mPresenter.getAppContext());
-                    sendDariaftPardakhtToServer(serverIpModel, dariaftPardakhtPPCModels, foroshandehMamorPakhshModel, noeMasouliat, darkhastFaktorModel, codeNoeVosolVajhNaghd, currentVersionNumber);
+                    sendDariaftPardakhtToServer(dariaftPardakhtPPCModels, foroshandehMamorPakhshModel, noeMasouliat, darkhastFaktorModel, codeNoeVosolVajhNaghd, currentVersionNumber);
                 }
             }
         }
@@ -992,16 +631,17 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
     }
 
 
-    private void sendDariaftPardakhtToServer(ServerIpModel serverIpModel , final ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, final DarkhastFaktorModel darkhastFaktorModel, int codeNoeVosolVajhNaghd, String currentVersionNumber)
+    private void sendDariaftPardakhtToServer(ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, final DarkhastFaktorModel darkhastFaktorModel, int codeNoeVosolVajhNaghd, String currentVersionNumber)
     {
+        ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
         final DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(mPresenter.getAppContext());
-        //APIServicePost apiServicePost = ApiClient.getClient(ip , port).create(APIServicePost.class);
-        final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
-
+        APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
 
         String ccDpdfs = "-1";
         JSONArray jsonArrayDariaftPardakht = new JSONArray();
         JSONArray jsonArrayDariaftPardakhtDarkhastFaktor = new JSONArray();
+        JSONArray jsonArrayKardex = new JSONArray();
+        JSONArray jsonArrayKardexSatr = new JSONArray();
         // get ccMarkazForosh , ccMarkazAnbar , ccMarkazSazmanForoshSakhtarForosh
         int ccMarkazForosh = 0;
         int ccMarkazAnbar = 0;
@@ -1034,15 +674,20 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             jsonArrayDariaftPardakhtDarkhastFaktor.put(dpdfModel.toJsonObject(ccMarkazForosh, ccMarkazAnbar, ccMarkazSazmanForoshSakhtarForosh, foroshandehMamorPakhshModel.getCcAfrad()));
         }
 
+
         try
         {
             JSONObject jsonObjectTreasury = new JSONObject();
             jsonObjectTreasury.put("DariaftPardakht" , jsonArrayDariaftPardakht);
             jsonObjectTreasury.put("DariaftPardakhtDarkhastFaktor" , jsonArrayDariaftPardakhtDarkhastFaktor);
+            jsonObjectTreasury.put("kardex" , jsonArrayKardex);
+            jsonObjectTreasury.put("kardexSatr" , jsonArrayKardexSatr);
 
             String strJsonObjectTreasury = jsonObjectTreasury.toString();
-            //saveToFile("treasury" + darkhastFaktorModel.getCcDarkhastFaktor() + ".txt" , strJsonObjectTreasury);
+            saveToFile("treasury" + darkhastFaktorModel.getCcDarkhastFaktor() + ".txt" , strJsonObjectTreasury);
+
             Call<CreateDariaftPardakhtPPCJSONResult> call = apiServicePost.createDariaftPardakhtPPCJSON(strJsonObjectTreasury);
+//            mPresenter.closeLoading();
             call.enqueue(new Callback<CreateDariaftPardakhtPPCJSONResult>()
             {
                 @Override
@@ -1055,17 +700,16 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
                             CreateDariaftPardakhtPPCJSONResult result = response.body();
                             if (result.getSuccess())
                             {
-                                DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
                                 darkhastFaktorDAO.updateSendedDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcDarkhastFaktor(), 1);
                                 dariaftPardakhtDarkhastFaktorPPCDAO.updateSendedDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcDarkhastFaktor(), 1);
                                 DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(mPresenter.getAppContext());
                                 dariaftPardakhtPPCDAO.updateSendedDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcDarkhastFaktor(), 1);
-                                mPresenter.onSuccessSendDariaftPardakht();
+                                mPresenter.onSuccess(R.string.successSendData);
                             }
                             else
                             {
                                 showErrorMessageOfSend(result.getMessage());
-                                setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), CLASS_NAME, "" , "sendDariaftPardakhtToServer" , "onResponse");
+                                setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TreasuryListModel", "" , "sendDariaftPardakhtToServer" , "onResponse");
                             }
                         }
                         else
@@ -1075,14 +719,14 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
                             {
                                 errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string() ;//+ "\n" + "can't send this log : " + logMessage;
                             }
-                            setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, CLASS_NAME, "" , "sendDariaftPardakhtToServer" , "onResponse");
+                            setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TreasuryListModel", "" , "sendDariaftPardakhtToServer" , "onResponse");
                             mPresenter.onError(R.string.errorOperation);
                         }
                     }
                     catch (Exception exception)
                     {
                         exception.printStackTrace();
-                        setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), CLASS_NAME, "" , "sendDariaftPardakhtToServer" , "onResponse");
+                        setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TreasuryListModel", "" , "sendDariaftPardakhtToServer" , "onResponse");
                         mPresenter.onError(R.string.errorOperation);
                     }
                 }
@@ -1090,7 +734,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
                 @Override
                 public void onFailure(Call<CreateDariaftPardakhtPPCJSONResult> call, Throwable t)
                 {
-                    setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), CLASS_NAME, "" , "sendDariaftPardakhtToServer" , "onFailure");
+                    setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TreasuryListModel", "" , "sendDariaftPardakhtToServer" , "onFailure");
                     mPresenter.onError(R.string.errorOperation);
                 }
             });
@@ -1099,7 +743,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
         catch (Exception e)
         {
             e.printStackTrace();
-            setLogToDB(Constants.LOG_EXCEPTION(), e.toString(), CLASS_NAME, "", "sendDariaftPardakhtToServer", "");
+            setLogToDB(Constants.LOG_EXCEPTION(), e.toString(), "TreasuryListModel", "", "sendDariaftPardakhtToServer", "");
         }
 
     }
@@ -2117,6 +1761,9 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             shared.putBoolean(shared.getHaveMojoodiGiri(), haveMojoodiGiri);
 
             //------------------------------------- MoshtaryGoroh..-------------------------------------
+            shared.putInt(shared.getCcGorohNoeMoshtary(), moshtary.getCcNoeMoshtary());
+            shared.putInt(shared.getCcGorohNoeSenf(), moshtary.getCcNoeSenf());
+
             NoeMoshtaryRialKharidDAO moshtaryRialKharidDAO = new NoeMoshtaryRialKharidDAO(mPresenter.getAppContext());
 
             long hadaghalMablaghKharid = moshtaryRialKharidDAO.getMablaghByccMoshtary(moshtary.getCcNoeMoshtary(), moshtary.getDarajeh());

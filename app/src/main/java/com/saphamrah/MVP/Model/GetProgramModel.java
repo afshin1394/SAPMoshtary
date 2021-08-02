@@ -5186,8 +5186,15 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
 
     private void getNoeVosolMoshtary(final int getProgramType , int ccMarkazSazmanForosh)
     {
+        String ccMarkazSazmanForoshSend = "";
+        DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
+        if (noeMasouliat == 4 || noeMasouliat == 5 ){
+            ccMarkazSazmanForoshSend = darkhastFaktorDAO.getCcMarkazSazmanForosh();
+        } else {
+            ccMarkazSazmanForoshSend = String.valueOf(ccMarkazSazmanForosh);
+        }
         final NoeVosolMoshtaryDAO noeVosolMoshtaryDAO = new NoeVosolMoshtaryDAO(mPresenter.getAppContext());
-        noeVosolMoshtaryDAO.fetchNoeVosolMoshtary(mPresenter.getAppContext(), activityNameForLog ,  ccMarkazSazmanForosh, new RetrofitResponse() {
+        noeVosolMoshtaryDAO.fetchNoeVosolMoshtary(mPresenter.getAppContext(), activityNameForLog ,  ccMarkazSazmanForoshSend,ccGorohs , new RetrofitResponse() {
             @Override
             public void onSuccess(final ArrayList arrayListData)
             {

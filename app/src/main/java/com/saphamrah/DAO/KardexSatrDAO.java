@@ -258,6 +258,34 @@ public class KardexSatrDAO
         return kardexSatrModel;
     }
 
+    public double getSumMablaghMarjoeeByCcKardex(long ccKardex)
+    {
+        double SumMablaghMarjoee=0;
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try
+        {
+            String query = "SELECT SUM(GheymatForosh * Tedad3) FROM kardexSatr WHERE ccKardex = " + ccKardex;
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    SumMablaghMarjoee = cursor.getDouble(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , KardexSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KardexSatrDAO" , "" , "getByCcKardex" , "");
+        }
+        return SumMablaghMarjoee;
+    }
+
    public int getCcKardexSatrForUpdateTedadMarjoeeForoshandeh(int ccElamMarjoeeSatr){
         int ccDarkhastSatr = 0;
 

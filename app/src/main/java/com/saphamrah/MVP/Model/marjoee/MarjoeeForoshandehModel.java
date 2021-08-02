@@ -80,16 +80,25 @@ import java.util.Date;
      * sabt marjoee foroshandeh
      */
     @Override
-    public void checkTaeidSabtMarjoee(ElamMarjoeeForoshandehModel entity  , long ccDarkhastFaktor, int ccElamMarjoeeSatr, int itemCount, int selectedCount, int position) {
+    public void checkTaeidSabtMarjoee(ElamMarjoeeForoshandehModel entity  , long ccDarkhastFaktor, int itemCount, int selectedCount, int position,boolean addMarjoee) {
         this.ccDarkhastFaktor = ccDarkhastFaktor;
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         tedadMarjoeeForInsert = selectedCount;
         insertKardexForoshandeh( entity, foroshandehMamorPakhshModel.getCcMarkazAnbar(), ccDarkhastFaktor);
         ccKardex =kardexDAO.findccKardexByccRefrence(Long.parseLong(entity.getCcDarkhastFaktor()));
         if(ccKardex > 0) {
-               insertKardexSatrForoshandeh(entity, ccKardex);
+              ccKardexSatr = insertKardexSatrForoshandeh(entity, ccKardex);
            }
-        insertUpdateDariaftPardakht(entity.getCcMoshtary(), entity.getNameMoshtary(), (tedadMarjoeeForInsert * entity.getGheymatForosh()) );
+        int tedad;
+
+        if (!addMarjoee){
+            tedad = entity.getTedad3();
+        }
+        else
+        {
+            tedad = tedadMarjoeeForInsert;
+        }
+        insertUpdateDariaftPardakht(entity, (tedad * entity.getGheymatForosh()));
 
        boolean updateTedadMarjoee = elamMarjoeeForoshandehDAO.updateTedadMarjoee(entity.getCcDarkhastFaktor() ,
                entity.getShomarehBach(),
@@ -98,26 +107,33 @@ import java.util.Date;
                entity.getGheymatMasrafKonandeh(),
                selectedCount);
 
-       if (updateTedadMarjoee){
-           mPresenter.onTaeidSabtMarjoee(selectedCount , position);
+       if (updateTedadMarjoee && !addMarjoee){
+          deleteMarjoee(ccKardexSatr,ccDarkhastFaktor,entity.getCcKalaCode(),selectedCount,position);
+       }else{
+          mPresenter.onTaeidSabtMarjoee(ccKardexSatr,selectedCount , position);
        }
     }
 
-    @Override
-    public void deleteMarjoee(long ccDarkhastFaktor ,int ccKalaCode) {
+    public void deleteMarjoee(int ccKardexSatr ,long ccDarkhastFaktor ,int ccKalaCode,int selectedCount,int position) {
 
         kardexSatrDAO.deleteByccKardexAndccKalaCode(ccKardex,ccKalaCode);
 
         int countKardexSatr = kardexSatrDAO.getByCcKardex(ccKardex).size();
 
-        if (countKardexSatr == 0)
-        kardexDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
+        if (countKardexSatr == 0) {
+            kardexDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
+            dariaftPardakhtPPCDAO.deleteMarjoeeForoshandehByccDarkhastFaktor(ccDarkhastFaktor, Constants.VALUE_MARJOEE());
+        }
 
-        dariaftPardakhtPPCDAO.deleteMarjoeeForoshandehByccDarkhastFaktor(ccDarkhastFaktor);
+        dariaftPardakhtDarkhastFaktorPPCDAO.deleteMarjoeeForoshandehByccDarkhastFaktor(ccKardexSatr,ccDarkhastFaktor,Constants.VALUE_MARJOEE());
 
-        dariaftPardakhtDarkhastFaktorPPCDAO.deleteMarjoeeForoshandehByccDarkhastFaktor(ccDarkhastFaktor);
+
 
         darkhastFaktorDAO.updateMarjoee(ccDarkhastFaktor, 0);
+
+        mPresenter.onTaeidSabtMarjoee(ccKardexSatr,selectedCount , position);
+
+
 
     }
 
@@ -169,7 +185,7 @@ import java.util.Date;
     * @param entity
     * @param ccKardex
     */
-   private void insertKardexSatrForoshandeh(ElamMarjoeeForoshandehModel entity, long ccKardex)
+   private int insertKardexSatrForoshandeh(ElamMarjoeeForoshandehModel entity, long ccKardex)
    {
        KardexSatrModel kardexSatr= new KardexSatrModel();
        int mamorPakhash = foroshandehMamorPakhshDAO.getIsSelect().getCcMamorPakhsh();
@@ -209,22 +225,27 @@ import java.util.Date;
        {
            throw new RuntimeException(e);
        }
+       return ccKardexSatr;
    }
 
    /**
     * insert update daryaft pardakht
-    * @param ccMoshtary
-    * @param NameMoshtary
+
     * @param Mablagh
     * @return
     */
-   private long insertUpdateDariaftPardakht(int ccMoshtary, String NameMoshtary, double Mablagh)
+   private long insertUpdateDariaftPardakht(ElamMarjoeeForoshandehModel entity, double Mablagh)
    {
+       int ccMoshtary = entity.getCcMoshtary();
+       String nameMoshtary = entity.getNameMoshtary();
+       String ccDarkhastFaktor = entity.getCcDarkhastFaktor();
+
        DariaftPardakhtPPCModel dariaftPardakhtPPC= new DariaftPardakhtPPCModel();
        DariaftPardakhtPPCDAO dariaftPardakhtDAO= new DariaftPardakhtPPCDAO(BaseApplication.getContext());
        long ccDariaftPardakht;
        try
        {
+           //cccKardex ccDarkhastFaktor
            int CodeNoeVosol  = 0;
            CodeNoeVosol = Integer.parseInt(Constants.VALUE_MARJOEE());
            dariaftPardakhtPPC = dariaftPardakhtDAO.SetForInsert_DariaftPardakhtPPC( 0,
@@ -232,7 +253,7 @@ import java.util.Date;
                    "مرجوعی",
                    0,
                    "",
-                   NameMoshtary,
+                   nameMoshtary,
                    0,
                    "",
                    "",
@@ -245,16 +266,23 @@ import java.util.Date;
                    0,
                    ccMoshtary,
                    0,
-                   ccKardex,
+                   Long.parseLong(ccDarkhastFaktor),
                    0,
                    null,
                    0,
                    CodeNoeVosol);
+
+
+           //ccKardex
            ccDariaftPardakht = dariaftPardakhtDAO.getMarjoeeByccMoshtary(ccMoshtary ,Constants.VALUE_MARJOEE());
            if(ccDariaftPardakht ==0)
                ccDariaftPardakht = dariaftPardakhtDAO.insert(dariaftPardakhtPPC);
-           else
-               dariaftPardakhtDAO.updateMablaghMarjoee(ccDariaftPardakht,Mablagh);
+           else {
+               DariaftPardakhtPPCModel dariaftPardakhtPPCModel=dariaftPardakhtDAO.getByccDariaftPardakht(ccDariaftPardakht);
+               double finalMablagh = dariaftPardakhtPPCModel.getMablagh() - Mablagh;
+               dariaftPardakhtDAO.updateMablaghMarjoee(ccDariaftPardakht, finalMablagh);
+
+           }
 
            insertDaryaftPardakhtDarkhastFaktor(BaseApplication.getContext(), ccDariaftPardakht);
        }

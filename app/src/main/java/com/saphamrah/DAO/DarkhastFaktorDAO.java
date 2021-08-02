@@ -751,6 +751,76 @@ public class DarkhastFaktorDAO
         return tarikhDarkhast;
     }
 
+    public String getCcMarkazSazmanForosh()
+    {
+        String ccMarkazSazmanForosh = "-1";
+        try
+        {
+            String query = "select Distinct ccMarkazSazmanForosh from darkhastFaktor";
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query,null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast())
+                    {
+                        ccMarkazSazmanForosh += "," + cursor.getString(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ccMarkazSazmanForosh()));
+                        cursor.moveToNext();
+                    }
+
+                    ccMarkazSazmanForosh = cursor.getString(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "getCcMarkazSazmanForosh" , "");
+        }
+        return ccMarkazSazmanForosh;
+    }
+
+    public String getCcGorohs()
+    {
+        String ccGorohs = "-1";
+        try
+        {
+            String query = "select Distinct ccNoeMoshtary from darkhastFaktor";
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query,null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast())
+                    {
+                        ccGorohs += "," + cursor.getString(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ccNoeMoshtary()));
+                        cursor.moveToNext();
+                    }
+
+                    ccGorohs = cursor.getString(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "getCcMarkazSazmanForosh" , "");
+        }
+        return ccGorohs;
+    }
+
     public ArrayList<DarkhastFaktorModel> getByccMoshtary(long ccMoshtary)
     {
         ArrayList<DarkhastFaktorModel> darkhastFaktorModels = new ArrayList<>();
@@ -852,7 +922,7 @@ public class DarkhastFaktorDAO
         long mablaghMandeh = -1;
         try
         {
-            String query = "select " + DarkhastFaktorModel.COLUMN_MablaghMandeh() + " from " + DarkhastFaktorModel.TableName();
+            String query = "select MablaghMandeh from DarkhastFaktor where ccDarkhastFaktor = " + ccDarkhastFaktor;
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)

@@ -100,8 +100,8 @@ public class MarjoeeForoshandehFragment extends Fragment implements MarjoeeForos
                 showEditCountmAlert(elamMarjoeeForoshandehModel.getCcElamMarjoeeSatr(), elamMarjoeeForoshandehModel.getNameKala(), elamMarjoeeForoshandehModel.getTedad3(), position);
             } else if (Constants.DELETE() == operation) {
                 elamMarjoeeForoshandehModelCheckTaeidSabt = elamMarjoeeForoshandehModel;
-                mPresenter.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt, ccDarkhastFaktor, elamMarjoeeForoshandehModel.getCcElamMarjoeeSatr(), 0, 0, position);
-                mPresenter.deleteMarjoee(ccDarkhastFaktor,elamMarjoeeForoshandehModel.getCcKalaCode());
+                mPresenter.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt, ccDarkhastFaktor, 0, 0, position,false);
+
             }
 
 
@@ -117,7 +117,7 @@ public class MarjoeeForoshandehFragment extends Fragment implements MarjoeeForos
     }
 
     @Override
-    public void onTaeidSabtMarjoee(int selectedCount, int position) {
+    public void onTaeidSabtMarjoee(int ccKardexSatr,int selectedCount, int position) {
         elamMarjoeeForoshandehModelsAdpater.get(position).setExtraProp_TedadMarjoee(selectedCount);
         adapter.notifyItemChanged(position);
     }
@@ -186,7 +186,7 @@ public class MarjoeeForoshandehFragment extends Fragment implements MarjoeeForos
                         } else {
                             if (selectedCount > 0 && selectedCount <= elamMarjoeeForoshandehModelsAdpater.get(position).getTedad3()) {
 
-                                mPresenter.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt, ccDarkhastFaktor, ccElamMarjoeeSatr, itemCount, selectedCount, position);
+                                mPresenter.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt, ccDarkhastFaktor, itemCount, selectedCount, position,true);
                                 show.dismiss();
 
 

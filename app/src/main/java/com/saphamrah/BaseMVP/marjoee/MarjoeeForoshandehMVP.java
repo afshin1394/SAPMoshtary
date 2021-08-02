@@ -13,7 +13,7 @@ public interface MarjoeeForoshandehMVP
         void showToast(int resId, int messageType, int duration);
         void onGetMarjoee(ArrayList<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModels);
         void onGetForoshandehMamorPakhshInfo(int noeMasouliat , int noeSabtMarjoee);
-        void onTaeidSabtMarjoee(int selectedCount, int position);
+        void onTaeidSabtMarjoee(int ccKardexSatr,int selectedCount, int position);
     }
 
 
@@ -23,8 +23,8 @@ public interface MarjoeeForoshandehMVP
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void getMarjoee(long ccDarkhastFaktor);
         void getForoshandehMamorPakhshInfo();
-        void checkTaeidSabtMarjoee( ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,long ccDarkhastFaktor, int ccElamMarjoeeSatr, int itemCount, int selectedCount , int position);
-        void deleteMarjoee(long ccDarkhastFaktor,int ccKalaCode);
+        void checkTaeidSabtMarjoee(ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,long ccDarkhastFaktor, int itemCount, int selectedCount , int position,boolean addMarjoee);
+//        void deleteMarjoee(long ccDarkhastFaktor,int ccKalaCode);
     }
 
 
@@ -32,7 +32,7 @@ public interface MarjoeeForoshandehMVP
     {
         void onGetMarjoee(ArrayList<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModels);
         void onGetForoshandehMamorPakhshInfo(int noeMasouliat , int noeSabtMarjoee);
-        void onTaeidSabtMarjoee(int selectedCount, int position);
+        void onTaeidSabtMarjoee(int ccKardexSatr,int selectedCount, int position);
     }
 
 
@@ -41,8 +41,8 @@ public interface MarjoeeForoshandehMVP
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void getMarjoee(long ccDarkhastFaktor);
         void getForoshandehMamorPakhshInfo();
-        void checkTaeidSabtMarjoee( ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,long ccDarkhastFaktor, int ccElamMarjoeeSatr, int itemCount, int selectedCount, int position);
-        void deleteMarjoee(long ccDarkhastFaktor,int ccKalaCode);
+        void checkTaeidSabtMarjoee( ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,long ccDarkhastFaktor, int itemCount, int selectedCount, int position,boolean insert);
+//        void deleteMarjoee(long ccDarkhastFaktor,int ccKalaCode,int selectedCount,int position);
     }
 
 }
