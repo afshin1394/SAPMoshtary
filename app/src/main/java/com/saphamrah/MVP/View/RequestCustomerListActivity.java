@@ -537,6 +537,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
     @Override
     public void onDestroy() {
         super.onDestroy();
-        new PubFunc().new LocationProvider().stopLocationProvider();
+        mPresenter.onDestroy(false);
+
     }
 }

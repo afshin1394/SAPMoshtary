@@ -793,5 +793,9 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
         startActivity(i);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestroy(false);
+    }
 }

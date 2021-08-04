@@ -1084,5 +1084,6 @@
     <string name="errorSendMarjoeeDubliacte">مرجوعی قبلا ارسال گردیده است . به واحد انبار مراجعه نمایید</string>
     <string name="selectCamera">دوربین</string>
     <string name="selectGallery">گالری</string>
-
+    <string name="undefined">نامشخص</string>
+    <string name="unAvailable">ناموجود</string>
 </resources>

@@ -64,6 +64,7 @@ import com.saphamrah.Model.MojoodiGiriModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.MoshtaryMorajehShodehRoozModel;
 import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.Network.RxNetwork.RxHttpRequest;
 import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
@@ -78,6 +79,8 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.APIServicePost;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.RxService.APIServiceRxjava;
+import com.saphamrah.WebService.RxService.Response.DataResponse.GetMandehMojodyMashinResponse;
 import com.saphamrah.WebService.ServiceResponse.ControlInsertFaktorResult;
 import com.saphamrah.WebService.ServiceResponse.CreateAdamDarkhastResult;
 import com.saphamrah.WebService.ServiceResponse.CreateBarkhordForoshandehBaMoshtaryResult;
@@ -2616,78 +2619,85 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
          * **/
         Log.i("checkMandehMojodi", "noeMasouliat: " + noeMasouliat);
         if (noeMasouliat == 1 || noeMasouliat == 3  || noeMasouliat == 6 || noeMasouliat ==8) {
-
-            mandehMojodyMashinDAO.fetchMandehMojodyMashin(mPresenter.getAppContext(), TemporaryRequestsListActivity.class.getSimpleName(), ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh,ccKalaCodes, ccSazmanForoshFaktor, new RxResponseHandler() {
-                @SuppressLint("LongLogTag")
-                @Override
-                public void onSuccess(ArrayList response) {
-                    ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels = ((ArrayList<MandehMojodyMashinModel>) response);
-                    for (MandehMojodyMashinModel mandehMojodyMashinModel : mandehMojodyMashinModels)
-                    {
-                        Log.i("MandehMojodyMashinModel", "onSuccess: " + mandehMojodyMashinModel.toString());
-                    }
-
-
-                    final Set<String> allContradictions = new HashSet<>();
-
-//                    Message message = searchForContradictions(mandehMojodyMashinModels, darkhastFaktorSatrModels);
-                    checkContradicts(mandehMojodyMashinModels, darkhastFaktorSatrModels, new Observer<HashMap<Integer,String>>() {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+            APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
+            apiServiceRxjava.getMandehMojodyMashin( ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh,ccKalaCodes, ccSazmanForoshFaktor)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<Response<GetMandehMojodyMashinResponse>>() {
                         @Override
-                        public void onSubscribe(@NonNull Disposable d)
-                        {
-                            mPresenter.bindDisposable(d);
+                        public void onSubscribe( Disposable d) {
+
                         }
 
                         @Override
-                        public void onNext(@NonNull HashMap<Integer,String> contradicts)
-                        {
+                        public void onNext( Response<GetMandehMojodyMashinResponse> getMandehMojodyMashinResponseResponse) {
+                            ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels = new ArrayList<>();
 
+                            final Set<String> allContradictions = new HashSet<>();
 
-                            if (contradicts != null)
-                                if (contradicts.size() > 0)
-                                    for (Integer key : contradicts.keySet()) {
-
-                                        allContradictions.add( contradicts.get(key));
-                                    }
-
-
-                            Log.i("contradictssss", "onNext: "+contradicts);
-                        }
-
-                        @Override
-                        public void onError(@NonNull Throwable e)
-                        {
-                            mPresenter.onErrorSendRequest(R.string.errorCheckMoghayerat, "");
-                        }
-
-                        @Override
-                        public void onComplete()
-                        {
-
-
-                            switch (allContradictions.size()) {
-                                ////**هیچ مغایرتی  نداریم**
-                                case 0:
-                                    sendTempFaktor(customerDarkhastFaktorModel, position);
-                                    break;
-                                default:
-                                    String name="";
-                                    for(String nameKala : allContradictions){
-                                       name += " - " + nameKala ;
+                            checkContradicts(mandehMojodyMashinModels, darkhastFaktorSatrModels, new Observer<HashMap<Integer,String>>() {
+                                @Override
+                                public void onSubscribe(@NonNull Disposable d)
+                                {
+                                    mPresenter.bindDisposable(d);
                                 }
-                                    mPresenter.onErrorSendRequest(R.string.errormoghayeratdarmojodiKala, name);
-                                    break;
-                            }
+
+                                @Override
+                                public void onNext(@NonNull HashMap<Integer,String> contradicts)
+                                {
+
+
+                                    if (contradicts != null)
+                                        if (contradicts.size() > 0)
+                                            for (Integer key : contradicts.keySet()) {
+
+                                                allContradictions.add( contradicts.get(key));
+                                            }
+
+
+                                    Log.i("contradicts", "onNext: "+contradicts);
+                                }
+
+                                @Override
+                                public void onError(@NonNull Throwable e)
+                                {
+                                    mPresenter.onErrorSendRequest(R.string.errorCheckMoghayerat, "");
+                                }
+
+                                @Override
+                                public void onComplete()
+                                {
+
+
+                                    switch (allContradictions.size()) {
+                                        ////**هیچ مغایرتی  نداریم**
+                                        case 0:
+                                            sendTempFaktor(customerDarkhastFaktorModel, position);
+                                            break;
+                                        default:
+                                            String name="";
+                                            for(String nameKala : allContradictions){
+                                                name += " - " + nameKala ;
+                                            }
+                                            mPresenter.onErrorSendRequest(R.string.errormoghayeratdarmojodiKala, name);
+                                            break;
+                                    }
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError( Throwable e) {
+                            mPresenter.onErrorSendRequest(R.string.errorSendData, "");
+                        }
+
+                        @Override
+                        public void onComplete() {
+
                         }
                     });
-                }
 
-                @Override
-                public void onFailed(String message, String type) {
-                    Log.i("fetchMandehMojodyMashin", "fail");
-                    mPresenter.onErrorSendRequest(R.string.errorSendData, "");
-                }
-            });
         } else {
             sendTempFaktor(customerDarkhastFaktorModel, position);
         }

@@ -7,6 +7,7 @@ import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxHttpErrorHandler;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.RxService.APIServiceRxjava;
 import com.saphamrah.WebService.RxService.Response.BaseResponse;
@@ -165,7 +166,7 @@ public class RxHttpRequest {
         else {
 
             observable
-                    .compose(this.parseHttpErrors(CLASS_NAME, ACTIVITY_NAME, FUNCTION))
+                    .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, ACTIVITY_NAME, FUNCTION, FUNCTION))
                     .subscribeOn(Schedulers.io())
                     .retry(2)
                     .observeOn(AndroidSchedulers.mainThread())

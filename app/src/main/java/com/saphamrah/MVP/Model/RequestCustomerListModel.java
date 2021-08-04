@@ -58,19 +58,28 @@ import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.RptForoshModel;
 import com.saphamrah.Model.RptMandehdarModel;
 import com.saphamrah.Model.RptSanadModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
+import com.saphamrah.Network.RxNetwork.RxHttpRequest;
 import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.FakeLocation;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.Repository.KalaMojodiRepository;
+import com.saphamrah.Repository.MandehMojodyMashinRepository;
 import com.saphamrah.Shared.GetProgramShared;
 import com.saphamrah.Shared.LastOlaviatMoshtaryShared;
 import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.Shared.UserTypeShared;
 import com.saphamrah.UIModel.CustomerAddressModel;
+import com.saphamrah.UIModel.KalaMojodiGiriModel;
 import com.saphamrah.UIModel.OlaviatMorajehModel;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxHttpErrorHandler;
+import com.saphamrah.WebService.RxService.APIServiceRxjava;
+import com.saphamrah.WebService.RxService.Response.DataResponse.GetMandehMojodyMashinResponse;
+import com.saphamrah.WebService.ServiceResponse.GetMojodyAnbarResult;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
@@ -78,18 +87,31 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.mail.internet.ParameterList;
 
-public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
-{
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
+
+
+public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps {
 
     private RequestCustomerListMVP.RequiredPresenterOps mPresenter;
     private final static String ACTIVITY_NAME_FOR_LOG = "RequestCustomerListActivity";
     private final static String CLASS_NAME = "RequestCustomerListModel";
     UserTypeShared userTypeShared = new UserTypeShared(BaseApplication.getContext());
+    static CompositeDisposable compositeDisposable;
 
     public RequestCustomerListModel(RequestCustomerListMVP.RequiredPresenterOps mPresenter)
     {
         this.mPresenter = mPresenter;
+        compositeDisposable = new CompositeDisposable();
+
     }
 
     @Override
@@ -1399,84 +1421,133 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             /**fetch all kala with -1
              * if you want to fetch a specific list of kala append their cckala in a string
              * **/
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(weakReferenceContext.get());
 
+            APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
 
-            mandehMojodyMashinDAO.fetchMandehMojodyMashin(weakReferenceContext.get(), ACTIVITY_NAME_FOR_LOG, ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh , ccKalaCode , ccSazmanForosh, new RxResponseHandler() {
-                @Override
-                public void onSuccess(ArrayList arrayListData) {
-
-                    new Thread(new Runnable() {
+            String finalCcForoshandeh = ccForoshandeh;
+            apiServiceRxjava.getMandehMojodyMashin(ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh, ccKalaCode, ccSazmanForosh)
+                    .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, "RequestCustomerListActivity", "getAllKalaApis", "getMojodyAnbar"))
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new Observer<Response<GetMandehMojodyMashinResponse>>() {
                         @Override
-                        public void run() {
-                            boolean deleteResult = mandehMojodyMashinDAO.deleteAll();
-                            boolean insertResult = mandehMojodyMashinDAO.insertGroup(arrayListData);
-                            KalaMojodiDAO kalaMojodiDAO = new KalaMojodiDAO(weakReferenceContext.get());
-                            kalaMojodiDAO.deleteAll();
-                            ArrayList<KalaMojodiModel> kalaMojodiModels = new ArrayList<>();
-                            if (arrayListData.size() > 0)
-                            {
-                                String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
-                                for (int i=0; i<arrayListData.size() ; i++)
-                                {
-                                    MandehMojodyMashinModel mandehMojodyMashinModel = (MandehMojodyMashinModel)arrayListData.get(i);
-                                    KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
-
-                                    kalaMojodiModel.setCcKalaCode(mandehMojodyMashinModel.getCcKalaCode());
-                                    kalaMojodiModel.setCcForoshandeh(finalCCForoshandeh);
-                                    kalaMojodiModel.setTedad(mandehMojodyMashinModel.getMojody());
-                                    kalaMojodiModel.setCcDarkhastFaktor(0);
-                                    kalaMojodiModel.setTarikhDarkhast(currentDate);
-                                    kalaMojodiModel.setShomarehBach(mandehMojodyMashinModel.getShomarehBach());
-                                    kalaMojodiModel.setTarikhTolid(mandehMojodyMashinModel.getTarikhTolid());
-                                    kalaMojodiModel.setGheymatMasrafKonandeh(mandehMojodyMashinModel.getGheymatMasrafKonandeh());
-                                    kalaMojodiModel.setGheymatForosh(mandehMojodyMashinModel.getGheymatForosh());
-                                    kalaMojodiModel.setCcTaminKonandeh(mandehMojodyMashinModel.getCcTaminKonandeh());
-                                    kalaMojodiModel.setZamaneSabt(currentDate);
-                                    kalaMojodiModel.setIsAdamForosh(mandehMojodyMashinModel.getIsAdamForosh());
-                                    kalaMojodiModel.setMax_Mojody(mandehMojodyMashinModel.getMaxMojody());
-                                    kalaMojodiModel.setMax_MojodyByShomarehBach(mandehMojodyMashinModel.getMax_MojodyByShomarehBach());
-                                    kalaMojodiModel.setCcAfrad(finalCCAfrad);
-                                    Log.d("RequestCustomerList","ccForoshandeh:"+finalCCForoshandeh+" , ccAfrad:"+finalCCAfrad);
-
-                                    kalaMojodiModels.add(kalaMojodiModel);
-                                }
-                                insertResult = kalaMojodiDAO.insertGroup(kalaMojodiModels);
-                                if (deleteResult && insertResult)
-                                {
-                                /*Message message = new Message();
-                                message.arg1 = 1;
-                                handler.sendMessage(message);*/
-                                    PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(new PubFunc.ConcurrencyEvents() {
-                                        @Override
-                                        public void uiThreadIsReady() {
-                                            publishProgress(1);
-
-                                        }
-                                    });
-                                }
-                                else
-                                {
-
-                                    PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(new PubFunc.ConcurrencyEvents() {
-                                        @Override
-                                        public void uiThreadIsReady() {
-                                            publishProgress(-4);
-
-                                        }
-                                    });
-
-                                }
-                            }
+                        public void onSubscribe(Disposable d) {
+                            compositeDisposable.add(d);
                         }
-                    }).start();
+
+                        @Override
+                        public void onNext(Response<GetMandehMojodyMashinResponse> getMandehMojodyMashinResponseResponse) {
+                            updateMandehMojodiMashinTable(getMandehMojodyMashinResponseResponse.body(), finalCcForoshandeh, ccAfrad);
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.i("MandehMojodiOnline", "onError: ");
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            Log.i("MandehMojodiOnline", "onComplete: ");
+
+                        }
+                    });
+
+        }
+
+        private void updateMandehMojodiMashinTable(GetMandehMojodyMashinResponse body,String ccForoshandeh,String ccAfrad) {
+            if (body != null) {
+                MandehMojodyMashinRepository mandehMojodyMashinRepository = new MandehMojodyMashinRepository(weakReferenceContext.get());
+                Disposable disposable = mandehMojodyMashinRepository.deleteAll()
+                        .subscribe(deleteAll -> {
+                            if (deleteAll) {
+
+                                Disposable insertGroup = mandehMojodyMashinRepository.insertGroup(body.getMandehMojodyMashinModels())
+                                        .subscribe(new Consumer<Boolean>() {
+                                            @Override
+                                            public void accept(Boolean insertGroup) throws Exception {
+                                                if (insertGroup) {
+                                                    updateKalaMojodiTable(body.getMandehMojodyMashinModels(), Integer.parseInt(ccForoshandeh), Integer.parseInt(ccAfrad));
+                                                } else {
+                                                    publishProgress(-4);
+                                                }
+                                            }
+                                        }, throwable -> publishProgress(-4));
+                                compositeDisposable.add(insertGroup);
+                            }
+                        }, throwable -> publishProgress(-4));
+                compositeDisposable.add(disposable);
 
 
-                }
-                @Override
-                public void onFailed(String message, String type) {
-                    publishProgress(-4);
-                }
-            });
+            }else{
+                publishProgress(-4);
+            }
+        }
+
+        private void updateKalaMojodiTable(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels,int ccForoshandeh,int ccAfrad) {
+            String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
+            ArrayList<KalaMojodiModel> kalaMojodiModels = new ArrayList<>();
+            Observable.fromIterable(mandehMojodyMashinModels)
+                    .subscribeOn(Schedulers.io())
+                    .map(mandehMojodyMashinModel -> {
+
+                                KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
+
+                                kalaMojodiModel.setCcKalaCode(mandehMojodyMashinModel.getCcKalaCode());
+                                kalaMojodiModel.setCcForoshandeh( ccForoshandeh);
+                                kalaMojodiModel.setTedad(mandehMojodyMashinModel.getMojody());
+                                kalaMojodiModel.setCcDarkhastFaktor(0);
+                                kalaMojodiModel.setTarikhDarkhast(currentDate);
+                                kalaMojodiModel.setShomarehBach(mandehMojodyMashinModel.getShomarehBach());
+                                kalaMojodiModel.setTarikhTolid(mandehMojodyMashinModel.getTarikhTolid());
+                                kalaMojodiModel.setGheymatMasrafKonandeh(mandehMojodyMashinModel.getGheymatMasrafKonandeh());
+                                kalaMojodiModel.setGheymatForosh(mandehMojodyMashinModel.getGheymatForosh());
+                                kalaMojodiModel.setCcTaminKonandeh(mandehMojodyMashinModel.getCcTaminKonandeh());
+                                kalaMojodiModel.setZamaneSabt(currentDate);
+                                kalaMojodiModel.setIsAdamForosh(mandehMojodyMashinModel.getIsAdamForosh());
+                                kalaMojodiModel.setMax_Mojody(mandehMojodyMashinModel.getMaxMojody());
+                                kalaMojodiModel.setMax_MojodyByShomarehBach(mandehMojodyMashinModel.getMax_MojodyByShomarehBach());
+                                kalaMojodiModel.setCcAfrad(ccAfrad);
+                                return kalaMojodiModel;
+                            }
+
+
+                            ).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<KalaMojodiModel>() {
+                        @Override
+                        public void onSubscribe( Disposable d) {
+                            compositeDisposable.add(d);
+
+                        }
+
+                        @Override
+                        public void onNext( KalaMojodiModel kalaMojodiModel) {
+                           kalaMojodiModels.add(kalaMojodiModel);
+                        }
+
+                        @Override
+                        public void onError( Throwable e) {
+                            Log.i("MandehMojodiOnline", "onError: ");
+                           publishProgress(-4);
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            Disposable insertGroup = new KalaMojodiRepository(weakReferenceContext.get())
+                                    .insertGroup(kalaMojodiModels)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(inserted -> {
+                                        if (inserted){
+                                             publishProgress(1);
+                                        }else{
+                                              publishProgress(4);
+                                        }
+                                    }, throwable -> publishProgress(-4));
+                            compositeDisposable.add(insertGroup);
+                        }
+                    });
+
         }
 
         private boolean checkPriority(int customerPriority)

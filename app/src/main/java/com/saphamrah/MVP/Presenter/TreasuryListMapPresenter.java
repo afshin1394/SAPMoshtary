@@ -164,7 +164,7 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
     @Override
     public void onDestroy(boolean isChangingConfig)
     {
-
+      mModel.onDestroy();
     }
 
     @Override

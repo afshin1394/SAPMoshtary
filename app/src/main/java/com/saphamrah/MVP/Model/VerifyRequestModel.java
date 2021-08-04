@@ -658,6 +658,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor() , -1);
+        int ccMoshtary = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary(),-1);
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
@@ -730,10 +731,10 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             ccForoshandeh = 0;
             insertGPSDataMashinPPC(locationProvider, ccDarkhastFaktor, ccMamorPakhsh, foroshandehMamorPakhshModel, selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary() , 0), currentDate);
         }
-        insertGPSDataPPC(locationProvider, foroshandehMamorPakhshModel.getCcAfrad(), ccForoshandeh, ccMamorPakhsh, ccMasirRooz);
+        insertGPSDataPPC(locationProvider, foroshandehMamorPakhshModel.getCcAfrad(), ccForoshandeh, ccMamorPakhsh, ccMasirRooz, ccDarkhastFaktor, ccMoshtary);
     }
 
-    private void insertGPSDataPPC(PubFunc.LocationProvider locationProvider, int ccAfrad, int ccForoshandeh, int ccMamorPakhsh, int ccMasirRooz)
+    private void insertGPSDataPPC(PubFunc.LocationProvider locationProvider, int ccAfrad, int ccForoshandeh, int ccMamorPakhsh, int ccMasirRooz, long ccDarkhastFaktor, int ccMoshtary)
     {
         GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
         GPSDataModel gpsDataModel = new GPSDataModel();
@@ -751,6 +752,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         gpsDataModel.setCcAfrad(ccAfrad);
         gpsDataModel.setDistance(0D);
         gpsDataModel.setTarikh(new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(Calendar.getInstance().getTime()));
+        gpsDataModel.setCcDarkhastFaktor(ccDarkhastFaktor);
+        gpsDataModel.setCcMoshtary(ccMoshtary);
         gpsDataPpcDAO.insert(gpsDataModel);
     }
 

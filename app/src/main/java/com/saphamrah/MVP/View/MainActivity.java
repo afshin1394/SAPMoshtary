@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements MainMVP.RequiredV
 
         Calligrapher calligrapher = new Calligrapher(this);
         calligrapher.setFont(this, getResources().getString(R.string.fontPath), true);
-
         startMVPOps();
 
         Toolbar toolbar = findViewById(R.id.toolbar);

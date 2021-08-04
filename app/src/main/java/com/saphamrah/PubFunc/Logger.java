@@ -46,7 +46,28 @@ public  class Logger {
             return logPPCDAO.insert(logModel);
         }
 
-
+    public boolean insertLogToDBGlobal(Context context, int logType, String logMessage, String logClass, String logActivity, String logFunctionParent, String logFunctionChild,String lineOfCode,String stackTrace) {
+        int ccAfrad;
+        Log.d("insertLogToDB", "imei:" + new PubFunc().new DeviceInfo().getIMEI(context) + "-" + logType + "-" + logMessage + "-" + new PubFunc().new DeviceInfo().getAPILevel(context));
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(context);
+        LogPPCDAO logPPCDAO = new LogPPCDAO(context);
+        ccAfrad = foroshandehMamorPakhshDAO.getCCAfrad();
+        LogPPCModel logModel = new LogPPCModel();
+        logModel.setCcAfrad(ccAfrad);
+        logModel.setIMEI(new PubFunc().new DeviceInfo().getIMEI(context));
+        logModel.setLogType(logType);
+        logModel.setLogMessage(logMessage);
+        logModel.setLogClass(logClass);
+        logModel.setLogActivity(logActivity);
+        logModel.setLogFunctionParent(logFunctionParent);
+        logModel.setLogFunctionChild(logFunctionChild);
+        logModel.setLogDate(new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(Calendar.getInstance().getTime()));
+        logModel.setExtraProp_IsOld(0);
+        logModel.setAndroidAPI(new PubFunc().new DeviceInfo().getAPILevel(context));
+        logModel.setLineOfCode(lineOfCode);
+        logModel.setStackTrace(stackTrace);
+        return logPPCDAO.insertGlobal(logModel);
+    }
 
 
         public boolean sendLogToServer(Context context, String logMessage, String logClass, String logActivity, String logFunctionParent, String logFunctionChild) {

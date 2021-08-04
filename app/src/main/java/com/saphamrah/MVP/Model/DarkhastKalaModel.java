@@ -966,6 +966,8 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
         gpsDataModel.setExtraProp_IsSend(0);
         gpsDataModel.setDistance(0D);
         gpsDataModel.setCcMamorPakhsh(ccMamorPakhsh);
+        gpsDataModel.setCcMoshtary(ccMoshtary);
+
         return gpsDataDAO.insert(gpsDataModel);
     }
 

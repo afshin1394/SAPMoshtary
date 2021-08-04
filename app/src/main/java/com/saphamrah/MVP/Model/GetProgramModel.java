@@ -2878,39 +2878,35 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
         }
 
         Log.d("GetProgram","Online: " + anbarakAfrad + " - " + ccForoshandeh + " - " + ccMamorPakhsh + " - " + ccKalaCode + " - " + ccSazmanForosh);
-        mandehMojodyMashinDAO.fetchMandehMojodyMashin(mPresenter.getAppContext(), activityNameForLog, anbarakAfrad, ccForoshandeh, ccMamorPakhsh,ccKalaCode,ccSazmanForosh, new RxResponseHandler() {
-
+        mandehMojodyMashinDAO.fetchMandehMojodyMashin(mPresenter.getAppContext(), activityNameForLog, anbarakAfrad, ccForoshandeh, ccMamorPakhsh, new RetrofitResponse()
+        {
             @Override
-            public void onStart(Disposable disposable) {
-                super.onStart(disposable);
-            }
-
-            @Override
-            public void onSuccess(final ArrayList arrayListData) {
-                Thread thread = new Thread() {
+            public void onSuccess(final ArrayList arrayListData)
+            {
+                Thread thread = new Thread()
+                {
                     @Override
-                    public void run() {
+                    public void run()
+                    {
                         boolean deleteResult = mandehMojodyMashinDAO.deleteAll();
                         boolean insertResult = mandehMojodyMashinDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult) {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                        if (deleteResult && insertResult)
+                        {
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
                             getKalaMojodi(getProgramType);
-                        } else {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+                        }
+                        else
+                        {
+                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
                         }
                     }
                 };
                 thread.start();
             }
-
             @Override
-            public void onFailed(String type, String error) {
-                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
-            }
-
-            @Override
-            public void onComplete() {
-                super.onComplete();
+            public void onFailed(String type, String error)
+            {
+                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
             }
         });
     }

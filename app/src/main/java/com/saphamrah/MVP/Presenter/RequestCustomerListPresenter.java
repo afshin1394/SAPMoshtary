@@ -146,7 +146,7 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
     @Override
     public void onDestroy(boolean isChangingConfig)
     {
-
+      mModel.onDestroy();
     }
 
     @Override

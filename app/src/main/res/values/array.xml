@@ -348,6 +348,7 @@
         <item>{\"name\":\"گروه مدت وصول\" , \"function\":\"getModatVosolGoroh\"}</item>
         <item>{\"name\":\"مدت وصول مرکز\" , \"function\":\"getModatVosolMarkaz\"}</item>
         <item>{\"name\":\"اطلاعات مسیر\" , \"function\":\"getMasirVaznHajmMashin\"}</item>
+        <item>{\"name\":\"اطلاعات نوع وصول\" , \"function\":\"getNoeVosolMoshtary\"}</item>
         <item>{\"name\":\"مشتری مراجعه شده\" , \"function\":\"getMoshtaryMorajeShodehRooz\"}</item>
     </string-array>
 

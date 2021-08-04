@@ -8,6 +8,7 @@ import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.CustomersListMVP;
 import com.saphamrah.DAO.AllMoshtaryForoshandehDAO;
 import com.saphamrah.DAO.BargashtyDAO;
+import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.MasirDAO;
 import com.saphamrah.DAO.MasirVaznHajmMashinDAO;
@@ -19,6 +20,7 @@ import com.saphamrah.DAO.MoshtaryAfradDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.DAO.MoshtaryEtebarSazmanForoshDAO;
 import com.saphamrah.DAO.MoshtaryMorajehShodehRoozDAO;
+import com.saphamrah.DAO.NoeVosolMoshtaryDAO;
 import com.saphamrah.Model.AllMoshtaryForoshandehModel;
 import com.saphamrah.Model.BargashtyModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
@@ -481,7 +483,8 @@ public class CustomersListModel implements CustomersListMVP.ModelOps
                         if (insertResult)
                         {
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            getMoshtaryMorajehShodeRooz();
+                            getNoeVosolMoshtary();
+
                         }
                     }
                 };
@@ -491,6 +494,40 @@ public class CustomersListModel implements CustomersListMVP.ModelOps
             public void onFailed(String type, String error)
             {
                 mPresenter.onFailedGetNewItem(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
+            }
+        });
+    }
+    private void getNoeVosolMoshtary()
+    {
+        final NoeVosolMoshtaryDAO noeVosolMoshtaryDAO = new NoeVosolMoshtaryDAO(mPresenter.getAppContext());
+        noeVosolMoshtaryDAO.fetchNoeVosolMoshtary(mPresenter.getAppContext(), "CustomersListActivity" ,  String.valueOf(ccMarkazSazmanForosh),ccGorohs , new RetrofitResponse() {
+            @Override
+            public void onSuccess(final ArrayList arrayListData)
+            {
+                Thread thread = new Thread()
+                {
+                    @Override
+                    public void run(){
+                        boolean deleteResult = noeVosolMoshtaryDAO.deleteAll();
+                        boolean insertResult = noeVosolMoshtaryDAO.insertGroup(arrayListData);
+                        if (deleteResult && insertResult)
+                        {
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
+                            getMoshtaryMorajehShodeRooz();
+
+                        }
+                        else
+                        {
+                            sendThreadMessage(Constants.BULK_INSERT_FAILED() ,++ itemCounter);
+                        }
+                    }
+                };
+                thread.start();
+            }
+            @Override
+            public void onFailed(String type, String error)
+            {
+                mPresenter.onFailedGetNewItem(itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
             }
         });
     }

@@ -936,6 +936,7 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        new PubFunc().new LocationProvider().stopLocationProvider();
+        mPresenter.onDestroy(false);
+
     }
 }

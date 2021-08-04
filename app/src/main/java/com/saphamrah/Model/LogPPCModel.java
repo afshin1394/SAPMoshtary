@@ -29,6 +29,9 @@ public class LogPPCModel
     private static final String COLUMN_LogDate = "LogDate";
     private static final String COLUMN_ExtraProp_IsOld = "ExtraProp_IsOld";
     private static final String COLUMN_AndroidAPI = "AndroidAPI";
+    private static final String COLUMN_LineOfCode = "LineOfCode";
+    private static final String COLUMN_StackTrace = "StackTrace";
+
 
 
     public static String TableName() {
@@ -70,8 +73,12 @@ public class LogPPCModel
     public static String COLUMN_AndroidAPI() {
         return COLUMN_AndroidAPI;
     }
-
-
+    public static String COLUMN_LineOfCode() {
+        return COLUMN_LineOfCode;
+    }
+    public static String COLUMN_StackTrace() {
+        return COLUMN_StackTrace;
+    }
 
     @SerializedName("ccLogPPC")
     @Expose
@@ -118,6 +125,14 @@ public class LogPPCModel
     @SerializedName("AndroidAPI")
     @Expose
     private int androidAPI;
+
+    @SerializedName("LineOfCode")
+    @Expose
+    private String lineOfCode;
+
+    @SerializedName("StackTrace")
+    @Expose
+    private String StackTrace;
 
 
     public int getCcLogPPC() {
@@ -217,6 +232,23 @@ public class LogPPCModel
     }
 
 
+    public String getLineOfCode() {
+        return lineOfCode;
+    }
+
+    public void setLineOfCode(String lineOfCode) {
+        this.lineOfCode = lineOfCode;
+    }
+
+
+    public String getStackTrace() {
+        return StackTrace;
+    }
+
+    public void setStackTrace(String stackTrace) {
+        StackTrace = stackTrace;
+    }
+
     public JSONObject toJsonObject(String deviceIP)
     {
         try
@@ -232,6 +264,9 @@ public class LogPPCModel
             jsonObject.put("LogFunctionChild" , logFunctionChild);
             jsonObject.put("LogDate" , logDate);
             jsonObject.put("AndroidAPI" , androidAPI);
+//            jsonObject.put("LineOfCode" , lineOfCode);
+//            jsonObject.put("StackTrace" , StackTrace);
+
             return jsonObject;
         }
         catch (Exception e)
@@ -254,18 +289,31 @@ public class LogPPCModel
         jsonObject.addProperty("LogFunctionChild" , logFunctionChild);
         jsonObject.addProperty("LogDate" , logDate);
         jsonObject.addProperty("AndroidAPI" , androidAPI);
+//        jsonObject.addProperty("LineOfCode" , lineOfCode);
+//        jsonObject.addProperty("StackTrace" , StackTrace);
         return jsonObject.toString();
     }
 
 
     @NonNull
     @Override
-    public String toString()
-    {
-        return  "ccLogPPC : " + ccLogPPC + " , ccAfrad : " + ccAfrad + " , IMEI : " + IMEI + " , logType : " + logType
-                + "\nlogMessage : " + logMessage + "\nlogClass : " + logClass + " , logActivity : " + logActivity
-                + " , functionParent : " + logFunctionParent + " , functionChild : " + logFunctionChild + " , date : " + logDate
-                + " , extraprop_isOld : " + extraProp_IsOld + " , androidAPI : " + androidAPI;
+    public String toString() {
+        return "LogPPCModel{" +
+                "ccLogPPC=" + ccLogPPC +
+                ", ccAfrad=" + ccAfrad +
+                ", IMEI='" + IMEI + '\'' +
+                ", logType=" + logType +
+                ", logMessage='" + logMessage + '\'' +
+                ", logClass='" + logClass + '\'' +
+                ", logActivity='" + logActivity + '\'' +
+                ", logFunctionParent='" + logFunctionParent + '\'' +
+                ", logFunctionChild='" + logFunctionChild + '\'' +
+                ", logDate='" + logDate + '\'' +
+                ", extraProp_IsOld=" + extraProp_IsOld +
+                ", androidAPI=" + androidAPI +
+                ", lineOfCode='" + lineOfCode + '\'' +
+                ", StackTrace='" + StackTrace + '\'' +
+                '}';
     }
 
 

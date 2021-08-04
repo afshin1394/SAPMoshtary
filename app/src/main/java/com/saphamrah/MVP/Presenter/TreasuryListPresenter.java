@@ -95,7 +95,7 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
 
     @Override
     public void onDestroy(boolean isChangingConfig) {
-
+        mModel.onDestroy();
     }
 
     @Override

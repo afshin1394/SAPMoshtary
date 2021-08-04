@@ -10948,6 +10948,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
     }
 
     private void getAnbarakMojodi(final int getProgramType, String anbarakAfrad, String ccForoshandeh, String ccMamorPakhsh) {
+        final int[] webCounter = {itemCounter};
         final MandehMojodyMashinDAO mandehMojodyMashinDAO = new MandehMojodyMashinDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
@@ -10972,41 +10973,76 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         }
 
         Log.d("GetProgram", "Online: " + anbarakAfrad + " - " + ccForoshandeh + " - " + ccMamorPakhsh + " - " + ccKalaCode + " - " + ccSazmanForosh);
-        mandehMojodyMashinDAO.fetchMandehMojodyMashin(mPresenter.getAppContext(), activityNameForLog, anbarakAfrad, ccForoshandeh, ccMamorPakhsh, ccKalaCode, ccSazmanForosh, new RxResponseHandler() {
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
 
-            @Override
-            public void onStart(Disposable disposable) {
-                super.onStart(disposable);
-            }
+        APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
 
-            @Override
-            public void onSuccess(final ArrayList arrayListData) {
-                Thread thread = new Thread() {
+        String finalCcForoshandeh = ccForoshandeh;
+        apiServiceRxjava.getMandehMojodyMashin(anbarakAfrad, ccForoshandeh, ccMamorPakhsh, ccKalaCode, ccSazmanForosh)
+                .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, "RequestCustomerListActivity", "getAllKalaApis", "getMojodyAnbar"))
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<Response<GetMandehMojodyMashinResponse>>() {
                     @Override
-                    public void run() {
-                        boolean deleteResult = mandehMojodyMashinDAO.deleteAll();
-                        boolean insertResult = mandehMojodyMashinDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult) {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
-                            getKalaMojodi(getProgramType);
-                        } else {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
-                        }
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
                     }
-                };
-                thread.start();
-            }
 
-            @Override
-            public void onFailed(String type, String error) {
-                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
-            }
+                    @Override
+                    public void onNext(Response<GetMandehMojodyMashinResponse> getMandehMojodyMashinResponseResponse) {
+                        updateMandehMojodiMashinTable(getProgramType,getMandehMojodyMashinResponseResponse.body(), finalCcForoshandeh,String.valueOf(ccAfrad));
 
-            @Override
-            public void onComplete() {
-                super.onComplete();
-            }
-        });
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.i("MandehMojodiOnline", "onError: ");
+                        mPresenter.onFailedGetProgram(webCounter[0], String.format(" type : %1$s \n error : %2$s", e.getCause().getMessage(), e.getMessage()));
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.i("MandehMojodiOnline", "onComplete: ");
+
+                    }
+                });
+
+    }
+
+
+    private void updateMandehMojodiMashinTable(int getProgramType,GetMandehMojodyMashinResponse body,String ccForoshandeh,String ccAfrad) {
+        if (body != null) {
+            MandehMojodyMashinRepository mandehMojodyMashinRepository = new MandehMojodyMashinRepository(mPresenter.getAppContext());
+            Disposable disposable = mandehMojodyMashinRepository.deleteAll()
+                    .subscribe(deleteAll -> {
+                        if (deleteAll) {
+
+                            Disposable insertGroup = mandehMojodyMashinRepository.insertGroup(body.getMandehMojodyMashinModels())
+                                    .subscribe(insertGroup1 -> {
+                                        Log.d("getProgram", "insertGroup1 : " + insertGroup1);
+                                        if (insertGroup1) {
+                                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                                            getKalaMojodi(getProgramType);
+                                        } else {
+                                            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+
+                                        }
+                                    }, throwable -> {
+                                        sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+                                    });
+                            compositeDisposable.add(insertGroup);
+                        }
+                    }, throwable -> {
+                        sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+
+                    });
+            compositeDisposable.add(disposable);
+
+
+        }else{
+            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+            getKalaMojodi(getProgramType);
+        }
     }
 
     private void getMasir(final int getProgramType, final String ccForoshandeh, String ccMarkazForosh, String azTarikh, String taTarikh, String codeNoe) {
