@@ -360,8 +360,8 @@ public class ForoshandehMamorPakhshDAO
         catch (Exception exception)
         {
             exception.printStackTrace();
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), exception.toString(), "ForoshandehMamorPakhshDAO" , "" , "getCCAfrad" , "");
+          //  PubFunc.Logger logger = new PubFunc().new Logger();
+            //logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), exception.toString(), "ForoshandehMamorPakhshDAO" , "" , "getCCAfrad" , "");
             return 0;
         }
     }

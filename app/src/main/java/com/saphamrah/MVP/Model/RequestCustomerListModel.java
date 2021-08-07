@@ -286,13 +286,14 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             @Override
             public void onSuccess()
             {
-                getBottomBarStatus(ccMoshtary,moshtaryGharardadccSazmanForosh);
+               // getBottomBarStatus(ccMoshtary,moshtaryGharardadccSazmanForosh);
             }
 
             @Override
             public void onSuccessUpdateMandehMojodiMashin()
             {
                 mPresenter.onSuccessUpdateMandeMojodi();
+                getBottomBarStatus(ccMoshtary,moshtaryGharardadccSazmanForosh);
             }
 
             @Override
@@ -1379,21 +1380,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
         {
             final int finalCCForoshandeh = Integer.valueOf(ccForoshandeh);
             final int finalCCAfrad = Integer.valueOf(ccAfrad);
-            /*final Handler handler = new Handler(new Handler.Callback() {
-                @Override
-                public boolean handleMessage(Message msg)
-                {
-                    if (msg.arg1 == 1)
-                    {
-                        listener.onSuccessUpdateMandehMojodiMashin();
-                    }
-                    else if (msg.arg1 == -1)
-                    {
-                        listener.onFailedUpdateMandehMojodiMashin();
-                    }
-                    return false;
-                }
-            });*/
+
 
 
             final MandehMojodyMashinDAO mandehMojodyMashinDAO = new MandehMojodyMashinDAO(weakReferenceContext.get());
@@ -1541,7 +1528,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                                         if (inserted){
                                              publishProgress(1);
                                         }else{
-                                              publishProgress(4);
+                                              publishProgress(-4);
                                         }
                                     }, throwable -> publishProgress(-4));
                             compositeDisposable.add(insertGroup);
