@@ -151,7 +151,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             Date dtGregorianGetProgramDate = sdf.parse(gregorianGetProgramDate);
             //---------------------- For Test -----------------
 
-            int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
+            int isTest = 0;//userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
             Log.d("date" , "istest : " + isTest);
             if (isTest == 1)
             {
@@ -715,10 +715,12 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
              **** Foroshandeh Etebar
              */
             ForoshandehEtebarModel foroshandehEtebarModel = foroshandehEtebarDAO.getByccForoshandeh(foroshandehMamorPakhshModel.getCcForoshandeh());
+            boolean checkEtebarForoshandeh=  moshtaryDAO.getByccMoshtary(ccMoshtary).getControlEtebarForoshandeh()==0?false:true;
 
 
-            Log.d("updateEtebarForoshandeh","foroshandehEtebarModel:" + foroshandehEtebarModel.toString());
 
+            Log.d("EtebarForoshandeh","foroshandehEtebarModel:" + foroshandehEtebarModel.toString());
+            Log.d("EtebarForoshandeh","checkEtebarForoshandeh:" + checkEtebarForoshandeh);
             /*
              **** EtebarBargashty
              */
@@ -750,10 +752,10 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             long MandehSaghfEtebarRiali = foroshandehEtebarModel.getSaghfEtebarRiali() - (rialBargahsty + RialAsnad + rialMoavaghForoshandeh);
             int MandehSaghfEtebarTedadi = foroshandehEtebarModel.getSaghfEtebarTedadi() - (tedadBargahsty + TedadAsnad + tedadMoavaghForoshandeh);
             long MandehSaghfEtebarModat = foroshandehEtebarModel.getSaghfEtebarModat() - Math.max(modatBargashty , modatMoavaghForoshandeh);
-            Log.d("requestCustomer","saghfEtebarRiali:" +foroshandehEtebarModel.getSaghfEtebarRiali() + "rialBargahsty:"+ rialBargahsty + "RialAsnad:"+RialAsnad + "rialMoavaghForoshandeh:"+rialMoavaghForoshandeh);
-            Log.d("requestCustomer","saghfEtebarTedadi:" +foroshandehEtebarModel.getSaghfEtebarTedadi() + "tedadBargahsty:"+ tedadBargahsty + "TedadAsnad:"+TedadAsnad + "tedadMoavaghForoshandeh:"+tedadMoavaghForoshandeh);
-            Log.d("requestCustomer","SaghfEtebarModat:" +foroshandehEtebarModel.getSaghfEtebarModat() + "Maxmodat:"+ Math.max(modatBargashty , modatMoavaghForoshandeh));
-            Log.d("requestCustomer","MandehSaghfEtebarRiali:"+ MandehSaghfEtebarRiali + " , MandehSaghfEtebarTedadi:"+MandehSaghfEtebarTedadi + " , MandehSaghfEtebarModat:"+MandehSaghfEtebarModat);
+            Log.d("EtebarForoshandeh","saghfEtebarRiali:" +foroshandehEtebarModel.getSaghfEtebarRiali() + "rialBargahsty:"+ rialBargahsty + "RialAsnad:"+RialAsnad + "rialMoavaghForoshandeh:"+rialMoavaghForoshandeh);
+            Log.d("EtebarForoshandeh","saghfEtebarTedadi:" +foroshandehEtebarModel.getSaghfEtebarTedadi() + "tedadBargahsty:"+ tedadBargahsty + "TedadAsnad:"+TedadAsnad + "tedadMoavaghForoshandeh:"+tedadMoavaghForoshandeh);
+            Log.d("EtebarForoshandeh","SaghfEtebarModat:" +foroshandehEtebarModel.getSaghfEtebarModat() + "Maxmodat:"+ Math.max(modatBargashty , modatMoavaghForoshandeh));
+            Log.d("EtebarForoshandeh","MandehSaghfEtebarRiali:"+ MandehSaghfEtebarRiali + " , MandehSaghfEtebarTedadi:"+MandehSaghfEtebarTedadi + " , MandehSaghfEtebarModat:"+MandehSaghfEtebarModat);
 
 
 
@@ -761,70 +763,65 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             /*
               **** check etebar bargashty
              */
-            Log.d("requestCustomer1","rialBargahsty:" + rialBargahsty + " foroshandehEtebarModel.getEtebarRialBargashty():" + foroshandehEtebarModel.getEtebarRialBargashty() + " MandehSaghfEtebarRiali:" + MandehSaghfEtebarRiali);
-            if(rialBargahsty >= foroshandehEtebarModel.getEtebarRialBargashty() || MandehSaghfEtebarRiali<=0)//rialBargahsty >= (foroshandehEtebarModel.getSaghfEtebarRiali() - (RialAsnad + rialMoavaghForoshandeh)))
+            Log.d("EtebarForoshandeh","rialBargahsty:" + rialBargahsty + " foroshandehEtebarModel.getEtebarRialBargashty():" + foroshandehEtebarModel.getEtebarRialBargashty() + " MandehSaghfEtebarRiali:" + MandehSaghfEtebarRiali);
+            if((rialBargahsty >= foroshandehEtebarModel.getEtebarRialBargashty() || MandehSaghfEtebarRiali<=0) && checkEtebarForoshandeh)
             {
                 isEtebarCheckBargashty = false;
-                Log.d("requestCustomer2","isEtebarCheckBargashty:" + isEtebarCheckBargashty);
+                Log.d("EtebarForoshandeh","isEtebarCheckBargashty:" + isEtebarCheckBargashty);
             }
-            Log.d("requestCustomer1","tedadBargahsty:" + tedadBargahsty + " foroshandehEtebarModel.getEtebarTedadBargashty():" + foroshandehEtebarModel.getEtebarTedadBargashty() + " MandehSaghfEtebarTedadi:" + MandehSaghfEtebarTedadi);
-            if(tedadBargahsty >= foroshandehEtebarModel.getEtebarTedadBargashty() || MandehSaghfEtebarTedadi<=0)//tedadBargahsty >= (foroshandehEtebarModel.getSaghfEtebarTedadi() - (TedadAsnad + tedadMoavaghForoshandeh)))
+            Log.d("EtebarForoshandeh","tedadBargahsty:" + tedadBargahsty + " foroshandehEtebarModel.getEtebarTedadBargashty():" + foroshandehEtebarModel.getEtebarTedadBargashty() + " MandehSaghfEtebarTedadi:" + MandehSaghfEtebarTedadi);
+            if((tedadBargahsty >= foroshandehEtebarModel.getEtebarTedadBargashty() || MandehSaghfEtebarTedadi<=0) && checkEtebarForoshandeh)
             {
                 isEtebarCheckBargashty = false;
-                Log.d("requestCustomer2","isEtebarCheckBargashty:" + isEtebarCheckBargashty);
+                Log.d("EtebarForoshandeh","isEtebarCheckBargashty:" + isEtebarCheckBargashty);
             }
-            Log.d("requestCustomer1","modatBargashty:" + modatBargashty + " foroshandehEtebarModel.getEtebarModatBargashty():" + foroshandehEtebarModel.getEtebarModatBargashty() + " MandehSaghfEtebarModat:" + MandehSaghfEtebarModat);
-            if(modatBargashty > foroshandehEtebarModel.getEtebarModatBargashty() || MandehSaghfEtebarModat<0)//modatBargashty >= (foroshandehEtebarModel.getSaghfEtebarModat() - (modatMoavaghForoshandeh)))
+            Log.d("EtebarForoshandeh","modatBargashty:" + modatBargashty + " foroshandehEtebarModel.getEtebarModatBargashty():" + foroshandehEtebarModel.getEtebarModatBargashty() + " MandehSaghfEtebarModat:" + MandehSaghfEtebarModat);
+            if((modatBargashty > foroshandehEtebarModel.getEtebarModatBargashty() || MandehSaghfEtebarModat<0) && checkEtebarForoshandeh)
             {
                 isEtebarCheckBargashty = false;
-                Log.d("requestCustomer2","isEtebarCheckBargashty:" + isEtebarCheckBargashty);
+                Log.d("EtebarForoshandeh","isEtebarCheckBargashty:" + isEtebarCheckBargashty);
             }
 
             /*
               **** check etebar asnad
              */
-            Log.d("requestCustomer1","sumRialAsnad:" + RialAsnad + " rialAsnadForoshandeh:" + etebarRialAsnadForoshandeh + " MandehSaghfEtebarRiali:" + MandehSaghfEtebarRiali);
-            if(RialAsnad >= etebarRialAsnadForoshandeh || MandehSaghfEtebarRiali<=0)//RialAsnad >= (foroshandehEtebarModel.getSaghfEtebarRiali() - (rialBargahsty + rialMoavaghForoshandeh)))
+            Log.d("EtebarForoshandeh","sumRialAsnad:" + RialAsnad + " rialAsnadForoshandeh:" + etebarRialAsnadForoshandeh + " MandehSaghfEtebarRiali:" + MandehSaghfEtebarRiali);
+            if((RialAsnad >= etebarRialAsnadForoshandeh || MandehSaghfEtebarRiali<=0) && checkEtebarForoshandeh)
             {
                 isEtebarAsnad = false;
-                Log.d("requestCustomer2","isEtebarAsnad:" + isEtebarAsnad);
+                Log.d("EtebarForoshandeh","isEtebarAsnad:" + isEtebarAsnad);
             }
-            Log.d("requestCustomer1","sumTedadAsnad:" + TedadAsnad + " tedadAsnadForoshandeh:" + etebarTedadAsnadForoshandeh + " MandehSaghfEtebarTedadi:" + MandehSaghfEtebarTedadi);
-            if(TedadAsnad >= etebarTedadAsnadForoshandeh || MandehSaghfEtebarTedadi<=0)//TedadAsnad >= (foroshandehEtebarModel.getSaghfEtebarTedadi() - (tedadBargahsty + tedadMoavaghForoshandeh)))
+            Log.d("EtebarForoshandeh","sumTedadAsnad:" + TedadAsnad + " tedadAsnadForoshandeh:" + etebarTedadAsnadForoshandeh + " MandehSaghfEtebarTedadi:" + MandehSaghfEtebarTedadi);
+            if((TedadAsnad >= etebarTedadAsnadForoshandeh || MandehSaghfEtebarTedadi<=0) && checkEtebarForoshandeh)
             {
                 isEtebarAsnad = false;
-                Log.d("requestCustomer2","isEtebarAsnad:" + isEtebarAsnad);
+                Log.d("EtebarForoshandeh","isEtebarAsnad:" + isEtebarAsnad);
             }
-            /*Log.d("requestCustomer1","sumModatAsnad:" + ModatAsnad + " modatAsnadForoshandeh:" + etebarModatAsnadForoshandeh + " saghfEtebarModat:" + saghfEtebarModat);
-            if(ModatAsnad >= etebarModatAsnadForoshandeh || ModatAsnad >= saghfEtebarModat)
-            {
-                isEtebarAsnad = false;
-                Log.d("requestCustomer2","isEtebarAsnad:" + isEtebarAsnad);
-            }*/
+
 
 
             /*
               **** check etebar moavagh
              */
-            Log.d("requestCustomer1","rialMoavaghForoshandeh:" + rialMoavaghForoshandeh + " foroshandehEtebarModel.getRialMoavagh():" + foroshandehEtebarModel.getRialMoavagh() + " MandehSaghfEtebarRiali:" + MandehSaghfEtebarRiali);
-            if(rialMoavaghForoshandeh >= foroshandehEtebarModel.getEtebarRialMoavagh() || MandehSaghfEtebarRiali<=0)//rialMoavaghForoshandeh >= (foroshandehEtebarModel.getSaghfEtebarRiali() - (rialBargahsty + RialAsnad )))
+            Log.d("EtebarForoshandeh","rialMoavaghForoshandeh:" + rialMoavaghForoshandeh + " foroshandehEtebarModel.getRialMoavagh():" + foroshandehEtebarModel.getRialMoavagh() + " MandehSaghfEtebarRiali:" + MandehSaghfEtebarRiali);
+            if((rialMoavaghForoshandeh >= foroshandehEtebarModel.getEtebarRialMoavagh() || MandehSaghfEtebarRiali<=0) && checkEtebarForoshandeh)
             {
                 isMojazForResid = false;
-                Log.d("requestCustomer2","isMojazForResid:" + isMojazForResid);
+                Log.d("EtebarForoshandeh","isMojazForResid:" + isMojazForResid);
             }
 
-            Log.d("requestCustomer1","tedadMoavaghForoshandeh:" + tedadMoavaghForoshandeh + " foroshandehEtebarModel.getTedadMoavagh():" + foroshandehEtebarModel.getTedadMoavagh() + " MandehSaghfEtebarTedadi:" + MandehSaghfEtebarTedadi);
-            if(tedadMoavaghForoshandeh >= foroshandehEtebarModel.getEtebarTedadMoavagh() || MandehSaghfEtebarTedadi<=0)//tedadMoavaghForoshandeh >= (foroshandehEtebarModel.getSaghfEtebarTedadi() - (tedadBargahsty + TedadAsnad)))
+            Log.d("EtebarForoshandeh","tedadMoavaghForoshandeh:" + tedadMoavaghForoshandeh + " foroshandehEtebarModel.getTedadMoavagh():" + foroshandehEtebarModel.getTedadMoavagh() + " MandehSaghfEtebarTedadi:" + MandehSaghfEtebarTedadi);
+            if((tedadMoavaghForoshandeh >= foroshandehEtebarModel.getEtebarTedadMoavagh() || MandehSaghfEtebarTedadi<=0) && checkEtebarForoshandeh)
             {
                 isMojazForResid = false;
-                Log.d("requestCustomer2","isMojazForResid:" + isMojazForResid);
+                Log.d("EtebarForoshandeh","isMojazForResid:" + isMojazForResid);
             }
 
-            Log.d("requestCustomer1","modatMoavaghForoshandeh:" + modatMoavaghForoshandeh + " foroshandehEtebarModel.getModatMoavagh():" + foroshandehEtebarModel.getModatMoavagh() + " MandehSaghfEtebarModat:" + MandehSaghfEtebarModat);
-            if(modatMoavaghForoshandeh > foroshandehEtebarModel.getEtebarModatMoavagh() || MandehSaghfEtebarModat<0)//modatMoavaghForoshandeh >= (foroshandehEtebarModel.getSaghfEtebarModat() - (modatBargashty)))
+            Log.d("EtebarForoshandeh","modatMoavaghForoshandeh:" + modatMoavaghForoshandeh + " foroshandehEtebarModel.getModatMoavagh():" + foroshandehEtebarModel.getModatMoavagh() + " MandehSaghfEtebarModat:" + MandehSaghfEtebarModat);
+            if((modatMoavaghForoshandeh > foroshandehEtebarModel.getEtebarModatMoavagh() || MandehSaghfEtebarModat<0) && checkEtebarForoshandeh)
             {
                 isMojazForResid = false;
-                Log.d("requestCustomer2","isMojazForResid:" + isMojazForResid);
+                Log.d("EtebarForoshandeh","isMojazForResid:" + isMojazForResid);
             }
 
 
@@ -1088,7 +1085,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             }
             //---------------------- For Test -----------------
             UserTypeShared userTypeShared = new UserTypeShared(weakReferenceContext.get());
-            int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
+            int isTest = 0;//userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
             Log.d("kharejAzMasir" , "istest : " + isTest);
             if (isTest == 1)
             {

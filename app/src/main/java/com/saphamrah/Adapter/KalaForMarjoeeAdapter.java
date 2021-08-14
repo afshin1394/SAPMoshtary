@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.saphamrah.Model.ListKalaForMarjoeeModel;
@@ -60,6 +61,12 @@ public class KalaForMarjoeeAdapter extends RecyclerView.Adapter<KalaForMarjoeeAd
         {
             holder.imgSelect.setImageResource(R.drawable.circle_tick_gray);
         }
+        if (listKalaForMarjoeeModel.get(position).getIsKalaZayeatTolid()==1){
+            holder.crdviewRoot.setBackgroundResource(R.color.marjoeeKamel);
+        } else {
+            holder.crdviewRoot.setBackgroundResource(R.color.defultTreasuryList);
+        }
+
         holder.bind(listKalaForMarjoeeModel.get(position) , position , listener);
     }
 
@@ -82,6 +89,7 @@ public class KalaForMarjoeeAdapter extends RecyclerView.Adapter<KalaForMarjoeeAd
         private TextView lblShomareBach;
         private TextView lblCost;
         private ImageView imgSelect;
+        private CardView crdviewRoot;
 
         public ViewHolder(View view)
         {
@@ -93,6 +101,7 @@ public class KalaForMarjoeeAdapter extends RecyclerView.Adapter<KalaForMarjoeeAd
             lblShomareBach = view.findViewById(R.id.lblShomareBach);
             lblCost = view.findViewById(R.id.lblGheymat);
             imgSelect = view.findViewById(R.id.imgSelect);
+            crdviewRoot = view.findViewById(R.id.crdviewRoot);
 
             lblNameKala.setTypeface(font);
             lblShomareBach.setTypeface(font);

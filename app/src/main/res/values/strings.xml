@@ -191,6 +191,7 @@
     <string name="errorDeleteCustomer">خطا در حذف مشتری</string>
     <string name="errorGetCustomerList">خطا در دریافت مشتریان</string>
     <string name="errorDeleteImage">خطا در حذف تصویر</string>
+    <string name="updateEtebarMoshtary">بروزرسانی اعتبار مشتری</string>
     <string name="errorUpdateMoshtaryEtebar">خطا در بروز رسانی اعتبار مشتری</string>
     <string name="errorUpdateForoshandehEtebar">خطا در بروز رسانی اعتبار فروشنده</string>
     <string name="successUpdateMoshtaryEtebar">بروز رسانی اعتبار مشتری با موفقیت انجام شد.</string>

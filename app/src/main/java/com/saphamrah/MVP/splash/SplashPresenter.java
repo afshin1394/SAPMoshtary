@@ -560,16 +560,8 @@ public class SplashPresenter implements SplashMVP.PresenterOps, SplashMVP.Requir
     }
     private void checkVersionAzmayeshi(int appVersion , int azmayeshiVersion , String urlAzmayeshi)
     {
-        if (appVersion < azmayeshiVersion)
+        if ((appVersion < azmayeshiVersion) || (appVersion > azmayeshiVersion))
         {
-            /*for (ParameterChildModel childParameterModel : childParameterModelsDownloadUrls)
-            {
-                if (childParameterModel.getCcParameterChild() == Constants.CC_CHILD_DOWNLOAD_URL_AZMAYESHI())
-                {
-                    downloadUrl = childParameterModel.getValue();
-                    break;
-                }
-            }*/
             Log.d("download" , "azmayeshi : " + urlAzmayeshi);
             mView.get().forceUpdateTest(urlAzmayeshi);
         }

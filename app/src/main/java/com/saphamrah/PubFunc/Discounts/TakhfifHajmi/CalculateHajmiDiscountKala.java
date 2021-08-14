@@ -88,14 +88,18 @@ public class CalculateHajmiDiscountKala extends DiscountCalculation
 
                         Log.d("takhfifKala","CcTakhfifHajmi :" + takhfifHajmiSatrModel.getCcTakhfifHajmi() );
                         Log.d("takhfifKala","MablaghTakhfifDarkhast :" + MablaghTakhfifDarkhast);
+                        long tedadLong = (long) tedad;
+                        long mablaghVahedKalaMohasebehLong = (long) mablaghVahedKalaMohasebeh;
                         if(takhfifHajmiTitrSatrModel.getOlaviat() == 0 || takhfifHajmiTitrSatrModel.getOlaviat() == 1 )//|| (takhfifHajmiTitrSatrModel.getCcTakhfifHajmi() == Integer.valueOf(model.getFiled7())))
                         {
-                            MablaghKol = (long) (tedad * mablaghVahedKalaMohasebeh);
+
+                            MablaghKol = (long) (tedadLong * mablaghVahedKalaMohasebehLong);
                             Log.d("takhfifKala","if MablaghKol :" + MablaghKol);
                         }
                         else
                         {
-                            MablaghKol = (long) ((tedad * mablaghVahedKalaMohasebeh)-MablaghTakhfifDarkhast);
+
+                            MablaghKol = (long) ((tedadLong * mablaghVahedKalaMohasebehLong)-MablaghTakhfifDarkhast);
                             Log.d("takhfifKala","else MablaghKol :" + MablaghKol);
                         }
                         Log.d("takhfifKala" , "MablaghKol : " + MablaghKol + "takhfifHajmiTitrSatrModel.getOlaviat:" +takhfifHajmiTitrSatrModel.getOlaviat());

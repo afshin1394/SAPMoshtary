@@ -270,6 +270,11 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
         mModel.getHashiehSoud(ccDarkhastFaktor,mablaghBaArzeshAfzoodeh);
     }
 
+    @Override
+    public void updateMoshtaryEtebar(int ccMoshtary) {
+        mModel.updateMoshtaryEtebar(ccMoshtary);
+    }
+
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
 
@@ -497,5 +502,18 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
     @Override
     public void onHashiehSoud(double mablaghTakhfifNaghdi, double mablaghTakhfifHajmi, double mablaghJayezeh, double mablaghHashiehSood, double jamSoodMaghazeh, double darsadSoodMaghazeh) {
         mView.get().onHashiehSoud(mablaghTakhfifNaghdi,mablaghTakhfifHajmi,mablaghJayezeh,mablaghHashiehSood,jamSoodMaghazeh,darsadSoodMaghazeh);
+    }
+
+    @Override
+    public void onFailedUpdateMoshtaryEtebar() {
+        mView.get().closeLoading();
+        mView.get().showAlertDialog(R.string.errorUpdateForoshandehEtebar,false ,Constants.FAILED_MESSAGE());
+
+    }
+
+    @Override
+    public void onSuccessUpdateMoshtaryEtebar() {
+        mView.get().closeLoading();
+        mView.get().showAlertDialog(R.string.successUpdateMoshtaryEtebar,false, Constants.SUCCESS_MESSAGE());
     }
 }

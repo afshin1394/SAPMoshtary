@@ -558,6 +558,17 @@
         <com.github.clans.fab.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/fabUpdateMoshtaryEtebar"
+            android:src="@drawable/ic_money_fab"
+            fab:fab_size="normal"
+            fab:fab_label="@string/updateEtebarMoshtary"
+            fab:fab_colorNormal="@color/colorFabUpdateGallery"
+            fab:fab_colorPressed="@color/colorFabSearchPrinter"
+            android:layout_margin="15dp"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/fabHashiehSoud"
             android:src="@drawable/ic_hashiehsood"
             fab:fab_size="normal"

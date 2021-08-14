@@ -72,6 +72,7 @@ public interface VerifyRequestMVP
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
         void getHashiehSoud(long ccDarkhastFaktor,String mablaghBaArzeshAfzoodeh);
+        void updateMoshtaryEtebar(int ccMoshtary);
     }
 
 
@@ -100,6 +101,8 @@ public interface VerifyRequestMVP
         void showLoading();
         void closeLoading();
         void onHashiehSoud(double mablaghTakhfifNaghdi ,double mablaghTakhfifHajmi ,double mablaghJayezeh ,double mablaghHashiehSood ,double jamSoodMaghazeh ,double darsadSoodMaghazeh);
+        void onFailedUpdateMoshtaryEtebar();
+        void onSuccessUpdateMoshtaryEtebar();
     }
 
 
@@ -123,6 +126,7 @@ public interface VerifyRequestMVP
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
         void getHashiehSoud(long ccDarkhastFaktor, String mablaghBaArzeshAfzoodeh);
+        void updateMoshtaryEtebar(int ccMoshtary);
     }
 
 }

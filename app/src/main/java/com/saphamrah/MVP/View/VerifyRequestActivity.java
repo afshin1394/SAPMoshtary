@@ -105,6 +105,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     private FloatingActionButton fabAddMarjoee;
     private FloatingActionButton fabHashiehSoud;
     private FloatingActionButton fabSelectBonus;
+    private FloatingActionButton fabUpdateMoshtaryEtebar;
     private RecyclerView recyclerViewRequestedGoods;
     private RecyclerView recyclerViewMarjoee;
     private RecyclerView recyclerViewTakhfif;
@@ -164,6 +165,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         fabAddMarjoee = findViewById(R.id.fabAddMarjoee);
         fabHashiehSoud = findViewById(R.id.fabHashiehSoud);
         fabSelectBonus = findViewById(R.id.fabSelectBonus);
+        fabUpdateMoshtaryEtebar = findViewById(R.id.fabUpdateMoshtaryEtebar);
         FloatingActionButton fabShowCustomerInfo = findViewById(R.id.fabShowCustomerInfo);
         recyclerViewRequestedGoods = findViewById(R.id.recyclerViewSefaresh);
         recyclerViewMarjoee = findViewById(R.id.recyclerViewReturned);
@@ -289,6 +291,12 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
                 onDeleteBonus(true);
                 //mPresenter.deleteBonus(ccDarkhastFaktor);
             }
+        });
+
+        fabUpdateMoshtaryEtebar.setOnClickListener(v -> {
+            fabMenu.close(true);
+            showLoading();
+            mPresenter.updateMoshtaryEtebar(ccMoshtary);
         });
 
 

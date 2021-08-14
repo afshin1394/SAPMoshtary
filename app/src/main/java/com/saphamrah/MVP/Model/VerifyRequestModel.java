@@ -73,6 +73,7 @@ import com.saphamrah.Model.TakhfifNaghdyModel;
 import com.saphamrah.Model.TakhfifSenfiModel;
 import com.saphamrah.Model.TakhfifSenfiSatrModel;
 import com.saphamrah.Model.TakhfifSenfiTitrSatrModel;
+import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.Discounts.TakhfifHajmi.CalculateHajmiDiscountBrand;
 import com.saphamrah.PubFunc.Discounts.TakhfifHajmi.CalculateHajmiDiscountGorohKala;
 import com.saphamrah.PubFunc.Discounts.TakhfifHajmi.CalculateHajmiDiscountKala;
@@ -103,6 +104,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
     private VerifyRequestMVP.RequiredPresenterOps mPresenter;
     ParameterChildDAO childParameterDAO = new ParameterChildDAO(BaseApplication.getContext());
+    MoshtaryDAO moshtaryDAO = new MoshtaryDAO(BaseApplication.getContext());
+    ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
     private static final String TAG = "VerifyRequestModel";
     public VerifyRequestModel(VerifyRequestMVP.RequiredPresenterOps mPresenter)
     {
@@ -1225,6 +1228,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         اگر مقدار true باشد اعتبار فروشنده چک می گردد
         */
         boolean checkEtebarForoshandeh=  moshtaryDAO.getByccMoshtary(ccMoshtary).getControlEtebarForoshandeh()==0?false:true;
+        Log.d("etebar","codeNoeVosol" + codeNoeVosol + " ,checkEtebarForoshandeh:"+checkEtebarForoshandeh);
+
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect());
         //------------------- TedadFaktorBazRoozMoshtary -----------------------------
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
@@ -1401,7 +1406,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
 
 
-                Log.d("etebar","codeNoeVosol" + codeNoeVosol + " ,checkEtebarForoshandeh:"+checkEtebarForoshandeh);
+
 
                 if(codeNoeVosol == valueResid)
                 {
@@ -1568,6 +1573,51 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
         mPresenter.onHashiehSoud(mablaghTakhfifNaghdi , mablaghTakhfifHajmi , mablaghJayezeh , mablaghHashiehSood , jamSoodMaghazeh , darsadSoodMaghazeh);
 
+    }
+
+    @Override
+    public void updateMoshtaryEtebar(int ccMoshtary) {
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
+        int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+        MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
+        getMoshtaryEtebarSazmanForosh(moshtaryModel, foroshandehMamorPakhshModel, noeMasouliat);
+    }
+
+    private void getMoshtaryEtebarSazmanForosh( MoshtaryModel moshtaryModel,  ForoshandehMamorPakhshModel foroshandehMamorPakhshModel,  int noeMasouliat)
+    {
+        final MoshtaryEtebarSazmanForoshDAO moshtaryEtebarSazmanForoshDAO = new MoshtaryEtebarSazmanForoshDAO(mPresenter.getAppContext());
+        moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForosh(mPresenter.getAppContext(), "VerifyRequestModel", String.valueOf(moshtaryModel.getCcMoshtary()), String.valueOf(foroshandehMamorPakhshModel.getCcSazmanForosh()), new RetrofitResponse()
+        {
+            @Override
+            public void onSuccess(final ArrayList arrayListData)
+            {
+                if (arrayListData.size() > 0)
+                {
+                    boolean deleteResult = moshtaryEtebarSazmanForoshDAO.deleteByccMoshtary(moshtaryModel.getCcMoshtary());
+                    boolean insertResult = moshtaryEtebarSazmanForoshDAO.insert((MoshtaryEtebarSazmanForoshModel) arrayListData.get(0));
+                    Log.d("updateEtebarMoshtary","deleteResult: " + deleteResult + " , insertResult: " + insertResult);
+                    Log.d("updateEtebarMoshtary","arrayListData: " + arrayListData.toString());
+                    if (deleteResult && insertResult)
+                    {
+                        mPresenter.onSuccessUpdateMoshtaryEtebar();
+                    }
+                    else
+                    {
+                        mPresenter.onFailedUpdateMoshtaryEtebar();
+                    }
+                }
+                else
+                {
+                    mPresenter.onFailedUpdateMoshtaryEtebar();
+                }
+            }
+            @Override
+            public void onFailed(String type, String error)
+            {
+                setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "VerifyRequestModel", "VerifyRequestModel", "getMoshtaryEtebarSazmanForosh", "onFailed");
+                mPresenter.onFailedUpdateMoshtaryEtebar();
+            }
+        });
     }
 
     interface OnCalculateDiscountResponse {
