@@ -1521,17 +1521,26 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
                         @Override
                         public void onComplete() {
-                            Disposable insertGroup = new KalaMojodiRepository(weakReferenceContext.get())
-                                    .insertGroup(kalaMojodiModels)
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(inserted -> {
-                                        if (inserted){
-                                             publishProgress(1);
-                                        }else{
-                                              publishProgress(-4);
+                            Disposable delete = new KalaMojodiRepository(weakReferenceContext.get())
+                                    .deleteAll()
+                                    .subscribe(deleteAll -> {
+                                        if (deleteAll) {
+                                            Disposable insertGroup = new KalaMojodiRepository(weakReferenceContext.get())
+                                                    .insertGroup(kalaMojodiModels)
+                                                    .observeOn(AndroidSchedulers.mainThread())
+                                                    .subscribe(inserted -> {
+                                                        if (inserted) {
+                                                            publishProgress(1);
+                                                        } else {
+                                                            publishProgress(-4);
+                                                        }
+                                                    }, throwable -> publishProgress(-4));
+                                            compositeDisposable.add(insertGroup);
+                                        } else {
+                                            publishProgress(-4);
                                         }
                                     }, throwable -> publishProgress(-4));
-                            compositeDisposable.add(insertGroup);
+                          compositeDisposable.add(delete);
                         }
                     });
 

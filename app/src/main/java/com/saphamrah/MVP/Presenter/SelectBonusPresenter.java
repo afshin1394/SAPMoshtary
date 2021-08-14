@@ -151,7 +151,7 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
                         }
                     }
 
-                Log.d("selectbonus", "selectedCount : " + model.getSelectedCount() + " , Max_MojodyByShomarehBach : " + maxShomarehBach + " , getMax_Mojody : " + maxMojodi + " , countCcKalaCode : " + countCcKalaCode + ", TedadSefareshDarkhast:" + TedadSefarshDarkhast);
+                Log.d("bonus", "selectedCount : " + model.getSelectedCount() + " , Max_MojodyByShomarehBach : " + maxShomarehBach + " , getMax_Mojody : " + maxMojodi + " , countCcKalaCode : " + countCcKalaCode + ", TedadSefareshDarkhast:" + TedadSefarshDarkhast);
               //mView.get().toastTest(model.getSelectedCount() , maxShomarehBach , maxMojodi,0);
               if (model.getSelectedCount() > model.getTedad() || model.getSelectedCount() > maxMojodi || model.getSelectedCount() > maxShomarehBach)
                 {

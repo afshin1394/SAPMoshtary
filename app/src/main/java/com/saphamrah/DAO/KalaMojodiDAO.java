@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.KalaMojodiModel;
@@ -444,7 +445,8 @@ public class KalaMojodiDAO
         try
         {
 
-            String query = "  select  Sum(distinct m.Max_MojodyByShomarehBach)Max_MojodyByShomarehBach , m.ccKalaCode , m.ShomarehBach , m.GheymatForosh ,m.GheymatMasrafKonandeh , m.ccTaminKonandeh  from\n" +
+            //String query = "  select  Sum(distinct m.Max_MojodyByShomarehBach)Max_MojodyByShomarehBach , m.ccKalaCode , m.ShomarehBach , m.GheymatForosh ,m.GheymatMasrafKonandeh , m.ccTaminKonandeh  from\n" +
+            String query = "  select  Sum(m.Max_MojodyByShomarehBach)Max_MojodyByShomarehBach , m.ccKalaCode , m.ShomarehBach , m.GheymatForosh ,m.GheymatMasrafKonandeh , m.ccTaminKonandeh  from\n" +
                     "                     JayezehEntekhabi j inner join KalaMojodi m \n" +
                     "                     on j.ccKalaCode = m.ccKalaCode \n" +
                     "                     and j.ccJayezeh = " + ccJayezeh + " \n" +
@@ -453,6 +455,7 @@ public class KalaMojodiDAO
                     "                     having sum(m.Tedad) > 0 ";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
+            Log.d("bonus","getMaxMojodi query: " + query);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)
@@ -493,7 +496,8 @@ public class KalaMojodiDAO
         try
         {
 
-            String query = "  select  sum(distinct m.Max_Mojody) Max_Mojody, m.ccKalaCode , m.ShomarehBach , m.GheymatForosh ,m.GheymatMasrafKonandeh , m.ccTaminKonandeh  from\n" +
+            //String query = "  select  sum(distinct m.Max_Mojody) Max_Mojody, m.ccKalaCode , m.ShomarehBach , m.GheymatForosh ,m.GheymatMasrafKonandeh , m.ccTaminKonandeh  from\n" +
+            String query = "  select  sum(m.Max_Mojody) Max_Mojody, m.ccKalaCode , m.ShomarehBach , m.GheymatForosh ,m.GheymatMasrafKonandeh , m.ccTaminKonandeh  from\n" +
                     "                     JayezehEntekhabi j inner join KalaMojodi m \n" +
                     "                     on j.ccKalaCode = m.ccKalaCode \n" +
                     "                     and j.ccJayezeh = " + ccJayezeh + " \n" +
@@ -502,6 +506,7 @@ public class KalaMojodiDAO
                     "                     having sum(m.Tedad) > 0 ";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
+            Log.d("bonus","getMaxMojodi query: " + query);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)
@@ -579,12 +584,13 @@ public class KalaMojodiDAO
         String query = "insert into kalaMojodi(ccKalaCode,ccForoshandeh,Tedad,ccDarkhastFaktor,TarikhDarkhast,ShomarehBach, \n" +
                 " TarikhTolid,GheymatMasrafKonandeh,GheymatForosh,ccTaminKonandeh,ForJayezeh,Max_Mojody,Max_MojodyByShomarehBach) \n" +
                 " select ccKalaCode,ccForoshandeh,Tedad*-1,ccDarkhastFaktor,TarikhDarkhast,ShomarehBach, \n" +
-                " TarikhTolid,GheymatMasrafKonandeh,GheymatForosh,ccTaminKonandeh,ForJayezeh,Max_Mojody,Max_MojodyByShomarehBach \n" +
+                " TarikhTolid,GheymatMasrafKonandeh,GheymatForosh,ccTaminKonandeh,ForJayezeh,Tedad*-1,Tedad*-1 \n" +
                 " from kalaMojodi where ccDarkhastFaktor = " + ccDarkhastFaktor + " and ForJayezeh = 1";
         try
         {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             db.execSQL(query);
+            Log.d("bouns", "updateMojodiForReturnJayezeh query:" + query);
             db.close();
             return true;
         }

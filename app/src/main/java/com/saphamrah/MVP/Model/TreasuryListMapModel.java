@@ -1430,24 +1430,42 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
 
                     @Override
                     public void onComplete() {
-                        Disposable insertGroup = new KalaMojodiRepository(mPresenter.getAppContext())
-                                .insertGroup(kalaMojodiModels)
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(inserted -> {
-                                    if (inserted){
-                                        Message message = new Message();
-                                        message.arg1 = 1;
-                                        handler.sendMessage(message);
+                        KalaMojodiRepository kalaMojodiRepository = new KalaMojodiRepository(mPresenter.getAppContext());
+                        Disposable delete = kalaMojodiRepository
+                                .deleteAll()
+                                .subscribe(deleteAll -> {
+                                    if (deleteAll){
+                                        Disposable insertGroup = new KalaMojodiRepository(mPresenter.getAppContext())
+                                                .insertGroup(kalaMojodiModels)
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribe(inserted -> {
+                                                    if (inserted){
+                                                        Message message = new Message();
+                                                        message.arg1 = 1;
+                                                        handler.sendMessage(message);
+                                                    }else{
+                                                        Message message = new Message();
+                                                        message.arg1 = -1;
+                                                        handler.sendMessage(message);
+                                                    }
+                                                }, throwable ->{
+                                                    Message message = new Message();
+                                                    message.arg1 = -1;
+                                                    handler.sendMessage(message);});
+                                        compositeDisposable.add(insertGroup);
                                     }else{
                                         Message message = new Message();
                                         message.arg1 = -1;
                                         handler.sendMessage(message);
                                     }
-                                }, throwable ->{
+
+                                }, throwable -> {
                                     Message message = new Message();
                                     message.arg1 = -1;
-                                    handler.sendMessage(message);});
-                        compositeDisposable.add(insertGroup);
+                                    handler.sendMessage(message);
+                                });
+                        compositeDisposable.add(delete);
+
                     }
                 });
 

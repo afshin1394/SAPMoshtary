@@ -547,8 +547,8 @@ public interface APIServiceRxjava {
     @GET("Api/ApiWarehouse/GetTafkikJoze_Pakhsh")
     Observable<Response<GetTafkikJozePakhshResult>>getTafkikJozePakhsh(@Query("ccDarkhastFaktors") String ccDarkhastFaktors);
 
-    @GET("Api/ApiTablet/GetAllTizerTablighat")
-    Observable<Response<GetAllTizerTablighatResult>>getAllTizerTablighat();
+//    @GET("Api/ApiTablet/GetAllTizerTablighat")
+//    Observable<Response<GetAllTizerTablighatResult>>getAllTizerTablighat();
 
     @GET("Api/ApiAmargar/GetAllNoeTablighat")
     Observable<Response<GetAllNoeTablighatResult>>getAllNoeTablighat();

@@ -621,7 +621,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         darkhastFaktorJayezehDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
         darkhastFaktorSatrDAO.deleteJayezehForccDarkhastFaktor(ccDarkhastFaktor);
 
-        kalaMojodiDAO.updateMojodiForReturnJayezeh(ccDarkhastFaktor);
+       // kalaMojodiDAO.updateMojodiForReturnJayezeh(ccDarkhastFaktor);
+        kalaMojodiDAO.deleteJayzeheByccDarkhastFaktor(ccDarkhastFaktor);
     }
 
 

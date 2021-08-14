@@ -229,7 +229,7 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
     @Override
     public void onWarningSelectCustomer(int resId)
     {
-        mView.get().closeLoading();
+        //mView.get().closeLoading();
         mView.get().showToast(resId, Constants.INFO_MESSAGE(), Constants.DURATION_LONG());
     }
 

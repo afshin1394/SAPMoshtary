@@ -297,7 +297,7 @@ Call<GetDarkhastFaktorSatrResult> call = apiServiceGet.getDarkhastFaktorSatr(noe
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(DarkhastFaktorSatrModel.TableName(), allColumns(), DarkhastFaktorSatrModel.COLUMN_ccKalaCode() + " = " + ccKalaCode + " AND ccDarkhastFaktor = " + ccDarkhastFaktor, null, null, null, null);
+            Cursor cursor = db.query(DarkhastFaktorSatrModel.TableName(), allColumns(), DarkhastFaktorSatrModel.COLUMN_ccKalaCode() + " = " + ccKalaCode + " AND ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeKala = 1 ", null, null, null, null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)

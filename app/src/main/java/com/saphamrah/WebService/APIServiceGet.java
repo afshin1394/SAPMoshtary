@@ -512,8 +512,8 @@ public interface APIServiceGet
     @GET("Api/ApiWarehouse/GetTafkikJoze_Pakhsh")
     Call<GetTafkikJozePakhshResult> getTafkikJozePakhsh(@Query("ccDarkhastFaktors") String ccDarkhastFaktors);
 
-    @GET("Api/ApiTablet/GetAllTizerTablighat")
-    Call<GetAllTizerTablighatResult> getAllTizerTablighat();
+//    @GET("Api/ApiTablet/GetAllTizerTablighat")
+//    Call<GetAllTizerTablighatResult> getAllTizerTablighat();
 
     @GET("Api/ApiAmargar/GetAllNoeTablighat")
     Call<GetAllNoeTablighatResult> getAllNoeTablighat();
