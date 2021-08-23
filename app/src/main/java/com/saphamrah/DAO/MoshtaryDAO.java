@@ -1102,6 +1102,27 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
         }
     }
 
+    public boolean deleteByCodeMoshtarysAndccForoshandeh(String codeMoshtarys , int ccforoshandeh)
+    {
+        String query = "DELETE FROM MOSHTARY WHERE CodeMoshtary = " + codeMoshtarys + " AND ccForoshandeh = " + ccforoshandeh;
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.rawQuery(query , null);
+//            db.delete(MoshtaryModel.TableName() , MoshtaryModel.COLUMN_CodeMoshtary() + " in ( " + codeMoshtarys + " )" + "AND" , null);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDelete , MoshtaryModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "MoshtaryDAO" , "" , "deleteByCodeMoshtarys" , "");
+            return false;
+        }
+    }
+
     private ContentValues modelToContentvalue(MoshtaryModel moshtaryModel , int operationType) //operationType -> insert = 1
     {
         ContentValues contentValues = new ContentValues();

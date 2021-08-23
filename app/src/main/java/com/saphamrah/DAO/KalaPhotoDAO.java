@@ -386,6 +386,32 @@ public class KalaPhotoDAO {
 
     }
 
+
+    public boolean insertGroup(ArrayList<KalaPhotoModel> kalaPhotoModels)
+    {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            for (KalaPhotoModel kalaPhotoModel : kalaPhotoModels) {
+                ContentValues contentValues = modelToContentvalue(kalaPhotoModel);
+                db.insertOrThrow(KalaPhotoModel.getTableName() , null , contentValues);
+            }
+
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            Log.i("getException", "insertGroup: "+exception.getMessage());
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorGroupInsert , KalaPhotoModel.getTableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaPhotoModelDAO" , "" , "insert" , "");
+            return false;
+        }
+    }
+
     public boolean insert(KalaPhotoModel kalaPhotoModel)
     {
         try

@@ -32,10 +32,11 @@ public class BarkhordForoshandehBaMoshtaryRepository {
     }
     private Callable<Boolean> insertGroupCallable(ArrayList<BarkhordForoshandehBaMoshtaryModel> barkhordForoshandehBaMoshtaryModels) {
         return () -> barkhordForoshandehBaMoshtaryDAO.insertGroup(barkhordForoshandehBaMoshtaryModels);
-
     }
 
-
+    private Callable<Boolean> updateIsFavoriteByccBarkhordCallable(int ccBarkhord,boolean operation) {
+        return () -> barkhordForoshandehBaMoshtaryDAO.updateIsFavoriteByccBarkhord(ccBarkhord,operation);
+    }
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
@@ -47,6 +48,12 @@ public class BarkhordForoshandehBaMoshtaryRepository {
 
     public Observable<Boolean> insertGroup(ArrayList<BarkhordForoshandehBaMoshtaryModel> barkhordForoshandehBaMoshtaryModels) {
         return RxDAOUtils.makeObservable(insertGroupCallable(barkhordForoshandehBaMoshtaryModels))
+                .subscribeOn(Schedulers.io());
+    }
+
+
+    public Observable<Boolean> updateIsFavoriteByccBarkhord(int ccBarkhord,boolean operation) {
+        return RxDAOUtils.makeObservable(updateIsFavoriteByccBarkhordCallable(ccBarkhord,operation))
                 .subscribeOn(Schedulers.io());
     }
 }

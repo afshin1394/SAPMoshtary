@@ -8,6 +8,7 @@ import android.util.Log;
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.KalaMojodiModel;
 import com.saphamrah.Model.KalaOlaviatModel;
+import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.Model.KalaZaribForoshModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -51,7 +52,7 @@ public class KalaMojodiZaribForoshDAO
        if (noeMoshtary == 350)
        {
 
-           query = " SELECT km.*,mgk.mablaghforosh GheymatForosh,mgk.MablaghMasrafKonandeh,mgk.ControlMablagh, ZaribForosh , Darajeh, o.Olaviat FROM \n" +
+           query = " SELECT km.*,mgk.mablaghforosh GheymatForosh,mgk.MablaghMasrafKonandeh,mgk.ControlMablagh, ZaribForosh , Darajeh, o.Olaviat , kp.Photo FROM \n" +
                    "(SELECT k.ccKalaCode, k.CodeKala, k.NameKala, k.ccTaminKonandeh, k.TedadDarKarton, k.TedadDarBasteh, k.Adad, k.MashmolMaliatAvarez, k.ccGorohKala, k.ccBrand, \n" +
                    " k.MablaghKharid, k.Tol, k.Arz, k.Ertefa, k.ccVahedSize, k.VaznKhales, k.VaznNakhales, VaznKarton, k.ccVahedVazn, k.BarCode, k.TarikhTolid, k.TarikhEngheza, \n" +
                    " k.NameVahedVazn, k.NameBrand, k.TedadMojodyGhabelForosh, k.NameVahedSize, k.ccVahedShomaresh,k.NameVahedShomaresh, k.ShomarehBach, k.GheymatForoshAsli,k.GheymatMasrafKonandehAsli, k.MablaghForosh MablaghForoshKala, \n" +
@@ -65,6 +66,7 @@ public class KalaMojodiZaribForoshDAO
                    " ORDER BY codekala DESC ) km \n" +
                    " LEFT JOIN (SELECT * FROM KalaZaribForosh z  WHERE ccGorohMoshtary =   " + noeMoshtary + " AND z.Darajeh IN ( 0," + darajeh + ")) z  ON km.ccKalaCode = z.ccKalaCode \n" +
                    " LEFT JOIN KalaOlaviat o on o.ccKalaCode = km.ccKalaCode \n" +
+                   " LEFT JOIN (SELECT * FROM KalaPhoto) kp ON kp.ccKalaCode= km.ccKalaCode \n" +
                    " LEFT JOIN (SELECT * FROM MoshtaryGharardadKala) mgk \n" +
                    "    ON mgk.ccKalaCode= km.ccKalaCode AND \n" +
                    "                 (CASE WHEN mgk.ControlMablagh = 1 AND km.mablaghforoshKala = mgk.mablaghforosh AND km.MablaghMasrafKonandehKala = mgk.MablaghMasrafKonandeh \n" +
@@ -79,7 +81,7 @@ public class KalaMojodiZaribForoshDAO
            }
        else
            {
-           query = "select km.* , IFNULL(ZaribForosh,1)ZaribForosh , Darajeh, o.Olaviat from \n" +
+           query = "select km.* , IFNULL(ZaribForosh,1)ZaribForosh , Darajeh, o.Olaviat , Kp.Photo from \n" +
                    " (select k.* , m.sumTedad, m.GheymatForosh, m.ccKalaMojodi, m.sumMax_MojodyByShomarehBach Max_MojodyByShomarehBach \n" +
                    " from Kala k left join (select KalaMojodi.* , sum(Tedad) sumTedad, sum(Max_Mojody) sumMax_Mojody, sum(Max_MojodyByShomarehBach) sumMax_MojodyByShomarehBach from KalaMojodi where IsAdamForosh = 0 group by ccKalaCode , ShomarehBach, \n" +
                    " GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh) m \n" +
@@ -92,6 +94,7 @@ public class KalaMojodiZaribForoshDAO
                    " and z.Darajeh IN ( 0," + darajeh + " )) z \n" +
                    " on km.ccKalaCode = z.ccKalaCode \n" +
                    " left join KalaOlaviat o on o.ccKalaCode = km.ccKalaCode \n" +
+                   " LEFT JOIN (SELECT * FROM KalaPhoto) kp on kp.ccKalaCode = km.ccKalaCode  \n" +
                    " where km.sumTedad > 0 order by o.Olaviat";
            }
         try
@@ -240,6 +243,8 @@ public class KalaMojodiZaribForoshDAO
 
             // KalaOlaviat
             kalaMojodiZaribModel.setOlaviat(cursor.getInt(cursor.getColumnIndex(KalaOlaviatModel.COLUMN_Olaviat())));
+            kalaMojodiZaribModel.setImageDb(cursor.getBlob(cursor.getColumnIndex(KalaPhotoModel.getColumnImage())));
+
 
             kalaMojodiZaribModels.add(kalaMojodiZaribModel);
             cursor.moveToNext();

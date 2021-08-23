@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.saphamrah.Model.BarkhordForoshandehBaMoshtaryModel;
+import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
@@ -57,7 +58,10 @@ public class BarkhordForoshandehBaMoshtaryDAO
             BarkhordForoshandehBaMoshtaryModel.COLUMN_ccMoshtary(),
             BarkhordForoshandehBaMoshtaryModel.COLUMN_Tarikh(),
             BarkhordForoshandehBaMoshtaryModel.COLUMN_Tozihat(),
-            BarkhordForoshandehBaMoshtaryModel.COLUMN_ExtraProp_IsOld()
+            BarkhordForoshandehBaMoshtaryModel.COLUMN_IsFavorite(),
+            BarkhordForoshandehBaMoshtaryModel.COLUMN_ExtraProp_IsOld(),
+            BarkhordForoshandehBaMoshtaryModel.COLUMN_ExtraProp_Recent(),
+
         };
     }
 
@@ -194,15 +198,15 @@ public class BarkhordForoshandehBaMoshtaryDAO
         }
     }
 
-    public boolean insert(BarkhordForoshandehBaMoshtaryModel model)
+    public long insert(BarkhordForoshandehBaMoshtaryModel model)
     {
         try
         {
             ContentValues contentValues = modelToContentvalue(model);
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            db.insertOrThrow(BarkhordForoshandehBaMoshtaryModel.TableName(), null , contentValues);
+            long id = db.insertOrThrow(BarkhordForoshandehBaMoshtaryModel.TableName(), null , contentValues);
             db.close();
-            return true;
+            return id;
         }
         catch (Exception exception)
         {
@@ -210,7 +214,7 @@ public class BarkhordForoshandehBaMoshtaryDAO
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorInsert , BarkhordForoshandehBaMoshtaryModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "BarkhordForoshandehBaMoshtaryDAO" , "" , "insert" , "");
-            return false;
+            return -1;
         }
     }
 
@@ -251,7 +255,17 @@ public class BarkhordForoshandehBaMoshtaryDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(BarkhordForoshandehBaMoshtaryModel.TableName(), allColumns(), BarkhordForoshandehBaMoshtaryModel.COLUMN_ccMoshtary() + "=" + ccMoshtary , null, null, null, BarkhordForoshandehBaMoshtaryModel.COLUMN_Tarikh() + " desc");
+            String query = " SELECT *\n" +
+                    "FROM "+BarkhordForoshandehBaMoshtaryModel.TableName()+" \n" +
+                    "Where "+BarkhordForoshandehBaMoshtaryModel.COLUMN_ccMoshtary()+ " = "+ccMoshtary+" \n" +
+                    "ORDER BY \n" +
+                    "  CASE WHEN "+BarkhordForoshandehBaMoshtaryModel.COLUMN_ExtraProp_Recent()+" = 1  THEN "+ BarkhordForoshandehBaMoshtaryModel.COLUMN_Tarikh()+" END DESC,\n" +
+                    "  CASE WHEN "+BarkhordForoshandehBaMoshtaryModel.COLUMN_IsFavorite()+" = 1 AND "+BarkhordForoshandehBaMoshtaryModel.COLUMN_ExtraProp_IsOld()+" = 0 THEN "+BarkhordForoshandehBaMoshtaryModel.COLUMN_Tarikh()+" END DESC,\n" +
+                    "  CASE WHEN "+BarkhordForoshandehBaMoshtaryModel.COLUMN_IsFavorite()+" = 1 AND "+BarkhordForoshandehBaMoshtaryModel.COLUMN_ExtraProp_IsOld()+" = 1 THEN "+BarkhordForoshandehBaMoshtaryModel.COLUMN_IsFavorite()+" END DESC,\n" +
+                    "  CASE WHEN "+BarkhordForoshandehBaMoshtaryModel.COLUMN_IsFavorite()+" = 0 AND "+BarkhordForoshandehBaMoshtaryModel.COLUMN_ExtraProp_IsOld()+" = 0 THEN "+BarkhordForoshandehBaMoshtaryModel.COLUMN_Tarikh()+" END DESC,\n" +
+                    "  CASE WHEN "+BarkhordForoshandehBaMoshtaryModel.COLUMN_IsFavorite()+" = 0 AND "+BarkhordForoshandehBaMoshtaryModel.COLUMN_ExtraProp_IsOld()+" = 1 THEN "+BarkhordForoshandehBaMoshtaryModel.COLUMN_Tarikh()+" END DESC\n" +
+                    ";";
+            Cursor cursor = db.rawQuery(query,null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)
@@ -270,6 +284,40 @@ public class BarkhordForoshandehBaMoshtaryDAO
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, BarkhordForoshandehBaMoshtaryDAO.class.getSimpleName() , "" , "getAllByccMoshtary" , "");
         }
         return barkhordForoshandehBaMoshtaryModels;
+    }
+
+    /**
+     *
+     * @param ccBarkhords
+     * @param operator add =0 remove=1
+     * @return
+     */
+    public boolean updateIsFavoriteByccBarkhord(int ccBarkhords,boolean operator)
+    {
+    try
+        {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        ContentValues contentValues = new ContentValues();
+        //makeFavorite
+        if (!operator)
+        contentValues.put(BarkhordForoshandehBaMoshtaryModel.COLUMN_IsFavorite() , 0);
+        //makeNotFavorite
+        else
+        contentValues.put(BarkhordForoshandehBaMoshtaryModel.COLUMN_IsFavorite() , 1);
+
+        db.update(BarkhordForoshandehBaMoshtaryModel.TableName(),contentValues, BarkhordForoshandehBaMoshtaryModel.COLUMN_ccBarkhordForoshandeh() + " = " + ccBarkhords,null);
+        db.close();
+        return true;
+    }
+        catch (Exception exception)
+    {
+        exception.printStackTrace();
+        PubFunc.Logger logger = new PubFunc().new Logger();
+        String message = context.getResources().getString(R.string.errorUpdate , BarkhordForoshandehBaMoshtaryModel.TableName()) + "\n" + exception.toString();
+        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, BarkhordForoshandehBaMoshtaryModel.TableName() , "" , "updateIsFavoriteByccBarkhord" , "");
+        return false;
+    }
+
     }
 
     public int getCountTodayByccMoshtary(int ccMoshtary)
@@ -400,7 +448,10 @@ public class BarkhordForoshandehBaMoshtaryDAO
         contentValues.put(BarkhordForoshandehBaMoshtaryModel.COLUMN_ccMoshtary() , barkhordForoshandehBaMoshtaryModel.getCcMoshtary());
         contentValues.put(BarkhordForoshandehBaMoshtaryModel.COLUMN_Tarikh() , barkhordForoshandehBaMoshtaryModel.getTarikh());
         contentValues.put(BarkhordForoshandehBaMoshtaryModel.COLUMN_Tozihat() , barkhordForoshandehBaMoshtaryModel.getTozihat());
+        contentValues.put(BarkhordForoshandehBaMoshtaryModel.COLUMN_IsFavorite() , barkhordForoshandehBaMoshtaryModel.getIsFavorite());
         contentValues.put(BarkhordForoshandehBaMoshtaryModel.COLUMN_ExtraProp_IsOld() , barkhordForoshandehBaMoshtaryModel.getExtraProp_IsOld());
+        contentValues.put(BarkhordForoshandehBaMoshtaryModel.COLUMN_ExtraProp_Recent() , barkhordForoshandehBaMoshtaryModel.ExtraProp_IsRecent());
+
 
         return contentValues;
     }
@@ -420,7 +471,9 @@ public class BarkhordForoshandehBaMoshtaryDAO
             barkhordForoshandehBaMoshtaryModel.setCcMoshtary(cursor.getInt(cursor.getColumnIndex(BarkhordForoshandehBaMoshtaryModel.COLUMN_ccMoshtary())));
             barkhordForoshandehBaMoshtaryModel.setTarikh(cursor.getString(cursor.getColumnIndex(BarkhordForoshandehBaMoshtaryModel.COLUMN_Tarikh())));
             barkhordForoshandehBaMoshtaryModel.setTozihat(cursor.getString(cursor.getColumnIndex(BarkhordForoshandehBaMoshtaryModel.COLUMN_Tozihat())));
+            barkhordForoshandehBaMoshtaryModel.setIsFavorite(cursor.getInt(cursor.getColumnIndex(BarkhordForoshandehBaMoshtaryModel.COLUMN_IsFavorite())));
             barkhordForoshandehBaMoshtaryModel.setExtraProp_IsOld(cursor.getInt(cursor.getColumnIndex(BarkhordForoshandehBaMoshtaryModel.COLUMN_ExtraProp_IsOld())));
+            barkhordForoshandehBaMoshtaryModel.setExtraProp_IsRecent(cursor.getInt(cursor.getColumnIndex(BarkhordForoshandehBaMoshtaryModel.COLUMN_ExtraProp_IsOld())));
 
             barkhordForoshandehBaMoshtaryModels.add(barkhordForoshandehBaMoshtaryModel);
             cursor.moveToNext();
@@ -445,4 +498,23 @@ public class BarkhordForoshandehBaMoshtaryDAO
     }
 
 
+    public boolean updateAllRecentBarkhords() {
+
+        String query = "update " + BarkhordForoshandehBaMoshtaryModel.TableName() + " set " + BarkhordForoshandehBaMoshtaryModel.COLUMN_ExtraProp_Recent() + " = 0 where " + BarkhordForoshandehBaMoshtaryModel.COLUMN_ExtraProp_Recent() + " = 1 ";
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , BarkhordForoshandehBaMoshtaryModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "BarkhordForoshandehBaMoshtaryDAO" , "" , "updateAllRecentBarkhords" , "");
+            return false;
+        }
+    }
 }

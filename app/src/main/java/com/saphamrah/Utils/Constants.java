@@ -487,6 +487,7 @@ public class Constants
     private static final int PHOTO_TYPE_NATIONAL_CARD = 4;
     private static final int PHOTO_TYPE_JAVAZE_KASB = 6;
     private static final int PHOTO_TYPE_DASTE_CHECK = 28;
+    public static final int PHOTO_TYPE_EMZA = 8;
 
 
     public static int PHOTO_TYPE_NATIONAL_CARD() {

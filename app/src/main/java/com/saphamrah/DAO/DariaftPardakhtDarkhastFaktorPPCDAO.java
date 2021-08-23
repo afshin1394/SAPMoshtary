@@ -321,6 +321,48 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
         return dariaftPardakhtDarkhastFaktorPPCModels;
     }
 
+    public ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> getByccDarkhastFaktorSortMablagh(long ccDarkhastFaktor)
+    {
+        ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query = " SELECT *  FROM ( " +
+                    " 	SELECT * FROM DariaftPardakhtDarkhastFaktorPPC " +
+                    " 	WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeVosol <> " + Constants.VALUE_MARJOEE() +
+                    " 	UNION ALL " +
+                    " 	SELECT 	0 ccDariaftPardakhtDarkhastFaktor,ccDarkhastFaktor, 0 ccDariaftPardakht,CodeNoeVosol, NameNoeVosol, 0 ShomarehSanad, TarikhSanad, TarikhSanadShamsi,SUM(MablaghDariaftPardakht) MablaghDariaftPardakht, " +
+                    "			sum(Mablagh) Mablagh,0 CodeVazeiat, ZamaneTakhsiseFaktor, 0 ccAfradMamorVosol,0 ccMarkazAnbar, " +
+                    "			0 AS Tabdil_NaghdBeFish, 0 AS ccTafkikJoze, 0 AS NaghlAzGhabl,0 AS IsForTasviehTakhir, ZamaneTakhsiseFaktorShamsi," +
+                    "			0 AS ExtraProp_IsDirkard, 0 AS ExtraProp_ccKardexSatr," +
+                    "			0 ExtraProp_IsBestankari_ForTasviehTakhir, ExtraProp_IsSend, 0 AS ExtraProp_CanDelete, 0 AS ExtraProp_IsTajil, 0 as ExtraProp_ccDarkhastFaktorServer, 0 as ccMarkazForosh, 0 as ccMarkazSazmanForoshSakhtarForosh , 0 as  ExtraProp_ccDaryaftPardakhtCheckBargashty , 0 IsTaeedShodeh " +
+                    " 	FROM DariaftPardakhtDarkhastFaktorPPC " +
+                    " 	WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeVosol = " + Constants.VALUE_MARJOEE() + " AND "+DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_Mablagh() + " <> 0  AND "+ DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_MablaghDariaftPardakht() + " <> 0 "+
+                    " 	GROUP BY CodeNoeVosol, NameNoeVosol, TarikhSanadShamsi, ccDarkhastFaktor" + " ) A" +
+                    " ORDER BY MablaghDariaftPardakht desc  ";
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    dariaftPardakhtDarkhastFaktorPPCModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DariaftPardakhtDarkhastFaktorPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtDarkhastFaktorPPCDAO" , "" , "getByccDarkhastFaktor" , "");
+        }
+        return dariaftPardakhtDarkhastFaktorPPCModels;
+    }
+
+
+
     public ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> getByccDarkhastFaktorWithoutMarjoee(long ccDarkhastFaktor)
     {
         ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels = new ArrayList<>();
@@ -910,6 +952,44 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
             String query =" UPDATE DariaftPardakhtDarkhastFaktorPPC "
                     +" SET   Mablagh= Mablagh - " +  Mablagh
                     +" Where ccDariaftPardakhtDarkhastFaktor = " + ccDariaftPardakhtDarkhastFaktor ;
+
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void UpdateMablaghDariaftPardakht(long ccDariaftPardakhtDarkhastFaktor, double Mablagh)
+    {
+        try
+        {
+            String query =" UPDATE DariaftPardakhtDarkhastFaktorPPC "
+                    +" SET   Mablagh = " +  Mablagh
+                    +" Where ccDariaftPardakhtDarkhastFaktor = " + ccDariaftPardakhtDarkhastFaktor ;
+
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void UpdateMablaghDariaftPardakhtAfterRemoveTajil()
+    {
+        try
+        {
+            String query =" UPDATE DariaftPardakhtDarkhastFaktorPPC "
+                    +" SET   Mablagh =  MablaghDariaftPardakht "
+                    +" Where ExtraProp_IsSend = 0 "  ;
 
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             db.execSQL(query);

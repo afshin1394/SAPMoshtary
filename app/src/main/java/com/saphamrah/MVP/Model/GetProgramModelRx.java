@@ -2405,15 +2405,14 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                                 .filter(getImageJsonResultResponse -> getImageJsonResultResponse.body().getData()!=null)
                                 .map(getImageJsonResultResponse -> getImageJsonResultResponse.body().getData().get(0))
                                 .filter(getImageStringModel -> getImageStringModel!=null)
+                                .filter(getImageStringModel -> getImageStringModel.getImage()!=null)
                                 .map(getImageStringModel -> {
-
                                             DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel = new DarkhastFaktorEmzaMoshtaryModel();
                                             darkhastFaktorEmzaMoshtaryModel.setCcDarkhastFaktor(ccDarkhastFaktorHavaleh[0]);
                                             darkhastFaktorEmzaMoshtaryModel.setCcMoshtary(ccMoshtary[0]);
                                             darkhastFaktorEmzaMoshtaryModel.setDarkhastFaktorImage(Base64.decode(getImageStringModel.getImage(), Base64.NO_WRAP));
                                             darkhastFaktorEmzaMoshtaryModel.setHave_FaktorImage(1);
                                             return darkhastFaktorEmzaMoshtaryModel;
-
                                 });
 
                 })

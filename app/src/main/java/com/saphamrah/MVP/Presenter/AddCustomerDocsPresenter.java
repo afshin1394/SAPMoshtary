@@ -88,6 +88,18 @@ public class AddCustomerDocsPresenter implements AddCustomerDocsMVP.PresenterOps
             mView.get().showToast(R.string.errorSelectImage, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
         }
     }
+    @Override
+    public void checkEmzaImage(int ccMoshtary , byte[] emza)
+    {
+        if (emza.length > 0)
+        {
+            mModel.saveEmzaImage(ccMoshtary , emza);
+        }
+        else
+        {
+            mView.get().showToast(R.string.errorSelectImage, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }
+    }
 
     @Override
     public void getNationalCardImage(int ccMoshtary)
@@ -105,6 +117,11 @@ public class AddCustomerDocsPresenter implements AddCustomerDocsMVP.PresenterOps
     public void getDasteCheckImage(int ccMoshtary)
     {
         mModel.getDasteCheckImage(ccMoshtary);
+    }
+    @Override
+    public void getEmzaImage(int ccMoshtary)
+    {
+        mModel.getEmzaImage(ccMoshtary);
     }
 
     @Override
@@ -145,6 +162,18 @@ public class AddCustomerDocsPresenter implements AddCustomerDocsMVP.PresenterOps
             mView.get().showToast(R.string.errorSelectImage, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
         }
     }
+    @Override
+    public void deleteEmzaImage(int ccMoshtaryPhoto)
+    {
+        if (ccMoshtaryPhoto > 0)
+        {
+            mModel.deleteEmzaImage(ccMoshtaryPhoto);
+        }
+        else
+        {
+            mView.get().showToast(R.string.errorSelectImage, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }
+    }
 
     @Override
     public void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild)
@@ -169,9 +198,9 @@ public class AddCustomerDocsPresenter implements AddCustomerDocsMVP.PresenterOps
     }
 
     @Override
-    public void onGetImageStatus(boolean savedNationalCard, boolean savedJavazeKasb, boolean savedDasteCheck, boolean isOld)
+    public void onGetImageStatus(boolean savedNationalCard, boolean savedJavazeKasb, boolean savedDasteCheck,boolean savedEmza, boolean isOld)
     {
-        mView.get().onGetImageStatus(savedNationalCard, savedJavazeKasb, savedDasteCheck, isOld);
+        mView.get().onGetImageStatus(savedNationalCard, savedJavazeKasb, savedDasteCheck,savedEmza, isOld);
     }
 
     @Override
@@ -190,6 +219,11 @@ public class AddCustomerDocsPresenter implements AddCustomerDocsMVP.PresenterOps
     public void onSuccessSavedDastehCheckImage()
     {
         mView.get().onSuccessSavedDastehCheckImage();
+    }
+    @Override
+    public void onSuccessSavedEmzaImage()
+    {
+        mView.get().onSuccessSavedEmzaImage();
     }
 
     @Override
@@ -236,6 +270,18 @@ public class AddCustomerDocsPresenter implements AddCustomerDocsMVP.PresenterOps
             mView.get().onGetDasteCheckImage(moshtaryPhotoPPCModel);
         }
     }
+    @Override
+    public void onGetEmzaImage(MoshtaryPhotoPPCModel moshtaryPhotoPPCModel)
+    {
+        if (moshtaryPhotoPPCModel == null)
+        {
+            mView.get().showToast(R.string.imageNotFound, Constants.INFO_MESSAGE(), Constants.DURATION_SHORT());
+        }
+        else
+        {
+            mView.get().onGetEmzaImage(moshtaryPhotoPPCModel);
+        }
+    }
 
     @Override
     public void onSuccessDeletedNationalCardImage()
@@ -253,6 +299,11 @@ public class AddCustomerDocsPresenter implements AddCustomerDocsMVP.PresenterOps
     public void onSuccessDeletedDasteCheckImage()
     {
         mView.get().onSuccessDeletedDasteCheckImage();
+    }
+    @Override
+    public void onSuccessDeletedEmzaImage()
+    {
+        mView.get().onSuccessDeletedEmzaImage();
     }
 
     @Override

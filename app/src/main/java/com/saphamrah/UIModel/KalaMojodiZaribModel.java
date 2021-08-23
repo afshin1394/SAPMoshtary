@@ -40,6 +40,7 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
     private boolean kalaDoSetareh;
     private float GheymatMasrafKonandehAsli;
     private float GheymatForoshAsli;
+    private byte[] imageDb;
 
 
 
@@ -277,6 +278,13 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
         GheymatForoshAsli = gheymatForoshAsli;
     }
 
+    public byte[] getImageDb() {
+        return imageDb;
+    }
+
+    public void setImageDb(byte[] imageDb) {
+        this.imageDb = imageDb;
+    }
 
     @Override
     public int compareTo(KalaMojodiZaribModel o)

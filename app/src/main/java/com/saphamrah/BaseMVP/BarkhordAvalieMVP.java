@@ -14,6 +14,10 @@ public interface BarkhordAvalieMVP
         void openMojodiGiriActivity();
         void openDarkhastKalaActivity();
         void showToast(int resId, int messageType , int duration);
+
+        void onGetNewBarkhord(BarkhordForoshandehBaMoshtaryModel model);
+
+        void onSuccessAddToFavorite(int position,boolean operator);
     }
 
 
@@ -26,6 +30,9 @@ public interface BarkhordAvalieMVP
         void checkRemoveBarkhord(BarkhordForoshandehBaMoshtaryModel barkhord);
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
+        void checkFavoriteOperation(BarkhordForoshandehBaMoshtaryModel barkhords, int position, boolean operator);
+
+        void updateRecentBarkhords();
     }
 
 
@@ -33,12 +40,14 @@ public interface BarkhordAvalieMVP
     {
         Context getAppContext();
         void onGetBarkhords(ArrayList<BarkhordForoshandehBaMoshtaryModel> barkhords);
-        void onSuccessInsertNewBarkhord();
+        void onSuccessInsertNewBarkhord(BarkhordForoshandehBaMoshtaryModel barkhordForoshandehBaMoshtaryModel);
         void onFailedInsertNewBarkhord();
         void onFailedRemoveBarkhord();
         void onGetCountTodayBarkhord();
         void onError(int resId);
         void onConfigurationChanged(BarkhordAvalieMVP.RequiredViewOps view);
+
+        void onSuccessAddToFavorite(int position,boolean operator);
     }
 
 
@@ -50,6 +59,10 @@ public interface BarkhordAvalieMVP
         void removeBarkhord(int ccBarkhord , int ccMoshtary);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
+
+        void addToFavorite(BarkhordForoshandehBaMoshtaryModel barkhords,int position,boolean operator);
+
+        void updateRecentBarkhords();
     }
 
 }

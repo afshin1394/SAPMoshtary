@@ -1167,7 +1167,6 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
 
         Log.i("ITEMNUMBERPER", "onGetGridRecyclerDetails: " + status);
         adapterRequestKalaListGrid.setStatus(status);
-        adapterRequestKalaListGrid.setKalaImages(kalaPhotoModels);
         setViewPackages(adapterRequestKalaListGrid.getStatus());
     }
 

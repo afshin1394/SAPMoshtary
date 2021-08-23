@@ -40,6 +40,7 @@ public class AddCustomerDocsModel implements AddCustomerDocsMVP.ModelOps
         boolean savedNationalCard = false;
         boolean savedJavazeKasb = false;
         boolean savedDasteCheck = false;
+        boolean savedEmza = false;
         boolean isOld = true;
         for (MoshtaryPhotoPPCModel moshtaryPhotoPPCModel : moshtaryPhotoPPCModels)
         {
@@ -55,9 +56,13 @@ public class AddCustomerDocsModel implements AddCustomerDocsMVP.ModelOps
             {
                 savedDasteCheck = true;
             }
+            else if (moshtaryPhotoPPCModel.getCcNoePhoto() == Constants.PHOTO_TYPE_EMZA)
+            {
+                savedDasteCheck = true;
+            }
         }
         isOld = moshtaryModel.getExtraProp_IsOld() == 1;
-        mPresenter.onGetImageStatus(savedNationalCard , savedJavazeKasb , savedDasteCheck, isOld);
+        mPresenter.onGetImageStatus(savedNationalCard , savedJavazeKasb , savedDasteCheck,savedEmza, isOld);
     }
 
     @Override
@@ -121,6 +126,26 @@ public class AddCustomerDocsModel implements AddCustomerDocsMVP.ModelOps
     }
 
     @Override
+    public void saveEmzaImage(int ccMoshtary , byte[] emza)
+    {
+        MoshtaryPhotoPPCDAO moshtaryPhotoPPCDAO = new MoshtaryPhotoPPCDAO(mPresenter.getAppContext());
+        MoshtaryPhotoPPCModel moshtaryPhotoPPCModel = new MoshtaryPhotoPPCModel();
+        moshtaryPhotoPPCModel.setCcMoshtaryPhoto(0);
+        moshtaryPhotoPPCModel.setCcMoshtary(ccMoshtary);
+        moshtaryPhotoPPCModel.setCcNoePhoto(Constants.PHOTO_TYPE_EMZA);
+        moshtaryPhotoPPCModel.setTxtNoePhoto(mPresenter.getAppContext().getResources().getString(R.string.emza));
+        moshtaryPhotoPPCModel.setImageMadrak(emza);
+        if (moshtaryPhotoPPCDAO.insert(moshtaryPhotoPPCModel))
+        {
+            mPresenter.onSuccessSavedEmzaImage();
+        }
+        else
+        {
+            mPresenter.onFailedSaveImage(R.string.errorSaveData);
+        }
+    }
+
+    @Override
     public void getNationalCardImage(int ccMoshtary)
     {
         MoshtaryPhotoPPCDAO moshtaryPhotoPPCDAO = new MoshtaryPhotoPPCDAO(mPresenter.getAppContext());
@@ -166,6 +191,21 @@ public class AddCustomerDocsModel implements AddCustomerDocsMVP.ModelOps
     }
 
     @Override
+    public void getEmzaImage(int ccMoshtary)
+    {
+        MoshtaryPhotoPPCDAO moshtaryPhotoPPCDAO = new MoshtaryPhotoPPCDAO(mPresenter.getAppContext());
+        ArrayList<MoshtaryPhotoPPCModel> moshtaryPhotoPPCModels = moshtaryPhotoPPCDAO.getByccMoshtaryAndType(ccMoshtary , Constants.PHOTO_TYPE_EMZA);
+        if (moshtaryPhotoPPCModels != null && moshtaryPhotoPPCModels.size() > 0)
+        {
+            mPresenter.onGetEmzaImage(moshtaryPhotoPPCModels.get(0));
+        }
+        else
+        {
+            mPresenter.onGetEmzaImage(null);
+        }
+    }
+
+    @Override
     public void deleteNationalCardImage(int ccMoshtaryPhoto)
     {
         MoshtaryPhotoPPCDAO moshtaryPhotoPPCDAO = new MoshtaryPhotoPPCDAO(mPresenter.getAppContext());
@@ -206,6 +246,20 @@ public class AddCustomerDocsModel implements AddCustomerDocsMVP.ModelOps
             mPresenter.onFailedDeleteImage();
         }
     }
+    @Override
+    public void deleteEmzaImage(int ccMoshtaryPhoto)
+    {
+        MoshtaryPhotoPPCDAO moshtaryPhotoPPCDAO = new MoshtaryPhotoPPCDAO(mPresenter.getAppContext());
+        if (moshtaryPhotoPPCDAO.deleteByccMoshtaryPhoto(ccMoshtaryPhoto))
+        {
+            mPresenter.onSuccessDeletedEmzaImage();
+        }
+        else
+        {
+            mPresenter.onFailedDeleteImage();
+        }
+    }
+
 
     @Override
     public void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild)

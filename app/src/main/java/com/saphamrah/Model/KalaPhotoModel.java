@@ -37,6 +37,14 @@ public class KalaPhotoModel {
     private int ccKalaCodeDb;
     private byte[] imageDb;
 
+    public KalaPhotoModel() {
+    }
+
+    public KalaPhotoModel(int ccKalaCodeDb, byte[] imageDb) {
+        this.ccKalaCodeDb = ccKalaCodeDb;
+        this.imageDb = imageDb;
+    }
+
     public int getCcKalaPhotoDb() {
         return ccKalaPhotoDb;
     }

@@ -218,6 +218,9 @@ public interface APIServiceRxjava {
     @GET("Api/ApiWareHouse/GetAllvKalaGoroh")
     Observable<Response<GetAllvKalaGorohResult>>getAllvKalaGoroh();
 
+    @GET("Api/ApiSales/GetKalaZaribForosh")
+    Observable<Response<GetAllvKalaZaribForoshResult>> getKalaZaribForosh(@Query("ccAnbarak") int ccAnbarak , @Query("ccForoshandeh") int ccForoshandeh, @Query("ccMamorPakhsh") int ccMamorPakhsh, @Query("ccGorohs") String ccGorohs);
+
     @GET("Api/ApiSales/GetAllvKalaZaribForoshWithMarkazForosh")
     Observable<Response<GetAllvKalaZaribForoshResult>>getAllvKalaZaribForosh(@Query("ccGorohs") String ccGorohs , @Query("ccMarkazForosh") String ccMarkazForosh);
 

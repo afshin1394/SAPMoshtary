@@ -55,6 +55,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
     private DateUtils dateUtils = new DateUtils();
     private String strCodeNoeVosol = "";
     private boolean canGetTajil = false;
+    private boolean seeFirst = true;
     private double MablaghTajil_Nahaee, MablaghPasAzKasrTajil;
     private GetProgramShared getProgramShared = new GetProgramShared(BaseApplication.getContext());
     private SimpleDateFormat simpleDateFormatShort = new SimpleDateFormat(Constants.DATE_SHORT_FORMAT());
@@ -117,6 +118,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
         ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels = dariaftPardakhtDarkhastFaktorPPCDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
         DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
         setTajil(darkhastFaktorModel, darkhastFaktorModel.getCodeNoeVosolAzMoshtary());
+        showLayTajil(darkhastFaktorModel);
         mPresenter.onGetVosols(dariaftPardakhtDarkhastFaktorPPCModels);
     }
 
@@ -131,6 +133,8 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
         ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = dariaftPardakhtPPCDAO.getByccMoshtaryPishdariaft(ccMoshtary); //ispishdariaft
         mPresenter.onGetVosolsPishDaryaft(dariaftPardakhtPPCModels);
     }
+
+
 
 
     /**
@@ -467,8 +471,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
             exception.printStackTrace();
             setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "InvoiceSettlementModel", "", "checkInsert", "");
             mPresenter.onErrorCheckInsert(R.string.errorInvalidDate);
-        }
-    }
+        }    }
 
     @Override
     public void checkInsertCheckBargashty(int ccMoshtary, long ccDarkhastFaktor, int codeNoeVosolMoshtary, int flagInputHesab, String mablaghMandeh, String nameNoevosol, DariaftPardakhtPPCModel dariaftPardakhtPPCModel) {
@@ -964,7 +967,12 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                     mablaghTakhsis = dariaftPardakhtPPCModel.getMablaghMandeh();
                 }
                 if (dariaftPardakhtPPCModel.getMablagh() <= dariaftPardakhtPPCModel.getMablaghMandeh()) {
-                    mablaghTakhsis = dariaftPardakhtPPCModel.getMablagh();
+
+                    if (dariaftPardakhtPPCModel.getCodeNoeVosol() == Integer.parseInt(Constants.VALUE_SANAD_TAJIL)){
+                        mablaghTakhsis = MablaghTajil_Nahaee;
+                    } else {
+                        mablaghTakhsis = dariaftPardakhtPPCModel.getMablagh();
+                    }
                 }
             }
             dariaftPardakhtDarkhastFaktorPPC.setCcDarkhastFaktor(dariaftPardakhtPPCModel.getCcDarkhastFaktor());
@@ -1112,7 +1120,6 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                         if (mablaghMandeh == 0){
                           dariaftPardakhtDarkhastFaktorPPCDAO.deleteDirKardAndTajil(0, ccDpDf_Extra);
                       }
-
                         mPresenter.onSuccessRemoveItem(position, mablaghMandeh);
                     } else {
                         mPresenter.onFailedRemoveItem();
@@ -1141,11 +1148,14 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                    if (!biggerCcDaryaftPardakht && mablaghMandeh > 0){
                        dariaftPardakhtDarkhastFaktorPPCDAO.deleteDirKardAndTajil(ccDarkhastFaktor, 0);
                        dariaftPardakhtPPCDAO.deleteDirKardAndTajil(ccDarkhastFaktor, 0);
+                       dariaftPardakhtDarkhastFaktorPPCDAO.UpdateMablaghDariaftPardakhtAfterRemoveTajil();
                        mPresenter.onVisibilityLayoutTajil(false);
                    }
 
                      mablaghMandeh = setMablaghMandehFaktor(ccDarkhastFaktor);
-                     mPresenter.onSuccessRemoveItem(position, mablaghMandeh);
+                     Update_DariaftPardakhtDarkhastFaktorPPC_PasAzTajil(darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor));
+
+                    mPresenter.onSuccessRemoveItem(position, mablaghMandeh);
                 } else {
                     mPresenter.onFailedRemoveItem();
                 }
@@ -1283,10 +1293,26 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
         DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtBargashtyPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(BaseApplication.getContext());
         //int isDirkardFromCodeSabtShode = configNoeVosolMojazeFaktorDAO.isDirkardFromCodeSabtShode(codeNoeVosolSabtShodeh);
 
+        Date dateNowDate = new Date();
+        Date tarikhErsalFaktor = DateUtils.convertStringDateToDateClass(darkhastFaktorModel.getTarikhErsal());
+        long difDayForFaktor = DateUtils.getDateDiffAsDay(tarikhErsalFaktor, dateNowDate);
+        @SuppressLint("SimpleDateFormat") String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(dateNowDate);
+        @SuppressLint("SimpleDateFormat") String tarikhErsal = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(tarikhErsalFaktor);
+        TaghvimTatilDAO taghvimTatilDAO = new TaghvimTatilDAO(mPresenter.getAppContext());
+        ArrayList<TaghvimTatilModel> taghvimTatilModels = taghvimTatilDAO.getTarikhTatilBetweenTwoDates(tarikhErsal,currentDate);
+        int holidaysBetweenSentDateAndToday = taghvimTatilModels.size();
+
+
         if (darkhastFaktorModel != null) {
             //if (isDirkardFromCodeSabtShode == 1) {
                 if (darkhastFaktorModel.getIsTakhir() == 1) {
-                    flag = dariaftPardakhtBargashtyPPCDAO.HaveDirkardDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor());
+
+                    if (difDayForFaktor > holidaysBetweenSentDateAndToday){
+                        flag = dariaftPardakhtBargashtyPPCDAO.HaveDirkardDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor());
+
+                    } else {
+                        flag = true;
+                    }
                 }
 
                 } else {
@@ -1760,8 +1786,252 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
         else {
             canGetTajil = false;
         }
+
+    }
+
+
+    public void  showLayTajil(DarkhastFaktorModel darkhastFaktorModel) {
+
+        int codeNoeVosol = Constants.CODE_NOE_VOSOL_CHECK();
+        /*
+         * چک کردن ماکزیموم تعداد روز برای داشتن تعجیل از فروشنده مامور پخش
+         * اگر فاصله ی بین تاریخ ارسال فاکتور با تاریخ روز کوچک تر یا مساوی ماکزیموم مدت تعجیل بود اجازه ی تعجیل داده میشود
+         */
+        int maxModattajil = configNoeVosolMojazeFaktorDAO.getMaxModatTajil(codeNoeVosol , darkhastFaktorModel.getCodeNoeVosolAzMoshtary());
+        Log.i("setTajil", "currentDate: "+maxModattajil);
+
+        Date dateNowDate = new Date();
+        Date tarikhErsalFaktor = DateUtils.convertStringDateToDateClass(darkhastFaktorModel.getTarikhErsal());
+        long difDayForFaktor = DateUtils.getDateDiffAsDay(tarikhErsalFaktor, dateNowDate);
+        Log.i("setTajil", "currentDate: "+difDayForFaktor);
+
+        // بررسی وجود تعطیلات مابین تاریخ ارسال فاکتور و روز جاری برای محاسبه بیشترین زمانی که این فاکتور تعجیل می گیرد
+        @SuppressLint("SimpleDateFormat") String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(dateNowDate);
+        @SuppressLint("SimpleDateFormat") String tarikhErsal = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(tarikhErsalFaktor);
+        TaghvimTatilDAO taghvimTatilDAO = new TaghvimTatilDAO(mPresenter.getAppContext());
+        ArrayList<TaghvimTatilModel> taghvimTatilModels = taghvimTatilDAO.getTarikhTatilBetweenTwoDates(tarikhErsal,currentDate);
+        int holidaysBetweenSentDateAndToday = taghvimTatilModels.size();
+        maxModattajil = maxModattajil + holidaysBetweenSentDateAndToday;
+
+
+        if (difDayForFaktor <= maxModattajil) {
+
+            boolean flag_IsYeksan_dp_SabtShodeh = true;
+            boolean flag_HaveTajil = false;
+            int TedadRoozTatil = 0;
+            long TedadRoozSabtVosol = 0;
+            boolean Is_TarikhRooz = true;
+
+            DariaftPardakhtDarkhastFaktorPPCDAO dpdfDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(BaseApplication.getContext());
+            ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dps = dpdfDAO.getByccDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor());
+
+            // set All Time
+            SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_SHORT_FORMAT_WITH_SLASH());
+
+
+            Date tarikhRoozDate = null;
+            String tarikhRoozShamsiString = "";
+            try {
+                String dateNow = simpleDateFormatShort.format(new Date());
+                tarikhRoozShamsiString = dateUtils.todayDateWithoutSlash((BaseApplication.getContext()));
+                tarikhRoozDate = simpleDateFormatShort.parse(getProgramShared.getString(getProgramShared.GREGORIAN_DATE_TIME_OF_GET_CONFIG(), dateNow));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+            Date tarikhSarResidMiladyDate = new Date();
+            String tarikhSarResidMiladyShamsiString = dateUtils.gregorianToPersianDateTime(tarikhSarResidMiladyDate);
+
+
+            //.... Is All Of Them Insert Today........
+
+            if (tarikhSarResidMiladyDate != null) //date
+            {
+                try {
+                    tarikhSarResidMiladyShamsiString = dateUtils.getDateWithoutSlashShamsi(BaseApplication.getContext(), tarikhSarResidMiladyDate);
+                    tarikhSarResidMiladyDate = sdf.parse(sdf.format(tarikhSarResidMiladyDate));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
+            Date zamaneSabt = null;
+            String taTarikh = null;
+            String azTarikh = null;
+            ArrayList<TaghvimTatilModel> lst_taghvimTatil = new ArrayList<>();
+            for (DariaftPardakhtDarkhastFaktorPPCModel entity : dps) {
+                zamaneSabt = null;
+                if (entity.getCodeNoeVosol() != Integer.parseInt(Constants.VALUE_CHECK())) {
+
+                    try {
+                        Date date = null;
+                        if (darkhastFaktorModel.getTarikhFaktor() != null) {
+                            date = simpleDateFormatLong.parse(darkhastFaktorModel.getTarikhFaktor());
+                            azTarikh = simpleDateFormatShort.format(date);
+                            Date taTarikhDate = simpleDateFormatDATE_TIME_WITH_SPACE.parse(getProgramShared.getString(getProgramShared.GREGORIAN_DATE_TIME_OF_GET_CONFIG(), ""));
+                            taTarikh = simpleDateFormatDATE_TIME_WITH_SPACE.format(taTarikhDate);//Date Now
+                        }
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    lst_taghvimTatil = taghvimTatilDAO.getTarikhTatilBetweenTwoDates(azTarikh, taTarikh);
+
+
+                    try {
+                        if (entity.getZamaneTakhsiseFaktor() != null) {
+                            if (!entity.getZamaneTakhsiseFaktor().equals("")) {
+                                zamaneSabt = simpleDateFormatShort.parse(entity.getZamaneTakhsiseFaktor());
+                            } else {
+                                zamaneSabt = tarikhRoozDate;
+                            }
+
+                        } else {
+                            zamaneSabt = tarikhRoozDate;
+                        }
+
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    long diffTime = 0;
+                    if (zamaneSabt != null && tarikhRoozDate != null)
+                        diffTime = DateUtils.getDateDiffAsDay(zamaneSabt, tarikhRoozDate);
+
+                    if (diffTime != 0)
+                        Is_TarikhRooz = false;
+                }
+
+                if (entity.getCodeNoeVosol() == Integer.parseInt(Constants.VALUE_MARJOEE())) {
+                    try {
+                        Date date = simpleDateFormatLong.parse(darkhastFaktorModel.getTarikhFaktor());
+                        azTarikh = simpleDateFormatShort.format(date);
+                        taTarikh = getProgramShared.getString(getProgramShared.GREGORIAN_DATE_TIME_OF_SERVER(), simpleDateFormatLong.format(new Date()));//Date Now
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    lst_taghvimTatil = taghvimTatilDAO.getTarikhTatilBetweenTwoDates(azTarikh, taTarikh);
+
+                    TedadRoozTatil = lst_taghvimTatil.size();
+                    TedadRoozSabtVosol = DateUtils.getDateDiffAsDay(zamaneSabt, tarikhRoozDate);
+                    if (TedadRoozSabtVosol - TedadRoozTatil == 1)
+                        Is_TarikhRooz = true;
+                }
+
+                if (entity.getCodeNoeVosol() == Integer.parseInt(Constants.VALUE_CHECK())) {
+
+                    try {
+                        if (!(entity.getTarikhSanad().equals("") | entity.getTarikhSanad() == null)) {
+                            zamaneSabt = simpleDateFormatDATE_TIME_FORMAT.parse(entity.getTarikhSanad());
+                        } else {
+                            zamaneSabt = tarikhRoozDate;
+                        }
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    long diffTime = DateUtils.getDateDiffAsDay(zamaneSabt, tarikhRoozDate);
+                    if (diffTime != 0)
+                        Is_TarikhRooz = false;
+                }
+            }
+
+            if (codeNoeVosol == Integer.parseInt(Constants.VALUE_CHECK())) //dropdown
+            {
+                if (!(tarikhSarResidMiladyShamsiString.contains(tarikhRoozShamsiString))) {
+                    Is_TarikhRooz = false;
+                }
+            }
+            flag_HaveTajil = dpdfDAO.HaveTajil(darkhastFaktorModel.getCcDarkhastFaktor());
+            //------------------------------ بررسی اینکه آیا همه وصولیهای ثبت شده یکسان هستند یا نه -----------------
+            int Have_Naghd_SabtShodeh = 0;
+            int Have_Check_SabtShodeh = 0;
+
+//            for (DariaftPardakhtDarkhastFaktorPPCModel entity : dps) {
+//                if (entity.getCodeNoeVosol() == Integer.parseInt(Constants.VALUE_VAJH_NAGHD()) || entity.getCodeNoeVosol() == Integer.parseInt(Constants.VALUE_POS()) ||
+//                        entity.getCodeNoeVosol() == Integer.parseInt(Constants.VALUE_FISH_BANKI()) || //|| entity.getCodeNoeVosol() == Integer.parseInt(Constants.VALUE_MARJOEE()) ||
+//                        entity.getCodeNoeVosol() == Integer.parseInt(Constants.VALUE_IRANCHECK()))
+//                    Have_Naghd_SabtShodeh = 1;
+//                if (entity.getCodeNoeVosol() == Integer.parseInt(Constants.VALUE_CHECK()))
+//                    Have_Check_SabtShodeh = 1;
+//            }
+            if (Have_Check_SabtShodeh == 1 & Have_Naghd_SabtShodeh == 1)
+                flag_IsYeksan_dp_SabtShodeh = false;
+            //----------------------------------------------------------------
+            if (codeNoeVosol != 0) {
+                //Naghd......
+                if ((codeNoeVosol == Integer.parseInt(Constants.VALUE_VAJH_NAGHD()) || codeNoeVosol == Integer.parseInt(Constants.VALUE_POS()) ||
+                        codeNoeVosol == Integer.parseInt(Constants.VALUE_FISH_BANKI()) || codeNoeVosol == Integer.parseInt(Constants.VALUE_POS()) ||
+                        codeNoeVosol == Integer.parseInt(Constants.VALUE_IRANCHECK())) && Have_Check_SabtShodeh == 0) {
+                    MablaghTajil_Nahaee = Get_MablaghTajil(darkhastFaktorModel.getCcDarkhastFaktor(), 1, darkhastFaktorModel.getCodeNoeVosolAzMoshtary());
+                    flag_IsYeksan_dp_SabtShodeh = true;
+                }
+
+                if ((codeNoeVosol == Integer.parseInt(Constants.VALUE_VAJH_NAGHD()) || codeNoeVosol == Integer.parseInt(Constants.VALUE_POS()) ||
+                        codeNoeVosol == Integer.parseInt(Constants.VALUE_FISH_BANKI()) || codeNoeVosol == Integer.parseInt(Constants.VALUE_POS())) &&
+                        Have_Check_SabtShodeh == 1) {
+
+                    MablaghTajil_Nahaee = 0;
+                    MablaghPasAzKasrTajil = 0;
+                    flag_IsYeksan_dp_SabtShodeh = false;
+                }
+
+                //Check......
+                if (codeNoeVosol == Integer.parseInt(Constants.VALUE_CHECK()) & Have_Naghd_SabtShodeh == 0) {
+                    if (tarikhSarResidMiladyDate.getDay() == tarikhRoozDate.getDay() | tarikhSarResidMiladyDate.getMonth() == tarikhRoozDate.getMonth()) {
+                        MablaghTajil_Nahaee = Get_MablaghTajil(darkhastFaktorModel.getCcDarkhastFaktor(), 2, darkhastFaktorModel.getCodeNoeVosolAzMoshtary());
+                        flag_IsYeksan_dp_SabtShodeh = true;
+                    }
+                }
+                if (codeNoeVosol == Integer.parseInt(Constants.VALUE_CHECK()) & Have_Naghd_SabtShodeh == 1) {
+                    MablaghTajil_Nahaee = 0;
+                    MablaghPasAzKasrTajil = 0;
+                    flag_IsYeksan_dp_SabtShodeh = false;
+                }
+            }
+            long mandehFaktorPasAzTajil_Naghd = 0;
+            long mandehFaktorPasAzTajil_Check = 0;
+            long mablaghTajil_Naghd = 0;
+            long mablaghTajil_Check = 0;
+            //------------------------------------
+            if (Is_TarikhRooz & !flag_HaveTajil & flag_IsYeksan_dp_SabtShodeh & darkhastFaktorModel.getIsTajil()==1) {
+                long mablaghMandehFaktor = setMablaghMandehFaktor(darkhastFaktorModel.getCcDarkhastFaktor());
+
+
+                mablaghTajil_Naghd = Get_MablaghTajil(darkhastFaktorModel.getCcDarkhastFaktor(), 1, darkhastFaktorModel.getCodeNoeVosolAzMoshtary());
+                mablaghTajil_Check = Get_MablaghTajil(darkhastFaktorModel.getCcDarkhastFaktor(), 2, darkhastFaktorModel.getCodeNoeVosolAzMoshtary());
+
+                mandehFaktorPasAzTajil_Naghd = (mablaghMandehFaktor - mablaghTajil_Naghd) > 0 ? (mablaghMandehFaktor - mablaghTajil_Naghd) : 0;
+                mandehFaktorPasAzTajil_Check = (mablaghMandehFaktor - mablaghTajil_Check) > 0 ? (mablaghMandehFaktor - mablaghTajil_Check) : 0;
+
+
+                if (codeNoeVosol == Integer.parseInt(Constants.VALUE_CHECK()))
+                    MablaghTajil_Nahaee = mablaghTajil_Check;
+                else
+                    MablaghTajil_Nahaee = mablaghTajil_Naghd;
+
+                MablaghPasAzKasrTajil = ((mablaghMandehFaktor - MablaghTajil_Nahaee) > 0 ? (mablaghMandehFaktor - MablaghTajil_Nahaee) : 0);
+                //-----------
+                canGetTajil = true;
+            } else {
+
+                canGetTajil = false;
+            }
+
+            mPresenter.oncallTajil(mablaghTajil_Naghd, mandehFaktorPasAzTajil_Naghd, mablaghTajil_Check, mandehFaktorPasAzTajil_Check, canGetTajil);
+        }
+        else {
+            canGetTajil = false;
+        }
         mPresenter.onVisibilityLayoutTajil(canGetTajil);
     }
+
+
 
     /**
      * Insert Tajil
@@ -1844,19 +2114,53 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                 }
             }
 
-            Update_DariaftPardakhtDarkhastFaktorPPC_PasAzTajil(ccDariaftPardakhtDarkhastFaktor, darkhastFaktorModel);
+            Update_DariaftPardakhtDarkhastFaktorPPC_PasAzTajil( darkhastFaktorModel);
         }
     }
 
-    private void Update_DariaftPardakhtDarkhastFaktorPPC_PasAzTajil(long ccdpdf, DarkhastFaktorModel darkhastFaktorModel) {
+    private void Update_DariaftPardakhtDarkhastFaktorPPC_PasAzTajil( DarkhastFaktorModel darkhastFaktorModel) {
+        double Sum_MablaghDariaftPardakht = 0;
+
+        ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dpdfs = dariaftPardakhtDarkhastFaktorPPCDAO.getByccDarkhastFaktorSortMablagh(darkhastFaktorModel.getCcDarkhastFaktor());
+        for (DariaftPardakhtDarkhastFaktorPPCModel entity : dpdfs){
+            Sum_MablaghDariaftPardakht += entity.getMablagh();
+        }
+
+        Log.i("Tajil update", "MablaghTajil_Nahaee: "+MablaghTajil_Nahaee);
+        Log.i("Tajil update", "Sum_MablaghDariaftPardakht: "+Sum_MablaghDariaftPardakht);
+
+        if (Sum_MablaghDariaftPardakht > darkhastFaktorModel.getMablaghKhalesFaktor()){
+
+            double mablaghSabti = Sum_MablaghDariaftPardakht - darkhastFaktorModel.getMablaghKhalesFaktor();
+            for (int i = 0; i < dpdfs.size(); i++) {
+                if (dpdfs.get(i).getExtraProp_IsSend() == 0 && (dpdfs.get(i).getCodeNoeVosol() != Integer.parseInt(Constants.VALUE_SANAD_TAJIL) )){
+                   if (mablaghSabti - dpdfs.get(i).getMablagh() > 0){
+                       mablaghSabti -= dpdfs.get(i).getMablagh();
+                       Log.i("Tajil update", "mablaghSabti > 0 : " + mablaghSabti);
+                       dariaftPardakhtDarkhastFaktorPPCDAO.UpdateMablaghDariaftPardakht(dpdfs.get(i).getCcDariaftPardakhtDarkhastFaktor(), 0);
+                   } else {
+                       dariaftPardakhtDarkhastFaktorPPCDAO.UpdateMablaghDariaftPardakht(dpdfs.get(i).getCcDariaftPardakhtDarkhastFaktor(), (dpdfs.get(i).getMablagh() - mablaghSabti));
+                       Log.i("Tajil update", "mablaghSabti < 0 : " +( dpdfs.get(i).getMablagh() - mablaghSabti));
+                       break;
+                   }
+                }
+            }
+
+        }
+    }
+
+    private void Update_DariaftPardakhtDarkhastFaktorPPC_PasAzTajilOld(long ccdpdf, DarkhastFaktorModel darkhastFaktorModel) {
         double Sum_MablaghDariaftPardakht = 0;
         DariaftPardakhtDarkhastFaktorPPCDAO dpdfDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(BaseApplication.getContext());
         ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dpdfs = dpdfDAO.getByccDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor());
         for (DariaftPardakhtDarkhastFaktorPPCModel entity : dpdfs)
             Sum_MablaghDariaftPardakht += entity.getMablagh();
 
-        if (Sum_MablaghDariaftPardakht > darkhastFaktorModel.getMablaghKhalesFaktor())
+        if (Sum_MablaghDariaftPardakht > darkhastFaktorModel.getMablaghKhalesFaktor()){
+
             dpdfDAO.Update_MablaghDariaftPardakht(ccdpdf, (Sum_MablaghDariaftPardakht - darkhastFaktorModel.getMablaghKhalesFaktor()));
+
+        }
     }
 
     public long Get_MablaghTajil(long ccDarkhastFaktor, int CodeNoeVosol, int CodeNoeVosolAzMoshtary) {

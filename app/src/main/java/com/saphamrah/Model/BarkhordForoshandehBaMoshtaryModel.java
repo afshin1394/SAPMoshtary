@@ -17,7 +17,10 @@ public class BarkhordForoshandehBaMoshtaryModel
     private static final String COLUMN_ccMoshtary = "ccMoshtary";
     private static final String COLUMN_Tarikh = "Tarikh";
     private static final String COLUMN_Tozihat = "Tozihat";
+    private static final String COLUMN_IsFavorite = "IsFavorite";
     private static final String COLUMN_ExtraProp_IsOld = "ExtraProp_IsOld";
+    private static final String COLUMN_ExtraProp_Recent = "ExtraProp_Recent";
+
 
     public static String TableName() {
         return TABLE_NAME;
@@ -37,9 +40,17 @@ public class BarkhordForoshandehBaMoshtaryModel
     public static String COLUMN_Tozihat() {
         return COLUMN_Tozihat;
     }
+    public static String COLUMN_IsFavorite() {
+        return COLUMN_IsFavorite;
+    }
     public static String COLUMN_ExtraProp_IsOld() {
         return COLUMN_ExtraProp_IsOld;
     }
+    public static String COLUMN_ExtraProp_Recent() {
+        return COLUMN_ExtraProp_Recent;
+    }
+
+
 
 
 
@@ -60,8 +71,14 @@ public class BarkhordForoshandehBaMoshtaryModel
     @SerializedName("Tozihat")
     @Expose
     private String Tozihat;
+    @SerializedName("IsFavorite")
+    @Expose
+    private int IsFavorite;
 
     private int ExtraProp_IsOld;
+
+    private int ExtraProp_IsRecent;
+
 
 
     public Integer getCcBarkhordForoshandeh() {
@@ -113,6 +130,23 @@ public class BarkhordForoshandehBaMoshtaryModel
     }
 
 
+    public int getIsFavorite() {
+        return IsFavorite;
+    }
+
+
+    public int ExtraProp_IsRecent() {
+        return ExtraProp_IsRecent;
+    }
+
+    public void setExtraProp_IsRecent(int extraProp_IsRecent) {
+        ExtraProp_IsRecent = extraProp_IsRecent;
+    }
+
+    public void setIsFavorite(int isFavorite) {
+        IsFavorite = isFavorite;
+    }
+
     public String toJsonString(BarkhordForoshandehBaMoshtaryModel model)
     {
         String tarikh = model.getTarikh() == null ? "" : model.getTarikh();
@@ -122,16 +156,22 @@ public class BarkhordForoshandehBaMoshtaryModel
         jsonObject.addProperty(COLUMN_ccMoshtary() , model.getCcMoshtary());
         jsonObject.addProperty(COLUMN_Tarikh() , tarikh);
         jsonObject.addProperty(COLUMN_Tozihat() , model.getTozihat());
+        jsonObject.addProperty(COLUMN_IsFavorite() , model.getIsFavorite());
         return jsonObject.toString();
     }
 
 
-
-    @NonNull
     @Override
-    public String toString()
-    {
-        return "ccBarkhordForoshandeh : " + ccBarkhordForoshandeh + " , ccForoshandeh : " + ccForoshandeh +
-        " , ccMoshtary : " + ccMoshtary + " , Tarikh : " + Tarikh + " , Tozihat : " + Tozihat + " , ExtraProp_IsOld : " + ExtraProp_IsOld;
+    public String toString() {
+        return "BarkhordForoshandehBaMoshtaryModel{" +
+                "ccBarkhordForoshandeh=" + ccBarkhordForoshandeh +
+                ", ccForoshandeh=" + ccForoshandeh +
+                ", ccMoshtary=" + ccMoshtary +
+                ", Tarikh='" + Tarikh + '\'' +
+                ", Tozihat='" + Tozihat + '\'' +
+                ", IsFavorite=" + IsFavorite +
+                ", ExtraProp_IsOld=" + ExtraProp_IsOld +
+                ", ExtraProp_IsRecent=" + ExtraProp_IsRecent +
+                '}';
     }
 }

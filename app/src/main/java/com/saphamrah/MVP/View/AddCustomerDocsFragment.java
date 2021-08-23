@@ -45,6 +45,7 @@ public class AddCustomerDocsFragment extends Fragment implements AddCustomerDocs
     private boolean nationalCardStatus;
     private boolean javazehKasbStatus;
     private boolean dastehCheckStatus;
+    private boolean emza;
     private boolean isOld;
 
     //private AddCustomerInfoModel addCustomerInfoModel;
@@ -84,19 +85,22 @@ public class AddCustomerDocsFragment extends Fragment implements AddCustomerDocs
         outState.putBoolean("nationalCard" , nationalCardStatus);
         outState.putBoolean("javazeKasb" , javazehKasbStatus);
         outState.putBoolean("dasteCheck" , dastehCheckStatus);
+        outState.putBoolean("emza" , emza);
     }
 
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState)
     {
+
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null)
         {
             nationalCardStatus = savedInstanceState.getBoolean("nationalCard");
             javazehKasbStatus = savedInstanceState.getBoolean("javazeKasb");
             dastehCheckStatus = savedInstanceState.getBoolean("dasteCheck");
-            onGetImageStatus(nationalCardStatus, javazehKasbStatus, dastehCheckStatus, isOld);
+            emza = savedInstanceState.getBoolean("emza");
+            onGetImageStatus(nationalCardStatus, javazehKasbStatus, dastehCheckStatus,emza, isOld);
         }
         /*if (savedInstanceState != null)
         {
@@ -336,7 +340,7 @@ public class AddCustomerDocsFragment extends Fragment implements AddCustomerDocs
     }
 
     @Override
-    public void onGetImageStatus(boolean savedNationalCard, boolean savedJavazeKasb, boolean savedDasteCheck, boolean isOld)
+    public void onGetImageStatus(boolean savedNationalCard, boolean savedJavazeKasb, boolean savedDasteCheck,boolean savedEmza, boolean isOld)
     {
         if (savedNationalCard)
         {
@@ -363,6 +367,14 @@ public class AddCustomerDocsFragment extends Fragment implements AddCustomerDocs
         else
         {
             imgSelectDasteCheck.setImageResource(R.drawable.ic_check_book);
+        }
+        if (savedEmza)
+        {
+            imgSelectDasteCheck.setImageResource(R.drawable.ic_success);
+        }
+        else
+        {
+            imgSelectDasteCheck.setImageResource(R.drawable.ic_emza);
         }
         this.isOld = isOld;
     }
@@ -428,6 +440,11 @@ public class AddCustomerDocsFragment extends Fragment implements AddCustomerDocs
         }
     }
 
+    @Override
+    public void onSuccessSavedEmzaImage() {
+
+    }
+
 
     @Override
     public void onGetNationalCardImage(MoshtaryPhotoPPCModel moshtaryPhotoPPCModel) {
@@ -445,6 +462,11 @@ public class AddCustomerDocsFragment extends Fragment implements AddCustomerDocs
     }
 
     @Override
+    public void onGetEmzaImage(MoshtaryPhotoPPCModel moshtaryPhotoPPCModel) {
+
+    }
+
+    @Override
     public void onSuccessDeletedNationalCardImage() {
 
     }
@@ -456,6 +478,11 @@ public class AddCustomerDocsFragment extends Fragment implements AddCustomerDocs
 
     @Override
     public void onSuccessDeletedDasteCheckImage() {
+
+    }
+
+    @Override
+    public void onSuccessDeletedEmzaImage() {
 
     }
 

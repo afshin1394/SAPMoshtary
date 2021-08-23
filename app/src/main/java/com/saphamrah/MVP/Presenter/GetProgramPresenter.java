@@ -9,6 +9,7 @@ import com.saphamrah.MVP.Model.GetProgramModel;
 import com.saphamrah.MVP.Model.GetProgramModelRx;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
+import com.saphamrah.PubFunc.Logger;
 import com.saphamrah.R;
 import com.saphamrah.Repository.BargashtyRepository;
 import com.saphamrah.Utils.Constants;
@@ -270,6 +271,8 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
     public void onFailedGetProgram(int itemIndex, String error)
     {
         mView.get().updateStatusOfFailedItem(Constants.GET_PROGRAM_FULL() , itemIndex , error);
+        Logger logger  = new Logger();
+        logger.insertLogToDB(getAppContext(),Constants.LOG_EXCEPTION(),error,"GetProgramPresenter","GetProgramActivity","onFailedGetProgram","");
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.saphamrah.MVP.Presenter;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.saphamrah.BaseMVP.BarkhordAvalieMVP;
 import com.saphamrah.MVP.Model.BarkhordAvalieModel;
@@ -36,6 +35,12 @@ public class BarkhordAvaliePresenter implements BarkhordAvalieMVP.PresenterOps ,
     {
         mView = new WeakReference<>(view);
     }
+
+    @Override
+    public void onSuccessAddToFavorite(int position,boolean operator) {
+        mView.get().onSuccessAddToFavorite(position,operator);
+    }
+
 
     @Override
     public void checkBottomBarClick(int position, int ccMoshtary)
@@ -97,6 +102,7 @@ public class BarkhordAvaliePresenter implements BarkhordAvalieMVP.PresenterOps ,
     @Override
     public void checkNewBarkhord(int ccMoshtary, String desc)
     {
+
         if (ccMoshtary <= 0)
         {
             mView.get().showToast(R.string.errorSelectCustomer, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
@@ -140,6 +146,16 @@ public class BarkhordAvaliePresenter implements BarkhordAvalieMVP.PresenterOps ,
 
     }
 
+    @Override
+    public void checkFavoriteOperation(BarkhordForoshandehBaMoshtaryModel barkhords, int position, boolean operator) {
+        mModel.addToFavorite(barkhords,position,operator);
+    }
+
+    @Override
+    public void updateRecentBarkhords() {
+        mModel.updateRecentBarkhords();
+    }
+
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
 
@@ -157,8 +173,9 @@ public class BarkhordAvaliePresenter implements BarkhordAvalieMVP.PresenterOps ,
     }
 
     @Override
-    public void onSuccessInsertNewBarkhord()
+    public void onSuccessInsertNewBarkhord(BarkhordForoshandehBaMoshtaryModel model)
     {
+        mView.get().onGetNewBarkhord(model);
         mView.get().showToast(R.string.successfullyDoneOps , Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
     }
 

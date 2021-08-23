@@ -51,6 +51,7 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
     private final int REQUEST_CODE_NATIONAL_CARD = 1;
     private final int REQUEST_CODE_JAVAZE_KASB = 2;
     private final int REQUEST_CODE_DASTE_CHECK = 3;
+    private final int REQUEST_CODE_EMZA = 4;
     /**
      * 1 == camera
      * 2 == gallery
@@ -60,6 +61,7 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
     private boolean nationalCardStatus;
     private boolean javazehKasbStatus;
     private boolean dastehCheckStatus;
+    private boolean emzaStatus;
     private boolean isOld;
 
     private CustomAlertDialog customAlertDialog;
@@ -78,6 +80,8 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
     ImageView imgSelectJavazeKasb;
     @BindView(R.id.imgDasteCheck)
     ImageView imgSelectDasteCheck;
+    @BindView(R.id.imgEmaza)
+    ImageView imgSelectEmza;
 
 
     @OnClick(R.id.lblSelectNationalCodeCamera)
@@ -135,6 +139,25 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
         }
     }
 
+    @OnClick(R.id.lblSelectEmazaCamera)
+    public void selectEmzaCamera(){
+        if (isOld)
+        {
+            showToast(R.string.errorCantAddForSendedCustomer, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }else {
+            openCamera(REQUEST_CODE_EMZA);
+        }
+    }
+    @OnClick(R.id.lblSelectEmazaGallery)
+    public void selectEmzaGallery(){
+        if (isOld)
+        {
+            showToast(R.string.errorCantAddForSendedCustomer, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }else {
+            openGallery(REQUEST_CODE_EMZA);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -167,6 +190,8 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
         imgSelectJavazeKasb.setOnClickListener(v -> mPresenter.getJavazeKasbImage(ccMoshtary));
 
         imgSelectDasteCheck.setOnClickListener(v -> mPresenter.getDasteCheckImage(ccMoshtary));
+
+        imgSelectEmza.setOnClickListener(v -> mPresenter.getEmzaImage(ccMoshtary));
 
         imgviewBack.setOnClickListener(v -> AddCustomerDocsActivity.this.finish());
 
@@ -251,6 +276,11 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
                 {
                     mPresenter.checkDastehCheckImage(ccMoshtary , new PubFunc().new ImageUtils().convertBitmapToByteArray(AddCustomerDocsActivity.this, bitmap , 50 ));
                 }
+                else if (requestCode == REQUEST_CODE_EMZA)
+                {
+                    mPresenter.checkEmzaImage(ccMoshtary , new PubFunc().new ImageUtils().convertBitmapToByteArray(AddCustomerDocsActivity.this, bitmap , 50 ));
+                }
+
             }
             catch (Exception exception)
             {
@@ -273,7 +303,7 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
     }
 
     @Override
-    public void onGetImageStatus(boolean savedNationalCard, boolean savedJavazeKasb, boolean savedDasteCheck, boolean isOld)
+    public void onGetImageStatus(boolean savedNationalCard, boolean savedJavazeKasb, boolean savedDasteCheck,boolean savedEmza, boolean isOld)
     {
         if (savedNationalCard)
         {
@@ -286,6 +316,11 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
             imgSelectJavazeKasb.setImageResource(R.drawable.ic_success);
         }
         if (savedDasteCheck)
+        {
+            dastehCheckStatus = savedDasteCheck;
+            imgSelectDasteCheck.setImageResource(R.drawable.ic_success);
+        }
+        if (savedEmza)
         {
             dastehCheckStatus = savedDasteCheck;
             imgSelectDasteCheck.setImageResource(R.drawable.ic_success);
@@ -339,6 +374,21 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
     }
 
     @Override
+    public void onSuccessSavedEmzaImage()
+    {
+        try
+        {
+            emzaStatus = true;
+            imgSelectEmza.setImageResource(R.drawable.ic_success);
+        }
+        catch (Exception exception)
+        {
+            showToast(R.string.errorSelectImage , Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "AddCustomerDocsActivity", "onSuccessSavedEmzaImage","");
+        }
+    }
+
+    @Override
     public void onGetNationalCardImage(final MoshtaryPhotoPPCModel moshtaryPhotoPPCModel)
     {
         customAlertDialog.showImage(AddCustomerDocsActivity.this, moshtaryPhotoPPCModel.getImageMadrak(), true, new CustomAlertDialogResponse() {
@@ -384,6 +434,21 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
             }
         });
     }
+    @Override
+    public void onGetEmzaImage(final MoshtaryPhotoPPCModel moshtaryPhotoPPCModel)
+    {
+        customAlertDialog.showImage(AddCustomerDocsActivity.this, moshtaryPhotoPPCModel.getImageMadrak(), true, new CustomAlertDialogResponse() {
+            @Override
+            public void setOnCancelClick() {
+
+            }
+
+            @Override
+            public void setOnApplyClick() {
+                mPresenter.deleteEmzaImage(moshtaryPhotoPPCModel.getCcMoshtaryPhoto());
+            }
+        });
+    }
 
     @Override
     public void onSuccessDeletedNationalCardImage()
@@ -404,6 +469,12 @@ public class AddCustomerDocsActivity extends AppCompatActivity implements AddCus
     {
         dastehCheckStatus = false;
         imgSelectDasteCheck.setImageResource(R.drawable.ic_check_book);
+    }
+    @Override
+    public void onSuccessDeletedEmzaImage()
+    {
+        dastehCheckStatus = false;
+        imgSelectEmza.setImageResource(R.drawable.ic_signature);
     }
 
     @Override

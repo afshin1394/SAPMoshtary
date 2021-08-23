@@ -19,9 +19,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
+import androidx.collection.SparseArrayCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.signature.ObjectKey;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.saphamrah.CustomView.CustomScrollView;
@@ -37,11 +41,15 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -51,7 +59,7 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
     public static final int SHOW_DETAILS = 1;
     public static final int DONT_SHOW_DETAILS = 0;
     public static final String TAG = RequestedGridGoodAdapter.class.getSimpleName();
-    public static final int UNSELECTED=-1;
+    public static final int UNSELECTED = -1;
 
 
     private Context context;
@@ -63,7 +71,8 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
     private int status;
     private static int heightOfRecycler;
     private static int widthOfRecycler;
-    private SparseArray allKalaPhoto = new SparseArray();
+    private SparseArray<byte[]> allKalaPhoto;
+    private CompositeDisposable compositeDisposable;
 
 
     public RequestedGridGoodAdapter(Context context, ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels, OnItemEventListener listener) {
@@ -71,6 +80,10 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
         this.listener = listener;
         this.kalaMojodiZaribModels = kalaMojodiZaribModels;
         lastSelectedPosition = UNSELECTED;
+        compositeDisposable = new CompositeDisposable();
+        setKalaImages();
+
+
     }
 
 
@@ -113,11 +126,9 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
     @Override
     public int getItemViewType(int position) {
 
-        if (position == lastSelectedPosition)
-        {
+        if (position == lastSelectedPosition) {
             return SHOW_DETAILS;
-        } else
-        {
+        } else {
             return DONT_SHOW_DETAILS;
         }
     }
@@ -133,25 +144,21 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
         KalaMojodiZaribModel model = kalaMojodiZaribModels.get(position);
 
 
-         //set kala status asasi
-            if (model.getKalaAsasi())
-            {
-                Log.d("RequestGoodsAdaptor t","KalaAsasi:"+ model.getKalaAsasi() );
-                holder.imgStatusKala.setImageResource(R.drawable.ic_kalaasasi);
-                holder.imgStatusKala.setVisibility(View.VISIBLE);
-            }
+        //set kala status asasi
+        if (model.getKalaAsasi()) {
+            Log.d("RequestGoodsAdaptor t", "KalaAsasi:" + model.getKalaAsasi());
+            holder.imgStatusKala.setImageResource(R.drawable.ic_kalaasasi);
+            holder.imgStatusKala.setVisibility(View.VISIBLE);
+        }
 
-            //set kala status pishnahadi
-            else if (model.getTedadPishnahadi()>0)
-            {
-                Log.d("RequestGoodsAdaptor t","KalaPishnahadi:"+ model.getTedadPishnahadi() );
-                holder.imgStatusKala.setImageResource(R.drawable.ic_kalapishnahadi);
-                holder.imgStatusKala.setVisibility(View.VISIBLE);
-            }
-            else
-            {
-                holder.imgStatusKala.setVisibility(View.GONE);
-            }
+        //set kala status pishnahadi
+        else if (model.getTedadPishnahadi() > 0) {
+            Log.d("RequestGoodsAdaptor t", "KalaPishnahadi:" + model.getTedadPishnahadi());
+            holder.imgStatusKala.setImageResource(R.drawable.ic_kalapishnahadi);
+            holder.imgStatusKala.setVisibility(View.VISIBLE);
+        } else {
+            holder.imgStatusKala.setVisibility(View.GONE);
+        }
 
         //TODO set Selection
         if (position == lastSelectedPosition) {
@@ -164,7 +171,7 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
         String gheymatForosh = formatter.format(model.getGheymatForosh());
         /**Zarib Arzesh Afzoodeh=0.1**/
         //Todo
-        String gheymatForoshBaArzeshAfzoodeh = formatter.format(model.getGheymatForosh() * 1.09 );
+        String gheymatForoshBaArzeshAfzoodeh = formatter.format(model.getGheymatForosh() * 1.09);
         String gheymatMasrafKonande = formatter.format(model.getMablaghMasrafKonandeh());
         int haveMaliatAvarezResId = model.getMashmolMaliatAvarez() == 0 ? R.drawable.ic_error : R.drawable.ic_success;
         String tarikhTolid = model.getTarikhTolid().substring(0, 10);
@@ -250,33 +257,22 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
             holder.lblMainNameCodeKala.setText(String.format("%1$s - %2$s", model.getCodeKala(), model.getNameKala()));
             holder.lblMainGheymatForosh.setText(String.format(" %1$s %2$s", gheymatForosh, context.getResources().getString(R.string.rial)));
             //holder.lblMainBatchNumber.setText(model.getShomarehBach());
-            if (model.getShomarehBach() !=null) {
-                if (!model.getShomarehBach().equals("")){
+            if (model.getShomarehBach() != null) {
+                if (!model.getShomarehBach().equals("")) {
                     holder.lblMainBatchNumber.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.shomareBach), model.getShomarehBach()));
                 } else {
-                    holder.lblMainBatchNumber.setText(String.format("%1$s %2$s",   formatter.format(model.getMablaghMasrafKonandeh() ) , context.getResources().getString(R.string.rial)));
+                    holder.lblMainBatchNumber.setText(String.format("%1$s %2$s", formatter.format(model.getMablaghMasrafKonandeh()), context.getResources().getString(R.string.rial)));
                 }
             } else {
-                holder.lblMainBatchNumber.setText(String.format("%1$s %2$s", model.getMablaghMasrafKonandeh() , context.getResources().getString(R.string.rial)));
+                holder.lblMainBatchNumber.setText(String.format("%1$s %2$s", model.getMablaghMasrafKonandeh(), context.getResources().getString(R.string.rial)));
             }
 //            if (model.getKalaAsasi()) {
 //                holder.imgStatusKala.setVisibility(View.VISIBLE);
 //            } else {
 //                holder.imgStatusKala.setVisibility(View.GONE);
 //            }
-            try {
+            holder.setImages(allKalaPhoto.get(model.getCcKalaCode()));
 
-                Glide.with(context)
-                        .load(allKalaPhoto.get(model.getCcKalaCode()))
-                        .placeholder(R.drawable.nopic_whit)
-                        .into(holder.imgKalaFull);
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.toString(), "RequestedGridGoodAdapter", "", "onBindViewHolder", "");
-            }
 
 
             //View has not been selected yet
@@ -287,14 +283,14 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
 
             holder.lblTedadMojodi.setText(String.format(" %1$s %2$s", model.getTedad(), context.getResources().getString(R.string.adad)));
 
-            if (model.getShomarehBach() !=null) {
-                if (!model.getShomarehBach().equals("")){
+            if (model.getShomarehBach() != null) {
+                if (!model.getShomarehBach().equals("")) {
                     holder.lblMainBatchNumber.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.shomareBach), model.getShomarehBach()));
                 } else {
-                    holder.lblMainBatchNumber.setText(String.format("%1$s %2$s",   formatter.format(model.getMablaghMasrafKonandeh() ) , context.getResources().getString(R.string.rial)));
+                    holder.lblMainBatchNumber.setText(String.format("%1$s %2$s", formatter.format(model.getMablaghMasrafKonandeh()), context.getResources().getString(R.string.rial)));
                 }
             } else {
-                holder.lblMainBatchNumber.setText(String.format("%1$s %2$s", model.getMablaghMasrafKonandeh() , context.getResources().getString(R.string.rial)));
+                holder.lblMainBatchNumber.setText(String.format("%1$s %2$s", model.getMablaghMasrafKonandeh(), context.getResources().getString(R.string.rial)));
             }
 //            holder.lblMainBatchNumber.setText(String.format(" %1$s", model.getShomarehBach()));
 
@@ -303,22 +299,18 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
             holder.lblMainGheymatForosh.setText(String.format(" %1$s %2$s", gheymatForosh, context.getResources().getString(R.string.rial)));
 
             //set kala status asasi
-            if (model.getKalaAsasi())
-            {
-                Log.d("RequestGoodsAdaptor t","KalaAsasi:"+ model.getKalaAsasi() );
+            if (model.getKalaAsasi()) {
+                Log.d("RequestGoodsAdaptor t", "KalaAsasi:" + model.getKalaAsasi());
                 holder.imgStatusKala.setImageResource(R.drawable.ic_kalaasasi);
                 holder.imgStatusKala.setVisibility(View.VISIBLE);
             }
 
             //set kala status pishnahadi
-            else if (model.getTedadPishnahadi()>0)
-            {
-                Log.d("RequestGoodsAdaptor t","KalaPishnahadi:"+ model.getTedadPishnahadi() );
+            else if (model.getTedadPishnahadi() > 0) {
+                Log.d("RequestGoodsAdaptor t", "KalaPishnahadi:" + model.getTedadPishnahadi());
                 holder.imgStatusKala.setImageResource(R.drawable.ic_kalapishnahadi);
                 holder.imgStatusKala.setVisibility(View.VISIBLE);
-            }
-            else
-            {
+            } else {
                 holder.imgStatusKala.setVisibility(View.GONE);
             }
 
@@ -328,23 +320,15 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
 
         /*****load images for central layout*****/
         Log.i("getImageHash", "onBindViewHolder: " + allKalaPhoto.get(model.getCcKalaCode()) + model.getCcKalaCode());
-        try {
-            Glide.with(context)
-                    .load(allKalaPhoto.get(model.getCcKalaCode()))
-                    .placeholder(R.drawable.nopic_whit)
-                    .into(holder.imgKalaGrid);
+        holder.setImages(allKalaPhoto.get(model.getCcKalaCode()));
 
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.toString(), "RequestedGridGoodAdapter", "", "onBindViewHolder", "");
-        }
 
 
         /***setEventListeners***/
         holder.setEventListeners(model, position, listener);
     }
+
+
 
 
     @Override
@@ -356,7 +340,9 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
     public class ViewHolder extends RecyclerView.ViewHolder {
         Typeface font = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fontPath));
         OnItemEventListener onItemEventListener;
-        /** global views**/
+        /**
+         * global views
+         **/
         private SwipeLayout swipeLayout;
         private CardView cardview;
         private LinearLayout layStatus;
@@ -455,7 +441,6 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
                     dividerSixthCap = view.findViewById(R.id.sixthCapDivider);
                     dividerEightCap = view.findViewById(R.id.eightCapDivider);
 
-                    swipeLayout.setLeftSwipeEnabled(true);
 
                     cardview = view.findViewById(R.id.crdviewRoot);
                     lblKalaNameCode = view.findViewById(R.id.lblNameCodeKalaMain);
@@ -535,19 +520,36 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
             });
 
 
-
-
             swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                         lastSelectedPosition = position;
-                         notifyDataSetChanged();
-                         listener.onItemClick(model, position);
+                    notifyItemChanged(position);
+                    notifyItemChanged(lastSelectedPosition);
+                    lastSelectedPosition = position;
+                    listener.onItemClick(model, position);
+                    Log.i("ccKalaCodeded", "onClick: " + model.getNameKala() + "modelccKalaCode" + model.getCcKalaCode() + allKalaPhoto.get(model.getCcKalaCode()));
 
                 }
             });
 
 
+        }
+        private void setImages(byte[] image) {
+
+            try {
+                Glide.with(context)
+                        .load(image)
+                        .placeholder(R.drawable.nopic_whit)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .apply(RequestOptions.signatureOf(new ObjectKey(String.valueOf(System.currentTimeMillis()))))
+                        .into(imgKalaGrid);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.toString(), "RequestedGridGoodAdapter", "", "onBindViewHolder", "");
+            }
         }
 
 
@@ -577,22 +579,30 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
     }
 
 
-    public void setKalaImages(ArrayList<KalaPhotoModel> kalaPhotoModels) {
-
+    public void setKalaImages() {
+        Log.i(TAG, "setKalaImages: kalaMojodiZaribModels.size()" + kalaMojodiZaribModels.size() + "\n");
+        if (allKalaPhoto != null) {
+            allKalaPhoto.clear();
+            notifyDataSetChanged();
+        }
+        allKalaPhoto = new SparseArray<>();
         Disposable disposable = Observable.fromIterable(kalaMojodiZaribModels)
-                .flatMap(kalaMojodiZaribModel -> Observable.fromIterable(kalaPhotoModels)
-                        .map(kalaPhotoModel -> {
-
-                            if (kalaPhotoModel.getCcKalaCodeDb() == kalaMojodiZaribModel.getCcKalaCode()) {
-                                allKalaPhoto.put(kalaPhotoModel.getCcKalaCodeDb(),kalaPhotoModel.getImageDb());
-
-                            }
-                            return kalaMojodiZaribModel;
-                        })
-                ).subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+                .subscribe(kalaMojodiZaribModel -> {
+                    allKalaPhoto.put(kalaMojodiZaribModel.getCcKalaCode(), kalaMojodiZaribModel.getImageDb());
+                });
+        compositeDisposable.add(disposable);
 
+    }
+
+    public void clearRecyclerView() {
+        if (compositeDisposable != null) {
+            if (!compositeDisposable.isDisposed()) {
+                compositeDisposable.dispose();
+            }
+            compositeDisposable = null;
+        }
     }
 
     public void setStatus(int status) {
@@ -629,7 +639,9 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
 
     }
 
-    public void resetLastSelectedPosition(){
-        this.lastSelectedPosition=UNSELECTED;
+    public void resetLastSelectedPosition() {
+        this.lastSelectedPosition = UNSELECTED;
     }
+
+
 }

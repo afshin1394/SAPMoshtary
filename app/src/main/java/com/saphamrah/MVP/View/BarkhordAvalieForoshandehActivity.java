@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,7 +19,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -26,8 +26,10 @@ import com.saphamrah.Adapter.BarkhordAvalieAdapter;
 import com.saphamrah.BaseMVP.BarkhordAvalieMVP;
 import com.saphamrah.CustomView.BottomBar;
 import com.saphamrah.CustomView.CustomTextInputLayout;
+import com.saphamrah.MVP.Model.BarkhordAvalieModel;
 import com.saphamrah.MVP.Presenter.BarkhordAvaliePresenter;
 import com.saphamrah.Model.BarkhordForoshandehBaMoshtaryModel;
+import com.saphamrah.PubFunc.ConcurrencyUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
@@ -48,6 +50,12 @@ public class BarkhordAvalieForoshandehActivity extends AppCompatActivity impleme
     private CustomAlertDialog customAlertDialog;
     private int ccMoshtary;
 
+    private ArrayList<BarkhordForoshandehBaMoshtaryModel> barkhordAvalieModels;
+    private BarkhordAvalieAdapter adapter;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager linearLayoutManager;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -57,12 +65,13 @@ public class BarkhordAvalieForoshandehActivity extends AppCompatActivity impleme
         Calligrapher calligrapher = new Calligrapher(this);
         calligrapher.setFont(this, getResources().getString(R.string.fontPath), true);
 
-        final FloatingActionMenu fabMenu = (FloatingActionMenu)findViewById(R.id.fabMenu);
-        FloatingActionButton fabAdd = (FloatingActionButton)findViewById(R.id.fabAdd);
+        final FloatingActionMenu fabMenu = findViewById(R.id.fabMenu);
+        FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
         ImageView imgBack = findViewById(R.id.imgBack);
 
-
         customAlertDialog = new CustomAlertDialog(BarkhordAvalieForoshandehActivity.this);
+        initializeAdapter();
+
         new BottomBar(BarkhordAvalieForoshandehActivity.this, 0, new BottomBar.OnItemClickListener() {
             @Override
             public void onClick(int position) {
@@ -89,10 +98,37 @@ public class BarkhordAvalieForoshandehActivity extends AppCompatActivity impleme
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 BarkhordAvalieForoshandehActivity.this.finish();
             }
         });
 
+    }
+
+    private void initializeAdapter() {
+        barkhordAvalieModels = new ArrayList<>();
+        recyclerView = findViewById(R.id.recyclerView);
+        adapter = new BarkhordAvalieAdapter(BarkhordAvalieForoshandehActivity.this, barkhordAvalieModels, new BarkhordAvalieAdapter.OnItemClickListener() {
+            @Override
+            public void deleteItem(BarkhordForoshandehBaMoshtaryModel barkhord, int position) {
+                mPresenter.checkRemoveBarkhord(barkhord);
+            }
+
+            @Override
+            public void addToFavorite(BarkhordForoshandehBaMoshtaryModel barkhords, int position,boolean operator) {
+                Log.i("opertaorre", "addToFavorite: "+operator);
+                mPresenter.checkFavoriteOperation(barkhords,position,operator);
+
+            }
+        });
+
+
+
+        linearLayoutManager = new LinearLayoutManager(BarkhordAvalieForoshandehActivity.this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(BarkhordAvalieForoshandehActivity.this , 0));
+        recyclerView.setAdapter(adapter);
     }
 
 
@@ -102,21 +138,13 @@ public class BarkhordAvalieForoshandehActivity extends AppCompatActivity impleme
         return BarkhordAvalieForoshandehActivity.this;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onGetBarkhords(final ArrayList<BarkhordForoshandehBaMoshtaryModel> barkhords)
     {
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
-        BarkhordAvalieAdapter adapter = new BarkhordAvalieAdapter(BarkhordAvalieForoshandehActivity.this, barkhords, new BarkhordAvalieAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BarkhordForoshandehBaMoshtaryModel barkhord, int position) {
-                mPresenter.checkRemoveBarkhord(barkhord);
-            }
-        });
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(BarkhordAvalieForoshandehActivity.this);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(BarkhordAvalieForoshandehActivity.this , 0));
-        recyclerView.setAdapter(adapter);
+        barkhordAvalieModels = barkhords;
+        adapter.setBarkhords(barkhordAvalieModels);
+
     }
 
     @Override
@@ -141,6 +169,22 @@ public class BarkhordAvalieForoshandehActivity extends AppCompatActivity impleme
     public void showToast(int resId, int messageType, int duration)
     {
         customAlertDialog.showToast(BarkhordAvalieForoshandehActivity.this, getResources().getString(resId), messageType, duration);
+    }
+
+    @Override
+    public void onGetNewBarkhord(BarkhordForoshandehBaMoshtaryModel model) {
+
+    }
+
+    @Override
+    public void onSuccessAddToFavorite(int position , boolean operator) {
+//        PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(new PubFunc.ConcurrencyEvents() {
+//            @Override
+//            public void uiThreadIsReady() {
+                adapter.updateBarkhordFavorite(position,operator);
+//            }
+//        });
+
     }
 
 
@@ -187,6 +231,7 @@ public class BarkhordAvalieForoshandehActivity extends AppCompatActivity impleme
                     else
                     {
                         show.dismiss();
+
                         mPresenter.checkNewBarkhord(ccMoshtary , editTextDesc.getText().toString().trim());
                     }
                 }
@@ -195,6 +240,12 @@ public class BarkhordAvalieForoshandehActivity extends AppCompatActivity impleme
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.updateRecentBarkhords();
+        barkhordAvalieModels = null;
+    }
 
     public void startMVPOps()
     {
@@ -253,6 +304,8 @@ public class BarkhordAvalieForoshandehActivity extends AppCompatActivity impleme
             }
         }
     }
+
+
 
 
 }

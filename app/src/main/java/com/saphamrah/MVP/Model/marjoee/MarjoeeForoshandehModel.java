@@ -127,6 +127,8 @@ import java.util.Date;
 
         dariaftPardakhtDarkhastFaktorPPCDAO.deleteMarjoeeForoshandehByccDarkhastFaktor(ccKardexSatr,ccDarkhastFaktor,Constants.VALUE_MARJOEE());
 
+        dariaftPardakhtPPCDAO.deleteDirKardAndTajil(ccDarkhastFaktor,0);
+        dariaftPardakhtDarkhastFaktorPPCDAO.deleteDirKardAndTajil(ccDarkhastFaktor,0);
 
 
         darkhastFaktorDAO.updateMarjoee(ccDarkhastFaktor, 0);
