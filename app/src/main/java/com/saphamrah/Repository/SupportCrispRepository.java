@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.SupportCrispDAO;
 import com.saphamrah.Model.SupportCrispModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -39,14 +39,14 @@ public class SupportCrispRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<SupportCrispModel> supportCrispModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(supportCrispModels))
+        return RxAsync.makeObservable(insertGroupCallable(supportCrispModels))
                 .subscribeOn(Schedulers.io());
     }
 }

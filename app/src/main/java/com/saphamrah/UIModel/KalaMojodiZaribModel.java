@@ -1,5 +1,7 @@
 package com.saphamrah.UIModel;
 
+import android.graphics.Bitmap;
+
 import androidx.annotation.NonNull;
 
 public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
@@ -40,7 +42,7 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
     private boolean kalaDoSetareh;
     private float GheymatMasrafKonandehAsli;
     private float GheymatForoshAsli;
-    private byte[] imageDb;
+    private Bitmap imageDb;
 
 
 
@@ -278,11 +280,11 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
         GheymatForoshAsli = gheymatForoshAsli;
     }
 
-    public byte[] getImageDb() {
+    public Bitmap getImageDb() {
         return imageDb;
     }
 
-    public void setImageDb(byte[] imageDb) {
+    public void setImageDb(Bitmap imageDb) {
         this.imageDb = imageDb;
     }
 

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.MojoodiGiriDAO;
 import com.saphamrah.Model.MojoodiGiriModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -48,12 +48,12 @@ public class MojoodiGiriRepository {
     /*******************************************************************Observable*****************************************************************/
 
     public Observable<Boolean> deleteAll(){
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> insertGroup(ArrayList<MojoodiGiriModel> mojoodiGiriModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(mojoodiGiriModels))
+        return RxAsync.makeObservable(insertGroupCallable(mojoodiGiriModels))
                 .subscribeOn(Schedulers.io());
     }
 }

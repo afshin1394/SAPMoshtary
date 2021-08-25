@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.MandehMojodyMashinDAO;
 import com.saphamrah.Model.MandehMojodyMashinModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -42,19 +42,19 @@ public class MandehMojodyMashinRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(mandehMojodyMashinModels))
+        return RxAsync.makeObservable(insertGroupCallable(mandehMojodyMashinModels))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<ArrayList<MandehMojodyMashinModel>> getAll() {
-        return RxDAOUtils.makeObservable(getAllCallable())
+        return RxAsync.makeObservable(getAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 }

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.MarjoeeMamorPakhshDAO;
 import com.saphamrah.Model.MarjoeeMamorPakhshModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -38,12 +38,12 @@ public class MarjoeeMamorPakhshRepository {
     /*******************************************************************Observable*****************************************************************/
 
     public Observable<Boolean> deleteAll(){
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> insertGroup(ArrayList<MarjoeeMamorPakhshModel> marjoeeMamorPakhshModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(marjoeeMamorPakhshModels))
+        return RxAsync.makeObservable(insertGroupCallable(marjoeeMamorPakhshModels))
                 .subscribeOn(Schedulers.io());
     }
 }

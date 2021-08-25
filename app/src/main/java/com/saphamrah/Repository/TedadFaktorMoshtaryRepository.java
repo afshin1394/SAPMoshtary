@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.TedadFaktorMoshtaryDAO;
 import com.saphamrah.Model.TedadFaktorMoshtaryModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -47,12 +47,12 @@ public class TedadFaktorMoshtaryRepository {
     /*******************************************************************Observable*****************************************************************/
 
     public Observable<Boolean> deleteAll(){
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> insertGroup(ArrayList<TedadFaktorMoshtaryModel> tedadFaktorMoshtaryModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(tedadFaktorMoshtaryModels))
+        return RxAsync.makeObservable(insertGroupCallable(tedadFaktorMoshtaryModels))
                 .subscribeOn(Schedulers.io());
     }
 }

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.TaghiratVersionPPCDAO;
 import com.saphamrah.Model.TaghiratVersionPPCModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -37,14 +37,14 @@ public class TaghiratVersionPPCRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<TaghiratVersionPPCModel> taghiratVersionPPCModel) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(taghiratVersionPPCModel))
+        return RxAsync.makeObservable(insertGroupCallable(taghiratVersionPPCModel))
                 .subscribeOn(Schedulers.io());
     }
 }

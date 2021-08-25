@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.BarkhordForoshandehBaMoshtaryDAO;
 import com.saphamrah.Model.BarkhordForoshandehBaMoshtaryModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -40,20 +40,20 @@ public class BarkhordForoshandehBaMoshtaryRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<BarkhordForoshandehBaMoshtaryModel> barkhordForoshandehBaMoshtaryModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(barkhordForoshandehBaMoshtaryModels))
+        return RxAsync.makeObservable(insertGroupCallable(barkhordForoshandehBaMoshtaryModels))
                 .subscribeOn(Schedulers.io());
     }
 
 
     public Observable<Boolean> updateIsFavoriteByccBarkhord(int ccBarkhord,boolean operation) {
-        return RxDAOUtils.makeObservable(updateIsFavoriteByccBarkhordCallable(ccBarkhord,operation))
+        return RxAsync.makeObservable(updateIsFavoriteByccBarkhordCallable(ccBarkhord,operation))
                 .subscribeOn(Schedulers.io());
     }
 }

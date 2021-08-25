@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.RptMandehdarDAO;
 import com.saphamrah.Model.RptMandehdarModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -39,14 +39,14 @@ public class RptMandehdarRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<RptMandehdarModel> rptMandehdarModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(rptMandehdarModels))
+        return RxAsync.makeObservable(insertGroupCallable(rptMandehdarModels))
                 .subscribeOn(Schedulers.io());
     }
 }

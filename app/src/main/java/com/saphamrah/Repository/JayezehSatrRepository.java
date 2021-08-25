@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.JayezehSatrDAO;
 import com.saphamrah.Model.JayezehSatrModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -47,14 +47,14 @@ public class JayezehSatrRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<JayezehSatrModel> jayezehSatrModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(jayezehSatrModels))
+        return RxAsync.makeObservable(insertGroupCallable(jayezehSatrModels))
                 .subscribeOn(Schedulers.io());
     }
 }

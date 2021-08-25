@@ -19,22 +19,22 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class RxDAOUtils {
+public class RxAsync {
 
 
-    private static final String TAG = "RxDAOUtils";
+    private static final String TAG = "RxAsync";
 
-    private static RxDAOUtils instance = null;
+    private static RxAsync instance = null;
 
-    public static RxDAOUtils getInstance() {
+    public static RxAsync getInstance() {
         if (instance == null) {
-            instance = new RxDAOUtils();
+            instance = new RxAsync();
         }
 
         return instance;
     }
 
-    public RxDAOUtils() {
+    public RxAsync() {
     }
 
     public static <T> Observable<T> makeObservable(final Callable<T> func) {

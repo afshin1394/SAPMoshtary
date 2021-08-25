@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.RptHadafForoshDAO;
 import com.saphamrah.Model.HadafForosh.RptHadafForoshModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -40,14 +40,14 @@ public class RptHadafForoshRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<RptHadafForoshModel> rptHadafForoshModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(rptHadafForoshModels))
+        return RxAsync.makeObservable(insertGroupCallable(rptHadafForoshModels))
                 .subscribeOn(Schedulers.io());
     }
 }

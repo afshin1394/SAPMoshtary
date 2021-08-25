@@ -1,8 +1,6 @@
 package com.saphamrah.MVP.Model;
 
 
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -57,6 +55,7 @@ import com.saphamrah.UIModel.JayezehByccKalaCodeModel;
 import com.saphamrah.UIModel.KalaDarkhastFaktorSatrModel;
 import com.saphamrah.UIModel.KalaMojodiZaribModel;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,9 +64,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
-public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
-{
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
+public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
 
     private DarkhastKalaMVP.RequiredPresenterOps mPresenter;
     private boolean enableKalaAsasi = true;
@@ -259,20 +261,28 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
     }
 
 
-    /**
-     *
-     * @param ccMoshtary شناسه مشتری
-     * @param calculateKalaPishnahadi اگر اولین بار لیست کالا گرفته شود، این پارامتر true می باشد ولی اگر بعد از محاسبه کالا پیشنهادی این متد فراخوانی شود این پارامتر برابر false است
-     */
-    @Override
-    public void getAllKalaWithMojodiZarib(final int ccMoshtary, final boolean calculateKalaPishnahadi, final boolean calculateKalaAsasi, boolean getAllRequestedGoods, boolean firstTime, DarkhastKalaActivity.AddItemType type)
-    {
+    private Callable<ArrayList<KalaMojodiZaribModel>> getAllKalaWithMojodiZaribCallable(final int ccMoshtary, final boolean calculateKalaPishnahadi, final boolean calculateKalaAsasi, boolean getAllRequestedGoods, DarkhastKalaActivity.AddItemType type) {
+        return () -> getAllKalaWithMojodiZaribFunc(ccMoshtary, calculateKalaPishnahadi, calculateKalaAsasi, getAllRequestedGoods, type);
+    }
+    public void getAllKalaWithMojodiZaribObservable(final int ccMoshtary, final boolean calculateKalaPishnahadi, final boolean calculateKalaAsasi, boolean getAllRequestedGoods, DarkhastKalaActivity.AddItemType type) {
+         RxAsync.makeObservable(getAllKalaWithMojodiZaribCallable(ccMoshtary, calculateKalaPishnahadi, calculateKalaAsasi, getAllRequestedGoods, type))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(throwable -> {
+                        mPresenter.onError();
+                 })
+                .doOnNext(kalaMojodiZaribModels -> {
+                        mPresenter.onGetAllKalaWithMojodiZarib(kalaMojodiZaribModels, type);
+                }).subscribe();
+    }
+
+
+    private ArrayList<KalaMojodiZaribModel> getAllKalaWithMojodiZaribFunc(final int ccMoshtary, final boolean calculateKalaPishnahadi, final boolean calculateKalaAsasi, boolean getAllRequestedGoods, DarkhastKalaActivity.AddItemType type) {
         KalaMojodiZaribForoshDAO kalaMojodiZaribForoshDAO = new KalaMojodiZaribForoshDAO(mPresenter.getAppContext());
         final MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
         final MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
 
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
-        //TODO
         int moshtaryGharardadccSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getMoshtaryGharardadccSazmanForosh(), -1);
         int ccMoshtaryGharardad = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtaryGharardad(), -1);
 
@@ -282,92 +292,79 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
         int noeMoshtary = moshtaryModel.getCcNoeMoshtary();
         final ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = kalaMojodiZaribForoshDAO.getAllByMoshtary(daraje, noeMoshtary, moshtaryGharardadccSazmanForosh, ccMoshtaryGharardad);
 
-        final Handler handler = new Handler(new Handler.Callback()
-        {
-            @Override
-            public boolean handleMessage(Message msg)
-            {
-                Log.d("DarkhastKalaModel", "end of get goods and size : " + kalaMojodiZaribModels.size() + "kalaMojodiZaribModels:" + kalaMojodiZaribModels.toString());
-                mPresenter.onGetAllKalaWithMojodiZarib(kalaMojodiZaribModels,firstTime,type);
-                return false;
+
+        Log.d("DarkhastKalaModel", "end of get goods and size : " + kalaMojodiZaribModels.size() + "kalaMojodiZaribModels:" + kalaMojodiZaribModels.toString());
+
+
+        ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
+        ForoshandehMamorPakhshUtils foroshandehMamorPakhshUtils = new ForoshandehMamorPakhshUtils();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
+        int noeMasouliat = foroshandehMamorPakhshUtils.getNoeMasouliat(foroshandehMamorPakhshModel);
+        String enablePishnahadKala = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_PISHNAHAD_KALA);
+        Log.d("darkhastKala", "calculateKalaPishnahadi : " + calculateKalaPishnahadi + " , noeMasouliat : " + noeMasouliat + " , enablePishnahadKala : " + enablePishnahadKala);
+        if (calculateKalaPishnahadi && (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 8) && enablePishnahadKala.trim().equals("1")) {
+            Log.d("darkhastKala", "in calculate kala pishnahadi");
+            DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
+            DarkhastFaktorKalaPishnahadiDAO darkhastFaktorKalaPishnahadiDAO = new DarkhastFaktorKalaPishnahadiDAO(mPresenter.getAppContext());
+            int ccForoshandeh = selectFaktorShared.getInt(selectFaktorShared.getCcForoshandeh(), -1);
+            float zaribDarkhastTablet = 0F;
+            int maxRoozPishbiniTahvil = 0;
+            try {
+                zaribDarkhastTablet = Float.parseFloat(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_ZARIB_DARKHAST_TABLET));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
-
-        Thread thread = new Thread()
-        {
-            @Override
-            public void run()
-            {
-                ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
-                ForoshandehMamorPakhshUtils foroshandehMamorPakhshUtils = new ForoshandehMamorPakhshUtils();
-                ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
-                int noeMasouliat = foroshandehMamorPakhshUtils.getNoeMasouliat(foroshandehMamorPakhshModel);
-                String enablePishnahadKala = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_PISHNAHAD_KALA);
-                Log.d("darkhastKala" , "calculateKalaPishnahadi : " + calculateKalaPishnahadi + " , noeMasouliat : " + noeMasouliat + " , enablePishnahadKala : " + enablePishnahadKala);
-                if (calculateKalaPishnahadi && (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 8) && enablePishnahadKala.trim().equals("1"))
-                {
-                    Log.d("darkhastKala" , "in calculate kala pishnahadi");
-                    DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-                    DarkhastFaktorKalaPishnahadiDAO darkhastFaktorKalaPishnahadiDAO = new DarkhastFaktorKalaPishnahadiDAO(mPresenter.getAppContext());
-                    SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
-                    int ccForoshandeh = selectFaktorShared.getInt(selectFaktorShared.getCcForoshandeh() , -1);
-                    float zaribDarkhastTablet = 0F;
-                    int maxRoozPishbiniTahvil = 0;
-                    try
-                    {
-                        zaribDarkhastTablet = Float.parseFloat(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_ZARIB_DARKHAST_TABLET));
-                    }
-                    catch (Exception e) { e.printStackTrace(); }
-                    try
-                    {
-                        maxRoozPishbiniTahvil = Integer.parseInt(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_MAX_ROOZ_PISHBINI_TAHVIL));
-                    }
-                    catch (Exception e) { e.printStackTrace(); }
-                    //TODO use hardcode for ToorVisit, add toorvisit to storedprocedure and webservice and then get from database
-                    int toorVisit = moshtaryDAO.getToorVisit(ccMoshtary);
-                    //int toorVisit = 14;
-                    SparseArray<KalaDarkhastFaktorModel> kalaDarkhastFaktorModels = darkhastFaktorKalaPishnahadiDAO.getByccMoshtaryForMinQTY(ccMoshtary);
-                    try
-                    {
-                        Log.d("DarkhastKalaModel_pishn" , "ccMoshtary : " + ccMoshtary);
-                        Log.d("DarkhastKalaModel_pishn" , "kalaMojodiZaribModels.size : " + kalaMojodiZaribModels.size());
-                        Log.d("DarkhastKalaModel_pishn" , "kalaMojodiZaribModels : " + kalaMojodiZaribModels.toString());
-                        Log.d("DarkhastKalaModel_pishn" , "toorVisit : " + toorVisit);
-                        Log.d("DarkhastKalaModel_pishn" , "kalaDarkhastFaktorModels.size : " + kalaDarkhastFaktorModels.size());
-                        Log.d("DarkhastKalaModel_pishn" , "kalaDarkhastFaktorModels : " + kalaDarkhastFaktorModels.toString());
-                    }
-                    catch (Exception e){e.printStackTrace();}
-
-                    if (kalaDarkhastFaktorModels != null && kalaDarkhastFaktorModels.size() > 0)
-                    {
-                        calculateKalaPishnahadi(ccForoshandeh, ccMoshtary, kalaMojodiZaribModels, kalaDarkhastFaktorModels, toorVisit, zaribDarkhastTablet);
-                    }
-                }
-
-                if (enableKalaAsasi && calculateKalaAsasi)
-                {
-                    String ccKalaCodesOfKalaAsasi = calculateKalaAsasi(kalaMojodiZaribModels, ccMoshtary, moshtaryModel.getCcNoeSenf());
-                    SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
-                    shared.remove(shared.getCcKalaCodesOfKalaAsasi());
-                    shared.putString(shared.getCcKalaCodesOfKalaAsasi(), ccKalaCodesOfKalaAsasi);
-                }
-                Collections.sort(kalaMojodiZaribModels);
-
-                Message message = new Message();
-                message.arg1 = 1;
-                handler.sendMessage(message);
+            try {
+                maxRoozPishbiniTahvil = Integer.parseInt(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_MAX_ROOZ_PISHBINI_TAHVIL));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        };
-        thread.start();
+            //TODO use hardcode for ToorVisit, add toorvisit to storedprocedure and webservice and then get from database
+            int toorVisit = moshtaryDAO.getToorVisit(ccMoshtary);
+            //int toorVisit = 14;
+            SparseArray<KalaDarkhastFaktorModel> kalaDarkhastFaktorModels = darkhastFaktorKalaPishnahadiDAO.getByccMoshtaryForMinQTY(ccMoshtary);
+            try {
+                Log.d("DarkhastKalaModel_pishn", "ccMoshtary : " + ccMoshtary);
+                Log.d("DarkhastKalaModel_pishn", "kalaMojodiZaribModels.size : " + kalaMojodiZaribModels.size());
+                Log.d("DarkhastKalaModel_pishn", "kalaMojodiZaribModels : " + kalaMojodiZaribModels.toString());
+                Log.d("DarkhastKalaModel_pishn", "toorVisit : " + toorVisit);
+                Log.d("DarkhastKalaModel_pishn", "kalaDarkhastFaktorModels.size : " + kalaDarkhastFaktorModels.size());
+                Log.d("DarkhastKalaModel_pishn", "kalaDarkhastFaktorModels : " + kalaDarkhastFaktorModels.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-        if (getAllRequestedGoods)
-        {
+            if (kalaDarkhastFaktorModels != null && kalaDarkhastFaktorModels.size() > 0) {
+                calculateKalaPishnahadi(ccForoshandeh, ccMoshtary, kalaMojodiZaribModels, kalaDarkhastFaktorModels, toorVisit, zaribDarkhastTablet);
+            }
+        }
+
+        if (enableKalaAsasi && calculateKalaAsasi) {
+            String ccKalaCodesOfKalaAsasi = calculateKalaAsasi(kalaMojodiZaribModels, ccMoshtary, moshtaryModel.getCcNoeSenf());
+            SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
+            shared.remove(shared.getCcKalaCodesOfKalaAsasi());
+            shared.putString(shared.getCcKalaCodesOfKalaAsasi(), ccKalaCodesOfKalaAsasi);
+        }
+        Collections.sort(kalaMojodiZaribModels);
+
+
+        if (getAllRequestedGoods) {
             getAllRequestedGoods();
         }
+        return kalaMojodiZaribModels;
+
     }
 
-    private long calculateDiffDates(KalaDarkhastFaktorModel kalaDarkhastFaktorModel)
-    {
+    /**
+     * @param ccMoshtary              شناسه مشتری
+     * @param calculateKalaPishnahadi اگر اولین بار لیست کالا گرفته شود، این پارامتر true می باشد ولی اگر بعد از محاسبه کالا پیشنهادی این متد فراخوانی شود این پارامتر برابر false است
+     */
+    @Override
+    public void getAllKalaWithMojodiZarib(final int ccMoshtary, final boolean calculateKalaPishnahadi, final boolean calculateKalaAsasi, boolean getAllRequestedGoods, DarkhastKalaActivity.AddItemType type) {
+        getAllKalaWithMojodiZaribObservable(ccMoshtary, calculateKalaPishnahadi, calculateKalaAsasi, getAllRequestedGoods, type);
+    }
+
+    private long calculateDiffDates(KalaDarkhastFaktorModel kalaDarkhastFaktorModel) {
         Date startDate = new Date();
         if (kalaDarkhastFaktorModel != null)
         {
@@ -697,20 +694,15 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps
 
 
     @Override
-    public void removeKala(KalaDarkhastFaktorSatrModel kalaDarkhastFaktorSatrModel , int position , int ccMoshtary)
-    {
-        Log.d("DarkhastKalaModel","removeKala kalaDarkhastFaktorSatrModel:" + kalaDarkhastFaktorSatrModel.toString());
+    public void removeKala(KalaDarkhastFaktorSatrModel kalaDarkhastFaktorSatrModel, int position, int ccMoshtary) {
+        Log.d("DarkhastKalaModel", "removeKala kalaDarkhastFaktorSatrModel:" + kalaDarkhastFaktorSatrModel.toString());
         DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
-        if (darkhastFaktorSatrDAO.delete(kalaDarkhastFaktorSatrModel.getCcDarkhastFaktor(), kalaDarkhastFaktorSatrModel.getCcTaminKonandeh(), kalaDarkhastFaktorSatrModel.getCcKala(), kalaDarkhastFaktorSatrModel.getCcKalaCode(), kalaDarkhastFaktorSatrModel.getShomarehBach(), kalaDarkhastFaktorSatrModel.getGheymatForoshAsli(), kalaDarkhastFaktorSatrModel.getGheymatMasrafKonandehAsli()))
-        {
-            if (insertNewKalaMojodi(kalaDarkhastFaktorSatrModel.getCcKalaCode(), kalaDarkhastFaktorSatrModel.getCcDarkhastFaktor(), kalaDarkhastFaktorSatrModel.getTarikhTolid(), kalaDarkhastFaktorSatrModel.getShomarehBach(), kalaDarkhastFaktorSatrModel.getCcTaminKonandeh(), kalaDarkhastFaktorSatrModel.getTedad3(), ((int) kalaDarkhastFaktorSatrModel.getGheymatForoshAsli()),((int) kalaDarkhastFaktorSatrModel.getGheymatMasrafKonandehAsli())))
-            {
-                getAllKalaWithMojodiZarib(ccMoshtary, true, true, false,true, DarkhastKalaActivity.AddItemType.NONE);
+        if (darkhastFaktorSatrDAO.delete(kalaDarkhastFaktorSatrModel.getCcDarkhastFaktor(), kalaDarkhastFaktorSatrModel.getCcTaminKonandeh(), kalaDarkhastFaktorSatrModel.getCcKala(), kalaDarkhastFaktorSatrModel.getCcKalaCode(), kalaDarkhastFaktorSatrModel.getShomarehBach(), kalaDarkhastFaktorSatrModel.getGheymatForoshAsli(), kalaDarkhastFaktorSatrModel.getGheymatMasrafKonandehAsli())) {
+            if (insertNewKalaMojodi(kalaDarkhastFaktorSatrModel.getCcKalaCode(), kalaDarkhastFaktorSatrModel.getCcDarkhastFaktor(), kalaDarkhastFaktorSatrModel.getTarikhTolid(), kalaDarkhastFaktorSatrModel.getShomarehBach(), kalaDarkhastFaktorSatrModel.getCcTaminKonandeh(), kalaDarkhastFaktorSatrModel.getTedad3(), ((int) kalaDarkhastFaktorSatrModel.getGheymatForoshAsli()), ((int) kalaDarkhastFaktorSatrModel.getGheymatMasrafKonandehAsli()))) {
+                getAllKalaWithMojodiZarib(ccMoshtary, true, true, false, DarkhastKalaActivity.AddItemType.NONE);
             }
             mPresenter.onSuccessRemoveKala(position);
-        }
-        else
-        {
+        } else {
             mPresenter.onErrorRemoveKala();
         }
     }

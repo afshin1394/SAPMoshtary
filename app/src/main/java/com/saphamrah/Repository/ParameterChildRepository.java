@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.Model.ParameterChildModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -44,19 +44,19 @@ public class ParameterChildRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<ParameterChildModel> parameterChildModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(parameterChildModels))
+        return RxAsync.makeObservable(insertGroupCallable(parameterChildModels))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<String> getValueByccChildParameter(int ccChildParameter) {
-        return RxDAOUtils.makeObservable(getValueByccChildParameterCallable(ccChildParameter))
+        return RxAsync.makeObservable(getValueByccChildParameterCallable(ccChildParameter))
                 .subscribeOn(Schedulers.io());
     }
 

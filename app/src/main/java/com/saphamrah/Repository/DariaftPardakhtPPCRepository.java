@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.DariaftPardakhtPPCDAO;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -57,19 +57,19 @@ public class DariaftPardakhtPPCRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(dariaftPardakhtPPCModels))
+        return RxAsync.makeObservable(insertGroupCallable(dariaftPardakhtPPCModels))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> deleteByccDariaftPardakhts(String ccDaryaftPardakhts) {
-        return RxDAOUtils.makeObservable(deleteByccDariaftPardakhtsCallable(ccDaryaftPardakhts))
+        return RxAsync.makeObservable(deleteByccDariaftPardakhtsCallable(ccDaryaftPardakhts))
                 .subscribeOn(Schedulers.io());
     }
 }

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.ForoshandehDAO;
 import com.saphamrah.Model.ForoshandehModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -67,24 +67,24 @@ public class ForoshandehRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<ForoshandehModel> foroshandehModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(foroshandehModels))
+        return RxAsync.makeObservable(insertGroupCallable(foroshandehModels))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<ArrayList<ForoshandehModel>> getAll() {
-        return RxDAOUtils.makeObservable(getAllCallable())
+        return RxAsync.makeObservable(getAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<ArrayList<String>> getDistinctccForoshandeh() {
-        return RxDAOUtils.makeObservable(getDistinctccForoshandehCallable())
+        return RxAsync.makeObservable(getDistinctccForoshandehCallable())
                 .subscribeOn(Schedulers.io());
     }
 

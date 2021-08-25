@@ -91,7 +91,9 @@ public class DariaftPardakhtPPCDAO
             DariaftPardakhtPPCModel.COLUMN_IsCheckMoshtary(),
             DariaftPardakhtPPCModel.COLUMN_ccMarkazForosh(),
             DariaftPardakhtPPCModel.COLUMN_ccMarkazSazmanForoshSakhtarForosh(),
-            DariaftPardakhtPPCModel.COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty()
+            DariaftPardakhtPPCModel.COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty(),
+            DariaftPardakhtPPCModel.COLUMN_UniqueId()
+
 
         };
     }
@@ -803,6 +805,26 @@ public class DariaftPardakhtPPCDAO
         }
     }
 
+    public boolean updateUniqId(long ccDaryaftPardakht , String uniqId)
+    {
+        try
+        {
+            String query = "update " + DariaftPardakhtPPCModel.TableName() + " set " + DariaftPardakhtPPCModel.COLUMN_UniqueId() + " = '" + uniqId + "'  where " + DariaftPardakhtPPCModel.COLUMN_ccDariaftPardakht() + " = " + ccDaryaftPardakht;
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , DariaftPardakhtPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtPPCDAO" , "" , "updateSendedDarkhastFaktor" , "");
+            return true;
+        }
+    }
+
 
     /**
      * update DB when send details pish daryaft  to server
@@ -974,6 +996,7 @@ public class DariaftPardakhtPPCDAO
         contentValues.put(DariaftPardakhtPPCModel.COLUMN_ccMarkazForosh() , dariaftPardakhtPPCModel.getCcMarkazForosh());
         contentValues.put(DariaftPardakhtPPCModel.COLUMN_ccMarkazSazmanForoshSakhtarForosh() , dariaftPardakhtPPCModel.getCcMarkazSazmanForoshSakhtarForosh());
         contentValues.put(DariaftPardakhtPPCModel.COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty(), dariaftPardakhtPPCModel.getExtraProp_ccDaryaftPardakhtCheckBargashty());
+        contentValues.put(DariaftPardakhtPPCModel.COLUMN_UniqueId(), dariaftPardakhtPPCModel.getUniqueId());
         return contentValues;
     }
 
@@ -1026,6 +1049,8 @@ public class DariaftPardakhtPPCDAO
             dariaftPardakhtPPCModel.setCcMarkazForosh(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_ccMarkazForosh())));
             dariaftPardakhtPPCModel.setCcMarkazSazmanForoshSakhtarForosh(cursor.getInt(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_ccMarkazSazmanForoshSakhtarForosh())));
             dariaftPardakhtPPCModel.setExtraProp_ccDaryaftPardakhtCheckBargashty(cursor.getLong(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty())));
+            dariaftPardakhtPPCModel.setUniqueId(cursor.getString(cursor.getColumnIndex(DariaftPardakhtPPCModel.COLUMN_UniqueId())));
+
             dariaftPardakhtPPCModels.add(dariaftPardakhtPPCModel);
             cursor.moveToNext();
         }

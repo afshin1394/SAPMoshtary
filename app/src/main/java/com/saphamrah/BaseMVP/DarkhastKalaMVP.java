@@ -24,7 +24,7 @@ public interface DarkhastKalaMVP
         void prepareDataForCheckInsertFaktor();
         void openBarkhordAvalieActivity();
         void onGetRequestedGoods(ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorsatrModels);
-        void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels, boolean firstTime, DarkhastKalaActivity.AddItemType type);
+        void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels,  DarkhastKalaActivity.AddItemType type);
         void onErrorAddNewRequestedKala(int errorResId);
         void onErrorAddNewRequestedKala(int resId, String parameter);
         void onSuccessAddNewRequestedKala(boolean isTedadKalaAsasi , boolean isTedadKalaAsasiWithTedad);
@@ -54,7 +54,7 @@ public interface DarkhastKalaMVP
         void checkBottomBarClick(int position , int selectedGoodsCount);
         void getNameListOfKalaAdamForosh();
         void getAllRequestedGoods();
-        void getAllKalaWithMojodiZarib(int ccMoshtary, boolean firstEnter, DarkhastKalaActivity.AddItemType type);
+        void getAllKalaWithMojodiZarib(int ccMoshtary,  DarkhastKalaActivity.AddItemType type);
         void checkAddKala(int ccMoshtary , int position , KalaMojodiZaribModel kalaMojodiZaribModel, String cartonCount, String basteCount, String adadCount);
         void checkRemoveKala(KalaDarkhastFaktorSatrModel kalaDarkhastFaktorsatrModels , int position , int ccMoshtary);
         void getElatAdamSefaresh(int ccMoshtary);
@@ -75,7 +75,7 @@ public interface DarkhastKalaMVP
         void onConfigurationChanged(DarkhastKalaMVP.RequiredViewOps view);
 		void onGetNoeMasouliat(int noeMasouliat);										 
         void onGetRequestedGoods(ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorsatrModels);
-        void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels, boolean firstTime, DarkhastKalaActivity.AddItemType type);
+        void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels, DarkhastKalaActivity.AddItemType type);
         void onGetElatAdamSefaresh(ArrayList<ElatAdamDarkhastModel> elatAdamDarkhastModels);
         void onErrorInsertFaktor(int errorResId);
         void onSuccessInsertFaktor(int position , int count);
@@ -99,7 +99,7 @@ public interface DarkhastKalaMVP
 		void getNoeMasouliat();					   
         void getNameListOfKalaAdamForosh();
         void getAllRequestedGoods();
-        void getAllKalaWithMojodiZarib(int ccMoshtary, boolean calculateKalaPishnahadi, boolean calculateKalaAsasi, boolean getAllRequestedGoods, boolean firstTime, DarkhastKalaActivity.AddItemType type);
+        void getAllKalaWithMojodiZarib(int ccMoshtary, boolean calculateKalaPishnahadi, boolean calculateKalaAsasi, boolean getAllRequestedGoods, DarkhastKalaActivity.AddItemType type);
         SparseIntArray insertNewFaktorSatr(int ccMoshtary , int position , KalaMojodiZaribModel kalaMojodiZaribModel , int requestedCount);
         void removeKala(KalaDarkhastFaktorSatrModel kalaDarkhastFaktorsatrModels , int position , int ccMoshtary);
         void getElatAdamSefaresh(int ccMoshtary);

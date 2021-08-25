@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.ParameterDAO;
 import com.saphamrah.Model.ParameterModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -40,14 +40,14 @@ public class ParameterRepository
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<ParameterModel> parameterModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(parameterModels))
+        return RxAsync.makeObservable(insertGroupCallable(parameterModels))
                 .subscribeOn(Schedulers.io());
     }
 }

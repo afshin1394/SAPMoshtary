@@ -3,7 +3,7 @@ package com.saphamrah.Repository;
 import android.content.Context;
 
 import com.saphamrah.DAO.GPSDataPpcDAO;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.concurrent.Callable;
 
@@ -46,14 +46,14 @@ public class GPSDataPpcRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteSendedRecords() {
-        return RxDAOUtils.makeObservable(deleteSendedRecordsCallable())
+        return RxAsync.makeObservable(deleteSendedRecordsCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
 //    public Observable<Boolean> insertGroup(ArrayList<GorohModel> gorohModels) {
-//        return RxDAOUtils.makeObservable(insertGroupCallable(gorohModels))
+//        return RxAsync.makeObservable(insertGroupCallable(gorohModels))
 //                .subscribeOn(Schedulers.io());
 //    }
 

@@ -108,12 +108,12 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
     }
 
     @Override
-    public void getAllKalaWithMojodiZarib(int ccMoshtary, boolean firstTime, DarkhastKalaActivity.AddItemType type)
+    public void getAllKalaWithMojodiZarib(int ccMoshtary, DarkhastKalaActivity.AddItemType type)
     {
         if (ccMoshtary > 0)
         {
             mView.get().showAlertLoading();
-            mModel.getAllKalaWithMojodiZarib(ccMoshtary, true, true, true,firstTime,type);
+            mModel.getAllKalaWithMojodiZarib(ccMoshtary, true, true, true,type);
         }
         else
         {
@@ -403,28 +403,31 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
     @Override
     public void onGetRequestedGoods(ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorModels)
     {
-        if (kalaDarkhastFaktorModels.size() > 0)
-        {
-            mView.get().onGetRequestedGoods(kalaDarkhastFaktorModels);
-        }
-        else
-        {
-            mView.get().showToast(R.string.emptyList, Constants.INFO_MESSAGE(), Constants.DURATION_LONG());
-        }
+        PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(() -> {
+            if (kalaDarkhastFaktorModels.size() > 0)
+            {
+                mView.get().onGetRequestedGoods(kalaDarkhastFaktorModels);
+            }
+            else
+            {
+                mView.get().showToast(R.string.emptyList, Constants.INFO_MESSAGE(), Constants.DURATION_LONG());
+            }
+        });
+
     }
 
     @Override
-    public void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels, boolean firstTime, DarkhastKalaActivity.AddItemType type)
+    public void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels, DarkhastKalaActivity.AddItemType type)
     {
         Log.d("DarkhastKala", "on get kala in presenter");
         mView.get().closeAlertLoading();
         if (kalaMojodiZaribModels.size() > 0)
         {
-            mView.get().onGetAllKalaWithMojodiZarib(kalaMojodiZaribModels,firstTime,type);
+            mView.get().onGetAllKalaWithMojodiZarib(kalaMojodiZaribModels,type);
         }
         else
         {
-            mView.get().onGetAllKalaWithMojodiZarib(new ArrayList<KalaMojodiZaribModel>(),firstTime,type);
+            mView.get().onGetAllKalaWithMojodiZarib(new ArrayList<KalaMojodiZaribModel>(),type);
 //            mView.get().showAlertDialog(R.string.notFoundKalaMojodiInAnbarak, Constants.FAILED_MESSAGE(), true);
         }
     }
@@ -496,6 +499,7 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
     public void onError()
     {
         mView.get().showToast(R.string.errorOperation, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        mView.get().closeAlertLoading();
     }
 
 

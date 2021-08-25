@@ -139,7 +139,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     //
 
     public enum AddItemType {
-        LIST, GRID, NONE
+        SHOW_LIST, SHOW_GRID_LIST, NONE
     }
 
 
@@ -255,10 +255,10 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
             if (permissions.size() > 0) {
                 ActivityCompat.requestPermissions(DarkhastKalaActivity.this, permissions.toArray(new String[permissions.size()]), READ_EXTERNAL_STORAGE_PERMISSION);
             } else {
-                mPresenter.getAllKalaWithMojodiZarib(ccMoshtary, true, AddItemType.NONE);
+                mPresenter.getAllKalaWithMojodiZarib(ccMoshtary,  AddItemType.NONE);
             }
         } else {
-            mPresenter.getAllKalaWithMojodiZarib(ccMoshtary, true, AddItemType.NONE);
+            mPresenter.getAllKalaWithMojodiZarib(ccMoshtary,  AddItemType.NONE);
         }
         mPresenter.getAllRequestedGoods();
 
@@ -270,7 +270,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
 //                showAddItemAlert(true);
                 fabMenu.close(true);
 //                showGridItemAlert();
-                mPresenter.getAllKalaWithMojodiZarib(ccMoshtary, false, AddItemType.GRID);
+                mPresenter.getAllKalaWithMojodiZarib(ccMoshtary,  AddItemType.SHOW_GRID_LIST);
 
                 Log.i("fabNewAddList", "onClick: ");
             }
@@ -280,7 +280,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
             @Override
             public void onClick(View v) {
                 fabMenu.close(true);
-                mPresenter.getAllKalaWithMojodiZarib(ccMoshtary, false, AddItemType.LIST);
+                mPresenter.getAllKalaWithMojodiZarib(ccMoshtary,  AddItemType.SHOW_LIST);
 
 
             }
@@ -323,7 +323,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == READ_EXTERNAL_STORAGE_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                mPresenter.getAllKalaWithMojodiZarib(ccMoshtary, true,AddItemType.NONE);
+                mPresenter.getAllKalaWithMojodiZarib(ccMoshtary, AddItemType.NONE);
             }
         }
     }
@@ -405,24 +405,25 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     }
 
     @Override
-    public void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels, boolean firstTime, AddItemType type) {
+    public void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels,  AddItemType type) {
         this.kalaMojodiZaribModels.clear();
         this.kalaMojodiZaribModels.addAll(kalaMojodiZaribModels);
         adapterRequestKalaListGrid.notifyDataSetChanged();
         adapterRequestKala.notifyDataSetChanged();
         adapterRequestKalaList.notifyDataSetChanged();
-        if (!firstTime) {
+
+
 
             switch (type) {
-                case GRID:
+                case SHOW_GRID_LIST:
                     showGridItemAlert();
                     break;
 
-                case LIST:
+                case SHOW_LIST:
                     showAddItemAlert(false);
                     break;
             }
-        }
+
     }
 
     @Override
@@ -936,7 +937,6 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
      */
     private void showGridItemAlert() {
 
-        mPresenter.getAllKalaWithMojodiZarib(ccMoshtary, false,AddItemType.NONE);
         alertView = getLayoutInflater().inflate(R.layout.alert_grid_goodlist_for_request, null);
         final CustomTextInputLayout txtinputCountCartonNew = alertView.findViewById(R.id.txtinputCartonCount);
         final CustomTextInputLayout txtinputCountBasteNew = alertView.findViewById(R.id.txtinputBastehCount);

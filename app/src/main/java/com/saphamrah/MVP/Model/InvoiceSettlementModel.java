@@ -887,6 +887,8 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
             dariaftPardakhtPPCModel.setExtraProp_ccDaryaftPardakhtCheckBargashty(ccDaryaftPardakhtCheckBargashty);
 
             ccDariaftPardakht = dariaftPardakhtDAO.insert(dariaftPardakhtPPCModel);
+            String uniqId = String.valueOf(ccDariaftPardakht) + String.valueOf(ccMoshtary) + String.valueOf(ccDarkhastFaktor) + String.valueOf(new SimpleDateFormat(Constants.UNIQ_TIME()).format(new Date()));
+            dariaftPardakhtDAO.updateUniqId(ccDariaftPardakht,uniqId);
         } catch (Exception exception) {
             exception.printStackTrace();
             setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "InvoiceSettlementModel", "", "prepareData", "");
@@ -2082,9 +2084,9 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
         for (DariaftPardakhtDarkhastFaktorPPCModel entity : dpdfs)
             Sum_MablaghDariaftPardakht += entity.getMablagh();
 
-        double MandehTajil = (MablaghPasAzKasrTajil - Sum_MablaghDariaftPardakht);
-        if (MandehTajil < 1000 & MandehTajil > 0)
-            Sum_MablaghDariaftPardakht += MandehTajil;
+        //double MandehTajil = (MablaghPasAzKasrTajil- Sum_MablaghDariaftPardakht );//
+        if (MablaghPasAzKasrTajil < 1000 & MablaghPasAzKasrTajil > 0)
+            Sum_MablaghDariaftPardakht += MablaghPasAzKasrTajil;
 
 
 

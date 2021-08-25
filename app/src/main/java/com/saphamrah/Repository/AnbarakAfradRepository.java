@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.AnbarakAfradDAO;
 import com.saphamrah.Model.AnbarakAfradModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -47,12 +47,12 @@ public class AnbarakAfradRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> insertGroup(ArrayList<AnbarakAfradModel> anbarakAfradModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(anbarakAfradModels))
+        return RxAsync.makeObservable(insertGroupCallable(anbarakAfradModels))
                 .subscribeOn(Schedulers.io());
     }
 }

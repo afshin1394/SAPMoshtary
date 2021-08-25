@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.TakhfifNaghdyDAO;
 import com.saphamrah.Model.TakhfifNaghdyModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -47,12 +47,12 @@ public class TakhfifNaghdyRepository {
     /*******************************************************************Observable*****************************************************************/
 
     public Observable<Boolean> deleteAll(){
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> insertGroup(ArrayList<TakhfifNaghdyModel> takhfifNaghdyModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(takhfifNaghdyModels))
+        return RxAsync.makeObservable(insertGroupCallable(takhfifNaghdyModels))
                 .subscribeOn(Schedulers.io());
     }
 }

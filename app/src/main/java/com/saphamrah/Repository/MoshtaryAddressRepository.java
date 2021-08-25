@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.MoshtaryAddressDAO;
 import com.saphamrah.Model.MoshtaryAddressModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -47,24 +47,24 @@ public class MoshtaryAddressRepository {
     /*******************************************************************Observable*****************************************************************/
 
     public Observable<Boolean> deleteAll(){
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> insertGroup(ArrayList<MoshtaryAddressModel> moshtaryAddressModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(moshtaryAddressModels))
+        return RxAsync.makeObservable(insertGroupCallable(moshtaryAddressModels))
                 .subscribeOn(Schedulers.io());
     }
 
 
     public Observable<Boolean> deleteByccMoshtary(int ccMoshtary) {
-        return RxDAOUtils.makeObservable(deleteByccMoshtaryCallable(ccMoshtary))
+        return RxAsync.makeObservable(deleteByccMoshtaryCallable(ccMoshtary))
                 .subscribeOn(Schedulers.io());
     }
 
 
     public Observable<Boolean> deleteByccMoshtaries(String ccMoshtaries) {
-        return RxDAOUtils.makeObservable(deleteByccAddressMoshtariesCallable(ccMoshtaries))
+        return RxAsync.makeObservable(deleteByccAddressMoshtariesCallable(ccMoshtaries))
                 .subscribeOn(Schedulers.io());
     }
 }

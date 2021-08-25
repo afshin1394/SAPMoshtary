@@ -5,7 +5,7 @@ import android.content.Context;
 import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.MoshtaryParentModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -73,46 +73,46 @@ public class MoshtaryRepository {
     /*******************************************************************Observable*****************************************************************/
 
     public Observable<Boolean> deleteAll(){
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> insertGroup(ArrayList<MoshtaryModel> moshtaryModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(moshtaryModels))
+        return RxAsync.makeObservable(insertGroupCallable(moshtaryModels))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> updateExtraOlaviatFromOlaviat() {
-        return RxDAOUtils.makeObservable(updateExtraOlaviatFromOlaviatCallable())
+        return RxAsync.makeObservable(updateExtraOlaviatFromOlaviatCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> updateccMoshtaryParentInMoshtary(ArrayList<MoshtaryParentModel> moshtaryParentModels) {
-        return RxDAOUtils.makeObservable(updateccMoshtaryParentInMoshtaryCallable(moshtaryParentModels))
+        return RxAsync.makeObservable(updateccMoshtaryParentInMoshtaryCallable(moshtaryParentModels))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<MoshtaryModel> getByccMoshtary(int ccMoshtary) {
-        return RxDAOUtils.makeObservable(getByccMoshtaryCallable(ccMoshtary))
+        return RxAsync.makeObservable(getByccMoshtaryCallable(ccMoshtary))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> deleteByCodeMoshtarys(String ccMoshtary) {
-        return RxDAOUtils.makeObservable(deleteByCodeMoshtarysCallable(ccMoshtary))
+        return RxAsync.makeObservable(deleteByCodeMoshtarysCallable(ccMoshtary))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<String> getAllccNoeSenf() {
-        return RxDAOUtils.makeObservable(getAllccNoeSenfCallable())
+        return RxAsync.makeObservable(getAllccNoeSenfCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Integer> getccMasirByCodeMoshtary(int codeMoshtary) {
-        return RxDAOUtils.makeObservable(getccMasirByCodeMoshtaryCallable(codeMoshtary))
+        return RxAsync.makeObservable(getccMasirByCodeMoshtaryCallable(codeMoshtary))
                 .subscribeOn(Schedulers.io());
     }
     public Observable<Integer> getccMasirByccForoshandeh(int ccForoshande) {
-        return RxDAOUtils.makeObservable(getccMasirByccForoshandehCallable(ccForoshande))
+        return RxAsync.makeObservable(getccMasirByccForoshandehCallable(ccForoshande))
                 .subscribeOn(Schedulers.io());
     }
 

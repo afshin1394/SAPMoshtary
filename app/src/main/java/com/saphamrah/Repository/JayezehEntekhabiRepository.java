@@ -5,7 +5,7 @@ import android.content.Context;
 import com.saphamrah.DAO.JayezehEntekhabiDAO;
 import com.saphamrah.Model.JayezehEntekhabiModel;
 import com.saphamrah.Model.KalaModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -69,24 +69,24 @@ public class JayezehEntekhabiRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<JayezehEntekhabiModel> jayezehEntekhabiModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(jayezehEntekhabiModels))
+        return RxAsync.makeObservable(insertGroupCallable(jayezehEntekhabiModels))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> updateMablaghForosh(double mablagheForosh, int ccKalaCode) {
-        return RxDAOUtils.makeObservable(updateMablaghForoshCallable( mablagheForosh,  ccKalaCode))
+        return RxAsync.makeObservable(updateMablaghForoshCallable( mablagheForosh,  ccKalaCode))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> updateMablaghForoshAll(ArrayList<KalaModel> kalaModels) {
-        return RxDAOUtils.makeObservable(updateMablaghForosh2Callable( kalaModels))
+        return RxAsync.makeObservable(updateMablaghForosh2Callable( kalaModels))
                 .subscribeOn(Schedulers.io());
     }
 

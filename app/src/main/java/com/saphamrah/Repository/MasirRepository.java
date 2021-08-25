@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.MasirDAO;
 import com.saphamrah.Model.MasirModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -43,17 +43,17 @@ public class MasirRepository {
     /*******************************************************************Observable*****************************************************************/
 
     public Observable<Boolean> deleteAll(){
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> insertGroup(ArrayList<MasirModel> masirModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(masirModels))
+        return RxAsync.makeObservable(insertGroupCallable(masirModels))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> updateTarikhMasir(String date) {
-        return RxDAOUtils.makeObservable(updateTarikhMasirCallable(date))
+        return RxAsync.makeObservable(updateTarikhMasirCallable(date))
                 .subscribeOn(Schedulers.io());
     }
 }

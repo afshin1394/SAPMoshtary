@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.ElamMarjoeePPCDAO;
 import com.saphamrah.Model.ElamMarjoeePPCModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -39,14 +39,14 @@ public class ElamMarjoeePPCRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<ElamMarjoeePPCModel> elamMarjoeePPCModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(elamMarjoeePPCModels))
+        return RxAsync.makeObservable(insertGroupCallable(elamMarjoeePPCModels))
                 .subscribeOn(Schedulers.io());
     }
 }

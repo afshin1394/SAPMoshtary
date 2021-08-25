@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.TaghvimTatilDAO;
 import com.saphamrah.Model.TaghvimTatilModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -37,12 +37,12 @@ public class TaghvimTatilRepository {
     /*******************************************************************Observable*****************************************************************/
 
     public Observable<Boolean> deleteAll(){
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> insertGroup(ArrayList<TaghvimTatilModel> taghvimTatilModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(taghvimTatilModels))
+        return RxAsync.makeObservable(insertGroupCallable(taghvimTatilModels))
                 .subscribeOn(Schedulers.io());
     }
 }

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.MarkazShomarehHesabDAO;
 import com.saphamrah.Model.MarkazShomarehHesabModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -48,12 +48,12 @@ public class MarkazShomarehHesabRepository {
     /*******************************************************************Observable*****************************************************************/
 
     public Observable<Boolean> deleteAll(){
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> insertGroup(ArrayList<MarkazShomarehHesabModel> markazShomarehHesabModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(markazShomarehHesabModels))
+        return RxAsync.makeObservable(insertGroupCallable(markazShomarehHesabModels))
                 .subscribeOn(Schedulers.io());
     }
 }

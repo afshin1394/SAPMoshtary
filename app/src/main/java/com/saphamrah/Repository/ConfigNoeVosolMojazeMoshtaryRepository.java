@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.ConfigNoeVosolMojazeMoshtaryDAO;
 import com.saphamrah.Model.ConfigNoeVosolMojazeMoshtaryModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -39,14 +39,14 @@ public class ConfigNoeVosolMojazeMoshtaryRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<ConfigNoeVosolMojazeMoshtaryModel> configNoeVosolMojazeMoshtaryModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(configNoeVosolMojazeMoshtaryModels))
+        return RxAsync.makeObservable(insertGroupCallable(configNoeVosolMojazeMoshtaryModels))
                 .subscribeOn(Schedulers.io());
     }
 }

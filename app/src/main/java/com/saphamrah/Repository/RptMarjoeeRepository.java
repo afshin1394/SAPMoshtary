@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.RptMarjoeeDAO;
 import com.saphamrah.Model.RptMarjoeeKalaModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -39,14 +39,14 @@ public class RptMarjoeeRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<RptMarjoeeKalaModel> rptMarjoeeKalaModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(rptMarjoeeKalaModels))
+        return RxAsync.makeObservable(insertGroupCallable(rptMarjoeeKalaModels))
                 .subscribeOn(Schedulers.io());
     }
 }

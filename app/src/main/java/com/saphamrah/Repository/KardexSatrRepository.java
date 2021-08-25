@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.KardexSatrDAO;
 import com.saphamrah.Model.KardexSatrModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -37,14 +37,14 @@ public class KardexSatrRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<KardexSatrModel> kardexSatrModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(kardexSatrModels))
+        return RxAsync.makeObservable(insertGroupCallable(kardexSatrModels))
                 .subscribeOn(Schedulers.io());
     }
 }

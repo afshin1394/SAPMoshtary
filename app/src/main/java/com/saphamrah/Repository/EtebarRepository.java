@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.EtebarDAO;
 import com.saphamrah.Model.EtebarModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -58,20 +58,20 @@ public class EtebarRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<EtebarModel> etebarModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(etebarModels))
+        return RxAsync.makeObservable(insertGroupCallable(etebarModels))
                 .subscribeOn(Schedulers.io());
     }
 
 
     public Observable<ArrayList<String>> deleteByCcForohsandehString(String ccForoshandeString) {
-        return RxDAOUtils.makeObservable(deleteByCcForohsandehCallable(ccForoshandeString))
+        return RxAsync.makeObservable(deleteByCcForohsandehCallable(ccForoshandeString))
                 .subscribeOn(Schedulers.io());
     }
 

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.MarkazShahrMarkaziDAO;
 import com.saphamrah.Model.MarkazShahrMarkaziModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -39,14 +39,14 @@ public class MarkazShahrMarkaziRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<MarkazShahrMarkaziModel> markazShahrMarkaziModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(markazShahrMarkaziModels))
+        return RxAsync.makeObservable(insertGroupCallable(markazShahrMarkaziModels))
                 .subscribeOn(Schedulers.io());
     }
 }

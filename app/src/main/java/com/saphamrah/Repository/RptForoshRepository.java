@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.RptForoshDAO;
 import com.saphamrah.Model.RptForoshModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -39,14 +39,14 @@ public class RptForoshRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<RptForoshModel> rptForoshModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(rptForoshModels))
+        return RxAsync.makeObservable(insertGroupCallable(rptForoshModels))
                 .subscribeOn(Schedulers.io());
     }
 }

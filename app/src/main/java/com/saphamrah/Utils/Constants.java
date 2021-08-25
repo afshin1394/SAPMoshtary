@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE = 4 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest
+    private static final int CURRENT_VERSION_TYPE = 0 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 
@@ -104,6 +104,7 @@ public class Constants
     private static final String DATE_TIME_MILISCONDS_2 = "yyyy-MM-dd HH:mm:ss.sss";
     private static final String TIME_FORMAT = "HH:mm:ss";
     private static final String SHORT_TIME_FORMAT = "HH:mm";
+    private static final String UNIQ_TIME = "yyyyMMddHHmmss";
 
     public static int ALLOWABLE_SERVER_LOCAL_TIME_DIFF() { return ALLOWABLE_SERVER_LOCAL_TIME_DIFF; }
 
@@ -162,6 +163,11 @@ public class Constants
      */
     public static String SHORT_TIME_FORMAT() { return SHORT_TIME_FORMAT; }
 
+    /**
+     *
+     * @return yyyyMMddHHmmss
+     */
+    public static String UNIQ_TIME() { return UNIQ_TIME; }
 
     ///////////////////////////// MESSAGE TYPE /////////////////////////////
     private static final int FAILED_MESSAGE = -1;

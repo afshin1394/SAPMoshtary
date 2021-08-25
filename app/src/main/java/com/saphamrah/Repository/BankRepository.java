@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.BankDAO;
 import com.saphamrah.Model.BankModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -58,19 +58,19 @@ public class BankRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<BankModel> bankModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(bankModels))
+        return RxAsync.makeObservable(insertGroupCallable(bankModels))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<ArrayList<BankModel>> getAll() {
-        return RxDAOUtils.makeObservable(getAllCallable())
+        return RxAsync.makeObservable(getAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 

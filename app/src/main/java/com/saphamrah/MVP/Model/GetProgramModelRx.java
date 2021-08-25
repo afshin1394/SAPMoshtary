@@ -288,7 +288,7 @@ import com.saphamrah.Shared.LocalConfigShared;
 import com.saphamrah.Shared.UserTypeShared;
 import com.saphamrah.Utils.CollectionUtils;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.Utils.RxUtils.RxHttpErrorHandler;
 import com.saphamrah.Repository.AdamDarkhastRepository;
 import com.saphamrah.Repository.AllMoshtaryForoshandehRepository;
@@ -5460,11 +5460,11 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         Log.i("RxJavaRequest", "updateJayezehEntekhabiTable: " + jayezehEntekhabiModels.size());
         JayezehEntekhabiRepository jayezehEntekhabiRepository = new JayezehEntekhabiRepository(mPresenter.getAppContext());
         Disposable disposableDeleteAll = jayezehEntekhabiRepository.deleteAll()
-                .compose(RxDAOUtils.parseSQlErrors(CLASS_NAME, "updateJayezehEntekhabiTable", "updateJayezehEntekhabiTable", "deleteAll"))
+                .compose(RxAsync.parseSQlErrors(CLASS_NAME, "updateJayezehEntekhabiTable", "updateJayezehEntekhabiTable", "deleteAll"))
                 .subscribe(deleteAll -> {
                     if (deleteAll) {
                         Disposable disposableInsertGroup = jayezehEntekhabiRepository.insertGroup(jayezehEntekhabiModels)
-                                .compose(RxDAOUtils.parseSQlErrors(CLASS_NAME, "updateJayezehEntekhabiTable", "updateJayezehEntekhabiTable", "insertGroup"))
+                                .compose(RxAsync.parseSQlErrors(CLASS_NAME, "updateJayezehEntekhabiTable", "updateJayezehEntekhabiTable", "insertGroup"))
 
                                 .subscribe(insertGroup -> {
                                     if (insertGroup) {

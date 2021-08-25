@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.PolygonForoshSatrDAO;
 import com.saphamrah.Model.PolygonForoshSatrModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -48,12 +48,12 @@ public class PolygonForoshSatrRepository {
     /*******************************************************************Observable*****************************************************************/
 
     public Observable<Boolean> deleteAll(){
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> insertGroup(ArrayList<PolygonForoshSatrModel> polygonForoshSatrModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(polygonForoshSatrModels))
+        return RxAsync.makeObservable(insertGroupCallable(polygonForoshSatrModels))
                 .subscribeOn(Schedulers.io());
     }
 }

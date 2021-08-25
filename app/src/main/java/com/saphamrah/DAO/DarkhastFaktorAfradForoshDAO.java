@@ -94,6 +94,7 @@ public class DarkhastFaktorAfradForoshDAO
         ContentValues contentValues = modelToContentvalue(darkhastFaktorAfradForoshModel);
         try
         {
+
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             insertId = db.insertOrThrow(DarkhastFaktorAfradForoshModel.TableName() , null , contentValues);
             db.close();

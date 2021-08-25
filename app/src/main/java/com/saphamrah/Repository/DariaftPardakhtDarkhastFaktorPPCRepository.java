@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.DariaftPardakhtDarkhastFaktorPPCDAO;
 import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -50,14 +50,14 @@ public class DariaftPardakhtDarkhastFaktorPPCRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels,boolean fromGetProgram) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(dariaftPardakhtDarkhastFaktorPPCModels,fromGetProgram))
+        return RxAsync.makeObservable(insertGroupCallable(dariaftPardakhtDarkhastFaktorPPCModels,fromGetProgram))
                 .subscribeOn(Schedulers.io());
     }
 

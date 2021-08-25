@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.ElatAdamDarkhastDAO;
 import com.saphamrah.Model.ElatAdamDarkhastModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -48,14 +48,14 @@ public class ElatAdamDarkhastRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<ElatAdamDarkhastModel> elatAdamDarkhastModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(elatAdamDarkhastModels))
+        return RxAsync.makeObservable(insertGroupCallable(elatAdamDarkhastModels))
                 .subscribeOn(Schedulers.io());
     }
 }

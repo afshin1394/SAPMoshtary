@@ -620,9 +620,9 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
             String strJsonObjectTreasury = jsonObjectTreasury.toString();
             saveToFile("treasury" + darkhastFaktorModel.getCcDarkhastFaktor() + ".txt" , strJsonObjectTreasury);
-
-            Call<CreateDariaftPardakhtPPCJSONResult> call = apiServicePost.createDariaftPardakhtPPCJSON(strJsonObjectTreasury);
 //            mPresenter.closeLoading();
+            Call<CreateDariaftPardakhtPPCJSONResult> call = apiServicePost.createDariaftPardakhtPPCJSON(strJsonObjectTreasury);
+
             call.enqueue(new Callback<CreateDariaftPardakhtPPCJSONResult>()
             {
                 @Override
@@ -662,7 +662,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                     {
                         exception.printStackTrace();
                         setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TreasuryListModel", "" , "sendDariaftPardakhtToServer" , "onResponse");
-                        mPresenter.onErrorSend(R.string.errorOperation);
+                        mPresenter.onErrorSend(R.string.errorSendDataToServer);
                     }
                 }
 
@@ -2083,7 +2083,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                         if (response.isSuccessful() && response.body() != null) {
                             Log.d("noTemp", "in if success and body not null");
                             CreateGpsDataPPCResult result = response.body();
-                            if (result.getSuccess()) {
+                             if (result.getSuccess()) {
                                 GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
                                 gpsDataPpcDAO.updateIsSend(ccGPSDatasFinal);
                                 mPresenter.onSuccessLocation(R.string.successSendData,position);

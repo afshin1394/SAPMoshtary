@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.KalaGorohDAO;
 import com.saphamrah.Model.KalaGorohModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -47,14 +47,14 @@ public class KalaGorohRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<KalaGorohModel> kalaGorohModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(kalaGorohModels))
+        return RxAsync.makeObservable(insertGroupCallable(kalaGorohModels))
                 .subscribeOn(Schedulers.io());
     }
 }

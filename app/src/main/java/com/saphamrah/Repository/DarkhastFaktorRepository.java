@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.Model.DarkhastFaktorModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -126,60 +126,60 @@ public class DarkhastFaktorRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroupFromGetProgram(ArrayList<DarkhastFaktorModel> darkhastFaktorModels, int noeMasouliat) {
-        return RxDAOUtils.makeObservable(insertGroupFromGetProgramCallable(darkhastFaktorModels,noeMasouliat))
+        return RxAsync.makeObservable(insertGroupFromGetProgramCallable(darkhastFaktorModels,noeMasouliat))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<String> getccDarkhastFaktorsByNoeFaktorHavaleRooz(int ccNoeFaktor) {
-        return RxDAOUtils.makeObservable(getccDarkhastFaktorsByNoeFaktorHavaleRoozCallable(ccNoeFaktor))
+        return RxAsync.makeObservable(getccDarkhastFaktorsByNoeFaktorHavaleRoozCallable(ccNoeFaktor))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<String> getccDarkhastFaktorsByNoeFaktorHavale(int ccNoeHavale) {
-        return RxDAOUtils.makeObservable(getccDarkhastFaktorsByNoeFaktorHavaleCallable(ccNoeHavale))
+        return RxAsync.makeObservable(getccDarkhastFaktorsByNoeFaktorHavaleCallable(ccNoeHavale))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<String> getAllccForoshandeh() {
-        return RxDAOUtils.makeObservable(getAllccForoshandehCallable())
+        return RxAsync.makeObservable(getAllccForoshandehCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<String> getccMoshtaryPakhshForForoshandeh() {
-        return RxDAOUtils.makeObservable(getAllccForoshandehCallable())
+        return RxAsync.makeObservable(getAllccForoshandehCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Map<Integer, String>> getccMoshtaryPakhshForForoshandeh(int codeVaziatFaktorTasvie) {
-        return RxDAOUtils.makeObservable(getccMoshtaryPakhshForForoshandehCallable(codeVaziatFaktorTasvie))
+        return RxAsync.makeObservable(getccMoshtaryPakhshForForoshandehCallable(codeVaziatFaktorTasvie))
                 .subscribeOn(Schedulers.io());
     }
 
 
     public Observable<ArrayList<DarkhastFaktorModel>> getAllByNotCodeVazeiat(int codeVaziat) {
-        return RxDAOUtils.makeObservable(getAllByNotCodeVazeiatCallable(codeVaziat))
+        return RxAsync.makeObservable(getAllByNotCodeVazeiatCallable(codeVaziat))
                 .subscribeOn(Schedulers.io());
     }
     public Observable<ArrayList<DarkhastFaktorModel>> getAllByNoeFaktorHavaleAndNotCodeVazeiat(int noeFaktorHavale,int codeVaziat) {
-        return RxDAOUtils.makeObservable(getAllByNoeFaktorHavaleAndNotCodeVazeiatCallable(noeFaktorHavale,codeVaziat))
+        return RxAsync.makeObservable(getAllByNoeFaktorHavaleAndNotCodeVazeiatCallable(noeFaktorHavale,codeVaziat))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<ArrayList<Integer>> getccMarkazSazmanForoshSakhtarForoshAll() {
-        return RxDAOUtils.makeObservable(getccMarkazSazmanForoshSakhtarForoshAllCallable())
+        return RxAsync.makeObservable(getccMarkazSazmanForoshSakhtarForoshAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
     public Observable<String> getCcMoshtaryForZanjire() {
-        return RxDAOUtils.makeObservable(getCcMoshtaryForZanjireCallable())
+        return RxAsync.makeObservable(getCcMoshtaryForZanjireCallable())
                 .subscribeOn(Schedulers.io());
     }
 }

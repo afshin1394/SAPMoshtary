@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.ConfigNoeVosolMojazeFaktorDAO;
 import com.saphamrah.Model.ConfigNoeVosolMojazeFaktorModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -39,14 +39,14 @@ public class ConfigNoeVosolMojazeFaktorRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<ConfigNoeVosolMojazeFaktorModel> configNoeVosolMojazeFaktorModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(configNoeVosolMojazeFaktorModels))
+        return RxAsync.makeObservable(insertGroupCallable(configNoeVosolMojazeFaktorModels))
                 .subscribeOn(Schedulers.io());
     }
 }

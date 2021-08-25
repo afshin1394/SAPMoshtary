@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.NoeMoshtaryRialKharidDAO;
 import com.saphamrah.Model.NoeMoshtaryRialKharidModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -39,14 +39,14 @@ public class NoeMoshtaryRialKharidRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<NoeMoshtaryRialKharidModel> noeMoshtaryRialKharidModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(noeMoshtaryRialKharidModels))
+        return RxAsync.makeObservable(insertGroupCallable(noeMoshtaryRialKharidModels))
                 .subscribeOn(Schedulers.io());
     }
 }

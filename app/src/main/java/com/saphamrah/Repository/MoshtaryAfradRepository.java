@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.MoshtaryAfradDAO;
 import com.saphamrah.Model.MoshtaryAfradModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -57,16 +57,16 @@ public class MoshtaryAfradRepository {
     /*******************************************************************Observable*****************************************************************/
 
     public Observable<Boolean> deleteAll(){
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
     public Observable<Boolean> deleteGroup(String ccAfrad) {
-        return RxDAOUtils.makeObservable(deleteGroupCallable(ccAfrad))
+        return RxAsync.makeObservable(deleteGroupCallable(ccAfrad))
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> insertGroup(ArrayList<MoshtaryAfradModel> moshtaryAfradModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(moshtaryAfradModels))
+        return RxAsync.makeObservable(insertGroupCallable(moshtaryAfradModels))
                 .subscribeOn(Schedulers.io());
     }
 }

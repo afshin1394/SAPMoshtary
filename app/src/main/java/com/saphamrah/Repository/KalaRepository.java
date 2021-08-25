@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.KalaDAO;
 import com.saphamrah.Model.KalaModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -68,24 +68,24 @@ public class KalaRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<KalaModel> kalaModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(kalaModels))
+        return RxAsync.makeObservable(insertGroupCallable(kalaModels))
                 .subscribeOn(Schedulers.io());
     }
 
 
     public Observable<KalaModel> getKalaByMaxMojody(int ccKalaCode) {
-        return RxDAOUtils.makeObservable(getKalaByMaxMojodiCallable(ccKalaCode))
+        return RxAsync.makeObservable(getKalaByMaxMojodiCallable(ccKalaCode))
                 .subscribeOn(Schedulers.io());
     }
     public Observable<ArrayList<KalaModel>> getKalaByMaxMojodyAll(ArrayList<Integer> ccKalaCodes) {
-        return RxDAOUtils.makeObservable(getKalaByMaxMojodi2Callable(ccKalaCodes))
+        return RxAsync.makeObservable(getKalaByMaxMojodi2Callable(ccKalaCodes))
                 .subscribeOn(Schedulers.io());
     }
 }

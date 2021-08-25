@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.MoshtaryTaghiratDAO;
 import com.saphamrah.Model.MoshtaryTaghiratModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -51,12 +51,12 @@ public class MoshtaryTaghiratRepository {
     /*******************************************************************Observable*****************************************************************/
 
     public Observable<Boolean> deleteAll(){
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> insertGroup(ArrayList<MoshtaryTaghiratModel> moshtaryTaghiratModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(moshtaryTaghiratModels))
+        return RxAsync.makeObservable(insertGroupCallable(moshtaryTaghiratModels))
                 .subscribeOn(Schedulers.io());
     }
 }

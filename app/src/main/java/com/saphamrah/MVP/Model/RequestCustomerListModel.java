@@ -1,6 +1,7 @@
 package com.saphamrah.MVP.Model;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -1469,7 +1470,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
         }
 
         private void updateKalaMojodiTable(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels,int ccForoshandeh,int ccAfrad) {
-            String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
+            @SuppressLint("SimpleDateFormat") String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
             ArrayList<KalaMojodiModel> kalaMojodiModels = new ArrayList<>();
             Observable.fromIterable(mandehMojodyMashinModels)
                     .subscribeOn(Schedulers.io())

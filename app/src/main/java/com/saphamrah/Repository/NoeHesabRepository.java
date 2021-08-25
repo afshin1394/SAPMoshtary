@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.NoeHesabDAO;
 import com.saphamrah.Model.NoeHesabModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -49,14 +49,14 @@ public class NoeHesabRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<NoeHesabModel> noeHesabModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(noeHesabModels))
+        return RxAsync.makeObservable(insertGroupCallable(noeHesabModels))
                 .subscribeOn(Schedulers.io());
     }
 }

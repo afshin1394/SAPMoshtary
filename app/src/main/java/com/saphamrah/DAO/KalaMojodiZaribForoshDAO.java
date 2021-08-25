@@ -3,6 +3,8 @@ package com.saphamrah.DAO;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.saphamrah.Model.KalaModel;
@@ -243,7 +245,13 @@ public class KalaMojodiZaribForoshDAO
 
             // KalaOlaviat
             kalaMojodiZaribModel.setOlaviat(cursor.getInt(cursor.getColumnIndex(KalaOlaviatModel.COLUMN_Olaviat())));
-            kalaMojodiZaribModel.setImageDb(cursor.getBlob(cursor.getColumnIndex(KalaPhotoModel.getColumnImage())));
+
+            byte[] byteImage = cursor.getBlob(cursor.getColumnIndex(KalaPhotoModel.getColumnImage()));
+            if (byteImage!=null) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
+                kalaMojodiZaribModel.setImageDb(bmp);
+            }
+
 
 
             kalaMojodiZaribModels.add(kalaMojodiZaribModel);

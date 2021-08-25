@@ -1229,6 +1229,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
             darkhastFaktorAfradForoshModel.setCcAfradRanandeh(ccAfradRanandeh);
             darkhastFaktorAfradForoshModel.setCcAfradGorohForosh(ccAfradModir);
         }
+        Log.d("tempRequest","AfradForosh : " + darkhastFaktorAfradForoshModel.toString());
         darkhastFaktorAfradForoshDAO.insert(darkhastFaktorAfradForoshModel);
         return darkhastFaktorAfradForoshModel;
     }

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.DarkhastFaktorRoozSortDAO;
 import com.saphamrah.Model.DarkhastFaktorRoozSortModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.concurrent.Callable;
 
@@ -38,14 +38,14 @@ public class DarkhastFaktorRoozSortRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insert(DarkhastFaktorRoozSortModel darkhastFaktorRoozSortModel) {
-        return RxDAOUtils.makeObservable(insertCallable(darkhastFaktorRoozSortModel))
+        return RxAsync.makeObservable(insertCallable(darkhastFaktorRoozSortModel))
                 .subscribeOn(Schedulers.io());
     }
 }

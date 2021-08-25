@@ -56,6 +56,7 @@ public class DariaftPardakhtPPCModel
     private static final String COLUMN_ccMarkazForosh = "ccMarkazForosh";
     private static final String COLUMN_ccMarkazSazmanForoshSakhtarForosh = "ccMarkazSazmanForoshSakhtarForosh";
     private static final String COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty = "ExtraProp_ccDaryaftPardakhtCheckBargashty";
+    private static final String COLUMN_UniqueId = "UniqueId";
 
     public static String TableName() {
         return TABLE_NAME;
@@ -177,6 +178,9 @@ public class DariaftPardakhtPPCModel
     public static String COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty() {
         return COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty;
     }
+    public static String COLUMN_UniqueId() {
+        return COLUMN_UniqueId;
+    }
 
 
 
@@ -297,6 +301,9 @@ public class DariaftPardakhtPPCModel
     @SerializedName("ExtraProp_ccDaryaftPardakhtCheckBargashty")
     @Expose
     private long ExtraProp_ccDaryaftPardakhtCheckBargashty;
+    @SerializedName("UniqueId")
+    @Expose
+    private String UniqueId;
 
 
     public long getExtraProp_ccDaryaftPardakhtCheckBargashty() {
@@ -565,6 +572,13 @@ public class DariaftPardakhtPPCModel
         ExtraProp_IsSend = extraProp_IsSend;
     }
 
+    public String getUniqueId() {
+        return UniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        UniqueId = uniqueId;
+    }
 
     public JSONObject toJsonObject(int ccMarkazForosh, int ccMarkazAnbar, int ccMarkazSazmanForoshSakhtarForosh, int codeNoeSanad, int codeNoeCheck, int codeNoeVosolVajhNaghd, String currentVersionNumber)
     {
@@ -606,6 +620,7 @@ public class DariaftPardakhtPPCModel
             jsonObject.put("ccMarkazSazmanForoshSakhtarForosh" , this.ccMarkazSazmanForoshSakhtarForosh==0 ? ccMarkazSazmanForoshSakhtarForosh : this.ccMarkazSazmanForoshSakhtarForosh);
             jsonObject.put("CodeNoeVosol" , CodeNoeVosol);
             jsonObject.put("ccDariaftPardakhtPPC" , ccDariaftPardakht);
+            jsonObject.put("UniqueId" , UniqueId);
         }
         catch (Exception exception)
         {
@@ -655,6 +670,7 @@ public class DariaftPardakhtPPCModel
             jsonObject.put("ccMarkazSazmanForoshSakhtarForosh" , this.ccMarkazSazmanForoshSakhtarForosh==0 ? ccMarkazSazmanForoshSakhtarForosh : this.ccMarkazSazmanForoshSakhtarForosh);
             jsonObject.put("CodeNoeVosol" , CodeNoeVosol);
             jsonObject.put("ccDariaftPardakhtPPC" , ccDariaftPardakht);
+            jsonObject.put("UniqueId" , UniqueId);
         }
         catch (Exception exception)
         {
@@ -705,6 +721,7 @@ public class DariaftPardakhtPPCModel
             jsonObject.put("ccDariaftPardakhtPPC" , ccDariaftPardakht);
             jsonObject.put("ShomarehHesabSanad" , ShomarehHesabSanad);
             jsonObject.put("ccSazmanForosh" , ccSazmanForosh);
+            jsonObject.put("UniqueId" , UniqueId);
         }
         catch (Exception exception)
         {
@@ -824,6 +841,7 @@ public class DariaftPardakhtPPCModel
                 ", NaghlAzGhabl=" + NaghlAzGhabl +
                 ", ccBrand=" + ccBrand +
                 ", IsCheckMoshtary=" + IsCheckMoshtary +
+                ", UniqueId=" + UniqueId +
                 '}';
     }
 }

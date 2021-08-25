@@ -1,6 +1,7 @@
 package com.saphamrah.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -55,7 +56,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGridGoodAdapter.ViewHolder> {
 
-    //TODO statistics
+
     public static final int SHOW_DETAILS = 1;
     public static final int DONT_SHOW_DETAILS = 0;
     public static final String TAG = RequestedGridGoodAdapter.class.getSimpleName();
@@ -65,13 +66,12 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
     private Context context;
     private final OnItemEventListener listener;
     private ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels;
-    private ArrayList<KalaMojodiZaribModel> filteredData;
     private int lastSelectedPosition;
     private int itemPerRow;
     private int status;
     private static int heightOfRecycler;
     private static int widthOfRecycler;
-    private SparseArray<byte[]> allKalaPhoto;
+//    private SparseArray<Bitmap> allKalaPhoto;
     private CompositeDisposable compositeDisposable;
 
 
@@ -81,7 +81,7 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
         this.kalaMojodiZaribModels = kalaMojodiZaribModels;
         lastSelectedPosition = UNSELECTED;
         compositeDisposable = new CompositeDisposable();
-        setKalaImages();
+//        setKalaImages();
 
 
     }
@@ -271,7 +271,8 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
 //            } else {
 //                holder.imgStatusKala.setVisibility(View.GONE);
 //            }
-            holder.setImages(allKalaPhoto.get(model.getCcKalaCode()));
+//            holder.setImages(allKalaPhoto.get(model.getCcKalaCode()));
+              holder.setImages(model.getImageDb(), holder.imgKalaFull);
 
 
 
@@ -319,8 +320,9 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
 
 
         /*****load images for central layout*****/
-        Log.i("getImageHash", "onBindViewHolder: " + allKalaPhoto.get(model.getCcKalaCode()) + model.getCcKalaCode());
-        holder.setImages(allKalaPhoto.get(model.getCcKalaCode()));
+//        Log.i("getImageHash", "onBindViewHolder: " + allKalaPhoto.get(model.getCcKalaCode()) + model.getCcKalaCode());
+//        holder.setImages(allKalaPhoto.get(model.getCcKalaCode()));
+        holder.setImages(model.getImageDb(), holder.imgKalaGrid);
 
 
 
@@ -527,32 +529,21 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
                     notifyItemChanged(lastSelectedPosition);
                     lastSelectedPosition = position;
                     listener.onItemClick(model, position);
-                    Log.i("ccKalaCodeded", "onClick: " + model.getNameKala() + "modelccKalaCode" + model.getCcKalaCode() + allKalaPhoto.get(model.getCcKalaCode()));
+//                    Log.i("ccKalaCodeded", "onClick: " + model.getNameKala() + "modelccKalaCode" + model.getCcKalaCode() + allKalaPhoto.get(model.getCcKalaCode()));
 
                 }
             });
 
 
         }
-        private void setImages(byte[] image) {
-
-            try {
-                Glide.with(context)
-                        .load(image)
-                        .placeholder(R.drawable.nopic_whit)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .apply(RequestOptions.signatureOf(new ObjectKey(String.valueOf(System.currentTimeMillis()))))
-                        .into(imgKalaGrid);
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.toString(), "RequestedGridGoodAdapter", "", "onBindViewHolder", "");
+        private void setImages(Bitmap image,ImageView imageView) {
+            if (image!=null){
+                imageView.setImageBitmap(image);
+            }else{
+                imageView.setImageResource(R.drawable.nopic_whit);
             }
+
         }
-
-
     }
 
     /****adapter events handler****/
@@ -579,22 +570,22 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
     }
 
 
-    public void setKalaImages() {
-        Log.i(TAG, "setKalaImages: kalaMojodiZaribModels.size()" + kalaMojodiZaribModels.size() + "\n");
-        if (allKalaPhoto != null) {
-            allKalaPhoto.clear();
-            notifyDataSetChanged();
-        }
-        allKalaPhoto = new SparseArray<>();
-        Disposable disposable = Observable.fromIterable(kalaMojodiZaribModels)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(kalaMojodiZaribModel -> {
-                    allKalaPhoto.put(kalaMojodiZaribModel.getCcKalaCode(), kalaMojodiZaribModel.getImageDb());
-                });
-        compositeDisposable.add(disposable);
-
-    }
+//    public void setKalaImages() {
+//        Log.i(TAG, "setKalaImages: kalaMojodiZaribModels.size()" + kalaMojodiZaribModels.size() + "\n");
+//        if (allKalaPhoto != null) {
+//            allKalaPhoto.clear();
+//            notifyDataSetChanged();
+//        }
+//        allKalaPhoto = new SparseArray<>();
+//        Disposable disposable = Observable.fromIterable(kalaMojodiZaribModels)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(kalaMojodiZaribModel -> {
+//                    allKalaPhoto.put(kalaMojodiZaribModel.getCcKalaCode(), kalaMojodiZaribModel.getImageDb());
+//                });
+//        compositeDisposable.add(disposable);
+//
+//    }
 
     public void clearRecyclerView() {
         if (compositeDisposable != null) {

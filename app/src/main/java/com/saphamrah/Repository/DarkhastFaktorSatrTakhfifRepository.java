@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.DarkhastFaktorSatrTakhfifDAO;
 import com.saphamrah.Model.DarkhastFaktorSatrTakhfifModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -48,14 +48,14 @@ public class DarkhastFaktorSatrTakhfifRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<DarkhastFaktorSatrTakhfifModel> darkhastFaktorSatrTakhfifModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(darkhastFaktorSatrTakhfifModels))
+        return RxAsync.makeObservable(insertGroupCallable(darkhastFaktorSatrTakhfifModels))
                 .subscribeOn(Schedulers.io());
     }
 }

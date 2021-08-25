@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.TakhfifSenfiDAO;
 import com.saphamrah.Model.TakhfifSenfiModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -37,12 +37,12 @@ public class TakhfifSenfiRepository {
     /*******************************************************************Observable*****************************************************************/
 
     public Observable<Boolean> deleteAll(){
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
     public Observable<Boolean> insertGroup(ArrayList<TakhfifSenfiModel> takhfifSenfiModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(takhfifSenfiModels))
+        return RxAsync.makeObservable(insertGroupCallable(takhfifSenfiModels))
                 .subscribeOn(Schedulers.io());
     }
 }

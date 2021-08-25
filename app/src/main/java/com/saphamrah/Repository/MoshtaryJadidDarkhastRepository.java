@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.DAO.MoshtaryJadidDarkhastDAO;
 import com.saphamrah.Model.MoshtaryJadidDarkhastModel;
-import com.saphamrah.Utils.RxUtils.RxDAOUtils;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -39,14 +39,14 @@ public class MoshtaryJadidDarkhastRepository {
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
-        return RxDAOUtils.makeObservable(deleteAllCallable())
+        return RxAsync.makeObservable(deleteAllCallable())
                 .subscribeOn(Schedulers.io());
     }
 
 
 
     public Observable<Boolean> insertGroup(ArrayList<MoshtaryJadidDarkhastModel> moshtaryJadidDarkhastModels) {
-        return RxDAOUtils.makeObservable(insertGroupCallable(moshtaryJadidDarkhastModels))
+        return RxAsync.makeObservable(insertGroupCallable(moshtaryJadidDarkhastModels))
                 .subscribeOn(Schedulers.io());
     }
 }

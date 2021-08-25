@@ -463,7 +463,7 @@ public class ForoshandehMamorPakhshDAO
         {
             exception.printStackTrace();
             PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), exception.toString(), "ForoshandehMamorPakhshDAO" , "" , "getByccForoshandeh" , "");
+            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), exception.toString(), "ForoshandehMamorPakhshDAO" , "" , "getIsSelect" , "");
         }
         return foroshandehMamorPakhshModel;
     }
