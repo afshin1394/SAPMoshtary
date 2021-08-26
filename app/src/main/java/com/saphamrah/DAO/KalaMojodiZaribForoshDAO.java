@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.saphamrah.MVP.View.DarkhastKalaActivity;
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.KalaMojodiModel;
 import com.saphamrah.Model.KalaOlaviatModel;
@@ -41,8 +42,8 @@ public class KalaMojodiZaribForoshDAO
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), "KalaMojodiZaribForoshDAO" , "" , "constructor" , "");
         }
     }
-
-    public ArrayList<KalaMojodiZaribModel> getAllByMoshtary(String darajeh, int noeMoshtary, int ccSazmanForosh, int ccMoshtaryGharardad)
+//TODO
+    public ArrayList<KalaMojodiZaribModel> getAllByMoshtary(String darajeh, int noeMoshtary, int ccSazmanForosh, int ccMoshtaryGharardad, DarkhastKalaActivity.AddItemType type)
     {
         ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = new ArrayList<>();
         String query = null;
@@ -96,9 +97,13 @@ public class KalaMojodiZaribForoshDAO
                    " and z.Darajeh IN ( 0," + darajeh + " )) z \n" +
                    " on km.ccKalaCode = z.ccKalaCode \n" +
                    " left join KalaOlaviat o on o.ccKalaCode = km.ccKalaCode \n" +
-                   " LEFT JOIN (SELECT * FROM KalaPhoto) kp on kp.ccKalaCode = km.ccKalaCode  \n" +
+                   " LEFT JOIN (SELECT * FROM KalaPhoto) kp ON kp.ccKalaCode= km.ccKalaCode \n" +
                    " where km.sumTedad > 0 order by o.Olaviat";
            }
+
+
+
+
         try
         {
             Log.i("getAllByMoshtary", "query: "+ query);
@@ -109,7 +114,8 @@ public class KalaMojodiZaribForoshDAO
             {
                 if (cursor.getCount() > 0)
                 {
-                    kalaMojodiZaribModels = cursorToModel(cursor);
+                    //TODO
+                    kalaMojodiZaribModels = cursorToModel(cursor,type);
                 }
                 cursor.close();
             }
@@ -185,7 +191,8 @@ public class KalaMojodiZaribForoshDAO
             {
                 if (cursor.getCount() > 0)
                 {
-                    kalaMojodiZaribModels = cursorToModel(cursor);
+                    //TODO
+                    kalaMojodiZaribModels = cursorToModel(cursor, DarkhastKalaActivity.AddItemType.NONE);
                 }
                 cursor.close();
             }
@@ -200,8 +207,8 @@ public class KalaMojodiZaribForoshDAO
         }
         return kalaMojodiZaribModels;
     }
-
-    private ArrayList<KalaMojodiZaribModel> cursorToModel(Cursor cursor)
+//TODO
+    private ArrayList<KalaMojodiZaribModel> cursorToModel(Cursor cursor,DarkhastKalaActivity.AddItemType type)
     {
         ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = new ArrayList<>();
 
@@ -245,11 +252,14 @@ public class KalaMojodiZaribForoshDAO
 
             // KalaOlaviat
             kalaMojodiZaribModel.setOlaviat(cursor.getInt(cursor.getColumnIndex(KalaOlaviatModel.COLUMN_Olaviat())));
-
-            byte[] byteImage = cursor.getBlob(cursor.getColumnIndex(KalaPhotoModel.getColumnImage()));
-            if (byteImage!=null) {
-                Bitmap bmp = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
-                kalaMojodiZaribModel.setImageDb(bmp);
+//TODO
+            if (type.equals(DarkhastKalaActivity.AddItemType.SHOW_GRID_LIST)) {
+                byte[] byteImage = cursor.getBlob(cursor.getColumnIndex(KalaPhotoModel.getColumnImage()));
+                if (byteImage != null) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
+                    Bitmap bitmap=getResizedBitmap(bmp,500);
+                    kalaMojodiZaribModel.setImageDb(bitmap);
+                }
             }
 
 
@@ -259,4 +269,20 @@ public class KalaMojodiZaribForoshDAO
         }
         return kalaMojodiZaribModels;
     }
+//TODO
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
 }

@@ -77,20 +77,18 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
     JayezehDAO jayezehDAO = new JayezehDAO(BaseApplication.getContext());
     DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
     private ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels;
-    public DarkhastKalaModel(DarkhastKalaMVP.RequiredPresenterOps mPresenter)
-    {
+
+    public DarkhastKalaModel(DarkhastKalaMVP.RequiredPresenterOps mPresenter) {
         this.mPresenter = mPresenter;
         // get calculate kala asasi from parameter
         String valueCalculateKalaAsasi = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_MOHASEBE_KALA_ASASI);
-        if (valueCalculateKalaAsasi != null && valueCalculateKalaAsasi.trim().equals("0"))
-        {
+        if (valueCalculateKalaAsasi != null && valueCalculateKalaAsasi.trim().equals("0")) {
             enableKalaAsasi = false;
         }
     }
 
     @Override
-    public void getNoeMasouliat()
-    {
+    public void getNoeMasouliat() {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         ForoshandehMamorPakhshUtils foroshandehMamorPakhshUtils = new ForoshandehMamorPakhshUtils();
@@ -99,20 +97,17 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
     }
 
     @Override
-    public void getNameListOfKalaAdamForosh()
-    {
+    public void getNameListOfKalaAdamForosh() {
         KalaMojodiDAO kalaMojodiDAO = new KalaMojodiDAO(mPresenter.getAppContext());
         String kalaNameOfAdamForosh = kalaMojodiDAO.getKalaAdamForosh();
-        if (!kalaNameOfAdamForosh.trim().equals(""))
-        {
+        if (!kalaNameOfAdamForosh.trim().equals("")) {
             String message = String.format("%1$s : %2$s", mPresenter.getAppContext().getString(R.string.adamForoshKala), kalaNameOfAdamForosh);
             mPresenter.showNameListOfKalaAdamForosh(message);
         }
     }
 
     @Override
-    public void getAllRequestedGoods()
-    {
+    public void getAllRequestedGoods() {
         SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = shared.getLong(shared.getCcDarkhastFaktor() , 0L);
 
@@ -290,7 +285,8 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
 
         String daraje = String.valueOf("0," + moshtaryModel.getDarajeh());
         int noeMoshtary = moshtaryModel.getCcNoeMoshtary();
-        final ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = kalaMojodiZaribForoshDAO.getAllByMoshtary(daraje, noeMoshtary, moshtaryGharardadccSazmanForosh, ccMoshtaryGharardad);
+        //TODO
+        final ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = kalaMojodiZaribForoshDAO.getAllByMoshtary(daraje, noeMoshtary, moshtaryGharardadccSazmanForosh, ccMoshtaryGharardad,type);
 
 
         Log.d("DarkhastKalaModel", "end of get goods and size : " + kalaMojodiZaribModels.size() + "kalaMojodiZaribModels:" + kalaMojodiZaribModels.toString());

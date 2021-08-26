@@ -525,11 +525,10 @@ public class RequestedGridGoodAdapter extends RecyclerSwipeAdapter<RequestedGrid
             swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    notifyItemChanged(position);
-                    notifyItemChanged(lastSelectedPosition);
+
+                    notifyDataSetChanged();
                     lastSelectedPosition = position;
                     listener.onItemClick(model, position);
-//                    Log.i("ccKalaCodeded", "onClick: " + model.getNameKala() + "modelccKalaCode" + model.getCcKalaCode() + allKalaPhoto.get(model.getCcKalaCode()));
 
                 }
             });
