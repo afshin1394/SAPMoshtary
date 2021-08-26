@@ -40,7 +40,7 @@ import static io.reactivex.plugins.RxJavaPlugins.setErrorHandler;
 public class RxHttpRequest {
 
 
-    public static final int TIME_OUT = 10;
+    public static final int TIME_OUT = 2;
     /**
      * millis
      **/
@@ -131,13 +131,11 @@ public class RxHttpRequest {
             @Override
             public void onError(@NonNull Throwable e) {
 
-                if (e!=null) {
-                    Log.i("--HTTP_RX_REQUEST--", "onError: " + e.getMessage());
-
-                    callback.onError(e.getMessage(), e.getCause().getMessage());
-                    PubFunc.Logger logger = new PubFunc().new Logger();
-                    logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s ", e.getMessage(), e.getCause().getMessage()), CLASS_NAME, ACTIVITY_NAME, FUNCTION, "onError");
-                }
+                Log.i("--HTTP_RX_REQUEST--", "onError: " + e.getMessage());
+                String cause = e.getCause() != null ? e.getCause().getMessage() : BaseApplication.getContext().getResources().getString(R.string.errorGetData);
+                callback.onError(e.getMessage(), cause);
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s ", e.getMessage(), e.getCause().getMessage()), CLASS_NAME, ACTIVITY_NAME, FUNCTION, "onError");
             }
 
             /**
@@ -170,7 +168,7 @@ public class RxHttpRequest {
                     .subscribeOn(Schedulers.io())
                     .retry(2)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .timeout(TIME_OUT, TimeUnit.SECONDS)
+                    .timeout(TIME_OUT, TimeUnit.MINUTES)
                     .subscribe(observer);
 
         }
@@ -220,41 +218,41 @@ public class RxHttpRequest {
 
 
 
-   public static  <T> ObservableTransformer<Response<T>, Response<T>> parseHttpErrors(String CLASS_NAME, String ACTIVITY_NAME, String FUNCTION) {
+    public static  <T> ObservableTransformer<Response<T>, Response<T>> parseHttpErrors(String CLASS_NAME, String ACTIVITY_NAME, String FUNCTION) {
 
 //        if (!isExecutable) {
 //            onError(new Throwable(BaseApplication.getContext().getString(R.string.Http_server_not_found), new Throwable(Constants.HTTP_WRONG_ENDPOINT())));
 //        }
-      return upstream -> upstream
-              .observeOn(AndroidSchedulers.mainThread())
-              .doOnNext(new Consumer<Response<T>>() {
-          @Override
-          public void accept(Response<T> t) throws Exception {
-              Log.i("Responsewww", "onNext: " + t.code() +"sop"+t.raw());
-              if (t != null) {
-                  if (t.code() >= HTTP_CLIENT_EXCEPTION && t.code() < 600)
-                      throw  new Exception(BaseApplication.getContext().getString(R.string.errorGetData), new Throwable(Constants.RETROFIT_EXCEPTION()));
+        return upstream -> upstream
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Consumer<Response<T>>() {
+                    @Override
+                    public void accept(Response<T> t) throws Exception {
+                        Log.i("Responsewww", "onNext: " + t.code() +"sop"+t.raw());
+                        if (t != null) {
+                            if (t.code() >= HTTP_CLIENT_EXCEPTION && t.code() < 600)
+                                throw  new Exception(BaseApplication.getContext().getString(R.string.errorGetData), new Throwable(Constants.RETROFIT_EXCEPTION()));
 
 
-                  Log.i("Responsewww", "onNext: " + t.raw());
-                  if (t.raw().body() != null) {
+                            Log.i("Responsewww", "onNext: " + t.raw());
+                            if (t.raw().body() != null) {
 
-                      long contentLength = t.raw().body().contentLength();
-                      PubFunc.Logger logger = new PubFunc().new Logger();
-                      logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, CLASS_NAME, ACTIVITY_NAME, FUNCTION, "onResponse");
-                  }
-                  if (t.code() == HTTP_BAD_REQUEST) {
-                      //Todo
-                      throw  new Exception(BaseApplication.getContext().getString(R.string.errorGetData), new Throwable(Constants.HTTP_BAD_REQUEST()));                  }
-              } else {
-                  throw  new Exception(BaseApplication.getContext().getString(R.string.errorGetData), new Throwable(Constants.HTTP_NULL_RESPONSE()));
-              }
-          }
-      });
-
-    }
+                                long contentLength = t.raw().body().contentLength();
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, CLASS_NAME, ACTIVITY_NAME, FUNCTION, "onResponse");
+                            }
+                            if (t.code() == HTTP_BAD_REQUEST) {
+                                //Todo
+                                throw  new Exception(BaseApplication.getContext().getString(R.string.errorGetData), new Throwable(Constants.HTTP_BAD_REQUEST()));                  }
+                        } else {
+                            throw  new Exception(BaseApplication.getContext().getString(R.string.errorGetData), new Throwable(Constants.HTTP_NULL_RESPONSE()));
+                        }
+                    }
+                });
 
     }
+
+}
 
 
 class RetryWithDelay implements Function<Observable<? extends Throwable>, Observable<?>> {

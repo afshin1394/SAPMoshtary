@@ -459,9 +459,9 @@
 
 
     <string-array name="GoodsNumberItems">
-        <item>{\"title\":\"تکی\" , \"value\":\"1\",\"image\":\"ic_1section\"}</item>
-        <item>{\"title\":\"دوتایی\" , \"value\":\"2\",\"image\":\"ic_2section\"}</item>
-        <item>{\"title\":\"چهار تایی\" , \"value\":\"3\",\"image\":\"ic_4section\"}</item>
+        <item>{\"title\":\"تکی\" , \"value\":\"1\",\"image\":\"0\"}</item>
+        <item>{\"title\":\"دوتایی\" , \"value\":\"2\",\"image\":\"1\"}</item>
+        <item>{\"title\":\"چهار تایی\" , \"value\":\"3\",\"image\":\"2\"}</item>
 
     </string-array>
 
