@@ -500,6 +500,7 @@ public class CustomersListModel implements CustomersListMVP.ModelOps
     private void getNoeVosolMoshtary()
     {
         final NoeVosolMoshtaryDAO noeVosolMoshtaryDAO = new NoeVosolMoshtaryDAO(mPresenter.getAppContext());
+        ccGorohs = new MoshtaryDAO(mPresenter.getAppContext()).getAllccNoeSenf();
         noeVosolMoshtaryDAO.fetchNoeVosolMoshtary(mPresenter.getAppContext(), "CustomersListActivity" ,  String.valueOf(ccMarkazSazmanForosh),ccGorohs , new RetrofitResponse() {
             @Override
             public void onSuccess(final ArrayList arrayListData)

@@ -503,6 +503,25 @@ public class DariaftPardakhtPPCDAO
         return dariaftPardakhtPPCs;
     }
 
+    public boolean isMarjoeeSend(long ccDarkhastFaktor)
+    {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query = "SELECT * FROM DariaftPardakhtPPC WHERE CodeNoeVosol = " + Constants.VALUE_MARJOEE() + " AND ExtraProp_IsSend = 0";
+            Cursor cursor = db.rawQuery(query , null);
+            cursor.moveToFirst();
+            if(cursor.getCount() !=0)
+                return true;
+            cursor.close();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
     public ArrayList<DariaftPardakhtPPCModel> getForSendToSqlByccDariaftPardakht(long ccDariaftPardakht)
     {
         ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCs = new ArrayList<>();

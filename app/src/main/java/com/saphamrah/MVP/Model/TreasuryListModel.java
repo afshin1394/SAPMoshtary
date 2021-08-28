@@ -525,12 +525,15 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
     @Override
     public void getDariaftPardakhtForSend(long ccDarkhastFaktor , int position)
     {
-
+        boolean isMarjoeeSend = dariaftPardakhtPPCDAO.isMarjoeeSend(ccDarkhastFaktor);
+        if (isMarjoeeSend){
+            mPresenter.onErrorSend(R.string.isMarjoeeSend);
+        }
+        else {
 //        boolean haveOtherMarjoee = kardexDAO.deleteByccDarkhastFaktor(String.valueOf(ccDarkhastFaktor))
         ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = dariaftPardakhtPPCDAO.getForSendToSqlByccDarkhastFaktor(ccDarkhastFaktor);
         Log.d("treasury" , "dariaftPardakhtPPCModels.size : " + dariaftPardakhtPPCModels.size());
-        if (dariaftPardakhtPPCModels.size() > 0)
-        {
+        if (dariaftPardakhtPPCModels.size() > 0) {
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
             ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             if (foroshandehMamorPakhshModel == null)
@@ -564,7 +567,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         {
             mPresenter.onErrorSend(R.string.errorNotExistItemForSend);
         }
-    }
+    }}
 
     private void sendDariaftPardakhtToServer(final int position , String ip , String port , final ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, final DarkhastFaktorModel darkhastFaktorModel, int codeNoeVosolVajhNaghd, String currentVersionNumber)
     {

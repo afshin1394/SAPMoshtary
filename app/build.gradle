@@ -1,6 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 29
@@ -8,8 +6,8 @@ android {
         applicationId "com.saphamrah"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 80
-        versionName "2.2.5.21"
+        versionCode 82
+        versionName "2.2.5.22"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -207,14 +205,6 @@ dependencies {
     implementation 'com.uber.autodispose:autodispose:1.1.0'
     implementation 'com.uber.autodispose:autodispose-android-archcomponents:1.1.0'
 
-// Import the Firebase BoM
-    implementation platform('com.google.firebase:firebase-bom:26.5.0')
-
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-
-    // Declare the dependency for the Firebase SDK for Google Analytics
-    implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.firebase:firebase-crashlytics'
 
 
     implementation 'com.github.afshin1394:central_exception_handler:1.0.5'

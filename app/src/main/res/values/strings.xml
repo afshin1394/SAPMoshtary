@@ -1088,4 +1088,5 @@
     <string name="undefined">نامشخص</string>
     <string name="unAvailable">ناموجود</string>
     <string name="selectEmza">امضا</string>
+    <string name="isMarjoeeSend">برای ارسال وصول ابتدا مرجوعی خود را ارسال نمایید</string>
 </resources>
