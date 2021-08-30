@@ -1284,7 +1284,6 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         });
 
 
-        final MandehMojodyMashinDAO mandehMojodyMashinDAO = new MandehMojodyMashinDAO(mPresenter.getAppContext());
         String ccAnbarakAfrad = String.valueOf(new AnbarakAfradDAO(mPresenter.getAppContext()).getAll().get(0).getCcAnbarak());
 
         if(noeMasouliat == 1 || noeMasouliat == 6 || noeMasouliat ==8)//1-Foroshandeh-Sard
@@ -1354,16 +1353,13 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                         if (deleteAll) {
 
                             Disposable insertGroup = mandehMojodyMashinRepository.insertGroup(body.getMandehMojodyMashinModels())
-                                    .subscribe(new Consumer<Boolean>() {
-                                        @Override
-                                        public void accept(Boolean insertGroup) throws Exception {
-                                            if (insertGroup) {
-                                                updateKalaMojodiTable(body.getMandehMojodyMashinModels(), Integer.parseInt(ccForoshandeh), Integer.parseInt(ccAfrad),handler);
-                                            } else {
-                                                Message message = new Message();
-                                                message.arg1 = -1;
-                                                handler.sendMessage(message);
-                                            }
+                                    .subscribe(insertGroup1 -> {
+                                        if (insertGroup1) {
+                                            updateKalaMojodiTable(body.getMandehMojodyMashinModels(), Integer.parseInt(ccForoshandeh), Integer.parseInt(ccAfrad),handler);
+                                        } else {
+                                            Message message = new Message();
+                                            message.arg1 = -1;
+                                            handler.sendMessage(message);
                                         }
                                     }, throwable -> {
                                         Message message = new Message();
@@ -1373,6 +1369,10 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
                             );
                             compositeDisposable.add(insertGroup);
+                        }else{
+                            Message message = new Message();
+                            message.arg1 = -1;
+                            handler.sendMessage(message);
                         }
                     }, throwable -> {
                         Message message = new Message();
@@ -1394,7 +1394,6 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
         ArrayList<KalaMojodiModel> kalaMojodiModels = new ArrayList<>();
         Observable.fromIterable(mandehMojodyMashinModels)
-                .subscribeOn(Schedulers.io())
                 .map(mandehMojodyMashinModel -> {
 
                             KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
@@ -1418,7 +1417,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                         }
 
 
-                ).subscribeOn(Schedulers.io())
+                )
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<KalaMojodiModel>() {
                     @Override
@@ -1442,24 +1441,36 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
                     @Override
                     public void onComplete() {
-                        Disposable insertGroup = new KalaMojodiRepository(mPresenter.getAppContext())
-                                .insertGroup(kalaMojodiModels)
+                        KalaMojodiRepository kalaMojodiRepository=new KalaMojodiRepository(mPresenter.getAppContext());
+                        Disposable deleteAllDisposable = kalaMojodiRepository.deleteAll()
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(inserted -> {
-                                    if (inserted){
-                                        Message message = new Message();
-                                        message.arg1 = 1;
-                                        handler.sendMessage(message);
+                                .subscribe(deleteAll -> {
+                                    if (deleteAll){
+                                        Disposable insertGroup = kalaMojodiRepository
+                                                .insertGroup(kalaMojodiModels)
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribe(inserted -> {
+                                                    if (inserted){
+                                                        Message message = new Message();
+                                                        message.arg1 = 1;
+                                                        handler.sendMessage(message);
+                                                    }else{
+                                                        Message message = new Message();
+                                                        message.arg1 = -1;
+                                                        handler.sendMessage(message);
+                                                    }
+                                                }, throwable ->{
+                                                    Message message = new Message();
+                                                    message.arg1 = -1;
+                                                    handler.sendMessage(message);});
+                                        compositeDisposable.add(insertGroup);
                                     }else{
                                         Message message = new Message();
                                         message.arg1 = -1;
                                         handler.sendMessage(message);
                                     }
-                                }, throwable ->{
-                                    Message message = new Message();
-                                    message.arg1 = -1;
-                                    handler.sendMessage(message);});
-                        compositeDisposable.add(insertGroup);
+                                });
+                        compositeDisposable.add(deleteAllDisposable);
                     }
                 });
 

@@ -106,8 +106,10 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
         }
     }
 
-    @Override
-    public void getAllRequestedGoods() {
+
+    private ArrayList<KalaDarkhastFaktorSatrModel> getAllRequestedGoodsFunc() throws Exception {
+
+        ArrayList <KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModelArrayList = new ArrayList<>();
         SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = shared.getLong(shared.getCcDarkhastFaktor() , 0L);
 
@@ -124,23 +126,35 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
                     shared.putBoolean(shared.getInsertDarkhastFaktorSatrForMamorPakhsh() , true);
                 }
                 KalaDarkhastFaktorSatrDAO kalaDarkhastFaktorSatrDAO = new KalaDarkhastFaktorSatrDAO(mPresenter.getAppContext());
-                ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels = kalaDarkhastFaktorSatrDAO.getByccDarkhast(ccDarkhastFaktor);
+                kalaDarkhastFaktorSatrModelArrayList = kalaDarkhastFaktorSatrDAO.getByccDarkhast(ccDarkhastFaktor);
                 if (enableKalaAsasi)
                 {
                     String ccKalaCodesOfKalaAsasi = shared.getString(shared.getCcKalaCodesOfKalaAsasi(), "");
-                    setKalaAsasiOfInsertedGoods(ccKalaCodesOfKalaAsasi, kalaDarkhastFaktorSatrModels);
+                    setKalaAsasiOfInsertedGoods(ccKalaCodesOfKalaAsasi, kalaDarkhastFaktorSatrModelArrayList);
                 }
-                mPresenter.onGetRequestedGoods(kalaDarkhastFaktorSatrModels);
+                return kalaDarkhastFaktorSatrModelArrayList;
+//                mPresenter.onGetRequestedGoods(kalaDarkhastFaktorSatrModels);
             }
             else
             {
-                mPresenter.onError();
+                throw new Exception();
+//                mPresenter.onError();
             }
         }
         else
         {
-            mPresenter.onGetRequestedGoods(new ArrayList<KalaDarkhastFaktorSatrModel>());
+            return kalaDarkhastFaktorSatrModelArrayList;
+//            mPresenter.onGetRequestedGoods(new ArrayList<KalaDarkhastFaktorSatrModel>());
         }
+
+    }
+
+    @Override
+    public void getAllRequestedGoods()
+    {
+
+        getAllRequestedGoodsObservable();
+
     }
 
 
@@ -255,19 +269,39 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
         return darkhastFaktorSatrDAO.insert(darkhastFaktorSatrModel);
     }
 
+    private Callable<ArrayList<KalaDarkhastFaktorSatrModel>> getAllRequestedGoodsCallable(){
+        return this::getAllRequestedGoodsFunc;
+    }
+
+
+    private void getAllRequestedGoodsObservable(){
+        RxAsync.makeObservable(getAllRequestedGoodsCallable())
+                .subscribeOn(Schedulers.single())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(throwable -> {
+                  mPresenter.onError();
+                })
+                .doOnNext(kalaMojodiZaribModels -> {
+
+                  mPresenter.onGetRequestedGoods(kalaMojodiZaribModels);
+                }).subscribe();
+    }
 
     private Callable<ArrayList<KalaMojodiZaribModel>> getAllKalaWithMojodiZaribCallable(final int ccMoshtary, final boolean calculateKalaPishnahadi, final boolean calculateKalaAsasi, boolean getAllRequestedGoods, DarkhastKalaActivity.AddItemType type) {
         return () -> getAllKalaWithMojodiZaribFunc(ccMoshtary, calculateKalaPishnahadi, calculateKalaAsasi, getAllRequestedGoods, type);
     }
     public void getAllKalaWithMojodiZaribObservable(final int ccMoshtary, final boolean calculateKalaPishnahadi, final boolean calculateKalaAsasi, boolean getAllRequestedGoods, DarkhastKalaActivity.AddItemType type) {
-         RxAsync.makeObservable(getAllKalaWithMojodiZaribCallable(ccMoshtary, calculateKalaPishnahadi, calculateKalaAsasi, getAllRequestedGoods, type))
-                .subscribeOn(Schedulers.io())
+        RxAsync.makeObservable(getAllKalaWithMojodiZaribCallable(ccMoshtary, calculateKalaPishnahadi, calculateKalaAsasi, getAllRequestedGoods, type))
+                .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(throwable -> {
-                        mPresenter.onError();
-                 })
+                    mPresenter.onError();
+                })
                 .doOnNext(kalaMojodiZaribModels -> {
-                        mPresenter.onGetAllKalaWithMojodiZarib(kalaMojodiZaribModels, type);
+                    if (getAllRequestedGoods) {
+                        getAllRequestedGoods();
+                    }
+                    mPresenter.onGetAllKalaWithMojodiZarib(kalaMojodiZaribModels, type);
                 }).subscribe();
     }
 

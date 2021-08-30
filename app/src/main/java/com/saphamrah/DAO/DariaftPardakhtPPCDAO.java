@@ -824,6 +824,30 @@ public class DariaftPardakhtPPCDAO
         }
     }
 
+    /**
+     * update DB when send marjoee to server
+     * @return
+     */
+    public boolean updateSendedMarjoee(long ccDarkhastFaktor)
+    {
+        try
+        {
+            String query = "update " + DariaftPardakhtPPCModel.TableName() + " set " + DariaftPardakhtPPCModel.COLUMN_ExtraProp_IsSend() + " = " + 1 + "  where " + DariaftPardakhtPPCModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " AND CodeNoeVosol = " + Constants.VALUE_MARJOEE();
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , DariaftPardakhtPPCModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtPPCDAO" , "" , "updateSendedMarjoee" , "");
+            return true;
+        }
+    }
+
     public boolean updateUniqId(long ccDaryaftPardakht , String uniqId)
     {
         try

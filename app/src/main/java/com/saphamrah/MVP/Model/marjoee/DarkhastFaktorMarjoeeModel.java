@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.marjoee.DarkhastFaktorMarjoeeMVP;
+import com.saphamrah.DAO.DariaftPardakhtPPCDAO;
 import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.KardexDAO;
@@ -45,7 +46,7 @@ public class DarkhastFaktorMarjoeeModel implements DarkhastFaktorMarjoeeMVP.Mode
     ServerIPShared serverIPShared = new ServerIPShared(BaseApplication.getContext());
     ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().postServerFromShared(BaseApplication.getContext());
     MarjoeeKamelImageDAO marjoeeKamelImageDAO = new MarjoeeKamelImageDAO(BaseApplication.getContext());
-
+    DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(BaseApplication.getContext());
     public DarkhastFaktorMarjoeeModel(DarkhastFaktorMarjoeeMVP.RequiredPresenterOps mPresenter) {
         this.mPresenter = mPresenter;
     }
@@ -127,6 +128,7 @@ public class DarkhastFaktorMarjoeeModel implements DarkhastFaktorMarjoeeMVP.Mode
                         if (response.isSuccessful() && response.body() != null) {
                             MarjoeeKardexResult result = response.body();
                             if (result.getSuccess()) {
+                                dariaftPardakhtPPCDAO.updateSendedMarjoee(darkhastFaktorModel.getCcDarkhastFaktor());
                                 mPresenter.onSuccessSend();
                             } else {
                                 showErrorMessageOfSend(result.getMessage());
