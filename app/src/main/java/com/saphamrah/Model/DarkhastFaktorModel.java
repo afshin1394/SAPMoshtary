@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.saphamrah.UIModel.CustomerDarkhastFaktorModel;
 import com.saphamrah.Utils.Constants;
 
 import org.json.JSONArray;
@@ -1252,7 +1253,7 @@ public class DarkhastFaktorModel
     }
 
 
-    public JSONObject toJsonForVosol(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, int ccMarkazForosh, int ccGorohNoeMoshtary, int ccGorohNoeSenf)
+    public JSONObject toJsonForVosol(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, int ccMarkazForosh, int ccGorohNoeMoshtary, int ccGorohNoeSenf, CustomerDarkhastFaktorModel customerDarkhastFaktorModel)
     {
         JSONObject jsonObject = new JSONObject();
         try
@@ -1299,8 +1300,8 @@ public class DarkhastFaktorModel
             jsonObject.put("ccMarkazAnbar" , foroshandehMamorPakhshModel.getCcMarkazAnbar());
             jsonObject.put("ccMarkazSazmanForosh" , ccMarkazSazmanForosh);
             jsonObject.put("ccMarkazSazmanForoshSakhtarForosh" , ccMarkazSazmanForoshSakhtarForosh);
-            jsonObject.put("ccMoshtaryGharardad" , ccMoshtaryGharardad);
-            jsonObject.put("MoshtaryGharardadccSazmanForosh" , MoshtaryGharardadccSazmanForosh);
+            jsonObject.put("ccMoshtaryGharardad" , customerDarkhastFaktorModel.getCcMoshtaryGharardad());
+            jsonObject.put("MoshtaryGharardadccSazmanForosh" , customerDarkhastFaktorModel.getMoshtaryGharardadccSazmanForosh());
             jsonObject.put("UniqID_Tablet" , UniqID_Tablet);
             jsonObject.put("Darajeh" , Darajeh);
 			jsonObject.put("ccDarkhastFaktorNoeForosh" , ccDarkhastFaktorNoeForosh);
@@ -1314,8 +1315,8 @@ public class DarkhastFaktorModel
         return jsonObject;
     }
 
-
-    public JSONObject toJsonStringForVosolSard(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int ccMarkazForosh, int ccGorohNoeMoshtary, int ccGorohNoeSenf)
+    //TODO قرارداد
+    public JSONObject toJsonStringForVosolSard(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int ccMarkazForosh, int ccGorohNoeMoshtary, int ccGorohNoeSenf, CustomerDarkhastFaktorModel customerDarkhastFaktorModel)
     {
         JSONObject jsonObject = new JSONObject();
         try
@@ -1355,8 +1356,8 @@ public class DarkhastFaktorModel
             jsonObject.put("ccAnbar" , foroshandehMamorPakhshModel.getCcAnbar());
             jsonObject.put("ccMarkazSazmanForosh" , ccMarkazSazmanForosh);
             jsonObject.put("ccMarkazSazmanForoshSakhtarForosh" , ccMarkazSazmanForoshSakhtarForosh);
-            jsonObject.put("ccMoshtaryGharardad" , ccMoshtaryGharardad);
-            jsonObject.put("MoshtaryGharardadccSazmanForosh" , MoshtaryGharardadccSazmanForosh);
+            jsonObject.put("ccMoshtaryGharardad" , customerDarkhastFaktorModel.getCcMoshtaryGharardad());
+            jsonObject.put("MoshtaryGharardadccSazmanForosh" , customerDarkhastFaktorModel.getMoshtaryGharardadccSazmanForosh());
             jsonObject.put("UniqID_Tablet" , UniqID_Tablet);
             jsonObject.put("Darajeh" , Darajeh);
 			jsonObject.put("ccDarkhastFaktorNoeForosh" , ccDarkhastFaktorNoeForosh);

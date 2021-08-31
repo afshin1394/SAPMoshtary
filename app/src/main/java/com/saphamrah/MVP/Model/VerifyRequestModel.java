@@ -459,10 +459,14 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
     {
         SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = shared.getLong(shared.getCcDarkhastFaktor() , 0L);
+        int ccNoeMoshtary = shared.getInt(shared.getCcGorohNoeMoshtary(), -1);
+        int ccMoshtaryGharardad = shared.getInt(shared.getCcMoshtaryGharardad(), -1);
         if (ccDarkhastFaktor != 0)
         {
             KalaDarkhastFaktorSatrDAO kalaDarkhastFaktorDAO = new KalaDarkhastFaktorSatrDAO(mPresenter.getAppContext());
-            ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels = kalaDarkhastFaktorDAO.getByccDarkhast(ccDarkhastFaktor);
+            Log.d("Check1 verify",ccDarkhastFaktor + "," + ccNoeMoshtary + "," + ccMoshtaryGharardad);
+
+            ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels = kalaDarkhastFaktorDAO.getByccDarkhastForDarkhastKala(ccDarkhastFaktor,ccNoeMoshtary,ccMoshtaryGharardad);
 
             String valueCalculateKalaAsasi = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_MOHASEBE_KALA_ASASI);
             if (valueCalculateKalaAsasi == null || valueCalculateKalaAsasi.trim().equals("") || valueCalculateKalaAsasi.trim().equals("1"))

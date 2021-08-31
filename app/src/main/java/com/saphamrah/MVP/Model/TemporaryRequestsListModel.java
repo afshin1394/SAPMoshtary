@@ -1820,9 +1820,11 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
                     {
                         jsonDarkhastHavaleSatrs.put(darkhastFaktorSatr.toJsonObjectHavale(mPresenter.getAppContext()));
                     }
-                    JSONObject jsonObjectHavale = darkhastFaktorModel.toJsonStringForVosolSard(foroshandehMamorPakhshModel, ccMarkazForosh, moshtaryModel.getCcNoeMoshtary(), moshtaryModel.getCcNoeSenf());
+
+                    JSONObject jsonObjectHavale = darkhastFaktorModel.toJsonStringForVosolSard(foroshandehMamorPakhshModel, ccMarkazForosh, moshtaryModel.getCcNoeMoshtary(), moshtaryModel.getCcNoeSenf(),customerDarkhastFaktorModel);
                     try
                     {
+
                         JSONObject jsonObjectFinal = new JSONObject();
                         jsonObjectFinal.put("DarkhastHavaleh" , jsonObjectHavale);
                         jsonObjectFinal.put("DarkhastHavaleh_AfradForoshandeh" , new JSONArray().put(darkhastFaktorAfradForoshModel.toJsonObject()));
@@ -1834,6 +1836,7 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
                         jsonObjectFinal.put("ElamMarjoeeSatr" , jsonArrayElamMarjoeeSatrPPC);
                         jsonObjectFinal.put("ElamMarjoeeSatr_Tedad" , jsonObjectelamMarjoeeSatrPPCTedad);
                         jsonObjectFinal.put("ControlData_ErsaliTablet" , new JSONArray().put(jsonObject));
+
                         String strJsonFinal = jsonObjectFinal.toString().replace("\\" , "");
 
                         sendDarkhastHavaleDataToServer(customerDarkhastFaktorModel.getCcMoshtary(), customerDarkhastFaktorModel.getCcDarkhastFaktor(), strJsonFinal, position, foroshandehMamorPakhshModel);
@@ -1849,7 +1852,7 @@ Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_
                 {
                     try
                     {
-                        JSONObject jsonObjectDarkhast = darkhastFaktorModel.toJsonForVosol(foroshandehMamorPakhshModel, noeMasouliat, ccMarkazForosh, moshtaryModel.getCcNoeMoshtary(), moshtaryModel.getCcNoeSenf());
+                        JSONObject jsonObjectDarkhast = darkhastFaktorModel.toJsonForVosol(foroshandehMamorPakhshModel, noeMasouliat, ccMarkazForosh, moshtaryModel.getCcNoeMoshtary(), moshtaryModel.getCcNoeSenf(),customerDarkhastFaktorModel);
 
                         JSONObject jsonObjectFinal = new JSONObject();
                         jsonObjectFinal.put("DarkhastFaktor" , jsonObjectDarkhast);

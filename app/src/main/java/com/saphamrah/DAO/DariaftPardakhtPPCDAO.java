@@ -508,7 +508,7 @@ public class DariaftPardakhtPPCDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query = "SELECT * FROM DariaftPardakhtPPC WHERE CodeNoeVosol = " + Constants.VALUE_MARJOEE() + " AND ExtraProp_IsSend = 0";
+            String query = "SELECT * FROM DariaftPardakhtPPC WHERE CodeNoeVosol = " + Constants.VALUE_MARJOEE() + " AND ExtraProp_IsSend = 0   AND ccDarkhastFaktor = " + ccDarkhastFaktor;
             Cursor cursor = db.rawQuery(query , null);
             cursor.moveToFirst();
             if(cursor.getCount() !=0)

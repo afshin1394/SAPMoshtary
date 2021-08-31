@@ -52,6 +52,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import javax.mail.internet.ParameterList;
@@ -5263,8 +5264,11 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
                                 sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                                 Log.i(GET_ALL_MOSHTARY_GHARARDAD_TAG, "onSuccess: 4");
 
-
+                                ArrayList<MoshtaryGharardadModel> moshtaryGharardadModelsFinal = new ArrayList<>();
                                 ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels = ((ArrayList<MoshtaryGharardadModel>) arrayListData);
+
+
+                                moshtaryGharardadModelsFinal.addAll(deleteDuplicates(moshtaryGharardadModels));
                                 /**
                                  *now we have all ccSazman and cc Gharardad in our MoshtaryGharardad Table
                                  * we need to find ccGharardads for each ccSazman and send a request for each set
@@ -5272,7 +5276,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
                                  *{@param ccMoshtaryGharardad}
                                  * we send all moshtary models to our getKalaMosavabModel And extract each set of{@param ccSazmanForosh}  && {@param ccMoshtaryGharardad}
                                  */
-                                getAllKalaMosavab(getProgramType, moshtaryGharardadModels);
+                                getAllKalaMosavab(getProgramType, moshtaryGharardadModelsFinal);
                             } else {
                                 sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
                             }
@@ -5304,6 +5308,24 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
 
     }
 
+
+    private List<MoshtaryGharardadModel> deleteDuplicates(ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels) {
+        List<MoshtaryGharardadModel> noRepeat = new ArrayList<MoshtaryGharardadModel>();
+
+        for (MoshtaryGharardadModel moshtaryGharardadModel : moshtaryGharardadModels) {
+            boolean isFound = false;
+            // check if the event name exists in noRepeat
+            for (MoshtaryGharardadModel e : noRepeat) {
+                if (e.getCcMoshtaryGharardad()==moshtaryGharardadModel.getCcMoshtaryGharardad() && (e.getCcSazmanForosh()==moshtaryGharardadModel.getCcSazmanForosh())) {
+                    isFound = true;
+                    break;
+                }
+            }
+            if (!isFound) noRepeat.add(moshtaryGharardadModel);
+        }
+        return noRepeat;
+    }
+
     /**
      * now we have all ccSazman and cc Gharardad in our MoshtaryGharardad Table
      * we neea to find ccGharardads for each ccSazman and send a request for each set
@@ -5314,22 +5336,24 @@ public class GetProgramModel implements GetProgramMVP.ModelOps
     public  final String __GET_ALL_KALA_MOSAVAB__ = "GET_ALL_KALA_MOSAVAB";
 
     private void getAllKalaMosavab(int getProgramType, ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels) {
-        ArrayList<ArrayList<MoshtaryGharardadKalaModel>> moshtaryGharardadArrayLists = new ArrayList<>();
+        ArrayList<MoshtaryGharardadKalaModel> moshtaryGharardadArrayLists = new ArrayList<>();
         for (MoshtaryGharardadModel moshtaryGharardadModel : moshtaryGharardadModels) {
             ArrayList<MoshtaryGharardadKalaModel> moshtaryGharardadKalaModels;
             /**
              * moshtaryGharardadModel.getCcSazmanForosh() {@param ccSazmanForosh}
              * moshtaryGharardadModel.getCcMoshtaryGharardad() {@param ccMoshtaryGharardad}
              */
+
+            Log.i("touples", "getAllKalaMosavab: "+moshtaryGharardadModel.getCcSazmanForosh()+","+moshtaryGharardadModel.getCcMoshtaryGharardad()+"\t");
             moshtaryGharardadKalaModels = getKalaMosavabBySazmanGharardad(moshtaryGharardadModel.getCcSazmanForosh(), moshtaryGharardadModel.getCcMoshtaryGharardad());
             if (moshtaryGharardadKalaModels.size() > 0)
-                moshtaryGharardadArrayLists.add(moshtaryGharardadKalaModels);
+                moshtaryGharardadArrayLists.addAll(moshtaryGharardadKalaModels);
         }
 
         MoshtaryGharardadKalaDAO moshtaryGharardadKalaDAO = new MoshtaryGharardadKalaDAO(mPresenter.getAppContext());
 
         boolean deleteAll = moshtaryGharardadKalaDAO.deleteAll();
-        boolean insertGroup = moshtaryGharardadKalaDAO.insertGroupAll(moshtaryGharardadArrayLists);
+        boolean insertGroup = moshtaryGharardadKalaDAO.insertGroup(moshtaryGharardadArrayLists);
         if (deleteAll && insertGroup) {
             Log.i(__GET_ALL_KALA_MOSAVAB__, "run: " + deleteAll + " " + insertGroup);
             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);

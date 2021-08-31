@@ -25,6 +25,8 @@ public class CustomerDarkhastFaktorModel
     private String codeMoshtary;
     private boolean haveEmzaImage;
     private boolean haveFaktorImage;
+    private int ccMoshtaryGharardad;
+    private int moshtaryGharardadccSazmanForosh;
 
 
     public long getCcDarkhastFaktor() {
@@ -155,6 +157,21 @@ public class CustomerDarkhastFaktorModel
         this.haveFaktorImage = haveFaktorImage;
     }
 
+    public int getCcMoshtaryGharardad() {
+        return ccMoshtaryGharardad;
+    }
+
+    public void setCcMoshtaryGharardad(int ccMoshtaryGharardad) {
+        this.ccMoshtaryGharardad = ccMoshtaryGharardad;
+    }
+
+    public int getMoshtaryGharardadccSazmanForosh() {
+        return moshtaryGharardadccSazmanForosh;
+    }
+
+    public void setMoshtaryGharardadccSazmanForosh(int moshtaryGharardadccSazmanForosh) {
+        this.moshtaryGharardadccSazmanForosh = moshtaryGharardadccSazmanForosh;
+    }
 
     @NonNull
     @Override
@@ -176,6 +193,9 @@ public class CustomerDarkhastFaktorModel
                 ", codeMoshtary='" + codeMoshtary + '\'' +
                 ", haveEmzaImage=" + haveEmzaImage +
                 ", haveFaktorImage=" + haveFaktorImage +
+                ", ccMoshtaryGharardad=" + ccMoshtaryGharardad +
+                ", ccMohtaryGharardadSazmanForosh=" + moshtaryGharardadccSazmanForosh +
+
                 '}';
     }
 }

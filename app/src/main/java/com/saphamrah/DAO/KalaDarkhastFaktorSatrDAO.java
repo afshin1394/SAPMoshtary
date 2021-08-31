@@ -3,6 +3,7 @@ package com.saphamrah.DAO;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.saphamrah.Model.DarkhastFaktorSatrModel;
 import com.saphamrah.Model.KalaModel;
@@ -68,6 +69,63 @@ public class KalaDarkhastFaktorSatrDAO
         }
         return kalaDarkhastFaktorSatrModels;
     }
+
+    public ArrayList<KalaDarkhastFaktorSatrModel> getByccDarkhastForDarkhastKala(long ccDarkhastFaktor, int ccNoeMoshtary, int ccMoshtaryGharardad)
+    {
+        ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels = new ArrayList<>();
+        try
+        {
+            String query ="";
+            if(ccNoeMoshtary!=350)
+            {
+                query = "select fs.*, k.CodeKala, k.BarCode, k.Adad, k.TedadDarKarton, k.TedadDarBasteh, k.ccGorohKala, k.NameKala, k.Tol, k.Arz, k.Ertefa, \n" +
+                        " k.NameVahedShomaresh, k.NameBrand, k.NameVahedSize, k.NameVahedVazn, k.VaznKarton, k.VaznKhales \n" +
+                        " from DarkhastFaktorSatr fs inner join Kala k on k.ccKalaCode = fs.ccKalaCode and k.ShomarehBach = fs.ShomarehBach \n" +
+                        " and k.gheymatForoshAsli = fs.gheymatForoshAsli and k.GheymatMasrafKonandehAsli = fs.GheymatMasrafKonandehAsli\n" +
+                        " and k.ccTaminKonandeh = fs.ccTaminKonandeh where fs.CodeNoeKala != 2 And ccDarkhastFaktor = " + ccDarkhastFaktor;
+            }
+            else if (ccNoeMoshtary==350)
+            {
+                query = " select fs.ccDarkhastFaktorSatr, fs.ccDarkhastFaktor, fs.ccTaminKonandeh, fs.ccKala,	fs.ccKalaCode,	fs.Tedad3,	fs.CodeNoeKala,	fs.ShomarehBach, fs.TarikhTolid,	mgk.MablaghForosh,	fs.MablaghForoshKhalesKala,	fs.MablaghTakhfifNaghdiVahed,	fs.Maliat,	fs.Avarez,	fs.ccAfrad,	fs.ExtraProp_IsOld,	fs.TarikhEngheza,	fs.ccAnbarMarjoee,	fs.ccAnbarGhesmat,	fs.MablaghKharid,	mgk.MablaghMasrafKonandeh GheymatMasrafKonandeh	,fs.GheymatForoshAsli,	fs.GheymatMasrafKonandehAsli, "+
+                        " k.CodeKala, k.BarCode, k.Adad, k.TedadDarKarton, k.TedadDarBasteh, k.ccGorohKala, k.NameKala, k.Tol, k.Arz, k.Ertefa, "+
+                        " k.NameVahedShomaresh, k.NameBrand, k.NameVahedSize, k.NameVahedVazn, k.VaznKarton, k.VaznKhales " +
+                        " from DarkhastFaktorSatr fs " +
+                        " inner join Kala k on k.ccKalaCode = fs.ccKalaCode and k.ShomarehBach = fs.ShomarehBach " +
+                        " and k.gheymatForoshAsli = fs.gheymatForoshAsli and k.GheymatMasrafKonandehAsli = fs.GheymatMasrafKonandehAsli " +
+                        " and k.ccTaminKonandeh = fs.ccTaminKonandeh " +
+                        " LEFT JOIN (SELECT * FROM MoshtaryGharardadKala) mgk " +
+                        "            ON mgk.ccKalaCode= fs.ccKalaCode AND "+
+                        " (CASE WHEN mgk.ControlMablagh = 1 AND fs.mablaghforosh = mgk.mablaghforosh AND fs.GheymatMasrafKonandeh = mgk.MablaghMasrafKonandeh "+
+                        "    THEN 1=1 " +
+                        "    WHEN    mgk.ControlMablagh = 0"+
+                        "    THEN 1=1" +
+                        "    END)" +
+                        " where fs.CodeNoeKala != 2 And ccDarkhastFaktor = " + ccDarkhastFaktor +
+                        "       AND mgk.ccMoshtaryGharardad = " + ccMoshtaryGharardad;
+            }
+            Log.i("Check1", "getByccDarkhastForDarkhastKala: " + query);
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    kalaDarkhastFaktorSatrModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , "DarkhastFaktorSatr , Kala") + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaDarkhastFaktorDAO" , "" , "getByccDarkhast" , "");
+        }
+        return kalaDarkhastFaktorSatrModels;
+    }
+
 
     public ArrayList<KalaDarkhastFaktorSatrModel> getByccDarkhastMarjoeeKoli(long ccDarkhastFaktor)
     {

@@ -44,8 +44,11 @@ public class FaktorDetailsModel implements FaktorDetailsMVP.ModelOps
 
         mPresenter.onGetFaktorDetails(moshtaryModel.getCodeMoshtary(), moshtaryModel.getNameMoshtary(), darkhastFaktorModel.getExtraProp_MablaghArzeshAfzoodeh(),
                 darkhastFaktorModel.getMablaghKolFaktor(), darkhastFaktorModel.getMablaghKhalesFaktor(), darkhastFaktorModel.getNameNoeVosolAzMoshtary(), darkhastFaktorModel.getModateVosol(), moshtaryAddressModel.getAddress());
+        int ccNoeMoshtary = moshtaryModel.getCcNoeMoshtary();
+        Log.d("Check1 faktordeteail",darkhastFaktorModel.getCcDarkhastFaktor() + "," + ccNoeMoshtary + "," + darkhastFaktorModel.getCcMoshtaryGhardad());
 
-        ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorModels = new KalaDarkhastFaktorSatrDAO(mPresenter.getAppContext()).getByccDarkhast(darkhastFaktorModel.getCcDarkhastFaktor());
+
+        ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorModels = new KalaDarkhastFaktorSatrDAO(mPresenter.getAppContext()).getByccDarkhastForDarkhastKala(darkhastFaktorModel.getCcDarkhastFaktor(),ccNoeMoshtary,darkhastFaktorModel.getCcMoshtaryGhardad());
         mPresenter.onGetKala(kalaDarkhastFaktorModels);
 
         DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());

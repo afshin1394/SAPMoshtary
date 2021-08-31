@@ -437,7 +437,9 @@ public class PrintActivity extends AppCompatActivity
             //--------------------------KalaFaktor -----------------------------
 
             lstKalaInfo = findViewById(R.id.lstKalaInfo);
-            ArrayList<KalaDarkhastFaktorSatrModel> items = new KalaDarkhastFaktorSatrDAO(PrintActivity.this).getByccDarkhast(darkhastfaktor.getCcDarkhastFaktor());
+            //ArrayList<KalaDarkhastFaktorSatrModel> items = new KalaDarkhastFaktorSatrDAO(PrintActivity.this).getByccDarkhast(darkhastfaktor.getCcDarkhastFaktor());
+            Log.d("Check1 print",darkhastfaktor.getCcDarkhastFaktor() + "," + darkhastfaktor.getCcNoeMoshtary() + "," + darkhastfaktor.getCcMoshtaryGhardad());
+            ArrayList<KalaDarkhastFaktorSatrModel> items = new KalaDarkhastFaktorSatrDAO(PrintActivity.this).getByccDarkhastForDarkhastKala(darkhastfaktor.getCcDarkhastFaktor(),darkhastfaktor.getCcNoeMoshtary(),darkhastfaktor.getCcMoshtaryGhardad());
             KalaPrintAdapter adapter = new KalaPrintAdapter(PrintActivity.this, items, noeFaktorPrint);
             lstKalaInfo.setLayoutManager(new LinearLayoutManager(PrintActivity.this));
             lstKalaInfo.setItemAnimator(new DefaultItemAnimator());

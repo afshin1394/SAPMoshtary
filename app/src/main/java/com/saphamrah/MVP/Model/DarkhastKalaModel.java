@@ -67,6 +67,9 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.internal.util.ConnectConsumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
@@ -111,6 +114,8 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
 
         ArrayList <KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModelArrayList = new ArrayList<>();
         SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
+        int ccNoeMoshtary = shared.getInt(shared.getCcGorohNoeMoshtary(), -1);
+        int ccMoshtaryGharardad = shared.getInt(shared.getCcMoshtaryGharardad(), -1);
         long ccDarkhastFaktor = shared.getLong(shared.getCcDarkhastFaktor() , 0L);
 
         if (ccDarkhastFaktor != 0)
@@ -126,7 +131,9 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
                     shared.putBoolean(shared.getInsertDarkhastFaktorSatrForMamorPakhsh() , true);
                 }
                 KalaDarkhastFaktorSatrDAO kalaDarkhastFaktorSatrDAO = new KalaDarkhastFaktorSatrDAO(mPresenter.getAppContext());
-                kalaDarkhastFaktorSatrModelArrayList = kalaDarkhastFaktorSatrDAO.getByccDarkhast(ccDarkhastFaktor);
+                //kalaDarkhastFaktorSatrModelArrayList = kalaDarkhastFaktorSatrDAO.getByccDarkhast(ccDarkhastFaktor);
+                Log.d("Check1 darkhastkala",ccDarkhastFaktor + "," + ccNoeMoshtary + "," + ccMoshtaryGharardad);
+                kalaDarkhastFaktorSatrModelArrayList = kalaDarkhastFaktorSatrDAO.getByccDarkhastForDarkhastKala(ccDarkhastFaktor,ccNoeMoshtary, ccMoshtaryGharardad);
                 if (enableKalaAsasi)
                 {
                     String ccKalaCodesOfKalaAsasi = shared.getString(shared.getCcKalaCodesOfKalaAsasi(), "");
@@ -277,6 +284,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
     private void getAllRequestedGoodsObservable(){
         RxAsync.makeObservable(getAllRequestedGoodsCallable())
                 .subscribeOn(Schedulers.single())
+
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(throwable -> {
                   mPresenter.onError();

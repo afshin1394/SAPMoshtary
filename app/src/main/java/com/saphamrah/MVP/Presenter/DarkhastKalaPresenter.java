@@ -404,6 +404,7 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
     public void onGetRequestedGoods(ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorModels)
     {
         PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(() -> {
+            mView.get().closeAlertLoading();
             if (kalaDarkhastFaktorModels.size() > 0)
             {
                 mView.get().onGetRequestedGoods(kalaDarkhastFaktorModels);
@@ -420,7 +421,6 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
     public void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels, DarkhastKalaActivity.AddItemType type)
     {
         Log.d("DarkhastKala", "on get kala in presenter");
-        mView.get().closeAlertLoading();
         if (kalaMojodiZaribModels.size() > 0)
         {
             mView.get().onGetAllKalaWithMojodiZarib(kalaMojodiZaribModels,type);

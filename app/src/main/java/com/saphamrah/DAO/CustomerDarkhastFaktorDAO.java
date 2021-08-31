@@ -64,7 +64,7 @@ public class CustomerDarkhastFaktorDAO
         String query = "select dm.* , Have_FaktorImage , LENGTH(de.EmzaImage) as HaveEmzaImage  \n" +
                 " from (select d.ccDarkhastFaktor, d.TarikhFaktor , d.ShomarehDarkhast, d.ShomarehFaktor, d.ccForoshandeh, \n" +
                 " d.ccMoshtary, d.TarikhErsal, d.MablaghKhalesFaktor, d.CodeVazeiat, d.ExtraProp_IsOld, \n" +
-                " d.ExtraProp_IsSend, d.UniqID_Tablet, m.NameMoshtary , m.CodeMoshtary \n" +
+                " d.ExtraProp_IsSend, d.UniqID_Tablet,d.ccMoshtaryGharardad,d.MoshtaryGharardadccSazmanForosh, m.NameMoshtary , m.CodeMoshtary \n" +
                 " from darkhastfaktor d inner join moshtary m on d.ccMoshtary = m.ccMoshtary \n" +
                 " where d.ShomarehFaktor = 0 and d.ExtraProp_InsertInPPC = 1 order by d.TarikhFaktor) dm \n" +
                 " left join DarkhastFaktor_EmzaMoshtary de \n" +
@@ -119,6 +119,8 @@ public class CustomerDarkhastFaktorDAO
             customerDarkhastFaktorModel.setCodeMoshtary(cursor.getString(cursor.getColumnIndex(MoshtaryModel.COLUMN_CodeMoshtary())));
             customerDarkhastFaktorModel.setHaveEmzaImage(cursor.getInt(cursor.getColumnIndex("HaveEmzaImage")) > 0);
             customerDarkhastFaktorModel.setHaveFaktorImage(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_FaktorImage())) > 0);
+            customerDarkhastFaktorModel.setCcMoshtaryGharardad(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ccMoshtaryGharardad())));
+            customerDarkhastFaktorModel.setMoshtaryGharardadccSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_MoshtaryGharardadccSazmanForosh())));
 
             customerDarkhastFaktorModels.add(customerDarkhastFaktorModel);
             cursor.moveToNext();
