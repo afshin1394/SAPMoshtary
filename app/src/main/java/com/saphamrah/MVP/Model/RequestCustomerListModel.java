@@ -269,6 +269,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
     @Override
     public void checkSelectedCustomer(final int ccMoshtary,final int ccMoshtareyGharardad ,final int moshtaryGharardadccSazmanForosh)
     {
+        Log.d("Check1 requestcustomer",ccMoshtary+"-"+ccMoshtareyGharardad+"-"+moshtaryGharardadccSazmanForosh);
         PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
         AsyncTaskCheckSelectCustomer asyncTaskCheckSelectCustomer = new AsyncTaskCheckSelectCustomer(mPresenter.getAppContext(), ccMoshtary,ccMoshtareyGharardad,moshtaryGharardadccSazmanForosh, locationProvider.getLocation(), new OnCheckSelectedCustomerResponse()
         {

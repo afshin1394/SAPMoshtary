@@ -31,16 +31,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , DarkhastKalaMVP.RequiredPresenterOps
-{
+public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, DarkhastKalaMVP.RequiredPresenterOps {
 
     private WeakReference<DarkhastKalaMVP.RequiredViewOps> mView;
     private DarkhastKalaMVP.ModelOps mModel;
     private boolean mIsChangingConfig;
     KalaOlaviatGheymatDAO kalaOlaviatGheymatDAO = new KalaOlaviatGheymatDAO(BaseApplication.getContext());
     DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(BaseApplication.getContext());
-    public DarkhastKalaPresenter(DarkhastKalaMVP.RequiredViewOps viewOps)
-    {
+
+    public DarkhastKalaPresenter(DarkhastKalaMVP.RequiredViewOps viewOps) {
         this.mView = new WeakReference<>(viewOps);
         mModel = new DarkhastKalaModel(this);
     }
@@ -50,8 +49,7 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
     /////////////////////////// PresenterOps ///////////////////////////
 
     @Override
-    public void onConfigurationChanged(DarkhastKalaMVP.RequiredViewOps view)
-    {
+    public void onConfigurationChanged(DarkhastKalaMVP.RequiredViewOps view) {
         this.mView = new WeakReference<>(view);
     }
 
@@ -447,10 +445,10 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps , Dar
     }
 
     @Override
-    public void onSuccessRemoveKala(int position)
-    {
+    public void onSuccessRemoveKala(int position) {
         mView.get().showToast(R.string.successfullyDoneOps, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
         mView.get().onSuccessRemoveKala(position);
+        mView.get().closeAlertLoading();
     }
 
     @Override

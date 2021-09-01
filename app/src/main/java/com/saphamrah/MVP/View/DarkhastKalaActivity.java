@@ -260,7 +260,8 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         } else {
             mPresenter.getAllKalaWithMojodiZarib(ccMoshtary,  AddItemType.NONE);
         }
-        mPresenter.getAllRequestedGoods();
+        //TODO  loading اجرا می شود پس نیاز نیست getAllKalaWithMojodiZarib این متد در داخل
+//        mPresenter.getAllRequestedGoods();
 
 
         fabAddCatalog.setOnClickListener(new View.OnClickListener() {

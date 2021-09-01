@@ -284,7 +284,6 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
     private void getAllRequestedGoodsObservable(){
         RxAsync.makeObservable(getAllRequestedGoodsCallable())
                 .subscribeOn(Schedulers.single())
-
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(throwable -> {
                   mPresenter.onError();
@@ -306,10 +305,12 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
                     mPresenter.onError();
                 })
                 .doOnNext(kalaMojodiZaribModels -> {
+
+                    mPresenter.onGetAllKalaWithMojodiZarib(kalaMojodiZaribModels, type);
                     if (getAllRequestedGoods) {
                         getAllRequestedGoods();
                     }
-                    mPresenter.onGetAllKalaWithMojodiZarib(kalaMojodiZaribModels, type);
+
                 }).subscribe();
     }
 
@@ -385,10 +386,10 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
         }
         Collections.sort(kalaMojodiZaribModels);
 
-
-        if (getAllRequestedGoods) {
-            getAllRequestedGoods();
-        }
+//TODO loading
+//        if (getAllRequestedGoods) {
+//            getAllRequestedGoods();
+//        }
         return kalaMojodiZaribModels;
 
     }
