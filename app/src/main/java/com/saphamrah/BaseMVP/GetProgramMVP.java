@@ -28,6 +28,8 @@ public interface GetProgramMVP
         void showToast(int resId, int messageType , int duration);
 
         void onGetProgramType(int service);
+
+        void showCompletedUpdateGharardadKalaMosavabeh();
     }
 
 
@@ -46,6 +48,8 @@ public interface GetProgramMVP
         void onDestroy(boolean isChangingConfig);
 
         void getProgramServiceType();
+
+        void checkUpdateGharardadKalaMosavabeh(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel);
     }
 
 
@@ -71,6 +75,10 @@ public interface GetProgramMVP
         void onConfigurationChanged(GetProgramMVP.RequiredViewOps view);
         void onNetworkError(boolean closeActivity);
         void onGetProgramServiceType(int service);
+
+        void onSuccessUpdateGharardadKalaMosavabeh(int getProgramItemCount, int arg2);
+
+        void onFailedUpdateGharardadKalaMosavabeh(int arg2, String string);
     }
 
 
@@ -92,6 +100,8 @@ public interface GetProgramMVP
         void releaseResources();
 
         void getProgramServiceType();
+
+        void updateGharardadKalaMosavabeh(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel);
     }
 
 }

@@ -47,6 +47,7 @@ import com.saphamrah.Adapter.RequestGoodsAdapter;
 import com.saphamrah.Adapter.RequestGoodsListAdapter;
 import com.saphamrah.Adapter.RequestedGoodAdapter;
 import com.saphamrah.Adapter.RequestedGridGoodAdapter;
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.DarkhastKalaMVP;
 import com.saphamrah.CustomView.BottomBar;
 import com.saphamrah.CustomView.CustomScrollView;
@@ -110,7 +111,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     private final int READ_EXTERNAL_STORAGE_PERMISSION = 100;
     private final int TAKE_IMAGE = 101;
     private JayezehParentAlertAdapter jayezehAlertAdapter;
-
+private FloatingActionButton fabShowMoshtaryGharardad;
 
     private View alertView;
     private AlertDialog show;
@@ -143,6 +144,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     }
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,6 +164,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         FloatingActionButton fabAddList = findViewById(R.id.fabAddAsList);
         FloatingActionButton fabSearch = findViewById(R.id.fabSearch);
         FloatingActionButton fabShowCustomerInfo = findViewById(R.id.fabShowCustomerInfo);
+        fabShowMoshtaryGharardad = findViewById(R.id.fabShowMoshtaryGharardad);
         //New Floating Action Button
         //TODO
 
@@ -225,6 +228,9 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         customAlertDialog = new CustomAlertDialog(DarkhastKalaActivity.this);
         customLoadingDialog = new CustomLoadingDialog();
         startMVPOps();
+
+        mPresenter.checkZanjiree();
+
 
         new BottomBar(DarkhastKalaActivity.this, 2, new BottomBar.OnItemClickListener() {
             @Override
@@ -314,6 +320,18 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
                 intent.putExtra(CustomerInfoActivity.CCMOSHTARY_KEY, ccMoshtary);
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
+            }
+        });
+
+        fabShowMoshtaryGharardad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(DarkhastKalaActivity.this, RptMoshtaryGharardad.class);
+                intent.putExtra("from", 1);
+                startActivity(intent);
+                overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
+
             }
         });
 
@@ -1169,6 +1187,11 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         Log.i("ITEMNUMBERPER", "onGetGridRecyclerDetails: " + status);
         adapterRequestKalaListGrid.setStatus(status);
         setViewPackages(adapterRequestKalaListGrid.getStatus());
+    }
+
+    @Override
+    public void onCheckZanjiree() {
+        fabShowMoshtaryGharardad.setVisibility(View.GONE);
     }
 
 

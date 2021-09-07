@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE = 0 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest
+    private static final int CURRENT_VERSION_TYPE = 4 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 
@@ -270,6 +270,8 @@ public class Constants
     private static final int GET_PROGRAM_UPDATE_MOSHTARY = 4;
     private static final int GET_PROGRAM_UPDATE_PARAMETERS = 5;
     private static final int GET_PROGRAM_UPDATE_ETEBAR_FOROSHANDEH = 6;
+    private static final int GET_PROGRAM_UPDATE_GHARARDAD_KALAMOSAVABEH = 7;
+
 
     public static int GET_PROGRAM_FULL(){return GET_PROGRAM_FULL;}
     public static int GET_PROGRAM_UPDATE_KALA(){return GET_PROGRAM_UPDATE_KALA;}
@@ -277,6 +279,8 @@ public class Constants
     public static int GET_PROGRAM_UPDATE_MOSHTARY(){return GET_PROGRAM_UPDATE_MOSHTARY;}
     public static int GET_PROGRAM_UPDATE_PARAMETERS(){return GET_PROGRAM_UPDATE_PARAMETERS;}
     public static int GET_PROGRAM_UPDATE_ETEBAR_FOROSHANDEH(){return GET_PROGRAM_UPDATE_ETEBAR_FOROSHANDEH;}
+    public static int GET_PROGRAM_UPDATE_GHARARDAD_KALAMOSAVABEH(){return GET_PROGRAM_UPDATE_GHARARDAD_KALAMOSAVABEH;}
+
 
 
     ///////////////////////////// SPEED TEST RATE /////////////////////////////

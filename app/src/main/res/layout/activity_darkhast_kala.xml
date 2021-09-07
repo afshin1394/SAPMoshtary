@@ -103,6 +103,18 @@
         fab:menu_labels_customFont="@string/fontPath"
         fab:menu_backgroundColor="@android:color/transparent">
 
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabShowMoshtaryGharardad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:src="@drawable/ic_mosavabe"
+            fab:fab_colorNormal="@color/colorBackSendDataSwipe"
+            fab:fab_colorPressed="@color/colorBackSendDataSwipe"
+            fab:fab_label="@string/rptMoshtaryGharardad"
+            fab:fab_size="normal" />
+
         <com.github.clans.fab.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

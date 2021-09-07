@@ -36,6 +36,7 @@ public class GetProgramAdapter extends ArrayAdapter<ForoshandehMamorPakhshModel>
     private  OnItemClickListenerUpdateCustomers updateCustomers;
     private OnItemClickListenerUpdateParameters updateParameters;
     private OnItemClickListenerUpdateEtebarForoshandeh updateEtebarForoshandeh;
+    private OnItemClickListenerUpdateGharardadKalaMosavabeh updateGharardadKalaMosavabeh;
     private HashSet<Integer> unfoldedIndexes = new HashSet<>();
     //private View.OnClickListener defaultRequestBtnClickListener;
     private Activity activity;
@@ -51,7 +52,9 @@ public class GetProgramAdapter extends ArrayAdapter<ForoshandehMamorPakhshModel>
                              , OnItemClickListenerUpdateCustomers updateCustomers
                              , OnItemClickListenerUpdateParameters updateParameters
                              , OnItemClickListenerUpdateEtebarForoshandeh updateEtebarForoshandeh
-                             ) {
+            , OnItemClickListenerUpdateGharardadKalaMosavabeh updateGharardadKalaMosavabeh
+
+    ) {
         super(activity, 0, objects);
         this.activity = activity;
         this.getProgram = getProgram;
@@ -62,6 +65,8 @@ public class GetProgramAdapter extends ArrayAdapter<ForoshandehMamorPakhshModel>
         this.updateCustomers = updateCustomers;
         this.updateParameters = updateParameters;
         this.updateEtebarForoshandeh = updateEtebarForoshandeh;
+        this.updateGharardadKalaMosavabeh = updateGharardadKalaMosavabeh;
+
         //selectedForoshandehIndex = -1;
     }
 
@@ -101,6 +106,7 @@ public class GetProgramAdapter extends ArrayAdapter<ForoshandehMamorPakhshModel>
             viewHolder.lblUpdateCustomers = cell.findViewById(R.id.lblUpdateCustomers);
             viewHolder.lblUpdateParameters = cell.findViewById(R.id.lblUpdateParameters);
             viewHolder.lblUpdateEtebarForoshandeh = cell.findViewById(R.id.lblUpdateEtebarForoshandeh);
+            viewHolder.lblUpdateGharardadKalaMosavabeh = cell.findViewById(R.id.lblUpdateGharardadKalaMosavabeh);
 
             viewHolder.lblGetProgram.setTag(position);
             viewHolder.lblUpdateForoshandeh.setTag(position);
@@ -109,6 +115,7 @@ public class GetProgramAdapter extends ArrayAdapter<ForoshandehMamorPakhshModel>
             viewHolder.lblUpdateCustomers.setTag(position);
             viewHolder.lblUpdateParameters.setTag(position);
             viewHolder.lblUpdateEtebarForoshandeh.setTag(position);
+            viewHolder.lblUpdateGharardadKalaMosavabeh.setTag(position);
 
             cell.setTag(viewHolder);
         } else {
@@ -208,6 +215,10 @@ public class GetProgramAdapter extends ArrayAdapter<ForoshandehMamorPakhshModel>
             updateEtebarForoshandeh.onItemClickListenerUpdateEtebarForoshandeh(position);
         });
 
+        viewHolder.lblUpdateGharardadKalaMosavabeh.setOnClickListener(v ->
+                updateGharardadKalaMosavabeh.onItemClickListenerUpdateGharardadKalaMosavabeh(position)
+        );
+
         // set custom btn handler for list item from that item
 //        if (item.getBtnGetProgramClickListener() != null)
 //        {
@@ -268,6 +279,7 @@ public class GetProgramAdapter extends ArrayAdapter<ForoshandehMamorPakhshModel>
         viewHolder.lblUpdateCustomers.setTypeface(font);
         viewHolder.lblUpdateParameters.setTypeface(font);
         viewHolder.lblUpdateEtebarForoshandeh.setTypeface(font);
+        viewHolder.lblUpdateGharardadKalaMosavabeh.setTypeface(font);
 
         setSliderBackgroundColor(viewHolder);
     }
@@ -291,6 +303,9 @@ public class GetProgramAdapter extends ArrayAdapter<ForoshandehMamorPakhshModel>
                 break;
             case 5:
                 viewHolder.layOperations.setBackgroundColor(activity.getResources().getColor(R.color.colorSliderEtebarForoshandeh));
+                break;
+            case 6:
+                viewHolder.layOperations.setBackgroundColor(activity.getResources().getColor(R.color.colorSliderGharardadKalaMosavabeh));
                 break;
             default:
                 viewHolder.layOperations.setBackgroundColor(Color.TRANSPARENT);
@@ -333,6 +348,7 @@ public class GetProgramAdapter extends ArrayAdapter<ForoshandehMamorPakhshModel>
         TextView lblUpdateCustomers;
         TextView lblUpdateParameters;
         TextView lblUpdateEtebarForoshandeh;
+        TextView lblUpdateGharardadKalaMosavabeh;
     }
 
     /*
@@ -361,6 +377,9 @@ public class GetProgramAdapter extends ArrayAdapter<ForoshandehMamorPakhshModel>
     }
     public interface OnItemClickListenerUpdateEtebarForoshandeh{
         void onItemClickListenerUpdateEtebarForoshandeh(int position);
+    }
+    public interface OnItemClickListenerUpdateGharardadKalaMosavabeh{
+        void onItemClickListenerUpdateGharardadKalaMosavabeh(int position);
     }
 
 

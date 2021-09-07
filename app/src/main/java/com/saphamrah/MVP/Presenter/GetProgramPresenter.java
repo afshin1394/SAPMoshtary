@@ -224,6 +224,26 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
 
     }
 
+    @Override
+    public void checkUpdateGharardadKalaMosavabeh(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel) {
+        int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+        if (noeMasouliat == ForoshandehMamorPakhshUtils.AMARGAR)
+        {
+            mView.get().showResourceError(false, R.string.error, R.string.dontAccessForOperation, Constants.FAILED_MESSAGE(), R.string.apply);
+        }
+        else
+        {
+            if (foroshandehMamorPakhshModel == null)
+            {
+                mView.get().showResourceError(false, R.string.error, R.string.errorSelectForoshandehMamorPakhsh, Constants.FAILED_MESSAGE(), R.string.apply);
+            }
+            else
+            {
+                mModel.updateGharardadKalaMosavabeh(foroshandehMamorPakhshModel);
+            }
+        }
+    }
+
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
 
@@ -393,6 +413,24 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
     @Override
     public void onGetProgramServiceType(int service) {
         mView.get().onGetProgramType(service);
+    }
+
+    @Override
+    public void onSuccessUpdateGharardadKalaMosavabeh(int getProgramItemCount, int itemIndex) {
+        if (itemIndex != getProgramItemCount - 1)
+        {
+            mView.get().updateStatusOfSuccessfulItem(itemIndex);
+        }
+        else
+        {
+            mView.get().showCompletedUpdateGharardadKalaMosavabeh();
+        }
+    }
+
+    @Override
+    public void onFailedUpdateGharardadKalaMosavabeh(int itemIndex, String errorMessage) {
+        mView.get().updateStatusOfFailedItem(Constants.GET_PROGRAM_UPDATE_GHARARDAD_KALAMOSAVABEH() , itemIndex , errorMessage);
+
     }
 
 

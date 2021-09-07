@@ -18,7 +18,8 @@ public interface RequestCustomerListMVP
         Context getAppContext();
         void onGetDateOfGetProgram(String date);
         void onGetCustomers(ArrayList<MoshtaryModel> moshtaryModels , ArrayList<MoshtaryAddressModel> moshtaryAddressModels , ArrayList<Integer> arrayListNoeMorajeh,ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels , boolean canUpdateCustomer);
-        void onGetSearch(ArrayList<MoshtaryModel> moshtaryModels , ArrayList<MoshtaryAddressModel> moshtaryAddressModels , ArrayList<Integer> arrayListNoeMorajeh);
+
+        void onGetSearch(ArrayList<MoshtaryModel> moshtaryModels , ArrayList<MoshtaryAddressModel> moshtaryAddressModels,ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels , ArrayList<Integer> arrayListNoeMorajeh);
         void showBarkhordAvalieActivity(int ccMoshtary);
         void showMojoodiGiriActivity(int ccMoshtary,int ccSazmanForosh);
         void showDarkhastKalaActivity(int ccMoshtary,int ccSazmanForosh);
@@ -35,8 +36,8 @@ public interface RequestCustomerListMVP
         void checkFakeLocation();
         void checkDateOfGetProgram();
         void getCustomers();
-        void searchCustomerName(String searchWord , ArrayList<MoshtaryModel> moshtaryModels , ArrayList<MoshtaryAddressModel> moshtaryAddressModels , ArrayList<Integer> arrayListNoeMorajeh);
-        void searchCustomerCode(String searchWord , ArrayList<MoshtaryModel> moshtaryModels , ArrayList<MoshtaryAddressModel> moshtaryAddressModels , ArrayList<Integer> arrayListNoeMorajeh);
+        void searchCustomerName(String searchWord , ArrayList<MoshtaryModel> moshtaryModels , ArrayList<MoshtaryAddressModel> moshtaryAddressModels ,ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels, ArrayList<Integer> arrayListNoeMorajeh);
+        void searchCustomerCode(String searchWord , ArrayList<MoshtaryModel> moshtaryModels , ArrayList<MoshtaryAddressModel> moshtaryAddressModels ,ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels, ArrayList<Integer> arrayListNoeMorajeh);
         void checkDuplicateRequestForCustomer(MoshtaryModel moshtaryModel,MoshtaryGharardadModel moshtaryGharardadModel);
         void checkSelectedCustomer(int ccMoshtary,int ccSazmanForoshGharardad,int ccMoshtaryGharardad);
         void checkUpdateEtebarMoshtary(MoshtaryModel moshtaryModel);

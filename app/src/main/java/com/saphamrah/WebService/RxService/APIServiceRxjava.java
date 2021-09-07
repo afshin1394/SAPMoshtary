@@ -10,6 +10,7 @@ import com.saphamrah.WebService.RxService.Response.DataResponse.KalaPhotoRespons
 import com.saphamrah.WebService.ServiceResponse.*;
 
 import io.reactivex.Observable;
+import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -140,6 +141,9 @@ public interface APIServiceRxjava {
 
     @GET("Api/ApiSales/GetForoshandehEtebar")
     Observable<Response<GetEtebarForoshandehResult>>getEtebarForoshandeh(@Query("ccForoshandehs") String ccForoshandehs);
+
+    @GET("Api/ApiSales/GetElamMarjoeeForoshandeh_Pakhsh")
+    Observable<Response<GetElamMarjoeeForoshandehResult>> getElamMarjoeeForoshandeh(@Query("ccDarkhastFaktors") String ccDarkhastFaktors);
 
     //F
     @GET("Api/ApiSales/GetForoshandehAmoozeshi_DeviceNumber")
@@ -330,6 +334,9 @@ public interface APIServiceRxjava {
 
     @GET("Api/apisales/GetMoshtaryGharardad")
     Observable<Response<GetAllMoshtaryGharardadResult>>getMoshtaryGharardad(@Query("ccForoshandeh") String ccForoshandeh);
+
+    @GET("Api/apisales/GetMoshtaryGharardad_Pakhsh")
+    Observable<Response<GetAllMoshtaryGharardadResult>> getMoshtaryGharardad(@Query("ccForoshandeh") String ccForoshandeh, @Query("ccMoshtaryGahrardad") int ccMoshtaryGahrardad, @Query("ccSazmanForosh") int ccSazmanForosh);
 
     @GET("Api/ApiGlobal/GetAllMahalByccMarkazForosh")
     Observable<Response<GetAllMahalByccMarkazForoshResult>>getAllMahalByccMarkazForosh(@Query("ccMarkazSazmanForosh") String ccMarkazSazmanForosh);

@@ -21,6 +21,9 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetDarkhastFaktorResult;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -770,7 +773,7 @@ public class DarkhastFaktorDAO
                         cursor.moveToNext();
                     }
 
-                    ccMarkazSazmanForosh = cursor.getString(0);
+                    //ccMarkazSazmanForosh = cursor.getString(0);
                 }
                 cursor.close();
             }
@@ -1607,6 +1610,48 @@ public class DarkhastFaktorDAO
             String message = context.getResources().getString(R.string.errorUpdate , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "updateResid" , "");
         }
+    }
+    public JSONArray getZangireiFaktorInfo() {
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        Log.d("GetProgram", "getAllMoshtaryGharardadAndGharardadKala3" );
+
+        try
+        {
+            String query = " select DISTINCT df.ccForoshandeh, df.ccMoshtaryGharardad, df.MoshtaryGharardadccSazmanForosh   from darkhastFaktor df \n" +
+                    " left join moshtary m on df.ccMoshtary = m.ccMoshtary where m.ccNoeMoshtary = 350 \n" ;
+            Log.d("GetProgram", "getAllMoshtaryGharardadAndGharardadKala4"+query );
+
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query,null);
+            Log.d("GetProgram", "getAllMoshtaryGharardadAndGharardadKala"+cursor.getCount() );
+            Log.d("GetProgram", "getAllMoshtaryGharardadAndGharardadKala"+cursor.getInt(0) );
+            Log.d("GetProgram", "getAllMoshtaryGharardadAndGharardadKala"+cursor.getInt(1) );
+
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    jsonObject.put("ccForoshandeh",cursor.getInt(0));
+                    jsonObject.put("ccMoshtaryGharardad",cursor.getInt(1));
+                    jsonObject.put("MoshtaryGharardadccSazmanForosh",cursor.getInt(2));
+                    jsonArray.put(jsonObject);
+                }
+                cursor.close();
+            }
+            db.close();
+
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, LogPPCModel.LOG_EXCEPTION, message, "DarkhastFaktorDAO" , "" , "getZangireiFaktorInfo" , "");
+        }
+        Log.i("getZangireiFaktorInfo", "getZangireiFaktorInfo: "+jsonArray);
+        return jsonArray;
     }
 
     public void updateCodeVazeiat()

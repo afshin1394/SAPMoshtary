@@ -7,11 +7,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.MoshtaryGharardadKalaModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.UIModel.RptMoshtaryGharardadUiModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
@@ -217,6 +219,36 @@ public class MoshtaryGharardadKalaDAO {
         }
     }
 
+    public ArrayList<RptMoshtaryGharardadUiModel> getKalaByCcMoshtaryGharardadAndCcSazmanForosh(String ccMoshtaryGharardad, String ccSazmanForosh){
+        ArrayList<RptMoshtaryGharardadUiModel> models = new ArrayList<>();
+        String query = "SELECT k.CodeKala, k.NameKala  , m.MablaghMasrafKonandeh , m.MablaghForosh , m.ControlMablagh ,m.ccKalaCode \n" +
+                "FROM MoshtaryGharardadKala m \n" +
+                "LEFT JOIN (SELECT DISTINCT ccKalaCode,CodeKala, NameKala FROM Kala) k ON k.ccKalaCode = m.ccKalaCode \n" +
+                "WHERE IFNULL(CodeKala,'0')<>'0' AND m.ccMoshtaryGharardad = " + ccMoshtaryGharardad + " AND m.ExtraPropCcSazmanForosh =  " + ccSazmanForosh +"  \n" +
+                "ORDER BY CodeKala";
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    models = cursorToModelUi(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception){
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , MoshtaryGharardadKalaModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, LogPPCModel.LOG_EXCEPTION, message, "MoshtaryGharardadKalaDAO" , "" , "getKalaByCcMoshtaryGharardadAndCcSazmanForosh" , "");
+
+        }
+        return models;
+
+    }
+
 
     public boolean insertGroup(ArrayList<MoshtaryGharardadKalaModel>  moshtaryGharardadKalaModels) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -293,6 +325,24 @@ public class MoshtaryGharardadKalaDAO {
             moshtaryGharardadKalaModel.setMablaghMasrafKonandeh(cursor.getLong(cursor.getColumnIndex(MoshtaryGharardadKalaModel.COLUMN_MablaghMasrafKonandeh())));
             moshtaryGharardadKalaModel.setControlMablagh(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadKalaModel.COLUMN_ControlMablagh())));
             moshtaryGharardadKalaModel.setExtraprop_ccSazmanForosh(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadKalaModel.COLUMN_ExtraPropCcSazmanForosh())));
+            moshtaryGharardadKalaModels.add(moshtaryGharardadKalaModel);
+            cursor.moveToNext();
+        }
+        return moshtaryGharardadKalaModels;
+    }
+    private ArrayList<RptMoshtaryGharardadUiModel> cursorToModelUi(Cursor cursor) {
+        ArrayList<RptMoshtaryGharardadUiModel> moshtaryGharardadKalaModels = new ArrayList<>();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            RptMoshtaryGharardadUiModel moshtaryGharardadKalaModel = new RptMoshtaryGharardadUiModel();
+
+            moshtaryGharardadKalaModel.setCodeKala(cursor.getInt(cursor.getColumnIndex(RptMoshtaryGharardadUiModel.COLUMN_CodeKala())));
+            moshtaryGharardadKalaModel.setNameKala(cursor.getString(cursor.getColumnIndex(RptMoshtaryGharardadUiModel.COLUMN_NameKala())));
+            moshtaryGharardadKalaModel.setMablaghForosh(cursor.getLong(cursor.getColumnIndex(RptMoshtaryGharardadUiModel.COLUMN_MablaghForosh())));
+            moshtaryGharardadKalaModel.setMablaghMasrafKonandeh(cursor.getLong(cursor.getColumnIndex(RptMoshtaryGharardadUiModel.COLUMN_MablaghMasrafKonandeh())));
+            moshtaryGharardadKalaModel.setControlMablagh(cursor.getInt(cursor.getColumnIndex(RptMoshtaryGharardadUiModel.COLUMN_ControlMablagh())));
+            moshtaryGharardadKalaModel.setCcKalaCode(cursor.getInt(cursor.getColumnIndex(RptMoshtaryGharardadUiModel.COLUMN_ccKalaCode())));
             moshtaryGharardadKalaModels.add(moshtaryGharardadKalaModel);
             cursor.moveToNext();
         }

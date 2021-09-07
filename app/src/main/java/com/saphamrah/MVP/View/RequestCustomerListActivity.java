@@ -63,6 +63,8 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
 
     private ArrayList<MoshtaryModel> moshtaryModelsSearch; // result of search
     private ArrayList<MoshtaryAddressModel> moshtaryAddressModelsSearch; // result of search
+    private ArrayList<MoshtaryGharardadModel> moshtaryGharardadModelsSearch; // result of search
+
     private boolean canUpdateCustomer;
     //private ArrayList<Integer> moshtaryNoeMorajehSearch;
 
@@ -152,11 +154,13 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
                 String searchWord = query.trim();
                 if (searchStatus == 1)
                 {
-                    mPresenter.searchCustomerName(searchWord, moshtaryModels, moshtaryAddressModels , moshtaryNoeMorajeh);
+                    //TODO search
+                    mPresenter.searchCustomerName(searchWord, moshtaryModels, moshtaryAddressModels, moshtaryGharardadModels , moshtaryNoeMorajeh);
                 }
                 else if (searchStatus == 2)
                 {
-                    mPresenter.searchCustomerCode(searchWord, moshtaryModels, moshtaryAddressModels , moshtaryNoeMorajeh);
+                    //TODO search
+                    mPresenter.searchCustomerCode(searchWord, moshtaryModels, moshtaryAddressModels,moshtaryGharardadModels , moshtaryNoeMorajeh);
                 }
                 return false;
             }
@@ -167,11 +171,13 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
                 {
                     if (searchStatus == 1)
                     {
-                        mPresenter.searchCustomerName(newText, moshtaryModels, moshtaryAddressModels , moshtaryNoeMorajeh);
+                        //TODO search
+                        mPresenter.searchCustomerName(newText, moshtaryModels, moshtaryAddressModels,moshtaryGharardadModels , moshtaryNoeMorajeh);
                     }
                     else if (searchStatus == 2)
                     {
-                        mPresenter.searchCustomerCode(newText, moshtaryModels, moshtaryAddressModels , moshtaryNoeMorajeh);
+                        //TODO search
+                        mPresenter.searchCustomerCode(newText, moshtaryModels, moshtaryAddressModels ,moshtaryGharardadModels, moshtaryNoeMorajeh);
                     }
                 }
                 else
@@ -202,11 +208,13 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
                 String searchWord = ((TextView)findViewById(com.miguelcatalan.materialsearchview.R.id.searchTextView)).getText().toString().trim();
                 if (searchStatus == 1)
                 {
-                    mPresenter.searchCustomerName(searchWord, moshtaryModels, moshtaryAddressModels , moshtaryNoeMorajeh);
+                    //TODO search
+                    mPresenter.searchCustomerName(searchWord, moshtaryModels, moshtaryAddressModels , moshtaryGharardadModels, moshtaryNoeMorajeh);
                 }
                 else if (searchStatus == 2)
                 {
-                    mPresenter.searchCustomerCode(searchWord, moshtaryModels, moshtaryAddressModels , moshtaryNoeMorajeh);
+                    //TODO search
+                    mPresenter.searchCustomerCode(searchWord, moshtaryModels, moshtaryAddressModels,moshtaryGharardadModels , moshtaryNoeMorajeh);
                 }
             }
         });
@@ -330,16 +338,18 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
 
 
     @Override
-    public void onGetSearch(ArrayList<MoshtaryModel> moshtaryModels, ArrayList<MoshtaryAddressModel> moshtaryAddressModels , ArrayList<Integer> arrayListNoeMorajeh)
+    public void onGetSearch(ArrayList<MoshtaryModel> moshtaryModels, ArrayList<MoshtaryAddressModel> moshtaryAddressModels,ArrayList<MoshtaryGharardadModel>  moshtaryGharardadModels, ArrayList<Integer> arrayListNoeMorajeh)
     {
         moshtaryModelsSearch = moshtaryModels;
         moshtaryAddressModelsSearch = moshtaryAddressModels;
+        moshtaryGharardadModelsSearch = moshtaryGharardadModels;
         //moshtaryNoeMorajehSearch = arrayListNoeMorajeh;
+//        adapter.notifyDataSetChanged();
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         adapter = new RequestCustomerListAdapter(RequestCustomerListActivity.this, moshtaryModels, moshtaryAddressModels, arrayListNoeMorajeh,moshtaryGharardadModels, canUpdateCustomer, new RequestCustomerListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int operation, int position) {
-                onListItemClickListener(operation , moshtaryModelsSearch.get(position) , moshtaryAddressModelsSearch.get(position),moshtaryGharardadModels.get(position));
+                onListItemClickListener(operation , moshtaryModelsSearch.get(position) , moshtaryAddressModelsSearch.get(position),moshtaryGharardadModelsSearch.get(position));
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(RequestCustomerListActivity.this);

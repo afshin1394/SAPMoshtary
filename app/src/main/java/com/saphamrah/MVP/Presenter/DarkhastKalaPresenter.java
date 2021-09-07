@@ -191,6 +191,7 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
 
             if (validData)
             {
+                Log.d("check1 insertsatr", kalaMojodiZaribModel.toString());
                 mModel.insertNewFaktorSatr(ccMoshtary , position , kalaMojodiZaribModel , requestCountSum);
             }
         }
@@ -375,6 +376,13 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
     }
 
     @Override
+    public void checkZanjiree(){
+        mModel.checkZanjiree();
+    }
+
+
+
+    @Override
     public void checkJayezeh(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor,int position) {
         mModel.checkJayezeh(ccJayezeh,tedadKala,mablaghForosh,ccKalaCode,ccDarkhastFaktor ,position);
     }
@@ -528,5 +536,11 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
     public void onGetRecyclerDetails(int ItemCountPerScreen, ArrayList<KalaPhotoModel> kalaPhotoModels) {
         mView.get().onGetGridRecyclerDetails(ItemCountPerScreen,kalaPhotoModels);
     }
+
+    @Override
+    public void  onCheckZanjiree(){
+        mView.get().onCheckZanjiree();
+    }
+
 
 }

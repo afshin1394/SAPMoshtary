@@ -62,6 +62,7 @@
         <activity android:name=".MVP.View.PishDaryaftActivity" />
         <activity android:name=".MVP.View.CheckBargashtiActivity" />
         <activity android:name=".MVP.View.marjoee.DarkhastFaktorMarjoeeActivity" />
+        <activity android:name=".MVP.View.RptMoshtaryGharardad" />
         <activity
             android:name=".MVP.View.RptForoshandehVisitActivity"
             android:screenOrientation="sensorLandscape" />

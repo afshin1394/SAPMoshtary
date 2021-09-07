@@ -93,7 +93,7 @@ public class KalaDarkhastFaktorSatrDAO
                         " inner join Kala k on k.ccKalaCode = fs.ccKalaCode and k.ShomarehBach = fs.ShomarehBach " +
                         " and k.gheymatForoshAsli = fs.gheymatForoshAsli and k.GheymatMasrafKonandehAsli = fs.GheymatMasrafKonandehAsli " +
                         " and k.ccTaminKonandeh = fs.ccTaminKonandeh " +
-                        " LEFT JOIN (SELECT * FROM MoshtaryGharardadKala) mgk " +
+                        " LEFT JOIN (SELECT * FROM MoshtaryGharardadKala ) mgk " +
                         "            ON mgk.ccKalaCode= fs.ccKalaCode AND "+
                         " (CASE WHEN mgk.ControlMablagh = 1 AND fs.mablaghforosh = mgk.mablaghforosh AND fs.GheymatMasrafKonandeh = mgk.MablaghMasrafKonandeh "+
                         "    THEN 1=1 " +

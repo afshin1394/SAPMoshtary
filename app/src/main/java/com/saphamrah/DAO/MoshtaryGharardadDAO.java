@@ -7,8 +7,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.MoshtaryGharardadKalaModel;
 import com.saphamrah.Model.MoshtaryGharardadModel;
+import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
@@ -151,6 +153,89 @@ public class MoshtaryGharardadDAO {
     }
 
 
+
+    @SuppressLint("LongLogTag")
+    public void fetchMoshtaryGharardad(final Context context, final String activityNameForLog, int ccForoshandeh,int ccMoshtaryGharardad,int ccSazmanForosh, final RetrofitResponse retrofitResponse) {
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+
+        Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "fetchMoshtaryGhararDad: " + serverIpModel.getServerIp().trim() + " " + serverIpModel.getPort().trim() + " ");
+        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+            String message = "can't find server";
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "");
+            retrofitResponse.onFailed(Constants.HTTP_ERROR(), message);
+            Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "fetchMoshtaryGhararDad: " + serverIpModel.getServerIp().trim() + " " + serverIpModel.getPort().trim() + " ");
+
+        } else {
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Log.i("HDAPDJOPWJ", "fetchMoshtaryGhararDad: " + serverIpModel.getPort() + " " + serverIpModel.getServerIp());
+            Call<GetAllMoshtaryGharardadResult> call = apiServiceGet.getMoshtaryGharardad(String.valueOf(ccForoshandeh),ccMoshtaryGharardad,ccSazmanForosh);
+
+            Log.i("urlOfCall", "fetchMoshtaryGhararDad: " + call.request().url());
+
+            call.enqueue(new Callback<GetAllMoshtaryGharardadResult>() {
+                @Override
+                public void onResponse(Call<GetAllMoshtaryGharardadResult> call, Response<GetAllMoshtaryGharardadResult> response) {
+                    Log.i("messsages", "onResponse: " + response.message());
+                    try {
+                        if (response.raw().body() != null) {
+                            long contentLength = response.raw().body().contentLength();
+                            PubFunc.Logger logger = new PubFunc().new Logger();
+                            logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, MoshtaryGharardadDAO.class.getSimpleName(), "", "fetchMoshtaryGhararDadKala", "onResponse");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        if (response.isSuccessful()) {
+                            Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP2: " + response.isSuccessful());
+                            GetAllMoshtaryGharardadResult result = response.body();
+                            if (result != null) {
+                                if (result.getSuccess()) {
+                                    Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP4: " + result.getSuccess());
+                                    retrofitResponse.onSuccess(result.getData());
+
+                                } else {
+                                    Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP6:" + result.getSuccess());
+                                    PubFunc.Logger logger = new PubFunc().new Logger();
+                                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onResponse");
+                                    retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
+                                }
+                            } else {
+                                Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP6: result null");
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), context.getResources().getString(R.string.resultIsNull), MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onResponse");
+                                retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
+                            }
+                        } else {
+                            Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP6: result null");
+                            String message = String.format("error body : %1$s , code : %2$s", response.message(), response.code());
+                            PubFunc.Logger logger = new PubFunc().new Logger();
+                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onResponse");
+                            retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), message);
+                        }
+                    }
+                    catch (Exception exception) {
+                        Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP7: Exception in Request");
+                        exception.printStackTrace();
+                        PubFunc.Logger logger = new PubFunc().new Logger();
+                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onResponse");
+                        retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION(), exception.toString());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<GetAllMoshtaryGharardadResult> call, Throwable t) {
+                    Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP8: fail 404 or 403" + t.getMessage());
+                    PubFunc.Logger logger = new PubFunc().new Logger();
+                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), t.getMessage(), MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onFailure");
+                    retrofitResponse.onFailed(Constants.RETROFIT_THROWABLE(), t.getMessage());
+                }
+            });
+        }
+    }
+
+
     @SuppressLint("LongLogTag")
     public ArrayList<Integer> getAllCcSazmanForosh() {
         ArrayList<Integer> AllCcSazmanForosh = new ArrayList<>();
@@ -225,7 +310,57 @@ public static final String GET_ALL_CCGHARARDAD_SAZMANFOROSH="getAllCCGharardadSa
         return gharardadSazman;
     }
 
+    public ArrayList<MoshtaryGharardadModel> getByccMoshtary(int ccMoshtary) {
+        ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels = new ArrayList<>();
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String strQry = "select * from " + MoshtaryGharardadModel.TableName() + " where " + MoshtaryGharardadModel.COLUMN_ccMoshtary() + " = " + ccMoshtary;
+            Cursor cursor = db.rawQuery(strQry, null);
+            if (cursor != null) {
+                Log.d("findByccMoshtary", "getAllmoshtaryGharardadModelsbyccMoshtary: " + cursor.getCount());
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+                        moshtaryGharardadModels = cursorToModel(cursor);
+                        cursor.moveToNext();
+                    }
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll, MoshtaryGharardadModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MoshtaryGharardadDAO.class.getSimpleName(), "", "MoshtaryGharardadModel", "");
+        }
+        return moshtaryGharardadModels;
+    }
+    public MoshtaryGharardadModel getMoshtaryGharardadByCcMoshtaryAndCcSazmanForosh(int ccMoshtary , int ccSazmanForosh){
+        MoshtaryGharardadModel models = new MoshtaryGharardadModel();
+        String query = "SELECT * FROM MoshtaryGharardad WHERE ccMoshtary = " + ccMoshtary + " AND ccSazmanForosh = " + ccSazmanForosh ;
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    models = cursorToModel(cursor).get(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception){
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , MoshtaryGharardadModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, LogPPCModel.LOG_EXCEPTION, message, "MoshtaryGharardadDAO" , "" , "getMoshtaryGharardadByCcMoshtaryAndCcSazmanForosh" , "");
 
+        }
+        return models;
+
+    }
     public boolean insertGroup(ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
@@ -323,13 +458,17 @@ public static final String GET_ALL_CCGHARARDAD_SAZMANFOROSH="getAllCCGharardadSa
             moshtaryGharardadModel.setNameNoeVosolAzMoshtary(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_NameNoeVosolAzMoshtary())));
             moshtaryGharardadModel.setCcSazmanForosh(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_CcSazmanForosh())));
             moshtaryGharardadModel.setNameSazmanForosh(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.getCOLUMN_NameSazmanForosh())));
-
+            moshtaryGharardadModel.setShomarehGharardad(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ShomarehGharardad())));
+            moshtaryGharardadModel.setCcMoshtaryGharardad(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ccMoshtaryGharardad())));
 
             moshtaryGharardadModels.add(moshtaryGharardadModel);
             cursor.moveToNext();
         }
         return moshtaryGharardadModels;
     }
+
+
+
 
 
 }

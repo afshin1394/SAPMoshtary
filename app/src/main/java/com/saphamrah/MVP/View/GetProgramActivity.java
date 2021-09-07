@@ -58,7 +58,8 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
         , GetProgramAdapter.OnItemClickListenerUpdateJayezehTakhfif
         , GetProgramAdapter.OnItemClickListenerUpdateCustomers
         , GetProgramAdapter.OnItemClickListenerUpdateParameters
-        , GetProgramAdapter.OnItemClickListenerUpdateEtebarForoshandeh {
+        , GetProgramAdapter.OnItemClickListenerUpdateEtebarForoshandeh
+        , GetProgramAdapter.OnItemClickListenerUpdateGharardadKalaMosavabeh {
 
     private final String TAG = this.getClass().getSimpleName();
     private StateMaintainer stateMaintainer = new StateMaintainer(this.getSupportFragmentManager(), TAG, GetProgramActivity.this);
@@ -266,6 +267,8 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
                 jsonObject = new JSONObject(getResources().getStringArray(R.array.updateParameters)[itemIndex]);
             } else if (getProgramType == Constants.GET_PROGRAM_UPDATE_ETEBAR_FOROSHANDEH()) {
                 jsonObject = new JSONObject(getResources().getStringArray(R.array.updateEtebarForoshandeh)[itemIndex]);
+            }else if (getProgramType == Constants.GET_PROGRAM_UPDATE_GHARARDAD_KALAMOSAVABEH()) {
+                jsonObject = new JSONObject(getResources().getStringArray(R.array.updateMoshtaryGharardadKalaMosavabeh)[itemIndex]);
             }
             return jsonObject.getString("name");
         } catch (Exception exception) {
@@ -330,6 +333,7 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
         foroshandehMamorPakhshModel = foroshandehMamorPakhshModels.get(0);
         arrayListForoshandehMamorPakhshModel = foroshandehMamorPakhshModels;
         adapter = new GetProgramAdapter(this, foroshandehMamorPakhshModels
+                , this
                 , this
                 , this
                 , this
@@ -526,6 +530,27 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
     }
 
     @Override
+    public void showCompletedUpdateGharardadKalaMosavabeh() {
+        recyclerViewGetProgramItems.smoothScrollToPosition(getProgramItemCount);
+        progressBar.setProgress(100);
+        lblProgressPercentage.setText(getResources().getString(R.string.percentageValue, 100));
+        lblPassedItemCounter.setText(String.format("%1$s / %2$s", String.valueOf(getProgramItemCount), String.valueOf(getProgramItemCount)));
+        imgGetProgramResultFailed.setVisibility(View.GONE);
+        imgGetProgramResultSuccess.setVisibility(View.VISIBLE);
+        viewRevealAnimator.showNext();
+        lblGetProgramResult.setText(getResources().getString(R.string.updateGharardadKalaMosavabehCompleted));
+        btnGetProgramResultClose.setBackground(getResources().getDrawable(R.drawable.altdlg_btn_bg_success));
+        imgGetProgramResultSuccess.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                imgGetProgramResultSuccess.performClick();
+                imgGetProgramResultSuccess.setPressed(true);
+                imgGetProgramResultSuccess.invalidate();
+            }
+        }, 800);
+    }
+
+    @Override
     public void showResourceError(boolean closeActivity, int titleResId, int messageResId, int messageType, int buttonTextResId) {
         try {
             if (show != null) {
@@ -593,6 +618,8 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
             itemsTitle = Arrays.asList(getAppContext().getResources().getStringArray(R.array.updateParameters));
         } else if (getProgramType == Constants.GET_PROGRAM_UPDATE_ETEBAR_FOROSHANDEH()) {
             itemsTitle = Arrays.asList(getAppContext().getResources().getStringArray(R.array.updateEtebarForoshandeh));
+        } else if (getProgramType == Constants.GET_PROGRAM_UPDATE_GHARARDAD_KALAMOSAVABEH()) {
+            itemsTitle = Arrays.asList(getAppContext().getResources().getStringArray(R.array.updateMoshtaryGharardadKalaMosavabeh));
         }
 
         alertAdapter = new GetProgramItemsStatusAdapter(GetProgramActivity.this, getProgramItemsStatus, itemsTitle);
@@ -759,5 +786,13 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
         getProgramItemsStatus = initializeItemsStatus();
         showItemStatusList(Constants.GET_PROGRAM_UPDATE_ETEBAR_FOROSHANDEH());
         mPresenter.checkUpdateEtebarForoshandeh(arrayListForoshandehMamorPakhshModel.get((position)));
+    }
+
+    @Override
+    public void onItemClickListenerUpdateGharardadKalaMosavabeh(int position) {
+        getProgramItemCount = getResources().getStringArray(R.array.updateMoshtaryGharardadKalaMosavabeh).length;
+        getProgramItemsStatus = initializeItemsStatus();
+        showItemStatusList(Constants.GET_PROGRAM_UPDATE_GHARARDAD_KALAMOSAVABEH());
+        mPresenter.checkUpdateGharardadKalaMosavabeh(arrayListForoshandehMamorPakhshModel.get((position)));
     }
 }

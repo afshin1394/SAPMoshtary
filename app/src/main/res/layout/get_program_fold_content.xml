@@ -347,6 +347,37 @@
                         android:paddingRight="30dp"
                         android:paddingLeft="30dp"/>
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/layUpdateGharardadKalaMosavabeh"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:background="@color/colorSliderGharardadKalaMosavabeh">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/iconSize100"
+                        android:id="@+id/imgUpdateGharardadKalaMosavabeh"
+                        android:src="@drawable/ic_contract_foreground"
+                        android:layout_marginRight="50dp"
+                        android:layout_marginLeft="50dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lblUpdateGharardadKalaMosavabeh"
+                        android:text="@string/updateGharardadKalaMosavabeh"
+                        android:textSize="@dimen/FontSize14"
+                        android:textColor="@color/colorWhite"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:background="@drawable/transparent_bg"
+                        android:layout_marginTop="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:paddingRight="30dp"
+                        android:paddingLeft="30dp"/>
+                </LinearLayout>
             </com.saphamrah.Utils.CustomViewFlipper>
             <ImageView
                 android:layout_width="@dimen/iconSize44"

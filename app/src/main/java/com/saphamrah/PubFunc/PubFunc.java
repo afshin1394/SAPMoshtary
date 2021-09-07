@@ -2170,6 +2170,24 @@ get mac address in android 10
             return true;
         }
 
+        /**remove duplicates in a list**/
+
+        public<T> ArrayList<T> deleteDuplicates(ArrayList<T> t) {
+            List<T> noRepeat = new ArrayList<T>();
+
+            for (T t1 : t) {
+                boolean isFound = false;
+                for (T e : noRepeat) {
+                    if (e.equals(t1)) {
+                        isFound = true;
+                        break;
+                    }
+                }
+                if (!isFound) noRepeat.add(t1);
+            }
+            return new ArrayList<>(noRepeat);
+        }
+
     }
 
     public class FontUtils {

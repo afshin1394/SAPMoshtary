@@ -44,6 +44,7 @@ public interface DarkhastKalaMVP
         void onCheckJayezeh(int position);
         void onCheckJayezehParent(ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels, int tedadKala,double mablaghForosh ,int ccKalaCode ,Long ccDarkhastFaktor);
         void onGetGridRecyclerDetails(int goodsNumberEachSection, ArrayList<KalaPhotoModel> kalaPhotoModels);
+        void onCheckZanjiree();
     }
 
 
@@ -66,6 +67,7 @@ public interface DarkhastKalaMVP
         void checkJayezeh(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor,int position);
         void checkJayezehParent(int ccKalaCode , int tedadKala , Long ccDarkhastFaktor, double mablaghForosh);
         void getRecyclerDetails();
+        void checkZanjiree();
     }
 
 
@@ -91,6 +93,7 @@ public interface DarkhastKalaMVP
         void onCheckJayezeh(int position);
         void onCheckJayezehParent(ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels, int tedadKala, double mablaghForosh , int ccKalaCode , Long ccDarkhastFaktor);
         void onGetRecyclerDetails(int ItemCountPerScreen,ArrayList<KalaPhotoModel> kalaPhotoModels);
+    void onCheckZanjiree();
     }
 
 
@@ -114,6 +117,7 @@ public interface DarkhastKalaMVP
         void getRecyclerDetails();
         int getItemCountPerScreen();
         ArrayList<KalaPhotoModel> getGallery();
+        void checkZanjiree();
     }
 
 }

@@ -135,6 +135,7 @@
         <item>{\"name\":\"پشتیبانی آنلاین\" , \"functdion\":\"getSupportCrisp\"}</item>
         <item>{\"name\":\"قرارداد مشتری\" , \"functdion\":\"getAllMoshtaryGharardad\"}</item>
         <item>{\"name\":\"کالا مصوبه قرارداد\" , \"functdion\":\"getAllKalaMosavab\"}</item>
+        <item>{\"name\":\"مرجوعی پخش \" , \"function\":\"getMarjoeePakhsh\"}</item>
         <item>{\"name\":\"دریافت تنظیمات\" , \"functdion\":\"getParameter\"}</item>
         <item>{\"name\":\"برخورد فروشنده با مشتری\" , \"function\":\"getBarkhordForoshandehBaMoshtary\"}</item>
     </string-array>
@@ -350,9 +351,14 @@
         <item>{\"name\":\"اطلاعات مسیر\" , \"function\":\"getMasirVaznHajmMashin\"}</item>
         <item>{\"name\":\"اطلاعات نوع وصول\" , \"function\":\"getNoeVosolMoshtary\"}</item>
         <item>{\"name\":\"مشتری مراجعه شده\" , \"function\":\"getMoshtaryMorajeShodehRooz\"}</item>
+        <item>{\"name\":\"قرارداد مشتری\" , \"functdion\":\"getAllMoshtaryGharardad\"}</item>
+        <item>{\"name\":\"کالا مصوبه قرارداد\" , \"functdion\":\"getAllKalaMosavab\"}</item>
     </string-array>
 
-
+    <string-array name="updateMoshtaryGharardadKalaMosavabeh">
+        <item>{\"name\":\"قرارداد مشتری\" , \"functdion\":\"getAllMoshtaryGharardad\"}</item>
+        <item>{\"name\":\"کالا مصوبه قرارداد\" , \"functdion\":\"getAllKalaMosavab\"}</item>
+    </string-array>
     <string-array name="addCustomerNavigationTabBarColors">
         <item>#df5a55</item>
         <item>#f9bb72</item>

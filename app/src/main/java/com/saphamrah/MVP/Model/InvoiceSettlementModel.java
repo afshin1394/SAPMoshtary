@@ -359,7 +359,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                 Log.d("invoice", "new PubFunc().new DateUtils().addDay(dateTarikhSarResidForCheck , tedadRoozForRotbeh).getTime() : " + dateUtils.addDay(dateTarikhSarResidForCheck, tedadRoozForRotbeh).getTime());
                 Log.d("invoice", "new PubFunc().new DateUtils().addDay(dateTarikhSarResidForCheck , tedadRoozForRotbeh) : " + dateUtils.addDay(dateTarikhSarResidForCheck, tedadRoozForRotbeh));
 
-                int tedadRoozMazad = 10;
+                int tedadRoozMazad = 10; //Todo Mazad ModatVosol Check
                 if (tarikhSanad.getTime()  > dateUtils.addDay(dateTarikhSarResidForCheck, tedadRoozForRotbeh + tedadRoozMazad ).getTime()) {
                     mPresenter.onErrorCheckInsert(R.string.errorInvalidDate);
                     hasError = true;

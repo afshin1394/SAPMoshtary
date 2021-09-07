@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:topLeftRadius="@dimen/altdlgCorner" android:topRightRadius="@dimen/altdlgCorner" android:bottomLeftRadius="0dp" android:bottomRightRadius="0dp"/>
+    <corners android:topLeftRadius="@dimen/altdlgCorner"
+        android:topRightRadius="@dimen/altdlgCorner"
+        android:bottomLeftRadius="0dp"
+        android:bottomRightRadius="0dp"/>
     <stroke android:width="@dimen/altdlgStrokeWidth" android:color="@color/colorDivider"/>
     <solid android:color="@color/colorWhite"/>
 </shape>

@@ -751,6 +751,38 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
         return moshtaryModel;
     }
 
+    public boolean isMoshtaryZanjiree(int ccMoshtary) {
+        boolean isZanjiree = true;
+        String query = "SELECT * FROm Moshtary WHERE ccMoshtary = " + ccMoshtary + " AND ccNoeMoshtary = 350";
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    isZanjiree = true;
+                } else {
+                    isZanjiree = false;
+                }
+                cursor.close();
+            } else {
+                isZanjiree = false;
+
+            }
+
+            assert cursor != null;
+            cursor.close();
+        } catch (Exception exception) {
+            isZanjiree = false;
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll, MoshtaryModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, LogPPCModel.LOG_EXCEPTION, message, "MoshtaryGharardadDAO", "", "isMoshtaryZanjiree", "");
+
+        }
+
+        return isZanjiree;
+    }
+
 
     public int countCodeMoshtary(String codeMoshtary)
     {
@@ -1024,6 +1056,32 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
             logger.insertLogToDB(context, LogPPCModel.LOG_EXCEPTION, message, "MoshtaryDAO", "", "getCcMasirByCodeMoshtary", "");
         }
         return ccMasir;
+    }
+
+    public ArrayList<MoshtaryModel> getMoshtaryZanjiree(){
+        ArrayList<MoshtaryModel> models = new ArrayList<>();
+        String query = "SELECT * FROM Moshtary WHERE ccNoeMoshtary = 350";
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    models = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception){
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , MoshtaryModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, LogPPCModel.LOG_EXCEPTION, message, "MoshtaryDAO" , "" , "getMoshtaryZanjiree" , "");
+
+        }
+       return models;
+
     }
 
     public boolean deleteAll()

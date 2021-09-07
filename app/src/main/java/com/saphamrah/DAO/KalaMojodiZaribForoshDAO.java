@@ -70,7 +70,7 @@ public class KalaMojodiZaribForoshDAO
                    " LEFT JOIN (SELECT * FROM KalaZaribForosh z  WHERE ccGorohMoshtary =   " + noeMoshtary + " AND z.Darajeh IN ( 0," + darajeh + ")) z  ON km.ccKalaCode = z.ccKalaCode \n" +
                    " LEFT JOIN KalaOlaviat o on o.ccKalaCode = km.ccKalaCode \n" +
                    " LEFT JOIN (SELECT * FROM KalaPhoto) kp ON kp.ccKalaCode= km.ccKalaCode \n" +
-                   " LEFT JOIN (SELECT * FROM MoshtaryGharardadKala) mgk \n" +
+                   " LEFT JOIN (SELECT * FROM MoshtaryGharardadKala WHERE ccMoshtaryGharardad = " + ccMoshtaryGharardad + ") mgk \n" +
                    "    ON mgk.ccKalaCode= km.ccKalaCode AND \n" +
                    "                 (CASE WHEN mgk.ControlMablagh = 1 AND km.mablaghforoshKala = mgk.mablaghforosh AND km.MablaghMasrafKonandehKala = mgk.MablaghMasrafKonandeh \n" +
                    "            THEN 1=1 \n" +
@@ -131,7 +131,7 @@ public class KalaMojodiZaribForoshDAO
         return kalaMojodiZaribModels;
     }
 
-    public ArrayList<KalaMojodiZaribModel> getByMoshtaryAndccKalaCode(String darajeh , int noeMoshtary , String ccKalaCode, int moshtaryGharardadccSazmanForosh)
+    public ArrayList<KalaMojodiZaribModel> getByMoshtaryAndccKalaCode(String darajeh , int noeMoshtary , String ccKalaCode, int moshtaryGharardadccSazmanForosh, int ccMoshtaryGharardad)
     {
         String query = null;
         ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = new ArrayList<>();
@@ -152,7 +152,7 @@ public class KalaMojodiZaribForoshDAO
                     " ORDER BY codekala DESC ) km \n" +
                     " LEFT JOIN (SELECT * FROM KalaZaribForosh z  WHERE ccGorohMoshtary =   " + noeMoshtary + " AND z.Darajeh IN ( 0," + darajeh + ")) z  ON km.ccKalaCode = z.ccKalaCode \n" +
                     " LEFT JOIN KalaOlaviat o on o.ccKalaCode = km.ccKalaCode \n" +
-                    " LEFT JOIN (SELECT * FROM MoshtaryGharardadKala) mgk \n" +
+                    " LEFT JOIN (SELECT * FROM MoshtaryGharardadKala WHERE ccMoshtaryGharardad = " + ccMoshtaryGharardad + " ) mgk \n" +
                     "    ON mgk.ccKalaCode= km.ccKalaCode AND \n" +
                     "                 (CASE WHEN mgk.ControlMablagh = 1 AND km.mablaghforoshKala = mgk.mablaghforosh AND km.MablaghMasrafKonandehKala = mgk.MablaghMasrafKonandeh \n" +
                     "            THEN 1=1 \n" +
@@ -216,7 +216,12 @@ public class KalaMojodiZaribForoshDAO
         while (!cursor.isAfterLast())
         {
             KalaMojodiZaribModel kalaMojodiZaribModel = new KalaMojodiZaribModel();
-
+            Log.d("check1 curserdao" ,
+                    String.valueOf(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccKalaCode())))+","+
+                    String.valueOf(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatForosh())))+","+
+                    String.valueOf(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_MablaghMasrafKonandeh())))+","+
+                    String.valueOf(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_GheymatForoshAsli())))+","+
+                    String.valueOf(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_GheymatMasrafKonandehAsli()))));
             //Kala
             kalaMojodiZaribModel.setCcKalaCode(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccKalaCode())));
             kalaMojodiZaribModel.setCodeKala(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_CodeKala())));
@@ -236,6 +241,7 @@ public class KalaMojodiZaribForoshDAO
             kalaMojodiZaribModel.setArz(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_Arz())));
             kalaMojodiZaribModel.setErtefa(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_Ertefa())));
             kalaMojodiZaribModel.setMashmolMaliatAvarez(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_MashmolMaliatAvarez())));
+            //TODO
             kalaMojodiZaribModel.setGheymatForoshAsli(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_GheymatForoshAsli())));
             kalaMojodiZaribModel.setGheymatMasrafKonandehAsli(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_GheymatMasrafKonandehAsli())));
 
@@ -243,6 +249,7 @@ public class KalaMojodiZaribForoshDAO
             kalaMojodiZaribModel.setCcKalaMojodi(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_ccKalaMojodi())));
             kalaMojodiZaribModel.setTedad(cursor.getInt(cursor.getColumnIndex("sumTedad")));
             kalaMojodiZaribModel.setMax_MojodyByShomarehBach(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_Max_MojodyByShomarehBach())));
+            //TODO
             kalaMojodiZaribModel.setGheymatForosh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatForosh())));
             kalaMojodiZaribModel.setMablaghMasrafKonandeh(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_MablaghMasrafKonandeh())));
             kalaMojodiZaribModel.setZaribForosh(cursor.getInt(cursor.getColumnIndex(KalaZaribForoshModel.COLUMN_ZaribForosh())));

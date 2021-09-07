@@ -166,6 +166,7 @@
     <string name="getProgramDate">تاریخ دریافت برنامه</string>
     <string name="updateForoshandeh">بروز رسانی فروشنده</string>
     <string name="updateKalaModatVosol">بروز رسانی کالا و مدت وصول</string>
+    <string name="updateGharardadKalaMosavabeh">بروز رسانی قرار داد و کالا مصوبه</string>
     <string name="updateKalaModatVosolCompleted">بروز رسانی اطلاعات کالا و مدت وصول \n با موفقیت انجام شد.</string>
     <string name="updateJayezehTakhfif">بروز رسانی جایزه و تخفیف</string>
     <string name="updateJayezehTakhfifCompleted">بروز رسانی اطلاعات جایزه و تخفیف \n با موفقیت انجام شد.</string>
@@ -179,6 +180,7 @@
     <string name="updateCustomersCompleted">بروز رسانی اطلاعات مشتری \n با موفقیت انجام شد.</string>
     <string name="updateParametersCompleted">بروز رسانی تنظیمات \n با موفقیت انجام شد.</string>
     <string name="updateEtebarForoshandehCompleted">بروز رسانی اعتبار فروشنده \n با موفقیت انجام شد.</string>
+    <string name="updateGharardadKalaMosavabehCompleted">بروز رسانی قرارداد کالا مصوبه \n با موفقیت انجام شد.</string>
     <string name="errorUpdateDatabase">خطا در بروز رسانی داده ها</string>
     <string name="addCustomer">افزودن مشتری</string>
     <string name="errorOutOfPolygon">شما در خارج از محدوده مشخص شده هستید.</string>
@@ -1089,4 +1091,16 @@
     <string name="unAvailable">ناموجود</string>
     <string name="selectEmza">امضا</string>
     <string name="isMarjoeeSend">برای ارسال وصول ابتدا مرجوعی خود را ارسال نمایید</string>
+    <string name="rptMoshtaryGharardad">گزارش مصوبه قرارداد مشتری</string>
+    <string name="moshtary">مشتری</string>
+    <string name="moshtaryGharardad">قرارداد مشتری</string>
+    <string name="haveNotMoshtary">مشتری زنجیره ای یافت نشد</string>
+    <string name="haveNotMoshtaryGharardad">قراردادی برای این مشتری یافت نشد</string>
+    <string name="shomareGharardad">شماره قرارداد</string>
+    <string name="mablaghMasrafKonandeh">مبلغ مصرف کننده</string>
+    <string name="haveConterolGheymat">کنترل قیمت دارد</string>
+    <string name="haveNotConterolGheymat">کنترل قیمت ندارد</string>
+    <string name="moshtaryIsNotZanjiree">این مشتری زنجیره ای نمی باشد</string>
+    <string name="customerZanjiree">مشتری زنجیره ای</string>
+    <string name="firstSelectedMoshtary">ابتدا مشتری را انتخاب نمایید</string>
 </resources>

@@ -70,30 +70,39 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
     }
 
     @Override
-    public void searchCustomerName(String searchWord , ArrayList<MoshtaryModel> moshtaryModels , ArrayList<MoshtaryAddressModel> moshtaryAddressModels , ArrayList<Integer> arrayListNoeMorajeh)
+    public void searchCustomerName(String searchWord , ArrayList<MoshtaryModel> moshtaryModels , ArrayList<MoshtaryAddressModel> moshtaryAddressModels , ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels, ArrayList<Integer> arrayListNoeMorajeh)
     {
         ArrayList<MoshtaryModel> moshtaryModelsSearch = new ArrayList<>();
         ArrayList<MoshtaryAddressModel> moshtaryAddressModelsSearch = new ArrayList<>();
+        ArrayList<MoshtaryGharardadModel> moshtaryGharardadModelsSearch = new ArrayList<>();
+
         ArrayList<Integer> moshtaryNoeMorajehSearch = new ArrayList<>();
         for (int i=0 ; i<moshtaryModels.size() ; i++)
         {
             MoshtaryModel moshtary = moshtaryModels.get(i);
             if (moshtary.getNameMoshtary().contains(searchWord))
             {
+
                 moshtaryModelsSearch.add(moshtary);
                 moshtaryAddressModelsSearch.add(moshtaryAddressModels.get(i));
+                moshtaryGharardadModelsSearch.add(moshtaryGharardadModels.get(i));
                 moshtaryNoeMorajehSearch.add(arrayListNoeMorajeh.get(i));
             }
         }
-        mView.get().onGetSearch(moshtaryModelsSearch , moshtaryAddressModelsSearch , moshtaryNoeMorajehSearch);
+
+//        mModel.searchCustomerName(searchWord,moshtaryModels,moshtaryAddressModels,moshtaryGharardadModels,arrayListNoeMorajeh);
+
+        mView.get().onGetSearch(moshtaryModelsSearch , moshtaryAddressModelsSearch ,moshtaryGharardadModelsSearch, moshtaryNoeMorajehSearch);
     }
 
+    //TODO search
     @Override
-    public void searchCustomerCode(String searchWord , ArrayList<MoshtaryModel> moshtaryModels , ArrayList<MoshtaryAddressModel> moshtaryAddressModels , ArrayList<Integer> arrayListNoeMorajeh)
+    public void searchCustomerCode(String searchWord , ArrayList<MoshtaryModel> moshtaryModels , ArrayList<MoshtaryAddressModel> moshtaryAddressModels ,ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels , ArrayList<Integer> arrayListNoeMorajeh)
     {
         searchWord = new PubFunc().new LanguageUtil().convertFaNumberToEN(searchWord);
         ArrayList<MoshtaryModel> moshtaryModelsSearch = new ArrayList<>();
         ArrayList<MoshtaryAddressModel> moshtaryAddressModelsSearch = new ArrayList<>();
+        ArrayList<MoshtaryGharardadModel> moshtaryGharardadModelsSearch = new ArrayList<>();
         ArrayList<Integer> moshtaryNoeMorajehSearch = new ArrayList<>();
         for (int i=0 ; i<moshtaryModels.size() ; i++)
         {
@@ -102,10 +111,12 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
             {
                 moshtaryModelsSearch.add(moshtary);
                 moshtaryAddressModelsSearch.add(moshtaryAddressModels.get(i));
+                moshtaryGharardadModelsSearch.add(moshtaryGharardadModels.get(i));
                 moshtaryNoeMorajehSearch.add(arrayListNoeMorajeh.get(i));
             }
         }
-        mView.get().onGetSearch(moshtaryModelsSearch , moshtaryAddressModelsSearch , moshtaryNoeMorajehSearch);
+        //TODO search
+        mView.get().onGetSearch(moshtaryModelsSearch , moshtaryAddressModelsSearch ,moshtaryGharardadModelsSearch, moshtaryNoeMorajehSearch);
     }
 
     @Override

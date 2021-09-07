@@ -214,6 +214,7 @@ import com.saphamrah.Model.DariaftPardakhtPPCModel;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
 import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.DarkhastFaktorSatrModel;
+import com.saphamrah.Model.ElamMarjoeeForoshandehModel;
 import com.saphamrah.Model.ElatAdamDarkhastModel;
 import com.saphamrah.Model.ElatMarjoeeKalaModel;
 import com.saphamrah.Model.ForoshandehEtebarModel;
@@ -275,13 +276,13 @@ import com.saphamrah.Model.TakhfifSenfiModel;
 import com.saphamrah.Model.TakhfifSenfiSatrModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.Network.RxNetwork.RxHttpRequest;
-import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.DateUtils;
 import com.saphamrah.PubFunc.DeviceInfo;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.Logger;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.Repository.ElamMarjoeeForoshandehRepository;
 import com.saphamrah.Shared.GetProgramShared;
 import com.saphamrah.Shared.LastOlaviatMoshtaryShared;
 import com.saphamrah.Shared.LocalConfigShared;
@@ -387,7 +388,6 @@ import com.saphamrah.Repository.TakhfifSenfiSatrRepository;
 import com.saphamrah.Repository.TedadFaktorMoshtaryRepository;
 import com.saphamrah.WebService.RxService.APIServiceRxjava;
 import com.saphamrah.WebService.RxService.Response.DataResponse.GetMandehMojodyMashinResponse;
-import com.saphamrah.WebService.ServiceResponse.BarkhordForoshandehBaMoshtaryResult;
 import com.saphamrah.WebService.ServiceResponse.DarkhastFaktorKalaPishnahadiResult;
 import com.saphamrah.WebService.ServiceResponse.GetAllGorohResult;
 import com.saphamrah.WebService.ServiceResponse.GetAllMoshtaryByccMasirResult;
@@ -420,13 +420,13 @@ import com.saphamrah.WebService.ServiceResponse.GetMairVaznHajmMashinResult;
 import com.saphamrah.WebService.ServiceResponse.GetMarjoeeForoshandehByDarkhastFaktorSatrResult;
 import com.saphamrah.WebService.ServiceResponse.GetMarjoeeForoshandehByDarkhastFaktorTitrResult;
 import com.saphamrah.WebService.ServiceResponse.GetMoshtaryPolygonResult;
-import com.saphamrah.WebService.ServiceResponse.GetParameterChildResult;
-import com.saphamrah.WebService.ServiceResponse.GetParameterResult;
 import com.saphamrah.WebService.ServiceResponse.GetTafkikJozePakhshResult;
 import com.saphamrah.WebService.ServiceResponse.GetTedadFaktorMoshtaryResult;
 import com.saphamrah.WebService.ServiceResponse.MarjoeeMamorPakhshResult;
 import com.saphamrah.WebService.ServiceResponse.SupportCrispResult;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.PrintWriter;
@@ -438,17 +438,20 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function3;
 import io.reactivex.schedulers.Schedulers;
@@ -830,6 +833,27 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         logger.insertLogToDB(mPresenter.getAppContext(), logType, message, logClass, logActivity, functionParent, functionChild);
     }
 
+
+    @Override
+    public void updateGharardadKalaMosavabeh(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel) {
+        noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+        getProgramItemCount = mPresenter.getAppContext().getResources().getStringArray(R.array.updateMoshtaryGharardadKalaMosavabeh).length;
+        itemCounter = -1;
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if (msg.arg1 == Constants.BULK_INSERT_SUCCESSFUL()) {
+                    mPresenter.onSuccessUpdateGharardadKalaMosavabeh(getProgramItemCount, msg.arg2);
+                } else if (msg.arg1 == Constants.BULK_INSERT_FAILED()) {
+                    mPresenter.onFailedUpdateEtebarForoshandeh(msg.arg2, mPresenter.getAppContext().getResources().getString(R.string.errorUpdateDatabase));
+                }
+                return false;
+            }
+        });
+        getAllMoshtaryGharardadAndGharardadKala(Constants.GET_PROGRAM_UPDATE_GHARARDAD_KALAMOSAVABEH(), foroshandehMamorPakhshModel.getCcForoshandeh());
+    }
+
+
     @Override
     public void onDestroy() {
         if (compositeDisposable != null) {
@@ -961,8 +985,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                     }
 
                     @Override
-                    public void onError(@NonNull Throwable e)
-                    {
+                    public void onError(@NonNull Throwable e) {
                         mPresenter.onFailedGetProgram(webCounter[0] + 1, String.format(" type : %1$s \n error : %2$s", Objects.requireNonNull(e.getCause()).getMessage(), e.getCause()));
                     }
 
@@ -1020,8 +1043,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
     private void updateBrandTable(int getProgramType
             , ArrayList<BrandModel> brandModels
             , ArrayList<ElatAdamDarkhastModel> elatAdamDarkhastModels
-            , ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels)
-    {
+            , ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels) {
         BrandRepository brandRepository = new BrandRepository(mPresenter.getAppContext());
         Disposable disposableDelete = brandRepository.deleteAll()
                 .subscribe(deleteTable ->
@@ -1029,14 +1051,11 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                             if (deleteTable) {
                                 Disposable disposableInsert = brandRepository.insertGroup(brandModels)
                                         .subscribe(insertGroup -> {
-                                            if (insertGroup)
-                                            {
+                                            if (insertGroup) {
                                                 sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                                                 updateElatAdamDarkhastTable(getProgramType, elatAdamDarkhastModels, elatMarjoeeKalaModels);
                                                 Log.i("RxJavaRequest", "item index:" + itemCounter + "\t updateBrandTable ");
-                                            }
-                                            else
-                                            {
+                                            } else {
                                                 throwException("updateBrandTable");
                                             }
                                         }, throwable -> {
@@ -1350,8 +1369,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
             , ArrayList<MarkazModel> markazAnbarModels
             , ArrayList<MarkazShomarehHesabModel> markazShomarehHesabModels
             , ArrayList<PosShomarehHesabModel> posShomarehHesabModels
-            , ArrayList<PolygonForoshSatrModel> polygonForoshSatrModels)
-    {
+            , ArrayList<PolygonForoshSatrModel> polygonForoshSatrModels) {
 
         updateccMasirs(getProgramType
                 , masirModels
@@ -1889,12 +1907,13 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
                     @Override
                     public void onComplete() {
+                        //distinct values emit
 
                         if (ccMoshtarys.length() != 0) {
                             ccMoshtarys = ccMoshtarys.substring(0, ccMoshtarys.length() - 1);
-                        }
+                        }updateMoshtaryTable(getProgramType, moshtaryModels);
 
-                        updateMoshtaryTable(getProgramType, moshtaryModels);
+
                     }
                 });
     }
@@ -2299,13 +2318,11 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
                     @Override
                     public void onNext(@NonNull Boolean deleteMoshtaryTaghiratRx) {
-                        if (deleteMoshtaryTaghiratRx)
-                        {
+                        if (deleteMoshtaryTaghiratRx) {
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                             Log.i("RxJavaRequest", "itemCounter" + itemCounter + "\t deleteMoshtaryTaghiratRx");
                             getDarkhastFaktorRx(getProgramType);
-                        } else
-                        {
+                        } else {
                             throwException("deleteMoshtaryTaghiratRx");
                         }
 
@@ -2351,7 +2368,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.i("RxJavaRequest", +itemCounter + "webCounter" + webCounter[0] + "onError: " + e.getMessage()+"lineNumber"+e.getStackTrace()[0].getLineNumber());
+                        Log.i("RxJavaRequest", +itemCounter + "webCounter" + webCounter[0] + "onError: " + e.getMessage() + "lineNumber" + e.getStackTrace()[0].getLineNumber());
 
                         mPresenter.onFailedGetProgram(++webCounter[0], String.format(" type : %1$s \n error : %2$s", e.getCause().getMessage(), e.getMessage()));
                     }
@@ -2377,7 +2394,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         ArrayList<DarkhastFaktorEmzaMoshtaryModel> darkhastFaktorEmzaMoshtaryModels = new ArrayList<>();
 
         Observable.fromIterable(darkhastFaktorModels)
-                .filter(darkhastFaktorModel -> darkhastFaktorModel!=null)
+                .filter(darkhastFaktorModel -> darkhastFaktorModel != null)
                 .filter(darkhastFaktorModel -> darkhastFaktorModel.getCodeVazeiat() != Constants.CODE_VAZEIAT_FAKTOR_TASVIEH)
                 .filter(darkhastFaktorModel -> darkhastFaktorModel.getFaktorRooz() == 0)
                 .flatMap(darkhastFaktorModel -> {
@@ -2390,30 +2407,30 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                     ccDarkhastFaktorHavaleh[0] = darkhastFaktorModel.getCcDarkhastFaktor();
                     ccMoshtary[0] = darkhastFaktorModel.getCcMoshtary();
 
-                        String ccDarkhastFaktor = "0";
-                        String ccDarkhastHavaleh = "0";
-                        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3|| noeMasouliat==6 || noeMasouliat==8) {
-                            ccDarkhastFaktor = String.valueOf(darkhastFaktorModel.getCcDarkhastFaktor());
-                        } else if (noeMasouliat == 4 || noeMasouliat == 5) {
-                            ccDarkhastHavaleh = String.valueOf(darkhastFaktorModel.getCcDarkhastFaktor());
-                        }
+                    String ccDarkhastFaktor = "0";
+                    String ccDarkhastHavaleh = "0";
+                    if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 8) {
+                        ccDarkhastFaktor = String.valueOf(darkhastFaktorModel.getCcDarkhastFaktor());
+                    } else if (noeMasouliat == 4 || noeMasouliat == 5) {
+                        ccDarkhastHavaleh = String.valueOf(darkhastFaktorModel.getCcDarkhastFaktor());
+                    }
 
 
-                        return apiServiceRxjava.getImageJSON(ccDarkhastFaktor, ccDarkhastHavaleh)
-                                .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, ACTIVITY_NAME, "getImageJSON", ""))
-                                .filter(getImageJsonResultResponse -> getImageJsonResultResponse.body()!=null)
-                                .filter(getImageJsonResultResponse -> getImageJsonResultResponse.body().getData()!=null)
-                                .map(getImageJsonResultResponse -> getImageJsonResultResponse.body().getData().get(0))
-                                .filter(getImageStringModel -> getImageStringModel!=null)
-                                .filter(getImageStringModel -> getImageStringModel.getImage()!=null)
-                                .map(getImageStringModel -> {
-                                            DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel = new DarkhastFaktorEmzaMoshtaryModel();
-                                            darkhastFaktorEmzaMoshtaryModel.setCcDarkhastFaktor(ccDarkhastFaktorHavaleh[0]);
-                                            darkhastFaktorEmzaMoshtaryModel.setCcMoshtary(ccMoshtary[0]);
-                                            darkhastFaktorEmzaMoshtaryModel.setDarkhastFaktorImage(Base64.decode(getImageStringModel.getImage(), Base64.NO_WRAP));
-                                            darkhastFaktorEmzaMoshtaryModel.setHave_FaktorImage(1);
-                                            return darkhastFaktorEmzaMoshtaryModel;
-                                });
+                    return apiServiceRxjava.getImageJSON(ccDarkhastFaktor, ccDarkhastHavaleh)
+                            .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, ACTIVITY_NAME, "getImageJSON", ""))
+                            .filter(getImageJsonResultResponse -> getImageJsonResultResponse.body() != null)
+                            .filter(getImageJsonResultResponse -> getImageJsonResultResponse.body().getData() != null)
+                            .map(getImageJsonResultResponse -> getImageJsonResultResponse.body().getData().get(0))
+                            .filter(getImageStringModel -> getImageStringModel != null)
+                            .filter(getImageStringModel -> getImageStringModel.getImage() != null)
+                            .map(getImageStringModel -> {
+                                DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel = new DarkhastFaktorEmzaMoshtaryModel();
+                                darkhastFaktorEmzaMoshtaryModel.setCcDarkhastFaktor(ccDarkhastFaktorHavaleh[0]);
+                                darkhastFaktorEmzaMoshtaryModel.setCcMoshtary(ccMoshtary[0]);
+                                darkhastFaktorEmzaMoshtaryModel.setDarkhastFaktorImage(Base64.decode(getImageStringModel.getImage(), Base64.NO_WRAP));
+                                darkhastFaktorEmzaMoshtaryModel.setHave_FaktorImage(1);
+                                return darkhastFaktorEmzaMoshtaryModel;
+                            });
 
                 })
                 .subscribeOn(Schedulers.io())
@@ -2426,7 +2443,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                     @Override
                     public void onNext(@NonNull DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel) {
                         Log.i("DarkhastFaktorEmza", "ccDarkhastFaktorHavaleh " + ccDarkhastFaktorHavaleh[0] + "ccMoshtary" + ccMoshtary[0]);
-                            darkhastFaktorEmzaMoshtaryModels.add(darkhastFaktorEmzaMoshtaryModel);
+                        darkhastFaktorEmzaMoshtaryModels.add(darkhastFaktorEmzaMoshtaryModel);
                     }
 
                     @Override
@@ -2440,7 +2457,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                         } catch (Exception e1) {
                         }
 
-                        Log.i("RxJavaRequest", +itemCounter + "onError:updateFaktorDetails " + e.getMessage()+"stackTrace:  "+wholeStackTrace);
+                        Log.i("RxJavaRequest", +itemCounter + "onError:updateFaktorDetails " + e.getMessage() + "stackTrace:  " + wholeStackTrace);
                         sendThreadMessage(Constants.BULK_INSERT_FAILED(), itemCounter);
 
                     }
@@ -2533,7 +2550,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.i("RxJavaRequest", +itemCounter + "onError: updateMoshtaryTableByDarkhastFaktorDetails" + e.getMessage() +"line"+e.getCause().getStackTrace()[0].getLineNumber());
+                        Log.i("RxJavaRequest", +itemCounter + "onError: updateMoshtaryTableByDarkhastFaktorDetails" + e.getMessage() + "line" + e.getCause().getStackTrace()[0].getLineNumber());
                     }
 
                     @Override
@@ -3228,7 +3245,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
      * section 48
      **/
     private void getMoshtaryPakhshRx(int getProgramType, Map<Integer, String> map) {
-        ArrayList<MoshtaryModel> moshtaryPakhshModels = new ArrayList<>();
+         ArrayList<MoshtaryModel> moshtaryPakhshModels = new ArrayList();
         ArrayList<MoshtaryMorajehShodehRoozModel> moshtaryMorajehShodehRoozModels = new ArrayList<>();
         ArrayList<String> listCodeMoshtary = new ArrayList<>();
         ArrayList<Integer> listccforoshandeh = new ArrayList<>();
@@ -3236,7 +3253,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         final int[] webCounter = {itemCounter};
 
         Observable.fromIterable(map.keySet())
-                .flatMap(ccForoshandeh -> {
+                .concatMap(ccForoshandeh -> {
                     String codeMoshtary = map.get(ccForoshandeh);
                     if (codeMoshtary != null && !codeMoshtary.trim().equals("")) {
                         return Observable.zip(apiServiceRxjava.getAllMoshtaryByccMasir(String.valueOf(ccForoshandeh), "-1", codeMoshtary.replace("'", ""))
@@ -3284,10 +3301,12 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                     @Override
                     public void onComplete() {
 
+                        ArrayList<MoshtaryModel> moshtaryPakhshDistinctModels  =new PubFunc().new DAOUtil().deleteDuplicates(moshtaryPakhshModels);
+
                         Log.i("webCounterLog", "getSecondAmbush: " + webCounter[0] + "\t must be twentySix");
                         Log.i("RxJavaRequest", "getMoshtaryPakhshRx: onComplete" + itemCounter);
+                        updateMoshtaryPakhshTable(getProgramType, listCodeMoshtary, moshtaryPakhshDistinctModels, moshtaryMorajehShodehRoozModels);
 
-                        updateMoshtaryPakhshTable(getProgramType, listCodeMoshtary, moshtaryPakhshModels, moshtaryMorajehShodehRoozModels);
                     }
                 });
     }
@@ -3779,7 +3798,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                                             PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(new PubFunc.ConcurrencyEvents() {
                                                 @Override
                                                 public void uiThreadIsReady() {
-                                                    Log.i("pofjwerjo", "uiThreadIsReady: "+darkhastFaktorModels);
+                                                    Log.i("pofjwerjo", "uiThreadIsReady: " + darkhastFaktorModels);
                                                 }
                                             });
                                             GetDariaftPardakhtRx(getProgramType, darkhastFaktorModels);
@@ -3813,12 +3832,13 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         Observable.fromIterable(darkhastFaktorModels)
                 .subscribeOn(Schedulers.io())
                 .flatMap(darkhastFaktorModel ->
-                {   PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(new PubFunc.ConcurrencyEvents() {
-                    @Override
-                    public void uiThreadIsReady() {
-                        Log.i("GetDariaftPardakhtsd", "GetDariaftPardakhtRx: "+darkhastFaktorModel.getCcDarkhastFaktor());
-                    }
-                });
+                {
+                    PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(new PubFunc.ConcurrencyEvents() {
+                        @Override
+                        public void uiThreadIsReady() {
+                            Log.i("GetDariaftPardakhtsd", "GetDariaftPardakhtRx: " + darkhastFaktorModel.getCcDarkhastFaktor());
+                        }
+                    });
                     return apiServiceRxjava.getDariaftPardakhtHavalePPC("1", "-1," + String.valueOf(darkhastFaktorModel.getCcDarkhastFaktor()))
                             .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, ACTIVITY_NAME, "GetDariaftPardakhtRx", "getDariaftPardakhtHavalePPC"))
                             .subscribeOn(Schedulers.io());
@@ -3846,7 +3866,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                         }
 
 
-
                     }
 
                     @Override
@@ -3857,23 +3876,22 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
                     @Override
                     public void onComplete() {
-                        if (ccDariaftPardakhts.endsWith(","))
-                        {
+                        if (ccDariaftPardakhts.endsWith(",")) {
                             ccDariaftPardakhts = ccDariaftPardakhts.substring(0, ccDariaftPardakhts.length() - 1);
                         }
 
                         PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(new PubFunc.ConcurrencyEvents() {
                             @Override
                             public void uiThreadIsReady() {
-                                Log.i("ccDariaftPardakhtsss", "onNext: "+ccDariaftPardakhts);
+                                Log.i("ccDariaftPardakhtsss", "onNext: " + ccDariaftPardakhts);
                             }
                         });
                         dariaftPardakhtCounter[0]++;
                         PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(new PubFunc.ConcurrencyEvents() {
                             @Override
                             public void uiThreadIsReady() {
-                                Log.i("dariaftPardakhtss", "updateDariaftPardakhtDarkhastFaktorTable: "+ new DariaftPardakhtPPCDAO(mPresenter.getAppContext()).getAll());
-                                Log.i("dariaftPardakhtss", "updateDariaftPardakhtDarkhastFaktorTable: "+dariaftPardakhtPPCModels);
+                                Log.i("dariaftPardakhtss", "updateDariaftPardakhtDarkhastFaktorTable: " + new DariaftPardakhtPPCDAO(mPresenter.getAppContext()).getAll());
+                                Log.i("dariaftPardakhtss", "updateDariaftPardakhtDarkhastFaktorTable: " + dariaftPardakhtPPCModels);
                             }
                         });
 //                        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
@@ -3995,7 +4013,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 //                        if (dariaftPardakhtDarkhastFaktorCounter[0] < 2) {
                         Log.i("webCounterLog", "getSecondAmbush: " + webCounter[0] + "\t must be thirthyTwo");
                         updateDariaftPardakhtDarkhastFaktorTable(getProgramType, dariaftPardakhtDarkhastFaktorPPCModels);
-                        Log.i("dariafttttttt", "onComplete: "+dariaftPardakhtDarkhastFaktorPPCModels);
+                        Log.i("dariafttttttt", "onComplete: " + dariaftPardakhtDarkhastFaktorPPCModels);
 //                        }
                     }
                 });
@@ -4558,7 +4576,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                     {
                         ccForoshandeh = 0;
                         ccMamorPakhsh = 0;
-                    }else{  // Modir
+                    } else {  // Modir
                         ccMamorPakhsh = 0;
                     }
 
@@ -4691,16 +4709,13 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         {
             anbarakAfrad = "0";
             ccMamorPakhsh = 0;
-        }
-        else if(noeMasouliat == 2 || noeMasouliat == 3)//2-Foroshandeh-Garm //3-Foroshandeh-Smart
+        } else if (noeMasouliat == 2 || noeMasouliat == 3)//2-Foroshandeh-Garm //3-Foroshandeh-Smart
         {
             ccMamorPakhsh = 0;
-        }
-        else if (noeMasouliat == 4 || noeMasouliat == 5)//4-MamorPakhsh-Sard // 5-MamorPakhsh-Smart
+        } else if (noeMasouliat == 4 || noeMasouliat == 5)//4-MamorPakhsh-Sard // 5-MamorPakhsh-Smart
         {
             ccForoshandeh = 0;
-        }
-        else //6-SarparastForoshandeh 7-Amargar
+        } else //6-SarparastForoshandeh 7-Amargar
         {
             ccForoshandeh = 0;
             ccMamorPakhsh = 0;
@@ -4721,7 +4736,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                             webCounter[0]++;
                         })
                         .doOnComplete(() -> Log.i("webCounterRx", "onNext:webCounter " + webCounter[0]))
-                , apiServiceRxjava.getKalaZaribForosh(Integer.parseInt(anbarakAfrad),ccForoshandeh,ccMamorPakhsh,ccGorohss )
+                , apiServiceRxjava.getKalaZaribForosh(Integer.parseInt(anbarakAfrad), ccForoshandeh, ccMamorPakhsh, ccGorohss)
                         .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, ACTIVITY_NAME, "getAllKalaApis", "getAllvKalaZaribForosh"))
                         .subscribeOn(Schedulers.io())
                         .doOnNext(getAllvKalaZaribForoshResultResponse ->
@@ -7065,7 +7080,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                         .doOnNext(getAllrptHadafeForoshResponseResponse -> webCounter[0]++)
                 , (getAllrptDarkhastFaktorHavalehVazeiatResultResponse, getVersionResultResponse, getAllMoshtaryChidmanResultResponse, getAllMoshtaryForoshandehResultResponse, getAllrptAmarForoshResultResponse, getAllrptListMoavaghForoshandehResultResponse, getAllrptListAsnadForoshandehResultResponse, getAllrptHadafeForoshResponse) -> {
 
-                    Log.i("rptHadafForosh", "getAllRptApis: "+Objects.requireNonNull(getAllrptHadafeForoshResponse.body()).getData());
+                    Log.i("rptHadafForosh", "getAllRptApis: " + Objects.requireNonNull(getAllrptHadafeForoshResponse.body()).getData());
 //                    assert getAllMoshtaryChidmanResultResponse.body() != null;
 
 //                    if (noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_SARD || noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_GARM || noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_SMART) {
@@ -7144,7 +7159,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
     }
 
 
-
     private void updateDarkhastFaktorVaziatTable(int getProgramType
             , ArrayList<RptDarkhastFaktorVazeiatPPCModel> rptDarkhastFaktorVazeiatPPCModels,
                                                  ArrayList<TaghiratVersionPPCModel> taghiratVersionPPCModels,
@@ -7198,8 +7212,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
     }
 
 
-
-
     private void updateTaghiratVersionPpcTable(int getProgramType, ArrayList<TaghiratVersionPPCModel> taghiratVersionPPCModels,
                                                ArrayList<MoshtaryChidmanModel> moshtaryChidmanModels,
                                                ArrayList<AllMoshtaryForoshandehModel> moshtaryForoshandehModels
@@ -7249,7 +7261,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
     }
 
 
-
     private void updateMoshtaryChidemanTable(int getProgramType, ArrayList<MoshtaryChidmanModel> moshtaryChidmanModels
             , ArrayList<AllMoshtaryForoshandehModel> moshtaryForoshandehModels
             , ArrayList<RptForoshModel> rptForoshModels
@@ -7292,7 +7303,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                 });
         compositeDisposable.add(deleteAllDisposable);
     }
-
 
 
     private void updateMoshtaryForoshandehTables(int getProgramType, ArrayList<AllMoshtaryForoshandehModel> moshtaryForoshandehModels
@@ -7479,8 +7489,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                         if (deleteAll) {
                             Disposable insertGroupDisposable = rptHadafForoshRepository.insertGroup(rptHadafForoshModels)
                                     .subscribe(insertGroup -> {
-                                        if (insertGroup)
-                                        {
+                                        if (insertGroup) {
                                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                                             Log.i("RxJavaRequest", "itemCounter:" + itemCounter + " \t updateRptHadafForoshTable:");
                                             if (noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD || noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SMART) {
@@ -7495,9 +7504,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
                                                 deleteElamMarjoeeTedadRx(getProgramType);
                                             }
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             Log.i("RxJavaRequest", +itemCounter + "  updateRptHadafForoshTable:error");
                                             throwException("updateRptHadafForoshTable");
                                         }
@@ -8376,7 +8383,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
     private void getDetailedApis(int getProgramType) {
 
         String ccMarkazSazmanForoshSend = "";
-        if (noeMasouliat == 4 || noeMasouliat == 5 ){
+        if (noeMasouliat == 4 || noeMasouliat == 5) {
             ccMarkazSazmanForoshSend = ccMarkazSazmanForoshPakhsh;
         } else {
             ccMarkazSazmanForoshSend = String.valueOf(ccMarkazSazmanForosh);
@@ -8423,7 +8430,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                         .doOnNext(getMahalCodePostiResultResponse -> ++webCounter[0])
 
 
-                , apiServiceRxjava.getNoeVosolMoshtary(ccMarkazSazmanForoshSend,ccGorohss)
+                , apiServiceRxjava.getNoeVosolMoshtary(ccMarkazSazmanForoshSend, ccGorohss)
                         .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, ACTIVITY_NAME, "getDetailedApis", "getNoeVosolMoshtary"))
                         .subscribeOn(Schedulers.io())
                         .doOnNext(noeVosolMoshtaryResultResponse -> ++webCounter[0])
@@ -9392,7 +9399,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                                     if (insertGroup) {
                                         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                                         Log.i("RxJavaRequest", "itemCounter:" + itemCounter + "\t  updateCrispTable");
-                                        getAllMoshtaryGharardadAndGharardadKala(getProgramType);
+                                        getAllMoshtaryGharardadAndGharardadKala(getProgramType, this.ccForoshandeh);
                                     } else {
                                         Log.i("RxJavaRequest", +itemCounter + "  updateCrispTable:error");
                                         throwException("updateCrispTable");
@@ -9604,7 +9611,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
     private void getNoeVosolMoshtary(final int getProgramType, int ccMarkazSazmanForosh) {
         final NoeVosolMoshtaryDAO noeVosolMoshtaryDAO = new NoeVosolMoshtaryDAO(mPresenter.getAppContext());
-        noeVosolMoshtaryDAO.fetchNoeVosolMoshtary(mPresenter.getAppContext(), activityNameForLog, String.valueOf(ccMarkazSazmanForosh),ccGorohss, new RetrofitResponse() {
+        noeVosolMoshtaryDAO.fetchNoeVosolMoshtary(mPresenter.getAppContext(), activityNameForLog, String.valueOf(ccMarkazSazmanForosh), ccGorohss, new RetrofitResponse() {
             @Override
             public void onSuccess(final ArrayList arrayListData) {
                 Thread thread = new Thread() {
@@ -9632,8 +9639,39 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         });
     }
 
-    private void getAllMoshtaryGharardadAndGharardadKala(int getProgramType) {
-        apiServiceRxjava.getMoshtaryGharardad(String.valueOf(ccForoshandeh))
+    private void getAllMoshtaryGharardadAndGharardadKala(int getProgramType, int ccForoshandeh) {
+
+        DarkhastFaktorRepository darkhastFaktorRepository = new DarkhastFaktorRepository(mPresenter.getAppContext());
+        Disposable disposable = darkhastFaktorRepository.getZangireiFaktorInfo()
+                .subscribe(jsonArray -> {
+                    if (jsonArray.length()>0) {
+                        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3)
+                            getAllMoshtaryGharardad(getProgramType, String.valueOf(ccForoshandeh));
+                        else if (noeMasouliat == 4 || noeMasouliat == 5)
+                            getAllMoshtaryGharardad(getProgramType, jsonArray);
+                        else
+                            getAllMoshtaryGharardad(getProgramType, "-1");
+                    }else{
+                        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                        if (getProgramType!=Constants.GET_PROGRAM_UPDATE_GHARARDAD_KALAMOSAVABEH())
+                        getMarjoeeForoshandehParameterAndParameterChild(getProgramType);
+                    }
+                }, throwable -> throwException("getZangireiFaktorInfo"));
+        compositeDisposable.add(disposable);
+
+    }
+
+    /**
+     * overload getAllMoshtaryGharardad
+     * {@link #getAllMoshtaryGharardad(int, JSONArray)}
+     * get All contractions which a seller can sell to them weather a cold seller, a warm seller and a smart seller or a distributer
+     * {@link #updateMoshtaryGhararadTable(int, ArrayList)}
+     *
+     * @param ccForoshandehString:each person in System has a cc
+     */
+    private void getAllMoshtaryGharardad(int getProgramType, String ccForoshandehString) {
+        apiServiceRxjava.getMoshtaryGharardad(ccForoshandehString)
                 .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, ACTIVITY_NAME, "getAllMoshtaryGharardadAndGharardadKala", ""))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -9659,12 +9697,65 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
                     }
                 });
+    }
+
+    /**
+     * overload getAllMoshtaryGharardad
+     * {@link #getAllMoshtaryGharardad(int, String)}
+     *
+     * @param getProgramType
+     * @param jsonArray
+     * @throws JSONException
+     */
+    private void getAllMoshtaryGharardad(int getProgramType, JSONArray jsonArray) {
+        ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels = new ArrayList<>();
+        Disposable disposable = Observable.range(0, jsonArray.length())
+                .map(jsonArray::get)
+                .subscribe(e -> {
+                    JSONObject jsonObject = ((JSONObject) e);
+                    int ccForoshandeh = jsonObject.getInt("ccForoshandeh");
+                    int ccMoshtaryGharardad = jsonObject.getInt("ccMoshtaryGharardad");
+                    int moshtaryGharardadccSazmanForosh = jsonObject.getInt("MoshtaryGharardadccSazmanForosh");
+
+                    apiServiceRxjava.getMoshtaryGharardad(String.valueOf(ccForoshandeh), ccMoshtaryGharardad, moshtaryGharardadccSazmanForosh)
+                            .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, ACTIVITY_NAME, "getAllMoshtaryGharardadAndGharardadKala", ""))
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .filter(getAllMoshtaryGharardadResultResponse -> getAllMoshtaryGharardadResultResponse.body() != null)
+                            .subscribe(new Observer<Response<GetAllMoshtaryGharardadResult>>() {
+                                @Override
+                                public void onSubscribe(@NonNull Disposable d) {
+                                    compositeDisposable.add(d);
+                                }
+
+                                @Override
+                                public void onNext(@NonNull Response<GetAllMoshtaryGharardadResult> getAllMoshtaryGharardadResultResponse) {
+                                    moshtaryGharardadModels.addAll(getAllMoshtaryGharardadResultResponse.body().getData());
+                                }
+
+                                @Override
+                                public void onError(@NonNull Throwable e) {
+                                    mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", e.getMessage(), e.getCause().getMessage()));
+                                }
+
+                                @Override
+                                public void onComplete() {
+                                    updateMoshtaryGhararadTable(getProgramType, moshtaryGharardadModels);
+                                }
+                            });
+
+
+                }, throwable -> throwException("getAllMoshtaryGharardad"));
+        compositeDisposable.add(disposable);
+
 
     }
+
 
     private void updateMoshtaryGhararadTable(int getProgramType, ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels) {
         MoshtaryGharardadRepository moshtaryGharardadRepository = new MoshtaryGharardadRepository(mPresenter.getAppContext());
         Disposable deleteAllDisposable = moshtaryGharardadRepository.deleteAll()
+                .distinct()
                 .subscribeOn(Schedulers.io())
                 .subscribe(deleteAll -> {
                     if (deleteAll) {
@@ -9674,6 +9765,8 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                                     if (insertGroup) {
                                         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                                         Log.i("RxJavaRequest", "itemCounter:" + itemCounter + "\t updateMoshtaryGhararadTable:");
+                                        Log.i("RxJavaRequest", "moshtaryGharardadModels: " + moshtaryGharardadModels);
+
                                         getAllMoshtaryGharardadKala(getProgramType, moshtaryGharardadModels);
                                     } else {
                                         Log.i("RxJavaRequest", +itemCounter + "  updateMoshtaryGhararadTable:error");
@@ -9746,9 +9839,8 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                                     if (insertGroup) {
                                         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                                         Log.i("RxJavaRequest", +itemCounter + "updateMoshtaryGharardadKalaTable:" + insertGroup);
-
-//
-                                        getParametersAndBarkhordApis(getProgramType);
+                                        if (getProgramType != Constants.GET_PROGRAM_UPDATE_GHARARDAD_KALAMOSAVABEH())
+                                            getMarjoeeForoshandehParameterAndParameterChild(getProgramType);
                                     } else {
                                         Log.i("RxJavaRequest", +itemCounter + "  updateMoshtaryGharardadKalaTable:error");
                                         throwException("updateMoshtaryGharardadKalaTable");
@@ -9767,7 +9859,8 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         compositeDisposable.add(deleteAllDisposable);
     }
 
-    private void getParametersAndBarkhordApis(int getProgramType) {
+
+    private void getMarjoeeForoshandehParameterAndParameterChild(int getProgramType) {
 
 
         GetProgramShared getProgramShared = new GetProgramShared(mPresenter.getAppContext());
@@ -9776,30 +9869,35 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         Disposable disposable = new ParameterChildRepository(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_MAX_ROOZ_PISHBINI_TAHVIL)
                 .subscribe(tedadMah -> {
                     tedadMah = (tedadMah == null || tedadMah.trim().equals("")) ? "1" : tedadMah;
-                    fetchParametersAndBarkhord(getProgramType, tedadMah, lastDateTimeGetConfig);
+                    fetchElamMarjoeeAndParametersAndBarkhord(getProgramType, tedadMah, lastDateTimeGetConfig);
                 }, throwable -> sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter));
         compositeDisposable.add(disposable);
 
 
     }
 
-    private void fetchParametersAndBarkhord(int getProgramType, String tedadMah, String lastDateTimeGetConfig) {
+    private void fetchElamMarjoeeAndParametersAndBarkhord(int getProgramType, String tedadMah, String lastDateTimeGetConfig) {
+        ArrayList<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModels = new ArrayList<>();
         ArrayList<ParameterModel> parameterModels = new ArrayList<>();
         ArrayList<ParameterChildModel> parameterChildModels = new ArrayList<>();
         ArrayList<BarkhordForoshandehBaMoshtaryModel> barkhordForoshandehBaMoshtaryModels = new ArrayList<>();
         final int[] webCounter = {itemCounter};
         int ccMarkazSazmanForosh = foroshandehMamorPakhshModel.getCcMarkazSazmanForosh();
 
-        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat==6 || noeMasouliat==8)
-        {
+        if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 8) {
             ccMarkazAnbar = -1;
-        }
-        else
-        {
+        } else {
             ccMarkazSazmanForosh = -1;
         }
 
-        Observable.zip(apiServiceRxjava.getParameter("1", String.valueOf(ccMarkazSazmanForosh), String.valueOf(ccMarkazAnbar), lastDateTimeGetConfig)
+        Observable.zip(
+                apiServiceRxjava.getElamMarjoeeForoshandeh(ccDarkhastFaktorPakhsh)
+                        .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, ACTIVITY_NAME, "getMarjoeeForoshandehAndKalaOlaviatGheymat", "getElamMarjoeeForoshandeh"))
+                        .subscribeOn(Schedulers.io())
+                        .doOnNext(getConfigNoeVosolMojazefaktorResult -> ++webCounter[0])
+                ,
+
+                apiServiceRxjava.getParameter("1", String.valueOf(ccMarkazSazmanForosh), String.valueOf(ccMarkazAnbar), lastDateTimeGetConfig)
                         .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, ACTIVITY_NAME, "fetchParametersAndBarkhord", "getParameter"))
                         .subscribeOn(Schedulers.io())
                         .doOnNext(getParameterResultResponse -> {
@@ -9821,17 +9919,16 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                         .doOnNext(getParameterResultResponse -> {
                             webCounter[0]++;
                         })
-                        .subscribeOn(Schedulers.io()), new Function3<Response<GetParameterResult>, Response<GetParameterChildResult>, Response<BarkhordForoshandehBaMoshtaryResult>, Boolean>() {
-                    @NonNull
-                    @Override
-                    public Boolean apply(@NonNull Response<GetParameterResult> getParameterResultResponse, @NonNull Response<GetParameterChildResult> getParameterChildResultResponse, @NonNull Response<BarkhordForoshandehBaMoshtaryResult> barkhordForoshandehBaMoshtaryResultResponse) {
-
-
+                        .subscribeOn(Schedulers.io()), (getElamMarjoeeForoshandehResponse, getParameterResultResponse, getParameterChildResultResponse, barkhordForoshandehBaMoshtaryResultResponse) -> {
+                    if (getElamMarjoeeForoshandehResponse.body() != null)
+                        elamMarjoeeForoshandehModels.addAll(getElamMarjoeeForoshandehResponse.body().getData());
+                    if (getParameterResultResponse.body() != null)
                         parameterModels.addAll(getParameterResultResponse.body().getData());
+                    if (getParameterChildResultResponse.body() != null)
                         parameterChildModels.addAll(getParameterChildResultResponse.body().getData());
+                    if (barkhordForoshandehBaMoshtaryResultResponse.body() != null)
                         barkhordForoshandehBaMoshtaryModels.addAll(barkhordForoshandehBaMoshtaryResultResponse.body().getData());
-                        return true;
-                    }
+                    return true;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -9843,7 +9940,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
                     @Override
                     public void onNext(@NonNull Boolean aBoolean) {
-                        updateParameterTable(getProgramType, parameterModels, parameterChildModels, barkhordForoshandehBaMoshtaryModels);
+                        updateMarjoeePakhsh(getProgramType, elamMarjoeeForoshandehModels, parameterModels, parameterChildModels, barkhordForoshandehBaMoshtaryModels);
                     }
 
                     @Override
@@ -9858,6 +9955,33 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                 });
 
 
+    }
+
+
+    private void updateMarjoeePakhsh(int getProgramType, ArrayList<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModels, ArrayList<ParameterModel> parameterModels, ArrayList<ParameterChildModel> parameterChildModels, ArrayList<BarkhordForoshandehBaMoshtaryModel> barkhordForoshandehBaMoshtaryModels) {
+        ElamMarjoeeForoshandehRepository elamMarjoeeForoshandehRepository = new ElamMarjoeeForoshandehRepository(mPresenter.getAppContext());
+        Disposable disposableDeleteAll = elamMarjoeeForoshandehRepository.deleteAll()
+                .doOnNext(deleteAll -> {
+                    if (deleteAll) {
+                        Disposable insertGroupDisposable = elamMarjoeeForoshandehRepository.insertGroup(elamMarjoeeForoshandehModels)
+                                .doOnNext(insertGroup -> {
+                                    sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+
+                                    updateParameterTable(getProgramType, parameterModels, parameterChildModels, barkhordForoshandehBaMoshtaryModels);
+
+
+                                })
+                                .doOnError(throwable -> {
+                                    throwException("updateMarjoeePakhsh");
+
+                                }).subscribe();
+                        compositeDisposable.add(insertGroupDisposable);
+                    }
+                })
+                .doOnError(throwable -> {
+                    throwException("updateMarjoeePakhsh");
+                }).subscribe();
+        compositeDisposable.add(disposableDeleteAll);
     }
 
     private void updateParameterTable(int getProgramType, ArrayList<ParameterModel> parameterModels
@@ -9985,7 +10109,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                 });
         compositeDisposable.add(deleteAllDisposable);
     }
-
 
 
     private void getParameter(final int getProgramType) {
@@ -10925,20 +11048,17 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         int ccForoshandeh = foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh();
 
 
-        if (noeMasouliat == 1 || noeMasouliat == 6 || noeMasouliat ==8)//1-Foroshandeh-Sard
+        if (noeMasouliat == 1 || noeMasouliat == 6 || noeMasouliat == 8)//1-Foroshandeh-Sard
         {
             anbarakAfrad = "0";
             ccMamorPakhsh = 0;
-        }
-        else if(noeMasouliat == 2 || noeMasouliat == 3)//2-Foroshandeh-Garm //3-Foroshandeh-Smart
+        } else if (noeMasouliat == 2 || noeMasouliat == 3)//2-Foroshandeh-Garm //3-Foroshandeh-Smart
         {
             ccMamorPakhsh = 0;
-        }
-        else if (noeMasouliat == 4 || noeMasouliat == 5)//4-MamorPakhsh-Sard // 5-MamorPakhsh-Smart
+        } else if (noeMasouliat == 4 || noeMasouliat == 5)//4-MamorPakhsh-Sard // 5-MamorPakhsh-Smart
         {
             ccForoshandeh = 0;
-        }
-        else //6-SarparastForoshandeh 7-Amargar
+        } else //6-SarparastForoshandeh 7-Amargar
         {
             ccForoshandeh = 0;
             ccMamorPakhsh = 0;
@@ -10948,8 +11068,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                 ccForoshandeh,
                 ccMamorPakhsh,
                 ccGorohs,
-                new RetrofitResponse()
-                {
+                new RetrofitResponse() {
                     @Override
                     public void onSuccess(final ArrayList arrayListData) {
                         Thread thread = new Thread() {
@@ -11017,7 +11136,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
                     @Override
                     public void onNext(Response<GetMandehMojodyMashinResponse> getMandehMojodyMashinResponseResponse) {
-                        updateMandehMojodiMashinTable(getProgramType,getMandehMojodyMashinResponseResponse.body(), finalCcForoshandeh,String.valueOf(ccAfrad));
+                        updateMandehMojodiMashinTable(getProgramType, getMandehMojodyMashinResponseResponse.body(), finalCcForoshandeh, String.valueOf(ccAfrad));
 
                     }
 
@@ -11038,7 +11157,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
     }
 
 
-    private void updateMandehMojodiMashinTable(int getProgramType,GetMandehMojodyMashinResponse body,String ccForoshandeh,String ccAfrad) {
+    private void updateMandehMojodiMashinTable(int getProgramType, GetMandehMojodyMashinResponse body, String ccForoshandeh, String ccAfrad) {
         if (body != null) {
             MandehMojodyMashinRepository mandehMojodyMashinRepository = new MandehMojodyMashinRepository(mPresenter.getAppContext());
             Disposable disposable = mandehMojodyMashinRepository.deleteAll()
@@ -11067,7 +11186,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
             compositeDisposable.add(disposable);
 
 
-        }else{
+        } else {
             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
             getKalaMojodi(getProgramType);
         }

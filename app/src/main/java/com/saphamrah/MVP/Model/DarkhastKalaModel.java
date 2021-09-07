@@ -27,6 +27,7 @@ import com.saphamrah.DAO.KalaMojodiZaribForoshDAO;
 import com.saphamrah.DAO.KalaPhotoDAO;
 import com.saphamrah.DAO.MoshtaryBrandDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
+import com.saphamrah.DAO.MoshtaryGharardadDAO;
 import com.saphamrah.DAO.MoshtaryJadidDarkhastDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.DAO.SystemConfigTabletDAO;
@@ -80,6 +81,8 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
     JayezehDAO jayezehDAO = new JayezehDAO(BaseApplication.getContext());
     DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
     private ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels;
+    private SelectFaktorShared shared = new SelectFaktorShared(BaseApplication.getContext());
+    private ParameterChildDAO parameterChildDAO = new ParameterChildDAO(BaseApplication.getContext());
 
     public DarkhastKalaModel(DarkhastKalaMVP.RequiredPresenterOps mPresenter) {
         this.mPresenter = mPresenter;
@@ -131,9 +134,10 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
                     shared.putBoolean(shared.getInsertDarkhastFaktorSatrForMamorPakhsh() , true);
                 }
                 KalaDarkhastFaktorSatrDAO kalaDarkhastFaktorSatrDAO = new KalaDarkhastFaktorSatrDAO(mPresenter.getAppContext());
-                //kalaDarkhastFaktorSatrModelArrayList = kalaDarkhastFaktorSatrDAO.getByccDarkhast(ccDarkhastFaktor);
+                //todo majid
+                kalaDarkhastFaktorSatrModelArrayList = kalaDarkhastFaktorSatrDAO.getByccDarkhast(ccDarkhastFaktor);
                 Log.d("Check1 darkhastkala",ccDarkhastFaktor + "," + ccNoeMoshtary + "," + ccMoshtaryGharardad);
-                kalaDarkhastFaktorSatrModelArrayList = kalaDarkhastFaktorSatrDAO.getByccDarkhastForDarkhastKala(ccDarkhastFaktor,ccNoeMoshtary, ccMoshtaryGharardad);
+                //kalaDarkhastFaktorSatrModelArrayList = kalaDarkhastFaktorSatrDAO.getByccDarkhastForDarkhastKala(ccDarkhastFaktor,ccNoeMoshtary, ccMoshtaryGharardad);
                 if (enableKalaAsasi)
                 {
                     String ccKalaCodesOfKalaAsasi = shared.getString(shared.getCcKalaCodesOfKalaAsasi(), "");
@@ -199,6 +203,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
         HashMap<String,Integer> hashMapSelectedGoods = darkhastFaktorSatrDAO.getCountOfKalaCodeByccDarkhastFaktor(ccDarkhastFaktor);
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
         int moshtaryGharardadccSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getMoshtaryGharardadccSazmanForosh(), -1);
+        int ccMoshtaryGharardad = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtaryGharardad(), -1);
         if (hashMapSelectedGoods.size() > 0)
         {
             MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
@@ -211,9 +216,14 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
             for (String ccKalaCode : hashMapSelectedGoods.keySet())
             {
                 int tedadDarkhasti = hashMapSelectedGoods.get(ccKalaCode);
+                Log.d("check1 kalamojodi1", ""+ ccKalaCode+","+ccDarkhastFaktor+", moshtaryGharardadccSazmanForosh:"+moshtaryGharardadccSazmanForosh +"," + ccMoshtaryGharardad);
+
                 Log.d("DarkhastKalaModel","calculateGoodsListWithMojodiOnline: cckalacode:" +  ccKalaCode + " ccDarkhastFaktor:" + ccDarkhastFaktor);
                 darkhastFaktorSatrDAO.deleteByccKalaCodeAndccDarkhastFaktor(ccDarkhastFaktor , ccKalaCode);
-                ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = kalaMojodiZaribForoshDAO.getByMoshtaryAndccKalaCode(daraje, noeMoshtary, ccKalaCode, moshtaryGharardadccSazmanForosh);
+
+                ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = kalaMojodiZaribForoshDAO.getByMoshtaryAndccKalaCode(daraje, noeMoshtary, ccKalaCode, moshtaryGharardadccSazmanForosh,ccMoshtaryGharardad);
+                Log.d("check1 kalamojodi2", kalaMojodiZaribModels.toString());
+
                 Log.d("DarkhastKalaModel","calculateGoodsListWithMojodiOnline: kalaMojodiZaribModels:" +  kalaMojodiZaribModels );
                 int sumSelectedNew = 0;
                 int loopCounter = 0;
@@ -253,6 +263,8 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
 
     private boolean insertNewDarkhastFaktorSatr(DarkhastFaktorSatrDAO darkhastFaktorSatrDAO , long ccDarkhastFaktor, KalaMojodiZaribModel kalaMojodiZaribModel, int requestedCount)
     {
+        Log.d("check1 insertsatr", kalaMojodiZaribModel.toString());
+
         DarkhastFaktorSatrModel darkhastFaktorSatrModel = new DarkhastFaktorSatrModel();
         darkhastFaktorSatrModel.setCcDarkhastFaktor(ccDarkhastFaktor);
         darkhastFaktorSatrModel.setCcTaminKonandeh(kalaMojodiZaribModel.getCcTaminKonandeh());
@@ -1137,5 +1149,17 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
         return kalaPhotoModels;
 //        mPresenter.onGetGallery(kalaPhotoModels);
     }
+
+    @Override
+    public void checkZanjiree(){
+        int ccNoeMoshtary = shared.getInt(shared.getCcGorohNoeMoshtary(),-1);
+        String ccZanjiree = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE());
+        if (ccNoeMoshtary != Integer.parseInt(ccZanjiree))
+            mPresenter.onCheckZanjiree();
+
+
+    }
+
+
 
 }

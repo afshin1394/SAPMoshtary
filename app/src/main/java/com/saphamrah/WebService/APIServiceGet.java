@@ -406,10 +406,14 @@ public interface APIServiceGet
     @GET("Api/apisales/GetMoshtaryGharardad")
     Call<GetAllMoshtaryGharardadResult> getMoshtaryGharardad(@Query("ccForoshandeh") String ccForoshandeh);
 
+
+    @GET("Api/apisales/GetMoshtaryGharardad_Pakhsh")
+    Call<GetAllMoshtaryGharardadResult> getMoshtaryGharardad(@Query("ccForoshandeh") String ccForoshandeh,@Query("ccMoshtaryGahrardad") int ccMoshtaryGahrardad,@Query("ccSazmanForosh") int ccSazmanForosh);
+
+
+
     @GET("Api/ApiSales/GetMarjoeeMamorPakhsh_Pakhsh")
     Call<MarjoeeMamorPakhshResult> getMarjoeeMamorPakhsh(@Query("ccMoshtarys") String ccMoshtarys);
-
-
 
     //N
     @GET("Api/ApiGlobal/GetAllNoeHesab")
