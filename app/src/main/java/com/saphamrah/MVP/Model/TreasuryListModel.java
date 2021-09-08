@@ -224,6 +224,8 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             if (sortType == Constants.SORT_TREASURY_BY_CUSTOMER_CODE)
             {
                 darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getAll(faktorRooz);
+                updateAllMablaghMandeh(darkhastFaktorMoshtaryForoshandeModels);
+
                 for (int i = 0; i < darkhastFaktorMoshtaryForoshandeModels.size(); i++) {
                     // set send location
                     for (int j = 0; j < gpsDataModels.size(); j++) {
@@ -238,6 +240,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                         }
                     }
                 }
+                updateAllMablaghMandeh(darkhastFaktorMoshtaryForoshandeModels);
             }
             else
             {

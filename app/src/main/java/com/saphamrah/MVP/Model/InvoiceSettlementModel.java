@@ -452,7 +452,11 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
 
 
                 boolean haveDirkardVosol = haveDirkardVosol(darkhastFaktorModel, null, CodeNoeVosolSabtShode);
-                if (mablaghMandehOtherVosol == 0 && !haveDirkardVosol) {
+
+
+                //boolean isRoozJari =true;
+
+                if (mablaghMandehOtherVosol == 0 && !haveDirkardVosol ) {
                     insertDirkardVosol(darkhastFaktorModel, null);
                 }
 
@@ -1182,7 +1186,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                 biggerCcDaryaftPardakht = true;
             }
         }
-        if (dariaftPardakhtDarkhastFaktorPPCModels.get(dariaftPardakhtDarkhastFaktorPPCModels.size() -1).getCodeNoeVosol() == Integer.parseInt(Constants.VALUE_SANAD_TAJIL))
+        if (dariaftPardakhtDarkhastFaktorPPCModels.get(dariaftPardakhtDarkhastFaktorPPCModels.size() -1).getCodeNoeVosol() == Integer.parseInt(Constants.VALUE_SANAD_TAJIL) || dariaftPardakhtDarkhastFaktorPPCModels.get(dariaftPardakhtDarkhastFaktorPPCModels.size() -1).getCodeNoeVosol() == Integer.parseInt(Constants.VALUE_SANAD_DIRKARD))
             biggerCcDaryaftPardakht = false;
 
         return biggerCcDaryaftPardakht;
@@ -1295,31 +1299,27 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
         DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtBargashtyPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(BaseApplication.getContext());
         //int isDirkardFromCodeSabtShode = configNoeVosolMojazeFaktorDAO.isDirkardFromCodeSabtShode(codeNoeVosolSabtShodeh);
 
-        Date dateNowDate = new Date();
-        Date tarikhErsalFaktor = DateUtils.convertStringDateToDateClass(darkhastFaktorModel.getTarikhErsal());
-        long difDayForFaktor = DateUtils.getDateDiffAsDay(tarikhErsalFaktor, dateNowDate);
-        @SuppressLint("SimpleDateFormat") String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(dateNowDate);
-        @SuppressLint("SimpleDateFormat") String tarikhErsal = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(tarikhErsalFaktor);
-        TaghvimTatilDAO taghvimTatilDAO = new TaghvimTatilDAO(mPresenter.getAppContext());
-        ArrayList<TaghvimTatilModel> taghvimTatilModels = taghvimTatilDAO.getTarikhTatilBetweenTwoDates(tarikhErsal,currentDate);
-        int holidaysBetweenSentDateAndToday = taghvimTatilModels.size();
+//        Date dateNowDate = new Date();
+//        Date tarikhErsalFaktor = DateUtils.convertStringDateToDateClass(darkhastFaktorModel.getTarikhErsal());
+//        long difDayForFaktor = DateUtils.getDateDiffAsDay(tarikhErsalFaktor, dateNowDate);
+//        @SuppressLint("SimpleDateFormat") String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(dateNowDate);
+//        @SuppressLint("SimpleDateFormat") String tarikhErsal = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(tarikhErsalFaktor);
+//        TaghvimTatilDAO taghvimTatilDAO = new TaghvimTatilDAO(mPresenter.getAppContext());
+//        ArrayList<TaghvimTatilModel> taghvimTatilModels = taghvimTatilDAO.getTarikhTatilBetweenTwoDates(tarikhErsal,currentDate);
+//        int holidaysBetweenSentDateAndToday = taghvimTatilModels.size();
 
 
         if (darkhastFaktorModel != null) {
             //if (isDirkardFromCodeSabtShode == 1) {
-                if (darkhastFaktorModel.getIsTakhir() == 1) {
-
-                    if (difDayForFaktor > holidaysBetweenSentDateAndToday){
+              if (darkhastFaktorModel.getIsTakhir() == 1) {
                         flag = dariaftPardakhtBargashtyPPCDAO.HaveDirkardDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor());
+              }
+//              if(difDayForFaktor-holidaysBetweenSentDateAndToday<=1){
+//                        flag=true;
+//              }
 
-                    } else {
-                        flag = true;
-                    }
-                }
-
-                } else {
+        } else {
             flag = dariaftPardakhtBargashtyPPCDAO.HaveDirkardBargahsty(bargashtyModel.getCcDariaftPardakht());
-            //}
         }
         return flag;
     }
@@ -1433,10 +1433,30 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
 
             diff_days = 0;
             codeNoeVosol = entity.getCodeNoeVosol();
+           Log.d("Dirkard" ,"ZamaneTakhsiseFaktor:" + ZamaneTakhsiseFaktor);
+            Log.d("Dirkard" ,"tarikhDate:" + tarikhDate);
+            Log.d("Dirkard" ,"ConvertToDay:" + ConvertToDay);
+            Log.d("Dirkard" ,"tarikhSanad:" + tarikhSanad);
+            Log.d("Dirkard" ,"tarikhSanad:" + tarikhSanad);
+
+
             if (codeNoeVosol == Integer.parseInt(Constants.VALUE_VAJH_NAGHD()) | codeNoeVosol == Integer.parseInt(Constants.VALUE_IRANCHECK()))
                 diff_days = (ZamaneTakhsiseFaktor.getTime() - tarikhDate.getTime()) / ConvertToDay;
+
             if (codeNoeVosol == Integer.parseInt(Constants.VALUE_POS()) | codeNoeVosol == Integer.parseInt(Constants.VALUE_FISH_BANKI()))
                 diff_days = (tarikhSanad.getTime() - tarikhDate.getTime()) / ConvertToDay;
+
+            // Mohasebeh Rooz Kari BArasas Tatilat
+            Date dateNowDate = new Date();
+            Date tarikhErsalFaktor = DateUtils.convertStringDateToDateClass(tarikh);
+            @SuppressLint("SimpleDateFormat") String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(dateNowDate);
+            @SuppressLint("SimpleDateFormat") String tarikhErsal = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(tarikhErsalFaktor);
+            TaghvimTatilDAO taghvimTatilDAO = new TaghvimTatilDAO(mPresenter.getAppContext());
+            ArrayList<TaghvimTatilModel> taghvimTatilModels = taghvimTatilDAO.getTarikhTatilBetweenTwoDates(tarikhErsal,currentDate);
+            int holidaysBetweenSentDateAndToday = taghvimTatilModels.size();
+
+            Log.d("Dirkard" ,"holidaysBetweenSentDateAndToday:" + holidaysBetweenSentDateAndToday);
+            diff_days = diff_days - holidaysBetweenSentDateAndToday;
 
             if (codeNoeVosol == Integer.parseInt(Constants.VALUE_CHECK()) | codeNoeVosol == Integer.parseInt(Constants.VALUE_CHECK_BANKI)) {
                 Date Max_Rooz_TarikhSanad;
@@ -1448,7 +1468,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                 diff_days = (Max_Rooz_TarikhSanad.getTime() - tarikhDate.getTime()) / ConvertToDay;
             }
 
-
+            Log.d("Dirkard" ,"diff_days:" + diff_days);
             if (diff_days <= 0)
                 diff_days = 1;
 
