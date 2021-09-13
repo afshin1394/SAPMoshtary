@@ -1613,7 +1613,6 @@ public class DarkhastFaktorDAO
     }
     public JSONArray getZangireiFaktorInfo() {
         JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
         Log.d("GetProgram", "getAllMoshtaryGharardadAndGharardadKala3" );
 
         try
@@ -1624,19 +1623,22 @@ public class DarkhastFaktorDAO
 
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query,null);
-            Log.d("GetProgram", "getAllMoshtaryGharardadAndGharardadKala"+cursor.getCount() );
-            Log.d("GetProgram", "getAllMoshtaryGharardadAndGharardadKala"+cursor.getInt(0) );
-            Log.d("GetProgram", "getAllMoshtaryGharardadAndGharardadKala"+cursor.getInt(1) );
+
 
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)
                 {
                     cursor.moveToFirst();
-                    jsonObject.put("ccForoshandeh",cursor.getInt(0));
-                    jsonObject.put("ccMoshtaryGharardad",cursor.getInt(1));
-                    jsonObject.put("MoshtaryGharardadccSazmanForosh",cursor.getInt(2));
-                    jsonArray.put(jsonObject);
+                    while(!cursor.isAfterLast()) {
+                        JSONObject jsonObject = new JSONObject();
+
+                        jsonObject.put("ccForoshandeh", cursor.getInt(0));
+                        jsonObject.put("ccMoshtaryGharardad", cursor.getInt(1));
+                        jsonObject.put("MoshtaryGharardadccSazmanForosh", cursor.getInt(2));
+                        jsonArray.put(jsonObject);
+                        cursor.moveToNext();
+                    }
                 }
                 cursor.close();
             }
@@ -1650,7 +1652,7 @@ public class DarkhastFaktorDAO
             String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, LogPPCModel.LOG_EXCEPTION, message, "DarkhastFaktorDAO" , "" , "getZangireiFaktorInfo" , "");
         }
-        Log.i("getZangireiFaktorInfo", "getZangireiFaktorInfo: "+jsonArray);
+        Log.i("GetProgram", "getZangireiFaktorInfo: "+jsonArray);
         return jsonArray;
     }
 

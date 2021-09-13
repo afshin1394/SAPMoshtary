@@ -146,6 +146,98 @@ public class MoshtaryGharardadKalaDAO {
 
     }
 
+    //TODO get gharardad faktor zangirei
+    @SuppressLint("LongLogTag")
+    public void fetchMoshtaryGharadadKalaSync(final Context context, final String activityNameForLog, int ccSazmanForosh, int ccMoshtaryGharardad,RetrofitResponse retrofitResponse) {
+
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+            String message = "can't find server";
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MoshtaryGharardadKalaDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharadadKala", "");
+            retrofitResponse.onFailed(Constants.HTTP_ERROR(), message);
+
+        } else {
+            Log.i("fetchMoshtaryGharardadkala", "fetchMoshtaryGharardadkala" + serverIpModel.getServerIp() + " " + serverIpModel.getPort());
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllMoshtaryGharardadKalaResult> call = apiServiceGet.getMoshtaryGharardadKala((String.valueOf(ccSazmanForosh)), (String.valueOf(ccMoshtaryGharardad)));
+
+            try {
+                Response<GetAllMoshtaryGharardadKalaResult> response = call.execute();
+                try {
+                    if (response.raw().body() != null) {
+                        long contentLength = response.raw().body().contentLength();
+                        PubFunc.Logger logger = new PubFunc().new Logger();
+                        Log.i("GET__RESPONSE_MOSHTARY_GHARARDAD_KALA", "onResponse: Response is not Null");
+                        logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, MoshtaryGharardadKalaDAO.class.getSimpleName(), "", "fetchMoshtaryGharadadKala", "onResponse");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.i("GET__RESPONSE_MOSHTARY_GHARARDAD_KALA", "exception in response.raw().body()");
+                }
+                try {
+
+                    if (response.isSuccessful()) {
+                        GetAllMoshtaryGharardadKalaResult result = response.body();
+                        if (result != null) {
+                            if (result.getSuccess()) {
+                                result.setData(result.getData());
+                                if (result.getData() != null) {
+                                    if (result.getData().size() > 0) {
+                                        Log.i("GET__RESPONSE_MOSHTARY_GHARARDAD_KALA", "onResponse: getTheResponse" + result.getData().get(0).getCcKalaCode() + " " + response.body());
+                                        retrofitResponse.onSuccess(result.getData());
+
+                                    }
+                                }
+                            } else {
+                                Log.i("GET__RESPONSE_MOSHTARY_GHARARDAD_KALA", "onResponse: resultNotSuccessfull");
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), MoshtaryGharardadKalaDAO.class.getSimpleName(), activityNameForLog, "fetchKalaOlaviat", "onResponse");
+                                retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
+                            }
+
+                        } else {
+                            Log.i("GET__RESPONSE_MOSHTARY_GHARARDAD_KALA", "onResponse: retrofit result is null");
+                            String endpoint = getEndpoint(call);
+                            PubFunc.Logger logger = new PubFunc().new Logger();
+                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", context.getResources().getString(R.string.resultIsNull), endpoint), MoshtaryGharardadKalaDAO.class.getSimpleName(), activityNameForLog, "fetchKalaOlaviat", "onResponse");
+                            retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
+                        }
+
+                    } else {
+                        Log.i("GET__RESPONSE_MOSHTARY_GHARARDAD_KALA", "onResponse: failed on Api Call");
+                        String endpoint = getEndpoint(call);
+                        String message = String.format("error body : %1$s , code : %2$s * %3$s", response.message(), response.code(), endpoint);
+                        PubFunc.Logger logger = new PubFunc().new Logger();
+                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MoshtaryGharardadKalaDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardadkala", "onResponse");
+                        retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), message);
+                    }
+                } catch (Exception exception) {
+                    Log.i("GET__RESPONSE_MOSHTARY_GHARARDAD_KALA", "onResponse: checking weather response is successfull" + exception.getMessage());
+                    exception.printStackTrace();
+                    PubFunc.Logger logger = new PubFunc().new Logger();
+                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), MoshtaryGharardadKalaDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardadkala", "onResponse");
+                    retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION(), exception.toString());
+                }
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.i("GET__RESPONSE_MOSHTARY_GHARARDAD_KALA", "onFailure: 8");
+                String endpoint = getEndpoint(call);
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", e.getMessage(), endpoint), MoshtaryGharardadKalaDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardadkala", "onFailure");
+                retrofitResponse.onFailed(Constants.RETROFIT_THROWABLE(), e.getMessage());
+
+            }
+
+
+        }
+
+
+    }
+
+
     private String getEndpoint(Call call) {
         String endpoint = "";
         try {

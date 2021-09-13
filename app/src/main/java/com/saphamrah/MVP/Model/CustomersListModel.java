@@ -519,7 +519,7 @@ public class CustomersListModel implements CustomersListMVP.ModelOps {
 
     public void getAllMoshtaryGharardad(String ccForoshandeh, AllMoshtaryForoshandehModel moshtaryForoshandehModel) {
         MoshtaryGharardadDAO moshtaryGharardadDAO = new MoshtaryGharardadDAO(mPresenter.getAppContext());
-        moshtaryGharardadDAO.fetchMoshtaryGharardad(mPresenter.getAppContext(), activityNameForLog, ccForoshandeh, new RetrofitResponse() {
+        moshtaryGharardadDAO.fetchMoshtaryGharardadASync(mPresenter.getAppContext(), activityNameForLog, ccForoshandeh, new RetrofitResponse() {
             @Override
             public void onSuccess(ArrayList arrayListData) {
 

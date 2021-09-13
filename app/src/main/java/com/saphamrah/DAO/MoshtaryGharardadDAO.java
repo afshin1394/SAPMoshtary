@@ -10,7 +10,6 @@ import android.util.Log;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.MoshtaryGharardadKalaModel;
 import com.saphamrah.Model.MoshtaryGharardadModel;
-import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
@@ -20,6 +19,7 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllMoshtaryGharardadResult;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +72,7 @@ public class MoshtaryGharardadDAO {
     }
 
     @SuppressLint("LongLogTag")
-    public void fetchMoshtaryGharardad(final Context context, final String activityNameForLog, String ccForoshandeh, final RetrofitResponse retrofitResponse) {
+    public void fetchMoshtaryGharardadASync(final Context context, final String activityNameForLog, String ccForoshandeh, final RetrofitResponse retrofitResponse) {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
 
         Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "fetchMoshtaryGhararDad: " + serverIpModel.getServerIp().trim() + " " + serverIpModel.getPort().trim() + " ");
@@ -155,7 +155,7 @@ public class MoshtaryGharardadDAO {
 
 
     @SuppressLint("LongLogTag")
-    public void fetchMoshtaryGharardad(final Context context, final String activityNameForLog, int ccForoshandeh,int ccMoshtaryGharardad,int ccSazmanForosh, final RetrofitResponse retrofitResponse) {
+    public void fetchMoshtaryGharardadSync(final Context context, final String activityNameForLog, int ccForoshandeh, int ccMoshtaryGharardad, int ccSazmanForosh, RetrofitResponse retrofitResponse) {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
 
         Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "fetchMoshtaryGhararDad: " + serverIpModel.getServerIp().trim() + " " + serverIpModel.getPort().trim() + " ");
@@ -164,76 +164,78 @@ public class MoshtaryGharardadDAO {
             PubFunc.Logger logger = new PubFunc().new Logger();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "");
             retrofitResponse.onFailed(Constants.HTTP_ERROR(), message);
-            Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "fetchMoshtaryGhararDad: " + serverIpModel.getServerIp().trim() + " " + serverIpModel.getPort().trim() + " ");
+
 
         } else {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
             Log.i("HDAPDJOPWJ", "fetchMoshtaryGhararDad: " + serverIpModel.getPort() + " " + serverIpModel.getServerIp());
-            Call<GetAllMoshtaryGharardadResult> call = apiServiceGet.getMoshtaryGharardad(String.valueOf(ccForoshandeh),ccMoshtaryGharardad,ccSazmanForosh);
+            Call<GetAllMoshtaryGharardadResult> call = apiServiceGet.getMoshtaryGharardad(String.valueOf(ccForoshandeh), ccMoshtaryGharardad, ccSazmanForosh);
 
             Log.i("urlOfCall", "fetchMoshtaryGhararDad: " + call.request().url());
+            try {
+                Response<GetAllMoshtaryGharardadResult> response = call.execute();
 
-            call.enqueue(new Callback<GetAllMoshtaryGharardadResult>() {
-                @Override
-                public void onResponse(Call<GetAllMoshtaryGharardadResult> call, Response<GetAllMoshtaryGharardadResult> response) {
-                    Log.i("messsages", "onResponse: " + response.message());
-                    try {
-                        if (response.raw().body() != null) {
-                            long contentLength = response.raw().body().contentLength();
-                            PubFunc.Logger logger = new PubFunc().new Logger();
-                            logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, MoshtaryGharardadDAO.class.getSimpleName(), "", "fetchMoshtaryGhararDadKala", "onResponse");
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+
+                try {
+                    if (response.raw().body() != null) {
+                        long contentLength = response.raw().body().contentLength();
+                        PubFunc.Logger logger = new PubFunc().new Logger();
+                        logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, MoshtaryGharardadDAO.class.getSimpleName(), "", "fetchMoshtaryGhararDadKala", "onResponse");
                     }
-                    try {
-                        if (response.isSuccessful()) {
-                            Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP2: " + response.isSuccessful());
-                            GetAllMoshtaryGharardadResult result = response.body();
-                            if (result != null) {
-                                if (result.getSuccess()) {
-                                    Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP4: " + result.getSuccess());
-                                    retrofitResponse.onSuccess(result.getData());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP2: " + response.isSuccessful());
+                        GetAllMoshtaryGharardadResult result = response.body();
+                        if (result != null) {
+                            if (result.getSuccess()) {
+                                Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP4: " + result.getSuccess());
+                                retrofitResponse.onSuccess(result.getData());
 
-                                } else {
-                                    Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP6:" + result.getSuccess());
-                                    PubFunc.Logger logger = new PubFunc().new Logger();
-                                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onResponse");
-                                    retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
-                                }
                             } else {
-                                Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP6: result null");
+                                Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP6:" + result.getSuccess());
                                 PubFunc.Logger logger = new PubFunc().new Logger();
-                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), context.getResources().getString(R.string.resultIsNull), MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onResponse");
-                                retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
+                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onResponse");
+                                retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
                             }
                         } else {
                             Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP6: result null");
-                            String message = String.format("error body : %1$s , code : %2$s", response.message(), response.code());
                             PubFunc.Logger logger = new PubFunc().new Logger();
-                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onResponse");
-                            retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), message);
+                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), context.getResources().getString(R.string.resultIsNull), MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onResponse");
+                            retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
+
                         }
-                    }
-                    catch (Exception exception) {
-                        Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP7: Exception in Request");
-                        exception.printStackTrace();
+                    } else {
+                        Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP6: result null");
+                        String message = String.format("error body : %1$s , code : %2$s", response.message(), response.code());
                         PubFunc.Logger logger = new PubFunc().new Logger();
-                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onResponse");
-                        retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION(), exception.toString());
+                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onResponse");
+                        retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), message);
+
                     }
+                } catch (Exception exception) {
+                    Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP7: Exception in Request");
+                    exception.printStackTrace();
+                    PubFunc.Logger logger = new PubFunc().new Logger();
+                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onResponse");
+                    retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION(), exception.toString());
+
                 }
 
-                @Override
-                public void onFailure(Call<GetAllMoshtaryGharardadResult> call, Throwable t) {
-                    Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP8: fail 404 or 403" + t.getMessage());
-                    PubFunc.Logger logger = new PubFunc().new Logger();
-                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), t.getMessage(), MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onFailure");
-                    retrofitResponse.onFailed(Constants.RETROFIT_THROWABLE(), t.getMessage());
-                }
-            });
+
+            } catch (Exception exception) {
+                Log.i("IN_FETCH_MOSHTARY_GHARARDAD", "STEP7: Exception in Request");
+                exception.printStackTrace();
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), MoshtaryGharardadDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryGharardad", "onResponse");
+                retrofitResponse.onFailed(Constants.RETROFIT_THROWABLE(), exception.getMessage());
+
+            }
         }
     }
+
 
 
     @SuppressLint("LongLogTag")
@@ -362,13 +364,16 @@ public static final String GET_ALL_CCGHARARDAD_SAZMANFOROSH="getAllCCGharardadSa
 
     }
     public boolean insertGroup(ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels) {
+        Log.i("getProgram", "insertGroup moshtaryGharardadModels: " + moshtaryGharardadModels + " " );
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
             db.beginTransaction();
             for (MoshtaryGharardadModel moshtaryGharardadModel : moshtaryGharardadModels) {
                 ContentValues contentValues = modelToContentvalue(moshtaryGharardadModel);
                 db.insertOrThrow(MoshtaryGharardadModel.TableName(), null, contentValues);
+
             }
+
             db.setTransactionSuccessful();
             db.endTransaction();
             db.close();
@@ -409,6 +414,10 @@ public static final String GET_ALL_CCGHARARDAD_SAZMANFOROSH="getAllCCGharardadSa
 
     private static ContentValues modelToContentvalue(MoshtaryGharardadModel moshtaryGharardadModel) {
         ContentValues contentValues = new ContentValues();
+
+        try {
+
+
         contentValues.put(MoshtaryGharardadModel.COLUMN_Radif(), moshtaryGharardadModel.getRadif());
         contentValues.put(MoshtaryGharardadModel.COLUMN_ccMoshtaryGharardad(), moshtaryGharardadModel.getCcMoshtaryGharardad());
         contentValues.put(MoshtaryGharardadModel.COLUMN_ccMoshtary(), moshtaryGharardadModel.getCcMoshtary());
@@ -425,11 +434,16 @@ public static final String GET_ALL_CCGHARARDAD_SAZMANFOROSH="getAllCCGharardadSa
         contentValues.put(MoshtaryGharardadModel.COLUMN_ModatVosol(), moshtaryGharardadModel.getModatVosol());
         contentValues.put(MoshtaryGharardadModel.COLUMN_ModatTakhirMojaz(), moshtaryGharardadModel.getModatTakhirMojaz());
         contentValues.put(MoshtaryGharardadModel.COLUMN_ccDarkhastFaktorNoeForosh(), moshtaryGharardadModel.getCcDarkhastFaktorNoeForosh());
+        contentValues.put(MoshtaryGharardadModel.COLUMN_CodeNoeVosolAzMoshtary(), moshtaryGharardadModel.getCodeNoeVosolAzMoshtary());
         contentValues.put(MoshtaryGharardadModel.COLUMN_NameNoeVosolAzMoshtary(), moshtaryGharardadModel.getNameNoeVosolAzMoshtary());
         contentValues.put(MoshtaryGharardadModel.COLUMN_CcSazmanForosh(), moshtaryGharardadModel.getCcSazmanForosh());
         contentValues.put(MoshtaryGharardadModel.COLUMN_nameSazmanForosh(), moshtaryGharardadModel.getNameSazmanForosh());
 
+        }catch (Exception e){
+            Log.i("exceptionnn", "modelToContentvalue: "+e.getMessage());
+        }
         return contentValues;
+
     }
 
     private ArrayList<MoshtaryGharardadModel> cursorToModel(Cursor cursor) {
@@ -441,9 +455,11 @@ public static final String GET_ALL_CCGHARARDAD_SAZMANFOROSH="getAllCCGharardadSa
 
 
             moshtaryGharardadModel.setRadif(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_Radif())));
+            moshtaryGharardadModel.setCcMoshtaryGharardad(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ccMoshtaryGharardad())));
             moshtaryGharardadModel.setCcMoshtary(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ccMoshtaryGharardad())));
             moshtaryGharardadModel.setCcMoshtaryNoeGharardad(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ccMoshtaryGharardad())));
             moshtaryGharardadModel.setNameMoshtaryNoeGharardad(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_NameMoshtaryNoeGharardad())));
+            moshtaryGharardadModel.setShomarehGharardad(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ShomarehGharardad())));
             moshtaryGharardadModel.setTarikhGharardad(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_TarikhGharardad())));
             moshtaryGharardadModel.setFromDate(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_FromDate())));
             moshtaryGharardadModel.setEndDate(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_EndDate())));
@@ -452,14 +468,12 @@ public static final String GET_ALL_CCGHARARDAD_SAZMANFOROSH="getAllCCGharardadSa
             moshtaryGharardadModel.setNameNoeVisit(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_NameNoeVisit())));
             moshtaryGharardadModel.setCodeNoeHaml(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_CodeNoeHaml())));
             moshtaryGharardadModel.setModatVosol(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ModatVosol())));
-            moshtaryGharardadModel.setModatVosol(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ModatTakhirMojaz())));
+            moshtaryGharardadModel.setModatTakhirMojaz(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ModatTakhirMojaz())));
             moshtaryGharardadModel.setCcDarkhastFaktorNoeForosh(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ccDarkhastFaktorNoeForosh())));
             moshtaryGharardadModel.setCodeNoeVosolAzMoshtary(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_CodeNoeVosolAzMoshtary())));
             moshtaryGharardadModel.setNameNoeVosolAzMoshtary(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_NameNoeVosolAzMoshtary())));
             moshtaryGharardadModel.setCcSazmanForosh(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_CcSazmanForosh())));
             moshtaryGharardadModel.setNameSazmanForosh(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.getCOLUMN_NameSazmanForosh())));
-            moshtaryGharardadModel.setShomarehGharardad(cursor.getString(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ShomarehGharardad())));
-            moshtaryGharardadModel.setCcMoshtaryGharardad(cursor.getInt(cursor.getColumnIndex(MoshtaryGharardadModel.COLUMN_ccMoshtaryGharardad())));
 
             moshtaryGharardadModels.add(moshtaryGharardadModel);
             cursor.moveToNext();
