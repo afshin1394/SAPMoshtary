@@ -351,6 +351,7 @@
         <item>{\"name\":\"اطلاعات مسیر\" , \"function\":\"getMasirVaznHajmMashin\"}</item>
         <item>{\"name\":\"اطلاعات نوع وصول\" , \"function\":\"getNoeVosolMoshtary\"}</item>
         <item>{\"name\":\"مشتری مراجعه شده\" , \"function\":\"getMoshtaryMorajeShodehRooz\"}</item>
+        <item>{\"name\":\"ضریب فروش کالا\" , \"function\":\"getKalaZaribForosh\"}</item>
         <item>{\"name\":\"قرارداد مشتری\" , \"functdion\":\"getAllMoshtaryGharardad\"}</item>
         <item>{\"name\":\"کالا مصوبه قرارداد\" , \"functdion\":\"getAllKalaMosavab\"}</item>
     </string-array>

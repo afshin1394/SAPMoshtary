@@ -235,7 +235,7 @@ Call<GetImageStringResult> call = apiServiceGet.getImageStringForMamorPakhsh(ccD
         else
         {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-Call<GetImageJsonResult> call = apiServiceGet.getImageJSON(ccDarkhastFaktor , ccDarkhastHavaleh);
+            Call<GetImageJsonResult> call = apiServiceGet.getImageJSON(ccDarkhastFaktor , ccDarkhastHavaleh);
             call.enqueue(new Callback<GetImageJsonResult>() {
                 @Override
                 public void onResponse(Call<GetImageJsonResult> call, Response<GetImageJsonResult> response)

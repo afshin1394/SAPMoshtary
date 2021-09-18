@@ -317,6 +317,47 @@ public class KalaZaribForoshDAO
         }
     }
 
+
+    public boolean deleteByccKalaZaribForosh(int ccKalaZaribForosh)
+    {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.delete(KalaZaribForoshModel.TableName(), KalaZaribForoshModel.COLUMN_ccKalaZaribForosh() + " = " + ccKalaZaribForosh, null) ;
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , KalaZaribForoshModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaZaribForoshDAO" , "" , "deleteByccKalaZaribForosh" , "");
+            return false;
+        }
+    }
+
+
+    public boolean deleteByccGoroh(String ccGoroh) {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.delete(KalaZaribForoshModel.TableName(), KalaZaribForoshModel.COLUMN_ccKalaZaribForosh() + " in ( " + ccGoroh + " ) ", null) ;
+            db.execSQL("delete from "+KalaZaribForoshModel.TableName()+" where "+KalaZaribForoshModel.COLUMN_ccGorohMoshtary() + " in ("+ccGoroh+")");
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , KalaZaribForoshModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaZaribForoshDAO" , "" , "deleteByccGoroh" , "");
+            return false;
+        }
+
+    }
+
+
+
     private static ContentValues modelToContentvalue(KalaZaribForoshModel kalaZaribForoshModel)
     {
         ContentValues contentValues = new ContentValues();

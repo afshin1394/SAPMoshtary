@@ -812,6 +812,38 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
         }
         return count;
     }
+    public String getAllccNoeMoshtaryByccMoshtary(int ccMoshtary)
+    {
+        String ccNoeMoshtary = "";
+        try
+        {
+            String query = "select distinct ccNoeMoshtary as ccGorohs from Moshtary where " + MoshtaryModel.COLUMN_ccMoshtary() + " = " + ccMoshtary;
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    ccNoeMoshtary = cursor.getString(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , MoshtaryModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, LogPPCModel.LOG_EXCEPTION, message, "MoshtaryDAO" , "" , "getByccMoshtary" , "");
+        }
+        if (ccNoeMoshtary == null)
+        {
+            ccNoeMoshtary = "-1";
+        }
+        return ccNoeMoshtary;
+    }
 
 
     public String getAllccNoeSenf()

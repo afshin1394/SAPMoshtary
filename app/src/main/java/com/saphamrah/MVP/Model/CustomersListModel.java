@@ -8,9 +8,11 @@ import android.util.Log;
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.CustomersListMVP;
 import com.saphamrah.DAO.AllMoshtaryForoshandehDAO;
+import com.saphamrah.DAO.AnbarakAfradDAO;
 import com.saphamrah.DAO.BargashtyDAO;
 import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
+import com.saphamrah.DAO.KalaZaribForoshDAO;
 import com.saphamrah.DAO.MasirDAO;
 import com.saphamrah.DAO.MasirVaznHajmMashinDAO;
 import com.saphamrah.DAO.ModatVosolDAO;
@@ -24,9 +26,12 @@ import com.saphamrah.DAO.MoshtaryGharardadDAO;
 import com.saphamrah.DAO.MoshtaryGharardadKalaDAO;
 import com.saphamrah.DAO.MoshtaryMorajehShodehRoozDAO;
 import com.saphamrah.DAO.NoeVosolMoshtaryDAO;
+import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.Model.AllMoshtaryForoshandehModel;
+import com.saphamrah.Model.AnbarakAfradModel;
 import com.saphamrah.Model.BargashtyModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
+import com.saphamrah.Model.KalaZaribForoshModel;
 import com.saphamrah.Model.MasirModel;
 import com.saphamrah.Model.ModatVosolGorohModel;
 import com.saphamrah.Model.ModatVosolMarkazModel;
@@ -38,10 +43,6 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -103,6 +104,7 @@ public class CustomersListModel implements CustomersListMVP.ModelOps {
     private int ccMarkazSazmanForosh = 0;
     private int ccSazmanForosh = 0;
     private String ccGorohs;
+    private int noeMoshtary;
 
     @Override
     public void getSelectedCustomerInfo(int position, final AllMoshtaryForoshandehModel allMoshtaryForoshandehModel) {
@@ -173,6 +175,7 @@ public class CustomersListModel implements CustomersListMVP.ModelOps {
                         if (arrayListData.size() > 0) {
                             MoshtaryModel model = (MoshtaryModel) arrayListData.get(0);
                             int ccMoshtary = model.getCcMoshtary();
+                            noeMoshtary = model.getCcNoeMoshtary();
                             moshtaryDAO.deleteByccMoshtary(ccMoshtary);
                             ((MoshtaryModel) arrayListData.get(0)).setExtraProp_MoshtaryMojazKharejAzMasir(1);
                             ((MoshtaryModel) arrayListData.get(0)).setExtraProp_IsOld(1);
@@ -475,6 +478,8 @@ public class CustomersListModel implements CustomersListMVP.ModelOps {
 
     private void getMoshtaryMorajehShodeRooz(AllMoshtaryForoshandehModel moshtaryForoshandehModel) {
         final MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(mPresenter.getAppContext());
+        ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
+
         String ccMasirs = new AllMoshtaryForoshandehDAO(mPresenter.getAppContext()).getAllccMasirsWithComma(ccForoshandeh);
         moshtaryMorajehShodehRoozDAO.fetchMoshtaryMorajehShodehRooz(mPresenter.getAppContext(), "CustomersListActivity", String.valueOf(ccForoshandeh), ccMasirs, new RetrofitResponse() {
             @Override
@@ -487,14 +492,21 @@ public class CustomersListModel implements CustomersListMVP.ModelOps {
                             boolean insertResult = moshtaryMorajehShodehRoozDAO.insertGroup(arrayListData);
                             if (deleteResult && insertResult) {
                                 sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                                //TODO add kala zarib forosh
 
-                                getAllMoshtaryGharardad(String.valueOf(ccForoshandeh), moshtaryForoshandehModel);
+                                getKalaZaribForosh(moshtaryForoshandehModel,ccForoshandeh);
+
+
                             } else {
                                 sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
                             }
+                            //TODO add kala zarib forosh
+
                         } else {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+
+                         getKalaZaribForosh(moshtaryForoshandehModel,ccForoshandeh);
                         }
+
                     }
                 };
                 thread.start();
@@ -507,6 +519,61 @@ public class CustomersListModel implements CustomersListMVP.ModelOps {
         });
     }
 
+    private void getKalaZaribForosh(AllMoshtaryForoshandehModel moshtaryForoshandehModel, int ccForoshandeh) {
+
+        ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
+        AnbarakAfradDAO anbarakAfradDAO = new AnbarakAfradDAO(mPresenter.getAppContext());
+        int ccAnbarak = -1;
+        ArrayList<AnbarakAfradModel> anbarakAfradModels= anbarakAfradDAO.getByccAfradForoshandeh(ccForoshandeh);
+        if (anbarakAfradModels.size()>0)
+        {
+             ccAnbarak = anbarakAfradDAO.getByccAfradForoshandeh(ccForoshandeh).get(0).getCcAnbarak();
+        }
+        KalaZaribForoshDAO kalaZaribForoshDAO = new KalaZaribForoshDAO(mPresenter.getAppContext());
+        kalaZaribForoshDAO.fetchKalaZaribForosh(mPresenter.getAppContext(), activityNameForLog,
+                ccAnbarak,
+                ccForoshandeh,
+                0,
+                String.valueOf(noeMoshtary),
+                new RetrofitResponse() {
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData) {
+                        Thread thread = new Thread() {
+                            @Override
+                            public void run() {
+                                boolean deleteResult = true;
+                                ArrayList<KalaZaribForoshModel> kalaZaribForoshModels = arrayListData;
+                                if (kalaZaribForoshModels!=null)
+                                {
+                                     deleteResult  =  kalaZaribForoshDAO.deleteByccGoroh(String.valueOf(noeMoshtary));
+                                }
+                                boolean insertResult = kalaZaribForoshDAO.insertGroup(arrayListData);
+
+                                if (deleteResult && insertResult) {
+                                    sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                                    if (noeMoshtary ==  Integer.parseInt(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE())))
+                                        getAllMoshtaryGharardad(moshtaryForoshandehModel);
+                                    else{
+                                        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                                        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                                    }
+                                } else {
+                                    sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+                                }
+                            }
+                        };
+                        thread.start();
+                    }
+
+                    @Override
+                    public void onFailed(String type, String error) {
+                        mPresenter.onFailedGetNewItem(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
+                    }
+                });
+
+
+    }
+
     public final String GET_ALL_MOSHTARY_GHARARDAD_TAG = "__GET_ALL_GHARAR_DAD__";
 
     /**
@@ -517,9 +584,9 @@ public class CustomersListModel implements CustomersListMVP.ModelOps {
      * @param ccForoshandeh:each person in System has a cc
      */
 
-    public void getAllMoshtaryGharardad(String ccForoshandeh, AllMoshtaryForoshandehModel moshtaryForoshandehModel) {
+    public void getAllMoshtaryGharardad( AllMoshtaryForoshandehModel moshtaryForoshandehModel) {
         MoshtaryGharardadDAO moshtaryGharardadDAO = new MoshtaryGharardadDAO(mPresenter.getAppContext());
-        moshtaryGharardadDAO.fetchMoshtaryGharardadASync(mPresenter.getAppContext(), activityNameForLog, ccForoshandeh, new RetrofitResponse() {
+        moshtaryGharardadDAO.fetchMoshtaryGharardadASync(mPresenter.getAppContext(), activityNameForLog, String.valueOf(moshtaryForoshandehModel.getCcForoshandeh()), new RetrofitResponse() {
             @Override
             public void onSuccess(ArrayList arrayListData) {
 
