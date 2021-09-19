@@ -551,13 +551,17 @@ public class CustomersListModel implements CustomersListMVP.ModelOps {
 
                                 if (deleteResult && insertResult) {
                                     sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                                    Log.d("CustomerListModel", "noeMoshtary:"  + noeMoshtary + "," + itemCounter);
                                     if (noeMoshtary ==  Integer.parseInt(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE())))
                                         getAllMoshtaryGharardad(moshtaryForoshandehModel);
                                     else{
+                                        Log.d("CustomerListModel", "itemCounter before:"  + itemCounter);
                                         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                                         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                                        Log.d("CustomerListModel", "itemCounter after:"  + itemCounter);
                                     }
                                 } else {
+                                    sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                                     sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
                                 }
                             }
