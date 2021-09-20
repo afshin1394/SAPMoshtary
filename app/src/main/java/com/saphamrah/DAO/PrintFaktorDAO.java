@@ -173,6 +173,8 @@ public class PrintFaktorDAO
                 modelGetTABLE_NAME.getCOLUMN_Radif(),
                 modelGetTABLE_NAME.getCOLUMN_ShomarehFaktor(),
                 modelGetTABLE_NAME.getCOLUMN_UniqID_Tablet(),
+                modelGetTABLE_NAME.getCOLUMN_FaktorImage(),
+                modelGetTABLE_NAME.getCOLUMN_ccDarkhastFaktorNoeForosh(),
         };
     }
 
@@ -274,6 +276,8 @@ public class PrintFaktorDAO
         contentValues.put(printFaktorModel.getCOLUMN_ShomarehFaktor() , model.getShomarehFaktor());
         contentValues.put(printFaktorModel.getCOLUMN_Radif() , model.getRadif());
         contentValues.put(printFaktorModel.getCOLUMN_UniqID_Tablet() , model.getUniqID_Tablet());
+        contentValues.put(printFaktorModel.getCOLUMN_FaktorImage() , model.getFaktorImage());
+        contentValues.put(printFaktorModel.getCOLUMN_ccDarkhastFaktorNoeForosh() , model.getCcDarkhastFaktorNoeForosh());
 
 
         return contentValues;
@@ -297,6 +301,8 @@ public class PrintFaktorDAO
             model.setShomarehFaktor(cursor.getString(cursor.getColumnIndex(model.getCOLUMN_ShomarehFaktor())));
             model.setUniqID_Tablet(cursor.getString(cursor.getColumnIndex(model.getCOLUMN_UniqID_Tablet())));
             model.setRadif(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_Radif())));
+            model.setCcDarkhastFaktorNoeForosh(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_ccDarkhastFaktorNoeForosh())));
+            model.setFaktorImage(cursor.getString(cursor.getColumnIndex(model.getCOLUMN_FaktorImage())));
 
             models.add(model);
             cursor.moveToNext();

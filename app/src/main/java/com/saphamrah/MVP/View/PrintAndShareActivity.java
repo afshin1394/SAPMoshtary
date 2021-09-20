@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,11 +33,13 @@ import com.saphamrah.MVP.Presenter.PrintAndSharePresenter;
 import com.saphamrah.Adapter.PrintAndShareAdapter;
 import com.saphamrah.Model.PrintFaktorModel;
 import com.saphamrah.Model.SystemConfigTabletModel;
+import com.saphamrah.PubFunc.ImageUtils;
 import com.saphamrah.R;
 import com.saphamrah.Service.BluetoothPrintService;
 import com.saphamrah.Utils.BixolonPrinter;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
+import com.saphamrah.Utils.CustomAlertDialogResponse;
 import com.saphamrah.Utils.CustomLoadingDialog;
 import com.saphamrah.Utils.Printer;
 import com.saphamrah.Utils.UrovoPrinter;
@@ -96,6 +99,12 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
         customLoadingDialog = new CustomLoadingDialog();
         customAlertDialog = new CustomAlertDialog(PrintAndShareActivity.this);
 
+        File tempdir = dir;
+        if (!tempdir.exists())
+        {
+            tempdir.mkdirs();
+        }
+
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null)
         {
@@ -113,21 +122,47 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
      */
     private void setRecycler() {
         adapter = new PrintAndShareAdapter(BaseApplication.getContext(), printFaktorModels, (action, position) -> {
+            String fileName = "Print-" + printFaktorModels.get(position).getUniqID_Tablet() + ".jpg";
+
+            boolean isFileExists = checkFileExists(printFaktorModels.get(position), fileName);
             if (action == Constants.PRINT()) {
-                try {
-                    Resize(position);
-                } catch (Exception e){
-                    e.getMessage();
+                if (isFileExists){
+                    try {
+                        Resize(fileName);
+                    } catch (Exception e){
+                        e.getMessage();
+                        showToast(R.string.errorHaveNotImageForPrint, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                    }
+                    boolean check = setPrinter(position);
+                    if (check) {
+                        String PathFaktorImage = Environment.getExternalStorageDirectory() + "/SapHamrah/Print/Print-" + printFaktorModels.get(position).getUniqID_Tablet() + ".jpg";
+                        printer.print(PathFaktorImage);
+                    }
+                } else {
                     showToast(R.string.errorHaveNotImageForPrint, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
                 }
 
-                boolean check = setPrinter(position);
-                if (check) {
-                    String PathFaktorImage = Environment.getExternalStorageDirectory() + "/SapHamrah/Print/Print-" + printFaktorModels.get(position).getUniqID_Tablet() + ".jpg";
-                    printer.print(PathFaktorImage);
-                }
             } else if (action == Constants.SHARE) {
-                openShare(printFaktorModels, position);
+                if (isFileExists) {
+                    openShare(fileName);
+                } else {
+                    showToast(R.string.errorHaveNotImageForPrint, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                }
+
+            } else if (action == Constants.IMAGE){
+                byte[] image = Base64.decode(printFaktorModels.get(position).getFaktorImage(), Base64.NO_WRAP);
+
+                customAlertDialog.showImage(PrintAndShareActivity.this,image , false, new CustomAlertDialogResponse() {
+                    @Override
+                    public void setOnCancelClick() {
+
+                    }
+
+                    @Override
+                    public void setOnApplyClick() {
+
+                    }
+                });
             }
 
         });
@@ -138,22 +173,37 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
         recyclerView.setAdapter(adapter);
     }
 
+    private boolean checkFileExists(PrintFaktorModel model , String fileName){
+        boolean fileExists = false;
+        File file = new File(dir, fileName);
+        if (file.exists()) {
+            fileExists = true;
+        }
+        else if (model.getCcDarkhastFaktorNoeForosh() == Constants.ccNoeFaktor) {
+            ImageUtils imageUtils = new ImageUtils();
+            byte[] image = Base64.decode(model.getFaktorImage(), Base64.NO_WRAP);
+            imageUtils.bitmapToFile(image, dir + "/" + fileName, dir.toString());
+
+//            file = new File(dir, fileName);
+
+            fileExists = file.exists();
+
+        }
+
+
+        return fileExists;
+    }
+
     /**
      * open activity for share faktor
      *
-     * @param models
-     * @param position
      */
-    private void openShare(ArrayList<PrintFaktorModel> models, int position) {
+    private void openShare(String fileName) {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
 
-        String fileName = "Print-" + models.get(position).getUniqID_Tablet() + ".jpg";
-        File file = new File(dir, fileName);
-
-        if (file.exists()) {
-
+            File file = new File(dir, fileName);
             Uri outputFileUri = Uri.fromFile(file);
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -161,10 +211,9 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
             intent.setType("image/jpg");
             intent.putExtra(Intent.EXTRA_STREAM, outputFileUri);
             startActivity(Intent.createChooser(intent, " اشتراک گذاری فاکتور... "));
-        } else {
-            showToast(R.string.errorHaveNotImageForPrint, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
         }
-    }
+
+
 
     /**
      * setup printer for print
@@ -193,67 +242,58 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
     /**
      * resize pic before print
      */
-    public void Resize(int position)
+    public void Resize(String fileName)
     {
         float Zarib = 0;
         int ResizeWidth = 0, ResizeHeight = 0;
         int quality = 100;
-        String mPath = Environment.getExternalStorageDirectory() + "/SapHamrah/Print";
-        mPath = mPath + "/Print-" + printFaktorModels.get(position).getUniqID_Tablet() + ".jpg";
-        //-----------------resize-------------------------
-        Bitmap tmp = BitmapFactory.decodeFile(mPath);
-        int printerSize = systemconfig_tabletDAO.getAll().get(0).getSizePrint();
-        if (printerSize == 384)
-        {
-            Zarib = (float) 384 / (tmp.getWidth());
-            ResizeWidth = (int) (tmp.getWidth() * Zarib);
-            ResizeHeight = (int) (tmp.getHeight() * Zarib);
-        }
-        else if (printerSize == 576)
-        {
-            Zarib = (float) 576 / (tmp.getWidth());
-            ResizeWidth = (int) (tmp.getWidth() * Zarib);
-            ResizeHeight = (int) (tmp.getHeight() * Zarib);
-        }
-        else if (printerSize == 832)
-        {
-            Zarib = (float) 832 / (tmp.getWidth());
-            ResizeWidth = (int) (tmp.getWidth() * Zarib);
-            ResizeHeight = (int) (tmp.getHeight() * Zarib);
-        }
 
-        Bitmap bitmap = Bitmap.createBitmap(ResizeWidth, ResizeHeight, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
+            //-----------------resize-------------------------
+            Bitmap tmp = BitmapFactory.decodeFile(dir + "/" + fileName);
+            int printerSize = systemconfig_tabletDAO.getAll().get(0).getSizePrint();
+            if (printerSize == 384) {
+                Zarib = (float) 384 / (tmp.getWidth());
+                ResizeWidth = (int) (tmp.getWidth() * Zarib);
+                ResizeHeight = (int) (tmp.getHeight() * Zarib);
+            } else if (printerSize == 576) {
+                Zarib = (float) 576 / (tmp.getWidth());
+                ResizeWidth = (int) (tmp.getWidth() * Zarib);
+                ResizeHeight = (int) (tmp.getHeight() * Zarib);
+            } else if (printerSize == 832) {
+                Zarib = (float) 832 / (tmp.getWidth());
+                ResizeWidth = (int) (tmp.getWidth() * Zarib);
+                ResizeHeight = (int) (tmp.getHeight() * Zarib);
+            }
+
+            Bitmap bitmap = Bitmap.createBitmap(ResizeWidth, ResizeHeight, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
 
 
-        Bitmap scaled = Bitmap.createScaledBitmap(tmp, ResizeWidth, ResizeHeight, true);
-        int leftOffset = 0;//(bitmap.getWidth() - scaled.getWidth()) / 2;
-        int topOffset = 0;
-        canvas.drawBitmap(scaled, leftOffset, topOffset, null);
+            Bitmap scaled = Bitmap.createScaledBitmap(tmp, ResizeWidth, ResizeHeight, true);
+            int leftOffset = 0;//(bitmap.getWidth() - scaled.getWidth()) / 2;
+            int topOffset = 0;
+            canvas.drawBitmap(scaled, leftOffset, topOffset, null);
 
-        File imageFile = new File(mPath);
+            File imageFile = new File(dir + "/" + fileName);
 
 
-        FileOutputStream outStream;
+            FileOutputStream outStream;
 
-        try
-        {
-            outStream = new FileOutputStream(imageFile);
+            try {
+                outStream = new FileOutputStream(imageFile);
 
-            try
-            {
-                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outStream);
-                outStream.flush();
-                outStream.close();
-            } catch (IOException e)
-            {
+                try {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outStream);
+                    outStream.flush();
+                    outStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
     }
 
 

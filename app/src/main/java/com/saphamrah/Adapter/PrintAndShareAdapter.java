@@ -81,8 +81,11 @@ public class PrintAndShareAdapter extends RecyclerSwipeAdapter<PrintAndShareAdap
 
         private ImageView imgShare;
 
+        private ImageView imgImage;
+
         private RelativeLayout layPrint;
         private RelativeLayout layShare;
+        private RelativeLayout layImage;
 
 
         public ViewHolder(View view)
@@ -96,10 +99,12 @@ public class PrintAndShareAdapter extends RecyclerSwipeAdapter<PrintAndShareAdap
             lblInvoiceCostAndShomarehFaktor = view.findViewById(R.id.lblInvoiceCostAndShomarehFaktor);
             imgPrint = view.findViewById(R.id.imgPrint);
             imgShare = view.findViewById(R.id.imgShare);
+            imgImage = view.findViewById(R.id.imgImage);
 
 
             layPrint = view.findViewById(R.id.layPrint);
             layShare = view.findViewById(R.id.layShare);
+            layImage = view.findViewById(R.id.layImage);
 
 
             lblRadif.setTypeface(font);
@@ -120,6 +125,11 @@ public class PrintAndShareAdapter extends RecyclerSwipeAdapter<PrintAndShareAdap
                 listener.onItemClick(Constants.SHARE, position);
                 swipeLayout.close(true);
             });
+            layImage.setOnClickListener(v->{
+                listener.onItemClick(Constants.IMAGE , position);
+                swipeLayout.close(true);
+            });
+
 
         }
     }

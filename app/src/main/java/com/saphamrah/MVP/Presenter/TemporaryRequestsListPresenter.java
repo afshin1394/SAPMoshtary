@@ -199,9 +199,9 @@ public class TemporaryRequestsListPresenter implements TemporaryRequestsListMVP.
     }
 
     @Override
-    public void onCheckSaveImage(long ccDarkhastFaktor)
+    public void onCheckSaveImage(long ccDarkhastFaktor,int type)
     {
-        mView.get().openSaveImageActivity(ccDarkhastFaktor);
+        mView.get().openSaveImageActivity(ccDarkhastFaktor,type);
     }
 
     @Override

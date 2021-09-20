@@ -21,7 +21,7 @@ public interface TemporaryRequestsListMVP
         void showSendAlert(int position , CustomerDarkhastFaktorModel customerDarkhastFaktorModel);
         void onSuccessDeleteTempRequest(int position);
         void openPrintActivity(long ccDarkhastFaktor);
-        void openSaveImageActivity(long ccDarkhastFaktor);
+        void openSaveImageActivity(long ccDarkhastFaktor,int type);
         void onSuccessDeleteNoRequest(int position);
         void showDeleteNoRequestAlert(int position , CustomerAdamDarkhastModel customerAdamDarkhastModel);
         void onSuccessSendNoRequest(int position);
@@ -62,7 +62,7 @@ public interface TemporaryRequestsListMVP
         void onConfigurationChanged(TemporaryRequestsListMVP.RequiredViewOps view);
         void onSuccessDeleteTempRequest(int position);
         void onCheckPrint(CustomerDarkhastFaktorModel customerDarkhastFaktorModel);
-        void onCheckSaveImage(long ccDarkhastFaktor);
+        void onCheckSaveImage(long ccDarkhastFaktor,int type);
         void onErrorFindServer();
         void onNetworkError(int errorId);
         void onErrorSendRequest(int errorId,String message);

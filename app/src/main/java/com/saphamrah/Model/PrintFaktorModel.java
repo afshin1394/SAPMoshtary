@@ -28,6 +28,13 @@ public class PrintFaktorModel {
     @SerializedName("Radif")
     @Expose
     private int Radif;
+    @SerializedName("FaktorImage")
+    @Expose
+    private String FaktorImage;
+    @SerializedName("ccDarkhastFaktorNoeForosh")
+    @Expose
+    private int ccDarkhastFaktorNoeForosh;
+
 
 
     public String getCodeMoshtary() {
@@ -78,6 +85,22 @@ public class PrintFaktorModel {
         Radif = radif;
     }
 
+    public String getFaktorImage() {
+        return FaktorImage;
+    }
+
+    public void setFaktorImage(String faktorImage) {
+        FaktorImage = faktorImage;
+    }
+
+    public int getCcDarkhastFaktorNoeForosh() {
+        return ccDarkhastFaktorNoeForosh;
+    }
+
+    public void setCcDarkhastFaktorNoeForosh(int ccDarkhastFaktorNoeForosh) {
+        this.ccDarkhastFaktorNoeForosh = ccDarkhastFaktorNoeForosh;
+    }
+
     public String getTABLE_NAME() {
         return "PrintFaktor";
     }
@@ -104,6 +127,13 @@ public class PrintFaktorModel {
 
     public String getCOLUMN_Radif() {
         return "Radif";
+    }
+
+    public String getCOLUMN_FaktorImage() {
+        return "FaktorImage";
+    }
+    public String getCOLUMN_ccDarkhastFaktorNoeForosh() {
+        return "ccDarkhastFaktorNoeForosh";
     }
 
 

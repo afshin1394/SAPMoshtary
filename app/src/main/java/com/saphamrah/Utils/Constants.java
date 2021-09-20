@@ -377,6 +377,7 @@ public class Constants
     public static final int MARJOEE = 10;
     public static final int SAVE_SEND_LOCATION = 11;
     public static final int SHARE = 12;
+    public static final int IMAGE = 13;
 
 
     public static int DELETE() {

@@ -22,6 +22,7 @@ import com.saphamrah.Adapter.TemporaryNoRequestsAdapter;
 import com.saphamrah.Adapter.TemporaryRequestsAdapter;
 import com.saphamrah.BaseMVP.TemporaryRequestsListMVP;
 import com.saphamrah.MVP.Presenter.TemporaryRequestsListPresenter;
+import com.saphamrah.MVP.printNoe2.PrintNoe2Activity;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.CustomerAdamDarkhastModel;
@@ -234,9 +235,15 @@ public class TemporaryRequestsListActivity extends AppCompatActivity implements 
     }
 
     @Override
-    public void openSaveImageActivity(long ccDarkhastFaktor)
+    public void openSaveImageActivity(long ccDarkhastFaktor,int type)
     {
-        Intent intent = new Intent(TemporaryRequestsListActivity.this , FaktorDetailsActivity.class);
+        Intent intent = null;
+        if (type ==Constants.ccNoeHavale){
+            intent = new Intent(TemporaryRequestsListActivity.this , FaktorDetailsActivity.class);
+        }
+        else if(type == Constants.ccNoeFaktor) {
+           intent = new Intent(TemporaryRequestsListActivity.this , PrintNoe2Activity.class);
+        }
         intent.putExtra("ccDarkhastFaktor" , ccDarkhastFaktor);
         intent.putExtra("sourceActivity" , "TemporaryRequestsListActivity");
         startActivityForResult(intent , OPEN_FAKTOR_DETAIL);

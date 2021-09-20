@@ -1103,4 +1103,7 @@
     <string name="moshtaryIsNotZanjiree">این مشتری زنجیره ای نمی باشد</string>
     <string name="customerZanjiree">مشتری زنجیره ای</string>
     <string name="firstSelectedMoshtary">ابتدا مشتری را انتخاب نمایید</string>
+    <string name="successGetScreenShot">تصویر با موفقیت ثبت شد</string>
+    <string name="saveFaktorManagement">ذخیره فاکتور</string>
+    <string name="ChooseSaveFaktorImage">انتخاب نوع ذخیره سازی عکس فاکتور</string>
 </resources>

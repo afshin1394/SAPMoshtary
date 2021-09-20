@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import com.saphamrah.Utils.Constants;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 
 public class ImageUtils
 {
@@ -59,5 +61,27 @@ public class ImageUtils
         }
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
+
+    public File bitmapToFile(byte[]  bytes, String fileNameToSave, String dir) {
+        File file = null;
+
+         try{
+             file = new File(fileNameToSave);
+             file.createNewFile();
+
+             //write the bytes in file
+             FileOutputStream fos =new  FileOutputStream(file);
+             fos.write(bytes);
+             fos.flush();
+             fos.close();
+         } catch (Exception e){
+             e.printStackTrace();
+         }
+
+         return file;
+    }
+
+
+
 
 }

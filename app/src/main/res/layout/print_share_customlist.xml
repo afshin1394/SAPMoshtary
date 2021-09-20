@@ -20,12 +20,39 @@
             app:cardCornerRadius="10dp"
             android:layoutDirection="rtl">
             <com.daimajia.swipe.SwipeLayout
-                xmlns:swipe="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/swipe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                swipe:leftEdgeSwipeOffset="0dp"
-                swipe:rightEdgeSwipeOffset="0dp">
+                app:leftEdgeSwipeOffset="0dp"
+                app:rightEdgeSwipeOffset="0dp">
+
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/layLeft"
+                    android:gravity="center"
+                    android:layoutDirection="rtl"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/layImage"
+                        android:layout_gravity="center"
+                        android:background="@color/colorFabPrint">
+                        <ImageView
+                            android:layout_width="@dimen/iconSize64"
+                            android:layout_height="@dimen/iconSize64"
+                            android:id="@+id/imgImage"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/ic_attach_image"
+                            android:layout_gravity="center"
+                            android:layoutDirection="rtl" />
+                    </RelativeLayout>
+
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="150dp"
@@ -59,14 +86,15 @@
                         android:id="@+id/layShare"
                         android:layout_gravity="center"
                         android:background="@color/colorFabPrint">
+
                         <ImageView
+                            android:id="@+id/imgShare"
                             android:layout_width="@dimen/iconSize64"
                             android:layout_height="@dimen/iconSize64"
-                            android:id="@+id/imgShare"
                             android:layout_centerInParent="true"
-                            android:src="@drawable/ic_share"
                             android:layout_gravity="center"
-                            android:layoutDirection="rtl" />
+                            android:layoutDirection="rtl"
+                            android:src="@drawable/ic_share" />
                     </RelativeLayout>
                 </LinearLayout>
 

@@ -503,7 +503,7 @@ public class CustomersListModel implements CustomersListMVP.ModelOps {
                             //TODO add kala zarib forosh
 
                         } else {
-
+                         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                          getKalaZaribForosh(moshtaryForoshandehModel,ccForoshandeh);
                         }
 
@@ -561,7 +561,6 @@ public class CustomersListModel implements CustomersListMVP.ModelOps {
                                         Log.d("CustomerListModel", "itemCounter after:"  + itemCounter);
                                     }
                                 } else {
-                                    sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                                     sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
                                 }
                             }

@@ -250,6 +250,24 @@ public class DarkhastFaktorEmzaMoshtaryDAO
         }
     }
 
+    public boolean haveImage(long ccDarkhastFaktor){
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query = "SELECT * FROM " + DarkhastFaktorEmzaMoshtaryModel.TableName() + " WHERE "+ DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_FaktorImage() + " = 1 " +"AND ccDarkhastFaktor  = " + ccDarkhastFaktor;
+            Cursor cursor = db.rawQuery(query , null);
+            cursor.moveToFirst();
+            if(cursor.getCount() !=0)
+                return true;
+            cursor.close();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
     public boolean updateSendedccDarkhastFaktor(long ccDarkhastFaktorOld , long ccDarkhastFaktorNew)
     {
         try

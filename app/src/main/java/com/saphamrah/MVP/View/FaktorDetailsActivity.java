@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -59,12 +60,17 @@ public class FaktorDetailsActivity extends AppCompatActivity implements FaktorDe
     private View mainView;
     private boolean imagedSaved; // اگر این فیلد true باشد به این معنی است که کاربر بر روی ثبت تصویر کلیک کرده و تصویر فاکتور ثبت شده. از این فیلد برای برگشت به فرم قبلی استفاده میشود و در فرم قبلی (فرم لیست درخواست ها) چک میشود تا اگر مقدار این فیلد برابر true بود، آداپتر بروزرسانی میشود.
     private long ccDarkhastFaktor;
+    //TODO
+    private ScrollView scrollMain;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faktor_details);
+        scrollMain = this.getWindow().getDecorView().findViewById(R.id.scrollMain);
+
 
         Calligrapher calligrapher = new Calligrapher(this);
         calligrapher.setFont(this, getResources().getString(R.string.fontPath), true);
@@ -102,6 +108,8 @@ public class FaktorDetailsActivity extends AppCompatActivity implements FaktorDe
                 saveScreenshotOfFaktor(ccDarkhastFaktor , bmp);
                 byte[] bytes = new PubFunc().new ImageUtils().convertBitmapToByteArray(FaktorDetailsActivity.this , bmp , 70);
                 mPresenter.checkUpdateDarkhastFaktorEmza(bytes , ccDarkhastFaktor);
+                                scrollMain.removeView(mainView);
+                scrollMain.addView(mainView);
                 bmp.recycle();
             }
         });

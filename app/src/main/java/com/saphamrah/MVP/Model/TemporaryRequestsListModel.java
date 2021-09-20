@@ -339,7 +339,9 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
     @Override
     public void saveImageTempRequest(int position , CustomerDarkhastFaktorModel customerDarkhastFaktorModel)
     {
-        mPresenter.onCheckSaveImage(customerDarkhastFaktorModel.getCcDarkhastFaktor());
+        DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor());
+        mPresenter.onCheckSaveImage(customerDarkhastFaktorModel.getCcDarkhastFaktor(),darkhastFaktorModel.getCcDarkhastFaktorNoeForosh());
     }
 
     @Override
