@@ -26,6 +26,7 @@ import com.saphamrah.DAO.GPSDataPpcDAO;
 import com.saphamrah.DAO.KalaMojodiDAO;
 import com.saphamrah.DAO.KardexDAO;
 import com.saphamrah.DAO.KardexSatrDAO;
+import com.saphamrah.DAO.LogPPCDAO;
 import com.saphamrah.DAO.MandehMojodyMashinDAO;
 import com.saphamrah.DAO.MarjoeeKamelImageDAO;
 import com.saphamrah.DAO.MasirDAO;
@@ -100,6 +101,7 @@ import com.saphamrah.WebService.RxService.APIServiceRxjava;
 import com.saphamrah.WebService.RxService.Response.DataResponse.GetMandehMojodyMashinResponse;
 import com.saphamrah.WebService.ServiceResponse.CreateDariaftPardakhtPPCJSONResult;
 import com.saphamrah.WebService.ServiceResponse.CreateGpsDataPPCResult;
+import com.saphamrah.WebService.ServiceResponse.CreateLogPPCResult;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
 import com.saphamrah.WebService.ServiceResponse.MarjoeeKardexResult;
 
@@ -645,6 +647,12 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                                 dariaftPardakhtDarkhastFaktorPPCDAO.updateSendedDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcDarkhastFaktor(), 1);
                                 DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(mPresenter.getAppContext());
                                 dariaftPardakhtPPCDAO.updateSendedDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcDarkhastFaktor(), 1);
+                                LogPPCDAO logPPCDAO = new LogPPCDAO(mPresenter.getAppContext());
+                                ArrayList<LogPPCModel> logPPCModels = logPPCDAO.getUnsendExceptionsOrderByIdDesc();
+                                if (logPPCModels.size() > 0)
+                                {
+                                    sendLogPPCToServer(apiServicePost , logPPCModels);
+                                }
                                 mPresenter.onSuccessSend(position);
                             }
                             else
@@ -711,6 +719,80 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         }
     }
 
+    private void sendLogPPCToServer(APIServicePost apiServicePost , ArrayList<LogPPCModel> logPPCModels)
+    {
+        JSONArray jsonArray = new JSONArray();
+        String ccLogs = "-1";
+        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+        String ip = serverIPShared.getString(serverIPShared.DEVICE_IP() , "");
+        for (LogPPCModel model : logPPCModels)
+        {
+            JSONObject jsonObject = model.toJsonObject(ip);
+            if (jsonObject != null)
+            {
+                jsonArray.put(jsonObject);
+                ccLogs += "," + model.getCcLogPPC();
+            }
+        }
+        final String ccLogsFinal = ccLogs;
+
+        if (jsonArray.length() > 0)
+        {
+            Call<CreateLogPPCResult> call = apiServicePost.createLogPPC(jsonArray.toString());
+            call.enqueue(new Callback<CreateLogPPCResult>()
+            {
+                @Override
+                public void onResponse(Call<CreateLogPPCResult> call, Response<CreateLogPPCResult> response)
+                {
+                    try
+                    {
+                        if (response.isSuccessful() && response.body() != null)
+                        {
+                            Log.d("noTemp" , "in if success and body not null");
+                            CreateLogPPCResult result = response.body();
+                            if (result.getSuccess())
+                            {
+                                LogPPCDAO logPPCDAO = new LogPPCDAO(mPresenter.getAppContext());
+                                logPPCDAO.updateExtraProp_IsOld(ccLogsFinal , 1);
+                            }
+                            else
+                            {
+                                Log.d("noTemp" , "in else not success");
+                                setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "" , "sendLogPPCToServer" , "onResponse");
+                                mPresenter.onError(R.string.errorSendLogData);
+                            }
+                        }
+                        else
+                        {
+                            String errorMessage = "response not successful " + response.message() ;//+ "\n" + "can't send this log : " + logMessage;
+                            if (response.errorBody() != null)
+                            {
+                                errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string() ;//+ "\n" + "can't send this log : " + logMessage;
+                            }
+                            setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "" , "sendLogPPCToServer" , "onResponse");
+                            Log.d("tempRequest" , "message : " + errorMessage);
+                            mPresenter.onError(R.string.errorSendLogData);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        Log.d("noTemp" , "in exception");
+                        exception.printStackTrace();
+                        setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "" , "sendLogPPCToServer" , "onResponse");
+                        mPresenter.onError(R.string.errorSendLogData);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CreateLogPPCResult> call, Throwable t)
+                {
+                    Log.d("noTemp" , "in onFailure");
+                    setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "" , "sendLogPPCToServer" , "onFailure");
+                    mPresenter.onError(R.string.errorSendLogData);
+                }
+            });
+        }
+    }
 
     private void saveToFile(String fileName , String jsonStringData)
     {

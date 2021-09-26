@@ -43,6 +43,7 @@ public interface VerifyRequestMVP
         void onDeleteBonus(boolean openSelectBonusActivity);
         void showToast(int resId, int messageType , int duration);
         void showToast(int resId, String param, int messageType, int duration);
+        void showToast(int resId, String paramOne , String paramTow, int messageType, int duration);
         void showAlertDialog(int resId, boolean closeActivity, int messageType);
         void showLoading();
         void closeLoading();
@@ -95,6 +96,8 @@ public interface VerifyRequestMVP
         void onDeleteBonus(boolean openSelectBonusActivity);
         void onErrorOperations(int resId);
         void onErrorCheck(int errorResId , String paramOne);
+        void onErrorVazn(int errorResId , String paramOne , String paramTwo);
+
         void onSuccessCheck(int clickedBottomBarposition);
         void onUpdateMablaghNahaeeFaktor(long ccDarkhastFaktor , int ccMoshtary);
         void deleteTakhfifJayezeForDarkhastFaktor(long ccDarkhastFaktor);

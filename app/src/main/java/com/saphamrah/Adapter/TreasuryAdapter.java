@@ -78,10 +78,10 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         holder.lblMablaghMandehFaktor.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.mande), formatter.format(models.get(position).getMablaghMandeh()), context.getResources().getString(R.string.rial)));
         holder.lblNameNoeVosol.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.noeVosol), models.get(position).getNameNoeVosolAzMoshtary()));
         if (models.get(position).getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale) {
-            holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.shomareDarkhast), models.get(position).getShomarehDarkhast()));
+            holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.shomareDarkhast), models.get(position).getShomarehDarkhast(),context.getResources().getString(R.string.havaleh)));
         }
         else {
-            holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.shomareFaktor), models.get(position).getShomarehFaktor()));
+            holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.shomareFaktor), models.get(position).getShomarehFaktor(),context.getResources().getString(R.string.faktor)));
         }
         try {
             Date date = sdf.parse(models.get(position).getTarikhErsal());

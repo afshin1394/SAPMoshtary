@@ -717,6 +717,12 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         customAlertDialog.showToast(VerifyRequestActivity.this, getResources().getString(resId, param), messageType, duration);
     }
 
+    @Override
+    public void showToast(int resId, String paramOne , String paramTwo, int messageType, int duration)
+    {
+        customAlertDialog.showToast(VerifyRequestActivity.this, getResources().getString(resId, paramOne , paramTwo), messageType, duration);
+    }
+
 	@Override
     public void showAlertDialog(int resId, boolean closeActivity, int messageType)
     {

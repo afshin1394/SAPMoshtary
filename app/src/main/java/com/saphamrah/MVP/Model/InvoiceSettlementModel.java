@@ -295,10 +295,14 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
             if (strCodeNoeVosol.equals(Constants.VALUE_POS()) || strCodeNoeVosol.equals(Constants.VALUE_FISH_BANKI())) {
                 DariaftPardakhtDarkhastFaktorPPCDAO dpdfDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(mPresenter.getAppContext());
                 if (dariaftPardakhtPPCModel.getShomarehSanad().length() > 0) {
-                    if (dpdfDAO.getCountShomarehSanad(dariaftPardakhtPPCModel.getShomarehSanad(), dariaftPardakhtPPCModel.getMablagh()) > 0) {
-                        mPresenter.onErrorCheckInsert(R.string.errorDuplicateNumber);
-                        hasError = true;
-                        return;
+
+                    boolean checkEbtalSanad = dariaftPardakhtDarkhastFaktorPPCDAO.checkEbtalSanad(ccDarkhastFaktor,dariaftPardakhtPPCModel.getShomarehSanad(),codeNoeVosolSelected);
+                    if (!checkEbtalSanad){
+                        if (dariaftPardakhtDarkhastFaktorPPCDAO.getCountShomarehSanad(dariaftPardakhtPPCModel.getShomarehSanad(), dariaftPardakhtPPCModel.getMablagh()) > 0) {
+                            mPresenter.onErrorCheckInsert(R.string.errorDuplicateNumber);
+                            hasError = true;
+                            return;
+                        }
                     }
                 }
             }
@@ -534,9 +538,12 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
             if (strCodeNoeVosol.equals(Constants.VALUE_POS()) || strCodeNoeVosol.equals(Constants.VALUE_FISH_BANKI())) {
                 DariaftPardakhtDarkhastFaktorPPCDAO dpdfDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(mPresenter.getAppContext());
                 if (dariaftPardakhtPPCModel.getShomarehSanad().length() > 0) {
-                    if (dpdfDAO.getCountShomarehSanad(dariaftPardakhtPPCModel.getShomarehSanad(), dariaftPardakhtPPCModel.getMablagh()) > 0) {
-                        mPresenter.onErrorCheckInsert(R.string.errorDuplicateNumber);
-                        hasError = true;
+                    boolean checkEbtalSanad = dariaftPardakhtDarkhastFaktorPPCDAO.checkEbtalSanad(ccDarkhastFaktor,dariaftPardakhtPPCModel.getShomarehSanad(),codeNoeVosolMoshtary);
+                    if (!checkEbtalSanad) {
+                        if (dpdfDAO.getCountShomarehSanad(dariaftPardakhtPPCModel.getShomarehSanad(), dariaftPardakhtPPCModel.getMablagh()) > 0) {
+                            mPresenter.onErrorCheckInsert(R.string.errorDuplicateNumber);
+                            hasError = true;
+                        }
                     }
                 }
             }

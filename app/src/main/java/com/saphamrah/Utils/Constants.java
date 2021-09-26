@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE = 2 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest
+    private static final int CURRENT_VERSION_TYPE = 0 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 
@@ -1323,6 +1323,16 @@ public class Constants
     //type of ccDarkhastFaktorNoeForosh
     public static final int ccNoeFaktor = 1;
     public static final int ccNoeHavale = 2;
+
+    // Noe Masouliat
+    public static final int FOROSHANDEH_SARD = 1;
+    public static final int FOROSHANDEH_GARM = 2;
+    public static final int FOROSHANDEH_SMART = 3;
+    public static final int MAMOURPAKHSH_SARD = 4;
+    public static final int MAMOURPAKHSH_SMART = 5;
+    public static final int SARPARAST = 6;
+    public static final int AMARGAR = 7;
+    public static final int RAEEIS = 8;
 
 }
 

@@ -946,7 +946,7 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(MoshtaryModel.TableName(), new String[]{MoshtaryModel.COLUMN_ExtraProp_Olaviat()},  "ccMoshtary= ?", new String[]{String.valueOf(ccMoshtary)}, null, null,  null);
+            Cursor cursor = db.query(MoshtaryModel.TableName(), new String[]{MoshtaryModel.COLUMN_Olaviat()},  "ccMoshtary= ?", new String[]{String.valueOf(ccMoshtary)}, null, null,  null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)

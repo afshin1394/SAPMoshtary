@@ -1246,7 +1246,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                             for (int i = 0; i < arrayListData.size(); i++) {
                                 final DarkhastFaktorModel darkhastFaktorModel = (DarkhastFaktorModel) arrayListData.get(i);
                                 if (darkhastFaktorModel.getFaktorRooz() == 0) {
-                                    getImageDarkhastFaktor(imageDarkhastFaktorDAO, darkhastFaktorEmzaMoshtaryDAO, darkhastFaktorModel.getCodeVazeiat(), darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcMoshtary());
+                                    getImageDarkhastFaktor(imageDarkhastFaktorDAO, darkhastFaktorEmzaMoshtaryDAO, darkhastFaktorModel.getCodeVazeiat(), darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcMoshtary(), darkhastFaktorModel.getCcDarkhastFaktorNoeForosh());
                                     ccDarkhastFaktors += "," + darkhastFaktorModel.getCcDarkhastFaktor();
                                 }
                                 if (darkhastFaktorModel.getForTasviehVosol() == 1) {
@@ -1285,15 +1285,19 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
         });
     }
 
-    private void getImageDarkhastFaktor(ImageDarkhastFaktorDAO imageDarkhastFaktorDAO, final DarkhastFaktorEmzaMoshtaryDAO darkhastFaktorEmzaMoshtaryDAO, int codeVazeiatFaktor, final long ccDarkhastFaktorHavaleh, final int ccMoshtary) {
+    private void getImageDarkhastFaktor(ImageDarkhastFaktorDAO imageDarkhastFaktorDAO, final DarkhastFaktorEmzaMoshtaryDAO darkhastFaktorEmzaMoshtaryDAO, int codeVazeiatFaktor, final long ccDarkhastFaktorHavaleh, final int ccMoshtary, final int ccDarkhastFaktorNoeForosh) {
         if (codeVazeiatFaktor != Constants.CODE_VAZEIAT_FAKTOR_TASVIEH) {
             String ccDarkhastFaktor = "0";
             String ccDarkhastHavaleh = "0";
             if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 8) {
                 ccDarkhastFaktor = String.valueOf(ccDarkhastFaktorHavaleh);
-            } else if (noeMasouliat == 4 || noeMasouliat == 5) {
+            } else if ((noeMasouliat == 4 || noeMasouliat == 5) && ccDarkhastFaktorNoeForosh == Constants.ccNoeHavale) {
                 ccDarkhastHavaleh = String.valueOf(ccDarkhastFaktorHavaleh);
+            }else if ((noeMasouliat == 4 || noeMasouliat == 5) && ccDarkhastFaktorNoeForosh == Constants.ccNoeFaktor) {
+                ccDarkhastFaktor = String.valueOf(ccDarkhastFaktorHavaleh);
             }
+            Log.d("getProgram", "ccDarkhastFaktorNoeForosh : " + ccDarkhastFaktorNoeForosh );
+
             Log.d("getProgram", "getImageDarkhastFaktor ccDarkhastFaktors : " + ccDarkhastFaktor + " , ccDarkhastHavaleh:" + ccDarkhastHavaleh);
             imageDarkhastFaktorDAO.fetchGetImageJSON(mPresenter.getAppContext(), "GetProgramActivity", ccDarkhastFaktor, ccDarkhastHavaleh, new RetrofitResponse() {
                 @Override
@@ -1690,8 +1694,8 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                 Thread thread = new Thread() {
                     @Override
                     public void run() {
+                        boolean deleteResult = moshtaryMorajehShodehRoozDAO.deleteAll();
                         if (arrayListData.size() > 0) {
-                            boolean deleteResult = moshtaryMorajehShodehRoozDAO.deleteAll();
                             boolean insertResult = moshtaryMorajehShodehRoozDAO.insertGroup(arrayListData);
                             if (insertResult) {
                                 sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
@@ -4722,6 +4726,8 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     private void checkLastOlaviat() {
         MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(BaseApplication.getContext());
         OlaviatMorajehModel olaviatMorajehModel = moshtaryMorajehShodehRoozDAO.getOlaviatMorajeh();
+
+        Log.d("getProgram","olaviat:"+ olaviatMorajehModel.getOlaviat() + "," + olaviatMorajehModel.getCcMoshtary());
 
         LastOlaviatMoshtaryShared lastOlaviatMoshtaryShared = new LastOlaviatMoshtaryShared(mPresenter.getAppContext());
         lastOlaviatMoshtaryShared.removeAll();

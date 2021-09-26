@@ -685,7 +685,7 @@
     <string name="errorModatVosolNaghdBiggerThanZero">مـدت وصــول درخواست اشتباه است.</string>
     <string name="errorModatRoozRaasGiri">مدت روز راس گیری درخواست اشتباه می باشد.</string>
     <string name="errorModatVosol">مدت وصول اشتباه می باشد.</string>
-    <string name="errorVaznFaktorBiggerVaznMashin">وزن فاکتور از وزن ماشین بیشتر می باشد.</string>
+    <string name="errorVaznFaktorBiggerVaznMashin">وزن فاکتور (%1$s کیلوگرم) از وزن ماشین (%2$s کیلوگرم) بیشتر می باشد.</string>
     <string name="errorHajmFaktorBiggerVaznMashin">حجم فاکتور از حجم ماشین بیشتر می باشد.</string>
     <string name="errorCostBiggerThanMax">مبلغ فاکتور باید کمتر از %1$s باشد.</string>
     <string name="errorMablaghLessThanMin">مبلغ فاکتور کمتر از حداقل مبلغ خرید (%1$s ریال) است.</string>
@@ -1106,4 +1106,6 @@
     <string name="successGetScreenShot">تصویر با موفقیت ثبت شد</string>
     <string name="saveFaktorManagement">ذخیره فاکتور</string>
     <string name="ChooseSaveFaktorImage">انتخاب نوع ذخیره سازی عکس فاکتور</string>
+    <string name="havaleh">(حواله)</string>
+    <string name="faktor">(فاکتور)</string>
 </resources>

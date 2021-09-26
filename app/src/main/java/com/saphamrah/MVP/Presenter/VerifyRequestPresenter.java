@@ -470,6 +470,23 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
     }
 
     @Override
+    public void onErrorVazn(int errorResId , String paramOne , String paramTwo)
+    {
+        if (paramOne.trim().equals("") && paramTwo.trim().equals(""))
+        {
+            mView.get().showToast(errorResId, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }
+        else
+        {
+            mView.get().showToast(errorResId, paramOne , paramTwo, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }
+    }
+
+
+
+
+
+    @Override
     public void onSuccessCheck(int clickedBottomBarposition)
     {
         checkBottomBarClick(clickedBottomBarposition);

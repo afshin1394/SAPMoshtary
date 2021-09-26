@@ -45,6 +45,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.saphamrah.Adapter.DrawerExpandablelistAdapter;
 import com.saphamrah.Adapter.MainMenuPagerAdapter;
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.MainMVP;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.MVP.Presenter.MainPresenter;
@@ -383,7 +384,19 @@ public class MainActivity extends AppCompatActivity implements MainMVP.RequiredV
         try
         {
             lblForoshandehName.setText(foroshandehMamorPakhshModel.getFullName());
-            lblNoeForoshandeh.setText(foroshandehMamorPakhshModel.getNameNoeForoshandehMamorPakhsh());
+            if (foroshandehMamorPakhshModel.getNoeMasouliat() == Constants.FOROSHANDEH_SARD ||
+                    foroshandehMamorPakhshModel.getNoeMasouliat() == Constants.FOROSHANDEH_GARM ||
+                    foroshandehMamorPakhshModel.getNoeMasouliat() == Constants.FOROSHANDEH_SMART ||
+                    foroshandehMamorPakhshModel.getNoeMasouliat() == Constants.SARPARAST ||
+                    foroshandehMamorPakhshModel.getNoeMasouliat() == Constants.RAEEIS){
+                if (foroshandehMamorPakhshModel.getCcDarkhastFaktorNoeForosh() == Constants.ccNoeFaktor){
+                    lblNoeForoshandeh.setText(foroshandehMamorPakhshModel.getNameNoeForoshandehMamorPakhsh() +  BaseApplication.getContext().getResources().getString(R.string.faktor));
+                } else {
+                    lblNoeForoshandeh.setText(foroshandehMamorPakhshModel.getNameNoeForoshandehMamorPakhsh() +  BaseApplication.getContext().getResources().getString(R.string.havaleh));
+                }
+            } else {
+                lblNoeForoshandeh.setText(foroshandehMamorPakhshModel.getNameNoeForoshandehMamorPakhsh());
+            }
             lblForoshandehSazmanForosh.setText(foroshandehMamorPakhshModel.getNameSazmanForosh());
             lblForoshandehMarkazForosh.setText(foroshandehMamorPakhshModel.getNameMarkazForosh());
             lblIMEI.setText(deviceIMEI);

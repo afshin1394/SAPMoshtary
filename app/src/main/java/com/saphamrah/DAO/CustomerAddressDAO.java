@@ -3,6 +3,7 @@ package com.saphamrah.DAO;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.Model.MoshtaryGharardadModel;
@@ -55,7 +56,7 @@ public class CustomerAddressDAO
                     "                     on MSR.ccMoshtary = M.ccMoshtary      \n" +
                     "      \n ";
 
-
+            Log.d("CustomerAddressDAO","strQry getByMasirWithoutMoshtaryJadid:"+ strQry);
 
 //            String query = "select m.*,MA.*,IFNULL(NoeMorajeh,0) AS NoeMorajeh from (SELECT * FROM( SELECT * FROM Moshtary \n" +
 //                    " WHERE (ExtraProp_IsOld = 1 OR ExtraProp_IsMoshtaryAmargar = 1) and ccMasir in (select ccMasir from Masir) \n" +
@@ -111,6 +112,7 @@ public class CustomerAddressDAO
 //                    " WHERE ccNoeAddress IN (1,2) GROUP BY ccMoshtary ORDER BY ccNoeAddress DESC) AS MA on MA.ccMoshtary = M.ccMoshtary \n" +
 //                    " LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
 //                    " on MSR.ccMoshtary = M.ccMoshtary";
+            Log.d("CustomerAddressDAO","strQry:"+ strQry);
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(strQry , null);
             if (cursor != null)

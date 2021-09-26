@@ -236,7 +236,6 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 {
                     customerAddressModels = customerAddressDAO.getByMasirWithoutMoshtaryJadid();
                 }
-
                 for (int i=0 ; i<customerAddressModels.size() ; i++)
                 {
                     moshtaryModels.add(customerAddressModels.get(i).getMoshtaryModel());
@@ -613,7 +612,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             /**
              * check olaviat customer
              */
-            boolean checkPriority = checkPriority(moshtaryModel.getExtraProp_Olaviat());
+            boolean checkPriority = checkPriority(moshtaryModel.getOlaviat());
 
 
             /**
@@ -641,7 +640,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
             Log.i("selectCustomer" ,"checkTarikhMasir :" + checkTarikhMasir);
             Log.i("selectCustomer" , "needCheckKharejAzMahal :" + needCheckKharejAzMahal);
-            Log.i("selectCustomer" , "checkPriority :" + checkPriority(moshtaryModel.getExtraProp_Olaviat()));
+            Log.i("selectCustomer" , "checkPriority :" + checkPriority);
 
 
 
@@ -1117,6 +1116,11 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 Log.d("kharejAzMahal" , "getExtraProp_IsMoshtaryAmargar : " + moshtary.getExtraProp_IsMoshtaryAmargar());
                 Log.d("kharejAzMahal" , "CanVisitKharejAzMahal_Polygon : " + CanVisitKharejAzMahal_Polygon + " , needCheckKharejAzMahal:" + needCheckKharejAzMahal);
 
+                if (foroshandehMamorPakhshModel.getCheckOlaviatMoshtary() == 1  && !checkPriority )//&& !checkTarikhMasir() && needCheckKharejAzMahal)
+                {
+                    return -5;
+                }
+
                 if (needCheckKharejAzMahal && CanVisitKharejAzMahal_Polygon == 0)
                 {
                     if (moshtary.getExtraProp_IsMoshtaryAmargar() == 0)
@@ -1176,10 +1180,9 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                         //}
                     }
                 }
-                if (foroshandehMamorPakhshModel.getCheckOlaviatMoshtary() == 1  && !checkPriority && !checkTarikhMasir() && needCheckKharejAzMahal)
-                {
-                    return -5;
-                }
+                Log.d("checkPriority", foroshandehMamorPakhshModel.getCheckOlaviatMoshtary() + " - " + checkPriority + " - " + checkTarikhMasir() + " - " + needCheckKharejAzMahal);
+
+
                 return 1;
             }
             catch (Exception exception)

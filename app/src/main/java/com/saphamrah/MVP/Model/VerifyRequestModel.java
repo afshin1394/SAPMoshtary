@@ -878,9 +878,12 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
         if (selectFaktorShared.getFloat(selectFaktorShared.getVaznMashin(), -1) < vaznFaktor && clickedBottomBarposition!=2)
         {
-            Log.d("checkData", "vazn mashin : " + selectFaktorShared.getFloat(selectFaktorShared.getHajmMashin(), -1) + " , vazn faktor : " + vaznFaktor);
+            Log.d("checkData", "vazn mashin : " + selectFaktorShared.getFloat(selectFaktorShared.getVaznMashin(), -1) + " , vazn faktor : " + vaznFaktor);
             hasError = true;
-            mPresenter.onErrorCheck(R.string.errorVaznFaktorBiggerVaznMashin, "");
+            String vaznMashin =String.valueOf(selectFaktorShared.getFloat(selectFaktorShared.getVaznMashin(), -1));
+            mPresenter.onErrorVazn(R.string.errorVaznFaktorBiggerVaznMashin,String.valueOf(vaznFaktor),vaznMashin);
+
+
             return;
         }
         if (selectFaktorShared.getFloat(selectFaktorShared.getHajmMashin(), -1) < hajmFaktor && clickedBottomBarposition!=2)

@@ -745,6 +745,37 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
         return sum;
     }
 
+    public boolean checkEbtalSanad( long ccDarkhastFaktor , String shomarehsanad , int CodeNoeVosol)
+    {
+        boolean checkEbtalSanad=false;
+        double sum = -1;
+        try
+        {
+            String query = "select sum(Mablagh) from DariaftPardakhtDarkhastFaktorPPC where ccDarkhastFaktor = " + ccDarkhastFaktor + " and shomarehsanad = " + shomarehsanad + " and CodeNoeVosol = " + CodeNoeVosol;
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    sum = cursor.getDouble(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception e)
+        {
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DariaftPardakhtDarkhastFaktorPPCModel.TableName()) + "\n" + e.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtDarkhastFaktorPPCDAO" , "" , "checkEbtalSanad" , "");
+        }
+        if(sum==0)
+            checkEbtalSanad=true;
+        return checkEbtalSanad;
+    }
+
     /**
      show vosol vajh naghd
     */

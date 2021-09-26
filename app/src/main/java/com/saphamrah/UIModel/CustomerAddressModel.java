@@ -48,4 +48,14 @@ public class CustomerAddressModel
     public void setMoshtaryGharardadModel(MoshtaryGharardadModel moshtaryGharardadModel) {
         this.moshtaryGharardadModel = moshtaryGharardadModel;
     }
+
+    @Override
+    public String toString() {
+        return "CustomerAddressModel{" +
+                "moshtaryModel=" + moshtaryModel +
+                ", moshtaryAddressModels=" + moshtaryAddressModels +
+                ", moshtaryMorajehShodehRoozModel=" + moshtaryMorajehShodehRoozModel +
+                ", moshtaryGharardadModel=" + moshtaryGharardadModel +
+                '}';
+    }
 }

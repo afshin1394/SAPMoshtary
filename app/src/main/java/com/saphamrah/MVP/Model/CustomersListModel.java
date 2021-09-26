@@ -179,7 +179,7 @@ public class CustomersListModel implements CustomersListMVP.ModelOps {
                             moshtaryDAO.deleteByccMoshtary(ccMoshtary);
                             ((MoshtaryModel) arrayListData.get(0)).setExtraProp_MoshtaryMojazKharejAzMasir(1);
                             ((MoshtaryModel) arrayListData.get(0)).setExtraProp_IsOld(1);
-                            ((MoshtaryModel) arrayListData.get(0)).setOlaviat(999);
+                            ((MoshtaryModel) arrayListData.get(0)).setOlaviat(0);
 
                             if (moshtaryDAO.insertGroup(arrayListData)) {
                                 sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), itemCounter);

@@ -45,7 +45,7 @@ public class CustomerInfoModel implements CustomerInfoMVP.ModelOps
         String noeVosolName = childParameterDAO.getTextByParameterNameAndValue(Constants.NOE_VOSOL_MOSHTARY() , String.valueOf(moshtaryModel.getCodeNoeVosolAzMoshtary()));
         //String darajeName = childParameterDAO.getTextByParameterNameAndValue(Constants.ROTBE() , String.valueOf(moshtaryModel.getDarajeh()));
         String noeShakhsiat = childParameterDAO.getTextByParameterNameAndValue(Constants.NOE_SHAKHSIAT() , String.valueOf(moshtaryModel.getCodeNoeShakhsiat()));
-        mPresenter.onGetNoeVosolHamlDarajeShakhsiat(noeVosolName , noeHamlName , moshtaryModel.getNameDarajeh() , noeShakhsiat, moshtaryModel.getExtraProp_Olaviat());
+        mPresenter.onGetNoeVosolHamlDarajeShakhsiat(noeVosolName , noeHamlName , moshtaryModel.getNameDarajeh() , noeShakhsiat, moshtaryModel.getOlaviat());
 
 		GorohDAO gorohDAO = new GorohDAO(mPresenter.getAppContext());
 		Log.d("CustomerInfoModel","CcNoeSenf()" + moshtaryModel.getCcNoeSenf() + " , CcNoeMoshtary()" + moshtaryModel.getCcNoeMoshtary());
