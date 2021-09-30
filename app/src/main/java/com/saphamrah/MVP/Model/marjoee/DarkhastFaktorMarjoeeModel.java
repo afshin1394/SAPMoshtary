@@ -90,11 +90,15 @@ public class DarkhastFaktorMarjoeeModel implements DarkhastFaktorMarjoeeMVP.Mode
         JSONArray jsonArrayKardex = new JSONArray();
         JSONArray jsonArrayKardexSatr = new JSONArray();
         JSONArray jsonArrayImageMarjoee = new JSONArray();
-        JSONArray jsonAfradAnbarak = new JSONArray();
+        JSONArray jsonArrayAfradAnbarak = new JSONArray();
 
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         int ccAfrad = foroshandehMamorPakhshModel.getCcAfrad();
         int ccAnbarak = foroshandehMamorPakhshModel.getCcAnbarak();
+
+
+        jsonArrayAfradAnbarak.put(AfradAnbarakToJson(ccAnbarak,ccAfrad));
+
         /*
          * add kardex and kardexSatr and marjoee Image to json
          */
@@ -120,6 +124,7 @@ public class DarkhastFaktorMarjoeeModel implements DarkhastFaktorMarjoeeMVP.Mode
             jsonObjectTreasury.put("kardex", jsonArrayKardex);
             jsonObjectTreasury.put("kardexSatr", jsonArrayKardexSatr);
             jsonObjectTreasury.put("MarjoeeKamelImage", jsonArrayImageMarjoee);
+            jsonObjectTreasury.put("AfradAnbarak", jsonArrayAfradAnbarak);
 
             String strJsonObjectTreasury = jsonObjectTreasury.toString();
             saveToFile("marjoee" + darkhastFaktorModel.getCcDarkhastFaktor() + ".txt", strJsonObjectTreasury);
@@ -166,6 +171,16 @@ public class DarkhastFaktorMarjoeeModel implements DarkhastFaktorMarjoeeMVP.Mode
         }
     }
 
+    private JSONObject AfradAnbarakToJson(int ccAnbarak, int ccAfrad) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("ccAfrad",ccAfrad);
+            jsonObject.put("ccAnbark",ccAnbarak);
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return jsonObject;
+    }
 
     private void showErrorMessageOfSend(String errorCode) {
         if (errorCode.trim().equals("-9")) {
