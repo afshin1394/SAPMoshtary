@@ -585,13 +585,19 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         JSONArray jsonArrayDariaftPardakhtDarkhastFaktor = new JSONArray();
         JSONArray jsonArrayKardex = new JSONArray();
         JSONArray jsonArrayKardexSatr = new JSONArray();
-        JSONArray jsonAfradAnbarak = new JSONArray();
+        JSONArray jsonArrayAfradAnbarak = new JSONArray();
         // get ccMarkazForosh , ccMarkazAnbar , ccMarkazSazmanForoshSakhtarForosh
         int ccMarkazForosh = 0;
         int ccMarkazAnbar = 0;
         int ccMarkazSazmanForoshSakhtarForosh = 0;
         int ccAfrad = foroshandehMamorPakhshModel.getCcAfrad();
         int ccAnbarak = foroshandehMamorPakhshModel.getCcAnbarak();
+
+
+
+
+
+        jsonArrayAfradAnbarak.put(AfradAnbarakToJson(ccAnbarak,ccAfrad));
 
         if(noeMasouliat != 4)
         {
@@ -629,6 +635,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             jsonObjectTreasury.put("DariaftPardakhtDarkhastFaktor" , jsonArrayDariaftPardakhtDarkhastFaktor);
             jsonObjectTreasury.put("kardex" , jsonArrayKardex);
             jsonObjectTreasury.put("kardexSatr" , jsonArrayKardexSatr);
+            jsonObjectTreasury.put("AfradAnbarak" , jsonArrayAfradAnbarak);
 
             String strJsonObjectTreasury = jsonObjectTreasury.toString();
             saveToFile("treasury" + darkhastFaktorModel.getCcDarkhastFaktor() + ".txt" , strJsonObjectTreasury);
@@ -701,6 +708,16 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
     }
 
+    private JSONObject AfradAnbarakToJson(int ccAnbarak, int ccAfrad) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("ccAfrad",ccAfrad);
+            jsonObject.put("ccAnbark",ccAnbarak);
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return jsonObject;
+    }
 
 
     private void showErrorMessageOfSend(String errorCode)

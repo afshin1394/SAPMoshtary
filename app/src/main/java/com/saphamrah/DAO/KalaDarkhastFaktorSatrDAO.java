@@ -132,10 +132,13 @@ public class KalaDarkhastFaktorSatrDAO
         ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels = new ArrayList<>();
         try
         {
-            String query = "select fs.*, k.CodeKala, k.BarCode, k.Adad, k.TedadDarKarton, k.TedadDarBasteh, k.ccGorohKala, k.NameKala, k.Tol, k.Arz, k.Ertefa, \n" +
+            String query = " SELECT fs.*, k.CodeKala, k.BarCode, k.Adad, k.TedadDarKarton, k.TedadDarBasteh, k.ccGorohKala, k.NameKala, k.Tol, k.Arz, k.Ertefa, \n" +
                     " k.NameVahedShomaresh, k.NameBrand, k.NameVahedSize, k.NameVahedVazn, k.VaznKarton, k.VaznKhales \n" +
-                    " from DarkhastFaktorSatr fs inner join Kala k on k.ccKalaCode = fs.ccKalaCode  where fs.CodeNoeKala != 2 And ccDarkhastFaktor = " + ccDarkhastFaktor;
+                    " FROM DarkhastFaktorSatr fs \n" +
+                    " LEFT JOIN (SELECT Distinct ccKalaCode, CodeKala, BarCode, Adad, TedadDarKarton, TedadDarBasteh, ccGorohKala, NameKala, Tol, Arz, Ertefa, NameVahedShomaresh, NameBrand, NameVahedSize, NameVahedVazn, VaznKarton, VaznKhales  FROM Kala ) k on k.ccKalaCode = fs.ccKalaCode \n" +
+                    " WHERE  ccDarkhastFaktor = " + ccDarkhastFaktor;
             SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Log.d("KalaDarkhastFakto", "getByccDarkhastMarjoeeKoli query :" +query );
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
