@@ -90,7 +90,11 @@ public class DarkhastFaktorMarjoeeModel implements DarkhastFaktorMarjoeeMVP.Mode
         JSONArray jsonArrayKardex = new JSONArray();
         JSONArray jsonArrayKardexSatr = new JSONArray();
         JSONArray jsonArrayImageMarjoee = new JSONArray();
+        JSONArray jsonAfradAnbarak = new JSONArray();
 
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
+        int ccAfrad = foroshandehMamorPakhshModel.getCcAfrad();
+        int ccAnbarak = foroshandehMamorPakhshModel.getCcAnbarak();
         /*
          * add kardex and kardexSatr and marjoee Image to json
          */
