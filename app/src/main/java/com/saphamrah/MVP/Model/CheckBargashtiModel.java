@@ -81,7 +81,7 @@ public class CheckBargashtiModel implements CheckBargashtiMVP.ModelOps
             }
             else
             {
-                ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(BaseApplication.getContext());
+                ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().postServerFromShared(BaseApplication.getContext());
                 if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
                 {
                     mPresenter.onErrorSend(R.string.errorFindServerIP);

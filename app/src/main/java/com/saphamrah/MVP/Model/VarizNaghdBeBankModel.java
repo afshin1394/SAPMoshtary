@@ -179,7 +179,7 @@ public class VarizNaghdBeBankModel implements VarizNaghdBeBankMVP.ModelOps {
 
             String strVariz = jsonObjectFinal.toString();
 
-            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(BaseApplication.getContext());
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().postServerFromShared(BaseApplication.getContext());
             if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
             {
                 mPresenter.onErrorSend(R.string.errorFindServerIP);

@@ -585,10 +585,14 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         JSONArray jsonArrayDariaftPardakhtDarkhastFaktor = new JSONArray();
         JSONArray jsonArrayKardex = new JSONArray();
         JSONArray jsonArrayKardexSatr = new JSONArray();
+        JSONArray jsonAfradAnbarak = new JSONArray();
         // get ccMarkazForosh , ccMarkazAnbar , ccMarkazSazmanForoshSakhtarForosh
         int ccMarkazForosh = 0;
         int ccMarkazAnbar = 0;
         int ccMarkazSazmanForoshSakhtarForosh = 0;
+        int ccAfrad = foroshandehMamorPakhshModel.getCcAfrad();
+        int ccAnbarak = foroshandehMamorPakhshModel.getCcAnbarak();
+
         if(noeMasouliat != 4)
         {
             ccMarkazForosh = foroshandehMamorPakhshModel.getCcMarkazForosh();
