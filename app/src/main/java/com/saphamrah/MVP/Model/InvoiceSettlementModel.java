@@ -460,7 +460,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
 
                 //boolean isRoozJari =true;
 
-                if (mablaghMandehOtherVosol == 0 && !haveDirkardVosol ) {
+                if (mablaghMandehOtherVosol < 1000 && !haveDirkardVosol ) {
                     insertDirkardVosol(darkhastFaktorModel, null);
                 }
 
@@ -658,7 +658,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
 
 
                 boolean haveDirkardVosol = haveDirkardVosol(null, bargashtyModel, CodeNoeVosolSabtShode);
-                if (mablaghMandehOtherVosol == 0 && !haveDirkardVosol) {
+                if (mablaghMandehOtherVosol < 1000 && !haveDirkardVosol) {
                     insertDirkardVosol(null, bargashtyModel);
                     mablaghMandehOtherVosol = (long) setMablaghMandehOtherVosol(ccDarkhastFaktor);
                     mPresenter.onSuccessInsert(mablaghMandehOtherVosol);
@@ -1656,7 +1656,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                 try {
                     Date date = null;
                     if (darkhastFaktorModel.getTarikhFaktor() != null) {
-                        date = simpleDateFormatLong.parse(darkhastFaktorModel.getTarikhFaktor());
+                        date = simpleDateFormatLong.parse(darkhastFaktorModel.getTarikhErsal());
                         azTarikh = simpleDateFormatShort.format(date);
                         Date taTarikhDate = simpleDateFormatDATE_TIME_WITH_SPACE.parse(getProgramShared.getString(getProgramShared.GREGORIAN_DATE_TIME_OF_GET_CONFIG(), ""));
                         taTarikh = simpleDateFormatDATE_TIME_WITH_SPACE.format(taTarikhDate);//Date Now
@@ -1695,7 +1695,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
 
             if (entity.getCodeNoeVosol() == Integer.parseInt(Constants.VALUE_MARJOEE())) {
                 try {
-                    Date date = simpleDateFormatLong.parse(darkhastFaktorModel.getTarikhFaktor());
+                    Date date = simpleDateFormatLong.parse(darkhastFaktorModel.getTarikhErsal());
                     azTarikh = simpleDateFormatShort.format(date);
                     taTarikh = getProgramShared.getString(getProgramShared.GREGORIAN_DATE_TIME_OF_SERVER(), simpleDateFormatLong.format(new Date()));//Date Now
                 } catch (ParseException e) {
@@ -1898,7 +1898,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                     try {
                         Date date = null;
                         if (darkhastFaktorModel.getTarikhFaktor() != null) {
-                            date = simpleDateFormatLong.parse(darkhastFaktorModel.getTarikhFaktor());
+                            date = simpleDateFormatLong.parse(darkhastFaktorModel.getTarikhErsal());
                             azTarikh = simpleDateFormatShort.format(date);
                             Date taTarikhDate = simpleDateFormatDATE_TIME_WITH_SPACE.parse(getProgramShared.getString(getProgramShared.GREGORIAN_DATE_TIME_OF_GET_CONFIG(), ""));
                             taTarikh = simpleDateFormatDATE_TIME_WITH_SPACE.format(taTarikhDate);//Date Now
@@ -1937,7 +1937,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
 
                 if (entity.getCodeNoeVosol() == Integer.parseInt(Constants.VALUE_MARJOEE())) {
                     try {
-                        Date date = simpleDateFormatLong.parse(darkhastFaktorModel.getTarikhFaktor());
+                        Date date = simpleDateFormatLong.parse(darkhastFaktorModel.getTarikhErsal());
                         azTarikh = simpleDateFormatShort.format(date);
                         taTarikh = getProgramShared.getString(getProgramShared.GREGORIAN_DATE_TIME_OF_SERVER(), simpleDateFormatLong.format(new Date()));//Date Now
                     } catch (ParseException e) {

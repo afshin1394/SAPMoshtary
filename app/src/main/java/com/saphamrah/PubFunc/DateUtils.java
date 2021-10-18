@@ -212,6 +212,19 @@ public class DateUtils
         return simpleDateFormat.format(today);
     }
 
+    /**
+     * تاریخ و زمان الان به میلادی و در قالب
+     * <br>
+     * yyyy-MM-dd'T'HH:mm:ss.sss
+     * @return
+     */
+    public String todayDateGregorianWithSeconds()
+    {
+        Date today = Calendar.getInstance().getTime();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
+        return simpleDateFormat.format(today);
+    }
+
 
     public Date todayGregorian()
     {

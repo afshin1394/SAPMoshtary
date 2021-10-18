@@ -53,6 +53,7 @@ public class MoshtaryModel
     private static final String COLUMN_ModateNaghd = "ModateNaghd";
     private static final String COLUMN_TarikhMoarefiMoshtary = "TarikhMoarefiMoshtary";
     private static final String COLUMN_KharejAzMahal = "KharejAzMahal";
+    private static final String COLUMN_CodeEghtesady = "CodeEghtesady";
 
 
 
@@ -212,6 +213,10 @@ public class MoshtaryModel
     {
         return COLUMN_KharejAzMahal;
     }
+    public static String COLUMN_CodeEghtesady()
+    {
+        return COLUMN_CodeEghtesady;
+    }
 
 
     @SerializedName("ccMoshtary")
@@ -289,7 +294,10 @@ public class MoshtaryModel
     @SerializedName("TarikhMoarefiMoshtary")
     @Expose
     private String TarikhMoarefiMoshtary;
-	
+    @SerializedName("CodeEghtesady")
+    @Expose
+    private String CodeEghtesady;
+
 	
     private int Olaviat;
     private String Address;
@@ -626,6 +634,14 @@ public class MoshtaryModel
         KharejAzMahal = kharejAzMahal;
     }
 
+    public String getCodeEghtesady() {
+        return CodeEghtesady;
+    }
+
+    public void setCodeEghtesady(String codeEghtesady) {
+        CodeEghtesady = codeEghtesady;
+    }
+
     /**
      * @deprecated
      * @param moshtaryAddressModels
@@ -733,6 +749,7 @@ public class MoshtaryModel
             jsonObject.put("ccMasir" , ccMasir);
             jsonObject.put("ccForoshandeh" , ccForoshandeh);
             jsonObject.put("olaviat" , Olaviat);
+            jsonObject.put("CodeEghtesady" , CodeEghtesady);
         }
         catch (Exception e)
         {
@@ -782,6 +799,7 @@ public class MoshtaryModel
                 ", ExtraProp_NoeForoshandeh_First=" + ExtraProp_NoeForoshandeh_First +
                 ", ExtraProp_MoshtaryMojazKharejAzMasir=" + ExtraProp_MoshtaryMojazKharejAzMasir +
                 ", ExtraProp_Olaviat=" + ExtraProp_Olaviat +
+                ", CodeEghtesady=" + CodeEghtesady +
                 ", DateOfMasir='" + DateOfMasir + '\'' +
                 '}';
     }

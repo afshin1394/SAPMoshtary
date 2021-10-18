@@ -237,6 +237,10 @@ public interface APIServiceRxjava {
     Observable<Response<GetAllvJayezehByccMarkazForoshResult>>getJayezeh(@Query("Noe_Titr_Satr") String noeTiteSatr, @Query("ccMarkazSazmanForosh") String ccMarkazSazmanForosh, @Query("ccJayezehs") String ccJayezehs);
     @GET("Api/ApiSales/GetAllvJayezehByccMarkazForosh")
     Observable<Response<GetAllvJayezehByccMarkazForoshResult>>getAllvJayezehByccMarkazForosh(@Query("ccMarkazForosh") String ccMarkazForosh);
+    @GET("Api/ApiSales/GetRptJashnvarehForosh")
+    Observable<Response<GetAllRptJashnvarehResult>>getRptJashnvarehForosh(@Query("ccForoshandeh") int ccForoshandeh,@Query("ccMoshtarys") String ccMoshtarys);
+
+
 
     /**
      * @deprecated
@@ -454,6 +458,11 @@ public interface APIServiceRxjava {
     Observable<Response<GetMessageBoxResult>>getMessageBoxResult(@Query("ccForoshandeh") String ccForoshandeh , @Query("ccMamorPakhsh") String ccMamorPakhsh);
 
     //N
+
+    @GET("Api/ApiTablet/GetNoePishnehad")
+    Observable<Response<NoePishnahadResult>> getNoePishnahad();
+
+
     @GET("Api/ApiGlobal/GetAllNoeHesab")
     Observable<Response<GetAllNoeHesabResult>>getAllNoeHesab();
 

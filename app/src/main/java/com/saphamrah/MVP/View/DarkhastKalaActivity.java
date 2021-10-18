@@ -119,6 +119,7 @@ private FloatingActionButton fabShowMoshtaryGharardad;
     private EditText edttxtCountBaste;
     private EditText edttxtCountAdad;
     private FloatingActionButton fabAdamSefaresh;
+    private FloatingActionButton fabNazaratAndPishnahad;
     //TODO
     private RequestedGridGoodAdapter adapterRequestKalaListGrid;
 
@@ -128,6 +129,7 @@ private FloatingActionButton fabShowMoshtaryGharardad;
     private ArrayList<KalaMojodiZaribModel> selectedItem = new ArrayList<>();
     private RecyclerView recyclerViewNew;
     private GridLayoutManager mLayoutManager;
+    private ImageView btn_menu;
 
 
     public int numberOfDisplayItems = 4;
@@ -165,6 +167,7 @@ private FloatingActionButton fabShowMoshtaryGharardad;
         FloatingActionButton fabSearch = findViewById(R.id.fabSearch);
         FloatingActionButton fabShowCustomerInfo = findViewById(R.id.fabShowCustomerInfo);
         fabShowMoshtaryGharardad = findViewById(R.id.fabShowMoshtaryGharardad);
+        fabNazaratAndPishnahad = findViewById(R.id.fabNazaratAndPishnahad);
         //New Floating Action Button
         //TODO
 
@@ -335,7 +338,21 @@ private FloatingActionButton fabShowMoshtaryGharardad;
             }
         });
 
+        fabNazaratAndPishnahad.setOnClickListener(v -> {
+
+            Intent intent = new Intent(DarkhastKalaActivity.this, NazaratAndPishnahadActivity.class);
+            intent.putExtra("ccMoshtary", ccMoshtary);
+            startActivity(intent);
+            overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
+
+        });
+
+
+
+
     }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

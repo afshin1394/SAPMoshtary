@@ -132,6 +132,8 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
             int requestCountSum = (requestCountCarton * kalaMojodiZaribModel.getTedadDarKarton()) + (requestCountBaste * kalaMojodiZaribModel.getTedadDarBasteh()) + (requestCountAdad * kalaMojodiZaribModel.getAdad());
             int ccGorohNoeSenf = shared.getInt(shared.getCcGorohNoeSenf() , 0);
             long ccDarkhastFaktor = shared.getLong(shared.getCcDarkhastFaktor() , 0);
+            int isKalaOlaviatMablagh = shared.getInt(shared.getIsKalaOlaviatMablagh() , 0);
+            int isKalaOlaviatSabt = shared.getInt(shared.getIsKalaOlaviatSabt() , 0);
             final int ccNoeSenfMoshtary_NemoonehKala = 345;
             Log.d("DarkhastKala","requestCountCarton:"+requestCountCarton);
             Log.d("DarkhastKala","requestCountBaste:"+requestCountBaste);
@@ -170,10 +172,12 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
             چک کردن اولویت کالا در ثبت بر اساس تعداد و درجه ی اولویت
              */
             if (validData){
-                checkOlaviat = checkKalaOlaviatMablagh(kalaMojodiZaribModel,requestCountSum);
-                if(!checkOlaviat){
-                    mView.get().onErrorAddNewRequestedKala(R.string.errorKalaOlaviat);
-                    validData = false;
+                if (isKalaOlaviatMablagh == 1) {
+                    checkOlaviat = checkKalaOlaviatMablagh(kalaMojodiZaribModel, requestCountSum);
+                    if (!checkOlaviat) {
+                        mView.get().onErrorAddNewRequestedKala(R.string.errorKalaOlaviat);
+                        validData = false;
+                    }
                 }
 
             }
@@ -181,12 +185,14 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
             چک کردن کالای مورد نظر جهت جلوگیری از ثبت با قیمت دیگر
              */
             if (validData){
-                checkKalaTekrari = checkKalaOlaviatSabtShode(kalaMojodiZaribModel,ccDarkhastFaktor);
-
-                if(!checkKalaTekrari){
-                    mView.get().onErrorAddNewRequestedKala(R.string.errorKalaOlaviatTekrari);
-                    validData = false;
+                if (isKalaOlaviatSabt == 1){
+                    checkKalaTekrari = checkKalaOlaviatSabtShode(kalaMojodiZaribModel,ccDarkhastFaktor);
+                    if(!checkKalaTekrari){
+                        mView.get().onErrorAddNewRequestedKala(R.string.errorKalaOlaviatTekrari);
+                        validData = false;
+                    }
                 }
+
             }
 
             if (validData)

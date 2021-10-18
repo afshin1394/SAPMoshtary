@@ -684,7 +684,8 @@ public class Constants
     public static final int CC_CHILD_MAX_ROOZ_PISHBINI_TAHVIL = 181;
     public static final int CC_CHILD_MIN_TAKHFIF_NAGHDI_KHORDE = 182;
     public static final int CC_CHILD_MIN_TAKHFIF_NAGHDI_GHEIRE_KHORDE = 183;
-
+    public static final int CC_CHILD_KALA_OLAVIAT_MABLAGH = 185;
+    public static final int CC_CHILD_KALA_OLAVIAT_SABT = 186;
 
 
 

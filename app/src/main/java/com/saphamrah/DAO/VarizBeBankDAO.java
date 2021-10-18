@@ -266,7 +266,7 @@ public class VarizBeBankDAO
      */
     public ArrayList<VarizBeBankModel> getByCcShomarehSanadMablagh(String shomarehSanad)
     {
-        String query = "select * from varizBeBank where " + modelTABLE_NAME.getCOLUMN_ExtraProp_ShomarehSanad() + " = " + shomarehSanad + " and Mablagh = ExtraProp_MablaghSabtShode  and ExtraProp_IsSend = 0";
+        String query = "select * from varizBeBank where " + modelTABLE_NAME.getCOLUMN_ExtraProp_ShomarehSanad() + " = '" + shomarehSanad + "' and Mablagh = ExtraProp_MablaghSabtShode  and ExtraProp_IsSend = 0";
         ArrayList<VarizBeBankModel> models = new ArrayList<>();
         try
         {
@@ -299,7 +299,7 @@ public class VarizBeBankDAO
      */
     public ArrayList<VarizBeBankModel> getByCcShomarehSanadExtraProp_Mablagh(String shomarehSanad)
     {
-        String query = "select * from varizBeBank where " + modelTABLE_NAME.getCOLUMN_ExtraProp_ShomarehSanad() + " = " + shomarehSanad + " and Mablagh != ExtraProp_MablaghSabtShode and ExtraProp_IsSend = 0 ";
+        String query = "select * from varizBeBank where " + modelTABLE_NAME.getCOLUMN_ExtraProp_ShomarehSanad() + " = '" + shomarehSanad + "' and Mablagh != ExtraProp_MablaghSabtShode and ExtraProp_IsSend = 0 ";
         ArrayList<VarizBeBankModel> models = new ArrayList<>();
         try
         {

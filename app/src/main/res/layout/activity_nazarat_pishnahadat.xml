@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/layTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layoutDirection="rtl"
+            android:background="@color/colorPrimary"
+            android:padding="@dimen/paddingTitle"
+            android:elevation="@dimen/elevationActivityTitle"
+            android:layout_alignParentTop="true"
+            tools:ignore="UnusedAttribute">
+
+            <TextView
+                android:id="@+id/lblActivityTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/nazarat"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/lblActivityTitle" />
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_nazarat"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layTitle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lay_details_nazarat"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layTitle"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <com.saphamrah.CustomView.CustomTextInputLayout
+                android:id="@+id/layEdtNoePishnahad"
+                android:layout_width="0dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layoutDirection="rtl"
+                android:textDirection="rtl"
+                android:theme="@style/TextInputLayoutTheme">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edtNoePishnahad"
+                    android:drawableLeft="@drawable/ic_arrow_down"
+                    android:hint="@string/noeMozoue"
+                    android:textColorHint="@color/colorDivider"
+                    android:textSize="@dimen/FontSize16"
+                    android:textColor="@color/colorTextPrimary"
+                    android:maxLines="1"
+                    android:inputType="none"
+                    android:editable="false"/>
+            </com.saphamrah.CustomView.CustomTextInputLayout>
+
+
+
+
+            <com.saphamrah.CustomView.CustomTextInputLayout
+                android:id="@+id/layEdtDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layEdtNoePishnahad"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layoutDirection="rtl"
+                android:textDirection="rtl"
+                android:theme="@style/TextInputLayoutTheme">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edtDescription"
+                    android:hint="@string/sharhMozoue"
+                    android:textColorHint="@color/colorDivider"
+                    android:textSize="@dimen/FontSize16"
+                    android:textColor="@color/colorTextPrimary"
+                    />
+            </com.saphamrah.CustomView.CustomTextInputLayout>
+
+            <com.saphamrah.CustomView.CustomTextInputLayout
+                android:id="@+id/layEdtDescriptionPishnehad"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layEdtDescription"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layoutDirection="rtl"
+                android:textDirection="rtl"
+                android:theme="@style/TextInputLayoutTheme">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edtDescriptionPishnehad"
+                    android:hint="@string/sharhPishnahad"
+                    android:textColorHint="@color/colorDivider"
+                    android:textSize="@dimen/FontSize16"
+                    android:textColor="@color/colorTextPrimary"
+                    />
+            </com.saphamrah.CustomView.CustomTextInputLayout>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.github.clans.fab.FloatingActionMenu
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabMenu"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            fab:menu_fab_size="normal"
+            fab:menu_showShadow="true"
+            fab:menu_shadowColor="#66000000"
+            fab:menu_shadowRadius="4dp"
+            fab:menu_shadowXOffset="1dp"
+            fab:menu_shadowYOffset="3dp"
+            fab:menu_colorNormal="@color/colorFabMenu"
+            fab:menu_colorPressed="@color/colorFabMenuClick"
+            fab:menu_colorRipple="#99FFFFFF"
+            fab:menu_animationDelayPerItem="50"
+            fab:menu_icon="@drawable/ic_menu"
+            fab:menu_buttonSpacing="0dp"
+            fab:menu_labels_margin="0dp"
+            fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+            fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+            fab:menu_labels_paddingTop="4dp"
+            fab:menu_labels_paddingRight="8dp"
+            fab:menu_labels_paddingBottom="4dp"
+            fab:menu_labels_paddingLeft="8dp"
+            fab:menu_labels_textColor="@color/colorTextPrimary"
+            fab:menu_labels_textSize="14sp"
+            fab:menu_labels_colorNormal="@color/colorWhite"
+            fab:menu_labels_colorPressed="@color/colorWhite"
+            fab:menu_labels_colorRipple="@color/colorWhite"
+            fab:menu_labels_singleLine="false"
+            fab:menu_labels_ellipsize="none"
+            fab:menu_labels_maxLines="-1"
+            fab:menu_labels_position="right"
+            fab:menu_openDirection="up"
+            fab:menu_labels_customFont="@string/fontPath"
+            fab:menu_backgroundColor="@android:color/transparent">
+
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fabAdd"
+                android:src="@drawable/fab_add"
+                fab:fab_size="normal"
+                fab:fab_label="@string/add"
+                fab:fab_colorNormal="@color/colorFabAdd"
+                fab:fab_colorPressed="@color/colorFabAddClick"
+                android:layout_margin="15dp"/>
+
+
+        </com.github.clans.fab.FloatingActionMenu>
+
+    <LinearLayout
+        android:id="@+id/layButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/btn_bg"
+        android:gravity="center_horizontal"
+        android:layoutDirection="rtl"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnApply"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/apply"
+            android:textSize="14dp"
+            android:textColor="@color/colorWhite"
+            android:padding="@dimen/altdlgButtonPadding"
+            android:layout_margin="1dp"
+            android:background="@android:color/transparent"/>
+        <LinearLayout
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:layout_margin="5dp">
+        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnCancel"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textSize="14dp"
+            android:textColor="@color/colorWhite"
+            android:padding="@dimen/altdlgButtonPadding"
+            android:layout_margin="1dp"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

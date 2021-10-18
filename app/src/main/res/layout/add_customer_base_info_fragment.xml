@@ -135,6 +135,29 @@
             </com.saphamrah.CustomView.CustomTextInputLayout>
 
             <com.saphamrah.CustomView.CustomTextInputLayout
+                android:id="@+id/txtinputCodeEghtesady"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layoutDirection="rtl"
+                android:textDirection="ltr"
+                android:theme="@style/TextInputLayoutTheme">
+                <EditText
+                    android:id="@+id/txtCodeEghtesady"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_national_card"
+                    android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                    android:hint="@string/CodeEghtesady"
+                    android:textColorHint="@color/colorDivider"
+                    android:textSize="@dimen/FontSize16"
+                    android:textColor="@color/colorTextPrimary"
+                    android:inputType="number"
+                    android:maxLength="12"
+                    android:maxLines="1" />
+            </com.saphamrah.CustomView.CustomTextInputLayout>
+
+            <com.saphamrah.CustomView.CustomTextInputLayout
                 android:id="@+id/txtinputMobile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

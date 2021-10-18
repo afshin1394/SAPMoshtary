@@ -14,6 +14,8 @@ public class SelectFaktorShared
 
     private String moshtaryGharardadccSazmanForosh ="sVndWrpfDGld";
     private String ccMoshtaryGharardad="momoSfkpswd";
+    private String iskalaOlaviatMablagh ="kacvckdfth";
+    private String iskalaOlaviatSabt ="nkagjcehft";
 
     private String ccMoshtary = "ezQI6YvaOK";            //int
     private String ccForoshandeh = "oJbuCX7HpM";         //int
@@ -394,6 +396,8 @@ public class SelectFaktorShared
             editor.remove(minModatHozor);
             editor.remove(ccMoshtaryGharardad);
             editor.remove(moshtaryGharardadccSazmanForosh);
+            editor.remove(iskalaOlaviatMablagh);
+            editor.remove(iskalaOlaviatSabt);
             editor.apply();
 
             editor.clear();
@@ -462,6 +466,8 @@ public class SelectFaktorShared
         putInt(getMinModatHozor() , 0);
         putInt(getCcMoshtaryGharardad() , 0);
         putInt(getMoshtaryGharardadccSazmanForosh() , 0);
+        putInt(getIsKalaOlaviatMablagh() , 0);
+        putInt(getIsKalaOlaviatSabt() , 0);
     }
 
 
@@ -727,6 +733,12 @@ public class SelectFaktorShared
 
     public String getCcMoshtaryGharardad() {
         return ccMoshtaryGharardad;
+    }
+    public String getIsKalaOlaviatMablagh() {
+        return iskalaOlaviatMablagh;
+    }
+    public String getIsKalaOlaviatSabt() {
+        return iskalaOlaviatSabt;
     }
 
     public void setCcMoshtaryGharardad(String ccMoshtaryGharardad) {

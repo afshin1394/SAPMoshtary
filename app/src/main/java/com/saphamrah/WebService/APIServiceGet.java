@@ -192,6 +192,8 @@ public interface APIServiceGet
     Call<GetAllvJayezehByccMarkazForoshResult> getJayezeh(@Query("Noe_Titr_Satr") String noeTiteSatr, @Query("ccMarkazSazmanForosh") String ccMarkazSazmanForosh, @Query("ccJayezehs") String ccJayezehs);
     @GET("Api/ApiSales/GetAllvJayezehByccMarkazForosh")
     Call<GetAllvJayezehByccMarkazForoshResult> getAllvJayezehByccMarkazForosh(@Query("ccMarkazForosh") String ccMarkazForosh);
+    @GET("Api/ApiSales/GetRptJashnvarehForosh")
+    Call<GetAllRptJashnvarehResult> getRptJashnvarehForosh(@Query("ccForoshandeh") int ccForoshandeh,@Query("ccMoshtarys") String ccMoshtarys);
 
     /**
      * @deprecated
@@ -416,6 +418,9 @@ public interface APIServiceGet
     Call<MarjoeeMamorPakhshResult> getMarjoeeMamorPakhsh(@Query("ccMoshtarys") String ccMoshtarys);
 
     //N
+    @GET("Api/ApiTablet/GetNoePishnehad")
+    Call<NoePishnahadResult> getNoePishnahad();
+
     @GET("Api/ApiGlobal/GetAllNoeHesab")
     Call<GetAllNoeHesabResult> getAllNoeHesab();
 

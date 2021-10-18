@@ -97,7 +97,12 @@
     <color name="colorFabPrint">#ECEDEE</color>
     <color name="colorFabSearchPrinter">#2196F3</color>
     <color name="colorFabUpdateGallery">#009DAD</color>
+    <color name="colorFabDelete">#E4284C</color>
+    <color name="colorFabDeleteClick">#781414</color>
+    <color name="colorFabSend">#8BAEEC</color>
+    <color name="colorFabSendClick">#3F70A5</color>
 
+    <color name="colorFabMoshtaryChidman">#933A68</color>
 
     <!-- color lay treasuryList -->
 

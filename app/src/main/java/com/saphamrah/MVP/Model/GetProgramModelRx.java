@@ -256,6 +256,7 @@ import com.saphamrah.Model.MoshtaryMorajehShodehRoozModel;
 import com.saphamrah.Model.MoshtaryParentModel;
 import com.saphamrah.Model.NoeFaaliatForMoarefiMoshtaryJadidModel;
 import com.saphamrah.Model.NoeMoshtaryRialKharidModel;
+import com.saphamrah.Model.NoePishnahadModel;
 import com.saphamrah.Model.NoeVosolMoshtaryModel;
 import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.ParameterModel;
@@ -266,6 +267,7 @@ import com.saphamrah.Model.RptForoshModel;
 import com.saphamrah.Model.RptMandehdarModel;
 import com.saphamrah.Model.RptSanadModel;
 import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.Model.SuggestModel;
 import com.saphamrah.Model.SupportCrispModel;
 import com.saphamrah.Model.TafkikJozeModel;
 import com.saphamrah.Model.TaghiratVersionPPCModel;
@@ -283,6 +285,7 @@ import com.saphamrah.PubFunc.Logger;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Repository.ElamMarjoeeForoshandehRepository;
+import com.saphamrah.Repository.NoePishnahadRepository;
 import com.saphamrah.Shared.GetProgramShared;
 import com.saphamrah.Shared.LastOlaviatMoshtaryShared;
 import com.saphamrah.Shared.LocalConfigShared;
@@ -423,6 +426,7 @@ import com.saphamrah.WebService.ServiceResponse.GetMoshtaryPolygonResult;
 import com.saphamrah.WebService.ServiceResponse.GetTafkikJozePakhshResult;
 import com.saphamrah.WebService.ServiceResponse.GetTedadFaktorMoshtaryResult;
 import com.saphamrah.WebService.ServiceResponse.MarjoeeMamorPakhshResult;
+import com.saphamrah.WebService.ServiceResponse.NoePishnahadResult;
 import com.saphamrah.WebService.ServiceResponse.SupportCrispResult;
 
 import org.json.JSONArray;
@@ -9840,7 +9844,8 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                                         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                                         Log.i("RxJavaRequest", +itemCounter + "updateMoshtaryGharardadKalaTable:" + insertGroup);
                                         if (getProgramType != Constants.GET_PROGRAM_UPDATE_GHARARDAD_KALAMOSAVABEH())
-                                            getMarjoeeForoshandehParameterAndParameterChild(getProgramType);
+                                            getNoePishnahad(getProgramType);
+
                                     } else {
                                         Log.i("RxJavaRequest", +itemCounter + "  updateMoshtaryGharardadKalaTable:error");
                                         throwException("updateMoshtaryGharardadKalaTable");
@@ -9858,6 +9863,81 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                 });
         compositeDisposable.add(deleteAllDisposable);
     }
+
+
+    private void getNoePishnahad(int getProgramType) {
+
+        apiServiceRxjava.getNoePishnahad()
+                .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, ACTIVITY_NAME, "getNoePishnahad", ""))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Response<NoePishnahadResult>>() {
+                    @Override
+                    public void onSubscribe(@androidx.annotation.NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@androidx.annotation.NonNull Response<NoePishnahadResult> noePishnahadResultResponse) {
+                        updateNoePishnahad(getProgramType, noePishnahadResultResponse.body().getData());
+
+                    }
+
+                    @Override
+                    public void onError(@androidx.annotation.NonNull Throwable e) {
+                        mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", e.getMessage(), e.getCause().getMessage()));
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
+    private void updateNoePishnahad(int getProgramType, ArrayList<NoePishnahadModel> noePishnahadModels) {
+        NoePishnahadRepository noePishnahadRepository = new NoePishnahadRepository(mPresenter.getAppContext());
+        Disposable deleteAllDisposable = noePishnahadRepository.deleteAll()
+                .subscribeOn(Schedulers.io())
+                .subscribe(deleteAll -> {
+                    if (deleteAll) {
+                        Disposable insertGroupDisposable = noePishnahadRepository.insertGroup(noePishnahadModels)
+                                .subscribe(insertGroup -> {
+                                    if (insertGroup) {
+                                        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                                        Log.i("RxJavaRequest", "itemCounter:" + itemCounter + "\t  updateNoePishnahad");
+                                       getMarjoeeForoshandehParameterAndParameterChild(getProgramType);
+                                    } else {
+                                        Log.i("RxJavaRequest", +itemCounter + "  updateNoePishnahad:error");
+                                        throwException("updateNoePishnahad");
+                                    }
+                                }, throwable -> {
+                                    Log.i("RxJavaRequest", +itemCounter + "  updateNoePishnahad:" + throwable.getMessage());
+                                    throwException("updateNoePishnahad");
+                                });
+                        compositeDisposable.add(insertGroupDisposable);
+
+                    } else {
+                        Log.i("RxJavaRequest", +itemCounter + "  updateNoePishnahad:error");
+                        throwException("updateNoePishnahad");
+                    }
+                });
+        compositeDisposable.add(deleteAllDisposable);
+    }
+
+
+
+
+//    private void updateKalaOlaviatGheymat(int getProgramType, ArrayList<SuggestModel> suggestModels){
+//        NoePishnahadRepository noePishnahadRepository = new NoePishnahadRepository(mPresenter.getAppContext());
+//        Disposable deleteAllDisposable = noePishnahadRepository.deleteAll()
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(deleteAll -> {
+//                    Disposable insertGroupDisposable = noePishnahadRepository.insertGroup()
+//                });
+//    }
 
 
     private void getMarjoeeForoshandehParameterAndParameterChild(int getProgramType) {

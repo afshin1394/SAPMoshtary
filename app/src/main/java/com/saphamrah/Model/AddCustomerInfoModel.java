@@ -34,6 +34,7 @@ public class AddCustomerInfoModel implements Parcelable
     private int olaviat;
     private ArrayList<MoshtaryAddressModel> moshtaryAddressModels;
     private ArrayList<MoshtaryShomarehHesabModel> moshtaryShomarehHesabModels;
+    private String CodeEghtesady;
     /*private byte[] nationalCardImage;
     private byte[] javazeKasbImage;
     private byte[] dastehCheckImage;*/
@@ -258,6 +259,14 @@ public class AddCustomerInfoModel implements Parcelable
         this.moshtaryShomarehHesabModels = moshtaryShomarehHesabModels;
     }
 
+    public String getCodeEghtesady() {
+        return CodeEghtesady;
+    }
+
+    public void setCodeEghtesady(String codeEghtesady) {
+        CodeEghtesady = codeEghtesady;
+    }
+
     /*public byte[] getNationalCardImage() {
         return nationalCardImage;
     }
@@ -317,6 +326,7 @@ public class AddCustomerInfoModel implements Parcelable
         dest.writeInt(isOld);
         dest.writeList(moshtaryAddressModels);
         dest.writeList(moshtaryShomarehHesabModels);
+        dest.writeString(CodeEghtesady);
         /*dest.writeInt(nationalCardImage.length);
         dest.writeByteArray(nationalCardImage);
         dest.writeInt(javazeKasbImage.length);
@@ -366,6 +376,7 @@ public class AddCustomerInfoModel implements Parcelable
         moshtaryShomarehHesabModels = new ArrayList<MoshtaryShomarehHesabModel>();
         moshtaryAddressModels = in.readArrayList(MoshtaryAddressModel.class.getClassLoader());
         moshtaryShomarehHesabModels = in.readArrayList(MoshtaryShomarehHesabModel.class.getClassLoader());
+        CodeEghtesady = in.readString();
         /*nationalCardImage = new byte[in.readInt()];
         in.readByteArray(nationalCardImage);
         javazeKasbImage = new byte[in.readInt()];

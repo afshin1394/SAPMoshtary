@@ -49,7 +49,7 @@ public class CustomerAddressDAO
                     "                     WHERE (ExtraProp_IsOld = 1 OR ExtraProp_IsMoshtaryAmargar = 1) and ccMasir in (select ccMasir from Masir) \n" +
                     "                     AND CodeVazeiat > 0 \n" +
                     "                     UNION SELECT * FROM Moshtary\n" +
-                    "left join MoshtaryGharardad mg on Moshtary.ccMoshtaryParent = mg.ccMoshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY ExtraProp_Olaviat ) AS M \n" +
+                    "left join MoshtaryGharardad mg on Moshtary.ccMoshtaryParent = mg.ccMoshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY Olaviat ) AS M \n" +
                     "                     LEFT JOIN (SELECT * FROM MoshtaryAddress \n" +
                     "                     WHERE ccNoeAddress IN (1,2) GROUP BY ccMoshtary ORDER BY ccNoeAddress DESC) AS MA on MA.ccMoshtary = M.ccMoshtary \n" +
                     "                     LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
@@ -100,7 +100,7 @@ public class CustomerAddressDAO
                     "                     WHERE (ExtraProp_IsOld = 1 OR ExtraProp_IsMoshtaryAmargar = 1) and ccMasir in (select ccMasir from Masir) \n" +
                     "                     UNION \n" +
                     "                     SELECT * FROM Moshtary\n" +
-                    "left join MoshtaryGharardad mg on Moshtary.ccMoshtaryParent = mg.ccMoshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY ExtraProp_Olaviat ) AS M \n" +
+                    "left join MoshtaryGharardad mg on Moshtary.ccMoshtaryParent = mg.ccMoshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY Olaviat ) AS M \n" +
                     "                     LEFT JOIN (SELECT * FROM MoshtaryAddress \n" +
                     "                     WHERE ccNoeAddress IN (1,2) GROUP BY ccMoshtary ORDER BY ccNoeAddress DESC) AS MA on MA.ccMoshtary = M.ccMoshtary \n" +
                     "                     LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
@@ -142,7 +142,7 @@ public class CustomerAddressDAO
         {
             String query = "select m.*,MA.*,IFNULL(NoeMorajeh,0) AS NoeMorajeh from (SELECT * FROM( SELECT * FROM Moshtary \n" +
                     " WHERE (ExtraProp_IsOld = 1 OR ExtraProp_IsMoshtaryAmargar = 1) and ccMasir in (select ccMasir from Masir) \n" +
-                    " UNION SELECT * FROM Moshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY ExtraProp_Olaviat ) AS M \n" +
+                    " UNION SELECT * FROM Moshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY Olaviat ) AS M \n" +
                     " LEFT JOIN (SELECT * FROM MoshtaryAddress \n" +
                     " WHERE ccNoeAddress IN (1,2) GROUP BY ccMoshtary ORDER BY ccNoeAddress DESC) AS MA on MA.ccMoshtary = M.ccMoshtary \n" +
                     " LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
@@ -187,7 +187,7 @@ public class CustomerAddressDAO
             moshtaryModel.setCcMoshtary(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ccMoshtary())));
             moshtaryModel.setNameMoshtary(cursor.getString(cursor.getColumnIndex(MoshtaryModel.COLUMN_NameMoshtary())));
             moshtaryModel.setNameTablo(cursor.getString(cursor.getColumnIndex(MoshtaryModel.COLUMN_NameTablo())));
-            moshtaryModel.setOlaviat(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ExtraProp_Olaviat())));
+            moshtaryModel.setOlaviat(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_Olaviat())));
             moshtaryModel.setModateVosol(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ModateVosol())));
             moshtaryModel.setCodeMoshtary(cursor.getString(cursor.getColumnIndex(MoshtaryModel.COLUMN_CodeMoshtary())));
             moshtaryModel.setAddress(cursor.getString(cursor.getColumnIndex(MoshtaryModel.COLUMN_Address())));

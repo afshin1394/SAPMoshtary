@@ -64,6 +64,16 @@ public class ForoshandehMamorPakhshRepository {
 
     }
 
+    private Callable<ForoshandehMamorPakhshModel>  getIsSelectCallable() {
+        return new Callable<ForoshandehMamorPakhshModel>() {
+            @Override
+            public ForoshandehMamorPakhshModel call()  {
+                return foroshandehMamorPakhshDAO.getIsSelect();
+            }
+        };
+
+    }
+
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
         return RxAsync.makeObservable(deleteAllCallable())
@@ -86,6 +96,11 @@ public class ForoshandehMamorPakhshRepository {
 
     public Observable<ForoshandehMamorPakhshModel> getForoshandehMamorPakhsh() {
         return RxAsync.makeObservable(getForoshandehMamorPakhshCallable())
+                .subscribeOn(Schedulers.io());
+    }
+
+    public Observable<ForoshandehMamorPakhshModel> getIsSelect() {
+        return RxAsync.makeObservable(getIsSelectCallable())
                 .subscribeOn(Schedulers.io());
     }
 }

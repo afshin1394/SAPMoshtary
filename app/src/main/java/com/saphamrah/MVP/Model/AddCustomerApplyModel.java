@@ -296,6 +296,14 @@ public class AddCustomerApplyModel implements AddCustomerApplyMVP.ModelOps
                 moshtaryModel.setCodeMely(" ");
                 moshtaryModel.setShenasehMely(addCustomerInfoModel.getNationalCode().trim());
             }
+            if(addCustomerInfoModel.getCodeEghtesady().trim().length()!=0)
+            {
+                moshtaryModel.setCodeEghtesady(addCustomerInfoModel.getCodeEghtesady().trim());
+            }
+            else
+            {
+                moshtaryModel.setCodeEghtesady(" ");
+            }
             MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
             return moshtaryDAO.insert(moshtaryModel);
         } catch (Exception exception)

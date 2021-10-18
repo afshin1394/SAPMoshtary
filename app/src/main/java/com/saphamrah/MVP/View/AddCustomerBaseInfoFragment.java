@@ -56,6 +56,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
     private EditText edttxtinputNoeSenf;
     private EditText edttxtinputNoeVosol;
     private EditText edttxtinputSaateVisit;
+    private EditText edttxtCodeEghtesady;
     private CustomTextInputLayout txtinputFirstName;
     private CustomTextInputLayout txtinputLastName;
     private CustomTextInputLayout txtinputTabloName;
@@ -70,6 +71,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
     private CustomTextInputLayout txtinputNoeSenf;
     private CustomTextInputLayout txtinputNoeVosol;
     private CustomTextInputLayout txtinputSaateVisit;
+    private CustomTextInputLayout txtinputCodeEghtesady;
     private Button btnApply;
     private Context context;
 
@@ -649,6 +651,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
         txtinputNoeSenf = (CustomTextInputLayout) view.findViewById(R.id.txtinputNoeSenf);
         txtinputNoeVosol = (CustomTextInputLayout) view.findViewById(R.id.txtinputNoeVosol);
         txtinputSaateVisit = (CustomTextInputLayout) view.findViewById(R.id.txtinputSaateVisit);
+        txtinputCodeEghtesady = (CustomTextInputLayout) view.findViewById(R.id.txtinputCodeEghtesady);
     }
 
     private void bindEditTextInput(View view)
@@ -667,6 +670,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
         edttxtinputNoeSenf = (EditText)view.findViewById(R.id.txtNoeSenf);
         edttxtinputNoeVosol = (EditText)view.findViewById(R.id.txtNoeVosol);
         edttxtinputSaateVisit = (EditText)view.findViewById(R.id.txtSaateVisit);
+        edttxtCodeEghtesady = (EditText)view.findViewById(R.id.txtCodeEghtesady);
     }
 
     private void setTypeFace()
@@ -687,6 +691,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
         edttxtinputNoeSenf.setTypeface(font);
         edttxtinputNoeVosol.setTypeface(font);
         edttxtinputSaateVisit.setTypeface(font);
+        edttxtCodeEghtesady.setTypeface(font);
 
         txtinputFirstName.setTypeface(font);
         txtinputLastName.setTypeface(font);
@@ -702,6 +707,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
         txtinputNoeSenf.setTypeface(font);
         txtinputNoeVosol.setTypeface(font);
         txtinputSaateVisit.setTypeface(font);
+        txtinputCodeEghtesady.setTypeface(font);
 
         btnApply.setTypeface(font);
     }
@@ -770,6 +776,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
         addCustomerInfoModel.setAnbarTitle(edttxtinputAnbar.getText().toString().trim());
         addCustomerInfoModel.setMasahatMaghaze(edttxtinputMasahateMaghazeh.getText().toString().trim());
         addCustomerInfoModel.setSaateVisit(edttxtinputSaateVisit.getText().toString().trim());
+        addCustomerInfoModel.setCodeEghtesady(edttxtCodeEghtesady.getText().toString().trim());
         mPresenter.checkCustomerBaseInfo(addCustomerInfoModel, requireCodeMeli, requireMobile, requireMasahat);
     }
 

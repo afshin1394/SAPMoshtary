@@ -1,5 +1,6 @@
 package com.saphamrah.WebService;
 
+import com.saphamrah.Model.MoshtaryChidmanModel;
 import com.saphamrah.WebService.ServiceResponse.CreateAdamDarkhastResult;
 import com.saphamrah.WebService.ServiceResponse.CreateAddressResult;
 import com.saphamrah.WebService.ServiceResponse.CreateAfradResult;
@@ -22,10 +23,12 @@ import com.saphamrah.WebService.ServiceResponse.CreateShomarehHesabResult;
 import com.saphamrah.WebService.ServiceResponse.CreateVisitMoshtaryResult;
 import com.saphamrah.WebService.ServiceResponse.GetUpdateMoshtaryResult;
 import com.saphamrah.WebService.ServiceResponse.MarjoeeKardexResult;
+import com.saphamrah.WebService.ServiceResponse.MoshtaryChidmanResult;
 import com.saphamrah.WebService.ServiceResponse.UpdateDarkhastFaktorWithJSONResult;
 import com.saphamrah.WebService.ServiceResponse.UpdateNotificationMessageBoxResult;
 import com.saphamrah.WebService.ServiceResponse.UpdateStatusMessageBoxResult;
 import com.saphamrah.WebService.ServiceResponse.VarizBeBankResult;
+import com.saphamrah.WebService.ServiceResponse.SuggestResult;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -117,6 +120,10 @@ public interface APIServicePost
     @POST("/api/apiGlobal/CreateShomarehHesab")
     Call<CreateShomarehHesabResult> createShomarehHesabResult(@Field("") String moshtaryShomareHesabData);
 
+    @FormUrlEncoded
+    @POST("Api/ApiTablet/CreateSuggestJSON ")
+    Call<SuggestResult> createSuggestResult(@Field("") String createSuggest);
+
     //L
     @FormUrlEncoded
     @POST("Api/ApiTablet/CreateLog")
@@ -175,4 +182,10 @@ public interface APIServicePost
     @FormUrlEncoded
     @POST("Api/ApiSales/CreateKardexWithJSON")
     Call<MarjoeeKardexResult> createKardexWithJson(@Field("") String jsonStringData);
+
+
+    @FormUrlEncoded
+    @POST("Api/ApiSales/CreateMoshtaryChidmanJSON")
+    Call<MoshtaryChidmanResult> createMoshtaryChidmanJSON(@Field("jsonMoshtaryChidmanModel") String jsonMoshtaryChidmanModel);
+
 }

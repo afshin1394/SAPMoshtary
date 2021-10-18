@@ -112,7 +112,7 @@ public class MarjoeeKamelImageDAO
         ArrayList<MarjoeeKamelImageModel> models = new ArrayList<>();
         try {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(KardexModel.TableName(), allColumns(), MarjoeeKamelImageModel.COLUMN_ccKardex() + " = " + cckardex, null, null, null, null);
+            Cursor cursor = db.query(MarjoeeKamelImageModel.TableName(), allColumns(), MarjoeeKamelImageModel.COLUMN_ccKardex() + " = " + cckardex, null, null, null, null);
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
                     models = cursorToModel(cursor);

@@ -273,6 +273,7 @@ public class RptThreeMonthPurchaseFragment extends Fragment implements RptThreeM
         Log.i(TAG, "onActionUpButton: ");
         ((RptThreeMonthPurchaseActivity) getActivity()).searchView.closeSearch();
         ((RptThreeMonthPurchaseActivity) getActivity()).searchStatus = 0;
+        if (rtp3MonthGetSumModels !=null)
         setListAdapter(rtp3MonthGetSumModels, sumTedad,sumMablaghFaktor);
     }
 
@@ -281,6 +282,7 @@ public class RptThreeMonthPurchaseFragment extends Fragment implements RptThreeM
         Log.i(TAG, "onActionEmptyButton: ");
         ((RptThreeMonthPurchaseActivity) getActivity()).searchView.closeSearch();
         ((RptThreeMonthPurchaseActivity) getActivity()).searchStatus = 0;
+        if (rtp3MonthGetSumModels !=null)
         setListAdapter(rtp3MonthGetSumModels, sumTedad , sumMablaghFaktor);
 
     }
@@ -290,6 +292,7 @@ public class RptThreeMonthPurchaseFragment extends Fragment implements RptThreeM
         Log.i(TAG, "onSearchViewClosed: ");
         ((RptThreeMonthPurchaseActivity) getActivity()). btnBack.setVisibility(View.VISIBLE);
         ((RptThreeMonthPurchaseActivity) getActivity()).searchStatus = 0;
+        if (rtp3MonthGetSumModels !=null)
         setListAdapter(rtp3MonthGetSumModels, sumTedad,sumMablaghFaktor);
     }
 

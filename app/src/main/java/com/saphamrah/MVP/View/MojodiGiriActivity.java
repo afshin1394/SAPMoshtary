@@ -103,6 +103,7 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
         FloatingActionButton fabSearch = findViewById(R.id.fabSearch);
         FloatingActionButton fabShowCustomerInfo = findViewById(R.id.fabShowCustomerInfo);
         fabAdamDarkhast = findViewById(R.id.fabAdamDarkhast);
+        FloatingActionButton fabMoshtaryChidman = findViewById(R.id.fabMoshtaryChidman);
         searchView = findViewById(R.id.searchView);
         searchView.setVoiceSearch(false);
         searchView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
@@ -226,6 +227,16 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
                 overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
             }
         });
+
+
+        fabMoshtaryChidman.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMoshtaryChidmanActivity();
+            }
+        });
+
+
     }
 
     @Override
@@ -819,6 +830,12 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
     protected void onDestroy() {
         super.onDestroy();
         new PubFunc().new LocationProvider().stopLocationProvider();
+    }
+
+    private void openMoshtaryChidmanActivity() {
+        Intent intent = new Intent(MojodiGiriActivity.this , MoshtaryChidmanActivity.class);
+        intent.putExtra("ccMoshtary" , ccMoshtary);
+        startActivity(intent);
     }
 
 }

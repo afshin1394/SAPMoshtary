@@ -37,6 +37,7 @@ import com.saphamrah.DAO.MojoodiGiriDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.DAO.MoshtaryMorajehShodehRoozDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
+import com.saphamrah.DAO.SuggestDAO;
 import com.saphamrah.MVP.View.TemporaryRequestsListActivity;
 import com.saphamrah.Model.AdamDarkhastModel;
 import com.saphamrah.Model.AnbarakAfradModel;
@@ -64,6 +65,7 @@ import com.saphamrah.Model.MojoodiGiriModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.MoshtaryMorajehShodehRoozModel;
 import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.Model.SuggestModel;
 import com.saphamrah.Network.RxNetwork.RxHttpRequest;
 import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
@@ -92,6 +94,7 @@ import com.saphamrah.WebService.ServiceResponse.CreateGpsDataPPCResult;
 import com.saphamrah.WebService.ServiceResponse.CreateKalaMojodyWithJSONResult;
 import com.saphamrah.WebService.ServiceResponse.CreateLogPPCResult;
 import com.saphamrah.WebService.ServiceResponse.CreateMojoodiGiriResult;
+import com.saphamrah.WebService.ServiceResponse.SuggestResult;
 import com.saphamrah.WebService.ServiceResponse.UpdateDarkhastFaktorWithJSONResult;
 
 import org.json.JSONArray;
@@ -538,6 +541,13 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         {
             sendLogPPCToServer(apiServicePost , logPPCModels);
         }
+
+        SuggestDAO suggestDAO = new SuggestDAO(mPresenter.getAppContext());
+        ArrayList<SuggestModel> suggestModels = suggestDAO.getAllSuggestIsNotSend();
+        if (suggestModels.size() > 0)
+        {
+            sendSuggest(apiServicePost ,suggestModels,suggestDAO);
+        }
     }
 
     private void sendBarkhordsToServer(APIServicePost apiServicePost , ArrayList<BarkhordForoshandehBaMoshtaryModel> barkhords)
@@ -902,6 +912,67 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
             GPSDataMashinDAO gpsDataMashinDAO = new GPSDataMashinDAO(mPresenter.getAppContext());
             gpsDataMashinDAO.deleteByccGPSDataMashins(sendedccGPSData);
         }
+    }
+
+    private void sendSuggest(APIServicePost apiServicePost , ArrayList<SuggestModel> suggestModels,SuggestDAO suggestDAO)
+    {
+        for (SuggestModel model : suggestModels)
+        {
+            String jsonString = model.toJsonString();
+            Call<SuggestResult> call = apiServicePost.createSuggestResult(jsonString);
+            call.enqueue(new Callback<SuggestResult>()
+            {
+                @Override
+                public void onResponse(Call<SuggestResult> call, Response<SuggestResult> response)
+                {
+                    try
+                    {
+                        if (response.isSuccessful() && response.body() != null)
+                        {
+                            Log.d("noTemp" , "in if success and body not null");
+                            SuggestResult result = response.body();
+                            if (result.getSuccess())
+                            {
+                                suggestDAO.updateIsSend(model.getCcSuggest());
+                            }
+                            else
+                            {
+                                Log.d("noTemp" , "in else not success");
+                                setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "" , "sendSuggest" , "onResponse");
+                                mPresenter.onError(R.string.errorSendSuggest);
+                            }
+                        }
+                        else
+                        {
+                            String errorMessage = "response not successful " + response.message() ;//+ "\n" + "can't send this log : " + logMessage;
+                            if (response.errorBody() != null)
+                            {
+                                errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string() ;//+ "\n" + "can't send this log : " + logMessage;
+                            }
+                            setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "" , "sendSuggest" , "onResponse");
+                            Log.d("tempRequest" , "message : " + errorMessage);
+                            mPresenter.onError(R.string.errorSendSuggest);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        Log.d("noTemp" , "in exception");
+                        exception.printStackTrace();
+                        setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "" , "sendSuggest" , "onResponse");
+                        mPresenter.onError(R.string.errorSendSuggest);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SuggestResult> call, Throwable t)
+                {
+                    Log.d("noTemp" , "in onFailure");
+                    setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "" , "sendSuggest" , "onFailure");
+                    mPresenter.onError(R.string.errorSendSuggest);
+                }
+            });
+        }
+
     }
 
     private void sendLogPPCToServer(APIServicePost apiServicePost , ArrayList<LogPPCModel> logPPCModels)

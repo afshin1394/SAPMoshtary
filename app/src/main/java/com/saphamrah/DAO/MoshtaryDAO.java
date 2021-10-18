@@ -97,7 +97,9 @@ public class MoshtaryDAO
             MoshtaryModel.COLUMN_ControlEtebarForoshandeh(),
             MoshtaryModel.COLUMN_ModateNaghd(),
             MoshtaryModel.COLUMN_TarikhMoarefiMoshtary(),
-            MoshtaryModel.COLUMN_KharejAzMahal()
+            MoshtaryModel.COLUMN_KharejAzMahal(),
+            MoshtaryModel.COLUMN_CodeEghtesady()
+
         };
     }
 
@@ -1265,6 +1267,7 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
         contentValues.put(MoshtaryModel.COLUMN_ModateNaghd() , moshtaryModel.getModateNaghd());
         contentValues.put(MoshtaryModel.COLUMN_TarikhMoarefiMoshtary(), moshtaryModel.getTarikhMoarefiMoshtary());
         contentValues.put(MoshtaryModel.COLUMN_KharejAzMahal(), moshtaryModel.getKharejAzMahal());
+        contentValues.put(MoshtaryModel.COLUMN_CodeEghtesady(), moshtaryModel.getCodeEghtesady());
 
 
         return contentValues;
@@ -1317,6 +1320,7 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
             moshtaryModel.setModateNaghd(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_ModateNaghd())));
             moshtaryModel.setTarikhMoarefiMoshtary(cursor.getString(cursor.getColumnIndex(MoshtaryModel.COLUMN_TarikhMoarefiMoshtary())));
             moshtaryModel.setKharejAzMahal(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_KharejAzMahal())));
+            moshtaryModel.setCodeEghtesady(cursor.getString(cursor.getColumnIndex(MoshtaryModel.COLUMN_CodeEghtesady())));
 
 
             moshtaryModels.add(moshtaryModel);

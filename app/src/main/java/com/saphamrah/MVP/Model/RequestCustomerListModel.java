@@ -1570,6 +1570,9 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
         {
             try
             {
+                ParameterChildDAO parameterChildDAO = new ParameterChildDAO(BaseApplication.getContext());
+                int isKalaOlaviatMablagh =Integer.parseInt(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_KALA_OLAVIAT_MABLAGH)) ;
+                int isKalaOlaviatSabt =Integer.parseInt(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_KALA_OLAVIAT_SABT));
                 Date minTarikhSanadBargashty = null;
                 Date tarikh = new Date();
                 ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(weakReferenceContext.get());
@@ -1591,6 +1594,8 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 shared.putInt(shared.getCcMoshtaryGharardad(),ccMoshtaryGharardad);
                 shared.putInt(shared.getMoshtaryGharardadccSazmanForosh(), moshtaryGharardadccSazmanForosh);
                 shared.putBoolean(shared.getIsMorajehShodeh(),isMorajehShodeh);
+                shared.putInt(shared.getIsKalaOlaviatSabt(),isKalaOlaviatSabt);
+                shared.putInt(shared.getIsKalaOlaviatMablagh(),isKalaOlaviatMablagh);
                 Log.i("shared.put","ccMoshtaryGharardad:" + ccMoshtaryGharardad + " , moshtaryGharardadccSazmanForosh:" + moshtaryGharardadccSazmanForosh);
                 Log.d("shared.put","CcMarkazForosh:" + foroshandehMamorPakhshModel.getCcMarkazForosh());
                 Log.d("shared.put","CcSazmanForosh:" + foroshandehMamorPakhshModel.getCcSazmanForosh());
@@ -1659,7 +1664,6 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 int minModatHozorDarMaghazeh = 0;
 
                 String ccChildParameters = Constants.CC_CHILD_HADAGHAL_MABLAGH_KHARID_MOSHTARY_JADID + "," + Constants.CC_CHILD_MABLAGH_MAX_FAKTOR_KHORDEH_MOSHTARY_JADID + "," + Constants.CC_CHILD_MABLAGH_MAX_FAKTOR_OMDEH_MOSHTARY_JADID + "," + Constants.CC_CHILD_Min_Zaman_Hozor_Dar_Maghazeh;
-                ParameterChildDAO parameterChildDAO = new ParameterChildDAO(weakReferenceContext.get());
                 ArrayList<ParameterChildModel> parameterChildModels = parameterChildDAO.getAllByccChildParameter(ccChildParameters);
                 for (ParameterChildModel parameterChild : parameterChildModels)
                 {

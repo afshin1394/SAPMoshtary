@@ -13,7 +13,7 @@ import java.io.FileOutputStream;
 public class ImageUtils
 {
 
-    public byte[] convertBitmapToByteArray(Context context , Bitmap bitmap , int quality)
+    public byte[] convertBitmapToByteArray(Context context, Bitmap bitmap, int quality, Bitmap.CompressFormat jpeg)
     {
         try
         {
