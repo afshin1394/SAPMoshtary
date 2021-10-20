@@ -439,6 +439,42 @@ public class DarkhastFaktorDAO
         return darkhastFaktorModels;
     }
 
+    public String getAllccMoshtary(){
+        String ccMoshtaryString = "-1,";
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query = "select  group_concat( distinct(  ccMoshtary  ))  from darkhastFaktor df";
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast())
+                    {
+                        if (cursor.getString(0)!=null) {
+                            ccMoshtaryString += cursor.getString(0);
+                        }
+                        cursor.moveToNext();
+                    }
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "getAllccMoshtary" , "");
+        }
+        return ccMoshtaryString;
+
+
+    }
+
 
     public ArrayList<DarkhastFaktorModel> getAllByNotCodeVazeiat(int codeVazeiat)
     {
@@ -1618,7 +1654,7 @@ public class DarkhastFaktorDAO
         try
         {
             String query = " select DISTINCT df.ccForoshandeh, df.ccMoshtaryGharardad, df.MoshtaryGharardadccSazmanForosh   from darkhastFaktor df \n" +
-                    " left join moshtary m on df.ccMoshtary = m.ccMoshtary where m.ccNoeMoshtary = 350 \n" ;
+                    " left join moshtary m on df.ccMoshtary = m.ccMoshtary where m.ccNoeMoshtary = 350 and df.ccDarkhastFaktorNoeForosh = 2" ;
             Log.d("GetProgram", "getAllMoshtaryGharardadAndGharardadKala4"+query );
 
             SQLiteDatabase db = dbHelper.getReadableDatabase();

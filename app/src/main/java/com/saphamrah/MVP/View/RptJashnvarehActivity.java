@@ -3,7 +3,6 @@ package com.saphamrah.MVP.View;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -64,6 +63,17 @@ public class RptJashnvarehActivity extends AppCompatActivity implements RptJashn
     private RecyclerView recyclerViewCustomers;
     private RecyclerView recyclerViewJashnvareh;
     private TextView lblTitle, lblNameForoshandeh, lblEmtiazForoshandeh;
+    private int ccMoshtaryExtra;
+    private Mode mode;
+
+    public enum Mode{
+        ForoshandehFromMenu,
+        MamorPakhshFromMenu,
+        ForoshandehFromVerify,
+        MamorPakhshFromVerify
+    }
+
+
 
     public enum State {
         Jashnvareh, Moshtary
@@ -84,13 +94,14 @@ public class RptJashnvarehActivity extends AppCompatActivity implements RptJashn
         bottomSheetBehavior = BottomSheetBehavior.from(cardViewRootBtmSheet);
         customLoadingDialog = new CustomLoadingDialog();
         mPresenter = new RptJashnvarehForoshPresenter(RptJashnvarehActivity.this);
-        initViews();
-        state = State.Moshtary;
-        mPresenter.getSumForoshandehScore();
+        ccMoshtaryExtra =  getIntent().getIntExtra("ccMoshtary",0);
+        mPresenter.checkNoeMasouliat(ccMoshtaryExtra);
+
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void initViews() {
+    private void initViews(int ccMoshtary) {
         lblTitle = findViewById(R.id.lblActivityTitle);
         fabRefresh = findViewById(R.id.fabRefresh);
         fabSearchMoshtary = findViewById(R.id.fabSearchMoshtary);
@@ -108,11 +119,10 @@ public class RptJashnvarehActivity extends AppCompatActivity implements RptJashn
         initSecondLevelAdapter();
 
         fabRefresh.setOnClickListener(view -> {
-            mPresenter.getAll();
+            mPresenter.getAll(ccMoshtary,mode);
             fabMenu.close(true);
 
         });
-
 
         fabSearchJashnvareh.setOnClickListener(view -> {
             state = State.Jashnvareh;
@@ -121,7 +131,7 @@ public class RptJashnvarehActivity extends AppCompatActivity implements RptJashn
             tempSecondLevelModel.clear();
             rptJashnvarehSecondLevelAdapter.notifyDataSetChanged();
             searchView.setHint(getResources().getString(R.string.searchSharhJashnvareh));
-            mPresenter.getAllJashnvareh();
+            mPresenter.getAllJashnvareh(ccMoshtary);
         });
 
         fabSearchMoshtary.setOnClickListener(view -> {
@@ -131,7 +141,7 @@ public class RptJashnvarehActivity extends AppCompatActivity implements RptJashn
             tempSecondLevelModel.clear();
             rptJashnvarehSecondLevelAdapter.notifyDataSetChanged();
             searchView.setHint(getResources().getString(R.string.searchCustomerName));
-            mPresenter.getAllCustomers();
+            mPresenter.getAllCustomers(ccMoshtary);
         });
 
 
@@ -145,10 +155,10 @@ public class RptJashnvarehActivity extends AppCompatActivity implements RptJashn
         rptJashnvarehFirstLevelAdapter = new RptJashnvarehFirstLevelAdapter(RptJashnvarehActivity.this, tempFirstLevelModel, (state, rptJashnvarehForoshModel,position) -> {
             switch (state) {
                 case Jashnvareh:
-                    mPresenter.getSumDetails(state, rptJashnvarehForoshModel.getCcJashnvarehForosh(),position);
+                    mPresenter.getSumDetails(state,ccMoshtaryExtra, rptJashnvarehForoshModel.getCcJashnvarehForosh(),position);
                     break;
                 case Moshtary:
-                    mPresenter.getSumDetails(state, rptJashnvarehForoshModel.getCcMoshtary(),position);
+                    mPresenter.getSumDetails(state,ccMoshtaryExtra, rptJashnvarehForoshModel.getCcMoshtary(),position);
                     break;
             }
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -163,7 +173,7 @@ public class RptJashnvarehActivity extends AppCompatActivity implements RptJashn
 
     private void initSecondLevelAdapter() {
         rptJashnvarehSecondLevelAdapter = new RptJashnvarehSecondLevelAdapter(RptJashnvarehActivity.this, this.tempSecondLevelModel, (rptJashnvarehForoshModel, position) -> {
-            mPresenter.getDetails(state,rptJashnvarehForoshModel,position);
+            mPresenter.getDetails(state,rptJashnvarehForoshModel,ccMoshtaryExtra,position);
             Log.i("initSecondLevelAdapter", " ccJaashnvareForosh"+rptJashnvarehForoshModel.getCcJashnvarehForosh() + " ccMoshtary :"+rptJashnvarehForoshModel.getCcMoshtary() +" position: "+position);
 
         });
@@ -215,6 +225,7 @@ public class RptJashnvarehActivity extends AppCompatActivity implements RptJashn
     public void onGetAll(ArrayList<RptJashnvarehForoshModel> jashnavareForoshModels) {
         rawData.clear();
         rawData.addAll(jashnavareForoshModels);
+        mPresenter.getSumForoshandehScore(ccMoshtaryExtra);
     }
 
     @Override
@@ -240,8 +251,19 @@ public class RptJashnvarehActivity extends AppCompatActivity implements RptJashn
 
     @Override
     public void onGetForoshandehScore(RptJashnvarehForoshModel rptJashnvarehForoshModel, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel) {
+
+        if (mode.equals(Mode.ForoshandehFromMenu) || mode.equals(Mode.ForoshandehFromVerify))
         lblNameForoshandeh.setText(String.format("%1$s: %2$s", getResources().getString(R.string.foroshandeh), foroshandehMamorPakhshModel.getFullName()));
-        lblEmtiazForoshandeh.setText(String.format("%1$s: %2$s", getResources().getString(R.string.emtiazForoshandeh), rptJashnvarehForoshModel.getEmtiazMoshtary()));
+        else
+        lblNameForoshandeh.setText(String.format("%1$s: %2$s", getResources().getString(R.string.mamorPakhsh), foroshandehMamorPakhshModel.getFullName()));
+
+
+
+        if (mode.equals(Mode.ForoshandehFromVerify) || mode.equals(Mode.MamorPakhshFromVerify))
+        lblEmtiazForoshandeh.setText(String.format("%1$s: %2$s", getResources().getString(R.string.sumEmtiazMoshtary), rptJashnvarehForoshModel.getEmtiazMoshtary()));
+        else
+        lblEmtiazForoshandeh.setText(String.format("%1$s: %2$s", getResources().getString(R.string.sumEmtiazMoshtarian), rptJashnvarehForoshModel.getEmtiazMoshtary()));
+
     }
 
 
@@ -265,6 +287,39 @@ public class RptJashnvarehActivity extends AppCompatActivity implements RptJashn
     @Override
     public void onGetDetails(ArrayList<RptJashnvarehForoshModel> jashnvarehForoshModels, int position) {
         rptJashnvarehSecondLevelAdapter.initChild(jashnvarehForoshModels,position);
+    }
+
+    @Override
+    public void onIsForoshandehFromMenu() {
+        initViews(ccMoshtaryExtra);
+        state = State.Moshtary;
+        mPresenter.getSumForoshandehScore(ccMoshtaryExtra);
+        mode = Mode.ForoshandehFromMenu;
+
+    }
+
+    @Override
+    public void onIsMamorPakhshFromMenu() {
+        initViews(ccMoshtaryExtra);
+        state = State.Moshtary;
+        mPresenter.getSumForoshandehScore(ccMoshtaryExtra);
+        mode = Mode.MamorPakhshFromMenu;
+    }
+
+    @Override
+    public void onIsFroshandehFromVerifyRequest(int ccMoshtary) {
+        initViews(ccMoshtaryExtra);
+        state = State.Moshtary;
+        mPresenter.getSumForoshandehScore(ccMoshtaryExtra);
+        mode = Mode.ForoshandehFromVerify;
+    }
+
+    @Override
+    public void onIsMamorpakhshVerifyRequest(int ccMoshtaryExtra) {
+        initViews(ccMoshtaryExtra);
+        state = State.Moshtary;
+        mPresenter.getSumForoshandehScore(ccMoshtaryExtra);
+        mode = Mode.MamorPakhshFromVerify;
     }
 
     private void initialSearchView() {

@@ -86,6 +86,7 @@ import com.saphamrah.PubFunc.Discounts.TakhfifSenfi.CalculateSenfiDiscountTaminK
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.Repository.RptJashnvarehForoshRepository;
 import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.UIModel.KalaDarkhastFaktorSatrModel;
 import com.saphamrah.UIModel.KalaElamMarjoeeModel;
@@ -98,6 +99,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 
 public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 {
@@ -105,11 +108,13 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
     private VerifyRequestMVP.RequiredPresenterOps mPresenter;
     ParameterChildDAO childParameterDAO = new ParameterChildDAO(BaseApplication.getContext());
     MoshtaryDAO moshtaryDAO = new MoshtaryDAO(BaseApplication.getContext());
+    CompositeDisposable compositeDisposable;
     ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
     private static final String TAG = "VerifyRequestModel";
     public VerifyRequestModel(VerifyRequestMVP.RequiredPresenterOps mPresenter)
     {
         this.mPresenter = mPresenter;
+        compositeDisposable = new CompositeDisposable();
     }
 
     @Override
@@ -1590,6 +1595,18 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
         getMoshtaryEtebarSazmanForosh(moshtaryModel, foroshandehMamorPakhshModel, noeMasouliat);
+    }
+
+    @Override
+    public void checkJashnvarehAvailable(int ccMoshtary) {
+       RptJashnvarehForoshRepository rptJashnvarehForoshRepository = new RptJashnvarehForoshRepository(mPresenter.getAppContext());
+       compositeDisposable.add( rptJashnvarehForoshRepository.isJashnvarehAvailable(ccMoshtary)
+                .subscribe(isAvailable -> {
+                    if (isAvailable)
+                        mPresenter.onJashnvarehAvailable();
+                }, throwable -> {
+                        mPresenter.onFailGetJashnvareh();
+                }));
     }
 
     private void getMoshtaryEtebarSazmanForosh( MoshtaryModel moshtaryModel,  ForoshandehMamorPakhshModel foroshandehMamorPakhshModel,  int noeMasouliat)

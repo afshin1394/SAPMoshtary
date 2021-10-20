@@ -49,6 +49,8 @@ public interface VerifyRequestMVP
         void closeLoading();
         void onHashiehSoud(double mablaghTakhfifNaghdi ,double mablaghTakhfifHajmi ,double mablaghJayezeh ,double mablaghHashiehSood ,double jamSoodMaghazeh ,double darsadSoodMaghazeh);
 
+
+        void onJashnvarehAvailable();
     }
 
 
@@ -74,6 +76,7 @@ public interface VerifyRequestMVP
         void onDestroy(boolean isChangingConfig);
         void getHashiehSoud(long ccDarkhastFaktor,String mablaghBaArzeshAfzoodeh);
         void updateMoshtaryEtebar(int ccMoshtary);
+        void checkJashnvarehAvailable(int ccMoshtary);
     }
 
 
@@ -106,6 +109,10 @@ public interface VerifyRequestMVP
         void onHashiehSoud(double mablaghTakhfifNaghdi ,double mablaghTakhfifHajmi ,double mablaghJayezeh ,double mablaghHashiehSood ,double jamSoodMaghazeh ,double darsadSoodMaghazeh);
         void onFailedUpdateMoshtaryEtebar();
         void onSuccessUpdateMoshtaryEtebar();
+
+        void onJashnvarehAvailable();
+
+        void onFailGetJashnvareh();
     }
 
 
@@ -130,6 +137,8 @@ public interface VerifyRequestMVP
         void onDestroy();
         void getHashiehSoud(long ccDarkhastFaktor, String mablaghBaArzeshAfzoodeh);
         void updateMoshtaryEtebar(int ccMoshtary);
+
+        void checkJashnvarehAvailable(int ccMoshtary);
     }
 
 }

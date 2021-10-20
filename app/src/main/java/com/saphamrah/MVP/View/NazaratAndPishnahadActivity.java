@@ -134,16 +134,16 @@ public class NazaratAndPishnahadActivity extends AppCompatActivity implements Na
     }
     @OnClick(R.id.btnCancel)
     public void btnCancel() {
-        clearItems();
         fabMenu.setVisibility(View.VISIBLE);
         layButtons.setVisibility(View.GONE);
         recycler_nazarat.setVisibility(View.VISIBLE);
         layDetailsNazarat.setVisibility(View.GONE);
+        clearItems();
     }
     @OnClick(R.id.btnApply)
     public void btnApply() {
-        clearItems();
         checkData();
+        clearItems();
     }
 
     private void checkData()

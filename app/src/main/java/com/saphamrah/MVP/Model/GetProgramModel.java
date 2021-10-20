@@ -4608,34 +4608,34 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
         SuggestDAO suggestDAO = new SuggestDAO(BaseApplication.getContext());
         NoePishnahadDAO noePishnahadDAO = new NoePishnahadDAO(BaseApplication.getContext());
 
-//        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
-//        getParameter(getProgramType);
+        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+        getParameter(getProgramType);
 
-        noePishnahadDAO.fetchNoePishnahad(BaseApplication.getContext(), "GetProgramActivity", new RetrofitResponse() {
-            @Override
-            public void onSuccess(ArrayList arrayListData) {
-                Thread thread = new Thread() {
-                    @Override
-                    public void run() {
-                    boolean deleteResult = noePishnahadDAO.deleteAll();
-                    boolean insertResult = noePishnahadDAO.insertGroup(arrayListData);
-                    suggestDAO.deleteIsSend();
-                    if (deleteResult && insertResult) {
-                        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
-                        getParameter(getProgramType);
-                    } else {
-                        sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
-                    }
-                    }
-                };
-                thread.start();
-            }
-
-            @Override
-            public void onFailed(String type, String error) {
-                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
-            }
-        });
+//        noePishnahadDAO.fetchNoePishnahad(BaseApplication.getContext(), "GetProgramActivity", new RetrofitResponse() {
+//            @Override
+//            public void onSuccess(ArrayList arrayListData) {
+//                Thread thread = new Thread() {
+//                    @Override
+//                    public void run() {
+//                    boolean deleteResult = noePishnahadDAO.deleteAll();
+//                    boolean insertResult = noePishnahadDAO.insertGroup(arrayListData);
+//                    suggestDAO.deleteIsSend();
+//                    if (deleteResult && insertResult) {
+//                        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+//                        getParameter(getProgramType);
+//                    } else {
+//                        sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+//                    }
+//                    }
+//                };
+//                thread.start();
+//            }
+//
+//            @Override
+//            public void onFailed(String type, String error) {
+//                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
+//            }
+//        });
     }
 
     private void getParameter(final int getProgramType) {

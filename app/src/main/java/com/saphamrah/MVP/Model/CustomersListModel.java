@@ -281,24 +281,27 @@ public class CustomersListModel implements CustomersListMVP.ModelOps {
     }
 
     private void getMoshtaryParent(final AllMoshtaryForoshandehModel allMoshtaryForoshandehModel) {
-        final MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
-        moshtaryDAO.fetchMoshtaryParent(mPresenter.getAppContext(), "CustomersListActivity", String.valueOf(allMoshtaryForoshandehModel.getCcMoshtary()), new RetrofitResponse() {
-            @Override
-            public void onSuccess(ArrayList arrayListData) {
-                for (int i = 0; i < arrayListData.size(); i++) {
-                    Log.d("GetcustomerInfo", "MoshtaryModel : " + arrayListData.get(i).toString());
-                }
-                if (moshtaryDAO.updateccMoshtaryParentInMoshtary(arrayListData)) {
-                    sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
-                    getMoshtaryAddress(allMoshtaryForoshandehModel);
-                }
-            }
+        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+        getMoshtaryAddress(allMoshtaryForoshandehModel);
 
-            @Override
-            public void onFailed(String type, String error) {
-                mPresenter.onFailedGetNewItem(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
-            }
-        });
+//        final MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
+//        moshtaryDAO.fetchMoshtaryParent(mPresenter.getAppContext(), "CustomersListActivity", String.valueOf(allMoshtaryForoshandehModel.getCcMoshtary()), new RetrofitResponse() {
+//            @Override
+//            public void onSuccess(ArrayList arrayListData) {
+//                for (int i = 0; i < arrayListData.size(); i++) {
+//                    Log.d("GetcustomerInfo", "MoshtaryModel : " + arrayListData.get(i).toString());
+//                }
+//                if (moshtaryDAO.updateccMoshtaryParentInMoshtary(arrayListData)) {
+//                    sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+//                    getMoshtaryAddress(allMoshtaryForoshandehModel);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailed(String type, String error) {
+//                mPresenter.onFailedGetNewItem(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
+//            }
+//        });
     }
 
 

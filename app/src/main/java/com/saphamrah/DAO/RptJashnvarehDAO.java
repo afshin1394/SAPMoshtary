@@ -338,21 +338,36 @@ public class RptJashnvarehDAO {
         return rptJashnvarehForoshModels;
     }
 
-    public RptJashnvarehForoshModel getEmtiazForoshandeh() {
+    public RptJashnvarehForoshModel getEmtiazForoshandeh(int ccMoshtary) {
         ArrayList<RptJashnvarehForoshModel> rptJashnvarehForoshModels = new ArrayList<>();
         try {
+            String strQuery ;
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String strQuery =
-                    "     select   -1 as Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
-                            "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
-                            "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
-                            "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
-                            "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
-                            "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
-                            "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
-                            "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
-                            "     SUM(j.EmtiazMoshtary) as EmtiazMoshtary , Sum(j.RialEmtiazMoshtary)  as RialEmtiazMoshtary ,\n" +
-                            "     j.Doreh , j.TarikhMohasebehEmtiaz from Rpt_JashnvarehForosh j ";
+            if (ccMoshtary == 0) {
+                strQuery =
+                        "     select   -1 as Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
+                                "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
+                                "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
+                                "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
+                                "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
+                                "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
+                                "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
+                                "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
+                                "     SUM(j.EmtiazMoshtary) as EmtiazMoshtary , Sum(j.RialEmtiazMoshtary)  as RialEmtiazMoshtary ,\n" +
+                                "     j.Doreh , j.TarikhMohasebehEmtiaz from Rpt_JashnvarehForosh j ";
+            }else{
+                strQuery =
+                        "     select   -1 as Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
+                                "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
+                                "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
+                                "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
+                                "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
+                                "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
+                                "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
+                                "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
+                                "     SUM(j.EmtiazMoshtary) as EmtiazMoshtary , Sum(j.RialEmtiazMoshtary)  as RialEmtiazMoshtary ,\n" +
+                                "     j.Doreh , j.TarikhMohasebehEmtiaz from Rpt_JashnvarehForosh j where ccMoshtary = "+ ccMoshtary;
+            }
 
 
             Cursor cursor = db.rawQuery(strQuery, null);
@@ -373,20 +388,34 @@ public class RptJashnvarehDAO {
     }
 
 
-    public ArrayList<RptJashnvarehForoshModel> getAllMoshtaries() {
+    public ArrayList<RptJashnvarehForoshModel> getAllMoshtaries(int ccMoshtary) {
         ArrayList<RptJashnvarehForoshModel> rptJashnvarehForoshModels = new ArrayList<>();
         try {
+            String strQuery;
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String strQuery = "select j.Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
-                    "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
-                    "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
-                    "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
-                    "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
-                    "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
-                    "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
-                    "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
-                    "     SUM(j.EmtiazMoshtary) as EmtiazMoshtary , Sum(j.RialEmtiazMoshtary)  as RialEmtiazMoshtary ,\n" +
-                    "     j.Doreh , j.TarikhMohasebehEmtiaz from Rpt_JashnvarehForosh j group by ccMoshtary order by radif";
+            if (ccMoshtary == 0) {
+                strQuery = "select j.Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
+                        "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
+                        "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
+                        "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
+                        "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
+                        "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
+                        "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
+                        "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
+                        "     SUM(j.EmtiazMoshtary) as EmtiazMoshtary , Sum(j.RialEmtiazMoshtary)  as RialEmtiazMoshtary ,\n" +
+                        "     j.Doreh , j.TarikhMohasebehEmtiaz from Rpt_JashnvarehForosh j group by ccMoshtary order by radif";
+            }else{
+                strQuery = "select j.Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
+                        "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
+                        "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
+                        "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
+                        "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
+                        "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
+                        "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
+                        "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
+                        "     SUM(j.EmtiazMoshtary) as EmtiazMoshtary , Sum(j.RialEmtiazMoshtary)  as RialEmtiazMoshtary ,\n" +
+                        "     j.Doreh , j.TarikhMohasebehEmtiaz from Rpt_JashnvarehForosh j where ccMoshtary = "+ccMoshtary+" group by ccMoshtary order by radif";
+            }
 
 
             Cursor cursor = db.rawQuery(strQuery, null);
@@ -430,34 +459,61 @@ public class RptJashnvarehDAO {
     }
 
     public ArrayList<RptJashnvarehForoshModel> getJashnvarehSumByccJashnvareh(
-            int ccJashnvarehForosh) {
+            int ccJashnvarehForosh,int ccMoshtaryExtra) {
         ArrayList<RptJashnvarehForoshModel> rptJashnvarehForoshModels = new ArrayList<>();
         try {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             String strQuery;
             if (ccJashnvarehForosh == -1){
-                strQuery ="   select  j.Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
-                        "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
-                        "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
-                        "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
-                        "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
-                        "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
-                        "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
-                        "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
-                        "     SUM(j.EmtiazMoshtary) as EmtiazMoshtary , Sum(j.RialEmtiazMoshtary)  as RialEmtiazMoshtary,\n" +
-                        "     j.Doreh , j.TarikhMohasebehEmtiaz from Rpt_JashnvarehForosh j group by ccJashnvarehForosh";
+                if (ccMoshtaryExtra == 0) {
+                    strQuery = "   select  j.Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
+                            "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
+                            "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
+                            "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
+                            "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
+                            "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
+                            "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
+                            "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
+                            "     SUM(j.EmtiazMoshtary) as EmtiazMoshtary , Sum(j.RialEmtiazMoshtary)  as RialEmtiazMoshtary,\n" +
+                            "     j.Doreh , j.TarikhMohasebehEmtiaz from Rpt_JashnvarehForosh j group by ccJashnvarehForosh";
+                }else{
+                    strQuery = "   select  j.Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
+                            "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
+                            "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
+                            "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
+                            "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
+                            "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
+                            "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
+                            "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
+                            "     SUM(j.EmtiazMoshtary) as EmtiazMoshtary , Sum(j.RialEmtiazMoshtary)  as RialEmtiazMoshtary,\n" +
+                            "     j.Doreh , j.TarikhMohasebehEmtiaz from Rpt_JashnvarehForosh j where j.ccMoshtary = "+ccMoshtaryExtra+" group by ccJashnvarehForosh";
+                }
             }else {
-                strQuery = "select  j.Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
-                        "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
-                        "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
-                        "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
-                        "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
-                        "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
-                        "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
-                        "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
-                        "     SUM(j.EmtiazMoshtary) as EmtiazMoshtary , Sum(j.RialEmtiazMoshtary)  as RialEmtiazMoshtary ,\n" +
-                        "     j.Doreh , j.TarikhMohasebehEmtiaz from Rpt_JashnvarehForosh j \n" +
-                        "     where  ccJashnvarehForosh = " + ccJashnvarehForosh + " order by Radif";
+                if (ccMoshtaryExtra == 0) {
+                    strQuery = "select  j.Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
+                            "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
+                            "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
+                            "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
+                            "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
+                            "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
+                            "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
+                            "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
+                            "     SUM(j.EmtiazMoshtary) as EmtiazMoshtary , Sum(j.RialEmtiazMoshtary)  as RialEmtiazMoshtary ,\n" +
+                            "     j.Doreh , j.TarikhMohasebehEmtiaz from Rpt_JashnvarehForosh j \n" +
+                            "     where  ccJashnvarehForosh = " + ccJashnvarehForosh + " order by Radif";
+                }else{
+                    strQuery = "select  j.Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
+                            "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
+                            "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
+                            "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
+                            "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
+                            "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
+                            "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
+                            "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
+                            "     SUM(j.EmtiazMoshtary) as EmtiazMoshtary , Sum(j.RialEmtiazMoshtary)  as RialEmtiazMoshtary ,\n" +
+                            "     j.Doreh , j.TarikhMohasebehEmtiaz from Rpt_JashnvarehForosh j \n" +
+                            "     where  ccJashnvarehForosh = " + ccJashnvarehForosh + " and j.ccMoshtary ="+ccMoshtaryExtra+" order by Radif";
+                }
             }
             Cursor cursor = db.rawQuery(strQuery, null);
             if (cursor != null) {
@@ -545,15 +601,44 @@ public class RptJashnvarehDAO {
     }
 
 
-    public ArrayList<RptJashnvarehForoshModel> getAllJashnvareh() {
+    public ArrayList<RptJashnvarehForoshModel> getAllJashnvareh(int ccMoshtary) {
         ArrayList<RptJashnvarehForoshModel> rptJashnvarehForoshModels = new ArrayList<>();
         try {
+            String strQry ;
+
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String strQuery = " select distinct j.* from Rpt_JashnvarehForosh j group by j.ccJashnvarehForosh \n" +
-                    "union all\n" +
-                    "select -1,-1,0,'همه',"+
-                    "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
-            Cursor cursor = db.rawQuery(strQuery, null);
+            if (ccMoshtary == 0) {
+                strQry =
+                        "  select * from(select distinct  j.Radif  , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
+                                "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
+                                "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
+                                "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
+                                "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
+                                "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
+                                "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
+                                "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
+                                "     sum(j.EmtiazMoshtary) as EmtiazMoshtary ,Sum( j.RialEmtiazMoshtary ) as RialEmtiazMoshtary ,\n" +
+                                "     j.Doreh , j.TarikhMohasebehEmtiaz\n" +
+                                "     from Rpt_JashnvarehForosh j \n" +
+                                "     union all\n" +
+                                "     select -1,-1,0,'همه',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ) where Radif is not null";
+            }else{
+                strQry =
+                        "   select * from(select distinct  j.Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
+                        "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
+                        "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
+                        "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
+                        "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
+                        "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
+                        "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
+                        "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
+                        "     sum(j.EmtiazMoshtary) as EmtiazMoshtary ,Sum( j.RialEmtiazMoshtary ) as RialEmtiazMoshtary ,\n" +
+                        "     j.Doreh , j.TarikhMohasebehEmtiaz\n" +
+                        "     from Rpt_JashnvarehForosh j where ccMoshtary = "+ccMoshtary+"\n" +
+                        "     union all\n" +
+                        "     select -1,-1,0,'همه',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ) where Radif is not null";
+            }
+            Cursor cursor = db.rawQuery(strQry, null);
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
                     rptJashnvarehForoshModels = cursorToModel(cursor);
@@ -611,21 +696,36 @@ public class RptJashnvarehDAO {
 
 
     public ArrayList<RptJashnvarehForoshModel> getAllMoshtaryByccJashnvareh(
-            int ccJashnvarehForosh) {
+            int ccJashnvarehForosh,int ccMoshtaryExtra) {
         ArrayList<RptJashnvarehForoshModel> rptJashnvarehForoshModels = new ArrayList<>();
         try {
+            String strQuery;
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String strQuery = " select  j.Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
-                    "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
-                    "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
-                    "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
-                    "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
-                    "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
-                    "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
-                    "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
-                    "     SUM(j.EmtiazMoshtary) as EmtiazMoshtary , Sum(j.RialEmtiazMoshtary)  as RialEmtiazMoshtary ,\n" +
-                    "     j.Doreh , j.TarikhMohasebehEmtiaz from Rpt_JashnvarehForosh j \n" +
-                    "     where  ccJashnvarehForosh = " + ccJashnvarehForosh + " group by ccMoshtary order by Radif";
+            if (ccMoshtaryExtra == 0) {
+                strQuery = " select  j.Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
+                        "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
+                        "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
+                        "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
+                        "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
+                        "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
+                        "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
+                        "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
+                        "     SUM(j.EmtiazMoshtary) as EmtiazMoshtary , Sum(j.RialEmtiazMoshtary)  as RialEmtiazMoshtary ,\n" +
+                        "     j.Doreh , j.TarikhMohasebehEmtiaz from Rpt_JashnvarehForosh j \n" +
+                        "     where  ccJashnvarehForosh = " + ccJashnvarehForosh + " group by ccMoshtary order by Radif";
+            }else{
+                strQuery = " select  j.Radif , j.ccJashnvarehForosh , j.ccJashnvarehForoshSatr ,\n" +
+                        "     j.SharhJashnvareh , j.ccDarkhastFaktor, j.ccMoshtary , j.CodeMoshtary,\n" +
+                        "     j.NameMoshtary , j.ccMarkazSazmanForosh , j.NameMarkaz, j.NameSazmanForosh ,\n" +
+                        "     j.NoeMohasebeh , j.MabnaMohasebeh , j.SharhMabnaMohasebeh,\n" +
+                        "     j.txtNoeMohasebeh,j.MohasebehBarAsase , j.AzTarikhJashnvareh , j.TaTarikhJashnvareh,\n" +
+                        "     j.AzTarikhJashnvarehSatr, j.TaTarikhJashnvarehSatr,\n" +
+                        "     j.txtCodeNoeBastehBandy , j.txtCodeNoeBastehBandyBeEza , j.Az, j.Ta, j.BeEza,\n" +
+                        "     j.EmtiazJashnvareh, j.RialYekEmtiazJashnvareh,  \n" +
+                        "     SUM(j.EmtiazMoshtary) as EmtiazMoshtary , Sum(j.RialEmtiazMoshtary)  as RialEmtiazMoshtary ,\n" +
+                        "     j.Doreh , j.TarikhMohasebehEmtiaz from Rpt_JashnvarehForosh j \n" +
+                        "     where  ccJashnvarehForosh = " + ccJashnvarehForosh + " and ccMoshtary = "+ccMoshtaryExtra+" group by ccMoshtary order by Radif";
+            }
             Cursor cursor = db.rawQuery(strQuery, null);
             if (cursor != null) {
                 if (cursor.getCount() > 0) {
@@ -740,5 +840,28 @@ public class RptJashnvarehDAO {
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "RptJashnarehDAO", "", "getJashnvarehListByccMoshtary", "");
         }
         return rptJashnvarehForoshModels;
+    }
+
+    public Boolean isJashnvarehAvailable(int ccMoshtary) {
+        boolean isAvailable = false;
+            try {
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+                String strQuery = "select * from Rpt_JashnvarehForosh where ccMoshtary = "+ccMoshtary;
+                Cursor cursor = db.rawQuery(strQuery, null);
+                if (cursor != null) {
+                    if (cursor.getCount() > 0) {
+                       isAvailable = true;
+                    }
+                    cursor.close();
+                }
+                db.close();
+            } catch (Exception exception) {
+
+                exception.printStackTrace();
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                String message = context.getResources().getString(R.string.errorSelectAll, RptJashnvarehForoshModel.TableName()) + "\n" + exception.toString();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "RptJashnarehDAO", "", "getJashnvarehListByccMoshtary", "");
+            }
+            return isAvailable;
     }
 }

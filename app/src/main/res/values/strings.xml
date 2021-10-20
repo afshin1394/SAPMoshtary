@@ -1146,4 +1146,8 @@
     <string name="pishnahad">پیشنهاد</string>
     <string name="sharhMozoue">شرح موضوع</string>
     <string name="noeMozoue">نوع موضوع</string>
+    <string name="errorjashnvareh">خطا در دریافت اطلاعات جشنواره</string>
+    <string name="emtiazMamorPakhsh">امتیاز مامور پخش</string>
+    <string name="sumEmtiazMoshtary">امتیاز کل مشتری</string>
+    <string name="mamorPakhsh">مامور پخش</string>
 </resources>

@@ -102,6 +102,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     private EditText editTextTedadAghlam;
     private EditText editTextSumTedad;
     private TextInputLayout txtinputLayTarikhPishbiniTahvil;
+    private FloatingActionButton fabJashnvareh;
     private FloatingActionButton fabAddMarjoee;
     private FloatingActionButton fabHashiehSoud;
     private FloatingActionButton fabSelectBonus;
@@ -162,6 +163,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         edttxtinputTarikhPishbiniTahvil = findViewById(R.id.txtTarikhPishbiniTahvil);
         txtinputLayTarikhPishbiniTahvil = findViewById(R.id.inputLayTarikhPishbiniTahvil);
         final FloatingActionMenu fabMenu = findViewById(R.id.fabMenu);
+        fabJashnvareh = findViewById(R.id.fabJashnvareh);
         fabAddMarjoee = findViewById(R.id.fabAddMarjoee);
         fabHashiehSoud = findViewById(R.id.fabHashiehSoud);
         fabSelectBonus = findViewById(R.id.fabSelectBonus);
@@ -207,6 +209,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         mPresenter.getRequestsList();
         mPresenter.getCustomerInfo(ccMoshtary, ccSazmanForosh);
         mPresenter.getMarjoeeList();
+        mPresenter.checkJashnvarehAvailable(ccMoshtary);
 
 
         edttxtinputCustomerAddress.setOnClickListener(new View.OnClickListener() {
@@ -821,6 +824,20 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
             btnOk.setOnClickListener(v -> show.dismiss());
 
         }
+    }
+
+    @Override
+    public void onJashnvarehAvailable() {
+        fabJashnvareh.setVisibility(View.VISIBLE);
+        fabJashnvareh.setOnClickListener(view -> {
+            openRptJashnvareh(ccMoshtary);
+        });
+    }
+
+    private void openRptJashnvareh(int ccMoshtary) {
+        Intent intent = new Intent(VerifyRequestActivity.this,RptJashnvarehActivity.class);
+        intent.putExtra("ccMoshtary",ccMoshtary);
+        startActivity(intent);
     }
 
     @Override

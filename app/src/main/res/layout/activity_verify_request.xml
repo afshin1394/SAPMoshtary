@@ -554,6 +554,19 @@
         fab:menu_openDirection="up"
         fab:menu_labels_customFont="@string/fontPath"
         fab:menu_backgroundColor="@android:color/transparent">
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabJashnvareh"
+            android:src="@drawable/ic_fab_jashnvareh"
+            fab:fab_size="normal"
+            android:visibility="gone"
+            fab:fab_label="@string/jashnvareh"
+            fab:fab_colorNormal="@color/colorFabHelp"
+            fab:fab_colorPressed="@color/colorFabHelpClick"
+            android:padding="@dimen/_20sdp"
+
+            />
 
         <com.github.clans.fab.FloatingActionButton
             android:layout_width="wrap_content"

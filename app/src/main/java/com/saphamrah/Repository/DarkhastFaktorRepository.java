@@ -79,6 +79,11 @@ public class DarkhastFaktorRepository {
         return () -> darkhastFaktorDAO.getZangireiFaktorInfo();
     }
 
+    private Callable<String> getAllccMoshtaryCallable() {
+        return () -> darkhastFaktorDAO.getAllccMoshtary();
+    }
+
+
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
         return RxAsync.makeObservable(deleteAllCallable())
@@ -142,4 +147,11 @@ public class DarkhastFaktorRepository {
         return RxAsync.makeObservable(getZangireiFaktorInfoCallable())
                 .subscribeOn(Schedulers.io());
     }
+
+    public Observable<String> getAllccMoshtary() {
+        return RxAsync.makeObservable(getAllccMoshtaryCallable())
+                .subscribeOn(Schedulers.io());
+    }
+
+
 }

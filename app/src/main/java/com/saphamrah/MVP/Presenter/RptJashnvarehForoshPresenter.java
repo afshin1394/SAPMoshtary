@@ -95,6 +95,27 @@ public class RptJashnvarehForoshPresenter implements RptJashnvarehForoshMVP.Pres
     }
 
     @Override
+    public void onIsForoshandehFromMenu() {
+        mView.get().onIsForoshandehFromMenu();
+    }
+
+    @Override
+    public void onIsMamorPakhshFromMenu() {
+        mView.get().onIsMamorPakhshFromMenu();
+
+    }
+
+    @Override
+    public void onIsForoshandehFromVerifyRequest(int ccMoshtaryExtra) {
+        mView.get().onIsFroshandehFromVerifyRequest(ccMoshtaryExtra);
+    }
+
+    @Override
+    public void onIsMamorPakhshFromVerifyRequest(int ccMoshtaryExtra) {
+        mView.get().onIsMamorpakhshVerifyRequest(ccMoshtaryExtra);
+    }
+
+    @Override
     public void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild) {
         if (!message.trim().equals("") || !logClass.trim().equals("") || !logActivity.trim().equals("") || !functionParent.trim().equals("") || !functionChild.trim().equals(""))
         {
@@ -108,16 +129,16 @@ public class RptJashnvarehForoshPresenter implements RptJashnvarehForoshMVP.Pres
     }
 
     @Override
-    public void getAllCustomers() {
-       mModel.getAllCustomers();
+    public void getAllCustomers(int ccMoshtary) {
+       mModel.getAllCustomers(ccMoshtary);
     }
 
 
 
     @Override
-    public void getAll() {
+    public void getAll(int ccMoshtary, RptJashnvarehActivity.Mode mode) {
         mView.get().showLoading();
-        mModel.getAll();
+        mModel.getAll(ccMoshtary,mode);
     }
 
     @Override
@@ -134,20 +155,20 @@ public class RptJashnvarehForoshPresenter implements RptJashnvarehForoshMVP.Pres
     }
 
     @Override
-    public void getAllJashnvareh() {
-        mModel.getAllJashnvareh();
+    public void getAllJashnvareh(int ccMoshtary) {
+        mModel.getAllJashnvareh(ccMoshtary);
     }
 
     @Override
-    public void getSumForoshandehScore() {
-        mModel.getSumForoshandehScore();
+    public void getSumForoshandehScore(int ccMoshtary) {
+        mModel.getSumForoshandehScore(ccMoshtary);
     }
 
     @Override
-    public void getSumDetails(RptJashnvarehActivity.State state, int ccUnique,int position) {
+    public void getSumDetails(RptJashnvarehActivity.State state,int ccMoshtaryExtra, int ccUnique,int position) {
         switch (state){
             case Jashnvareh:
-                mModel.getSumJashnvarehByccJashnvareh(ccUnique,position);
+                mModel.getSumJashnvarehByccJashnvareh(ccUnique,ccMoshtaryExtra,position);
                 break;
             case Moshtary:
                 mModel.getAllJashnvarehByCustomer(ccUnique,position);
@@ -156,21 +177,25 @@ public class RptJashnvarehForoshPresenter implements RptJashnvarehForoshMVP.Pres
     }
 
     @Override
-    public void getDetails(RptJashnvarehActivity.State state, RptJashnvarehForoshModel rptJashnvarehForoshModel, int position) {
+    public void getDetails(RptJashnvarehActivity.State state, RptJashnvarehForoshModel rptJashnvarehForoshModel,int ccMoshtaryExtra, int position) {
         switch (state){
             case Jashnvareh:
-                  mModel.getAllCustomerByJashnvareh(rptJashnvarehForoshModel.getCcJashnvarehForosh(),position);
+                  mModel.getAllCustomerByJashnvareh(rptJashnvarehForoshModel.getCcJashnvarehForosh(), ccMoshtaryExtra,position);
                 break;
 
 
             case Moshtary:
-//                mModel.getJashnvarehSatr(rptJashnvarehForoshModel.getCcJashnvarehForosh(),position);
 
                 mModel.getMoshtarySatr(rptJashnvarehForoshModel.getCcMoshtary(),position);
 
                 break;
 
         }
+    }
+
+    @Override
+    public void checkNoeMasouliat(int ccMoshtary) {
+        mModel.checkNoeMasouliat(ccMoshtary);
     }
 
 

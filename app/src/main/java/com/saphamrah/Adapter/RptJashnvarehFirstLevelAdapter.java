@@ -84,7 +84,7 @@ public class RptJashnvarehFirstLevelAdapter extends RecyclerView.Adapter<RptJash
         public void bindJashnvareh(RptJashnvarehForoshModel rptJashnvarehForoshModel) {
             binding.lblRadif.setText(String.valueOf(getAdapterPosition()+1));
             binding.lblCustomerFullNameCode.setText(String.format("%1$s" ,  rptJashnvarehForoshModel.getSharhJashnvareh()));
-            binding.IMGName.setImageResource(R.drawable.ic_jashnvareh_foreground);
+            binding.IMGName.setImageResource(R.drawable.ic_jashnvareh);
 
         }
     }

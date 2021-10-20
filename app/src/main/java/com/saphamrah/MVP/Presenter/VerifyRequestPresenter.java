@@ -275,6 +275,12 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
         mModel.updateMoshtaryEtebar(ccMoshtary);
     }
 
+    @Override
+    public void checkJashnvarehAvailable(int ccMoshtary) {
+        mModel.checkJashnvarehAvailable(ccMoshtary);
+
+    }
+
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
 
@@ -532,5 +538,16 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
     public void onSuccessUpdateMoshtaryEtebar() {
         mView.get().closeLoading();
         mView.get().showAlertDialog(R.string.successUpdateMoshtaryEtebar,false, Constants.SUCCESS_MESSAGE());
+    }
+
+    @Override
+    public void onJashnvarehAvailable() {
+        mView.get().onJashnvarehAvailable();
+    }
+
+    @Override
+    public void onFailGetJashnvareh() {
+        mView.get().showToast(R.string.errorjashnvareh,Constants.FAILED_MESSAGE(),Constants.DURATION_SHORT());
+
     }
 }

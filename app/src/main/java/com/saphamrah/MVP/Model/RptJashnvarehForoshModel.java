@@ -7,8 +7,10 @@ import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.MVP.View.RptJashnvarehActivity;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.Repository.DarkhastFaktorRepository;
 import com.saphamrah.Repository.ForoshandehMamorPakhshRepository;
 import com.saphamrah.Repository.RptJashnvarehForoshRepository;
 import com.saphamrah.Utils.Constants;
@@ -20,6 +22,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class RptJashnvarehForoshModel implements RptJashnvarehForoshMVP.ModelOps{
@@ -51,9 +54,9 @@ public class RptJashnvarehForoshModel implements RptJashnvarehForoshMVP.ModelOps
     }
 
     @Override
-    public void getAllCustomers() {
+    public void getAllCustomers(int ccMoshtary) {
       RptJashnvarehForoshRepository  jashnvarehForoshRepository = new RptJashnvarehForoshRepository(mPresenter.getAppContext());
-       jashnvarehForoshRepository.getAllMoshtaries()
+       jashnvarehForoshRepository.getAllMoshtaries(ccMoshtary)
                .observeOn(AndroidSchedulers.mainThread())
                .subscribe(new Observer<ArrayList<com.saphamrah.Model.RptJashnvarehForoshModel>>() {
                    @Override
@@ -89,12 +92,32 @@ public class RptJashnvarehForoshModel implements RptJashnvarehForoshMVP.ModelOps
 
 
     @Override
-    public void getAll() {
+    public void getAll(int ccMoshtary, RptJashnvarehActivity.Mode mode) {
+    compositeDisposable.add(new ForoshandehMamorPakhshRepository(mPresenter.getAppContext())
+             .getIsSelect()
+             .observeOn(AndroidSchedulers.mainThread())
+             .subscribe(foroshandehMamorPakhshModel -> {
+                 if (mode.equals(RptJashnvarehActivity.Mode.MamorPakhshFromMenu)){
+                   compositeDisposable.add( new DarkhastFaktorRepository(mPresenter.getAppContext())
+                           .getAllccMoshtary()
+                           .observeOn(AndroidSchedulers.mainThread())
+                           .subscribe(ccMoshtaryString -> {
+                               getJashnvarehFromServer("-1",ccMoshtaryString);
+                             }));
 
+                 }else if (mode.equals(RptJashnvarehActivity.Mode.ForoshandehFromMenu)){
+                     getJashnvarehFromServer(String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()),"-1");
+                 }else{
+                     getJashnvarehFromServer("-1",String.valueOf(ccMoshtary));
+                 }
+             }));
+    }
+
+    private void getJashnvarehFromServer(String ccforoshandehString, String ccMoshtaryString) {
         RptJashnvarehForoshRepository rptJashnvarehForoshRepository = new RptJashnvarehForoshRepository(mPresenter.getAppContext());
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
-        rptJashnvarehForoshRepository.fetchApiServiceRx(serverIpModel,RptJashnvarehActivity.class.getSimpleName(), foroshandehMamorPakhshModel.getCcForoshandeh(), "-1")
+
+        rptJashnvarehForoshRepository.fetchApiServiceRx(serverIpModel,RptJashnvarehActivity.class.getSimpleName(), ccforoshandehString, ccMoshtaryString)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ArrayList<com.saphamrah.Model.RptJashnvarehForoshModel>>() {
                     @Override
@@ -104,7 +127,7 @@ public class RptJashnvarehForoshModel implements RptJashnvarehForoshMVP.ModelOps
 
                     @Override
                     public void onNext(@NonNull ArrayList<com.saphamrah.Model.RptJashnvarehForoshModel> rptJashnvarehForoshModels) {
-                      compositeDisposable.add(rptJashnvarehForoshRepository.deleteAll()
+                        compositeDisposable.add(rptJashnvarehForoshRepository.deleteAll()
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(deleteAll -> {
                                     if (deleteAll) {
@@ -146,8 +169,6 @@ public class RptJashnvarehForoshModel implements RptJashnvarehForoshMVP.ModelOps
 
                     }
                 });
-
-
     }
 
     @Override
@@ -185,9 +206,9 @@ public class RptJashnvarehForoshModel implements RptJashnvarehForoshMVP.ModelOps
 
 
     @Override
-    public void getAllJashnvareh() {
+    public void getAllJashnvareh(int ccMoshtary) {
         RptJashnvarehForoshRepository rptJashnvarehForoshRepository = new RptJashnvarehForoshRepository(mPresenter.getAppContext());
-        rptJashnvarehForoshRepository.getAllJashnvareh()
+        rptJashnvarehForoshRepository.getAllJashnvareh(ccMoshtary)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ArrayList<com.saphamrah.Model.RptJashnvarehForoshModel>>() {
                     @Override
@@ -249,9 +270,9 @@ public class RptJashnvarehForoshModel implements RptJashnvarehForoshMVP.ModelOps
     }
 
     @Override
-    public void getSumForoshandehScore() {
+    public void getSumForoshandehScore(int ccMoshtary) {
         RptJashnvarehForoshRepository rptJashnvarehForoshRepository = new RptJashnvarehForoshRepository(mPresenter.getAppContext());
-        rptJashnvarehForoshRepository.getSumForoshandehScore()
+        rptJashnvarehForoshRepository.getSumForoshandehScore(ccMoshtary)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<com.saphamrah.Model.RptJashnvarehForoshModel>() {
                     @Override
@@ -284,9 +305,9 @@ public class RptJashnvarehForoshModel implements RptJashnvarehForoshMVP.ModelOps
     }
 
     @Override
-    public void getAllCustomerByJashnvareh(int ccJashnvarehForosh,int position) {
+    public void getAllCustomerByJashnvareh(int ccJashnvarehForosh,int ccMoshtaryExtra,int position) {
         RptJashnvarehForoshRepository rptJashnvarehForoshRepository = new RptJashnvarehForoshRepository(mPresenter.getAppContext());
-        rptJashnvarehForoshRepository.getAllMoshtaryByJashnvareh(ccJashnvarehForosh)
+        rptJashnvarehForoshRepository.getAllMoshtaryByJashnvareh(ccJashnvarehForosh,ccMoshtaryExtra)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ArrayList<com.saphamrah.Model.RptJashnvarehForoshModel>>() {
                     @Override
@@ -400,9 +421,9 @@ public class RptJashnvarehForoshModel implements RptJashnvarehForoshMVP.ModelOps
     }
 
     @Override
-    public void getSumJashnvarehByccJashnvareh(int ccJashnvarehForosh,int position) {
+    public void getSumJashnvarehByccJashnvareh(int ccJashnvarehForosh,int ccMoshtaryExtra,int position) {
         RptJashnvarehForoshRepository rptJashnvarehForoshRepository = new RptJashnvarehForoshRepository(mPresenter.getAppContext());
-        rptJashnvarehForoshRepository.getSumJashnvarehByccJashnvareh(ccJashnvarehForosh)
+        rptJashnvarehForoshRepository.getSumJashnvarehByccJashnvareh(ccJashnvarehForosh,ccMoshtaryExtra)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ArrayList<com.saphamrah.Model.RptJashnvarehForoshModel>>() {
                     @Override
@@ -427,6 +448,30 @@ public class RptJashnvarehForoshModel implements RptJashnvarehForoshMVP.ModelOps
                     }
                 });
 
+    }
+
+    @Override
+    public void checkNoeMasouliat(int ccMoshtaryExtra) {
+        ForoshandehMamorPakhshRepository foroshandehMamorPakhshRepository = new ForoshandehMamorPakhshRepository(mPresenter.getAppContext());
+       compositeDisposable.add(foroshandehMamorPakhshRepository.getIsSelect()
+                .subscribe(foroshandehMamorPakhshModel -> {
+                    int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+                    if (noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_GARM
+                            || noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_SARD
+                            || noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_SMART
+                            || noeMasouliat == ForoshandehMamorPakhshUtils.SARPARAST
+                            || noeMasouliat == ForoshandehMamorPakhshUtils.MODIR){
+                        if (ccMoshtaryExtra==0)
+                        mPresenter.onIsForoshandehFromMenu();
+                        else
+                        mPresenter.onIsForoshandehFromVerifyRequest(ccMoshtaryExtra);
+                    }else {
+                        if (ccMoshtaryExtra==0)
+                        mPresenter.onIsMamorPakhshFromMenu();
+                        else
+                        mPresenter.onIsMamorPakhshFromVerifyRequest(ccMoshtaryExtra);
+                    }
+                }));
     }
 
 

@@ -34,6 +34,7 @@ public class RptJashnvarehSecondLevelAdapter extends RecyclerView.Adapter<RptJas
 
     public void initChild(ArrayList<RptJashnvarehForoshModel> jashnvarehForoshModels, int position) {
         this.jashnavareForoshModels.get(position).setRptJashnvarehForoshModels(jashnvarehForoshModels);
+        binding.getRoot().setClickable(true);
         notifyItemChanged(position);
     }
 
@@ -86,21 +87,23 @@ public class RptJashnvarehSecondLevelAdapter extends RecyclerView.Adapter<RptJas
             jashnvarehCustomlistBinding.lblEmtiaz.setTypeface(font);
             jashnvarehCustomlistBinding.lblRialEmtiaz.setTypeface(font);
             itemView.setOnClickListener(v -> {
-                if (jashnavareForoshModels.get(getAdapterPosition()).getRptJashnvarehForoshModels().size() > 0) {
-                    if (jashnavareForoshModels.get(getAdapterPosition()).isExpanded()) {
-                        jashnavareForoshModels.get(getAdapterPosition()).setExpanded(false);
-                        collapse(jashnvarehCustomlistBinding.recyclerView);
-                        jashnvarehCustomlistBinding.expandBtn.setRotation(0);
+                    if (jashnavareForoshModels.get(getAdapterPosition()).getRptJashnvarehForoshModels().size() > 0) {
+                        if (jashnavareForoshModels.get(getAdapterPosition()).isExpanded()) {
+                            jashnavareForoshModels.get(getAdapterPosition()).setExpanded(false);
+                            collapse(jashnvarehCustomlistBinding.recyclerView);
+                            jashnvarehCustomlistBinding.expandBtn.setRotation(0);
+                        } else {
+                            binding.getRoot().setClickable(false);
+                            jashnavareForoshModels.get(getAdapterPosition()).setExpanded(true);
+                            iRptJashnvarehSecondLevelAdapter.onItemClick(jashnavareForoshModels.get(getAdapterPosition()), getAdapterPosition());
+                            jashnvarehCustomlistBinding.expandBtn.setRotation(180);
+                        }
                     } else {
                         jashnavareForoshModels.get(getAdapterPosition()).setExpanded(true);
                         iRptJashnvarehSecondLevelAdapter.onItemClick(jashnavareForoshModels.get(getAdapterPosition()), getAdapterPosition());
-                        jashnvarehCustomlistBinding.expandBtn.setRotation(180);
+                        jashnvarehCustomlistBinding.expandBtn.setRotation(0);
                     }
-                } else {
-                    jashnavareForoshModels.get(getAdapterPosition()).setExpanded(true);
-                    iRptJashnvarehSecondLevelAdapter.onItemClick(jashnavareForoshModels.get(getAdapterPosition()), getAdapterPosition());
-                    jashnvarehCustomlistBinding.expandBtn.setRotation(0);
-                }
+
             });
 
         }
@@ -131,7 +134,7 @@ public class RptJashnvarehSecondLevelAdapter extends RecyclerView.Adapter<RptJas
             jashnvarehCustomlistBinding.lblName.setText(String.format("%1$s", rptJashnvarehForoshModel.getSharhJashnvareh()));
             jashnvarehCustomlistBinding.lblEmtiaz.setText(String.format("%1$s %2$s", rptJashnvarehForoshModel.getEmtiazMoshtary(),context.getResources().getString(R.string.emtiaz)));
             jashnvarehCustomlistBinding.lblRialEmtiaz.setText(String.format("%1$s %2$s", (int) rptJashnvarehForoshModel.getRialEmtiazMoshtary(), context.getResources().getString(R.string.rial)));
-            jashnvarehCustomlistBinding.ImgName.setImageResource(R.drawable.ic_jashnvareh_foreground);
+            jashnvarehCustomlistBinding.ImgName.setImageResource(R.drawable.ic_jashnvareh);
 
             if (rptJashnvarehForoshModel.isExpanded()) {
                 jashnvarehCustomlistBinding.expandBtn.setRotation(180);

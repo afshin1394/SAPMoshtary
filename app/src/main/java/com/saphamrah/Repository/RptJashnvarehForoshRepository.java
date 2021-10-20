@@ -1,6 +1,7 @@
 package com.saphamrah.Repository;
 
 import android.content.Context;
+import android.text.BoringLayout;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -57,8 +58,8 @@ public class RptJashnvarehForoshRepository {
         return () -> rptJashnvarehDAO.getAll();
     }
 
-    private Callable<ArrayList<RptJashnvarehForoshModel>> getAllMoshtariesCallable() {
-        return () -> rptJashnvarehDAO.getAllMoshtaries();
+    private Callable<ArrayList<RptJashnvarehForoshModel>> getAllMoshtariesCallable(int ccMoshtary) {
+        return () -> rptJashnvarehDAO.getAllMoshtaries(ccMoshtary);
     }
 
     private Callable<ArrayList<RptJashnvarehForoshModel>> getJashnvarehListByccMoshtaryCallable(int ccMoshtary) {
@@ -69,18 +70,18 @@ public class RptJashnvarehForoshRepository {
         return () -> rptJashnvarehDAO.getJashnvarehSatrByccJashnvarehAndccMoshtary(ccMoshtary,ccJashnvarehForosh);
     }
 
-    private Callable<ArrayList<RptJashnvarehForoshModel>> getAllJashnvarehCallable() {
-        return () -> rptJashnvarehDAO.getAllJashnvareh();
+    private Callable<ArrayList<RptJashnvarehForoshModel>> getAllJashnvarehCallable(int ccMoshtary) {
+        return () -> rptJashnvarehDAO.getAllJashnvareh(ccMoshtary);
 
     }
 
-    private Callable<RptJashnvarehForoshModel> getSumForoshandehScoreCallable() {
-        return () -> rptJashnvarehDAO.getEmtiazForoshandeh();
+    private Callable<RptJashnvarehForoshModel> getSumForoshandehScoreCallable(int ccMoshtary) {
+        return () -> rptJashnvarehDAO.getEmtiazForoshandeh(ccMoshtary);
 
     }
 
-    private Callable<ArrayList<RptJashnvarehForoshModel>> getAllMoshtaryByJashnvarehCallable(int ccjashnvarehForosh) {
-        return () -> rptJashnvarehDAO.getAllMoshtaryByccJashnvareh(ccjashnvarehForosh);
+    private Callable<ArrayList<RptJashnvarehForoshModel>> getAllMoshtaryByJashnvarehCallable(int ccjashnvarehForosh,int ccMoshtaryExtra) {
+        return () -> rptJashnvarehDAO.getAllMoshtaryByccJashnvareh(ccjashnvarehForosh,ccMoshtaryExtra);
 
     }
 
@@ -99,10 +100,17 @@ public class RptJashnvarehForoshRepository {
 
     }
 
-    private Callable<ArrayList<RptJashnvarehForoshModel>> getSumJashnvarehByccJashnvarehCallable(int ccJashnvareh) {
-        return () -> rptJashnvarehDAO.getJashnvarehSumByccJashnvareh(ccJashnvareh);
+    private Callable<ArrayList<RptJashnvarehForoshModel>> getSumJashnvarehByccJashnvarehCallable(int ccJashnvareh,int ccMoshtaryExtra) {
+        return () -> rptJashnvarehDAO.getJashnvarehSumByccJashnvareh(ccJashnvareh,ccMoshtaryExtra);
 
     }
+
+
+    private Callable<Boolean> isJashnvarehAvailableCallable(int ccMoshtary) {
+        return () -> rptJashnvarehDAO.isJashnvarehAvailable(ccMoshtary);
+
+    }
+
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
         return RxAsync.makeObservable(deleteAllCallable())
@@ -122,8 +130,8 @@ public class RptJashnvarehForoshRepository {
     }
 
 
-    public Observable<ArrayList<RptJashnvarehForoshModel>> getAllMoshtaries() {
-        return RxAsync.makeObservable(getAllMoshtariesCallable())
+    public Observable<ArrayList<RptJashnvarehForoshModel>> getAllMoshtaries(int ccMoshtary) {
+        return RxAsync.makeObservable(getAllMoshtariesCallable(ccMoshtary))
                 .subscribeOn(Schedulers.io());
     }
 
@@ -139,19 +147,19 @@ public class RptJashnvarehForoshRepository {
 
 
 
-    public Observable<ArrayList<RptJashnvarehForoshModel>> getAllJashnvareh() {
-        return RxAsync.makeObservable(getAllJashnvarehCallable())
+    public Observable<ArrayList<RptJashnvarehForoshModel>> getAllJashnvareh(int ccMoshtary) {
+        return RxAsync.makeObservable(getAllJashnvarehCallable(ccMoshtary))
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<RptJashnvarehForoshModel> getSumForoshandehScore() {
-        return RxAsync.makeObservable(getSumForoshandehScoreCallable())
+    public Observable<RptJashnvarehForoshModel> getSumForoshandehScore(int ccMoshtary) {
+        return RxAsync.makeObservable(getSumForoshandehScoreCallable(ccMoshtary))
                 .subscribeOn(Schedulers.io());
     }
 
 
-    public Observable<ArrayList<RptJashnvarehForoshModel>> getAllMoshtaryByJashnvareh(int ccJashnvarehForosh) {
-        return RxAsync.makeObservable(getAllMoshtaryByJashnvarehCallable(ccJashnvarehForosh))
+    public Observable<ArrayList<RptJashnvarehForoshModel>> getAllMoshtaryByJashnvareh(int ccJashnvarehForosh,int ccMoshtaryExtra) {
+        return RxAsync.makeObservable(getAllMoshtaryByJashnvarehCallable(ccJashnvarehForosh,ccMoshtaryExtra))
                 .subscribeOn(Schedulers.io());
     }
 
@@ -171,12 +179,18 @@ public class RptJashnvarehForoshRepository {
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<ArrayList<RptJashnvarehForoshModel>> getSumJashnvarehByccJashnvareh(int ccJashnvarehForosh) {
-        return RxAsync.makeObservable(getSumJashnvarehByccJashnvarehCallable(ccJashnvarehForosh))
+    public Observable<ArrayList<RptJashnvarehForoshModel>> getSumJashnvarehByccJashnvareh(int ccJashnvarehForosh,int ccMoshtaryExtra) {
+        return RxAsync.makeObservable(getSumJashnvarehByccJashnvarehCallable(ccJashnvarehForosh,ccMoshtaryExtra))
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<ArrayList<RptJashnvarehForoshModel>> fetchApiServiceRx(ServerIpModel serverIpModel,String activityNameForLog,int ccForoshandeh,String ccMoshtaries) {
+
+    public Observable<Boolean> isJashnvarehAvailable(int ccMoshtary) {
+        return RxAsync.makeObservable(isJashnvarehAvailableCallable(ccMoshtary))
+                .subscribeOn(Schedulers.io());
+    }
+
+    public Observable<ArrayList<RptJashnvarehForoshModel>> fetchApiServiceRx(ServerIpModel serverIpModel,String activityNameForLog,String ccForoshandeh,String ccMoshtaries) {
         APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
 
         return apiServiceRxjava.getRptJashnvarehForosh(ccForoshandeh,ccMoshtaries)
@@ -191,4 +205,5 @@ public class RptJashnvarehForoshRepository {
 
 
     }
+
 }

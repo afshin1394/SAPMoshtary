@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -161,6 +162,10 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
     private EditText edt_mablagh_pas_az_kasr_naghd_tajil;
     private EditText edt_check_tajil;
     private EditText edt_mablagh_pas_az_kasr_check_tajil;
+
+
+    Runnable runnable;
+    private Handler handler = new Handler();
 
 
     @SuppressLint("CutPasteId")
@@ -410,7 +415,7 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
             @Override
             public void onClick(View v) {
                 fabMenu.close(true);
-
+                clearNoeVosol();
                 boolean haveNotIsTaeedShodeAndIsSend = checkHaveNotIsTaeedShodehAndIsSend();
                 if (haveNotIsTaeedShodeAndIsSend) {
                     customAlertDialog.showMessageAlert(InvoiceSettlementActivity.this, false, "", getResources().getString(R.string.isTaeedShode), Constants.FAILED_MESSAGE(), getResources().getString(R.string.apply));
@@ -751,6 +756,15 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
         });
     }
 
+    private void clearNoeVosol(){
+        editTextSelectNoeVosol.setText("");
+        layoutVajhNaghdInfo.setVisibility(View.GONE);
+        layoutPOSInfo.setVisibility(View.GONE);
+        layoutIranCheckInfo.setVisibility(View.GONE);
+        layoutFishBankiInfo.setVisibility(View.GONE);
+        layoutCheckInfo.setVisibility(View.GONE);
+    }
+
     @Override
     public void showVosolIranCheckInfo(final ArrayList<ParameterChildModel> childParameterModels, int codeNoevosol) {
         //codeNoeVosolMoshtary = codeNoevosol;
@@ -1071,10 +1085,20 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
 
             @Override
             public void afterTextChanged(Editable s) {
-                addCommaToPrice(editTextCheckMablagh, s, this);
+
+                separator(s,this);
+
             }
         });
     }
+
+    private void separator (Editable editable, TextWatcher textWatcher) {
+        if (runnable != null) handler.removeCallbacks(runnable);
+
+        runnable = () -> addCommaToPrice(editTextCheckMablagh, editable, textWatcher);
+        handler.postDelayed(runnable, 500);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

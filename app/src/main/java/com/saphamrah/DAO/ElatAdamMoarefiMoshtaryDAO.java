@@ -68,7 +68,7 @@ public class ElatAdamMoarefiMoshtaryDAO
         else
         {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-Call<GetElatAdamMoarefiMoshtaryResult> call = apiServiceGet.getElatAdamMoarefiMoshtary();
+            Call<GetElatAdamMoarefiMoshtaryResult> call = apiServiceGet.getElatAdamMoarefiMoshtary();
             call.enqueue(new Callback<GetElatAdamMoarefiMoshtaryResult>() {
                 @Override
                 public void onResponse(Call<GetElatAdamMoarefiMoshtaryResult> call, Response<GetElatAdamMoarefiMoshtaryResult> response)

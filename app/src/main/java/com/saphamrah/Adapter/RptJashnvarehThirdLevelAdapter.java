@@ -92,7 +92,7 @@ public class RptJashnvarehThirdLevelAdapter extends RecyclerView.Adapter<RptJash
             binding.lblTaTarikh.setText(jashnvarehForoshModel.getTaTarikhJashnvareh()!=null ? String.format("%1$s" , jashnvarehForoshModel.getTaTarikhJashnvareh().substring(0,9)):String.format("%1$s" ,context.getResources().getString(R.string.undefined)));
             binding.lblMarkaz.setText(String.format("%1$s - %2$s" , jashnvarehForoshModel.getNameMarkaz(),jashnvarehForoshModel.getNameSazmanForosh()));
             binding.lblRialEmtiaz.setText(String.format("%1$s %2$s" ,  (int) jashnvarehForoshModel.getRialEmtiazMoshtary(),context.getResources().getString(R.string.rial)));
-            binding.IMGName.setImageResource(R.drawable.ic_jashnvareh_foreground);
+            binding.IMGName.setImageResource(R.drawable.ic_jashnvareh);
         }
 
     }
