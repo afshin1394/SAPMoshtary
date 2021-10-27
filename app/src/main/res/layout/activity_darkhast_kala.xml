@@ -109,7 +109,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:src="@drawable/ic_mosavabe"
+            android:src="@drawable/ic_suggest"
             fab:fab_colorNormal="@color/colorBackSendDataSwipe"
             fab:fab_colorPressed="@color/colorBackSendDataSwipe"
             fab:fab_label="@string/pishnahadMoshtary"
