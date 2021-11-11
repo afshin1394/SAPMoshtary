@@ -3226,7 +3226,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 // todo auto
                 KalaMojodiDAO kalaMojodiDAO = new KalaMojodiDAO(mPresenter.getAppContext());
                 int countKalaMojodi = kalaMojodiDAO.getCountByccKalaCode(ccKalaCodeJayezeh);
-                int countMaxMojody = kalaMojodiDAO.getCountByccKalaCode(ccKalaCodeJayezeh);
+                int countMaxMojody = kalaMojodiDAO.getMaxMojodyByccKalaCode(ccKalaCodeJayezeh);
 
                 Log.d("jayezeh" , "countKalaMojodi : " + countKalaMojodi +  " countMaxMojody:"+ countMaxMojody  + " tedadJayezeh: " + tedadJayezeh);
                 if (countKalaMojodi <= 0)
@@ -3234,7 +3234,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                     //insert takhfif naghdi
                     insertTakhfifNaghdi(ccJayezeh, sharhJayezeh, ccKalaJayezeh, tedadJayezeh, tedadJayezeh);
                 }
-                else if (countKalaMojodi >= tedadJayezeh)
+                else if (countKalaMojodi >= tedadJayezeh && countMaxMojody >= tedadJayezeh)
                 {
                     Log.d("jayezeh" , "ccDarkhastFaktor : " + ccDarkhastFaktor);
 																		
@@ -3250,7 +3250,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 else //if (countMojodiForKala > 0 && countMojodiForKala < tedadJayezeh)
                 {
                     //diff == count takhfif naghdi
-                    int diff = tedadJayezeh - countKalaMojodi;
+                    int diff = tedadJayezeh - countMaxMojody;
                     if (checkKalaForInsertKalaMojodi(ccKalaJayezeh , countKalaMojodi))
                     {
                         insertTakhfifNaghdi(ccJayezeh, sharhJayezeh, ccKalaJayezeh, tedadJayezeh, diff);
@@ -3287,7 +3287,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             return insertedKala == tedadJayezeh;
         }
 
-        private boolean insertKalaMojodi(KalaMojodiDAO kalaMojodiDAO, int ccTaminKonandeh, int count, String shomarehBach, String tarikhTolid, int gheymatMasrafKonandeh, int gheymatForosh, int ccKalaCode, int ccForoshandeh, int ccAfrad)
+        private boolean insertKalaMojodi(KalaMojodiDAO kalaMojodiDAO, int ccTaminKonandeh, int count, String shomarehBach, String tarikhTolid, float gheymatMasrafKonandeh, float gheymatForosh, int ccKalaCode, int ccForoshandeh, int ccAfrad)
         {
             String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
             KalaMojodiModel kalaMojodiModelFromDB = kalaMojodiDAO.getOneByccKalaCode(String.valueOf(ccKalaCode));
@@ -3316,7 +3316,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             }
         }
 
-        private boolean insertDarkhastFaktorSatr(int ccTaminKonandeh, int ccKalaCode, int count, String shomarehBach, String tarikhTolid, int gheymatForosh, int gheymatMasrafKonandeh)
+        private boolean insertDarkhastFaktorSatr(int ccTaminKonandeh, int ccKalaCode, int count, String shomarehBach, String tarikhTolid, float gheymatForosh, float gheymatMasrafKonandeh)
         {
             DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
             DarkhastFaktorSatrModel darkhastFaktorSatrModel = new DarkhastFaktorSatrModel();
@@ -3338,6 +3338,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             darkhastFaktorSatrModel.setExtraProp_IsOld(false);
             darkhastFaktorSatrModel.setGheymatMasrafKonandeh(gheymatMasrafKonandeh);
             darkhastFaktorSatrModel.setGheymatForoshAsli(gheymatForosh);
+            darkhastFaktorSatrModel.setGheymatMasrafKonandehAsli(gheymatMasrafKonandeh);
             return darkhastFaktorSatrDAO.insert(darkhastFaktorSatrModel);
         }
 
