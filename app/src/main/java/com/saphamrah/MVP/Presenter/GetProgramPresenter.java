@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.saphamrah.BaseMVP.GetProgramMVP;
 import com.saphamrah.DAO.SystemConfigTabletDAO;
+import com.saphamrah.MVP.Model.GetProgramGrpcModel;
 import com.saphamrah.MVP.Model.GetProgramModel;
 import com.saphamrah.MVP.Model.GetProgramModelRx;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
@@ -39,6 +40,9 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
                 break;
             case Constants.GET_PROGRAM_RX:
                 mModel = new GetProgramModelRx(this);
+                break;
+            case Constants.GET_PROGRAM_GRPC:
+                mModel = new GetProgramGrpcModel(this);
                 break;
         }
 

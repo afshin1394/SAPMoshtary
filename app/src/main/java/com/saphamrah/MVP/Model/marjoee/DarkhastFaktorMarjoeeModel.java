@@ -95,9 +95,10 @@ public class DarkhastFaktorMarjoeeModel implements DarkhastFaktorMarjoeeMVP.Mode
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         int ccAfrad = foroshandehMamorPakhshModel.getCcAfrad();
         int ccAnbarak = foroshandehMamorPakhshModel.getCcAnbarak();
+        int faktorRooz = (int)darkhastFaktorModel.getFaktorRooz();
 
 
-        jsonArrayAfradAnbarak.put(AfradAnbarakToJson(ccAnbarak,ccAfrad));
+        jsonArrayAfradAnbarak.put(AfradAnbarakToJson(ccAnbarak,ccAfrad,faktorRooz));
 
         /*
          * add kardex and kardexSatr and marjoee Image to json
@@ -171,11 +172,12 @@ public class DarkhastFaktorMarjoeeModel implements DarkhastFaktorMarjoeeMVP.Mode
         }
     }
 
-    private JSONObject AfradAnbarakToJson(int ccAnbarak, int ccAfrad) {
+    private JSONObject AfradAnbarakToJson(int ccAnbarak, int ccAfrad, int faktorRooz) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("ccAfrad",ccAfrad);
-            jsonObject.put("ccAnbark",ccAnbarak);
+            jsonObject.put("ccAnbarak",ccAnbarak);
+            jsonObject.put("FaktorRooz",faktorRooz);
         }catch (Exception exception){
             exception.printStackTrace();
         }

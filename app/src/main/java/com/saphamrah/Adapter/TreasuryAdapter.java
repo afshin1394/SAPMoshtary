@@ -91,6 +91,13 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             e.printStackTrace();
         }
 
+        if (models.get(position).getNameSazmanForosh() != null){
+            holder.lblMoshtaryGharardad.setVisibility(View.VISIBLE);
+            holder.lblMoshtaryGharardad.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.moshtaryGharardad), models.get(position).getNameSazmanForosh()));
+        } else {
+            holder.lblMoshtaryGharardad.setVisibility(View.GONE);
+        }
+
         /*
         ****** layout Edit Darkhast ******
          */
@@ -135,9 +142,9 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             holder.laySendVosol.setVisibility(View.GONE);
             countSwipeLayout -=1;
         } else {
-            if (models.get(position).getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale) {
+            //if (models.get(position).getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale) {
                 holder.layEditVosol.setVisibility(View.VISIBLE);
-            }
+            //}
             holder.laySendVosol.setVisibility(View.VISIBLE);
         }
 
@@ -289,6 +296,7 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         private TextView lblTarikhErsal;
         private TextView lblNameNoeVosol;
         private TextView lblHaveMarjoee;
+        private TextView lblMoshtaryGharardad;
         private RelativeLayout layShowLocation;
         private RelativeLayout layFaktor;
         private RelativeLayout layFaktorDetail;
@@ -328,6 +336,7 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             layEditVosol = view.findViewById(R.id.layEdit);
             layEditDarkhast = view.findViewById(R.id.layEditDarkhast);
             layMarjoee = view.findViewById(R.id.layMarjoee);
+            lblMoshtaryGharardad = view.findViewById(R.id.lblMoshtaryGharardad);
             lay_for_color = view.findViewById(R.id.lay_for_color);
             laySaveAndSend = view.findViewById(R.id.laySaveAndSendLocation);
             lay_expand_btn = view.findViewById(R.id.lay_expand_btn);
@@ -345,6 +354,7 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             lblNameNoeVosol.setTypeface(font);
             lblTarikhErsal.setTypeface(font);
             lblHaveMarjoee.setTypeface(font);
+            lblMoshtaryGharardad.setTypeface(font);
 
 
 

@@ -595,12 +595,12 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         int ccMarkazSazmanForoshSakhtarForosh = 0;
         int ccAfrad = foroshandehMamorPakhshModel.getCcAfrad();
         int ccAnbarak = foroshandehMamorPakhshModel.getCcAnbarak();
+        int faktorRooz = (int)darkhastFaktorModel.getFaktorRooz();
 
 
+        Log.d("TreasuryListModel", "Send JSON ccAnabrak:" + ccAnbarak + " ,ccAfrad:" + ccAfrad + " ,FaktorRooz:" + faktorRooz);
 
-
-
-        jsonArrayAfradAnbarak.put(AfradAnbarakToJson(ccAnbarak,ccAfrad));
+        jsonArrayAfradAnbarak.put(AfradAnbarakToJson(ccAnbarak,ccAfrad,faktorRooz));
 
         if(noeMasouliat != 4)
         {
@@ -712,11 +712,12 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
     }
 
-    private JSONObject AfradAnbarakToJson(int ccAnbarak, int ccAfrad) {
+    private JSONObject AfradAnbarakToJson(int ccAnbarak, int ccAfrad, int faktorRooz) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("ccAfrad",ccAfrad);
-            jsonObject.put("ccAnbark",ccAnbarak);
+            jsonObject.put("ccAnbarak",ccAnbarak);
+            jsonObject.put("FaktorRooz",faktorRooz);
         }catch (Exception exception){
             exception.printStackTrace();
         }

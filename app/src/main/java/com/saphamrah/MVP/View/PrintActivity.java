@@ -1,6 +1,7 @@
 package com.saphamrah.MVP.View;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
@@ -51,6 +52,7 @@ import com.saphamrah.DAO.MoshtaryAddressDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.DAO.SystemConfigTabletDAO;
+import com.saphamrah.MVP.printNoe2.PrintNoe2Activity;
 import com.saphamrah.Model.CodeTypeModel;
 import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
@@ -318,20 +320,25 @@ public class PrintActivity extends AppCompatActivity
 
             //---------------------------Company--------------------------
 
-            if (Constants.CURRENT_VERSION_TYPE() == 3 || Constants.CURRENT_VERSION_TYPE() == 6)
+            if (Constants.CURRENT_VERSION_TYPE() == 6)
             {
                 imgLogoPrint.setImageResource(R.drawable.logo_print);
             }
-            else
+            else if (Constants.CURRENT_VERSION_TYPE() == 0 || Constants.CURRENT_VERSION_TYPE() == 1 || Constants.CURRENT_VERSION_TYPE() == 2)
             {
                 CompanyDAO companyDAO = new CompanyDAO(PrintActivity.this);
                 byte[] bitmapdata = null;
-                UserTypeShared userTypeShared = new UserTypeShared(PrintActivity.this);
-                int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE(), 0);
-                if (isTest == 3)
-                    bitmapdata = companyDAO.getByccCompany(2).getLogoPhotoPrint();//pegah
-                else
-                    bitmapdata = companyDAO.getByccCompany(1).getLogoPhotoPrint();//mihan
+
+                bitmapdata = companyDAO.getByccCompany(1).getLogoPhotoPrint();//mihan
+                Bitmap bmpLogoPrint = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+                imgLogoPrint.setImageBitmap(bmpLogoPrint);
+            }
+            else if(Constants.CURRENT_VERSION_TYPE() == 4 || Constants.CURRENT_VERSION_TYPE() == 5 || Constants.CURRENT_VERSION_TYPE() == 7)
+            {
+                CompanyDAO companyDAO = new CompanyDAO(PrintActivity.this);
+                byte[] bitmapdata = null;
+
+                bitmapdata = companyDAO.getByccCompany(2).getLogoPhotoPrint();//mihan
                 Bitmap bmpLogoPrint = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
                 imgLogoPrint.setImageBitmap(bmpLogoPrint);
             }
@@ -1000,6 +1007,7 @@ public class PrintActivity extends AppCompatActivity
         PrintActivity.this.finish();
     }
 
+    @SuppressLint("MissingSuperCall")
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         Log.d("onActivityResult", "onActivityResult " + resultCode);

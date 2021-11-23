@@ -493,10 +493,18 @@ public class ForoshandehMamorPakhshDAO
     {
         try
         {
+            String strquery = " UPDATE  ForoshandehMamorPakhsh SET ExtraProp_IsSelect=0 " ;
+            String strquery1 = " UPDATE ForoshandehMamorPakhsh SET ExtraProp_IsSelect=1 WHERE ccForoshandeh = " + ccForoshandeh;
+
+//            SQLiteDatabase db = dbHelper.getWritableDatabase();
+//            ContentValues values = new ContentValues();
+//            values.put(ForoshandehMamorPakhshModel.COLUMN_ExtraProp_IsSelect(), 1);
+//            db.update(ForoshandehMamorPakhshModel.TableName(), values, ForoshandehMamorPakhshModel.COLUMN_ccForoshandeh() + " = " + ccForoshandeh, null);
+//            db.close();
+
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            ContentValues values = new ContentValues();
-            values.put(ForoshandehMamorPakhshModel.COLUMN_ExtraProp_IsSelect(), 1);
-            db.update(ForoshandehMamorPakhshModel.TableName(), values, ForoshandehMamorPakhshModel.COLUMN_ccForoshandeh() + " = " + ccForoshandeh, null);
+            db.execSQL(strquery);
+            db.execSQL(strquery1);
             db.close();
         }
         catch (Exception exception)

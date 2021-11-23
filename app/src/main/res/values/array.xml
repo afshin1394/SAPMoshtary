@@ -274,6 +274,7 @@
         <item>{\"name\":\"مسیر\" , \"function\":\"getMasirFaalForoshandehAmargar\"}</item>
         <item>{\"name\":\"نوع فعالیت\" , \"function\":\"getNoeFaaliatSenfAmargar\"}</item>
         <item>{\"name\":\"گروه\" , \"function\":\"getGorohAmargar\"}</item>
+        <item>{\"name\":\"پیشنهاد\" , \"functdion\":\"getNoePishnahadAmargar\"}</item>
         <item>{\"name\":\"علت عدم معرفی مشتری\" , \"function\":\"getElatAdamMoarefiMoshtaryAmargar\"}</item>
     </string-array>
 
@@ -481,5 +482,6 @@
     <string-array name="getProgramServiceItems">
         <item>{\"title\":\"سرویس Retrofit\" , \"value\":\"1\"}</item>
         <item>{\"title\":\"سرویس RX\" , \"value\":\"2\"}</item>
+        <item>{\"title\":\"سرویس GRPC\" , \"value\":\"3\"}</item>
     </string-array>
 </resources>

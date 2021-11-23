@@ -375,6 +375,21 @@
                         />
 
                     <TextView
+                        android:id="@+id/lblMoshtaryGharardad"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/FontSize16"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/lblNameNoeVosol"
+                        />
+
+                    <TextView
                         android:id="@+id/lblHaveMarjoee"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

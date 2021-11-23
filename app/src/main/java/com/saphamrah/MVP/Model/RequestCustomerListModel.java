@@ -152,7 +152,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             Date dtGregorianGetProgramDate = sdf.parse(gregorianGetProgramDate);
             //---------------------- For Test -----------------
 
-            int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
+            int isTest= 0;//= userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
             Log.d("date" , "istest : " + isTest);
             if (isTest == 1)
             {
@@ -1086,7 +1086,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             }
             //---------------------- For Test -----------------
             UserTypeShared userTypeShared = new UserTypeShared(weakReferenceContext.get());
-            int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
+            int isTest = 0;//userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
             Log.d("kharejAzMasir" , "istest : " + isTest);
             if (isTest == 1)
             {

@@ -401,7 +401,18 @@ public class AmargarCustomerListActivity extends AppCompatActivity implements Am
             case ListMoshtarianAdapter.ADAM_FAAL:
                 mPresenter.getElatAdamMoarefiMoshtary(model.getCcMoshtary());
                 break;
+            case ListMoshtarianAdapter.SUGGEST:
+               openSuggest(model.getCcMoshtary());
+                break;
         }
+    }
+
+    private void openSuggest(int ccMoshtary){
+        Intent intent = new Intent(AmargarCustomerListActivity.this, NazaratAndPishnahadActivity.class);
+        intent.putExtra("ccMoshtary", ccMoshtary);
+        intent.putExtra("from", 2);
+        startActivity(intent);
+        overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
     }
 
     @Override

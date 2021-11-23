@@ -220,7 +220,7 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
         ArrayList<KalaOlaviatGheymatModel> kalaOlaviatGheymatModels = kalaOlaviatGheymatDAO.getByCcKalaCode(kalaMojodiZaribModel.getCcKalaCode());
 
         for (KalaOlaviatGheymatModel model : kalaOlaviatGheymatModels){
-            if (kalaMojodiZaribModel.getGheymatForosh() == model.getGheymatForosh()){
+            if (kalaMojodiZaribModel.getGheymatForoshAsli() == model.getGheymatForosh()){
                 if (model.getOlaviat() > lastOlaviat  && requestCountSum <= lastMojodi){
                     canInsertKala = false;
                 }

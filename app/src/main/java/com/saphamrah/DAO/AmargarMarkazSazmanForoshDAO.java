@@ -5,19 +5,36 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
+import com.saphamrah.MVP.Model.GetProgramModel;
 import com.saphamrah.Model.AmargarMarkazSazmanForoshModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAmargarMarkazForoshResult;
+import com.saphamrah.protos.SellOrganizationCenterStatisticianGrpc;
+import com.saphamrah.protos.SellOrganizationCenterStatisticianReply;
+import com.saphamrah.protos.SellOrganizationCenterStatisticianReplyList;
+import com.saphamrah.protos.SellOrganizationCenterStatisticianRequest;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,6 +75,87 @@ public class AmargarMarkazSazmanForoshDAO
             AmargarMarkazSazmanForoshModel.COLUMN_nameMarkazSazmanForosh()
         };
     }
+    public void fetchAmargarMarkazForoshGrpc(final Context context, final String activityNameForLog, final String ccAmargar, final RetrofitResponse retrofitResponse)
+    {
+        try {
+
+
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+        serverIpModel.setPort("5000");
+
+        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+        {
+            String message = "can't find server";
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MahalDAO.class.getSimpleName(), activityNameForLog, "fetchAllMahalByccMarkazForoshAmargarGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
+        }
+        else {
+
+            CompositeDisposable compositeDisposable = new CompositeDisposable();
+            ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+            SellOrganizationCenterStatisticianGrpc.SellOrganizationCenterStatisticianBlockingStub sellOrganizationCenterStatisticianBlockingStub = SellOrganizationCenterStatisticianGrpc.newBlockingStub(managedChannel);
+            SellOrganizationCenterStatisticianRequest sellOrganizationCenterStatisticianRequest = SellOrganizationCenterStatisticianRequest.newBuilder().setStatisticianID(Integer.parseInt(ccAmargar)).build();
+
+            Callable<SellOrganizationCenterStatisticianReplyList> getSellOrganizationCenterStatisticianCallable  = () -> sellOrganizationCenterStatisticianBlockingStub.getSellOrganizationCenterStatistician(sellOrganizationCenterStatisticianRequest);
+            RxAsync.makeObservable(getSellOrganizationCenterStatisticianCallable)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .map(sellOrganizationCenterStatisticianReplyList -> {
+                        ArrayList<AmargarMarkazSazmanForoshModel> mahalModels = new ArrayList<>();
+                        for (SellOrganizationCenterStatisticianReply sellOrganizationCenterStatisticianReply : sellOrganizationCenterStatisticianReplyList.getSellOrganizationCenterStatisticiansList()) {
+                            AmargarMarkazSazmanForoshModel amargarMarkazSazmanForoshModel = new AmargarMarkazSazmanForoshModel();
+                            amargarMarkazSazmanForoshModel.setCcAmargarMarkazSazmanForosh(sellOrganizationCenterStatisticianReply.getSellOrganizationCenterStatisticianID());
+                            amargarMarkazSazmanForoshModel.setCcMarkazForosh(sellOrganizationCenterStatisticianReply.getSellCenterID());
+                            amargarMarkazSazmanForoshModel.setCcSazmanForosh(sellOrganizationCenterStatisticianReply.getSellOrganizationID());
+                            amargarMarkazSazmanForoshModel.setCcMarkazSazmanForosh(sellOrganizationCenterStatisticianReply.getSellOrganizationCenterID());
+                            amargarMarkazSazmanForoshModel.setCcAmargar (sellOrganizationCenterStatisticianReply.getStatisticianID());
+                            amargarMarkazSazmanForoshModel.setNameMarkazForosh(sellOrganizationCenterStatisticianReply.getSellCenterName());
+                            amargarMarkazSazmanForoshModel.setNameSazmanForosh(sellOrganizationCenterStatisticianReply.getSellOrganizationName());
+                            amargarMarkazSazmanForoshModel.setNameMarkazSazmanForosh(sellOrganizationCenterStatisticianReply.getSellOrganizationCenterName());
+
+
+                            mahalModels.add(amargarMarkazSazmanForoshModel);
+                        }
+
+                        return mahalModels;
+
+                    }).subscribe(new Observer<ArrayList<AmargarMarkazSazmanForoshModel>>() {
+                @Override
+                public void onSubscribe(@NonNull Disposable d) {
+                    compositeDisposable.add(d);
+                }
+
+                @Override
+                public void onNext(@NonNull ArrayList<AmargarMarkazSazmanForoshModel> mahalModels) {
+                    retrofitResponse.onSuccess(mahalModels);
+                }
+
+                @Override
+                public void onError(@NonNull Throwable e) {
+                    retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                }
+
+                @Override
+                public void onComplete() {
+                    if (!compositeDisposable.isDisposed()) {
+                        compositeDisposable.dispose();
+                    }
+                    compositeDisposable.clear();
+                }
+            });
+
+        }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), MahalDAO.class.getSimpleName(), activityNameForLog, "fetchAllMahalByccMarkazForoshAmargarGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
+        }
+
+    }
+
 
 
     public void fetchAmargarMarkazForosh(final Context context, final String activityNameForLog, final String ccAmargar, final RetrofitResponse retrofitResponse)
@@ -80,6 +178,8 @@ public class AmargarMarkazSazmanForoshDAO
                 {
                     try
                     {
+                        GetProgramModel.responseSize += response.raw().toString().getBytes(StandardCharsets.UTF_8).length;
+
                         if (response.raw().body() != null)
                         {
                             long contentLength = response.raw().body().contentLength();

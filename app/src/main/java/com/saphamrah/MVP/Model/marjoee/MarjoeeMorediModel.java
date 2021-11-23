@@ -139,7 +139,7 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
         {
             kardex = kardexDAO.SetForInsert_Kardex(ccMarkazAnbar,
                     darkhastFaktorModel.getCcMarkazForosh(),
-                    foroshandehMamorPakhshModel.getCcAnbarMarjoee(),
+                    darkhastFaktorModel.getCcAnbar(),
                     //entity.getCcAnbarMarjoee(),
                     entity.getCcMoshtary(),
                     0,

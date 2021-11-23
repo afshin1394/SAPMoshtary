@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.ActivityTypeForIntroducingNewCustomer.proto.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "ActivityTypeForIntroducingNewCustomerProto";
+option objc_class_prefix = "HLW";
+
+package Sales;
+
+
+service ActivityTypeForIntroducingNewCustomer{
+  rpc GetActivityTypeForIntroducingNewCustomer(ActivityTypeForIntroducingNewCustomerRequest) returns(ActivityTypeForIntroducingNewCustomerReplyList);
+}
+
+message ActivityTypeForIntroducingNewCustomerRequest{
+  string SellerID =1;
+}
+
+message ActivityTypeForIntroducingNewCustomerReply{
+  int32 ActivityTypeForIntroducingNewCustomerID = 1;
+  int32 ConsumerTypeID = 2 ;
+  int32 ConsumerGuildID = 3 ;
+}
+
+message ActivityTypeForIntroducingNewCustomerReplyList{
+  repeated ActivityTypeForIntroducingNewCustomerReply ActivityTypeForIntroducingNewCustomers = 1;
+}

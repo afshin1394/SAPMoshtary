@@ -15,9 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.UIModel.KalaDarkhastFaktorSatrModel;
+import com.saphamrah.Utils.Constants;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -29,7 +32,8 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
     private ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels;
     private boolean showSwipe;
     private Context context;
-
+    private SelectFaktorShared shared = new SelectFaktorShared(BaseApplication.getContext());
+    private  int ccNoeMoshtary = 0;
     public RequestedGoodAdapter(Context context , ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels , boolean showSwipe , OnItemClickListener listener)
     {
         this.context = context;
@@ -43,6 +47,7 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.requested_good_customlist, parent, false);
+        ccNoeMoshtary = shared.getInt(shared.getCcGorohNoeMoshtary(), -1);
         return new MyViewHolder(itemView);
     }
 
@@ -51,13 +56,19 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
     {
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         String mablaghForosh = formatter.format((int)kalaDarkhastFaktorSatrModels.get(position).getMablaghForosh());
-        holder.lblCodeNameKala.setText(String.format("%1$s - %2$s", kalaDarkhastFaktorSatrModels.get(position).getCodeKala(), kalaDarkhastFaktorSatrModels.get(position).getNameKala()));
+
         holder.lblMablaghForosh.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.mablaghForoshUnitRial), mablaghForosh));
         holder.lblShomareBach.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.shomareBach), kalaDarkhastFaktorSatrModels.get(position).getShomarehBach()));
         int[] counts = new PubFunc().new ConvertUnit().tedadToCartonBasteAdad(kalaDarkhastFaktorSatrModels.get(position).getTedad3(), kalaDarkhastFaktorSatrModels.get(position).getTedadDarKarton(), kalaDarkhastFaktorSatrModels.get(position).getTedadDarBasteh(), kalaDarkhastFaktorSatrModels.get(position).getAdad());
         holder.lblCartonCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.carton), String.valueOf(counts[0])));
         holder.lblBasteCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.basteh), String.valueOf(counts[1])));
         holder.lblAdadCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.adad), String.valueOf(counts[2])));
+        if (ccNoeMoshtary == 350){
+            holder.lblCodeNameKala.setText(String.format("%1$s - %2$s - %3$s", kalaDarkhastFaktorSatrModels.get(position).getCodeKala(), kalaDarkhastFaktorSatrModels.get(position).getNameKala() , kalaDarkhastFaktorSatrModels.get(position).getBarCode()));
+        } else {
+            holder.lblCodeNameKala.setText(String.format("%1$s - %2$s", kalaDarkhastFaktorSatrModels.get(position).getCodeKala(), kalaDarkhastFaktorSatrModels.get(position).getNameKala()));
+        }
+
 
         //set kala status asasi
         if (kalaDarkhastFaktorSatrModels.get(position).getKalaAsasi())

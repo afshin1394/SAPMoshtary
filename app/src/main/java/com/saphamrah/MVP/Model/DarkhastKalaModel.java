@@ -204,6 +204,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
         int moshtaryGharardadccSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getMoshtaryGharardadccSazmanForosh(), -1);
         int ccMoshtaryGharardad = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtaryGharardad(), -1);
+        Log.d("DarkhastKalaModel","hashMapSelectedGoods:" + hashMapSelectedGoods.toString());
         if (hashMapSelectedGoods.size() > 0)
         {
             MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
@@ -216,38 +217,42 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
             for (String ccKalaCode : hashMapSelectedGoods.keySet())
             {
                 int tedadDarkhasti = hashMapSelectedGoods.get(ccKalaCode);
-                Log.d("check1 kalamojodi1", ""+ ccKalaCode+","+ccDarkhastFaktor+", moshtaryGharardadccSazmanForosh:"+moshtaryGharardadccSazmanForosh +"," + ccMoshtaryGharardad);
-
-                Log.d("DarkhastKalaModel","calculateGoodsListWithMojodiOnline: cckalacode:" +  ccKalaCode + " ccDarkhastFaktor:" + ccDarkhastFaktor);
+                Log.d("DarkhastKalaModel", "ccKalaCode:"+ ccKalaCode+",ccDarkhastFaktor:"+ccDarkhastFaktor+", moshtaryGharardadccSazmanForosh:"+moshtaryGharardadccSazmanForosh +"," + ccMoshtaryGharardad);
                 darkhastFaktorSatrDAO.deleteByccKalaCodeAndccDarkhastFaktor(ccDarkhastFaktor , ccKalaCode);
 
                 ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = kalaMojodiZaribForoshDAO.getByMoshtaryAndccKalaCode(daraje, noeMoshtary, ccKalaCode, moshtaryGharardadccSazmanForosh,ccMoshtaryGharardad);
-                Log.d("check1 kalamojodi2", kalaMojodiZaribModels.toString());
+                Log.d("DarkhastKalaModel","kalaMojodiZaribModels:" + kalaMojodiZaribModels.toString());
 
-                Log.d("DarkhastKalaModel","calculateGoodsListWithMojodiOnline: kalaMojodiZaribModels:" +  kalaMojodiZaribModels );
                 int sumSelectedNew = 0;
                 int loopCounter = 0;
+                Log.d("DarkhastKalaModel","after while  sumSelectedNew:" +  sumSelectedNew + ", tedadDarkhasti:" + tedadDarkhasti + ",loopCounter:" + loopCounter + ",kalaMojodiZaribModels.size():" + kalaMojodiZaribModels.size());
                 while (sumSelectedNew < tedadDarkhasti && loopCounter < kalaMojodiZaribModels.size())
                 {
                     tedadDarkhasti = tedadDarkhasti - sumSelectedNew;
+                    Log.d("DarkhastKalaModel","In While Before If sumSelectedNew:" +  sumSelectedNew + ", tedadDarkhasti:" + tedadDarkhasti + ",loopCounter:" + loopCounter );
                     if (kalaMojodiZaribModels.get(loopCounter).getTedad() >= tedadDarkhasti)
                     {
                         if (insertNewDarkhastFaktorSatr(darkhastFaktorSatrDAO, ccDarkhastFaktor, kalaMojodiZaribModels.get(loopCounter), tedadDarkhasti))
                         {
                             Log.d("DarkhastKalaModel" , "tedadDarkhasti : " + tedadDarkhasti);
+                            Log.d("DarkhastKalaModel","kalaMojodiZaribModels.get("+loopCounter+"):"+kalaMojodiZaribModels.get(loopCounter).toString());
                             insertNewKalaMojodi(kalaMojodiZaribModels.get(loopCounter).getCcKalaCode(), ccDarkhastFaktor, kalaMojodiZaribModels.get(loopCounter).getTarikhTolid(), kalaMojodiZaribModels.get(loopCounter).getShomarehBach(), kalaMojodiZaribModels.get(loopCounter).getCcTaminKonandeh(), (tedadDarkhasti*-1) , kalaMojodiZaribModels.get(loopCounter).getGheymatForoshAsli(), kalaMojodiZaribModels.get(loopCounter).getGheymatMasrafKonandehAsli());
                             sumSelectedNew = tedadDarkhasti;
                             tedadDarkhasti = 0;
+                            Log.d("DarkhastKalaModel","In While after If  sumSelectedNew:" +  sumSelectedNew + ", tedadDarkhasti:" + tedadDarkhasti + ",loopCounter:" + loopCounter + ",kalaMojodiZaribModels.size():" + kalaMojodiZaribModels.size());
+
                         }
                     }
                     else
                     {
+                        Log.d("DarkhastKalaModel" , "In While else kalaMojodiZaribModels.get("+loopCounter+") : " + kalaMojodiZaribModels.get(loopCounter).toString());
                         if (insertNewDarkhastFaktorSatr(darkhastFaktorSatrDAO, ccDarkhastFaktor, kalaMojodiZaribModels.get(loopCounter), kalaMojodiZaribModels.get(loopCounter).getTedad()))
                         {
-                            Log.d("DarkhastKalaModel" , "kalaMojodiZaribModels.get(loopCounter).getTedad() : " + kalaMojodiZaribModels.get(loopCounter).getTedad());
                             insertNewKalaMojodi(kalaMojodiZaribModels.get(loopCounter).getCcKalaCode(), ccDarkhastFaktor, kalaMojodiZaribModels.get(loopCounter).getTarikhTolid(), kalaMojodiZaribModels.get(loopCounter).getShomarehBach(), kalaMojodiZaribModels.get(loopCounter).getCcTaminKonandeh(), (kalaMojodiZaribModels.get(loopCounter).getTedad()*-1),kalaMojodiZaribModels.get(loopCounter).getGheymatForoshAsli(), kalaMojodiZaribModels.get(loopCounter).getGheymatMasrafKonandehAsli());
                             sumSelectedNew += kalaMojodiZaribModels.get(loopCounter).getTedad();
                             //tedadDarkhasti = tedadDarkhasti - kalaMojodiZaribModels.get(loopCounter).getTedad();
+                            Log.d("DarkhastKalaModel","In While after else  sumSelectedNew:" +  sumSelectedNew + ", tedadDarkhasti:" + tedadDarkhasti + ",loopCounter:" + loopCounter + ",kalaMojodiZaribModels.size():" + kalaMojodiZaribModels.size());
+
                         }
                     }
                     loopCounter++;

@@ -16,6 +16,7 @@ public class RptMojodiAnbarModel
     private static final String COLUMN_IsAdamForosh = "IsAdamForosh";
     private static final String COLUMN_ccSazmanForosh = "ccSazmanForosh";
     private static final String COLUMN_NameSazmanForosh = "NameSazmanForosh";
+    private static final String COLUMN_ccDarkhastFaktorNoeForosh = "ccDarkhastFaktorNoeForosh";
 
 
     public static String TableName() {
@@ -51,6 +52,9 @@ public class RptMojodiAnbarModel
     public static String COLUMN_NameSazmanForosh() {
         return COLUMN_NameSazmanForosh;
     }
+    public static String COLUMN_ccDarkhastFaktorNoeForosh() {
+        return COLUMN_ccDarkhastFaktorNoeForosh;
+    }
 
 
 
@@ -65,6 +69,7 @@ public class RptMojodiAnbarModel
     private int IsAdamForosh;
     private int ccSazmanForosh;
     private String NameSazmanForosh;
+    private int ccDarkhastFaktorNoeForosh;
 
 
     public void setRadif(int Radif){
@@ -146,6 +151,14 @@ public class RptMojodiAnbarModel
         return this.NameSazmanForosh;
     }
 
+    public int getCcDarkhastFaktorNoeForosh() {
+        return ccDarkhastFaktorNoeForosh;
+    }
+
+    public void setCcDarkhastFaktorNoeForosh(int ccDarkhastFaktorNoeForosh) {
+        this.ccDarkhastFaktorNoeForosh = ccDarkhastFaktorNoeForosh;
+    }
+
     @NonNull
     @Override
     public String toString()
@@ -162,6 +175,7 @@ public class RptMojodiAnbarModel
                 ", IsAdamForosh=" + IsAdamForosh +
                 ", CcSazmanForosh=" + ccSazmanForosh +
                 ", NameSazmanForosh=" + NameSazmanForosh +
+                ", ccDarkhastFaktorNoeForosh=" + ccDarkhastFaktorNoeForosh +
                 '}';
     }
 

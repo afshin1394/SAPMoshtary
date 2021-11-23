@@ -39,6 +39,7 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     private static final String COLUMN_ExtraProp_MablaghDariaftPardakht = "ExtraProp_MablaghDariaftPardakht";
     private static final String COLUMN_ccMoshtaryGharardad = "ccMoshtaryGharardad";
     private static final String COLUMN_MoshtaryGharardadccSazmanForosh = "MoshtaryGharardadccSazmanForosh";
+    private static final String COLUMN_NameSazmanForosh = "NameSazmanForosh";
 
 
     public static String COLUMN_ccDarkhastFaktor() {
@@ -140,6 +141,9 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     public static String COLUMN_MoshtaryGharardadccSazmanForosh() {
         return COLUMN_MoshtaryGharardadccSazmanForosh;
     }
+    public static String COLUMN_NameSazmanForosh() {
+        return COLUMN_NameSazmanForosh;
+    }
 
     private long ccDarkhastFaktor;
     private int ccForoshandeh;
@@ -176,6 +180,7 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     private int ccMoshtaryGharardad;
     private int MoshtaryGharardadccSazmanForosh;
     private int ExtraProp_SendLocation = 0;
+    private String NameSazmanForosh = "";
 
     /**
      * this is just for show details vosol
@@ -511,6 +516,14 @@ public class DarkhastFaktorMoshtaryForoshandeModel
         ExtraProp_HaveMarjoee = extraProp_HaveMarjoee;
     }
 
+    public String getNameSazmanForosh() {
+        return NameSazmanForosh;
+    }
+
+    public void setNameSazmanForosh(String nameSazmanForosh) {
+        NameSazmanForosh = nameSazmanForosh;
+    }
+
     @NonNull
     @Override
     public String toString()
@@ -547,6 +560,7 @@ public class DarkhastFaktorMoshtaryForoshandeModel
                 ", CountDarkhastFaktor=" + CountDarkhastFaktor +
                 ", ccMoshtaryGharardad=" + ccMoshtaryGharardad +
                 ", MoshtaryGharardadccSazmanForosh=" + MoshtaryGharardadccSazmanForosh +
+                ", NameSazmanForosh=" + NameSazmanForosh +
                 '}';
     }
 }

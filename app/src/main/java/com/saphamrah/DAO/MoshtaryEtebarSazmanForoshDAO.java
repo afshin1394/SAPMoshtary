@@ -176,7 +176,7 @@ public class MoshtaryEtebarSazmanForoshDAO
         else
         {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-Call<GetAllvMoshtaryEtebarSazmanForoshResult> call = apiServiceGet.getAllvMoshtaryEtebarSazmanForoshForPakhsh(ccMoshtarys , ccSazmanForosh);
+            Call<GetAllvMoshtaryEtebarSazmanForoshResult> call = apiServiceGet.getAllvMoshtaryEtebarSazmanForoshForPakhsh(ccMoshtarys , ccSazmanForosh);
             call.enqueue(new Callback<GetAllvMoshtaryEtebarSazmanForoshResult>() {
                 @Override
                 public void onResponse(Call<GetAllvMoshtaryEtebarSazmanForoshResult> call, Response<GetAllvMoshtaryEtebarSazmanForoshResult> response)

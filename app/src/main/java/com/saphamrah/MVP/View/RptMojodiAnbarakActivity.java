@@ -56,6 +56,7 @@ public class RptMojodiAnbarakActivity extends AppCompatActivity implements RptMo
     private FloatingActionButton fabChangeView;
     private FloatingActionButton fabSearch;
     private FloatingActionButton fabRefresh;
+    private FloatingActionButton fabSortHavalehFaktor;
     private boolean searchMode;
     private int sortedType; //sort by code kala = 1 , sort by name kala = 2 , sort by count = 3
     private boolean viewAsTable;
@@ -64,6 +65,10 @@ public class RptMojodiAnbarakActivity extends AppCompatActivity implements RptMo
     private final int SORT_BY_CODE_KALA = 1;
     private final int SORT_BY_NAME_KALA = 2;
     private final int SORT_BY_COUNT = 3;
+
+    // 2 == havaleh  1 == faktor
+   private int sortByHavalehFaktor = 2;
+   private TextView lblActivityTitle;
 
     //private ArrayList<RptMojodiAnbarModel> mojodiAnbarModelsSearch;
 
@@ -86,6 +91,8 @@ public class RptMojodiAnbarakActivity extends AppCompatActivity implements RptMo
         fabSearch = findViewById(R.id.fabSearch);
         FloatingActionButton fabHelp = findViewById(R.id.fabHelp);
         fabRefresh = findViewById(R.id.fabRefresh);
+        fabSortHavalehFaktor = findViewById(R.id.fabSortHavalehFaktor);
+        lblActivityTitle = findViewById(R.id.lblActivityTitle);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         try
@@ -172,8 +179,8 @@ public class RptMojodiAnbarakActivity extends AppCompatActivity implements RptMo
         //mojodiAnbarModelsSearch = new ArrayList<>();
 
         startMVPOps();
-
-        mPresenter.getMojodiAnbar();
+        lblActivityTitle.setText(getResources().getString(R.string.mojodiAnbarakReportHavaleh));
+        mPresenter.getMojodiAnbar(Constants.ccNoeHavale,viewAsTable);
         //mPresenter.getGallery();
 
 
@@ -187,11 +194,11 @@ public class RptMojodiAnbarakActivity extends AppCompatActivity implements RptMo
                 searchView.closeSearch();
                 if (sortedType == SORT_BY_CODE_KALA)
                 {
-                    mPresenter.sortByNameKala(viewAsTable);
+                    mPresenter.sortByNameKala(viewAsTable,sortByHavalehFaktor);
                 }
                 else if (sortedType == SORT_BY_NAME_KALA)
                 {
-                    mPresenter.sortByCount(viewAsTable);
+                    mPresenter.sortByCount(viewAsTable,sortByHavalehFaktor);
                 }
                 else
                 {
@@ -217,6 +224,7 @@ public class RptMojodiAnbarakActivity extends AppCompatActivity implements RptMo
                 {
                     setAdapterAsTable(mojodiAnbarModels);
                 }
+
             }
         });
 
@@ -242,9 +250,27 @@ public class RptMojodiAnbarakActivity extends AppCompatActivity implements RptMo
             @Override
             public void onClick(View v) {
                 fabMenu.close(true);
-                mPresenter.updateMojodiAnbar();
+                mPresenter.updateMojodiAnbar(sortByHavalehFaktor,viewAsTable);
 
             }
+        });
+
+        fabSortHavalehFaktor.setOnClickListener(v -> {
+            fabMenu.close(true);
+
+            if (sortByHavalehFaktor == 1){
+                sortByHavalehFaktor = 2;
+                fabSortHavalehFaktor.setLabelText(getResources().getString(R.string.sortByFaktor));
+                lblActivityTitle.setText(getResources().getString(R.string.mojodiAnbarakReportHavaleh));
+                mPresenter.getMojodiAnbar(Constants.ccNoeHavale,viewAsTable);
+            } else {
+                fabSortHavalehFaktor.setLabelText(getResources().getString(R.string.sortByHavaleh));
+                sortByHavalehFaktor = 1;
+                lblActivityTitle.setText(getResources().getString(R.string.mojodiAnbarakReportFaktor));
+                mPresenter.getMojodiAnbar(Constants.ccNoeFaktor,viewAsTable);
+
+            }
+
         });
 
 
@@ -425,6 +451,8 @@ public class RptMojodiAnbarakActivity extends AppCompatActivity implements RptMo
     @Override
     public void setAdapterAsTable(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels)
     {
+        this.mojodiAnbarModels = new ArrayList<>();
+        this.mojodiAnbarModels = mojodiAnbarModels;
         tableAdapter = new RptMojodiAnbarakTableAdapter(RptMojodiAnbarakActivity.this , mojodiAnbarModels);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(RptMojodiAnbarakActivity.this);
         recyclerView.setLayoutManager(mLayoutManager);

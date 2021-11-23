@@ -93,6 +93,7 @@ public class DarkhastFaktorModel
     private static final String COLUMN_IsTakhir = "IsTakhir";
     private static final String COLUMN_MoshtaryGharardadccSazmanForosh = "MoshtaryGharardadccSazmanForosh";
     private static final String COLUMN_ccMoshtaryGharardad = "ccMoshtaryGharardad";
+    private static final String COLUMN_ccAnbar = "ccAnbar";
 
 
 
@@ -306,9 +307,13 @@ public class DarkhastFaktorModel
     }
     public static String COLUMN_MoshtaryGharardadccSazmanForosh() {
         return COLUMN_MoshtaryGharardadccSazmanForosh;
-    }public static String COLUMN_ccMoshtaryGharardad() {
+    }
+    public static String COLUMN_ccMoshtaryGharardad() {
     return COLUMN_ccMoshtaryGharardad;
 }
+    public static String COLUMN_ccAnbar() {
+        return COLUMN_ccAnbar;
+    }
 
 
     @SerializedName("ccDarkhastFaktor")
@@ -545,7 +550,9 @@ public class DarkhastFaktorModel
     @SerializedName("ccMoshtaryGharardad")
     @Expose
     private int ccMoshtaryGharardad;
-
+    @SerializedName("ccAnbar")
+    @Expose
+    private int ccAnbar;
 
 
     //private float MablaghFaktorPishAzTakhfif;
@@ -1186,6 +1193,14 @@ public class DarkhastFaktorModel
 
     public void setCcMoshtaryGhardad(int ccMoshtaryGharardad) {
         this.ccMoshtaryGharardad = ccMoshtaryGharardad;
+    }
+
+    public int getCcAnbar() {
+        return ccAnbar;
+    }
+
+    public void setCcAnbar(int ccAnbar) {
+        this.ccAnbar = ccAnbar;
     }
 
     public String toJsonStringForVosol(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, int ccMarkazForosh, int ccGorohNoeMoshtary, int ccGorohNoeSenf, JSONArray jsonDarkhastFaktorSatrs, JSONArray darkhastFaktorTakhfifModels, float mablaghTakhfifFaktorSatr, JSONArray jsonEmza, JSONArray jsonMoshtaryPhotoPPCChidman, JSONArray jsonDariaftPardakht)

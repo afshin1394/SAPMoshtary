@@ -5,19 +5,36 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
+import com.saphamrah.MVP.Model.GetProgramModel;
 import com.saphamrah.Model.NoeTablighatModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllNoeTablighatResult;
+import com.saphamrah.protos.AdsTypeGrpc;
+import com.saphamrah.protos.AdsTypeReply;
+import com.saphamrah.protos.AdsTypeReplyList;
+import com.saphamrah.protos.AdsTypeRequest;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,6 +69,80 @@ public class NoeTablighatDAO
             NoeTablighatModel.COLUMN_NameNoeTablighat()
         };
     }
+    public void fetchNoeTablighatGrpc(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
+    {
+        try {
+
+
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+        serverIpModel.setPort("5000");
+
+        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+        {
+            String message = "can't find server";
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, NoeTablighatDAO.class.getSimpleName(), activityNameForLog, "fetchNoeTablighatGrpc", "");
+            retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR() , message);
+        }
+        else
+        {
+
+            CompositeDisposable compositeDisposable = new CompositeDisposable();
+            ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+            AdsTypeGrpc.AdsTypeBlockingStub adsTypeBlockingStub = AdsTypeGrpc.newBlockingStub(managedChannel);
+            AdsTypeRequest adsTypeRequest = AdsTypeRequest.newBuilder().build();
+
+            Callable<AdsTypeReplyList> adsTypeReplyListCallable  = () -> adsTypeBlockingStub.getAdsType(adsTypeRequest);
+            RxAsync.makeObservable(adsTypeReplyListCallable)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .map(adsTypeReplyList -> {
+                        ArrayList<NoeTablighatModel> noeTablighatModels = new ArrayList<>();
+                        for (AdsTypeReply adsTypeReply : adsTypeReplyList.getAdsTypesList()) {
+                            NoeTablighatModel noeTablighatModel = new NoeTablighatModel();
+                            noeTablighatModel.setCcNoeTablighat(adsTypeReply.getAdsTypeID());
+                            noeTablighatModel.setNameNoeTablighat(adsTypeReply.getAdsTypeName());
+
+                            noeTablighatModels.add(noeTablighatModel);
+                        }
+
+                        return noeTablighatModels;
+
+                    }).subscribe(new Observer<ArrayList<NoeTablighatModel>>() {
+                @Override
+                public void onSubscribe(@NonNull Disposable d) {
+                    compositeDisposable.add(d);
+                }
+
+                @Override
+                public void onNext(@NonNull ArrayList<NoeTablighatModel> noeTablighatModels) {
+                    retrofitResponse.onSuccess(noeTablighatModels);
+                }
+
+                @Override
+                public void onError(@NonNull Throwable e) {
+                    retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                }
+
+                @Override
+                public void onComplete() {
+                    if (!compositeDisposable.isDisposed()) {
+                        compositeDisposable.dispose();
+                    }
+                    compositeDisposable.clear();
+                }
+            });
+
+           }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), NoeTablighatDAO.class.getSimpleName(), activityNameForLog, "fetchNoeTablighatGrpc", "");
+            retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR() , exception.getMessage());
+        }
+
+    }
 
 
     public void fetchNoeTablighat(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
@@ -74,6 +165,8 @@ public class NoeTablighatDAO
                 {
                     try
                     {
+                        GetProgramModel.responseSize += response.raw().toString().getBytes(StandardCharsets.UTF_8).length;
+
                         if (response.raw().body() != null)
                         {
                             long contentLength = response.raw().body().contentLength();

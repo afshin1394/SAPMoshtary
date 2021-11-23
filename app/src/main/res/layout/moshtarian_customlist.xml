@@ -51,6 +51,23 @@
                             android:layoutDirection="rtl"
                             android:layout_marginRight="5dp" />
                     </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/laySuggest"
+                        android:layout_gravity="center"
+                        android:background="@color/colorTitleExpandable">
+                        <ImageView
+                            android:layout_width="@dimen/iconSize64"
+                            android:layout_height="@dimen/iconSize64"
+                            android:src="@drawable/ic_suggest"
+                            android:layout_centerInParent="true"
+                            android:layoutDirection="rtl"
+                            android:layout_marginRight="5dp" />
+                    </RelativeLayout>
+
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"

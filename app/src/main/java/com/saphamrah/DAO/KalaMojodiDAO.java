@@ -184,12 +184,14 @@ public class KalaMojodiDAO
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             //select sum(Tedad) from KalaMojodi where ccKalaCode =
-            String query = " SELECT SUM(Tedad) " +
-                           " FROM ( " +
-                           "         SELECT SUM(Tedad) AS Tedad FROM KalaMojodi WHERE ccKalaCode = " + ccKalaCode + " AND Tedad<0 " +
-                           "         UNION ALL " +
-                           "         SELECT MAX(Max_Mojody) AS Tedad FROM KalaMojodi WHERE ccKalaCode = " + ccKalaCode +
-                           " ) ";
+//            String query = " SELECT SUM(Tedad) " +
+//                           " FROM ( " +
+//                           "         SELECT SUM(Tedad) AS Tedad FROM KalaMojodi WHERE ccKalaCode = " + ccKalaCode + " AND Tedad<0 " +
+//                           "         UNION ALL " +
+//                           "         SELECT MAX(Max_Mojody) AS Tedad FROM KalaMojodi WHERE ccKalaCode = " + ccKalaCode +
+//                           " ) ";
+
+            String query = " SELECT SUM(DISTINCT Max_Mojody) FROM KalaMojodi WHERE ccKalaCode = " + ccKalaCode ;
 
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)

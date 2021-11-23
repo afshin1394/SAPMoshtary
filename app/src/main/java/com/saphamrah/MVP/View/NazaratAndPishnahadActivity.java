@@ -76,6 +76,7 @@ public class NazaratAndPishnahadActivity extends AppCompatActivity implements Na
     private ArrayList<SuggestModel> suggestModels = new ArrayList<>();
     private int noePishnahad = 1;
     private int ccMoshtary = 0;
+    private int from = 0;
     private int ccNoePishnahad = 0;
 
 
@@ -93,8 +94,14 @@ public class NazaratAndPishnahadActivity extends AppCompatActivity implements Na
         Intent getIntent = getIntent();
         if (getIntent != null){
             ccMoshtary = getIntent.getIntExtra("ccMoshtary" , 0);
-            if (ccMoshtary !=0){
+            from = getIntent.getIntExtra("from" , 0);
+            if (ccMoshtary !=0 && from ==1){
                 noePishnahad = 2;
+                lblActivityTitle.setText(this.getResources().getString(R.string.pishnahadMoshtary));
+                layEdtDescriptionPishnehad.setVisibility(View.GONE);
+            }
+            else if(ccMoshtary !=0 && from ==2){
+                noePishnahad = 3;
                 lblActivityTitle.setText(this.getResources().getString(R.string.pishnahadMoshtary));
                 layEdtDescriptionPishnehad.setVisibility(View.GONE);
             }

@@ -8,7 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.util.SparseArray;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Application.BaseApplication;
+import com.saphamrah.Model.BankModel;
 import com.saphamrah.Model.DarkhastFaktorKalaPishnahadiModel;
 import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.DarkhastFaktorSatrModel;
@@ -20,13 +23,30 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.DarkhastFaktorKalaPishnahadiResult;
+import com.saphamrah.protos.BankGrpc;
+import com.saphamrah.protos.BankReply;
+import com.saphamrah.protos.BankReplyList;
+import com.saphamrah.protos.BankRequest;
+import com.saphamrah.protos.SuggestedGoodInvoiceRequestGrpc;
+import com.saphamrah.protos.SuggestedGoodInvoiceRequestReply;
+import com.saphamrah.protos.SuggestedGoodInvoiceRequestReplyList;
+import com.saphamrah.protos.SuggestedGoodInvoiceRequestRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,6 +54,7 @@ import retrofit2.Response;
 public class DarkhastFaktorKalaPishnahadiDAO {
     DarkhastFaktorKalaPishnahadiModel modelGetTABLE_NAME = new DarkhastFaktorKalaPishnahadiModel();
     private DBHelper dbHelper;
+
 
 
     public DarkhastFaktorKalaPishnahadiDAO(Context context) {
@@ -44,6 +65,97 @@ public class DarkhastFaktorKalaPishnahadiDAO {
             PubFunc.Logger logger = new PubFunc().new Logger();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), "DarkhastFaktorKalaPishnahadiDAO", "", "constructor", "");
         }
+    }
+
+    private String[] allColumns() {
+        return new String[]
+                {
+                        modelGetTABLE_NAME.getCOLUMN_ccDarkhastFaktorKalaPishnahadi(),
+                        modelGetTABLE_NAME.getCOLUMN_ccKalaCode(),
+                        modelGetTABLE_NAME.getCOLUMN_MinTarikhFaktor(),
+                        modelGetTABLE_NAME.getCOLUMN_tedad(),
+                        modelGetTABLE_NAME.getCOLUMN_ccMoshtary(),
+
+                };
+    }
+
+    public void fetchDarkhastFaktorKalaPishnahadiGrpc(final Context context, final String activityNameForLog, String ccForoshandeh , String ccmoshtarys, final RetrofitResponse retrofitResponse)
+    {
+        try {
+
+
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            serverIpModel.setPort("5000");
+
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+            {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
+            }
+            else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                SuggestedGoodInvoiceRequestGrpc.SuggestedGoodInvoiceRequestBlockingStub suggestedGoodInvoiceRequestBlockingStub = SuggestedGoodInvoiceRequestGrpc.newBlockingStub(managedChannel);
+                SuggestedGoodInvoiceRequestRequest suggestedGoodInvoiceRequestRequest = SuggestedGoodInvoiceRequestRequest.newBuilder().build();
+                Callable<SuggestedGoodInvoiceRequestReplyList> getSuggestedGoodInvoiceRequestCallable  = () -> suggestedGoodInvoiceRequestBlockingStub.getSuggestedGoodInvoiceRequest(suggestedGoodInvoiceRequestRequest);
+                RxAsync.makeObservable(getSuggestedGoodInvoiceRequestCallable)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(suggestedGoodInvoiceRequestReplyList -> {
+                            ArrayList<DarkhastFaktorKalaPishnahadiModel> darkhastFaktorKalaPishnahadiModels = new ArrayList<>();
+                            for (SuggestedGoodInvoiceRequestReply suggestedGoodInvoiceRequestReply : suggestedGoodInvoiceRequestReplyList.getSuggestedGoodInvoiceRequestsList()) {
+                                DarkhastFaktorKalaPishnahadiModel darkhastFaktorKalaPishnahadiModel = new DarkhastFaktorKalaPishnahadiModel();
+
+                                darkhastFaktorKalaPishnahadiModel.setCcDarkhastFaktorKalaPishnahadi(suggestedGoodInvoiceRequestReply.getSuggestedGoodInvoiceReqCustomerID());
+                                darkhastFaktorKalaPishnahadiModel.setCcMoshtary(suggestedGoodInvoiceRequestReply.getCustomerID());
+                                darkhastFaktorKalaPishnahadiModel.setCcKalaCode(suggestedGoodInvoiceRequestReply.getGoodCodeID());
+                                darkhastFaktorKalaPishnahadiModel.setMinTarikhFaktor(suggestedGoodInvoiceRequestReply.getMinInvoiceDate());
+                                darkhastFaktorKalaPishnahadiModel.setTedad(suggestedGoodInvoiceRequestReply.getQuantity());
+
+
+                                darkhastFaktorKalaPishnahadiModels.add(darkhastFaktorKalaPishnahadiModel);
+                            }
+
+                            return darkhastFaktorKalaPishnahadiModels;
+
+                        }).subscribe(new Observer<ArrayList<DarkhastFaktorKalaPishnahadiModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ArrayList<DarkhastFaktorKalaPishnahadiModel> darkhastFaktorKalaPishnahadiModels) {
+                        retrofitResponse.onSuccess(darkhastFaktorKalaPishnahadiModels);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (!compositeDisposable.isDisposed()) {
+                            compositeDisposable.dispose();
+                        }
+                        compositeDisposable.clear();
+                    }
+                });
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
+        }
+
+
+
+
     }
 
     public void fetchDarkhastFaktorKalaPishnahadi(final Context context, final String activityNameForLog, String ccForoshandeh , String ccmoshtarys, final RetrofitResponse retrofitResponse) {
@@ -129,17 +241,7 @@ public class DarkhastFaktorKalaPishnahadiDAO {
         }
     }
 
-    private String[] allColumns() {
-        return new String[]
-                {
-                        modelGetTABLE_NAME.getCOLUMN_ccDarkhastFaktorKalaPishnahadi(),
-                        modelGetTABLE_NAME.getCOLUMN_ccKalaCode(),
-                        modelGetTABLE_NAME.getCOLUMN_MinTarikhFaktor(),
-                        modelGetTABLE_NAME.getCOLUMN_tedad(),
-                        modelGetTABLE_NAME.getCOLUMN_ccMoshtary(),
 
-                };
-    }
 
     @SuppressLint("LongLogTag")
     public boolean insertGroup(ArrayList<DarkhastFaktorKalaPishnahadiModel> darkhastFaktorKalaPishnahadiModelArrayList) {

@@ -159,9 +159,9 @@ public class DiscountCalculation
     }
     public int calculateZarib(double beEza, int noeTedadRialTakhfif, int codeNoeBasteBandiTakhfif, double tedadCarton, double tedadBaste, double tedadAdad, double sumMablagh, double sumVazn, double tedadAghlam)
     {
-        Log.d("Takhfif" , "beEza : " + beEza + " , codeNoeBasteBandiTakhfif : " + codeNoeBasteBandiTakhfif + " , tedadBaste : " + tedadBaste + " , tedadCarton : " + tedadCarton);
-        Log.d("Takhfif" , " , noeTedadRialTakhfif : " + noeTedadRialTakhfif + " , basteBandiAdad : " + basteBandiAdad + " , basteBandiBaste : " + basteBandiBaste + " , basteBandiCarton : " + basteBandiCarton);
-        Log.d("Takhfif" , "sumMablagh : " + sumMablagh + ", sumVazn: " + sumVazn);
+        Log.d("Takhfif" , "calculateZarib beEza : " + beEza + " , codeNoeBasteBandiTakhfif : " + codeNoeBasteBandiTakhfif + " , tedadBaste : " + tedadBaste + " , tedadCarton : " + tedadCarton);
+        Log.d("Takhfif" , "calculateZarib , noeTedadRialTakhfif : " + noeTedadRialTakhfif + " , basteBandiAdad : " + basteBandiAdad + " , basteBandiBaste : " + basteBandiBaste + " , basteBandiCarton : " + basteBandiCarton);
+        Log.d("Takhfif" , "calculateZarib sumMablagh : " + sumMablagh + ", sumVazn: " + sumVazn);
         int zarib = 0;
         if (beEza == 0)
         {
@@ -172,24 +172,24 @@ public class DiscountCalculation
             {
                 if (codeNoeBasteBandiTakhfif == basteBandiAdad) {
                     zarib = (int) (tedadAdad / beEza);
-                    Log.d("Takhfif", "add - zarib" + zarib);
+                    Log.d("Takhfif", "calculateZarib add - zarib" + zarib);
                 } else if (codeNoeBasteBandiTakhfif == basteBandiBaste) {
                     zarib = (int) (tedadBaste / beEza);
-                    Log.d("Takhfif", "baste - zarib" + zarib);
+                    Log.d("Takhfif", "calculateZarib baste - zarib" + zarib);
                 } else if (codeNoeBasteBandiTakhfif == basteBandiCarton) {
                     zarib = (int) (tedadCarton / beEza);
-                    Log.d("Takhfif", "carton - zarib" + zarib);
+                    Log.d("Takhfif", "calculateZarib carton - zarib" + zarib);
                 }
             }
             else if (noeTedadRialTakhfif == tedadRialRial)
             {
                 zarib = (int) (sumMablagh / beEza);
-                Log.d("Takhfif", "rial-vazn - zarib" + zarib + " ,noeTedadRialTakhfif:" + noeTedadRialTakhfif + " , tedadRialRial:" + tedadRialRial + " , tedadRialVazn:" + tedadRialVazn);
+                Log.d("Takhfif", "calculateZarib rial-vazn - zarib" + zarib + " ,noeTedadRialTakhfif:" + noeTedadRialTakhfif + " , tedadRialRial:" + tedadRialRial + " , tedadRialVazn:" + tedadRialVazn);
             }
             else if (noeTedadRialTakhfif == tedadRialVazn)
             {
                 zarib = (int) (sumVazn / beEza);
-                Log.d("Takhfif", "rial-vazn - zarib" + zarib + " ,noeTedadRialTakhfif:" + noeTedadRialTakhfif + " , tedadRialRial:" + tedadRialRial + " , tedadRialVazn:" + tedadRialVazn);
+                Log.d("Takhfif", "calculateZarib rial-vazn - zarib" + zarib + " ,noeTedadRialTakhfif:" + noeTedadRialTakhfif + " , tedadRialRial:" + tedadRialRial + " , tedadRialVazn:" + tedadRialVazn);
             }
             else if (noeTedadRialTakhfif == tedadRialAghlam)
             {
@@ -209,22 +209,22 @@ public class DiscountCalculation
             if (codeNoeBasteBandiTakhfif == basteBandiAdad)
             {
                 tedad = (int) tedadAdad;
-                Log.d("takhfifKala","basteBandiAdad , tedad: " + tedad );
+                Log.d("takhfif","calculateTedad basteBandiAdad , tedad: " + tedad );
             }
             else if (codeNoeBasteBandiTakhfif == basteBandiBaste)
             {
                 tedad = (int) tedadBaste;
-                Log.d("takhfifKala","basteBandiBaste , tedad: " + tedad );
+                Log.d("takhfif","calculateTedad basteBandiBaste , tedad: " + tedad );
             }
             else if (codeNoeBasteBandiTakhfif == basteBandiCarton)
             {
                 tedad = (int) tedadCarton;
-                Log.d("takhfifKala","basteBandiCarton , tedad: " + tedad );
+                Log.d("takhfif","calculateTedad basteBandiCarton , tedad: " + tedad );
             }
             else
             {
                 tedad = (int) tedadAdad;
-                Log.d("takhfifKala","adad , tedad: " + tedad );
+                Log.d("takhfif","adad , tedad: " + tedad );
             }
         //}
         return tedad;
@@ -233,31 +233,31 @@ public class DiscountCalculation
     public long calculateMablaghVahed(int noeTedadRialTakhfif, int tedad, long vazn, long MablaghKol, long tedadAghlam)
     {
         long mablaghVahed = 0;
-        Log.d("takhfifKala", MablaghKol + " - " + vazn + " - " + tedad);
+        Log.d("takhfif", MablaghKol + " - " + vazn + " - " + tedad);
         if(noeTedadRialTakhfif == tedadRialTedad)
         {
             if(tedad>0)
                 mablaghVahed = MablaghKol / tedad;
-            Log.d("takhfifKala","calculateMablaghVahed : " + mablaghVahed + "- tedadRialTedad: " + tedadRialTedad );
+            Log.d("takhfif","calculateMablaghVahed : " + mablaghVahed + "- tedadRialTedad: " + tedadRialTedad );
         }
         else if(noeTedadRialTakhfif == tedadRialRial)
         {
             if(tedad>0)
                 mablaghVahed = MablaghKol / tedad;
-            Log.d("takhfifKala","calculateMablaghVahed : " + mablaghVahed + "- tedadRialRial: " + tedadRialRial );
+            Log.d("takhfif","calculateMablaghVahed : " + mablaghVahed + "- tedadRialRial: " + tedadRialRial );
         }
         else if(noeTedadRialTakhfif == tedadRialVazn)
         {
             double vaznKilogeram = vazn/1000.0;
             if(vaznKilogeram>0)
                 mablaghVahed = Math.round(MablaghKol / vaznKilogeram);
-            Log.d("takhfifKala","calculateMablaghVahed : " + mablaghVahed + "- tedadRialVazn: " + " - " + tedadRialVazn + " - " + vaznKilogeram);
+            Log.d("takhfif","calculateMablaghVahed : " + mablaghVahed + "- tedadRialVazn: " + " - " + tedadRialVazn + " - " + vaznKilogeram);
         }
         else if(noeTedadRialTakhfif == tedadRialAghlam)
         {
             if(tedadAghlam>0)
                 mablaghVahed = Math.round(MablaghKol / tedadAghlam);
-            Log.d("takhfifKala","calculateMablaghVahed : " + mablaghVahed + "- tedadRialAghlam: " + " - " + tedadRialAghlam + " - ");
+            Log.d("takhfif","calculateMablaghVahed : " + mablaghVahed + "- tedadRialAghlam: " + " - " + tedadRialAghlam + " - ");
         }
         return mablaghVahed;
     }
@@ -268,47 +268,47 @@ public class DiscountCalculation
         if (beEza == 0)
         {
             Mablagh = MablaghKol;
-            Log.d("takhfifKala","beEza=0 , Mablaghkol: " + MablaghKol );
+            Log.d("takhfif","calculateMablagh beEza=0 , Mablaghkol: " + MablaghKol );
         }
         else if(beEza>0 && First==Second && noeTedadRialTakhfif == tedadRialTedad)
         {
             Mablagh = MablaghVahed * beEza;
-            Log.d("takhfifKala","First==Second: " + MablaghVahed + "-" + tedadRialTedad + "-" + beEza);
+            Log.d("takhfif","calculateMablagh First==Second: " + MablaghVahed + "-" + tedadRialTedad + "-" + beEza);
         }
         else if(beEza>0 && First==Second && noeTedadRialTakhfif == tedadRialRial)
         {
             Mablagh = beEza;
-            Log.d("takhfifKala","First==Second: - tedadRialRial: " +tedadRialRial + "-" + beEza);
+            Log.d("takhfif","calculateMablagh First==Second: - tedadRialRial: " +tedadRialRial + "-" + beEza);
         }
         else if(beEza>0 && First==Second && noeTedadRialTakhfif == tedadRialVazn)
         {
             Mablagh = MablaghVahed * beEza;
-            Log.d("takhfifKala","First==Second: - tedadRialVazn:  " +tedadRialVazn + "-" + beEza);
+            Log.d("takhfif","calculateMablagh First==Second: - tedadRialVazn:  " +tedadRialVazn + "-" + beEza);
         }
         else if(beEza>0 && First==Second && noeTedadRialTakhfif == tedadRialAghlam)
         {
             Mablagh = MablaghVahed * beEza;
-            Log.d("takhfifKala","First==Second: - tedadRialVazn:  " +tedadRialAghlam + "-" + beEza);
+            Log.d("takhfif","calculateMablagh First==Second: - tedadRialVazn:  " +tedadRialAghlam + "-" + beEza);
         }
         else if(beEza>0 && First!=Second && noeTedadRialTakhfif == tedadRialTedad)
         {
             Mablagh = MablaghKol;
-            Log.d("takhfifKala","First!=Second: " + MablaghKol );
+            Log.d("takhfif","calculateMablagh First!=Second: " + MablaghKol );
         }
         else if(beEza>0 && First!=Second && noeTedadRialTakhfif == tedadRialRial)
         {
             Mablagh = MablaghKol;
-            Log.d("takhfifKala","First==Second: - tedadRialRial: " +tedadRialRial + "-" + beEza);
+            Log.d("takhfif","calculateMablagh First==Second: - tedadRialRial: " +tedadRialRial + "-" + beEza);
         }
         else if(beEza>0 && First!=Second && noeTedadRialTakhfif == tedadRialVazn)
         {
             Mablagh = MablaghKol;
-            Log.d("takhfifKala","First==Second - tedadRialVazn: " + MablaghKol + "-" + tedadRialVazn + "-" + beEza);
+            Log.d("takhfif","calculateMablagh First==Second - tedadRialVazn: " + MablaghKol + "-" + tedadRialVazn + "-" + beEza);
         }
         else if(beEza>0 && First!=Second && noeTedadRialTakhfif == tedadRialAghlam)
         {
             Mablagh = MablaghKol;
-            Log.d("takhfifKala","First==Second - tedadRialVazn: " + MablaghKol + "-" + tedadRialAghlam + "-" + beEza);
+            Log.d("takhfif","calculateMablagh First==Second - tedadRialVazn: " + MablaghKol + "-" + tedadRialAghlam + "-" + beEza);
         }
         return Mablagh;
     }
@@ -331,12 +331,12 @@ public class DiscountCalculation
                 if (beEza == 0)
                 {
                     mablaghTakhfif = (long) (sumMablagh * (darsadTakhfif / 100));
-                    Log.d("takhfifHajmi" , "tedadRialRial" + "beEza:" + beEza + "sumMablagh : " + sumMablagh + " ,darsadTakhfif:" + darsadTakhfif  );
+                    Log.d("takhfif" , "calculateMablaghTakhfif tedadRialRial" + "beEza:" + beEza + "sumMablagh : " + sumMablagh + " ,darsadTakhfif:" + darsadTakhfif  );
                 }
                 else
                 {
                     mablaghTakhfif = (long) (sumMablagh * (zarib * darsadTakhfif / 100));
-                    Log.d("takhfifHajmi" , "tedadRialRial" + "beEza:" + beEza + "sumMablagh : " + sumMablagh + ",zarib:" + zarib +" ,darsadTakhfif:" + darsadTakhfif  );
+                    Log.d("takhfif" , "calculateMablaghTakhfif tedadRialRial" + "beEza:" + beEza + "sumMablagh : " + sumMablagh + ",zarib:" + zarib +" ,darsadTakhfif:" + darsadTakhfif  );
                 }
             }
             else if (noeTedadRial == tedadRialTedad)
@@ -344,12 +344,12 @@ public class DiscountCalculation
                 if (beEza == 0)
                 {
                     mablaghTakhfif = (long) (sumMablagh * (darsadTakhfif / 100));
-                    Log.d("takhfifHajmi" , "tedadRialTedad" + "beEza:" + beEza + "sumMablagh : " + sumMablagh  +" ,darsadTakhfif:" + darsadTakhfif  );
+                    Log.d("takhfif" , "calculateMablaghTakhfif tedadRialTedad" + "beEza:" + beEza + "sumMablagh : " + sumMablagh  +" ,darsadTakhfif:" + darsadTakhfif  );
                 }
                 else
                 {
                     mablaghTakhfif = (long) (sumMablagh * (zarib * darsadTakhfif / 100));
-                    Log.d("takhfifHajmi" , "tedadRialRial" + "beEza:" + beEza + "sumMablagh : " + sumMablagh + ",zarib:" + zarib +" ,darsadTakhfif:" + darsadTakhfif  );
+                    Log.d("takhfif" , "calculateMablaghTakhfif tedadRialRial" + "beEza:" + beEza + "sumMablagh : " + sumMablagh + ",zarib:" + zarib +" ,darsadTakhfif:" + darsadTakhfif  );
                 }
             }
             else if (noeTedadRial == tedadRialVazn)
@@ -357,12 +357,12 @@ public class DiscountCalculation
                 if (beEza == 0)
                 {
                     mablaghTakhfif = (long) (sumMablagh * (darsadTakhfif / 100));
-                    Log.d("takhfifHajmi" , "tedadRialVazn" + "beEza:" + beEza + "sumMablagh : " + sumMablagh  +" ,darsadTakhfif:" + darsadTakhfif  );
+                    Log.d("takhfif" , "calculateMablaghTakhfif tedadRialVazn" + "beEza:" + beEza + "sumMablagh : " + sumMablagh  +" ,darsadTakhfif:" + darsadTakhfif  );
                 }
                 else
                 {
                     mablaghTakhfif = (long) (sumMablagh * (zarib * darsadTakhfif / 100));
-                    Log.d("takhfifHajmi" , "tedadRialVazn" + "beEza:" + beEza + "sumMablagh : " + sumMablagh + ",zarib:" + zarib +" ,darsadTakhfif:" + darsadTakhfif  );
+                    Log.d("takhfif" , "calculateMablaghTakhfif tedadRialVazn" + "beEza:" + beEza + "sumMablagh : " + sumMablagh + ",zarib:" + zarib +" ,darsadTakhfif:" + darsadTakhfif  );
                 }
             }
             else if (noeTedadRial == tedadRialAghlam)
@@ -370,12 +370,12 @@ public class DiscountCalculation
                 if (beEza == 0)
                 {
                     mablaghTakhfif = (long) (sumMablagh * (darsadTakhfif / 100));
-                    Log.d("takhfifHajmi" , "tedadRialAghlam" + "beEza:" + beEza + "sumMablagh : " + sumMablagh  +" ,darsadTakhfif:" + darsadTakhfif  );
+                    Log.d("takhfif" , "calculateMablaghTakhfif tedadRialAghlam" + "beEza:" + beEza + "sumMablagh : " + sumMablagh  +" ,darsadTakhfif:" + darsadTakhfif  );
                 }
                 else
                 {
                     mablaghTakhfif = (long) (sumMablagh * (zarib * darsadTakhfif / 100));
-                    Log.d("takhfifHajmi" , "tedadRialAghlam" + "beEza:" + beEza + "sumMablagh : " + sumMablagh + ",zarib:" + zarib +" ,darsadTakhfif:" + darsadTakhfif  );
+                    Log.d("takhfif" , "calculateMablaghTakhfif tedadRialAghlam" + "beEza:" + beEza + "sumMablagh : " + sumMablagh + ",zarib:" + zarib +" ,darsadTakhfif:" + darsadTakhfif  );
                 }
             }
         }
@@ -413,7 +413,7 @@ public class DiscountCalculation
     {
         try
         {
-            Log.d("takhfifHajmi","insertFaktorTakhfifHajmi-mablaghTakhfif: "+ mablaghTakhfif + " , (float)mablaghTakhfif:"+(float)mablaghTakhfif);
+            Log.d("takhfif","insertFaktorTakhfifHajmi-mablaghTakhfif: "+ mablaghTakhfif + " , (float)mablaghTakhfif:"+(float)mablaghTakhfif);
             DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(context);
             DarkhastFaktorTakhfifModel model = new DarkhastFaktorTakhfifModel();
             model.setCcDarkhastFaktor(ccDarkhastFaktor);

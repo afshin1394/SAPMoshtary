@@ -6,11 +6,13 @@ import com.saphamrah.BaseMVP.PorseshnameAdamMVP;
 import com.saphamrah.DAO.PorseshnamehDAO;
 import com.saphamrah.DAO.PorseshnamehShomareshDAO;
 import com.saphamrah.DAO.PorseshnamehTablighatDAO;
+import com.saphamrah.DAO.SuggestDAO;
 import com.saphamrah.DAO.VisitMoshtaryDAO;
 import com.saphamrah.Model.PorseshnamehModel;
 import com.saphamrah.Model.PorseshnamehShomareshModel;
 import com.saphamrah.Model.PorseshnamehTablighatModel;
 import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.Model.SuggestModel;
 import com.saphamrah.Model.VisitMoshtaryModel;
 import com.saphamrah.PubFunc.DeviceInfo;
 import com.saphamrah.PubFunc.FileUtils;
@@ -24,6 +26,7 @@ import com.saphamrah.WebService.APIServicePost;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.CreateAmargarResult;
 import com.saphamrah.WebService.ServiceResponse.CreateVisitMoshtaryResult;
+import com.saphamrah.WebService.ServiceResponse.SuggestResult;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -209,6 +212,7 @@ public class PorseshnameAdamModel implements PorseshnameAdamMVP.ModelOps
                                     {
                                         new VisitMoshtaryDAO(mPresenter.getAppContext()).updateIsOld(ccVisitMoshtary);
                                         new PorseshnamehDAO(mPresenter.getAppContext()).updateIsOld(ccPorseshnameh);
+                                        checkOtherData(apiServicePost);
                                         mPresenter.onSuccessSend();
                                         getAllPorseshname();
                                     }
@@ -261,6 +265,78 @@ public class PorseshnameAdamModel implements PorseshnameAdamMVP.ModelOps
             mPresenter.onErrorSendPorseshnameToServer(mPresenter.getAppContext().getString(R.string.cantFindServer));
         }
     }
+
+    private void checkOtherData(APIServicePost apiServicePost)
+    {
+        SuggestDAO suggestDAO = new SuggestDAO(mPresenter.getAppContext());
+        ArrayList<SuggestModel> suggestModels = suggestDAO.getAllSuggestIsNotSend();
+        if (suggestModels.size() > 0)
+        {
+            sendSuggest(apiServicePost ,suggestModels,suggestDAO);
+        }
+    }
+
+    private void sendSuggest(APIServicePost apiServicePost , ArrayList<SuggestModel> suggestModels,SuggestDAO suggestDAO)
+    {
+        for (SuggestModel model : suggestModels)
+        {
+            String jsonString = model.toJsonString();
+            Call<SuggestResult> call = apiServicePost.createSuggestResult(jsonString);
+            call.enqueue(new Callback<SuggestResult>()
+            {
+                @Override
+                public void onResponse(Call<SuggestResult> call, Response<SuggestResult> response)
+                {
+                    try
+                    {
+                        if (response.isSuccessful() && response.body() != null)
+                        {
+                            Log.d("noTemp" , "in if success and body not null");
+                            SuggestResult result = response.body();
+                            if (result.getSuccess())
+                            {
+                                suggestDAO.updateIsSend(model.getCcSuggest());
+                            }
+                            else
+                            {
+                                Log.d("noTemp" , "in else not success");
+                                setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "" , "sendSuggest" , "onResponse");
+                                mPresenter.onErrorSendPorseshnameToServer(mPresenter.getAppContext().getString(R.string.errorSendSuggest));
+                            }
+                        }
+                        else
+                        {
+                            String errorMessage = "response not successful " + response.message() ;//+ "\n" + "can't send this log : " + logMessage;
+                            if (response.errorBody() != null)
+                            {
+                                errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string() ;//+ "\n" + "can't send this log : " + logMessage;
+                            }
+                            setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "" , "sendSuggest" , "onResponse");
+                            Log.d("tempRequest" , "message : " + errorMessage);
+                            mPresenter.onErrorSendPorseshnameToServer(mPresenter.getAppContext().getString(R.string.errorSendSuggest));
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        Log.d("noTemp" , "in exception");
+                        exception.printStackTrace();
+                        setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "" , "sendSuggest" , "onResponse");
+                        mPresenter.onErrorSendPorseshnameToServer(mPresenter.getAppContext().getString(R.string.errorSendSuggest));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SuggestResult> call, Throwable t)
+                {
+                    Log.d("noTemp" , "in onFailure");
+                    setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "" , "sendSuggest" , "onFailure");
+                    mPresenter.onErrorSendPorseshnameToServer(mPresenter.getAppContext().getString(R.string.errorSendSuggest));
+                }
+            });
+        }
+
+    }
+
 
     private void showMessageOfErrorCode(int errorCode)
     {

@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Tablet.StatisticGoods.proto.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "StatisticGoodsProto";
+option objc_class_prefix = "HLW";
+
+
+package Tablet;
+
+
+service StatisticGoods {
+
+  rpc GetStatisticGoods (StatisticGoodsRequest) returns (StatisticGoodsReplyList);
+}
+
+
+message StatisticGoodsRequest {
+
+}
+
+
+message StatisticGoodsReply {
+
+  int32 GoodsCodeID = 1;
+  string GoodsName= 2;
+  string GoodsGroupName = 3;
+  int32 GoodsGroupID = 4;
+  int32 BrandID = 5;
+  string BrandName = 6;
+  float Length = 7;
+  float Width = 8;
+  float Heigth = 9;
+  int32 SizeUnitID = 10;
+  float PureWeight = 11;
+  float NonPureWeight = 12;
+  float BoxWeigth = 13;
+  int32 WeightUnitID = 14;
+  int32 Count1 = 15;
+  int32 Count2 = 16;
+  int32 Count3 = 17;
+
+}
+
+
+
+
+message StatisticGoodsReplyList{
+  repeated StatisticGoodsReply StatisticGoods = 1;
+}

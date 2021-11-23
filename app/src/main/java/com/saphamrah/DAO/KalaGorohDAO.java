@@ -5,19 +5,36 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
+import com.saphamrah.MVP.Model.GetProgramModel;
 import com.saphamrah.Model.KalaGorohModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvKalaGorohResult;
+import com.saphamrah.protos.GroupGoodsGrpc;
+import com.saphamrah.protos.GroupGoodsReply;
+import com.saphamrah.protos.GroupGoodsReplyList;
+import com.saphamrah.protos.GroupGoodsRequest;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -141,6 +158,90 @@ public class KalaGorohDAO
         }
     }
 
+    public void fetchAllvKalaGorohAmargarGrpc(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
+    {
+        try {
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+        serverIpModel.setPort("5000");
+
+        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+        {
+            String message = "can't find server";
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, KalaGorohDAO.class.getSimpleName(), activityNameForLog, "fetchAllvKalaGorohAmargarGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
+        }
+        else
+        {
+
+            CompositeDisposable compositeDisposable = new CompositeDisposable();
+            ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+            GroupGoodsGrpc.GroupGoodsBlockingStub groupGoodsBlockingStub = GroupGoodsGrpc.newBlockingStub(managedChannel);
+            GroupGoodsRequest groupGoodsRequest = GroupGoodsRequest.newBuilder().build();
+
+            Callable<GroupGoodsReplyList> groupGoodsReplyListCallable  = () -> groupGoodsBlockingStub.getGroupGoods(groupGoodsRequest);
+            RxAsync.makeObservable(groupGoodsReplyListCallable)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .map(groupGoodsReplyList -> {
+                        ArrayList<KalaGorohModel> kalaGorohModels = new ArrayList<>();
+                        for (GroupGoodsReply groupGoodsReply : groupGoodsReplyList.getGroupGoodsReplysList()) {
+                            KalaGorohModel kalaGorohModel = new KalaGorohModel();
+                            kalaGorohModel.setCcGoroh(groupGoodsReply.getGroupID());
+                            kalaGorohModel.setCodeGoroh(groupGoodsReply.getCodeGoodsID());
+                            kalaGorohModel.setCcKalaGoroh(groupGoodsReply.getGroupGoodsID());
+                            kalaGorohModel.setNameGoroh(groupGoodsReply.getGroupName());
+                            kalaGorohModel.setCcGorohLink(groupGoodsReply.getLinkGroupID());
+                            kalaGorohModel.setCcRoot(groupGoodsReply.getRootID());
+
+                            kalaGorohModels.add(kalaGorohModel);
+                        }
+
+                        return kalaGorohModels;
+
+                    }).subscribe(new Observer<ArrayList<KalaGorohModel>>() {
+                @Override
+                public void onSubscribe(@NonNull Disposable d) {
+                    compositeDisposable.add(d);
+                }
+
+                @Override
+                public void onNext(@NonNull ArrayList<KalaGorohModel> noeTablighatModels) {
+                    retrofitResponse.onSuccess(noeTablighatModels);
+                }
+
+                @Override
+                public void onError(@NonNull Throwable e) {
+                    e.printStackTrace();
+                    PubFunc.Logger logger = new PubFunc().new Logger();
+                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.toString(), KalaGorohDAO.class.getSimpleName(), activityNameForLog, "fetchAllvKalaGorohAmargarGrpc", "CatchException");
+                    retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                }
+
+                @Override
+                public void onComplete() {
+                    if (!managedChannel.isShutdown()){
+                        managedChannel.shutdown();
+                    }
+                    if (!compositeDisposable.isDisposed()) {
+                        compositeDisposable.dispose();
+                    }
+                    compositeDisposable.clear();
+                }
+            });
+
+        }
+        }catch (Exception exception){
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), KalaGorohDAO.class.getSimpleName(), activityNameForLog, "fetchAllvKalaGorohAmargarGrpc", "CatchException");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),exception.getMessage());
+        }
+
+    }
+
 
     public void fetchAllvKalaGorohAmargar(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
     {
@@ -162,6 +263,8 @@ Call<GetAllvKalaGorohResult> call = apiServiceGet.getAllKalaGorohAmargar();
                 {
                     try
                     {
+                        GetProgramModel.responseSize += response.raw().toString().getBytes(StandardCharsets.UTF_8).length;
+
                         if (response.raw().body() != null)
                         {
                             long contentLength = response.raw().body().contentLength();

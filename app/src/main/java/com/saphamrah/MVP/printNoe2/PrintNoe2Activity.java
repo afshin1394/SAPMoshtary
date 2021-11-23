@@ -309,20 +309,25 @@ public class PrintNoe2Activity extends AppCompatActivity
             }
             //---------------------------Company--------------------------
 
-            if (Constants.CURRENT_VERSION_TYPE() == 3 || Constants.CURRENT_VERSION_TYPE() == 6)
+            if (Constants.CURRENT_VERSION_TYPE() == 6)
             {
                 imgLogoPrint.setImageResource(R.drawable.logo_print);
             }
-            else
+            else if (Constants.CURRENT_VERSION_TYPE() == 0 || Constants.CURRENT_VERSION_TYPE() == 1 || Constants.CURRENT_VERSION_TYPE() == 2)
             {
                 CompanyDAO companyDAO = new CompanyDAO(PrintNoe2Activity.this);
                 byte[] bitmapdata = null;
-                UserTypeShared userTypeShared = new UserTypeShared(PrintNoe2Activity.this);
-                int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE(), 0);
-                if (isTest == 3)
-                    bitmapdata = companyDAO.getByccCompany(2).getLogoPhotoPrint();//pegah
-                else
-                    bitmapdata = companyDAO.getByccCompany(1).getLogoPhotoPrint();//mihan
+
+                bitmapdata = companyDAO.getByccCompany(1).getLogoPhotoPrint();//mihan
+                Bitmap bmpLogoPrint = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+                imgLogoPrint.setImageBitmap(bmpLogoPrint);
+            }
+            else if(Constants.CURRENT_VERSION_TYPE() == 4 || Constants.CURRENT_VERSION_TYPE() == 5 || Constants.CURRENT_VERSION_TYPE() == 7)
+            {
+                CompanyDAO companyDAO = new CompanyDAO(PrintNoe2Activity.this);
+                byte[] bitmapdata = null;
+
+                bitmapdata = companyDAO.getByccCompany(2).getLogoPhotoPrint();//mihan
                 Bitmap bmpLogoPrint = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
                 imgLogoPrint.setImageBitmap(bmpLogoPrint);
             }

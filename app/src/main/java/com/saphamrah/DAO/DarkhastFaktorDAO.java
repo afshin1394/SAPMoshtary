@@ -125,6 +125,7 @@ public class DarkhastFaktorDAO
 			DarkhastFaktorModel.COLUMN_IsTakhir(),
             DarkhastFaktorModel.COLUMN_MoshtaryGharardadccSazmanForosh(),
             DarkhastFaktorModel.COLUMN_ccMoshtaryGharardad(),
+            DarkhastFaktorModel.COLUMN_ccAnbar()
         };
     }
 
@@ -397,6 +398,7 @@ public class DarkhastFaktorDAO
         values.put(DarkhastFaktorModel.COLUMN_UniqID_Tablet(), darkhastFaktorModel.getUniqID_Tablet());
         values.put(DarkhastFaktorModel.COLUMN_ccMoshtaryGharardad(), darkhastFaktorModel.getCcMoshtaryGhardad());
         values.put(DarkhastFaktorModel.COLUMN_MoshtaryGharardadccSazmanForosh(), darkhastFaktorModel.getMoshtaryGharardadccSazmanForosh());
+        values.put(DarkhastFaktorModel.COLUMN_ccAnbar(), darkhastFaktorModel.getCcAnbar());
         try
         {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -1765,6 +1767,7 @@ public class DarkhastFaktorDAO
             values.put(DarkhastFaktorModel.COLUMN_UniqID_Tablet(), darkhastFaktorModel.getUniqID_Tablet());
             values.put(DarkhastFaktorModel.COLUMN_ccMoshtaryGharardad(), darkhastFaktorModel.getCcMoshtaryGhardad());
             values.put(DarkhastFaktorModel.COLUMN_MoshtaryGharardadccSazmanForosh(), darkhastFaktorModel.getMoshtaryGharardadccSazmanForosh());
+            values.put(DarkhastFaktorModel.COLUMN_ccAnbar(), darkhastFaktorModel.getCcAnbar());
 
 
             SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -1992,6 +1995,7 @@ public class DarkhastFaktorDAO
 		contentValues.put(DarkhastFaktorModel.COLUMN_IsTakhir() , darkhastFaktorModel.getIsTakhir());
         contentValues.put(DarkhastFaktorModel.COLUMN_ccMoshtaryGharardad() , darkhastFaktorModel.getCcMoshtaryGhardad());
         contentValues.put(DarkhastFaktorModel.COLUMN_MoshtaryGharardadccSazmanForosh() , darkhastFaktorModel.getMoshtaryGharardadccSazmanForosh());
+        contentValues.put(DarkhastFaktorModel.COLUMN_ccAnbar() , darkhastFaktorModel.getCcAnbar());
 
         return contentValues;
     }
@@ -2075,6 +2079,7 @@ public class DarkhastFaktorDAO
 			darkhastFaktorModel.setIsTakhir(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_IsTakhir())));
             darkhastFaktorModel.setCcMoshtaryGhardad(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ccMoshtaryGharardad())));
             darkhastFaktorModel.setMoshtaryGharardadccSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_MoshtaryGharardadccSazmanForosh())));
+            darkhastFaktorModel.setCcAnbar(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ccAnbar())));
 
 
             darkhastFaktorModels.add(darkhastFaktorModel);

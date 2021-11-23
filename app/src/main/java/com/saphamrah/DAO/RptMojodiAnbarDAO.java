@@ -58,7 +58,8 @@ public class RptMojodiAnbarDAO
             RptMojodiAnbarModel.COLUMN_MandehMojodi_Adad(),
             RptMojodiAnbarModel.COLUMN_IsAdamForosh(),
             RptMojodiAnbarModel.COLUMN_ccSazmanForosh(),
-            RptMojodiAnbarModel.COLUMN_NameSazmanForosh()
+            RptMojodiAnbarModel.COLUMN_NameSazmanForosh(),
+            RptMojodiAnbarModel.COLUMN_ccDarkhastFaktorNoeForosh()
 
 
         };
@@ -244,12 +245,12 @@ public class RptMojodiAnbarDAO
         return rptMojodiAnbarModels;
     }
 
-    public ArrayList<RptMojodiAnbarModel> getAllOrderByNameKala()
+    public ArrayList<RptMojodiAnbarModel> getAllOrderByNameKala(int sortByHavalehFaktor)
     {
         ArrayList<RptMojodiAnbarModel> rptMojodiAnbarModels = new ArrayList<>();
         try
         {
-            String query = "select * from " + RptMojodiAnbarModel.TableName() + " order by " + RptMojodiAnbarModel.COLUMN_NameKala() + " COLLATE UNICODE";
+            String query = "select * from " + RptMojodiAnbarModel.TableName() + " WHERE ccDarkhastFaktorNoeForosh = "+ sortByHavalehFaktor +" order by " + RptMojodiAnbarModel.COLUMN_NameKala() + " COLLATE UNICODE";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
             //Cursor cursor = db.query(RptMojodiAnbarModel.TableName(), allColumns(), null, null, null, null, RptMojodiAnbarModel.COLUMN_NameKala());
@@ -273,12 +274,41 @@ public class RptMojodiAnbarDAO
         return rptMojodiAnbarModels;
     }
 
-    public ArrayList<RptMojodiAnbarModel> getAllOrderByCount()
+    public ArrayList<RptMojodiAnbarModel> getAllOrderBySortHavalehFaktor(int sortHavalehFaktor)
     {
         ArrayList<RptMojodiAnbarModel> rptMojodiAnbarModels = new ArrayList<>();
         try
         {
-            String query = "select * from " + RptMojodiAnbarModel.TableName() + " order by " +
+            String query = "select * from " + RptMojodiAnbarModel.TableName() + " Where ccDarkhastFaktorNoeForosh = "+ sortHavalehFaktor + " order by " + RptMojodiAnbarModel.COLUMN_NameKala() + " COLLATE UNICODE";
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            //Cursor cursor = db.query(RptMojodiAnbarModel.TableName(), allColumns(), null, null, null, null, RptMojodiAnbarModel.COLUMN_NameKala());
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    rptMojodiAnbarModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , RptMojodiAnbarModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "RptMojodiAnbarDAO" , "" , "getAllOrderByNameKala" , "");
+        }
+        return rptMojodiAnbarModels;
+    }
+
+    public ArrayList<RptMojodiAnbarModel> getAllOrderByCount(int sortByHavalehFaktor)
+    {
+        ArrayList<RptMojodiAnbarModel> rptMojodiAnbarModels = new ArrayList<>();
+        try
+        {
+            String query = "select * from " + RptMojodiAnbarModel.TableName() + " WHERE ccDarkhastFaktorNoeForosh = "+ sortByHavalehFaktor +" order by " +
                     RptMojodiAnbarModel.COLUMN_MandehMojodi_Karton() + " desc , " +
                     RptMojodiAnbarModel.COLUMN_MandehMojodi_Basteh() + " desc , " +
                     RptMojodiAnbarModel.COLUMN_MandehMojodi_Adad() + " desc";
@@ -340,6 +370,7 @@ public class RptMojodiAnbarDAO
         contentValues.put(RptMojodiAnbarModel.COLUMN_IsAdamForosh() , rptMojodiAnbarModel.getIsAdamForosh());
         contentValues.put(RptMojodiAnbarModel.COLUMN_ccSazmanForosh() , rptMojodiAnbarModel.getCcSazmanForosh());
         contentValues.put(RptMojodiAnbarModel.COLUMN_NameSazmanForosh() , rptMojodiAnbarModel.getNameSazmanForosh());
+        contentValues.put(RptMojodiAnbarModel.COLUMN_ccDarkhastFaktorNoeForosh() , rptMojodiAnbarModel.getCcDarkhastFaktorNoeForosh());
 
 
         return contentValues;
@@ -365,6 +396,7 @@ public class RptMojodiAnbarDAO
             rptMojodiAnbarModel.setIsAdamForosh(cursor.getInt(cursor.getColumnIndex(RptMojodiAnbarModel.COLUMN_IsAdamForosh())));
             rptMojodiAnbarModel.setCcSazmanForosh(cursor.getInt(cursor.getColumnIndex(RptMojodiAnbarModel.COLUMN_ccSazmanForosh())));
             rptMojodiAnbarModel.setNameSazmanForosh(cursor.getString(cursor.getColumnIndex(RptMojodiAnbarModel.COLUMN_NameSazmanForosh())));
+            rptMojodiAnbarModel.setCcDarkhastFaktorNoeForosh(cursor.getInt(cursor.getColumnIndex(RptMojodiAnbarModel.COLUMN_ccDarkhastFaktorNoeForosh())));
 
             rptMojodiAnbarModels.add(rptMojodiAnbarModel);
             cursor.moveToNext();

@@ -62,7 +62,7 @@ public interface APIServicePost
     Call<CreateDariaftPardakhtPPCResult> createDariaftPardakht(@Field("") String dariaftPardakht);
 
     @FormUrlEncoded
-    @POST("Api/ApiSales/CreateDariaftPardakhtPPCJSONWithKardex")
+    @POST("Api/ApiSales/CreateDariaftPardakhtPPCJSONWithAfrad")
     Call<CreateDariaftPardakhtPPCJSONResult> createDariaftPardakhtPPCJSON(@Field("") String jsonDariaftPardakht);
     @FormUrlEncoded
     @POST("Api/ApiSales/CreateDariaftPardakhtPPCBargashtyJSON")
@@ -180,7 +180,7 @@ public interface APIServicePost
     Call<MarjoeeKardexResult> marjoeeKardex(@Field("") String jsonStringData);
 
     @FormUrlEncoded
-    @POST("Api/ApiSales/CreateKardexWithJSON")
+    @POST("Api/ApiSales/CreateKardexAfradWithJSON")
     Call<MarjoeeKardexResult> createKardexWithJson(@Field("") String jsonStringData);
 
 

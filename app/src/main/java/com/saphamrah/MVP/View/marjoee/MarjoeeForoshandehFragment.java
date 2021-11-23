@@ -178,7 +178,7 @@ public class MarjoeeForoshandehFragment extends Fragment implements MarjoeeForos
                             if (selectedCount > 0 && selectedCount <= itemCount) {
                                 show.dismiss();
                                 //TODO::
-//                                    mPresenter.checkUpdateCountOfMarjoee(ccDarkhastFaktor, ccElamMarjoeeSatr, itemCount, selectedCount);
+                                mPresenter.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt, ccDarkhastFaktor, itemCount, selectedCount, position,true);
                             } else {
                                 lblError.setVisibility(View.VISIBLE);
                                 lblError.setText(getResources().getString(R.string.invalidRangeForEditMarjoee));

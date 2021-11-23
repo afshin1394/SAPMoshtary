@@ -49,9 +49,10 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
                     " df.ExtraProp_IsSend, df.CodeNoeVosolAzMoshtary,df.ExtraProp_IsMarjoeeKamel,df.ExtraProp_Resid, df.ExtraProp_ShowFaktorMamorPakhsh , df.ExtraProp_MablaghDariaftPardakht, \n" +
                     " df.ccMoshtaryGharardad, df.MoshtaryGharardadccSazmanForosh, \n" +
                     " f.FullNameForoshandeh, f.ccAfradForoshandeh , df.ExtraProp_MablaghDariaftPardakht , \n" +
-                    " m.NameMoshtary, m.CodeMoshtary \n" +
+                    " m.NameMoshtary, m.CodeMoshtary , mg.nameSazmanForosh\n" +
                     " from DarkhastFaktor df left join Moshtary m on df.ccMoshtary = m.ccMoshtary \n" +
                     " left join Foroshandeh f on df.ccForoshandeh = f.ccForoshandeh \n" +
+                    "  left join moshtaryGharardad mg on df.MoshtaryGharardadccSazmanForosh = mg.ccSazmanForosh \n" +
                     " where ForTasviehVosol = 1 AND FaktorRooz = " + faktorRooz + " order by df.TarikhFaktor DESC";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query, null);
@@ -80,11 +81,12 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
                     " df.ExtraProp_IsSend, df.CodeNoeVosolAzMoshtary,df.ExtraProp_IsMarjoeeKamel,df.ExtraProp_Resid, df.ExtraProp_ShowFaktorMamorPakhsh , df.ExtraProp_MablaghDariaftPardakht, \n" +
                     " df.ccMoshtaryGharardad, df.MoshtaryGharardadccSazmanForosh, \n" +
                     " f.FullNameForoshandeh, f.ccAfradForoshandeh , \n" +
-                    " m.NameMoshtary, m.CodeMoshtary \n" +
+                    " m.NameMoshtary, m.CodeMoshtary , mg.NameSazmanForosh \n" +
                     " from DarkhastFaktor df left join Moshtary m on df.ccMoshtary = m.ccMoshtary \n" +
                     " left join Foroshandeh f on df.ccForoshandeh = f.ccForoshandeh \n" +
                     " left join DarkhastFaktorRoozSort dfs \n" +
                     " on df.ccDarkhastFaktor = dfs.ccDarkhastFaktor \n" +
+                    "  left join moshtaryGharardad mg on df.MoshtaryGharardadccSazmanForosh = mg.ccSazmanForosh \n" +
                     " where ForTasviehVosol = 1 AND FaktorRooz = " + faktorRooz +
                     " order by dfs.Sort";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -253,6 +255,7 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
                 darkhastFaktorMoshtaryForoshandeModel.setExtraProp_MablaghDariaftPardakht(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_MablaghDariaftPardakht())));
                 darkhastFaktorMoshtaryForoshandeModel.setCcMoshtaryGharardad(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccMoshtaryGharardad())));
                 darkhastFaktorMoshtaryForoshandeModel.setMoshtaryGharardadccSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_MoshtaryGharardadccSazmanForosh())));
+                darkhastFaktorMoshtaryForoshandeModel.setNameSazmanForosh(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_NameSazmanForosh())));
                 darkhastFaktorMoshtaryForoshandeModels.add(darkhastFaktorMoshtaryForoshandeModel);
                 cursor.moveToNext();
             }

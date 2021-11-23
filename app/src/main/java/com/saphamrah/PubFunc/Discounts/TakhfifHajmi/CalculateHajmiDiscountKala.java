@@ -46,11 +46,11 @@ public class CalculateHajmiDiscountKala extends DiscountCalculation
             ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrsForKala = darkhastFaktorSatrDAO.getByccDarkhastFaktorForTakhfifHajmiKala(darkhastFaktorModel.getCcDarkhastFaktor());
             codeTakhfif = new ParameterChildDAO(context).getValueByccChildParameter(Constants.CC_CHILD_CODE_TAKHFIF_HAJMI());
 
-            Log.d("takhfifKala" , "darkhastFaktorModel : " + darkhastFaktorModel.toString());
+            Log.d("takhfif" , "takhfifKala darkhastFaktorModel : " + darkhastFaktorModel.toString());
 
             for (DarkhastFaktorSatrModel darkhastFaktorSatrModel : darkhastFaktorSatrsForKala)
             {
-                Log.d("takhfifKala" , "darkhastFaktorSatrModel : " + darkhastFaktorSatrModel.toString());
+                Log.d("takhfif" , "takhfifKala darkhastFaktorSatrModel : " + darkhastFaktorSatrModel.toString());
                 KalaModel kala = kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode());
 
                 ArrayList<TakhfifHajmiSatrModel> takhfifHajmiSatrs = takhfifHajmiSatrDAO.getForFaktor(takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),
@@ -63,54 +63,97 @@ public class CalculateHajmiDiscountKala extends DiscountCalculation
                 for (TakhfifHajmiSatrModel takhfifHajmiSatrModel : takhfifHajmiSatrs)
                 {
                     ArrayList<DataTableModel> darkhastFaktorSatrModelsForTakhfif = darkhastFaktorSatrDAO.getByccDarkhastFaktorAndccKalaCode(darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorSatrModel.getCcKalaCode(), takhfifHajmiTitrSatrModel.getOlaviat() , takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),takhfifHajmiTitrSatrModel.getNoeGheymat());
-                    Log.d("takhfifKala" , "darkhastFaktorSatrModelsForTakhfif : " + darkhastFaktorSatrModelsForTakhfif);
+                    Log.d("takhfif" , "takhfifKala darkhastFaktorSatrModelsForTakhfif : " + darkhastFaktorSatrModelsForTakhfif);
                     for (DataTableModel model : darkhastFaktorSatrModelsForTakhfif)
                     {
                         KalaModel kalaMohasebeh = kalaDAO.getByccKalaCode(takhfifHajmiSatrModel.getCcGorohMohasebeh());
-                        int mablaghVahedKalaMohasebeh = darkhastFaktorSatrDAO.getMablaghForoshByccKalaCode(takhfifHajmiSatrModel.getCcGorohMohasebeh(),darkhastFaktorModel.getCcDarkhastFaktor());
-                        Log.d("takhfifKala" , "model : " + model.toString());
-                        Log.d("takhfifKala" , "DarkhastFaktorSatrModel : " + model.toString());
-                        Log.d("takhfifKala" , "kala : " + kala.toString());
-                        Log.d("takhfifKala" , "mablaghVahedKalaMohasebeh : " + mablaghVahedKalaMohasebeh);
+                        //int mablaghVahedKalaMohasebeh = darkhastFaktorSatrDAO.getMablaghForoshByccKalaCode(takhfifHajmiSatrModel.getCcGorohMohasebeh(),darkhastFaktorModel.getCcDarkhastFaktor());
+                        //int mablaghVahedKalaMohasebeh =(int) Double.parseDouble(model.getFiled7());
+                        Log.d("takhfif" , "takhfifKala model : " + model.toString());
+                        Log.d("takhfif" , "takhfifKala DarkhastFaktorSatrModel : " + model.toString());
+                        Log.d("takhfif" , "takhfifKala kala : " + kala.toString());
                         int sumTedadDarKarton = Integer.parseInt(model.getFiled3()) / kala.getTedadDarKarton();
                         int sumTedadDarBaste = Integer.parseInt(model.getFiled3()) / kala.getTedadDarBasteh();
-                        Log.d("takhfifKala", "sumTedadDarKarton : " + sumTedadDarKarton);
-                        Log.d("takhfifKala", "sumTedadDarBaste : " + sumTedadDarBaste);
-                        Log.d("takhfifKala", "takhfifHajmiSatrModel : " + takhfifHajmiSatrModel);
+                        Log.d("takhfif", "takhfifKala sumTedadDarKarton : " + sumTedadDarKarton);
+                        Log.d("takhfif", "takhfifKala sumTedadDarBaste : " + sumTedadDarBaste);
+                        Log.d("takhfif", "takhfifKala takhfifHajmiSatrModel : " + takhfifHajmiSatrModel);
                         zarib = calculateZarib(takhfifHajmiSatrModel.getBeEza(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(),
                                 sumTedadDarKarton, sumTedadDarBaste, Integer.parseInt(model.getFiled3()), Double.parseDouble(model.getFiled6()), ((darkhastFaktorSatrModel.getTedad3()* darkhastFaktorSatrModel.getVazn())/1000.0),0);
-                        Log.d("takhfifKala" , "MablaghKolFaktor : " + darkhastFaktorModel.getMablaghKolFaktor());
-                        Log.d("takhfifKala" , "zarib : " + zarib);
+                        Log.d("takhfif" , "takhfifKala MablaghKolFaktor : " + darkhastFaktorModel.getMablaghKolFaktor());
+                        Log.d("takhfif" , "takhfifKala zarib : " + zarib);
 
-                        int tedad = calculateTedad(takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(), kalaMohasebeh.getTedadDarKarton(), kalaMohasebeh.getTedadDarBasteh(), Double.parseDouble(model.getFiled3()));
-                        Log.d("takhfifKala" , "tedad : " + tedad);
+                        //int tedad = calculateTedad(takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(), kalaMohasebeh.getTedadDarKarton(), kalaMohasebeh.getTedadDarBasteh(), Double.parseDouble(model.getFiled3()));
+                        int tedad = calculateTedad(takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(), sumTedadDarKarton, sumTedadDarBaste, Double.parseDouble(model.getFiled3()));
+                        Log.d("takhfif" , "tedad : " + tedad);
+                        int mablaghVahedKalaMohasebeh = (int)calculateMablaghVahed( takhfifHajmiTitrSatrModel.getNoeTedadRial(),tedad,0,(long)Double.parseDouble(model.getFiled6()),1);
+                        Log.d("takhfif" , "takhfifKala mablaghVahedKalaMohasebeh : " + mablaghVahedKalaMohasebeh);
+
                         long MablaghTakhfifDarkhast = Math.round(Double.valueOf(model.getFiled6()));
 
-                        Log.d("takhfifKala","CcTakhfifHajmi :" + takhfifHajmiSatrModel.getCcTakhfifHajmi() );
-                        Log.d("takhfifKala","MablaghTakhfifDarkhast :" + MablaghTakhfifDarkhast);
-                        long tedadLong = (long) tedad;
+                        Log.d("takhfif","takhfifKala CcTakhfifHajmi :" + takhfifHajmiSatrModel.getCcTakhfifHajmi() );
+                        Log.d("takhfif","takhfifKala MablaghTakhfifDarkhast :" + MablaghTakhfifDarkhast);
+                        long tedadLong = (long) tedad ;
+
+                        Log.d("takhfif" , "takhfifKala tedadLong : " + tedad);
+
                         long mablaghVahedKalaMohasebehLong = (long) mablaghVahedKalaMohasebeh;
                         if(takhfifHajmiTitrSatrModel.getOlaviat() == 0 || takhfifHajmiTitrSatrModel.getOlaviat() == 1 )//|| (takhfifHajmiTitrSatrModel.getCcTakhfifHajmi() == Integer.valueOf(model.getFiled7())))
                         {
 
                             MablaghKol = (long) (tedadLong * mablaghVahedKalaMohasebehLong);
-                            Log.d("takhfifKala","if MablaghKol :" + MablaghKol);
+                            Log.d("takhfif","takhfifKala if MablaghKol :" + MablaghKol);
                         }
                         else
                         {
 
                             MablaghKol = (long) ((tedadLong * mablaghVahedKalaMohasebehLong)-MablaghTakhfifDarkhast);
-                            Log.d("takhfifKala","else MablaghKol :" + MablaghKol);
+                            Log.d("takhfif","takhfifKala else MablaghKol :" + MablaghKol);
                         }
-                        Log.d("takhfifKala" , "MablaghKol : " + MablaghKol + "takhfifHajmiTitrSatrModel.getOlaviat:" +takhfifHajmiTitrSatrModel.getOlaviat());
-                        Mablagh =  calculateMablagh(takhfifHajmiTitrSatrModel.getNoeTedadRial(), (int) takhfifHajmiSatrModel.getBeEza(), (long) MablaghKol, (long) mablaghVahedKalaMohasebeh, takhfifHajmiSatrModel.getCcNoeField(), takhfifHajmiSatrModel.getCcGorohMohasebeh());
+                        Log.d("takhfif" , "takhfifKala MablaghKol : " + MablaghKol + "takhfifHajmiTitrSatrModel.getOlaviat:" +takhfifHajmiTitrSatrModel.getOlaviat());
+                       Mablagh =  calculateMablagh(takhfifHajmiTitrSatrModel.getNoeTedadRial(), (int) takhfifHajmiSatrModel.getBeEza(), (long) MablaghKol, (long) mablaghVahedKalaMohasebeh, takhfifHajmiSatrModel.getCcNoeField(), takhfifHajmiSatrModel.getCcGorohMohasebeh());
+                        //Mablagh =  calculateMablagh(takhfifHajmiTitrSatrModel.getNoeTedadRial(), (int) takhfifHajmiSatrModel.getBeEza(), (long) MablaghKol, (long) MablaghKol, takhfifHajmiSatrModel.getCcNoeField(), takhfifHajmiSatrModel.getCcGorohMohasebeh());
+                        Log.d("takhfif" , "takhfifKala Mablagh : " + Mablagh);
+
                         //double mablaghTakhfif = calculateMablaghTakhfif(Double.valueOf(model.getFiled6()), (tedad*kala.getMablaghForosh()), zarib, takhfifHajmiSatrModel.getBeEza(), takhfifHajmiSatrModel.getDarsadTakhfif(), takhfifHajmiTitrSatrModel.getNoeTedadRial());
                         long mablaghTakhfif = calculateMablaghTakhfif(Mablagh, (long) mablaghVahedKalaMohasebeh, zarib, takhfifHajmiSatrModel.getBeEza(), takhfifHajmiSatrModel.getDarsadTakhfif(), takhfifHajmiTitrSatrModel.getNoeTedadRial());
-                        Log.d("takhfifKala" , "mablaghTakhfif : " + mablaghTakhfif);
+                        Log.d("takhfif" , "takhfifKala mablaghTakhfif : " + mablaghTakhfif);
                         if (mablaghTakhfif > 0)
                         {
+                            int currentOlaviat = takhfifHajmiTitrSatrModel.getOlaviat();
+
                             insertFaktorTakhfif(context, darkhastFaktorModel.getCcDarkhastFaktor(), codeTakhfif, takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), takhfifHajmiTitrSatrModel.getSharhTakhfif(), takhfifHajmiSatrModel.getDarsadTakhfif(), mablaghTakhfif, takhfifHajmiTitrSatrModel.getForJayezeh());
                             insertFaktorSatrTakhfif(context, Integer.parseInt(model.getFiled1()), codeTakhfif, takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), takhfifHajmiTitrSatrModel.getSharhTakhfif(), takhfifHajmiSatrModel.getDarsadTakhfif(), mablaghTakhfif, takhfifHajmiTitrSatrModel.getForJayezeh(), takhfifHajmiTitrSatrModel.getOlaviat());
+
+//                            ArrayList<DataTableModel> darkhastFaktorSatrModelsForInserts = darkhastFaktorSatrDAO.getByccDarkhastFaktorAndccKalaCodeAndNoeGheymat(darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorSatrModel.getCcKalaCode(), takhfifHajmiTitrSatrModel.getNoeGheymat(),currentOlaviat);
+//                            long sumMablaghTalkhfifSatr=0;
+//                            int j=0;
+//                            for(DataTableModel dataTableModel : darkhastFaktorSatrModelsForInserts) {
+//                                long mablaghTakhfifSatr=0;
+//                                Log.d("takhfif", "takhfifKala 1.5 MablaghTakhfifSatr : " + mablaghTakhfifSatr + " , " + Math.round(mablaghTakhfifSatr) + " , mablaghTakhfif: " + mablaghTakhfif + " , sumMablaghTalkhfifSatr: " + sumMablaghTalkhfifSatr);
+//                                Log.d("takhfif", "takhfifKala j  : " + j + " , darkhastFaktorSatrModelsForInsert.Size : " + darkhastFaktorSatrModelsForInserts.size() + " , darkhastFaktorSatrModelsForInsert.size()-1 : " + (darkhastFaktorSatrModelsForInserts.size() - 1) );
+//                                Log.d("takhfif", "takhfifKala ccDarkhastFaktorSatr : " + Double.parseDouble(dataTableModel.getFiled1()) + " , ccKalaCode : " + Double.parseDouble(dataTableModel.getFiled2()) +
+//                                        ", Tedad :" + Double.parseDouble(dataTableModel.getFiled3()) + ",Gheymat: " + Double.parseDouble(dataTableModel.getFiled4()) + ", Olaviat:"+ Double.parseDouble(dataTableModel.getFiled5()));
+//                                j++;
+//                                if(currentOlaviat == 0 || currentOlaviat == 1){
+//                                    mablaghTakhfifSatr = Math.round((((Double.parseDouble(dataTableModel.getFiled3())*Double.parseDouble(dataTableModel.getFiled4())))*takhfifHajmiSatrModel.getDarsadTakhfif())/100);
+//                                }
+//                                else{
+//                                    mablaghTakhfifSatr = Math.round((((Double.parseDouble(dataTableModel.getFiled3())*Double.parseDouble(dataTableModel.getFiled4()))-Double.parseDouble(dataTableModel.getFiled5()))*takhfifHajmiSatrModel.getDarsadTakhfif())/100);
+//                                }
+//                                Log.d("takhfif", "takhfifKala   mablaghTakhfifSatr: " + mablaghTakhfifSatr );
+//
+//
+//                                if (j == darkhastFaktorSatrModelsForInserts.size() || mablaghTakhfif <= mablaghTakhfifSatr) {
+//                                    mablaghTakhfifSatr = mablaghTakhfif - sumMablaghTalkhfifSatr;
+//                                } else {
+//                                    sumMablaghTalkhfifSatr += mablaghTakhfifSatr;
+//                                }
+//                                //sumMablaghTalkhfifSatr += mablaghTakhfifSatr;
+//                                if (mablaghTakhfifSatr > 0) {
+//                                    Log.d("takhfif", "takhfifKala 1.6 takhfifHajmiTitrSatrModel CcTakhfifHajmi: " + takhfifHajmiTitrSatrModel.getCcTakhfifHajmi() + " mablaghTakhfifSatr : " + mablaghTakhfifSatr + " , mablaghTakhfif: " + mablaghTakhfif + " , sumMablaghTalkhfifSatr: " + sumMablaghTalkhfifSatr);
+//                                    insertFaktorSatrTakhfif(context, Long.valueOf(dataTableModel.getFiled1()), codeTakhfif, takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), takhfifHajmiTitrSatrModel.getSharhTakhfif(), takhfifHajmiSatrModel.getDarsadTakhfif(), mablaghTakhfifSatr, takhfifHajmiTitrSatrModel.getForJayezeh(), takhfifHajmiTitrSatrModel.getOlaviat());
+//                                }
+//                            }
                         }
                     }
                 }
@@ -279,6 +322,7 @@ public class CalculateHajmiDiscountKala extends DiscountCalculation
                         {
                             insertFaktorTakhfif(context, darkhastFaktorModel.getCcDarkhastFaktor(), codeTakhfif, takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),
                                     takhfifHajmiTitrSatrModel.getSharhTakhfif(), takhfifHajmiSatr.getDarsadTakhfif(), mablaghTakhfif, takhfifHajmiTitrSatrModel.getForJayezeh());
+
                             insertFaktorSatrTakhfif(context, darkhastFaktorSatr.getCcDarkhastFaktorSatr(), codeTakhfif, takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),
                                     takhfifHajmiTitrSatrModel.getSharhTakhfif(), takhfifHajmiSatr.getDarsadTakhfif(), mablaghTakhfif, takhfifHajmiTitrSatrModel.getForJayezeh(), takhfifHajmiTitrSatrModel.getOlaviat());
                         }

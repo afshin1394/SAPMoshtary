@@ -91,8 +91,8 @@ public class KalaMojodiModel
     private String TarikhDarkhast;
     private String ShomarehBach;
     private String TarikhTolid;
-    private int GheymatMasrafKonandeh;
-    private int GheymatForosh;
+    private float GheymatMasrafKonandeh;
+    private float GheymatForosh;
     private int ccTaminKonandeh;
     private int ForJayezeh;
     private String ZamaneSabt;
@@ -101,15 +101,15 @@ public class KalaMojodiModel
     private int Max_MojodyByShomarehBach;
     private int ccAfrad;
 
-    public int getGheymatForoshAsli() {
+    public float getGheymatForoshAsli() {
         return gheymatForoshAsli;
     }
 
-    public void setGheymatForoshAsli(int gheymatForoshAsli) {
+    public void setGheymatForoshAsli(float gheymatForoshAsli) {
         this.gheymatForoshAsli = gheymatForoshAsli;
     }
 
-    private int gheymatForoshAsli;
+    private float gheymatForoshAsli;
 
 
     public int getCcKalaMojodi() {
@@ -168,17 +168,17 @@ public class KalaMojodiModel
         TarikhTolid = tarikhTolid;
     }
 
-    public int getGheymatMasrafKonandeh() {
+    public float getGheymatMasrafKonandeh() {
         return GheymatMasrafKonandeh;
     }
-    public void setGheymatMasrafKonandeh(int gheymatMasrafKonandeh) {
+    public void setGheymatMasrafKonandeh(float gheymatMasrafKonandeh) {
         GheymatMasrafKonandeh = gheymatMasrafKonandeh;
     }
 
-    public int getGheymatForosh() {
+    public float getGheymatForosh() {
         return GheymatForosh;
     }
-    public void setGheymatForosh(int gheymatForosh) {
+    public void setGheymatForosh(float gheymatForosh) {
         GheymatForosh = gheymatForosh;
     }
 

@@ -31,6 +31,7 @@ public class ListMoshtarianAdapter extends RecyclerSwipeAdapter<ListMoshtarianAd
     public static final int SHOW_LOCATION = 3;
     public static final int PORSESHNAME = 4;
     public static final int ADAM_FAAL = 5;
+    public static final int SUGGEST = 6;
 
     private Context context;
     private List<ListMoshtarianModel> listMoshtarianModels;
@@ -145,6 +146,7 @@ public class ListMoshtarianAdapter extends RecyclerSwipeAdapter<ListMoshtarianAd
         TextView txtviewLastPurchaseCost;
         RelativeLayout layAdamFaal;
         RelativeLayout layPorseshname;
+        RelativeLayout laySuggest;
        /* RelativeLayout laySend;
         RelativeLayout layDelete;*/
         RelativeLayout layLocation;
@@ -168,6 +170,7 @@ public class ListMoshtarianAdapter extends RecyclerSwipeAdapter<ListMoshtarianAd
             txtviewLastPurchaseCost = itemView.findViewById(R.id.lblLastPurchaseCost);
             layAdamFaal = itemView.findViewById(R.id.layAdamFaal);
             layPorseshname = itemView.findViewById(R.id.layPorseshname);
+            laySuggest = itemView.findViewById(R.id.laySuggest);
             /*laySend = itemView.findViewById(R.id.laySend);
             layDelete = itemView.findViewById(R.id.layDelete);*/
             layLocation = itemView.findViewById(R.id.layLocation);
@@ -219,6 +222,14 @@ public class ListMoshtarianAdapter extends RecyclerSwipeAdapter<ListMoshtarianAd
                 public void onClick(View v)
                 {
                     listener.onItemClick(PORSESHNAME, getAdapterPosition());
+                }
+            });
+            laySuggest.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    listener.onItemClick(SUGGEST, getAdapterPosition());
                 }
             });
 

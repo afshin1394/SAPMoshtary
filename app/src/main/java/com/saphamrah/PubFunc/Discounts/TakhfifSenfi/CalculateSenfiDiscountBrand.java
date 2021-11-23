@@ -72,7 +72,7 @@ public class CalculateSenfiDiscountBrand extends DiscountCalculation
 
                 mablaghVahed = Math.round(sumMablaghKolBrand / sumTedadBrand);
 
-                Log.d("takhfifBrand", "mablaghVahed : " + mablaghVahed);
+                Log.d("takhfifSenfi", "Brand mablaghVahed : " + mablaghVahed);
 
                 ArrayList<TakhfifSenfiSatrModel> takhfifSenfiSatrs = takhfifSenfiSatrDAO.getForFaktor(takhfifSenfiTitrSatrModel.getCcTakhfifSenfi(),
                         new int[]{getTedadRialTedad(), getTedadRialRial(), getTedadRialVazn(), getTedadRialAghlam()}, new int[]{getBasteBandiCarton(), getBasteBandiBaste(), getBasteBandiAdad()},
@@ -99,11 +99,11 @@ public class CalculateSenfiDiscountBrand extends DiscountCalculation
 
                     mablaghVahed = Math.round (sumMablaghKolBrandMohasebeh / sumTedadBrandMohasebeh);
 
-                    Log.d("takhfifBrand", "sumTedadBrandMohasebeh : " + sumTedadBrandMohasebeh);
-                    Log.d("takhfifBrand", "sumTedadBastehBrandMohasebeh : " + sumTedadBastehBrandMohasebeh);
-                    Log.d("takhfifBrand", "sumTedadKartonBrandMohasebeh : " + sumTedadKartonBrandMohasebeh);
-                    Log.d("takhfifBrand", "sumMablaghKolBrandMohasebeh : " + sumMablaghKolBrandMohasebeh);
-                    Log.d("takhfifBrand", "mablaghVahed : " + mablaghVahed);
+                    Log.d("takhfifSenfi", "Brand sumTedadBrandMohasebeh : " + sumTedadBrandMohasebeh);
+                    Log.d("takhfifSenfi", "Brand sumTedadBastehBrandMohasebeh : " + sumTedadBastehBrandMohasebeh);
+                    Log.d("takhfifSenfi", "Brand sumTedadKartonBrandMohasebeh : " + sumTedadKartonBrandMohasebeh);
+                    Log.d("takhfifSenfi", "Brand sumMablaghKolBrandMohasebeh : " + sumMablaghKolBrandMohasebeh);
+                    Log.d("takhfifSenfi", "Brand mablaghVahed : " + mablaghVahed);
 
                     zarib = calculateZarib(takhfifSenfiSatrModel.getBeEza(), takhfifSenfiTitrSatrModel.getNoeTedadRial(), takhfifSenfiSatrModel.getCodeNoeBastehBandy(), sumTedadKartonBrand, sumTedadBastehBrand, sumTedadBrand, sumMablaghKolBrand,(sumVaznBrand/1000.0),tedadAghlam);
                     int tedad = calculateTedad(takhfifSenfiTitrSatrModel.getNoeTedadRial(), takhfifSenfiSatrModel.getCodeNoeBastehBandy(), sumTedadKartonBrandMohasebeh, sumTedadBastehBrandMohasebeh, 1);
@@ -116,6 +116,9 @@ public class CalculateSenfiDiscountBrand extends DiscountCalculation
                         long sumMablaghTakhfifSatr = 0;
                         String allMablaghTakhfifSatr = "-1";
                         ArrayList<DataTableModel> arrayListKalaBrandInDarkhast = darkhastFaktorSatrDAO.getBrandOfKalaInDarkhast(darkhastFaktorModel.getCcDarkhastFaktor());
+                        Log.d("takhfifSenfi", "Brand arrayListKalaBrandInDarkhast : " + arrayListKalaBrandInDarkhast.toString());
+                        Log.d("takhfifSenfi", "Brand arrayListKalaBrandInDarkhast.size : " + arrayListKalaBrandInDarkhast.size());
+
                         for (DataTableModel kalaBrand : arrayListKalaBrandInDarkhast)
                         {
                             if (kalaBrand.getFiled1() != null && kalaBrand.getFiled1().trim().equals(String.valueOf(ccBrandMohasebeh)))

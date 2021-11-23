@@ -44,6 +44,8 @@
     <string name="serverTime">زمان سرور</string>
     <string name="deviceTime">زمان دستگاه</string>
     <string name="timeDiff">اختلاف زمان</string>
+    <string name="timeDiffGetProgram">زمان سپری شده دریافت برنامه</string>
+    <string name="DataCapacityGetProgram">حجم اطلاعات دریافت برنامه</string>
     <string name="errorGetDateTimeData">خطا در دریافت تاریخ و زمان</string>
     <string name="errorGetDataTitle">خطا در دریافت اطلاعات</string>
     <string name="errorGetData">خطا در دریافت اطلاعات، لطفا دوباره تلاش کنید.</string>
@@ -651,6 +653,7 @@
     <string name="until">تا</string>
     <string name="meter">متر</string>
     <string name="kilometer">کیلومتر</string>
+    <string name="kiloByte">کیلوبایت</string>
     <string name="hour">ساعت</string>
     <string name="second">ثانیه</string>
     <string name="min">دقیقه</string>
@@ -1150,4 +1153,8 @@
     <string name="emtiazMamorPakhsh">امتیاز مامور پخش</string>
     <string name="sumEmtiazMoshtary">امتیاز کل مشتری</string>
     <string name="mamorPakhsh">مامور پخش</string>
+    <string name="sortByFaktor">نمایش براساس فاکتور</string>
+    <string name="sortByHavaleh">نمایش براساس حواله</string>
+    <string name="mojodiAnbarakReportHavaleh">گزارش موجودی کالا (حواله)</string>
+    <string name="mojodiAnbarakReportFaktor">گزارش موجودی کالا (فاکتور)</string>
 </resources>

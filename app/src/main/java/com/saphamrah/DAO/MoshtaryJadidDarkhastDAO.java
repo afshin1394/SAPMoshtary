@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.saphamrah.MVP.Model.GetProgramModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.MoshtaryJadidDarkhastModel;
 import com.saphamrah.Model.ServerIpModel;
@@ -17,6 +18,7 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.ServiceResponse.GetAllMoshtaryJadidDarkhastPPCResult;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import retrofit2.Call;

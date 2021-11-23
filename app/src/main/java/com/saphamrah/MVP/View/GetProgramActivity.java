@@ -384,11 +384,7 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
         alertAdapter.notifyDataSetChanged();
         imgGetProgramResultFailed.setVisibility(View.VISIBLE);
         imgGetProgramResultSuccess.setVisibility(View.GONE);
-        try {
-            viewRevealAnimator.showNext();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        viewRevealAnimator.post(() -> viewRevealAnimator.showNext());
         lblGetProgramResult.setText(getResources().getString(R.string.getProgramError, getItemName(getProgramType, itemIndex)));
         btnGetProgramResultClose.setBackground(getResources().getDrawable(R.drawable.altdlg_btn_bg_failed));
         imgGetProgramResultFailed.postDelayed(new Runnable() {

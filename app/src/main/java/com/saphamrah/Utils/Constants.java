@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE = 0 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest
+    private static final int CURRENT_VERSION_TYPE = 4 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 
@@ -48,7 +48,7 @@ public class Constants
     private static final String HTTP_TIME_OUT_EXCEPTION="HTTP_TIME_OUT_EXCEPTION";
 
 
-
+    public static final  String HTTP_EXCEPTION() {  return  HTTP_EXCEPTION;   }
     public static final  String HTTP_WRONG_ENDPOINT() {  return  HTTP_WRONG_ENDPOINT;   }
     public static final  String HTTP_NULL_RESPONSE() {  return  HTTP_NULL_RESPONSE;   }
     public static final  String HTTP_BAD_REQUEST(){return HTTP_BAD_REQUEST;}
@@ -1320,6 +1320,7 @@ public class Constants
     //GetProgram
     public static final int GET_PROGRAM_RETROFIT = 1;
     public static final int GET_PROGRAM_RX = 2;
+    public static final int GET_PROGRAM_GRPC = 3;
 
 
     //type of ccDarkhastFaktorNoeForosh

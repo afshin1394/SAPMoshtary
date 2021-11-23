@@ -37,15 +37,15 @@ public class RptMojodiAnbarakPresenter implements RptMojodiAnbrakMVP.PresenterOp
     /////////////////////////// PresenterOps ///////////////////////////
 
     @Override
-    public void getMojodiAnbar()
+    public void getMojodiAnbar(int sortHavalehFaktor,boolean viewAsTable)
     {
-        mModel.getMojodiAnbar();
+        mModel.getMojodiAnbar(sortHavalehFaktor , viewAsTable);
     }
 
     @Override
-    public void updateMojodiAnbar()
+    public void updateMojodiAnbar(int sortHavalehFaktor,boolean viewAsTable)
     {
-        mModel.updateMojodiAnbar();
+        mModel.updateMojodiAnbar(sortHavalehFaktor , viewAsTable);
     }
 
     @Override
@@ -96,15 +96,15 @@ public class RptMojodiAnbarakPresenter implements RptMojodiAnbrakMVP.PresenterOp
     }
 
     @Override
-    public void sortByNameKala(boolean viewAsTable)
+    public void sortByNameKala(boolean viewAsTable,int sortByHavalehFaktor)
     {
-        mModel.getMojodiAnbarOrderByNameKala(viewAsTable);
+        mModel.getMojodiAnbarOrderByNameKala(viewAsTable , sortByHavalehFaktor);
     }
 
     @Override
-    public void sortByCount(boolean viewAsTable)
+    public void sortByCount(boolean viewAsTable,int sortByHavalehFaktor)
     {
-        mModel.getMojodiAnbarOrderByCount(viewAsTable);
+        mModel.getMojodiAnbarOrderByCount(viewAsTable,sortByHavalehFaktor);
     }
 
     @Override
@@ -141,11 +141,16 @@ public class RptMojodiAnbarakPresenter implements RptMojodiAnbrakMVP.PresenterOp
     }
 
     @Override
-    public void onGetMojodiAnbar(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels)
+    public void onGetMojodiAnbar(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels,boolean viewAsTable)
     {
         if (mojodiAnbarModels != null)
         {
-            mView.get().setAdapter(mojodiAnbarModels);
+            if (viewAsTable){
+                mView.get().setAdapterAsTable(mojodiAnbarModels);
+            } else  {
+                mView.get().setAdapter(mojodiAnbarModels);
+            }
+
         }
         else
         {

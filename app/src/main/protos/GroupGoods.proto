@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Amargar.GroupGoods.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "GroupGoodsProto";
+option objc_class_prefix = "HLW";
+
+package Amargar;
+
+service GroupGoods{
+  rpc GetGroupGoods(GroupGoodsRequest) returns(GroupGoodsReplyList);
+}
+
+message GroupGoodsRequest{
+
+}
+
+message GroupGoodsReply{
+  int32  GroupGoodsID = 1;
+  int32 CodeGoodsID = 2;
+  int32 GroupID = 3;
+  string GroupName = 4;
+  int32  LinkGroupID = 5;
+  int32 RootID = 6;
+
+}
+
+message GroupGoodsReplyList{
+  repeated GroupGoodsReply GroupGoodsReplys = 1;
+}

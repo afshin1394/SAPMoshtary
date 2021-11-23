@@ -44,15 +44,15 @@ public class RptMojodiAnbarakModel implements RptMojodiAnbrakMVP.ModelOps
     }
 
     @Override
-    public void getMojodiAnbar()
+    public void getMojodiAnbar(int sortHavalehFaktor,boolean viewAsTable)
     {
         AnbarakAfradDAO anbarakAfradDAO = new AnbarakAfradDAO(mPresenter.getAppContext());
         ArrayList<AnbarakAfradModel> anbarakAfradModels = anbarakAfradDAO.getAll();
         if (anbarakAfradModels != null && anbarakAfradModels.size() > 0)
         {
             RptMojodiAnbarDAO mojodiAnbarDAO = new RptMojodiAnbarDAO(mPresenter.getAppContext());
-            ArrayList<RptMojodiAnbarModel> mojodiAnbarModels = mojodiAnbarDAO.getAllOrderByCodeKala();
-            mPresenter.onGetMojodiAnbar(mojodiAnbarModels);
+            ArrayList<RptMojodiAnbarModel> mojodiAnbarModels = mojodiAnbarDAO.getAllOrderBySortHavalehFaktor(sortHavalehFaktor);
+            mPresenter.onGetMojodiAnbar(mojodiAnbarModels , viewAsTable);
         }
         else
         {
@@ -61,7 +61,7 @@ public class RptMojodiAnbarakModel implements RptMojodiAnbrakMVP.ModelOps
     }
 
     @Override
-    public void updateMojodiAnbar()
+    public void updateMojodiAnbar(int sortHavalehFaktor , boolean viewAsTable)
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
         ArrayList<ForoshandehMamorPakhshModel> foroshandehMamorPakhshModels = foroshandehMamorPakhshDAO.getAll();
@@ -91,7 +91,7 @@ public class RptMojodiAnbarakModel implements RptMojodiAnbrakMVP.ModelOps
                         {
                             if (msg.arg1 == 1)
                             {
-                                mPresenter.onGetMojodiAnbar(arrayListData);
+                                getMojodiAnbar(sortHavalehFaktor,viewAsTable);
                             }
                             return false;
                         }
@@ -125,18 +125,18 @@ public class RptMojodiAnbarakModel implements RptMojodiAnbrakMVP.ModelOps
     }
 
     @Override
-    public void getMojodiAnbarOrderByNameKala(boolean viewAsTable)
+    public void getMojodiAnbarOrderByNameKala(boolean viewAsTable,int sortByHavalehFaktor)
     {
         RptMojodiAnbarDAO mojodiAnbarDAO = new RptMojodiAnbarDAO(mPresenter.getAppContext());
-        ArrayList<RptMojodiAnbarModel> mojodiAnbarakModels = mojodiAnbarDAO.getAllOrderByNameKala();
+        ArrayList<RptMojodiAnbarModel> mojodiAnbarakModels = mojodiAnbarDAO.getAllOrderByNameKala(sortByHavalehFaktor);
         mPresenter.onGetMojodiAnbarOrderByNameKala(mojodiAnbarakModels , viewAsTable);
     }
 
     @Override
-    public void getMojodiAnbarOrderByCount(boolean viewAsTable)
+    public void getMojodiAnbarOrderByCount(boolean viewAsTable,int sortByHavalehFaktor)
     {
         RptMojodiAnbarDAO mojodiAnbarDAO = new RptMojodiAnbarDAO(mPresenter.getAppContext());
-        ArrayList<RptMojodiAnbarModel> mojodiAnbarakModels = mojodiAnbarDAO.getAllOrderByCount();
+        ArrayList<RptMojodiAnbarModel> mojodiAnbarakModels = mojodiAnbarDAO.getAllOrderByCount(sortByHavalehFaktor);
         mPresenter.onGetMojodiAnbarOrderByCount(mojodiAnbarakModels , viewAsTable);
     }
 

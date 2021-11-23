@@ -27,7 +27,7 @@ public interface APIServiceRxjava {
 
 
     /**************************************************************************************M*****************************************************************************/
-    @GET("Api/ApiTablet/Get_MandehMojody")
+    @GET("Api/ApiTablet/Get_MandehMojody_Online")
     Observable<Response< GetMandehMojodyMashinResponse>>getMandehMojodyMashin(@Query("ccAnbarak") String ccAnbarak
             , @Query("ccForoshandeh") String ccForoshandeh
             , @Query("ccMamorPakhsh") String ccMamorPakhsh
@@ -433,8 +433,8 @@ public interface APIServiceRxjava {
     @GET("Api/ApiTablet/GetMojodyAnbar")
     Observable<Response<GetMojodyAnbarResult>>getMojodyAnbar(@Query("ccAfrad") String ccAfrad,@Query("ccMarkazSazmanForoshSakhtarForosh") String ccMarkazSazmanForoshSakhtarForosh);
 
-    @GET("Api/ApiTablet/Get_MandehMojody")
-    Observable<Response<GetMandehMojodyMashinResult>>getMandehMojodyMashin(@Query("ccAnbarak") String ccAnbarak, @Query("ccForoshandeh") String ccForoshandeh, @Query("ccMamorPakhsh") String ccMamorPakhsh);
+//    @GET("Api/ApiTablet/GGetMandehMojodyMashinet_MandehMojody")
+//    Observable<Response<Result>>getMandehMojodyMashin(@Query("ccAnbarak") String ccAnbarak, @Query("ccForoshandeh") String ccForoshandeh, @Query("ccMamorPakhsh") String ccMamorPakhsh);
 
     @GET("Api/ApiTablet/GetAllMoshtaryChidman")
     Observable<Response<GetAllMoshtaryChidmanResult>>getAllMoshtaryChidman(@Query("ccMasirs") String ccMasirs);

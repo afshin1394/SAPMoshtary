@@ -121,6 +121,16 @@
             fab:fab_colorPressed="@color/colorFabSortClick"/>
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabSortHavalehFaktor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_invoice_show"
+            fab:fab_colorNormal="@color/colorFabList"
+            fab:fab_colorPressed="@color/colorFabListClick"
+            fab:fab_label="@string/sortByFaktor"
+            fab:fab_size="normal" />
+
+        <com.github.clans.fab.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/fabChangeView"

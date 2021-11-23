@@ -127,9 +127,17 @@ public class CalculateHajmiDiscountTaminKonandeh extends DiscountCalculation
                             {
                                 if (kalaTaminKonandeh.getFiled1() != null && kalaTaminKonandeh.getFiled1().trim().equals(String.valueOf(ccTaminKonandehMohasebeh)))
                                 {
-                                    long mablaghTakhfifSatr = calculateMablaghTakhfifSatr(Integer.valueOf(kalaTaminKonandeh.getFiled3()), mablaghVahed, takhfifHajmiSatrModel.getDarsadTakhfif());
-                                    sumMablaghTalkhfifSatr += Math.round(mablaghTakhfifSatr);
-                                    allMablaghTakhfifSatr += "," + Math.round(mablaghTakhfifSatr);
+                                    //long mablaghTakhfifSatr = calculateMablaghTakhfifSatr(Integer.valueOf(kalaTaminKonandeh.getFiled3()), mablaghVahed, takhfifHajmiSatrModel.getDarsadTakhfif());
+                                    Log.d("takhfifTaminKonandeh", "ccDarkhastfaktorSatr : " + Integer.valueOf(kalaTaminKonandeh.getFiled2()));
+                                    Log.d("takhfifTaminKonandeh", "tedad : " + Integer.valueOf(kalaTaminKonandeh.getFiled3()));
+                                    Log.d("takhfifTaminKonandeh", "Mablagh : " + Integer.valueOf(kalaTaminKonandeh.getFiled4()));
+                                    Log.d("takhfifTaminKonandeh", "Darsad : " + takhfifHajmiSatrModel.getDarsadTakhfif());
+
+                                    long mablaghTakhfifSatr = calculateMablaghTakhfifSatr(Integer.valueOf(kalaTaminKonandeh.getFiled3()), Integer.valueOf(kalaTaminKonandeh.getFiled4()), takhfifHajmiSatrModel.getDarsadTakhfif());
+                                    Log.d("takhfifTaminKonandeh", "mablaghTakhfifSatr : " + mablaghTakhfifSatr);
+
+                                    //sumMablaghTalkhfifSatr += Math.round(mablaghTakhfifSatr);
+                                    //allMablaghTakhfifSatr += "," + Math.round(mablaghTakhfifSatr);
                                     insertFaktorSatrTakhfif(context, Long.valueOf(kalaTaminKonandeh.getFiled2()), codeTakhfif, takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),
                                             takhfifHajmiTitrSatrModel.getSharhTakhfif(), takhfifHajmiSatrModel.getDarsadTakhfif(), mablaghTakhfifSatr,
                                             takhfifHajmiTitrSatrModel.getForJayezeh(), takhfifHajmiTitrSatrModel.getOlaviat());

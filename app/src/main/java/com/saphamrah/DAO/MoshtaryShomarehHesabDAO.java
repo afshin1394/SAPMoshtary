@@ -5,19 +5,39 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
+import com.saphamrah.Model.BankModel;
 import com.saphamrah.Model.MoshtaryShomarehHesabModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvMoshtaryShomarehHesabResult;
+import com.saphamrah.protos.BankGrpc;
+import com.saphamrah.protos.BankReply;
+import com.saphamrah.protos.BankReplyList;
+import com.saphamrah.protos.BankRequest;
+import com.saphamrah.protos.CustomerAccountNumberGrpc;
+import com.saphamrah.protos.CustomerAccountNumberReply;
+import com.saphamrah.protos.CustomerAccountNumberReplyList;
+import com.saphamrah.protos.CustomerAccountNumberRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,7 +84,94 @@ public class MoshtaryShomarehHesabDAO
             MoshtaryShomarehHesabModel.COLUMN_SahebanHesab()
         };
     }
+    public void fetchAllvMoshtaryShomarehHesabGrpc(final Context context, final String activityNameForLog, final String ccMoshtarys, final RetrofitResponse retrofitResponse)
+    {
+        try {
 
+
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            serverIpModel.setPort("5000");
+
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+            {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
+            }
+            else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                CustomerAccountNumberGrpc.CustomerAccountNumberBlockingStub customerAccountNumberBlockingStub = CustomerAccountNumberGrpc.newBlockingStub(managedChannel);
+                CustomerAccountNumberRequest customerAccountNumberRequest = CustomerAccountNumberRequest.newBuilder().build();
+                Callable<CustomerAccountNumberReplyList> getCustomerAccountNumberCallable  = () -> customerAccountNumberBlockingStub.getCustomerAccountNumber(customerAccountNumberRequest);
+                RxAsync.makeObservable(getCustomerAccountNumberCallable)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(customerAccountNumberReplyList -> {
+                            ArrayList<MoshtaryShomarehHesabModel> moshtaryShomarehHesabModels = new ArrayList<>();
+                            for (CustomerAccountNumberReply customerAccountNumberReply : customerAccountNumberReplyList.getCustomerAccountNumbersList()) {
+                                MoshtaryShomarehHesabModel moshtaryShomarehHesabModel = new MoshtaryShomarehHesabModel();
+
+                                moshtaryShomarehHesabModel.setCcMoshtaryShomarehHesab(customerAccountNumberReply.getCustomerAccountNumberID());
+                                moshtaryShomarehHesabModel.setCcMoshtary(customerAccountNumberReply.getCustomerID());
+                                moshtaryShomarehHesabModel.setCodeMoshtary(customerAccountNumberReply.getCustomerCode());
+                                moshtaryShomarehHesabModel.setNameMoshtary(customerAccountNumberReply.getCustomerName());
+                                moshtaryShomarehHesabModel.setCcBank(customerAccountNumberReply.getBankID());
+                                moshtaryShomarehHesabModel.setNameBank(customerAccountNumberReply.getBankName());
+                                moshtaryShomarehHesabModel.setCcNoeHesab(customerAccountNumberReply.getAccountTypeCode());
+                                moshtaryShomarehHesabModel.setNameNoeHesab(customerAccountNumberReply.getAccountTypeName());
+                                moshtaryShomarehHesabModel.setCcShomarehHesab(customerAccountNumberReply.getAccountNumberID());
+                                moshtaryShomarehHesabModel.setShomarehHesab(customerAccountNumberReply.getAccountNumber());
+                                moshtaryShomarehHesabModel.setNameShobeh(customerAccountNumberReply.getBranchName());
+                                moshtaryShomarehHesabModel.setCodeShobeh(customerAccountNumberReply.getBranchCode());
+                                moshtaryShomarehHesabModel.setShartBardashtAzHesab(customerAccountNumberReply.getStartwithdrawFromBankAccount());
+                                moshtaryShomarehHesabModel.setSahebanHesab(customerAccountNumberReply.getAccountOwners());
+
+
+
+                                moshtaryShomarehHesabModels.add(moshtaryShomarehHesabModel);
+                            }
+
+                            return moshtaryShomarehHesabModels;
+
+                        }).subscribe(new Observer<ArrayList<MoshtaryShomarehHesabModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ArrayList<MoshtaryShomarehHesabModel> moshtaryShomarehHesabModels) {
+                        retrofitResponse.onSuccess(moshtaryShomarehHesabModels);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (!compositeDisposable.isDisposed()) {
+                            compositeDisposable.dispose();
+                        }
+                        compositeDisposable.clear();
+                    }
+                });
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
+        }
+
+
+
+
+    }
     public void fetchAllvMoshtaryShomarehHesab(final Context context, final String activityNameForLog, final String ccMoshtarys, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);

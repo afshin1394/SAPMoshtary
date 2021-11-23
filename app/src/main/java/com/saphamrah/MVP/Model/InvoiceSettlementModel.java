@@ -858,7 +858,8 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                     if (!dariaftPardakhtPPCModel.getTarikhSanadShamsi().trim().equals("")) {
                         tarikhSarResidGregorian = dateUtils.persianToGregorianWhithTime(dariaftPardakhtPPCModel.getTarikhSanadShamsi());
                     } else {
-                        tarikhSarResidGregorian = dateUtils.persianToGregorianWhithTime(new Date().toString());
+                        //tarikhSarResidGregorian = dateUtils.persianToGregorianWhithTime(new Date().toString());
+                        tarikhSarResidGregorian = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
                     }
                 }
             } catch (Exception exception) {

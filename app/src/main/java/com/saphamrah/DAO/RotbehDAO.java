@@ -5,19 +5,36 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
+import com.saphamrah.MVP.Model.GetProgramModel;
 import com.saphamrah.Model.RotbehModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllRotbehResult;
+import com.saphamrah.protos.RankGrpc;
+import com.saphamrah.protos.RankReply;
+import com.saphamrah.protos.RankReplyList;
+import com.saphamrah.protos.RankRequest;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,6 +72,82 @@ public class RotbehDAO
     }
 
 
+    public void fetchRotbehGrpc(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
+    {
+        try {
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+        serverIpModel.setPort("5000");
+
+        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+        {
+            String message = "can't find server";
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RotbehModel.class.getSimpleName(), activityNameForLog, "fetchRotbehGrpc", "");
+            retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR() , message);
+        }
+        else {
+
+            CompositeDisposable compositeDisposable = new CompositeDisposable();
+            ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+            RankGrpc.RankBlockingStub rankBlockingStub = RankGrpc.newBlockingStub(managedChannel);
+            RankRequest rankRequest = RankRequest.newBuilder().build();
+
+            Callable<RankReplyList> rankReplyListCallable  = () -> rankBlockingStub.getRank(rankRequest);
+            RxAsync.makeObservable(rankReplyListCallable)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .map(rankReplyList -> {
+                        ArrayList<RotbehModel> rotbehModels = new ArrayList<>();
+                        for (RankReply rankReply : rankReplyList.getRankReplysList()) {
+                            RotbehModel rotbehModel = new RotbehModel();
+                            rotbehModel.setCcRotbeh(rankReply.getRankID());
+                            rotbehModel.setNameRotbeh(rankReply.getRankName());
+                            rotbehModel.setViewInPPCForMoshtaryJadid(rankReply.getViewInPPCForNewCar());
+                            rotbehModels.add(rotbehModel);
+                        }
+
+                        return rotbehModels;
+
+                    }).subscribe(new Observer<ArrayList<RotbehModel>>() {
+                @Override
+                public void onSubscribe(@NonNull Disposable d) {
+                    compositeDisposable.add(d);
+                }
+
+                @Override
+                public void onNext(@NonNull ArrayList<RotbehModel> rotbehModels) {
+                    retrofitResponse.onSuccess(rotbehModels);
+                }
+
+                @Override
+                public void onError(@NonNull Throwable e) {
+                    retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                }
+
+                @Override
+                public void onComplete() {
+                    if (!compositeDisposable.isDisposed()) {
+                        compositeDisposable.dispose();
+                    }
+                    compositeDisposable.clear();
+                }
+            });
+
+          }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), RotbehModel.class.getSimpleName(), activityNameForLog, "fetchRotbehGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
+        }
+
+
+
+
+    }
+
+
     public void fetchRotbeh(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
@@ -75,6 +168,8 @@ public class RotbehDAO
                 {
                     try
                     {
+                        GetProgramModel.responseSize += response.raw().toString().getBytes(StandardCharsets.UTF_8).length;
+
                         if (response.raw().body() != null)
                         {
                             long contentLength = response.raw().body().contentLength();

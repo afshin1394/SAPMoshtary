@@ -17,9 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.UIModel.KalaMojodiZaribModel;
+import com.saphamrah.Utils.Constants;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -33,6 +37,8 @@ public class RequestGoodsListAdapter extends RecyclerSwipeAdapter<RequestGoodsLi
     private boolean showSwipe;
     private Context context;
     private static int lastSelectedItem; // todo Add Static
+    private SelectFaktorShared shared = new SelectFaktorShared(BaseApplication.getContext());
+    private  int ccNoeMoshtary = 0;
 
     public RequestGoodsListAdapter(Context context , ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels , boolean showSwipe, OnItemClickListener listener)
     {
@@ -48,6 +54,7 @@ public class RequestGoodsListAdapter extends RecyclerSwipeAdapter<RequestGoodsLi
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.request_goods_list_customlist, parent, false);
+        ccNoeMoshtary = shared.getInt(shared.getCcGorohNoeMoshtary(), -1);
         return new MyViewHolder(itemView);
     }
 
@@ -58,7 +65,6 @@ public class RequestGoodsListAdapter extends RecyclerSwipeAdapter<RequestGoodsLi
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right , null);
         String mablaghForosh = formatter.format((int)kalaMojodiZaribModels.get(position).getGheymatForosh());
-        holder.lblCodeNameKala.setText(String.format("%1$s - %2$s", kalaMojodiZaribModels.get(position).getCodeKala(), kalaMojodiZaribModels.get(position).getNameKala()));
         holder.lblMablaghForosh.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.mablaghForoshUnitRial), mablaghForosh));
         if (kalaMojodiZaribModels.get(position).getShomarehBach() !=null) {
             if (!kalaMojodiZaribModels.get(position).getShomarehBach().equals("")){
@@ -74,8 +80,14 @@ public class RequestGoodsListAdapter extends RecyclerSwipeAdapter<RequestGoodsLi
         holder.lblCartonCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.carton), String.valueOf(counts[0])));
         holder.lblBasteCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.basteh), String.valueOf(counts[1])));
         holder.lblAdadCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.adad), String.valueOf(counts[2])));
+//todo ccNoeMoshtary From Parameter
+        if (ccNoeMoshtary == 350){
+            holder.lblCodeNameKala.setText(String.format("%1$s - %2$s - %3$s", kalaMojodiZaribModels.get(position).getCodeKala(), kalaMojodiZaribModels.get(position).getNameKala() , kalaMojodiZaribModels.get(position).getBarCode()));
 
+        } else {
+            holder.lblCodeNameKala.setText(String.format("%1$s - %2$s", kalaMojodiZaribModels.get(position).getCodeKala(), kalaMojodiZaribModels.get(position).getNameKala()));
 
+        }
 
         //set kala status asasi
         if (kalaMojodiZaribModels.get(position).getKalaAsasi())

@@ -31,12 +31,12 @@ public interface RptMojodiAnbrakMVP
         void onConfigurationChanged(RptMojodiAnbrakMVP.RequiredViewOps view);
         //Todo
         void getGallery();
-        void getMojodiAnbar();
-        void updateMojodiAnbar();
+        void getMojodiAnbar(int sortHavalehFaktor,boolean viewAsTable);
+        void updateMojodiAnbar(int sortHavalehFaktor,boolean viewAsTable);
         void checkSearchNameKala(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels , String searchWord , boolean viewAsTable);
         void sortByCodeKala(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels , boolean viewAsTable);
-        void sortByNameKala(boolean viewAsTable);
-        void sortByCount(boolean viewAsTable);
+        void sortByNameKala(boolean viewAsTable,int sortByHavalehFaktor);
+        void sortByCount(boolean viewAsTable,int sortByHavalehFaktor);
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
     }
@@ -46,7 +46,7 @@ public interface RptMojodiAnbrakMVP
     {
         Context getAppContext();
         void onGetGallery(ArrayList<KalaPhotoModel> kalaPhotoModels);
-        void onGetMojodiAnbar(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels);
+        void onGetMojodiAnbar(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels,boolean viewAsTable);
         void onGetMojodiAnbarOrderByNameKala(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels  , boolean viewAsTable);
         void onGetMojodiAnbarOrderByCount(ArrayList<RptMojodiAnbarModel> mojodiAnbarModels  , boolean viewAsTable);
         void onFailedGetMojodiAnbar(int resId);
@@ -57,10 +57,10 @@ public interface RptMojodiAnbrakMVP
     interface ModelOps
     {
         void getGallery();
-        void getMojodiAnbar();
-        void updateMojodiAnbar();
-        void getMojodiAnbarOrderByNameKala(boolean viewAsTable);
-        void getMojodiAnbarOrderByCount(boolean viewAsTable);
+        void getMojodiAnbar(int sortHavalehFaktor,boolean viewAsTable);
+        void updateMojodiAnbar(int sortHavalehFaktor ,boolean viewAsTable);
+        void getMojodiAnbarOrderByNameKala(boolean viewAsTable,int sortByHavalehFaktor);
+        void getMojodiAnbarOrderByCount(boolean viewAsTable,int sortByHavalehFaktor);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
     }

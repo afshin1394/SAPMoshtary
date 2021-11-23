@@ -342,6 +342,7 @@ private FloatingActionButton fabShowMoshtaryGharardad;
 
             Intent intent = new Intent(DarkhastKalaActivity.this, NazaratAndPishnahadActivity.class);
             intent.putExtra("ccMoshtary", ccMoshtary);
+            intent.putExtra("from", 1);
             startActivity(intent);
             overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
 
@@ -807,7 +808,7 @@ private FloatingActionButton fabShowMoshtaryGharardad;
                         selectedPosition.clear();
                         //adapterRequestKala.clearSelecedItem();
                         for (int i = 0; i < kalaMojodiZaribModels.size(); i++) {
-                            String nameKala = new PubFunc().new LanguageUtil().convertFaNumberToEN(kalaMojodiZaribModels.get(i).getNameKala());
+                            String nameKala = new PubFunc().new LanguageUtil().convertFaNumberToEN(kalaMojodiZaribModels.get(i).getNameKala() + kalaMojodiZaribModels.get(i).getBarCode());
                             if (nameKala.contains(searchWord)) {
                                 arrayListKalaModel.add(kalaMojodiZaribModels.get(i));
                                 adapterRequestKalaListGrid.notifyDataSetChanged();
