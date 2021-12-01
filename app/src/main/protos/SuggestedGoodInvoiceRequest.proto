@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.SuggestedGoodInvoiceRequest.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "SuggestedGoodInvoiceRequestProto";
+option objc_class_prefix = "HLW";
+
+package Sales;
+
+service SuggestedGoodInvoiceRequest{
+	rpc GetSuggestedGoodInvoiceRequest(SuggestedGoodInvoiceRequestRequest) returns(SuggestedGoodInvoiceRequestReplyList);
+}
+
+message SuggestedGoodInvoiceRequestRequest{
+  int32 SellerID = 1;
+  string CustomersID = 2;
+
+}
+
+message SuggestedGoodInvoiceRequestReply{
+       int32  SuggestedGoodInvoiceReqCustomerID = 1;
+       int32  CustomerID = 2;
+       int32  GoodCodeID = 3;
+       string MinInvoiceDate = 4;
+       int32  Quantity = 5;
+
+
+}
+
+message SuggestedGoodInvoiceRequestReplyList{
+	repeated SuggestedGoodInvoiceRequestReply SuggestedGoodInvoiceRequests = 1;
+}

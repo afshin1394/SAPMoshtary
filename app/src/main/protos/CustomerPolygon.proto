@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Tablet.CustomerPolygon.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CustomerPolygonProto";
+option objc_class_prefix = "HLW";
+
+
+package Tablet;
+
+service CustomerPolygon {
+
+  rpc GetCustomerPolygon (CustomerPolygonRequest) returns (CustomerPolygonReplyList);
+}
+
+
+message CustomerPolygonRequest {
+ string RoutesID = 1;
+ string CustomersID = 2;
+}
+
+
+message CustomerPolygonReply {
+
+  int32 SellPolygonID = 1;
+  int32 CustomerID= 2;
+  int32 CanVisitOutOfRange = 3;
+  int32 RouteID = 4;
+  int32 VisitTour = 5;
+
+}
+
+
+
+
+message CustomerPolygonReplyList{
+	repeated CustomerPolygonReply CustomerPolygons = 1;
+}
