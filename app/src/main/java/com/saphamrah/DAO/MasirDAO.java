@@ -253,7 +253,7 @@ public class MasirDAO
         else
         {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-Call<GetAllMasirResult> call = apiServiceGet.getAllMasirFaalForoshandeh();
+            Call<GetAllMasirResult> call = apiServiceGet.getAllMasirFaalForoshandeh();
             call.enqueue(new Callback<GetAllMasirResult>() {
                 @Override
                 public void onResponse(Call<GetAllMasirResult> call, Response<GetAllMasirResult> response)

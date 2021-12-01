@@ -59,17 +59,16 @@ public class AddCustomerApplyPresenter implements AddCustomerApplyMVP.PresenterO
     private boolean checkBaseInfo(AddCustomerInfoModel addCustomerInfoModel)
     {
         boolean validData = true;
-        if (addCustomerInfoModel != null)
-        {
-            if (addCustomerInfoModel.getFirstName()== null || addCustomerInfoModel.getFirstName().trim().equals(""))
-            {
+        if (addCustomerInfoModel != null) {
+            if (addCustomerInfoModel.getFirstName() == null || addCustomerInfoModel.getFirstName().trim().equals("")) {
                 validData = false;
                 mView.get().onErrorFirstName();
             }
-            if (addCustomerInfoModel.getLastName() == null || addCustomerInfoModel.getLastName().trim().equals(""))
-            {
-                validData = false;
-                mView.get().onErrorLastName();
+            if (addCustomerInfoModel.getNoeShakhsiatId() != null && addCustomerInfoModel.getNoeShakhsiatId().trim().equals("1")) {
+                if (addCustomerInfoModel.getLastName() == null || addCustomerInfoModel.getLastName().trim().equals("")) {
+                    validData = false;
+                    mView.get().onErrorLastName();
+                }
             }
             if (addCustomerInfoModel.getTabloName() == null || addCustomerInfoModel.getTabloName().trim().equals(""))
             {

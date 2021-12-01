@@ -17,7 +17,7 @@
         android:padding="5dp"/>
     <TextView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="2"
         android:id="@+id/lblCustomerCode"
         android:textColor="@color/colorTextPrimary"
@@ -28,17 +28,18 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:layout_weight="3"
         android:id="@+id/lblCustomerName"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/FontSize14"
-        android:gravity="center"
+        android:gravity="right"
+        android:lines="2"
         android:background="@drawable/table_content_cell_bg"
         android:padding="5dp"/>
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:layout_weight="1.5"
         android:id="@+id/lblTarikhFaktor"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/FontSize14"
@@ -78,7 +79,7 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:layout_weight="1.5"
         android:id="@+id/lblTarikhErsal"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/FontSize14"
@@ -87,12 +88,13 @@
         android:padding="5dp"/>
     <TextView
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="2"
         android:id="@+id/lblMamorTozie"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/FontSize14"
         android:gravity="center"
+        android:lines="2"
         android:background="@drawable/table_content_cell_bg"
         android:padding="5dp"/>
 

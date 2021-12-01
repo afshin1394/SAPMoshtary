@@ -107,17 +107,18 @@ public class AddCustomerBaseInfoPresenter implements AddCustomerBaseInfoMVP.Pres
     public void checkCustomerBaseInfo(AddCustomerInfoModel addCustomerInfoModel, boolean requireCodeMeli, boolean requireMobile, boolean requireMasahateMaghaze)
     {
         boolean validData = true;
-        if (addCustomerInfoModel != null)
-        {
-            if (addCustomerInfoModel.getFirstName()== null || addCustomerInfoModel.getFirstName().trim().equals(""))
-            {
+        if (addCustomerInfoModel != null) {
+            if (addCustomerInfoModel.getFirstName() == null || addCustomerInfoModel.getFirstName().trim().equals("")) {
                 validData = false;
                 mView.get().onErrorFirstName();
             }
-            if (addCustomerInfoModel.getLastName() == null || addCustomerInfoModel.getLastName().trim().equals(""))
+            if (addCustomerInfoModel.getNoeShakhsiatId() != null && addCustomerInfoModel.getNoeShakhsiatId().trim().equals("1")) // haghighi = 1
             {
-                validData = false;
-                mView.get().onErrorLastName();
+                if (addCustomerInfoModel.getLastName() == null || addCustomerInfoModel.getLastName().trim().equals(""))
+                {
+                    validData = false;
+                    mView.get().onErrorLastName();
+                }
             }
             if (addCustomerInfoModel.getTabloName() == null || addCustomerInfoModel.getTabloName().trim().equals(""))
             {

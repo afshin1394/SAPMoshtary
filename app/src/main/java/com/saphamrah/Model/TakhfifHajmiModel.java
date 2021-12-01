@@ -294,13 +294,13 @@ public class TakhfifHajmiModel
     }
 
 
-    private int SahmHesab;
-    public void setSahmHesab(int SahmHesab){
-        this.SahmHesab = SahmHesab;
-    }
-    public int getSahmHesab(){
-        return this.SahmHesab;
-    }
+//    private int SahmHesab;
+//    public void setSahmHesab(int SahmHesab){
+//        this.SahmHesab = SahmHesab;
+//    }
+//    public int getSahmHesab(){
+//        return this.SahmHesab;
+//    }
 
 
     private int Darajeh;
@@ -447,31 +447,31 @@ public class TakhfifHajmiModel
     {
         return "TakhfifHajmiModel{" +
                 "Radif=" + Radif +
-                ", CodeNoeTakhfif=" + CodeNoeTakhfif +
+                //", CodeNoeTakhfif=" + CodeNoeTakhfif +
                 ", ccTakhfifHajmi=" + ccTakhfifHajmi +
                 ", CodeNoe=" + CodeNoe +
                 ", SharhTakhfif='" + SharhTakhfif + '\'' +
-                ", FromDate='" + FromDate + '\'' +
-                ", FromDateWithoutSlash='" + FromDateWithoutSlash + '\'' +
-                ", EndDate='" + EndDate + '\'' +
-                ", EndDateWithoutSlash='" + EndDateWithoutSlash + '\'' +
+                //", FromDate='" + FromDate + '\'' +
+                //", FromDateWithoutSlash='" + FromDateWithoutSlash + '\'' +
+                //", EndDate='" + EndDate + '\'' +
+                //", EndDateWithoutSlash='" + EndDateWithoutSlash + '\'' +
                 ", NoeTedadRial=" + NoeTedadRial +
-                ", txtNoeTedadRial='" + txtNoeTedadRial + '\'' +
+                //", txtNoeTedadRial='" + txtNoeTedadRial + '\'' +
                 ", NameNoeFieldMoshtary=" + NameNoeFieldMoshtary +
-                ", txtNameNoeFieldMoshtary='" + txtNameNoeFieldMoshtary + '\'' +
+                //", txtNameNoeFieldMoshtary='" + txtNameNoeFieldMoshtary + '\'' +
                 ", ccNoeFieldMoshtary=" + ccNoeFieldMoshtary +
-                ", ccMoshtary=" + ccMoshtary +
-                ", NameMoshtary='" + NameMoshtary + '\'' +
-                ", ccGoroh=" + ccGoroh +
-                ", NameGoroh='" + NameGoroh + '\'' +
-                ", NameGorohText='" + NameGorohText + '\'' +
+                //", ccMoshtary=" + ccMoshtary +
+                //", NameMoshtary='" + NameMoshtary + '\'' +
+                //", ccGoroh=" + ccGoroh +
+                //", NameGoroh='" + NameGoroh + '\'' +
+                //", NameGorohText='" + NameGorohText + '\'' +
                 ", CodeNoeHaml=" + CodeNoeHaml +
-                ", BeHesab=" + BeHesab +
-                ", NameBeHesab='" + NameBeHesab + '\'' +
-                ", SahmHesab=" + SahmHesab +
+                //", BeHesab=" + BeHesab +
+                //", NameBeHesab='" + NameBeHesab + '\'' +
+                //", SahmHesab=" + SahmHesab +
                 ", Darajeh=" + Darajeh +
                 ", ForJayezeh=" + ForJayezeh +
-                ", ForReport=" + ForReport +
+                //", ForReport=" + ForReport +
                 ", NoeVosol=" + NoeVosol +
                 ", txtNoeVosol='" + txtNoeVosol + '\'' +
                 ", Id=" + Id +

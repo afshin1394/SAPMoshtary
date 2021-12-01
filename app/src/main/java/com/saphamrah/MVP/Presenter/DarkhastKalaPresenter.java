@@ -156,9 +156,10 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
                 mView.get().onErrorAddNewRequestedKala(R.string.errorBiggerThanZero);
                 validData = false;
             }
-            else if ( (kalaMojodiZaribModel.getZaribForosh() != 0) &&
+            else if ( ((kalaMojodiZaribModel.getZaribForosh() != 0) &&
                     (requestCountSum % kalaMojodiZaribModel.getZaribForosh() != 0 ) && (requestCountSum % kalaMojodiZaribModel.getTedadDarKarton() != 0) &&
-                    (requestCountSum - kalaMojodiZaribModel.getTedadMojodyGhabelForosh() != 0 ) && (ccGorohNoeSenf != ccNoeSenfMoshtary_NemoonehKala))
+                   // (requestCountSum - kalaMojodiZaribModel.getTedadMojodyGhabelForosh() != 0 ) && (ccGorohNoeSenf != ccNoeSenfMoshtary_NemoonehKala))
+                    (requestCountSum - kalaMojodiZaribModel.getTedadMojodyGhabelForosh() != 0 )) && (ccGorohNoeSenf != ccNoeSenfMoshtary_NemoonehKala))
             {
                 mView.get().onErrorAddNewRequestedKala(R.string.errorZaribForosh);
                 validData = false;

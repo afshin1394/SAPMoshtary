@@ -1251,6 +1251,9 @@ public class DarkhastFaktorSatrDAO
                     query += " FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
                     + " (SELECT DISTINCT ccKalaCode, ccBrand, TedadDarKarton, TedadDarBasteh FROM Kala)B ON A.ccKalaCode= B.ccKalaCode "
                     + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " AND ccTaminKonandeh = " +  ccTaminKonandeh + " GROUP BY B.ccBrand";
+
+            Log.d("takhfifTaminKonandeh", "getBrandByccTaminKonandehMohasebeh query : " + query.toString());
+
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
@@ -1278,7 +1281,7 @@ public class DarkhastFaktorSatrDAO
         ArrayList<DataTableModel> kalaBrandAndMablagh = new ArrayList<>();
         try
         {
-            String query = "select dfs.ccTaminKonandeh, dfs.ccDarkhastFaktorSatr, dfs.Tedad3,dfs.MablaghForosh from  DarkhastFaktorSatr dfs \n" +
+            String query = "select dfs.ccTaminKonandeh, dfs.ccDarkhastFaktorSatr, dfs.Tedad3,CAST(dfs.MablaghForosh AS int) MablaghForosh from  DarkhastFaktorSatr dfs \n" +
                     "  where dfs.ccDarkhastFaktor = " + ccDarkhastFaktor;
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
