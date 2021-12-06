@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.AcountNumberCenter.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "AcountNumberCenterProto";
+option objc_class_prefix = "HLW";
+
+package Global;
+
+service AcountNumberCenter{
+	rpc GetAcountNumberCenter(AcountNumberCenterRequest) returns(AcountNumberCenterReplyList);
+}
+
+message AcountNumberCenterRequest{
+string CenterID = 1;
+}
+
+message AcountNumberCenterReply{
+         int32 CenterID = 1;
+         int32 AcountNumberID = 2;
+         string AcountNumber = 3;
+         int32 BankID = 4;
+         string BankName = 5;
+         string BranchCode = 6;
+         string BranchName = 7;
+         int32 AcountTypeID = 8;
+         string AcountTypeName = 9;
+         string IBAN = 10;
+         
+}
+
+message AcountNumberCenterReplyList{
+	repeated AcountNumberCenterReply AcountNumberCenters = 1;
+}
