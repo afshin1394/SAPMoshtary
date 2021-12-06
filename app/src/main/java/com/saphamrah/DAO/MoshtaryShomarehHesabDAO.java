@@ -105,7 +105,7 @@ public class MoshtaryShomarehHesabDAO
                 CompositeDisposable compositeDisposable = new CompositeDisposable();
                 ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
                 CustomerAccountNumberGrpc.CustomerAccountNumberBlockingStub customerAccountNumberBlockingStub = CustomerAccountNumberGrpc.newBlockingStub(managedChannel);
-                CustomerAccountNumberRequest customerAccountNumberRequest = CustomerAccountNumberRequest.newBuilder().build();
+                CustomerAccountNumberRequest customerAccountNumberRequest = CustomerAccountNumberRequest.newBuilder().setCustomersID(ccMoshtarys).build();
                 Callable<CustomerAccountNumberReplyList> getCustomerAccountNumberCallable  = () -> customerAccountNumberBlockingStub.getCustomerAccountNumber(customerAccountNumberRequest);
                 RxAsync.makeObservable(getCustomerAccountNumberCallable)
                         .subscribeOn(Schedulers.io())

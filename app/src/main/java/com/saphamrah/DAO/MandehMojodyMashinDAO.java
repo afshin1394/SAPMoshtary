@@ -110,7 +110,7 @@ public class MandehMojodyMashinDAO
                 CompositeDisposable compositeDisposable = new CompositeDisposable();
                 ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
                 RemainingInventoryGrpc.RemainingInventoryBlockingStub remainingInventoryBlockingStub = RemainingInventoryGrpc.newBlockingStub(managedChannel);
-                RemainingInventoryRequest remainingInventoryRequest = RemainingInventoryRequest.newBuilder().build();
+                RemainingInventoryRequest remainingInventoryRequest = RemainingInventoryRequest.newBuilder().setBinID(ccAnbarak).setSellerID(ccForoshandeh).setDistributerID(ccMamorPakhsh).build();
 
                 Callable<RemainingInventoryReplyList> getRemainingInventoryCallable  = () -> remainingInventoryBlockingStub.getRemainingInventory(remainingInventoryRequest);
                 RxAsync.makeObservable(getRemainingInventoryCallable)

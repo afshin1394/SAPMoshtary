@@ -100,7 +100,7 @@ public class PosShomarehHesabDAO
                 CompositeDisposable compositeDisposable = new CompositeDisposable();
                 ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
                 PosAccountNumberGrpc.PosAccountNumberBlockingStub posAccountNumberBlockingStub = PosAccountNumberGrpc.newBlockingStub(managedChannel);
-                PosAccountNumberRequest posAccountNumberRequest = PosAccountNumberRequest.newBuilder().build();
+                PosAccountNumberRequest posAccountNumberRequest = PosAccountNumberRequest.newBuilder().setPosAccountNumberID(Integer.valueOf(ccPosShomarehHesab)).setStoreCenterID(Integer.valueOf(ccMarkazAnbar)).build();
                 Callable<PosAccountNumberReplyList> getPosAccountNumberCallable  = () -> posAccountNumberBlockingStub.getPosAccountNumber(posAccountNumberRequest);
                 RxAsync.makeObservable(getPosAccountNumberCallable)
                         .subscribeOn(Schedulers.io())

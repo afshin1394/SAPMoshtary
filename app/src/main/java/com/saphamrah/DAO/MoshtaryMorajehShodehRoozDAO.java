@@ -99,7 +99,7 @@ public class MoshtaryMorajehShodehRoozDAO
                 CompositeDisposable compositeDisposable = new CompositeDisposable();
                 ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
                 TodayReferredCustomerGrpc.TodayReferredCustomerBlockingStub todayReferredCustomerBlockingStub = TodayReferredCustomerGrpc.newBlockingStub(managedChannel);
-                TodayReferredCustomerRequest todayReferredCustomerRequest = TodayReferredCustomerRequest.newBuilder().build();
+                TodayReferredCustomerRequest todayReferredCustomerRequest = TodayReferredCustomerRequest.newBuilder().setSellerID(ccForoshandeh).setDirectionID(ccMasir).build();
                 Callable<TodayReferredCustomerReplyList> getTodayReferredCustomerCallable  = () -> todayReferredCustomerBlockingStub.getTodayReferredCustomer(todayReferredCustomerRequest);
                 RxAsync.makeObservable(getTodayReferredCustomerCallable)
                         .subscribeOn(Schedulers.io())

@@ -100,7 +100,7 @@ public class DarkhastFaktorKalaPishnahadiDAO {
                 CompositeDisposable compositeDisposable = new CompositeDisposable();
                 ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
                 SuggestedGoodInvoiceRequestGrpc.SuggestedGoodInvoiceRequestBlockingStub suggestedGoodInvoiceRequestBlockingStub = SuggestedGoodInvoiceRequestGrpc.newBlockingStub(managedChannel);
-                SuggestedGoodInvoiceRequestRequest suggestedGoodInvoiceRequestRequest = SuggestedGoodInvoiceRequestRequest.newBuilder().build();
+                SuggestedGoodInvoiceRequestRequest suggestedGoodInvoiceRequestRequest = SuggestedGoodInvoiceRequestRequest.newBuilder().setSellerID(Integer.valueOf(ccForoshandeh)).setCustomersID(ccmoshtarys).build();
                 Callable<SuggestedGoodInvoiceRequestReplyList> getSuggestedGoodInvoiceRequestCallable  = () -> suggestedGoodInvoiceRequestBlockingStub.getSuggestedGoodInvoiceRequest(suggestedGoodInvoiceRequestRequest);
                 RxAsync.makeObservable(getSuggestedGoodInvoiceRequestCallable)
                         .subscribeOn(Schedulers.io())

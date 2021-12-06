@@ -96,7 +96,7 @@ public class ModatVosolMarkazDAO
                 CompositeDisposable compositeDisposable = new CompositeDisposable();
                 ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
                 CenterRecieptionDurationGrpc.CenterRecieptionDurationBlockingStub centerRecieptionDurationBlockingStub = CenterRecieptionDurationGrpc.newBlockingStub(managedChannel);
-                CenterRecieptionDurationRequest centerRecieptionDurationRequest = CenterRecieptionDurationRequest.newBuilder().build();
+                CenterRecieptionDurationRequest centerRecieptionDurationRequest = CenterRecieptionDurationRequest.newBuilder().setSellCenterID(Integer.valueOf(ccMarkazForosh)).build();
                 Callable<CenterRecieptionDurationReplyList> getCenterRecieptionDurationCallable  = () -> centerRecieptionDurationBlockingStub.getCenterRecieptionDuration(centerRecieptionDurationRequest);
                 RxAsync.makeObservable(getCenterRecieptionDurationCallable)
                         .subscribeOn(Schedulers.io())

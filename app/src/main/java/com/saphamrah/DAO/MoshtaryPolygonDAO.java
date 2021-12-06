@@ -96,7 +96,7 @@ public class MoshtaryPolygonDAO
                 CompositeDisposable compositeDisposable = new CompositeDisposable();
                 ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
                 CustomerPolygonGrpc.CustomerPolygonBlockingStub customerPolygonBlockingStub = CustomerPolygonGrpc.newBlockingStub(managedChannel);
-                CustomerPolygonRequest customerPolygonRequest = CustomerPolygonRequest.newBuilder().build();
+                CustomerPolygonRequest customerPolygonRequest = CustomerPolygonRequest.newBuilder().setRoutesID(ccMasirs).setCustomersID(ccMoshtarys).build();
                 Callable<CustomerPolygonReplyList> getCustomerPolygonCallable  = () -> customerPolygonBlockingStub.getCustomerPolygon(customerPolygonRequest);
                 RxAsync.makeObservable(getCustomerPolygonCallable)
                         .subscribeOn(Schedulers.io())

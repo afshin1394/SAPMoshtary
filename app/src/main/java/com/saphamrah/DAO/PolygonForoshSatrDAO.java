@@ -100,7 +100,7 @@ public class PolygonForoshSatrDAO
                 CompositeDisposable compositeDisposable = new CompositeDisposable();
                 ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
                 SellPolygonRowGrpc.SellPolygonRowBlockingStub sellPolygonRowBlockingStub = SellPolygonRowGrpc.newBlockingStub(managedChannel);
-                SellPolygonRowRequest sellPolygonRowRequest = SellPolygonRowRequest.newBuilder().build();
+                SellPolygonRowRequest sellPolygonRowRequest = SellPolygonRowRequest.newBuilder().setSellerID(ccForoshandeh).build();
                 Callable<SellPolygonRowReplyList> getSellPolygonRowCallable  = () -> sellPolygonRowBlockingStub.getSellPolygonRow(sellPolygonRowRequest);
                 RxAsync.makeObservable(getSellPolygonRowCallable)
                         .subscribeOn(Schedulers.io())

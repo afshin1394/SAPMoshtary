@@ -119,7 +119,7 @@ public class BargashtyDAO
                 CompositeDisposable compositeDisposable = new CompositeDisposable();
                 ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
                 ReturnedChequeGrpc.ReturnedChequeBlockingStub returnedChequeBlockingStub = ReturnedChequeGrpc.newBlockingStub(managedChannel);
-                ReturnedChequeRequest returnedChequeRequest = ReturnedChequeRequest.newBuilder().build();
+                ReturnedChequeRequest returnedChequeRequest = ReturnedChequeRequest.newBuilder().setSellerID(ccForoshandeh).build();
                 Callable<ReturnedChequeReplyList> getReturnedChequeCallable  = () -> returnedChequeBlockingStub.getReturnedCheque(returnedChequeRequest);
                 RxAsync.makeObservable(getReturnedChequeCallable)
                         .subscribeOn(Schedulers.io())

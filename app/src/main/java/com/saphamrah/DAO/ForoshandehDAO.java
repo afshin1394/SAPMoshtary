@@ -21,6 +21,7 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvForoshandehByccForoshandehResult;
+import com.saphamrah.protos.SellerBySellerIDRequest;
 import com.saphamrah.protos.SellerGrpc;
 import com.saphamrah.protos.SellerReply;
 import com.saphamrah.protos.SellerReplyList;
@@ -104,9 +105,9 @@ public class ForoshandehDAO
                 CompositeDisposable compositeDisposable = new CompositeDisposable();
                 ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
                 SellerGrpc.SellerBlockingStub sellerBlockingStub = SellerGrpc.newBlockingStub(managedChannel);
-                SellerRequest sellerRequest = SellerRequest.newBuilder().build();
+                SellerBySellerIDRequest sellerBySellerIDRequest = SellerBySellerIDRequest.newBuilder().setSellerID(ccForoshandeh).build();
 
-                Callable<SellerReplyList> replyListCallable  = () -> sellerBlockingStub.getSeller(sellerRequest);
+                Callable<SellerReplyList> replyListCallable  = () -> sellerBlockingStub.getSellerBySellerID(sellerBySellerIDRequest);
                 RxAsync.makeObservable(replyListCallable)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
