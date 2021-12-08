@@ -27,53 +27,27 @@ public class ForoshandehMamorPakhshRepository {
 
     /*******************************************************************Callable*****************************************************************/
     private Callable<Boolean> deleteAllCallable() {
-        return new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception {
-                return foroshandehMamorPakhshDAO.deleteAll();
-            }
-        };
+        return () -> foroshandehMamorPakhshDAO.deleteAll();
 
     }
     private Callable<Boolean> insertGroupCallable(ArrayList<ForoshandehMamorPakhshModel> foroshandehMamorPakhshModels) {
-        return new Callable<Boolean>() {
-            @Override
-            public Boolean call()
-            {
-                return foroshandehMamorPakhshDAO.insertGroup(foroshandehMamorPakhshModels);
-            }
-        };
+        return () -> foroshandehMamorPakhshDAO.insertGroup(foroshandehMamorPakhshModels);
 
     }
     private Callable<ArrayList<ForoshandehMamorPakhshModel>>  getAllCallable() {
-        return new Callable<ArrayList<ForoshandehMamorPakhshModel>>() {
-            @Override
-            public ArrayList<ForoshandehMamorPakhshModel> call()  {
-                return foroshandehMamorPakhshDAO.getAll();
-            }
-        };
+        return () -> foroshandehMamorPakhshDAO.getAll();
 
     }
     private Callable<ForoshandehMamorPakhshModel>  getForoshandehMamorPakhshCallable() {
-        return new Callable<ForoshandehMamorPakhshModel>() {
-            @Override
-            public ForoshandehMamorPakhshModel call()  {
-                return foroshandehMamorPakhshDAO.getIsSelect();
-            }
-        };
+        return () -> foroshandehMamorPakhshDAO.getIsSelect();
 
     }
+
 
     private Callable<ForoshandehMamorPakhshModel>  getIsSelectCallable() {
-        return new Callable<ForoshandehMamorPakhshModel>() {
-            @Override
-            public ForoshandehMamorPakhshModel call()  {
-                return foroshandehMamorPakhshDAO.getIsSelect();
-            }
-        };
+        return () -> foroshandehMamorPakhshDAO.getIsSelect();
 
     }
-
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
         return RxAsync.makeObservable(deleteAllCallable())

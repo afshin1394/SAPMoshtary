@@ -101,7 +101,8 @@ public class ForoshandehMamorPakhshDAO
 			ForoshandehMamorPakhshModel.COLUMN_FromDateKharejAzMahal(),
 			ForoshandehMamorPakhshModel.COLUMN_EndDateKharejAzMahal(),
 			ForoshandehMamorPakhshModel.COLUMN_ccAnbarMarjoee(),
-			ForoshandehMamorPakhshModel.COLUMN_CodeNoeAnbarMarjoee()
+			ForoshandehMamorPakhshModel.COLUMN_CodeNoeAnbarMarjoee(),
+            ForoshandehMamorPakhshModel.COLUMN_Version()
 
         };
     }
@@ -597,6 +598,7 @@ public class ForoshandehMamorPakhshDAO
 				foroshandehMamorPakhshModel.setEndDateKharejAzMahal(cursor.getString(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_EndDateKharejAzMahal())));
 				foroshandehMamorPakhshModel.setCcAnbarMarjoee(cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_ccAnbarMarjoee())));
 				foroshandehMamorPakhshModel.setCodeNoeAnbarMarjoee(cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_CodeNoeAnbarMarjoee())));
+                foroshandehMamorPakhshModel.setVersion(cursor.getString(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_Version())));
 
                 foroshandehMamorPakhshModels.add(foroshandehMamorPakhshModel);
                 cursor.moveToNext();
@@ -659,6 +661,8 @@ public class ForoshandehMamorPakhshDAO
 		contentValues.put(ForoshandehMamorPakhshModel.COLUMN_EndDateKharejAzMahal() , model.getEndDateKharejAzMahal());
 		contentValues.put(ForoshandehMamorPakhshModel.COLUMN_ccAnbarMarjoee() , model.getCcAnbarMarjoee());
 		contentValues.put(ForoshandehMamorPakhshModel.COLUMN_CodeNoeAnbarMarjoee() , model.getCodeNoeAnbarMarjoee());
+        contentValues.put(ForoshandehMamorPakhshModel.COLUMN_Version(), model.getVersion());
+
 
         return contentValues;
     }

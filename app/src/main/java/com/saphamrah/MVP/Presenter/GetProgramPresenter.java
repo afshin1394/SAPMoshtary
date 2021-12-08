@@ -51,6 +51,13 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
 
     /////////////////////////// PresenterOps ///////////////////////////
 
+
+    @Override
+    public void checkServerTime()
+    {
+        mModel.getServerTime();
+    }
+
     @Override
     public void onConfigurationChanged(GetProgramMVP.RequiredViewOps view)
     {
@@ -436,6 +443,23 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
         mView.get().updateStatusOfFailedItem(Constants.GET_PROGRAM_UPDATE_GHARARDAD_KALAMOSAVABEH() , itemIndex , errorMessage);
 
     }
+    @Override
+    public void notFoundServerIP()
+    {
+        mView.get().showResourceError(true, R.string.errorGetData , R.string.errorFindServerIP , Constants.FAILED_MESSAGE() , R.string.apply);
+    }
 
+    @Override
+    public void onGetServerTime(boolean validDiffTime, String message)
+    {
+        if (!validDiffTime)
+//        {
+//            checkFakeLocation();
+//        }
+//        else
+        {
+            mView.get().showErrorAlert(true, R.string.errorLocalDateTimeTitle, message, Constants.FAILED_MESSAGE(), R.string.apply);
+        }
+    }
 
 }

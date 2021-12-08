@@ -233,6 +233,16 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
     }
 
 
+
+
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        mPresenter.checkServerTime();
+        //createNotification();
+    }
     /*
      functions
      */
@@ -790,5 +800,11 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
         getProgramItemsStatus = initializeItemsStatus();
         showItemStatusList(Constants.GET_PROGRAM_UPDATE_GHARARDAD_KALAMOSAVABEH());
         mPresenter.checkUpdateGharardadKalaMosavabeh(arrayListForoshandehMamorPakhshModel.get((position)));
+    }
+
+    @Override
+    public void showErrorAlert(boolean closeActivity, int titleResId, String message, int messageType, int buttonTextResId)
+    {
+        customAlertDialog.showMessageAlert(GetProgramActivity.this, closeActivity, getResources().getString(titleResId), message, messageType, getResources().getString(buttonTextResId));
     }
 }

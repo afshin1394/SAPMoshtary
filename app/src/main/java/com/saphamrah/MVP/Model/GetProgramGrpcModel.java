@@ -24,6 +24,7 @@ import com.saphamrah.Model.JayezehEntekhabiModel;
 import com.saphamrah.Model.JayezehModel;
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.KalaMojodiModel;
+import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.MandehMojodyMashinModel;
 import com.saphamrah.Model.MasirModel;
 import com.saphamrah.Model.MoshtaryAfradModel;
@@ -39,10 +40,12 @@ import com.saphamrah.R;
 import com.saphamrah.Shared.GetProgramShared;
 import com.saphamrah.Shared.LastOlaviatMoshtaryShared;
 import com.saphamrah.Shared.LocalConfigShared;
+import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Shared.UserTypeShared;
 import com.saphamrah.UIModel.OlaviatMorajehModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
+import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -5206,5 +5209,41 @@ public class GetProgramGrpcModel implements GetProgramMVP.ModelOps {
         });
     }
 
+    @Override
+    public void getServerTime()
+    {
+        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
+        String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
+                , "");
+        String port = serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
+                , "");
+        if (serverIP.equals("") || port.equals(""))
+        {
+            mPresenter.notFoundServerIP();
+        }
+        else
+        {
+            PubFunc.LoginInfo loginInfo = new PubFunc().new LoginInfo();
+            loginInfo.callLoginInfoService(mPresenter.getAppContext(), serverIP, port, new GetLoginInfoCallback()
+            {
+                @Override
+                public void onSuccess(boolean validDiffTime, String serverDateTime, String deviceDateTime, long diff)
+                {
+                    String message = String.format("%1$s \n %2$s : %3$s \n %4$s : %5$s \n %6$s ( %7$s %8$s) : %9$s %10$s", mPresenter.getAppContext().getString(R.string.errorLocalDateTime),
+                            mPresenter.getAppContext().getString(R.string.serverTime), serverDateTime, mPresenter.getAppContext().getString(R.string.deviceTime), deviceDateTime,
+                            mPresenter.getAppContext().getString(R.string.timeDiff), Constants.ALLOWABLE_SERVER_LOCAL_TIME_DIFF(),
+                            mPresenter.getAppContext().getString(R.string.second), diff, mPresenter.getAppContext().getString(R.string.second));
+                    mPresenter.onGetServerTime(validDiffTime, message);
+                }
+
+                @Override
+                public void onFailure(String error)
+                {
+                    setLogToDB(LogPPCModel.LOG_EXCEPTION, error, "MainModel", "", "getServerTime", "onFailure");
+                    mPresenter.onGetServerTime(false, mPresenter.getAppContext().getString(R.string.errorGetDateTimeData));
+                }
+            });
+        }
+    }
 
 }

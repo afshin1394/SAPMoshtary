@@ -61,6 +61,7 @@ public class ForoshandehMamorPakhshModel
 	private static final String COLUMN_EndDateKharejAzMahal = "EndDateKharejAzMahal";
 	private static final String COLUMN_ccAnbarMarjoee = "ccAnbarMarjoee";
 	private static final String COLUMN_CodeAnbarMarjoee= "CodeNoeAnbarMarjoee";
+    private static final String COLUMN_Version= "Version";
 
 
     public static String TableName() {
@@ -216,6 +217,11 @@ public class ForoshandehMamorPakhshModel
     public static String COLUMN_CodeNoeAnbarMarjoee() {
         return COLUMN_CodeAnbarMarjoee;
     }
+    //TODO
+    public static String COLUMN_Version() {
+        return COLUMN_Version;
+    }
+
 
 
 
@@ -372,6 +378,11 @@ public class ForoshandehMamorPakhshModel
     private int CodeNoeAnbarMarjoee;
 
     private Integer extraPropIsSelect;
+
+
+    @SerializedName("Version")
+    @Expose
+    private String version;
 
 
 
@@ -793,7 +804,13 @@ public class ForoshandehMamorPakhshModel
     }
 
 
+    public String getVersion() {
+        return version;
+    }
 
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
     private View.OnClickListener btnGetProgramClickListener;
     public View.OnClickListener getBtnGetProgramClickListener() {

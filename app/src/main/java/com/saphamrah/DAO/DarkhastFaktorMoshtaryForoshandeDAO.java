@@ -52,7 +52,7 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
                     " m.NameMoshtary, m.CodeMoshtary , mg.nameSazmanForosh\n" +
                     " from DarkhastFaktor df left join Moshtary m on df.ccMoshtary = m.ccMoshtary \n" +
                     " left join Foroshandeh f on df.ccForoshandeh = f.ccForoshandeh \n" +
-                    "  left join moshtaryGharardad mg on df.MoshtaryGharardadccSazmanForosh = mg.ccSazmanForosh \n" +
+                    "  left join moshtaryGharardad mg on df.MoshtaryGharardadccSazmanForosh = mg.ccSazmanForosh AND df.ccMoshtaryGharardad = mg.ccMoshtarygharardad \n" +
                     " where ForTasviehVosol = 1 AND FaktorRooz = " + faktorRooz + " order by df.TarikhFaktor DESC";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query, null);

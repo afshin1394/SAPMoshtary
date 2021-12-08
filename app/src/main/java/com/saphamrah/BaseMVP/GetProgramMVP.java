@@ -26,10 +26,10 @@ public interface GetProgramMVP
         void showResourceError(boolean closeActivity, int titleResId, int messageResId, int messageType, int buttonTextResId);
         void showServerMessage(boolean closeActivity, int titleResId, String message, int messageType, int buttonTextResId);
         void showToast(int resId, int messageType , int duration);
-
         void onGetProgramType(int service);
-
         void showCompletedUpdateGharardadKalaMosavabeh();
+        void showErrorAlert(boolean closeActivity, int titleResId, String message, int messageType, int buttonTextResId);
+
     }
 
 
@@ -46,10 +46,10 @@ public interface GetProgramMVP
         void checkUpdateEtebarForoshandeh(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel);
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
-
         void getProgramServiceType();
-
         void checkUpdateGharardadKalaMosavabeh(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel);
+        void checkServerTime();
+
     }
 
 
@@ -75,10 +75,12 @@ public interface GetProgramMVP
         void onConfigurationChanged(GetProgramMVP.RequiredViewOps view);
         void onNetworkError(boolean closeActivity);
         void onGetProgramServiceType(int service);
-
         void onSuccessUpdateGharardadKalaMosavabeh(int getProgramItemCount, int arg2);
-
         void onFailedUpdateGharardadKalaMosavabeh(int arg2, String string);
+        void onGetServerTime(boolean validDiffTime, String message);
+        void notFoundServerIP();
+
+
     }
 
 
@@ -95,13 +97,12 @@ public interface GetProgramMVP
         void updateEtebarForoshandeh(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
-
         void clearRam();
         void releaseResources();
-
         void getProgramServiceType();
-
         void updateGharardadKalaMosavabeh(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel);
+        void getServerTime();
+
     }
 
 }
