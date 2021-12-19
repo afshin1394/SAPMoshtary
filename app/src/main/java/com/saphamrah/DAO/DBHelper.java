@@ -19,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper
 
     private static String DB_NAME = "DataBase.sqlite";
     private static String DB_PATH = "";
-    private static final int DB_VERSION = 94;
+    private static final int DB_VERSION = 96;
 
     private SQLiteDatabase mDataBase;
     private final Context mContext;

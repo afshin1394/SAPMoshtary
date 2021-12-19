@@ -20,16 +20,11 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvKalaZaribForoshResult;
-import com.saphamrah.protos.BankGrpc;
-import com.saphamrah.protos.BankReply;
-import com.saphamrah.protos.BankReplyList;
-import com.saphamrah.protos.BankRequest;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
-import Sales.SalesCoefficientGoodsGrpc;
-import Sales.SalesCoefficientGoodsOuterClass;
+
 import io.grpc.ManagedChannel;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -73,84 +68,7 @@ public class KalaZaribForoshDAO
             KalaZaribForoshModel.COLUMN_Darajeh()
         };
     }
-    public void fetchKalaZaribForoshGrpc(final Context context, final String activityNameForLog, int ccAnbarak ,  int ccForoshandeh,  int ccMamorPakhsh,  String ccGorohs, final RetrofitResponse retrofitResponse)
-    {
-        try {
 
-
-            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-            serverIpModel.setPort("5000");
-
-
-            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
-            {
-                String message = "can't find server";
-                PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
-                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
-            }
-            else {
-
-                CompositeDisposable compositeDisposable = new CompositeDisposable();
-                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
-                SalesCoefficientGoodsGrpc.SalesCoefficientGoodsBlockingStub salesCoefficientGoodsBlockingStub = SalesCoefficientGoodsGrpc.newBlockingStub(managedChannel);
-                SalesCoefficientGoodsOuterClass.SalesCoefficientGoodsRequest salesCoefficientGoodsRequest = SalesCoefficientGoodsOuterClass.SalesCoefficientGoodsRequest.newBuilder().setBinID(String.valueOf(ccAnbarak)).setSellerID(String.valueOf(ccForoshandeh)).setDistributerID(String.valueOf(ccMamorPakhsh)).setGroupsID(ccGorohs).build();
-                Callable<SalesCoefficientGoodsOuterClass.SalesCoefficientGoodsReplyList> getSalesCoefficientGoodsCallable  = () -> salesCoefficientGoodsBlockingStub.getSalesCoefficientGoods(salesCoefficientGoodsRequest);
-                RxAsync.makeObservable(getSalesCoefficientGoodsCallable)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .map(salesCoefficientGoodsReplyList -> {
-                            ArrayList<KalaZaribForoshModel> kalaZaribForoshModels = new ArrayList<>();
-                            for (SalesCoefficientGoodsOuterClass.SalesCoefficientGoodsReply salesCoefficientGoodsReply : salesCoefficientGoodsReplyList.getSalesCoefficientGoodssList()) {
-                                KalaZaribForoshModel kalaZaribForoshModel = new KalaZaribForoshModel();
-
-                                kalaZaribForoshModel.setCcKalaZaribForosh(salesCoefficientGoodsReply.getSalesCoefficientGoodsID());
-                                kalaZaribForoshModel.setCcKalaCode(salesCoefficientGoodsReply.getCodeGoodsID());
-                                kalaZaribForoshModel.setCcGorohMoshtary(salesCoefficientGoodsReply.getCustomerGroupID());
-                                kalaZaribForoshModel.setZaribForosh(salesCoefficientGoodsReply.getSalesCoefficient());
-                                kalaZaribForoshModel.setDarajeh(salesCoefficientGoodsReply.getDegree());
-
-
-                                kalaZaribForoshModels.add(kalaZaribForoshModel);
-                            }
-
-                            return kalaZaribForoshModels;
-
-                        }).subscribe(new Observer<ArrayList<KalaZaribForoshModel>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(@NonNull ArrayList<KalaZaribForoshModel> kalaZaribForoshModels) {
-                        retrofitResponse.onSuccess(kalaZaribForoshModels);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        if (!compositeDisposable.isDisposed()) {
-                            compositeDisposable.dispose();
-                        }
-                        compositeDisposable.clear();
-                    }
-                });
-            }
-        }catch (Exception exception){
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
-            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
-        }
-
-
-
-
-    }
     public void fetchAllKalaZaribForosh(final Context context, final String activityNameForLog, final String ccGorohs, String ccMarkazForosh, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);

@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.saphamrah.Model.DataTableModel;
 import com.saphamrah.Model.RptJashnvarehForoshModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
@@ -21,6 +22,8 @@ import com.saphamrah.WebService.ServiceResponse.GetAllRptJashnvarehResult;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -864,4 +867,34 @@ public class RptJashnvarehDAO {
             }
             return isAvailable;
     }
+
+    public Double getEmtiazJashnvarehByccMoshtary (int ccMoshtary) {
+        Double EmtiazMoshtary = 0.0;
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String strQuery = " SELECT   sum(EmtiazMoshtary) as EmtiazMoshtary \n" +
+                    " FROM Rpt_JashnvarehForosh \n" +
+                    " WHERE  ccMoshtary = " + ccMoshtary +
+                    " GROUP BY ccMoshtary ";
+            Cursor cursor = db.rawQuery(strQuery, null);
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+                        EmtiazMoshtary = cursor.getDouble(0);
+                        cursor.moveToNext();
+                    }
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll, RptJashnvarehForoshModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "RptJashnarehDAO", "", "getEmtiazJashnvarehByccMoshtary", "");
+        }
+        return EmtiazMoshtary;
+    }
+
 }

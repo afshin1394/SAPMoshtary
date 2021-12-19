@@ -97,7 +97,7 @@ public interface APIServicePost
 
     //G
     @FormUrlEncoded
-    @POST("api/apiSales/CreateGpsData")
+    @POST("Api/ApiSales/CreateGpsDataJSON")
     Call<CreateGpsDataPPCResult> createGpsDataPPCResult(@Field("") String gpsData);
 
     @FormUrlEncoded

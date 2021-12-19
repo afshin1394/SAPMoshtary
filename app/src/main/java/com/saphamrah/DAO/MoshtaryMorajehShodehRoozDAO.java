@@ -21,14 +21,6 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.MoshtaryMorajehShodehRoozResult;
-import com.saphamrah.protos.BankGrpc;
-import com.saphamrah.protos.BankReply;
-import com.saphamrah.protos.BankReplyList;
-import com.saphamrah.protos.BankRequest;
-import com.saphamrah.protos.TodayReferredCustomerGrpc;
-import com.saphamrah.protos.TodayReferredCustomerReply;
-import com.saphamrah.protos.TodayReferredCustomerReplyList;
-import com.saphamrah.protos.TodayReferredCustomerRequest;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -78,84 +70,6 @@ public class MoshtaryMorajehShodehRoozDAO
         };
     }
 
-    public void fetchMoshtaryMorajehShodehRoozGrpc(final Context context, final String activityNameForLog, final String ccForoshandeh , String ccMasir, final RetrofitResponse retrofitResponse)
-    {
-        try {
-
-
-            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-            serverIpModel.setPort("5000");
-
-
-            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
-            {
-                String message = "can't find server";
-                PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
-                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
-            }
-            else {
-
-                CompositeDisposable compositeDisposable = new CompositeDisposable();
-                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
-                TodayReferredCustomerGrpc.TodayReferredCustomerBlockingStub todayReferredCustomerBlockingStub = TodayReferredCustomerGrpc.newBlockingStub(managedChannel);
-                TodayReferredCustomerRequest todayReferredCustomerRequest = TodayReferredCustomerRequest.newBuilder().setSellerID(ccForoshandeh).setDirectionID(ccMasir).build();
-                Callable<TodayReferredCustomerReplyList> getTodayReferredCustomerCallable  = () -> todayReferredCustomerBlockingStub.getTodayReferredCustomer(todayReferredCustomerRequest);
-                RxAsync.makeObservable(getTodayReferredCustomerCallable)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .map(todayReferredCustomerReplyList -> {
-                            ArrayList<MoshtaryMorajehShodehRoozModel> moshtaryMorajehShodehRoozModels = new ArrayList<>();
-                            for (TodayReferredCustomerReply todayReferredCustomerReply : todayReferredCustomerReplyList.getTodayReferredCustomersList()) {
-                                MoshtaryMorajehShodehRoozModel moshtaryMorajehShodehRoozModel = new MoshtaryMorajehShodehRoozModel();
-
-                                moshtaryMorajehShodehRoozModel.setCcForoshandeh(todayReferredCustomerReply.getSellerID());
-                                moshtaryMorajehShodehRoozModel.setCcMoshtary(todayReferredCustomerReply.getCustomerID());
-                                moshtaryMorajehShodehRoozModel.setNoeMorajeh(todayReferredCustomerReply.getReferenceType());
-                                moshtaryMorajehShodehRoozModel.setEtebarEzafehShodeh(todayReferredCustomerReply.getCreditsAdded());
-                                moshtaryMorajehShodehRoozModel.setMablaghMandehFaktor(todayReferredCustomerReply.getInvoiceRemainingPrice());
-
-
-                                moshtaryMorajehShodehRoozModels.add(moshtaryMorajehShodehRoozModel);
-                            }
-
-                            return moshtaryMorajehShodehRoozModels;
-
-                        }).subscribe(new Observer<ArrayList<MoshtaryMorajehShodehRoozModel>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(@NonNull ArrayList<MoshtaryMorajehShodehRoozModel> moshtaryMorajehShodehRoozModels) {
-                        retrofitResponse.onSuccess(moshtaryMorajehShodehRoozModels);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        if (!compositeDisposable.isDisposed()) {
-                            compositeDisposable.dispose();
-                        }
-                        compositeDisposable.clear();
-                    }
-                });
-            }
-        }catch (Exception exception){
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
-            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
-        }
-
-
-
-
-    }
     public void fetchMoshtaryMorajehShodehRooz(final Context context, final String activityNameForLog, final String ccForoshandeh , String ccMasir, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);

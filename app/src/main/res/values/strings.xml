@@ -1157,4 +1157,5 @@
     <string name="sortByHavaleh">نمایش براساس حواله</string>
     <string name="mojodiAnbarakReportHavaleh">گزارش موجودی کالا (حواله)</string>
     <string name="mojodiAnbarakReportFaktor">گزارش موجودی کالا (فاکتور)</string>
+    <string name="rptKalaZaribForosh">ضریب فروش کالا</string>
 </resources>

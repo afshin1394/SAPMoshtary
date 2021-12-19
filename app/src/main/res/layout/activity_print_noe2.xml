@@ -852,6 +852,15 @@
                     android:background="@android:color/transparent"
                     android:contentDescription="امضا مشتری"
                     android:drawingCacheQuality="low" />
+                <TextView
+                    android:id="@+id/txtJashnvareh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:textSize="@dimen/FontSize20"
+                    android:layout_margin="5dp"
+                    android:textColor="@color/colorBlack"/>
+
             </LinearLayout>
             <View
                 android:layout_width="fill_parent"

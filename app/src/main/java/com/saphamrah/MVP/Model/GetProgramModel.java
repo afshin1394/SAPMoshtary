@@ -4003,7 +4003,9 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     private void getMarjoeeMamorPakhsh(int getProgramType) {
         Log.i("itemCounter", "getMarjoeeMamorPakhsh : " + itemCounter);
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
-        String ccMoshtary = darkhastFaktorDAO.getCcdarkhastFaktorsForZanjirei();
+        //String ccMoshtary = darkhastFaktorDAO.getCcdarkhastFaktorsForZanjirei();
+        String ccMoshtary = darkhastFaktorDAO.getCcMoshtaryForZanjire();
+        Log.d("getProgram","ccmoshtary for mamorpakhshmarjoee api:"+ccMoshtary);
         if (noeMasouliat == 4 || noeMasouliat == 5) {
             MarjoeeMamorPakhshDAO marjoeeMamorPakhshDAO = new MarjoeeMamorPakhshDAO(mPresenter.getAppContext());
             marjoeeMamorPakhshDAO.fetchMarjoeeMamorPakhsh(mPresenter.getAppContext(), activityNameForLog, ccMoshtary, new RetrofitResponse() {
@@ -4626,10 +4628,56 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                     suggestDAO.deleteIsSend();
                     if (deleteResult && insertResult) {
                         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
-                        getParameter(getProgramType);
+                        if(noeMasouliat ==1 || noeMasouliat==2 || noeMasouliat==3 || noeMasouliat==6 || noeMasouliat==8)
+                        {
+                            getJashnvareh(getProgramType,ccForoshandeh,"-1");
+                        }
+                        else if (noeMasouliat == 4 || noeMasouliat == 5)
+                        {
+                            getJashnvareh(getProgramType,-1,ccMoshtaryPakhsh);
+                        }
+                        else
+                        {
+                            getParameter(getProgramType);
+                        }
+
                     } else {
                         sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
                     }
+                    }
+                };
+                thread.start();
+            }
+
+            @Override
+            public void onFailed(String type, String error) {
+                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
+            }
+        });
+    }
+
+    private  void getJashnvareh( int getProgramType, int ccForoshandeh, String ccMoshtarys){
+        SuggestDAO suggestDAO = new SuggestDAO(BaseApplication.getContext());
+        RptJashnvarehDAO rptJashnvarehDAO = new RptJashnvarehDAO(BaseApplication.getContext());
+
+//        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+//        getParameter(getProgramType);
+
+        rptJashnvarehDAO.fetchRptJashnvareh(BaseApplication.getContext(), "GetProgramActivity", ccForoshandeh, ccMoshtarys, new RetrofitResponse() {
+            @Override
+            public void onSuccess(ArrayList arrayListData) {
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        boolean deleteResult = rptJashnvarehDAO.deleteAll();
+                        boolean insertResult = rptJashnvarehDAO.insertGroup(arrayListData);
+                        suggestDAO.deleteIsSend();
+                        if (deleteResult && insertResult) {
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                            getParameter(getProgramType);
+                        } else {
+                            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+                        }
                     }
                 };
                 thread.start();

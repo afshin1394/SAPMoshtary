@@ -88,7 +88,7 @@ public class CalculateHajmiDiscountKala extends DiscountCalculation
                         int mablaghVahedKalaMohasebeh = (int)calculateMablaghVahed( takhfifHajmiTitrSatrModel.getNoeTedadRial(),tedad,0,(long)Double.parseDouble(model.getFiled6()),1);
                         Log.d("takhfif" , "takhfifKala mablaghVahedKalaMohasebeh : " + mablaghVahedKalaMohasebeh);
 
-                        long MablaghTakhfifDarkhast = Math.round(Double.valueOf(model.getFiled6()));
+                        long MablaghTakhfifDarkhast = Math.round(Double.valueOf(model.getFiled8()));
 
                         Log.d("takhfif","takhfifKala CcTakhfifHajmi :" + takhfifHajmiSatrModel.getCcTakhfifHajmi() );
                         Log.d("takhfif","takhfifKala MablaghTakhfifDarkhast :" + MablaghTakhfifDarkhast);
@@ -97,18 +97,18 @@ public class CalculateHajmiDiscountKala extends DiscountCalculation
                         Log.d("takhfif" , "takhfifKala tedadLong : " + tedad);
 
                         long mablaghVahedKalaMohasebehLong = (long) mablaghVahedKalaMohasebeh;
-                        if(takhfifHajmiTitrSatrModel.getOlaviat() == 0 || takhfifHajmiTitrSatrModel.getOlaviat() == 1 )//|| (takhfifHajmiTitrSatrModel.getCcTakhfifHajmi() == Integer.valueOf(model.getFiled7())))
-                        {
+//                        if(takhfifHajmiTitrSatrModel.getOlaviat() == 0 || takhfifHajmiTitrSatrModel.getOlaviat() == 1 )//|| (takhfifHajmiTitrSatrModel.getCcTakhfifHajmi() == Integer.valueOf(model.getFiled7())))
+//                        {
 
                             MablaghKol = (long) (tedadLong * mablaghVahedKalaMohasebehLong);
                             Log.d("takhfif","takhfifKala if MablaghKol :" + MablaghKol);
-                        }
-                        else
-                        {
-
-                            MablaghKol = (long) ((tedadLong * mablaghVahedKalaMohasebehLong)-MablaghTakhfifDarkhast);
-                            Log.d("takhfif","takhfifKala else MablaghKol :" + MablaghKol);
-                        }
+//                        }
+//                        else
+//                        {
+//
+//                            MablaghKol = (long) ((tedadLong * mablaghVahedKalaMohasebehLong)-MablaghTakhfifDarkhast);
+//                            Log.d("takhfif","takhfifKala else MablaghKol :" + MablaghKol);
+//                        }
                         Log.d("takhfif" , "takhfifKala MablaghKol : " + MablaghKol + "takhfifHajmiTitrSatrModel.getOlaviat:" +takhfifHajmiTitrSatrModel.getOlaviat());
                        Mablagh =  calculateMablagh(takhfifHajmiTitrSatrModel.getNoeTedadRial(), (int) takhfifHajmiSatrModel.getBeEza(), (long) MablaghKol, (long) mablaghVahedKalaMohasebeh, takhfifHajmiSatrModel.getCcNoeField(), takhfifHajmiSatrModel.getCcGorohMohasebeh());
                         //Mablagh =  calculateMablagh(takhfifHajmiTitrSatrModel.getNoeTedadRial(), (int) takhfifHajmiSatrModel.getBeEza(), (long) MablaghKol, (long) MablaghKol, takhfifHajmiSatrModel.getCcNoeField(), takhfifHajmiSatrModel.getCcGorohMohasebeh());

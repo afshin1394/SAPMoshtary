@@ -24,14 +24,6 @@ import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.RxService.APIServiceRxjava;
 import com.saphamrah.WebService.RxService.Response.DataResponse.GetMandehMojodyMashinResponse;
 import com.saphamrah.WebService.ServiceResponse.GetMandehMojodyMashinResult;
-import com.saphamrah.protos.GroupStatisticianGrpc;
-import com.saphamrah.protos.GroupStatisticianReply;
-import com.saphamrah.protos.GroupStatisticianReplyList;
-import com.saphamrah.protos.GroupStatisticianRequest;
-import com.saphamrah.protos.RemainingInventoryGrpc;
-import com.saphamrah.protos.RemainingInventoryReply;
-import com.saphamrah.protos.RemainingInventoryReplyList;
-import com.saphamrah.protos.RemainingInventoryRequest;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -89,91 +81,6 @@ public class MandehMojodyMashinDAO
         };
     }
 
-    public void fetchMandehMojodyMashinGrpc(final Context context, final String activityNameForLog, final String ccAnbarak, String ccForoshandeh, String ccMamorPakhsh, final RetrofitResponse retrofitResponse)
-    {
-        try {
-
-
-            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-            serverIpModel.setPort("5000");
-
-
-            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
-            {
-                String message = "can't find server";
-                PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
-                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
-            }
-            else {
-
-                CompositeDisposable compositeDisposable = new CompositeDisposable();
-                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
-                RemainingInventoryGrpc.RemainingInventoryBlockingStub remainingInventoryBlockingStub = RemainingInventoryGrpc.newBlockingStub(managedChannel);
-                RemainingInventoryRequest remainingInventoryRequest = RemainingInventoryRequest.newBuilder().setBinID(ccAnbarak).setSellerID(ccForoshandeh).setDistributerID(ccMamorPakhsh).build();
-
-                Callable<RemainingInventoryReplyList> getRemainingInventoryCallable  = () -> remainingInventoryBlockingStub.getRemainingInventory(remainingInventoryRequest);
-                RxAsync.makeObservable(getRemainingInventoryCallable)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .map(remainingInventoryReplyList -> {
-                            ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels = new ArrayList<>();
-                            for (RemainingInventoryReply remainingInventoryReply : remainingInventoryReplyList.getRemainingInventoriesList()) {
-                                MandehMojodyMashinModel mandehMojodyMashinModel = new MandehMojodyMashinModel();
-
-                                mandehMojodyMashinModel.setCcKalaCode(remainingInventoryReply.getGoodCodeID());
-                                mandehMojodyMashinModel.setCodeNoeKala(remainingInventoryReply.getGoodTypeCode());
-                                mandehMojodyMashinModel.setMojody(remainingInventoryReply.getInventory());
-                                mandehMojodyMashinModel.setShomarehBach(remainingInventoryReply.getBachNumber());
-                                mandehMojodyMashinModel.setTarikhTolid(remainingInventoryReply.getProductionDate());
-                                mandehMojodyMashinModel.setGheymatMasrafKonandeh(remainingInventoryReply.getConsumerPrice());
-                                mandehMojodyMashinModel.setGheymatForosh(remainingInventoryReply.getSellPrice());
-                                mandehMojodyMashinModel.setCcTaminKonandeh(remainingInventoryReply.getProviderID());
-                                mandehMojodyMashinModel.setMaxMojody(remainingInventoryReply.getMaxInventory());
-                                mandehMojodyMashinModel.setMax_MojodyByShomarehBach(0);
-                                mandehMojodyMashinModel.setIsAdamForosh(remainingInventoryReply.getIsNonSale());
-
-
-                                mandehMojodyMashinModels.add(mandehMojodyMashinModel);
-                            }
-
-                            return mandehMojodyMashinModels;
-
-                        }).subscribe(new Observer<ArrayList<MandehMojodyMashinModel>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(@NonNull ArrayList<MandehMojodyMashinModel> kalaModels) {
-                        retrofitResponse.onSuccess(kalaModels);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        if (!compositeDisposable.isDisposed()) {
-                            compositeDisposable.dispose();
-                        }
-                        compositeDisposable.clear();
-                    }
-                });
-            }
-        }catch (Exception exception){
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
-            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
-        }
-
-
-
-
-    }
     public void fetchMandehMojodyMashin(final Context context, final String activityNameForLog, final String ccAnbarak, String ccForoshandeh, String ccMamorPakhsh, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);

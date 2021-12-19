@@ -22,10 +22,6 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllMasirResult;
-import com.saphamrah.protos.DirectionGrpc;
-import com.saphamrah.protos.DirectionReply;
-import com.saphamrah.protos.DirectionReplyList;
-import com.saphamrah.protos.DirectionRequest;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -160,83 +156,6 @@ public class MasirDAO
                 }
             });
         }
-    }
-
-    public void fetchAllMasirFaalForoshandehGrpc(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
-    {
-        try {
-
-
-        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-
-//        ServerIpModel serverIpModel = new ServerIpModel();
-//        serverIpModel.setServerIp("192.168.80.181");
-        serverIpModel.setPort("5000");
-        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
-        {
-            String message = "can't find server";
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MasirDAO.class.getSimpleName(), activityNameForLog, "fetchAllMasirFaalForoshandehGrpc", "");
-            retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
-        }
-        else
-        {
-
-            CompositeDisposable compositeDisposable = new CompositeDisposable();
-            ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
-            DirectionGrpc.DirectionBlockingStub directionBlockingStub = DirectionGrpc.newBlockingStub(managedChannel);
-            DirectionRequest directionRequest = DirectionRequest.newBuilder().build();
-
-            Callable<DirectionReplyList> groupReplyListCallable  = () -> directionBlockingStub.getDirection(directionRequest);
-            RxAsync.makeObservable(groupReplyListCallable)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .map(directionReplyList -> {
-                        ArrayList<MasirModel> masirModels = new ArrayList<>();
-                        for (DirectionReply directionReply : directionReplyList.getDirectionsList()) {
-                            MasirModel masirModel = new MasirModel();
-                            masirModel.setCcMasir(directionReply.getDirectionID());
-                            masirModel.setCcForoshandeh(directionReply.getSellerID());
-                            masirModel.setNameMasir(directionReply.getDirectionName());
-                            masirModel.setToorVisit(directionReply.getVisitTour());
-                            masirModel.setCcMasirRoozVisit(directionReply.getVisitDirectionTodayID());
-                            masirModels.add(masirModel);
-                        }
-
-                        return masirModels;
-
-                    }).subscribe(new Observer<ArrayList<MasirModel>>() {
-                @Override
-                public void onSubscribe(@NonNull Disposable d) {
-                    compositeDisposable.add(d);
-                }
-
-                @Override
-                public void onNext(@NonNull ArrayList<MasirModel> masirModels) {
-                    retrofitResponse.onSuccess(masirModels);
-                }
-
-                @Override
-                public void onError(@NonNull Throwable e) {
-                    retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
-                }
-
-                @Override
-                public void onComplete() {
-                    if (!compositeDisposable.isDisposed()) {
-                        compositeDisposable.dispose();
-                    }
-                    compositeDisposable.clear();
-                }
-            });
-
-          }
-        }catch (Exception exception){
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), MasirDAO.class.getSimpleName(), activityNameForLog, "fetchAllMasirFaalForoshandehGrpc", "");
-            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
-        }
-
     }
 
 

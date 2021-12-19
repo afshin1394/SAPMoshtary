@@ -14,6 +14,7 @@ import com.saphamrah.DAO.DariaftPardakhtDarkhastFaktorPPCDAO;
 import com.saphamrah.DAO.DariaftPardakhtPPCDAO;
 import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
+import com.saphamrah.DAO.KardexDAO;
 import com.saphamrah.DAO.MarkazShomarehHesabDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.DAO.MoshtaryShomarehHesabDAO;
@@ -66,7 +67,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
     ParameterChildDAO parameterChildDAO = new ParameterChildDAO(BaseApplication.getContext());
     DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(BaseApplication.getContext());
     ConfigNoeVosolMojazeFaktorDAO configNoeVosolMojazeFaktorDAO = new ConfigNoeVosolMojazeFaktorDAO(BaseApplication.getContext());
-
+    private KardexDAO kardexDAO = new KardexDAO(BaseApplication.getContext());
     public InvoiceSettlementModel(InvoiceSettlementMVP.RequiredPresenterOps mPresenter) {
         this.mPresenter = mPresenter;
     }
@@ -430,9 +431,12 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                     return;
                 }
                 if (CodeNoeVosolSabtShode != valueResid && strCodeNoeVosol.equals(Constants.VALUE_RESID())) {
-                    mPresenter.onErrorCheckInsert(R.string.errorDuplicateVosolForResid);
-                    hasError = true;
-                    return;
+                    boolean checkMarjoeeMoredi = kardexDAO.checkMarjoeeMoredi(ccDarkhastFaktor);
+                    if (!checkMarjoeeMoredi){
+                        mPresenter.onErrorCheckInsert(R.string.errorDuplicateVosolForResid);
+                        hasError = true;
+                        return;
+                    }
                 }
             }
 

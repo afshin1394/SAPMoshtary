@@ -78,7 +78,9 @@ public class CustomEtebarModel {
         rptEtebarMoldeList.add(rptEtebarRiali);
         rptEtebarTedadi = new RptEtebarTedadiModatModel(SaghfEtebarTedadi, TedadMoavagh + TedadAsnad + TedadBargashty, RptEtebarType.Saghf, EtebarType.Tedati);
         rptEtebarMoldeList.add(rptEtebarTedadi);
-        rptEtebarModat = new RptEtebarTedadiModatModel(SaghfEtebarModat, ModatMoavagh +ModatAsnad + ModatBargashty, RptEtebarType.Saghf, EtebarType.ModatEtebar);
+        //rptEtebarModat = new RptEtebarTedadiModatModel(SaghfEtebarModat, ModatMoavagh +ModatAsnad + ModatBargashty, RptEtebarType.Saghf, EtebarType.ModatEtebar);
+
+        rptEtebarModat = new RptEtebarTedadiModatModel(SaghfEtebarModat, (Math.max(ModatMoavagh ,ModatAsnad)), RptEtebarType.Saghf, EtebarType.ModatEtebar);
         rptEtebarMoldeList.add(rptEtebarModat);
 
         //set etebar Moavagh

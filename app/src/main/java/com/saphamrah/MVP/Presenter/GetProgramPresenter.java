@@ -5,20 +5,16 @@ import android.util.Log;
 
 import com.saphamrah.BaseMVP.GetProgramMVP;
 import com.saphamrah.DAO.SystemConfigTabletDAO;
-import com.saphamrah.MVP.Model.GetProgramGrpcModel;
 import com.saphamrah.MVP.Model.GetProgramModel;
 import com.saphamrah.MVP.Model.GetProgramModelRx;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.Logger;
 import com.saphamrah.R;
-import com.saphamrah.Repository.BargashtyRepository;
 import com.saphamrah.Utils.Constants;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProgramMVP.RequiredPresenterOps
 {
@@ -42,7 +38,7 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
                 mModel = new GetProgramModelRx(this);
                 break;
             case Constants.GET_PROGRAM_GRPC:
-                mModel = new GetProgramGrpcModel(this);
+               // mModel = new GetProgramGrpcModel(this);
                 break;
         }
 

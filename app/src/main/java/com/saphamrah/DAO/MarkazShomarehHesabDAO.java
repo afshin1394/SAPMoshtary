@@ -22,14 +22,6 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvMarkazShomarehHesabResult;
-import com.saphamrah.protos.AcountNumberCenterGrpc;
-import com.saphamrah.protos.AcountNumberCenterReply;
-import com.saphamrah.protos.AcountNumberCenterReplyList;
-import com.saphamrah.protos.AcountNumberCenterRequest;
-import com.saphamrah.protos.BankGrpc;
-import com.saphamrah.protos.BankReply;
-import com.saphamrah.protos.BankReplyList;
-import com.saphamrah.protos.BankRequest;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -84,90 +76,7 @@ public class MarkazShomarehHesabDAO
         };
     }
 
-    public void fetchMarkazShomareHesabGrpc(final Context context, final String activityNameForLog,final String ccMarkaz, final RetrofitResponse retrofitResponse)
-    {
-        try {
 
-
-            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-            serverIpModel.setPort("5000");
-
-
-            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
-            {
-                String message = "can't find server";
-                PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
-                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
-            }
-            else {
-
-                CompositeDisposable compositeDisposable = new CompositeDisposable();
-                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
-                AcountNumberCenterGrpc.AcountNumberCenterBlockingStub acountNumberCenterBlockingStub = AcountNumberCenterGrpc.newBlockingStub(managedChannel);
-                AcountNumberCenterRequest acountNumberCenterRequest = AcountNumberCenterRequest.newBuilder().setCenterID(ccMarkaz).build();
-                Callable<AcountNumberCenterReplyList> getAcountNumberCenterCallable  = () -> acountNumberCenterBlockingStub.getAcountNumberCenter(acountNumberCenterRequest);
-                RxAsync.makeObservable(getAcountNumberCenterCallable)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .map(acountNumberCenterReplyList -> {
-                            ArrayList<MarkazShomarehHesabModel> markazShomarehHesabModels = new ArrayList<>();
-                            for (AcountNumberCenterReply acountNumberCenterReply : acountNumberCenterReplyList.getAcountNumberCentersList()) {
-                                MarkazShomarehHesabModel markazShomarehHesabModel = new MarkazShomarehHesabModel();
-
-                                markazShomarehHesabModel.setCcMarkaz(acountNumberCenterReply.getCenterID());
-                                markazShomarehHesabModel.setCcShomarehHesab(acountNumberCenterReply.getAcountNumberID());
-                                markazShomarehHesabModel.setShomarehHesab(acountNumberCenterReply.getAcountNumber());
-                                markazShomarehHesabModel.setCcBank(acountNumberCenterReply.getBankID());
-                                markazShomarehHesabModel.setNameBank(acountNumberCenterReply.getBankName());
-                                markazShomarehHesabModel.setCodeShobeh(acountNumberCenterReply.getBranchCode());
-                                markazShomarehHesabModel.setNameShobeh(acountNumberCenterReply.getBranchName());
-                                markazShomarehHesabModel.setCcNoeHesab(acountNumberCenterReply.getAcountTypeID());
-                                markazShomarehHesabModel.setNameNoeHesab(acountNumberCenterReply.getAcountTypeName());
-                                markazShomarehHesabModel.setShomarehSheba(acountNumberCenterReply.getIBAN());
-
-
-
-                                markazShomarehHesabModels.add(markazShomarehHesabModel);
-                            }
-
-                            return markazShomarehHesabModels;
-
-                        }).subscribe(new Observer<ArrayList<MarkazShomarehHesabModel>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(@NonNull ArrayList<MarkazShomarehHesabModel> markazShomarehHesabModels) {
-                        retrofitResponse.onSuccess(markazShomarehHesabModels);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        if (!compositeDisposable.isDisposed()) {
-                            compositeDisposable.dispose();
-                        }
-                        compositeDisposable.clear();
-                    }
-                });
-            }
-        }catch (Exception exception){
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
-            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
-        }
-
-
-
-
-    }
     public void fetchMarkazShomareHesab(final Context context, final String activityNameForLog,final String ccMarkaz, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);

@@ -20,14 +20,6 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllModatVosolMarkazForoshByccMarkazForoshResult;
-import com.saphamrah.protos.BankGrpc;
-import com.saphamrah.protos.BankReply;
-import com.saphamrah.protos.BankReplyList;
-import com.saphamrah.protos.BankRequest;
-import com.saphamrah.protos.CenterRecieptionDurationGrpc;
-import com.saphamrah.protos.CenterRecieptionDurationReply;
-import com.saphamrah.protos.CenterRecieptionDurationReplyList;
-import com.saphamrah.protos.CenterRecieptionDurationRequest;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -75,82 +67,7 @@ public class ModatVosolMarkazDAO
         };
     }
 
-    public void fetchAllModatVosolMarkazGrpc(final Context context, final String activityNameForLog, final String ccMarkazForosh, final RetrofitResponse retrofitResponse)
-    {
-        try {
 
-
-            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-            serverIpModel.setPort("5000");
-
-
-            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
-            {
-                String message = "can't find server";
-                PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
-                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
-            }
-            else {
-
-                CompositeDisposable compositeDisposable = new CompositeDisposable();
-                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
-                CenterRecieptionDurationGrpc.CenterRecieptionDurationBlockingStub centerRecieptionDurationBlockingStub = CenterRecieptionDurationGrpc.newBlockingStub(managedChannel);
-                CenterRecieptionDurationRequest centerRecieptionDurationRequest = CenterRecieptionDurationRequest.newBuilder().setSellCenterID(Integer.valueOf(ccMarkazForosh)).build();
-                Callable<CenterRecieptionDurationReplyList> getCenterRecieptionDurationCallable  = () -> centerRecieptionDurationBlockingStub.getCenterRecieptionDuration(centerRecieptionDurationRequest);
-                RxAsync.makeObservable(getCenterRecieptionDurationCallable)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .map(centerRecieptionDurationReplyList -> {
-                            ArrayList<ModatVosolMarkazModel> modatVosolMarkazModels = new ArrayList<>();
-                            for (CenterRecieptionDurationReply centerRecieptionDurationReply : centerRecieptionDurationReplyList.getCenterRecieptionDurationsList()) {
-                                ModatVosolMarkazModel modatVosolMarkazModel = new ModatVosolMarkazModel();
-
-                                modatVosolMarkazModel.setCcModatVosolMarkaz(centerRecieptionDurationReply.getRecieptionDurationCenterID());
-                                modatVosolMarkazModel.setCcModatVosol(centerRecieptionDurationReply.getRecieptionDurationID());
-                                modatVosolMarkazModel.setCcMarkazSazmanForoshSakhtarForosh(centerRecieptionDurationReply.getSellStructureSellOrganizationCenterID());
-
-
-                                modatVosolMarkazModels.add(modatVosolMarkazModel);
-                            }
-
-                            return modatVosolMarkazModels;
-
-                        }).subscribe(new Observer<ArrayList<ModatVosolMarkazModel>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(@NonNull ArrayList<ModatVosolMarkazModel> modatVosolMarkazModels) {
-                        retrofitResponse.onSuccess(modatVosolMarkazModels);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        if (!compositeDisposable.isDisposed()) {
-                            compositeDisposable.dispose();
-                        }
-                        compositeDisposable.clear();
-                    }
-                });
-            }
-        }catch (Exception exception){
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
-            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
-        }
-
-
-
-
-    }
 
     public void fetchAllModatVosolMarkaz(final Context context, final String activityNameForLog, final String ccMarkazForosh, final RetrofitResponse retrofitResponse)
     {

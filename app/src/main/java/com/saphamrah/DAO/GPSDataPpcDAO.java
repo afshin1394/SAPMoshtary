@@ -170,7 +170,7 @@ public class GPSDataPpcDAO
         else
         {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-Call<GetGPSDataResult> call = apiServiceGet.getGPSDataByccMamorPakhsh(ccMamorPakhsh);
+            Call<GetGPSDataResult> call = apiServiceGet.getGPSDataByccMamorPakhsh(ccMamorPakhsh);
             call.enqueue(new Callback<GetGPSDataResult>() {
                 @Override
                 public void onResponse(Call<GetGPSDataResult> call, Response<GetGPSDataResult> response)
@@ -240,6 +240,7 @@ Call<GetGPSDataResult> call = apiServiceGet.getGPSDataByccMamorPakhsh(ccMamorPak
             });
         }
     }
+
 
     private String getEndpoint(Call call)
     {

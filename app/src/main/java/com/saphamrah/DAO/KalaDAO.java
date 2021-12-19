@@ -8,7 +8,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.saphamrah.MVP.Model.GetProgramModel;
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.ServerIpModel;
@@ -18,16 +17,10 @@ import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
-
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetMojodyAnbarResult;
-import com.saphamrah.protos.StatisticGoodsGrpc;
-import com.saphamrah.protos.StatisticGoodsReply;
-import com.saphamrah.protos.StatisticGoodsReplyList;
-import com.saphamrah.protos.StatisticGoodsRequest;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
@@ -189,94 +182,6 @@ public class KalaDAO
         }
     }
 
-    public void fetchKalaAmargarGrpc(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
-    {
-        try {
-            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-//        ServerIpModel serverIpModel = new ServerIpModel();
-//        serverIpModel.setServerIp("192.168.80.181");
-        serverIpModel.setPort("5000");
-
-            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
-                String message = "can't find server";
-                PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, KalaDAO.class.getSimpleName(), activityNameForLog, "fetchKalaAmargarGrpc", "");
-                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
-            } else {
-
-                CompositeDisposable compositeDisposable = new CompositeDisposable();
-                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
-                StatisticGoodsGrpc.StatisticGoodsBlockingStub statisticGoodsBlockingStub = StatisticGoodsGrpc.newBlockingStub(managedChannel);
-                StatisticGoodsRequest statisticGoodsRequest = StatisticGoodsRequest.newBuilder().build();
-                Callable<StatisticGoodsReplyList> getStatisticGoodsCallable = new Callable<StatisticGoodsReplyList>() {
-                    @Override
-                    public StatisticGoodsReplyList call() {
-                        return statisticGoodsBlockingStub.getStatisticGoods(statisticGoodsRequest);
-                    }
-                };
-                RxAsync.makeObservable(getStatisticGoodsCallable)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .map(statisticGoodsReplyList -> {
-                            ArrayList<KalaModel> kalaModels = new ArrayList<>();
-                            for (StatisticGoodsReply statisticGoodsReply : statisticGoodsReplyList.getStatisticGoodsList()) {
-                                KalaModel kalaModel = new KalaModel();
-                                kalaModel.setCcKalaCode(statisticGoodsReply.getGoodsCodeID());
-                                kalaModel.setCcGorohKala(statisticGoodsReply.getGoodsGroupID());
-                                kalaModel.setArz(statisticGoodsReply.getWidth());
-                                kalaModel.setTol(statisticGoodsReply.getLength());
-                                kalaModel.setErtefa(statisticGoodsReply.getHeigth());
-                                kalaModel.setTedadDarBasteh(statisticGoodsReply.getCount2());
-                                kalaModel.setTedadDarKarton(statisticGoodsReply.getCount3());
-                                kalaModel.setCcBrand(statisticGoodsReply.getBrandID());
-                                kalaModel.setNameBrand(statisticGoodsReply.getBrandName());
-                                kalaModel.setNameKala(statisticGoodsReply.getGoodsName());
-                                kalaModel.setVaznKarton(statisticGoodsReply.getBoxWeigth());
-                                kalaModel.setVaznKhales(statisticGoodsReply.getPureWeight());
-                                kalaModel.setVaznNaKhales(statisticGoodsReply.getNonPureWeight());
-                                kalaModel.setCcVahedSize(statisticGoodsReply.getSizeUnitID());
-                                kalaModel.setCcVahedVazn(statisticGoodsReply.getWeightUnitID());
-                                kalaModels.add(kalaModel);
-                            }
-
-                            return kalaModels;
-
-                        }).subscribe(new Observer<ArrayList<KalaModel>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(@NonNull ArrayList<KalaModel> kalaModels) {
-                        retrofitResponse.onSuccess(kalaModels);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        if (!compositeDisposable.isDisposed()) {
-                            compositeDisposable.dispose();
-                        }
-                        compositeDisposable.clear();
-                    }
-                });
-
-            }
-        }catch (Exception exception){
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), KalaDAO.class.getSimpleName(), activityNameForLog, "fetchKalaAmargarGrpc", "");
-            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
-        }
-
-
-
-
-    }
 
 
     public void fetchKalaAmargar(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)

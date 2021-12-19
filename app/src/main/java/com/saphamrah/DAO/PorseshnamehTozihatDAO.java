@@ -20,10 +20,6 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetPorseshnamehTozihatResult;
-import com.saphamrah.protos.DescriptionQuestionnaireGrpc;
-import com.saphamrah.protos.DescriptionQuestionnaireReply;
-import com.saphamrah.protos.DescriptionQuestionnaireReplyList;
-import com.saphamrah.protos.DescriptionQuestionnaireRequest;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -71,76 +67,7 @@ public class PorseshnamehTozihatDAO
         };
     }
 
-    public void fetchPorseshnamehTozihatGrpc(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
-    {
-        try {
-        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-//        ServerIpModel serverIpModel = new ServerIpModel();
-//        serverIpModel.setServerIp("192.168.80.181");
-        serverIpModel.setPort("5000");
-        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
-        {
-            String message = "can't find server";
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, KalaDAO.class.getSimpleName(), activityNameForLog, "fetchPorseshnamehTozihatGrpc", "");
-            retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
-        }
-        else {
-            CompositeDisposable compositeDisposable = new CompositeDisposable();
-            ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
-            DescriptionQuestionnaireGrpc.DescriptionQuestionnaireBlockingStub descriptionQuestionnaireBlockingStub = DescriptionQuestionnaireGrpc.newBlockingStub(managedChannel);
-            DescriptionQuestionnaireRequest descriptionQuestionnaireRequest = DescriptionQuestionnaireRequest.newBuilder().build();
 
-            Callable<DescriptionQuestionnaireReplyList> descriptionQuestionnaireReplyListCallable  = () -> descriptionQuestionnaireBlockingStub.getDiscriptionQuestionnaire(descriptionQuestionnaireRequest);
-            RxAsync.makeObservable(descriptionQuestionnaireReplyListCallable)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .map(descriptionQuestionnaireReplyList -> {
-                        ArrayList<PorseshnamehTozihatModel> porseshnamehTozihatModels = new ArrayList<>();
-                        for (DescriptionQuestionnaireReply descriptionQuestionnaireReply : descriptionQuestionnaireReplyList.getDescriptionQuestionnairesList()) {
-                            PorseshnamehTozihatModel porseshnamehTozihatModel = new PorseshnamehTozihatModel();
-                            porseshnamehTozihatModel.setCcPorseshnamehTozihat(descriptionQuestionnaireReply.getDescriptionQuestionnaireID());
-                            porseshnamehTozihatModel.setSharh(descriptionQuestionnaireReply.getDescription());
-                            porseshnamehTozihatModels.add(porseshnamehTozihatModel);
-                        }
-
-                        return porseshnamehTozihatModels;
-
-                    }).subscribe(new Observer<ArrayList<PorseshnamehTozihatModel>>() {
-                @Override
-                public void onSubscribe(@NonNull Disposable d) {
-                    compositeDisposable.add(d);
-                }
-
-                @Override
-                public void onNext(@NonNull ArrayList<PorseshnamehTozihatModel> rotbehModels) {
-                    retrofitResponse.onSuccess(rotbehModels);
-                }
-
-                @Override
-                public void onError(@NonNull Throwable e) {
-                    retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
-                }
-
-                @Override
-                public void onComplete() {
-                    if (!managedChannel.isShutdown()){
-                        managedChannel.shutdown();
-                    }
-                    if (!compositeDisposable.isDisposed()) {
-                        compositeDisposable.dispose();
-                    }
-                    compositeDisposable.clear();
-                }
-            });
-
-        }
-        }catch (Exception exception){
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), KalaDAO.class.getSimpleName(), activityNameForLog, "fetchPorseshnamehTozihatGrpc", "");
-            retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , exception.getMessage());
-        }
-    }
 
 
     public void fetchPorseshnamehTozihat(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)

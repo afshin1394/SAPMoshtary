@@ -21,14 +21,6 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvPolygonForoshSatrByForoshandehResult;
-import com.saphamrah.protos.BankGrpc;
-import com.saphamrah.protos.BankReply;
-import com.saphamrah.protos.BankReplyList;
-import com.saphamrah.protos.BankRequest;
-import com.saphamrah.protos.SellPolygonRowGrpc;
-import com.saphamrah.protos.SellPolygonRowReply;
-import com.saphamrah.protos.SellPolygonRowReplyList;
-import com.saphamrah.protos.SellPolygonRowRequest;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -79,85 +71,7 @@ public class PolygonForoshSatrDAO
         };
     }
 
-    public void fetchAllvPolygonForoshSatrByForoshandehGrpc(final Context context, final String activityNameForLog,final String ccForoshandeh, final RetrofitResponse retrofitResponse)
-    {
-        try {
 
-
-            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-            serverIpModel.setPort("5000");
-
-
-            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
-            {
-                String message = "can't find server";
-                PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
-                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
-            }
-            else {
-
-                CompositeDisposable compositeDisposable = new CompositeDisposable();
-                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
-                SellPolygonRowGrpc.SellPolygonRowBlockingStub sellPolygonRowBlockingStub = SellPolygonRowGrpc.newBlockingStub(managedChannel);
-                SellPolygonRowRequest sellPolygonRowRequest = SellPolygonRowRequest.newBuilder().setSellerID(ccForoshandeh).build();
-                Callable<SellPolygonRowReplyList> getSellPolygonRowCallable  = () -> sellPolygonRowBlockingStub.getSellPolygonRow(sellPolygonRowRequest);
-                RxAsync.makeObservable(getSellPolygonRowCallable)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .map(sellPolygonRowReplyList -> {
-                            ArrayList<PolygonForoshSatrModel> polygonForoshSatrModels = new ArrayList<>();
-                            for (SellPolygonRowReply sellPolygonRowReply : sellPolygonRowReplyList.getSellPolygonRowsList()) {
-                                PolygonForoshSatrModel polygonForoshSatrModel = new PolygonForoshSatrModel();
-
-                                polygonForoshSatrModel.setCcPolygonForosh(sellPolygonRowReply.getSellPolygonID());
-                                polygonForoshSatrModel.setCcPolygonForoshSatr(sellPolygonRowReply.getSellPolygonRowID());
-                                polygonForoshSatrModel.setCcMasir(sellPolygonRowReply.getDirectionID());
-                                polygonForoshSatrModel.setCcForoshandeh(sellPolygonRowReply.getSellerID());
-                                polygonForoshSatrModel.setLat_y(sellPolygonRowReply.getLat());
-                                polygonForoshSatrModel.setLng_x(sellPolygonRowReply.getLng());
-
-
-                                polygonForoshSatrModels.add(polygonForoshSatrModel);
-                            }
-
-                            return polygonForoshSatrModels;
-
-                        }).subscribe(new Observer<ArrayList<PolygonForoshSatrModel>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(@NonNull ArrayList<PolygonForoshSatrModel> kalaModels) {
-                        retrofitResponse.onSuccess(kalaModels);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        if (!compositeDisposable.isDisposed()) {
-                            compositeDisposable.dispose();
-                        }
-                        compositeDisposable.clear();
-                    }
-                });
-            }
-        }catch (Exception exception){
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
-            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
-        }
-
-
-
-
-    }
     public void fetchAllvPolygonForoshSatrByForoshandeh(final Context context, final String activityNameForLog,final String ccForoshandeh, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);

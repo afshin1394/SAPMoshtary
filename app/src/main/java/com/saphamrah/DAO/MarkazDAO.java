@@ -21,10 +21,6 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvMarkazResult;
-import com.saphamrah.protos.SellCenterGrpc;
-import com.saphamrah.protos.SellCenterReply;
-import com.saphamrah.protos.SellCenterReplyList;
-import com.saphamrah.protos.SellCenterRequest;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -161,77 +157,7 @@ public class MarkazDAO
     }
 
 
-    public void  fetchAllMarkazForoshGrpc(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
-    {
-        try {
-            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-//        ServerIpModel serverIpModel = new ServerIpModel();
-//        serverIpModel.setServerIp("192.168.80.181");
-            serverIpModel.setPort("5000");
 
-            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
-                String message = "can't find server";
-                PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MarkazDAO.class.getSimpleName(), activityNameForLog, "fetchAllMarkazForoshGrpc", "");
-                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
-            } else {
-
-                CompositeDisposable compositeDisposable = new CompositeDisposable();
-                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
-                SellCenterGrpc.SellCenterBlockingStub sellCenterBlockingStub = SellCenterGrpc.newBlockingStub(managedChannel);
-                SellCenterRequest sellCenterRequest = SellCenterRequest.newBuilder().build();
-
-                Callable<SellCenterReplyList> sellCenterReplyListCallable = () -> sellCenterBlockingStub.getSellCenters(sellCenterRequest);
-                RxAsync.makeObservable(sellCenterReplyListCallable)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .map(rankReplyList -> {
-                            ArrayList<MarkazModel> markazModels = new ArrayList<>();
-                            for (SellCenterReply sellCenterReply : rankReplyList.getSellRepliesList()) {
-                                MarkazModel markazModel = new MarkazModel();
-                                markazModel.setCcMarkaz(sellCenterReply.getCenterID());
-                                markazModel.setCodeMarkaz(sellCenterReply.getCenterCode());
-                                markazModel.setLatitude_y(sellCenterReply.getLatitude());
-                                markazModel.setLongitude_x(sellCenterReply.getLongitude());
-
-                                markazModels.add(markazModel);
-                            }
-
-                            return markazModels;
-
-                        }).subscribe(new Observer<ArrayList<MarkazModel>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(@NonNull ArrayList<MarkazModel> markazModels) {
-                        retrofitResponse.onSuccess(markazModels);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        if (!compositeDisposable.isDisposed()) {
-                            compositeDisposable.dispose();
-                        }
-                        compositeDisposable.clear();
-                    }
-                });
-
-            }
-        }catch (Exception exception){
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), MarkazDAO.class.getSimpleName(), activityNameForLog, "fetchAllMarkazForoshGrpc", "");
-            retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), exception.getMessage());
-        }
-
-    }
 
 
     public void fetchAllMarkazForosh(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)

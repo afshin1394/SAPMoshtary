@@ -21,14 +21,6 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvMoshtaryAddressResult;
-import com.saphamrah.protos.BankGrpc;
-import com.saphamrah.protos.BankReply;
-import com.saphamrah.protos.BankReplyList;
-import com.saphamrah.protos.BankRequest;
-import com.saphamrah.protos.CustomerAddressGrpc;
-import com.saphamrah.protos.CustomerAddressReply;
-import com.saphamrah.protos.CustomerAddressReplyList;
-import com.saphamrah.protos.CustomerAddressRequest;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -103,98 +95,7 @@ public class MoshtaryAddressDAO
      * @param retrofitResponse
      */
 
-    public void fetchAllvMoshtaryAddressGrpc(final Context context, final String activityNameForLog,final String ccMoshtarys, final String ccMarkazSazmanForosh, final RetrofitResponse retrofitResponse)
-    {
-        try {
 
-
-            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-            serverIpModel.setPort("5000");
-
-
-            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
-            {
-                String message = "can't find server";
-                PubFunc.Logger logger = new PubFunc().new Logger();
-                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
-                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
-            }
-            else {
-
-                CompositeDisposable compositeDisposable = new CompositeDisposable();
-                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
-                CustomerAddressGrpc.CustomerAddressBlockingStub customerAddressBlockingStub = CustomerAddressGrpc.newBlockingStub(managedChannel);
-                CustomerAddressRequest customerAddressRequest = CustomerAddressRequest.newBuilder().build();
-                Callable<CustomerAddressReplyList> getCustomerAddressCallable  = () -> customerAddressBlockingStub.getCustomerAddress(customerAddressRequest);
-                RxAsync.makeObservable(getCustomerAddressCallable)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .map(customerAddressReplyList -> {
-                            ArrayList<MoshtaryAddressModel> moshtaryAddressModels = new ArrayList<>();
-                            for (CustomerAddressReply customerAddressReply : customerAddressReplyList.getCustomerAddresssList()) {
-                                MoshtaryAddressModel moshtaryAddressModel = new MoshtaryAddressModel();
-
-                                moshtaryAddressModel.setCcMoshtaryAddress(customerAddressReply.getAddressCustomerID());
-                                moshtaryAddressModel.setCcMoshtary(customerAddressReply.getCustomerID());
-                                moshtaryAddressModel.setCcAddress(customerAddressReply.getAddressID());
-                                moshtaryAddressModel.setCcNoeAddress(customerAddressReply.getAddressTypeID());
-                                moshtaryAddressModel.setCcMahaleh(customerAddressReply.getDistrictID());
-                                moshtaryAddressModel.setNameNoeAddress(customerAddressReply.getAddressTypeName());
-                                moshtaryAddressModel.setAddress(customerAddressReply.getAddress());
-                                moshtaryAddressModel.setCcShahr(customerAddressReply.getCityID());
-                                moshtaryAddressModel.setKhiabanAsli(customerAddressReply.getMainStreet());
-                                moshtaryAddressModel.setKhiabanFarei1(customerAddressReply.getByStreet1());
-                                moshtaryAddressModel.setKhiabanFarei2(customerAddressReply.getByStreet2());
-                                moshtaryAddressModel.setKoocheAsli(customerAddressReply.getMainAlley());
-                                moshtaryAddressModel.setKoocheFarei1(customerAddressReply.getByAlley1());
-                                moshtaryAddressModel.setKoocheFarei2(customerAddressReply.getByAlley2());
-                                moshtaryAddressModel.setPelak(customerAddressReply.getPlague());
-                                moshtaryAddressModel.setTelephone(customerAddressReply.getPhone());
-                                moshtaryAddressModel.setCodePosty(customerAddressReply.getPostalCode());
-                                moshtaryAddressModel.setLatitude_y(customerAddressReply.getLatitude());
-                                moshtaryAddressModel.setLongitude_x(customerAddressReply.getLatitude());
-
-
-                                moshtaryAddressModels.add(moshtaryAddressModel);
-                            }
-
-                            return moshtaryAddressModels;
-
-                        }).subscribe(new Observer<ArrayList<MoshtaryAddressModel>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(@NonNull ArrayList<MoshtaryAddressModel> moshtaryAddressModels) {
-                        retrofitResponse.onSuccess(moshtaryAddressModels);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        if (!compositeDisposable.isDisposed()) {
-                            compositeDisposable.dispose();
-                        }
-                        compositeDisposable.clear();
-                    }
-                });
-            }
-        }catch (Exception exception){
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
-            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
-        }
-
-
-
-
-    }
 
     public void fetchAllvMoshtaryAddress(final Context context, final String activityNameForLog,final String ccMoshtarys, final String ccMarkazSazmanForosh, final RetrofitResponse retrofitResponse)
     {

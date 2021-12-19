@@ -252,6 +252,7 @@
         <item>{\"name\":\"کالا مصوبه قرارداد\" , \"functdion\":\"getAllKalaMosavab\"}</item>
         <item>{\"name\":\"مرجوعی پخش \" , \"function\":\"getMarjoeePakhsh\"}</item>
         <item>{\"name\":\"اولویت قیمت کالا\" , \"function\":\"getKalaOlaviatGheymat\"}</item>
+        <item>{\"name\":\"جشنواره\" , \"functdion\":\"getJashnvareh\"}</item>
         <item>{\"name\":\"پیشنهاد\" , \"functdion\":\"getNoePishnahad\"}</item>
         <item>{\"name\":\"دریافت تنظیمات\" , \"functdion\":\"getParameter\"}</item>
         <item>{\"name\":\"برخورد فروشنده با مشتری\" , \"function\":\"getBarkhordForoshandehBaMoshtary\"}</item>

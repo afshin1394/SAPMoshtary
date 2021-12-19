@@ -51,6 +51,7 @@ import com.saphamrah.DAO.KalaElamMarjoeeDAO;
 import com.saphamrah.DAO.MoshtaryAddressDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
+import com.saphamrah.DAO.RptJashnvarehDAO;
 import com.saphamrah.DAO.SystemConfigTabletDAO;
 import com.saphamrah.MVP.View.BixolonDeviceListActivity;
 import com.saphamrah.MVP.View.FaktorDetailsActivity;
@@ -92,7 +93,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import me.anwarshahriar.calligrapher.Calligrapher;
 
@@ -657,6 +660,17 @@ public class PrintNoe2Activity extends AppCompatActivity
             TextView txtEmza = findViewById(R.id.txtEmza);
             //txtEmza.setTypeface(font);
             txtEmza.setText(txtMatn);
+
+            //---------------------------------Jashnvareh-------------------------
+            TextView txtJashnvareh = findViewById(R.id.txtJashnvareh);
+            String txtMatnJashnvareh = "";
+            Double EmtiazMoshtary =0.0;
+            RptJashnvarehDAO rptJashnvarehDAO = new RptJashnvarehDAO(PrintNoe2Activity.this);
+            EmtiazMoshtary = rptJashnvarehDAO.getEmtiazJashnvarehByccMoshtary(moshtary.getCcMoshtary());
+            if(EmtiazMoshtary>0) {
+                txtMatnJashnvareh = "تعداد کد قرعه کشی اخذ شده شما تا قبل از این فاکتور " + Math.round(EmtiazMoshtary) + " می باشد.";
+                txtJashnvareh.setText(txtMatnJashnvareh);
+            }
 
 
             //------------------------------------------------------------------------------------------------------

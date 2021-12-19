@@ -17,19 +17,19 @@ import java.lang.Override;
 public class DarkhastFaktorMarjoeeActivity_ViewBinding implements Unbinder {
   private DarkhastFaktorMarjoeeActivity target;
 
-  private View view7f09014d;
+  private View view7f09017b;
 
-  private View view7f09014e;
+  private View view7f09017c;
 
-  private View view7f09014c;
+  private View view7f09017a;
 
-  private View view7f090158;
+  private View view7f090188;
 
-  private View view7f09015f;
+  private View view7f090191;
 
-  private View view7f090161;
+  private View view7f090193;
 
-  private View view7f0900a0;
+  private View view7f0900b0;
 
   @UiThread
   public DarkhastFaktorMarjoeeActivity_ViewBinding(DarkhastFaktorMarjoeeActivity target) {
@@ -46,7 +46,7 @@ public class DarkhastFaktorMarjoeeActivity_ViewBinding implements Unbinder {
     target.fabMenu = Utils.findRequiredViewAsType(source, R.id.fabMenu, "field 'fabMenu'", FloatingActionMenu.class);
     view = Utils.findRequiredView(source, R.id.fabMarjoeeKoli, "field 'fabMarjoeeKoli' and method 'fabMarjoeeKoli'");
     target.fabMarjoeeKoli = Utils.castView(view, R.id.fabMarjoeeKoli, "field 'fabMarjoeeKoli'", FloatingActionButton.class);
-    view7f09014d = view;
+    view7f09017b = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -55,7 +55,7 @@ public class DarkhastFaktorMarjoeeActivity_ViewBinding implements Unbinder {
     });
     view = Utils.findRequiredView(source, R.id.fabMarjoeeMoredi, "field 'fabMarjoeeMoredi' and method 'fabMarjoeeMoredi'");
     target.fabMarjoeeMoredi = Utils.castView(view, R.id.fabMarjoeeMoredi, "field 'fabMarjoeeMoredi'", FloatingActionButton.class);
-    view7f09014e = view;
+    view7f09017c = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -64,7 +64,7 @@ public class DarkhastFaktorMarjoeeActivity_ViewBinding implements Unbinder {
     });
     view = Utils.findRequiredView(source, R.id.fabMarjoeeForoshandeh, "field 'fabMarjoeeForoshandeh' and method 'fabMarjoeeForoshandeh'");
     target.fabMarjoeeForoshandeh = Utils.castView(view, R.id.fabMarjoeeForoshandeh, "field 'fabMarjoeeForoshandeh'", FloatingActionButton.class);
-    view7f09014c = view;
+    view7f09017a = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -73,7 +73,7 @@ public class DarkhastFaktorMarjoeeActivity_ViewBinding implements Unbinder {
     });
     view = Utils.findRequiredView(source, R.id.fabSabtMarjoee, "field 'fabSabtMarjoee' and method 'fabSabtMarjoee'");
     target.fabSabtMarjoee = Utils.castView(view, R.id.fabSabtMarjoee, "field 'fabSabtMarjoee'", FloatingActionButton.class);
-    view7f090158 = view;
+    view7f090188 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -82,7 +82,7 @@ public class DarkhastFaktorMarjoeeActivity_ViewBinding implements Unbinder {
     });
     view = Utils.findRequiredView(source, R.id.fabSearchNameKala, "field 'fabSearchNameKala' and method 'fabSearchNameKala'");
     target.fabSearchNameKala = Utils.castView(view, R.id.fabSearchNameKala, "field 'fabSearchNameKala'", FloatingActionButton.class);
-    view7f09015f = view;
+    view7f090191 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -90,7 +90,7 @@ public class DarkhastFaktorMarjoeeActivity_ViewBinding implements Unbinder {
       }
     });
     view = Utils.findRequiredView(source, R.id.fabSend, "method 'fabSend'");
-    view7f090161 = view;
+    view7f090193 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -98,7 +98,7 @@ public class DarkhastFaktorMarjoeeActivity_ViewBinding implements Unbinder {
       }
     });
     view = Utils.findRequiredView(source, R.id.btn_back, "method 'btn_back'");
-    view7f0900a0 = view;
+    view7f0900b0 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -122,19 +122,19 @@ public class DarkhastFaktorMarjoeeActivity_ViewBinding implements Unbinder {
     target.fabSabtMarjoee = null;
     target.fabSearchNameKala = null;
 
-    view7f09014d.setOnClickListener(null);
-    view7f09014d = null;
-    view7f09014e.setOnClickListener(null);
-    view7f09014e = null;
-    view7f09014c.setOnClickListener(null);
-    view7f09014c = null;
-    view7f090158.setOnClickListener(null);
-    view7f090158 = null;
-    view7f09015f.setOnClickListener(null);
-    view7f09015f = null;
-    view7f090161.setOnClickListener(null);
-    view7f090161 = null;
-    view7f0900a0.setOnClickListener(null);
-    view7f0900a0 = null;
+    view7f09017b.setOnClickListener(null);
+    view7f09017b = null;
+    view7f09017c.setOnClickListener(null);
+    view7f09017c = null;
+    view7f09017a.setOnClickListener(null);
+    view7f09017a = null;
+    view7f090188.setOnClickListener(null);
+    view7f090188 = null;
+    view7f090191.setOnClickListener(null);
+    view7f090191 = null;
+    view7f090193.setOnClickListener(null);
+    view7f090193 = null;
+    view7f0900b0.setOnClickListener(null);
+    view7f0900b0 = null;
   }
 }
