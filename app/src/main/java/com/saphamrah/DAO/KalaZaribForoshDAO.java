@@ -9,10 +9,13 @@ import androidx.annotation.NonNull;
 
 import com.saphamrah.Model.BankModel;
 import com.saphamrah.Model.KalaZaribForoshModel;
+import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.UIModel.kalaZaribForosh.KalaZaribForoshConstKt;
+import com.saphamrah.UIModel.kalaZaribForosh.KalaZaribForoshUiModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
@@ -369,6 +372,36 @@ public class KalaZaribForoshDAO
 
     }
 
+    public ArrayList<KalaZaribForoshUiModel> getKalaZaribForoshKala(int darajeh , int ccNoeMoshtary){
+
+        ArrayList<KalaZaribForoshUiModel> models = new ArrayList<>();
+            try
+            {
+                String query = "SELECT CodeKala,NameKala,ZaribForosh  \n" +
+                        "FROM kalazaribforosh\n" +
+                        "join (select distinct ccKalaCode,CodeKala,NameKala from Kala) Kala on Kala.ccKalaCode =  kalazaribforosh.ccKalaCode\n" +
+                        "where ccGorohMoshtary= "+ ccNoeMoshtary +" and Darajeh in (0, " + darajeh + ") ";
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+                Cursor cursor = db.rawQuery(query, null);
+                if (cursor != null)
+                {
+                    if (cursor.getCount() > 0)
+                    {
+                        models = KalaZaribForoshConstKt.cursorToModel(cursor);
+                    }
+                    cursor.close();
+                }
+                db.close();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                String message = context.getResources().getString(R.string.errorSelectAll , BankModel.TableName()) + "\n" + e.toString();
+                logger.insertLogToDB(context, LogPPCModel.LOG_EXCEPTION, message, "BankDAO" , "" , "getByCodeBank" , "");
+            }
+            return models;
+        }
 
 
     private static ContentValues modelToContentvalue(KalaZaribForoshModel kalaZaribForoshModel)
