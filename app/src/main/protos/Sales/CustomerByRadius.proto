@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.CustomerByRadius.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CustomerByRadiusProto";
+
+package Sales;
+
+service CustomerByRadius{
+  rpc GetCustomerByRadius(CustomerByRadiusRequest) returns(CustomerByRadiusReplyList);
+}
+
+message CustomerByRadiusRequest{
+  string Radius =1;
+  string Latitude = 2;
+  string Longitude = 3;
+}
+
+message CustomerByRadiusReply{
+  int32	Index = 1;
+  int32	CustomerID = 2;
+  int32	QuestionnaireID = 3;
+  string	OldCustomerID = 4;
+  string	CustomerName = 5;
+  string	CustomerFullName = 6;
+  string	CustomerLastName = 7;
+  int32	SituationCustomerCode = 8;
+  string	SituationCustomerCodeTxt = 9;
+  string	SignsName = 10;
+  string	CustomerTypeName = 11 ;
+  string	NationalCode = 12;
+  double	Latitude = 13;
+  double	Longitude = 14;
+  string	Address = 15 ;
+  string	Phone = 16;
+  string	Mobile = 17;
+  int32	IsStatisticianCustomer = 18;
+  string	Plague = 19;
+  string	PostalCode = 20;
+  int32	DistrictID = 21 ;
+  string	StatisticianSituationCode = 22;
+  string	MainStreet = 23;
+  string	ByStreet1 =24;
+  string	ByStreet2 =25;
+  string	MainAlley =26 ;
+  string	ByAlley1 = 27;
+  string	ByAlley2 = 28;
+  string	LastInvoiceDate = 29;
+  int64	LastInvoicePrice = 30;
+  int32	ShopArea = 31;
+  int32	HasStore = 32 ;
+  int32	ID =33;
+
+}
+
+message CustomerByRadiusReplyList{
+  repeated CustomerByRadiusReply CustomerByRadiuss = 1;
+}

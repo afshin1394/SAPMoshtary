@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Treasury.RptReceiptList.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RptReceiptProto";
+option objc_class_prefix = "HLW";
+
+
+package Treasury;
+
+
+service RptReceiptList{
+  rpc GetReceiptListRpt(RptReceiptListRequest) returns(RptReceiptListReplyList);
+}
+
+message RptReceiptListRequest{
+  string DistributerSalesManPersonID = 1;
+}
+
+message RptReceiptListReply{
+  int64	InvoiceRequestID = 1;
+  string	CustomerCode = 2;
+  string	CustomerName = 3;
+  int32	InvoiceNumber=4;
+  float	PureInvoicePrice=5;
+  float	CashPrice=6;
+  float	FishPrice=7;
+  float	PosPrice=8;
+  float	ChequePrice=9;
+  float	ReturnedPrice=10;
+  float	AcceleratedPrice = 11;
+  float	DelayedPrice = 12;
+  float	ReceiptPrice = 13;
+  float	CreditPrice = 14;
+  float	RemainingInvoicePrice = 15;
+}
+
+
+message RptReceiptListReplyList{
+  repeated RptReceiptListReply RptReceiptLists = 1;
+}

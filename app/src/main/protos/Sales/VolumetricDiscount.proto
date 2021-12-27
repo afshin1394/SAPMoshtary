@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.VolumetricDiscount.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "VolumetricDiscountProto";
+option objc_class_prefix = "HLW";
+
+
+package Sales;
+
+
+service VolumetricDiscount{
+  rpc GetVolumetricDiscount(VolumetricDiscountRequest) returns(VolumetricDiscountReplyList);
+}
+
+message VolumetricDiscountRequest{
+
+  string RowTitleType = 1;
+  string SellOrganizationCenterID = 2;
+  string VolumetricDiscountID = 3;
+
+}
+
+message VolumetricDiscountReply{
+  int32	Index = 1;
+  int32	VolumetricDiscountID = 2;
+  int32	TypeCode = 3;
+  string	DiscountDescription = 4;
+  int32	RialCountType = 5;
+  int32	CustomerFieldTypeName = 6;
+  int32	CustomerFieldTypeID = 7;
+  int32	CarryingTypeCode = 8;
+  int32	Degree = 9;
+  int32	ForBonus = 10;
+  int32	ReceiptType = 11;
+  string	ReceiptTypeTxt = 12;
+  int32	InjuctiveGroupID = 13;
+  int32	SellOrganizationCenterID = 14;
+  int32	Priority = 15;
+  int32	IsStepByStep = 16;
+  int32	AreaID = 17;
+  int32	GuildTypeID = 18;
+  string	GuildTypeName = 19;
+  int32	PriceType = 20;
+
+
+}
+
+message VolumetricDiscountReplyList{
+  repeated VolumetricDiscountReply VolumetricDiscounts = 1;
+}

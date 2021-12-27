@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.RptCustomerVisit.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RptCustomerVisitProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+
+service RptCustomerVisit{
+  rpc GetRptCustomerVisit(RptCustomerVisitRequest) returns(RptCustomerVisitReplyList);
+}
+
+message RptCustomerVisitRequest{
+  string SalesManID = 1;
+
+
+}
+
+message RptCustomerVisitReply{
+  int32	Index = 1;
+  int32	Priority = 2;
+  string	CustomerCode = 3;
+  string	CustomerName = 4;
+  string	Telephone = 5;
+  double	PurchaseRial = 6;
+  string	ShopEntranceTime = 7;
+  string	ShopExitTime = 8;
+  string	TimePeriodInShop = 9;
+  string	ReferralStatus = 10;
+  string	RequestStatus = 11;
+  string	NonRequestReason = 12;
+  int32	InvoiceItemsCount = 13;
+  int32	IsReferral = 14;
+
+
+
+}
+
+message RptCustomerVisitReplyList{
+  repeated RptCustomerVisitReply RptCustomerVisits = 1;
+}

@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.CustomerOwnershipType.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CustomerOwnershipTypeProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+service CustomerOwnershipType{
+  rpc GetCustomerOwnershipType(CustomerOwnershipTypeRequest) returns(CustomerOwnershipTypeReplyList);
+}
+
+message CustomerOwnershipTypeRequest{
+
+
+}
+
+message CustomerOwnershipTypeReply{
+
+  int32 CustomerOwnershipTypeID = 1;
+  string  CustomerOwnershipName = 2;
+
+
+
+}
+
+message CustomerOwnershipTypeReplyList{
+  repeated CustomerOwnershipTypeReply CustomerOwnershipTypes = 1;
+}

@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.CustomerDefaultCredit.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CustomerDefaultCreditProto";
+option objc_class_prefix = "HLW";
+
+package Sales;
+
+service CustomerDefaultCredit{
+  rpc GetCustomerDefaultCredit(CustomerDefaultCreditRequest) returns(CustomerDefaultCreditReplyList);
+}
+
+message CustomerDefaultCreditRequest{
+  string SalesManID = 1;
+}
+
+message CustomerDefaultCreditReply{
+  int32	CustomerDefaultCreditID = 1;
+  int32	CustomerTypeID = 2;
+  int64	MaxRialCredit = 3;
+  int64	MaxDocuments = 4;
+  int32	MaxPeriodCredit = 5;
+  int64	MaxQuantityCredit = 6;
+  int64	AssuranceRial = 7;
+  int64	PersonalDocumentsRial = 8;
+  int32	PersonalDocumentsCount = 9;
+  int32	PersonalDocumentsPeriod = 10;
+  int64	CustomerDocumentsRial = 11;
+  int32	CustomerDocumentsCount = 12;
+  int32	CustomerDocumentsPeriod = 13;
+  int64	PostponedRial = 14;
+  int32	PostponedCount = 15;
+  int32	PostponedPeriod = 16;
+  int64	ReturnedRial = 17;
+  int32	ReturnedCount = 18;
+  int32	ReturnedPeriod = 19;
+  int32	ReceiptPeriod = 20;
+
+
+
+}
+
+message CustomerDefaultCreditReplyList{
+  repeated CustomerDefaultCreditReply CustomerDefaultCredits = 1;
+}

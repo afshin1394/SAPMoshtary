@@ -20,6 +20,10 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetPosShomarehHesabResult;
+import com.saphamrah.protos.PosAccountNumberGrpc;
+import com.saphamrah.protos.PosAccountNumberReply;
+import com.saphamrah.protos.PosAccountNumberReplyList;
+import com.saphamrah.protos.PosAccountNumberRequest;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -70,7 +74,88 @@ public class PosShomarehHesabDAO
             PosShomarehHesabModel.COLUMN_ShomarehHesab()
         };
     }
+    public void fetchPosShomareHesabGrpc(final Context context, final String activityNameForLog,final String ccPosShomarehHesab , String ccMarkazAnbar, final RetrofitResponse retrofitResponse)
+    {
+        try {
 
+
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            serverIpModel.setPort("5000");
+
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+            {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
+            }
+            else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                PosAccountNumberGrpc.PosAccountNumberBlockingStub posAccountNumberBlockingStub = PosAccountNumberGrpc.newBlockingStub(managedChannel);
+                PosAccountNumberRequest posAccountNumberRequest = PosAccountNumberRequest.newBuilder().setStoreCenterID(ccMarkazAnbar).setPosAccountNumberID(ccPosShomarehHesab).build();
+                Callable<PosAccountNumberReplyList> getPosAccountNumberCallable  = () -> posAccountNumberBlockingStub.getPosAccountNumber(posAccountNumberRequest);
+                RxAsync.makeObservable(getPosAccountNumberCallable)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(posAccountNumberReplyList -> {
+                            ArrayList<PosShomarehHesabModel> posShomarehHesabModels = new ArrayList<>();
+                            for (PosAccountNumberReply posAccountNumberReply : posAccountNumberReplyList.getPosAccountNumbersList()) {
+                                PosShomarehHesabModel posShomarehHesabModel = new PosShomarehHesabModel();
+
+                                posShomarehHesabModel.setCcPosShomarehHesab(posAccountNumberReply.getPosAccountNumberID());
+                                posShomarehHesabModel.setCcShomarehHesab(posAccountNumberReply.getAccountNumberID());
+                                posShomarehHesabModel.setPosNumber(posAccountNumberReply.getPosNumber());
+                                posShomarehHesabModel.setCcBank(posAccountNumberReply.getBankID());
+                                posShomarehHesabModel.setNameBank(posAccountNumberReply.getNameBank());
+                                posShomarehHesabModel.setCodeShobeh(posAccountNumberReply.getBranchCode());
+                                posShomarehHesabModel.setNameShobeh(posAccountNumberReply.getBranchName());
+                                posShomarehHesabModel.setShomarehHesab(posAccountNumberReply.getAccountNumber());
+
+
+
+                                posShomarehHesabModels.add(posShomarehHesabModel);
+                            }
+
+                            return posShomarehHesabModels;
+
+                        }).subscribe(new Observer<ArrayList<PosShomarehHesabModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ArrayList<PosShomarehHesabModel> posShomarehHesabModels) {
+                        retrofitResponse.onSuccess(posShomarehHesabModels);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (!compositeDisposable.isDisposed()) {
+                            compositeDisposable.dispose();
+                        }
+                        compositeDisposable.clear();
+                    }
+                });
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
+        }
+
+
+
+
+    }
 
 
     public void fetchPosShomareHesab(final Context context, final String activityNameForLog,final String ccPosShomarehHesab , String ccMarkazAnbar, final RetrofitResponse retrofitResponse)

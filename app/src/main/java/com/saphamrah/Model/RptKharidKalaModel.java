@@ -135,11 +135,11 @@ public class RptKharidKalaModel
     }
 
 
-    private int MablaghKharid;
-    public void setMablaghKharid(int MablaghKharid){
+    private long MablaghKharid;
+    public void setMablaghKharid(long MablaghKharid){
         this.MablaghKharid = MablaghKharid;
     }
-    public int getMablaghKharid(){
+    public long getMablaghKharid(){
         return this.MablaghKharid;
     }
 

@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.MessageBox.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "MessageBoxProto";
+option objc_class_prefix = "HLW";
+package Global;
+
+
+service MessageBox {
+
+  rpc GetMessageBox (MessageBoxRequest) returns (MessageBoxReplyList);
+}
+
+
+message MessageBoxRequest {
+  string SalesManID = 1;
+  string DistributerID = 2;
+}
+
+
+message MessageBoxReply {
+  int32	MessageID = 1;
+  string	Title = 2;
+  string	Message = 3;
+  int32	MessageType = 4 ;
+  int32	UserID = 5 ;
+  int32	Active = 6;
+  string	Date = 7 ;
+  int32	SalesManID = 8 ;
+  int32	DistributerID = 9;
+  int32	SalesManStatus = 10 ;
+  int32	ActiveSalesMan = 11;
+  int32	SalesManNotification = 12;
+
+
+}
+
+message MessageBoxReplyList{
+  repeated MessageBoxReply MessageBoxs = 1;
+}

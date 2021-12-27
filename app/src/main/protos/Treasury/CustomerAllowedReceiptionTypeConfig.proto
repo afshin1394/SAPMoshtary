@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Treasury.CustomerAllowedReceiptionTypeConfig.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CustomerAllowedReceiptionTypeConfigProto";
+option objc_class_prefix = "HLW";
+package Treasury;
+
+
+
+
+service CustomerAllowedReceiptionTypeConfig{
+  rpc GetCustomerAllowedReceiptionTypeConfig(CustomerAllowedReceiptionTypeConfigRequest) returns(CustomerAllowedReceiptionTypeConfigReplyList);
+}
+
+message CustomerAllowedReceiptionTypeConfigRequest{
+
+  string CustomersID = 1;
+
+
+}
+
+message CustomerAllowedReceiptionTypeConfigReply{
+
+  int32 CustomerAllowedReceiptionTypeConfigID = 1;
+  int32 ReceiptionTypeCode_Tablet = 2;
+  int32 DegreeID = 3;
+  int32 CustomerTypeID = 4;
+  int32 SituationCode = 5;
+  string ReceiptionTypeTxt = 6;
+  int32 IsUpFrontReciept = 7;
+  int32 ExtraReceiptionDuration = 8;
+  int32 CashDiscountSubject = 9;
+  int32 ReciptionDelaySubject = 10;
+
+}
+
+message CustomerAllowedReceiptionTypeConfigReplyList{
+  repeated CustomerAllowedReceiptionTypeConfigReply CustomerAllowedReceiptionTypeConfigs = 1;
+}

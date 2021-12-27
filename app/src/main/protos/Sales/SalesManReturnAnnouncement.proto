@@ -1,0 +1,52 @@
+syntax = "proto3";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "SalesManReturnAnnouncementProto";
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.SalesManReturnAnnouncement.Protos";
+
+package Sales;
+
+service SalesManReturnAnnouncement{
+  rpc GetSalesManReturnAnnouncement(SalesManReturnAnnouncementRequest) returns(SalesManReturnAnnouncementReplyList);
+}
+
+message SalesManReturnAnnouncementRequest{
+  string InvoiceRequestsID = 1;
+}
+
+message SalesManReturnAnnouncementReply{
+  int32	ReturnAnnouncementRowID =1;
+  int32	ReturnAnnouncementID = 2;
+  int32	CustomerID =3;
+  string	InvoiceRequestID = 4;
+  int32	GoodsID = 5;
+  int32	GoodsCodeID = 6;
+  string	GoodsCode = 7;
+  string	GoodsName = 8;
+  string	BatchNumber =9;
+  string	ProductionDate = 10;
+  string	ShamsiProductionDate =11;
+  string	ExpirationDate =12;
+  int32	GoodReturnReasonID =13;
+  string	GoodReturnReasonName = 14;
+  int32	Quantity3 =15;
+  int32	PrividerID = 16;
+  string	CustomerName =17;
+  string	SalesManFullName = 18;
+  string	InvoiceNumber =19;
+  int32	StoreID = 20;
+  float	BuyPrice = 21;
+  float	SellPrice = 22;
+  float	PureSellPrice = 23;
+  float	ConsumerPrice = 24;
+  int32	StorePortionID = 25;
+  float	OriginalSellPrice = 26;
+  int32	SalesManID = 27;
+
+
+}
+
+message SalesManReturnAnnouncementReplyList{
+  repeated SalesManReturnAnnouncementReply SalesManReturnAnnouncements = 1;
+}

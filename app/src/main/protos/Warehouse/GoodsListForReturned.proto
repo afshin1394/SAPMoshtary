@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Warehouse.GoodsListForReturned.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "GoodsListForReturnedProto";
+option objc_class_prefix = "HLW";
+package Warehouse;
+
+
+service GoodsListForReturned{
+  rpc GetGoodsListForReturned(GoodsListForReturnedRequest) returns(GoodsListForReturnedReplyList);
+}
+
+message GoodsListForReturnedRequest{
+  string SellerID = 1;
+  string CustomerID = 2;
+}
+
+message GoodsListForReturnedReply{
+  int32	GoodsID = 1;
+  int32	GoodsCodeID = 2;
+  string	GoodsCode =3;
+  string	GoodsName = 4;
+  int32	ProviderID =5;
+  string	BatchNumber = 6;
+  string	ProductionDate = 7;
+  string	ExpirationDate = 8;
+  int32	Quantity = 9;
+  float	SellPrice = 10;
+  float	ConsumerPrice = 11;
+
+
+
+}
+
+message GoodsListForReturnedReplyList{
+  repeated GoodsListForReturnedReply GoodsListForReturneds = 1;
+}

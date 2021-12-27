@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.GPSData.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "GPSDataPPCProto";
+package Sales;
+
+
+service GPSData{
+  rpc GetGPSData(GPSDataRequest) returns(GPSDataReplyList);
+
+}
+
+
+
+message GPSDataRequest{
+  string SalesManID = 1;
+  string DistributorID = 2;
+}
+
+message GPSDataReply{
+  int32	GpsDateID_PPC=1;
+  int32	SelasManID=2;
+  int32	RouteID=3;
+  double	Latitude=4;
+  double	Longitude=5;
+  double	Altitude=6;
+  float	Accuracy=7;
+  float	Bearing=8;
+  float	Speed=9;
+  int64	ElapsedRealTimeNanos=10;
+  string	Date=11;
+  int32	Status=12;
+  double	Distance=13;
+  int32	DistributerID=14;
+  int64	InvoiceRequestID=15;
+  int32	CustomerID=16;
+  int32	PersonID=17;
+
+
+}
+
+message GPSDataReplyList{
+  repeated GPSDataReply GPSDatas = 1;
+}
+

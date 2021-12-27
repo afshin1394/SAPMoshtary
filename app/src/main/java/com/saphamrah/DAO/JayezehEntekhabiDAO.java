@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.JayezehEntekhabiModel;
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.ServerIpModel;
@@ -12,13 +14,26 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvJayezehEntekhabiResult;
+import com.saphamrah.protos.OptionalBonusGrpc;
+import com.saphamrah.protos.OptionalBonusReply;
+import com.saphamrah.protos.OptionalBonusReplyList;
+import com.saphamrah.protos.OptionalBonusRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -67,6 +82,85 @@ public class JayezehEntekhabiDAO
         };
     }
 
+    public void fetchJayezehEntekhabiGrpc(final Context context, final String activityNameForLog, final String ccMarkazForosh, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, JayezehEntekhabiDAO.class.getSimpleName(), activityNameForLog, "fetchJayezehEntekhabiGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                OptionalBonusGrpc.OptionalBonusBlockingStub optionalBonusBlockingStub = OptionalBonusGrpc.newBlockingStub(managedChannel);
+                OptionalBonusRequest optionalBonusRequest = OptionalBonusRequest.newBuilder().setCcMarkazForosh(ccMarkazForosh).build();
+                Callable<OptionalBonusReplyList> optionalBonusReplyListCallable = () -> optionalBonusBlockingStub.getOptionalBonus(optionalBonusRequest);
+                RxAsync.makeObservable(optionalBonusReplyListCallable)
+                        .map(optionalBonusReplyList ->  {
+                            ArrayList<JayezehEntekhabiModel> models = new ArrayList<>();
+                            for (OptionalBonusReply reply : optionalBonusReplyList.getOptionalBonusesList()) {
+                                JayezehEntekhabiModel model = new JayezehEntekhabiModel();
+                                model.setCcJayezeh(reply.getJayezehID());
+                                model.setCcJayezehSatr(reply.getRowBonusID());
+                                model.setCcJayezehSatrKala(reply.getRowGoodBonusID());
+                                model.setCcKala(reply.getGoodID());
+                                model.setCcKalaCodeAsli(reply.getOriginalGoodCodeID());
+                                model.setCcMarkazForosh(reply.getSellCenterID());
+                                model.setCcNoeMoshtary(reply.getCustomerTypeID());
+                                model.setCcTakhfifHajmi(reply.getVolumetricDiscountID());
+                                model.setCodeNoe(reply.getTypeCode());
+                                model.setCodeKalaOld(reply.getOldGoodCode());
+                                model.setMablaghForosh(reply.getSellPrice());
+                                model.setNameKala(reply.getGoodName());
+                                model.setCcKalaCode(reply.getGoodCodeID());
+
+                                models.add(model);
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<JayezehEntekhabiModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<JayezehEntekhabiModel> jayezehModels) {
+                                retrofitResponse.onSuccess(jayezehModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), JayezehEntekhabiDAO.class.getSimpleName(), activityNameForLog, "fetchJayezehEntekhabiGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+
+    }
 
     public void fetchJayezehEntekhabi(final Context context, final String activityNameForLog, final String ccMarkazForosh, final RetrofitResponse retrofitResponse)
     {

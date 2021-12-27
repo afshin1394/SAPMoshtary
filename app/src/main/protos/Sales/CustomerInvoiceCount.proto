@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.CustomerInvoiceCount.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CustomerInvoiceCountProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+service CustomerInvoiceCount{
+  rpc GetCustomerInvoiceCount(CustomerInvoiceCountRequest) returns(CustomerInvoiceCountReplyList);
+}
+
+message CustomerInvoiceCountRequest{
+  string CustomersID = 1;
+
+}
+
+message CustomerInvoiceCountReply{
+
+  int32	CustomerID = 1;
+  int32	CustomerInvoiceCount = 2;
+
+
+
+}
+
+message CustomerInvoiceCountReplyList{
+  repeated CustomerInvoiceCountReply CustomerInvoiceCounts = 1;
+}

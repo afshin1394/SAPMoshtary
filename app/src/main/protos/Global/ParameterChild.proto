@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.ParameterChild.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "ParameterChildProto";
+package Global;
+
+
+service ParameterChild {
+  rpc GetParameterChild (ParameterChildRequest) returns (ParameterChildReplyList);
+}
+
+
+message ParameterChildRequest {
+  string RowTitleType = 1;
+  string	SellOrganizationCenterID = 2;
+  string	StoreCenterID = 3;
+  string	DateProgram = 4;
+
+}
+
+message ParameterChildReply {
+  int32	ParameterChildID = 1;
+  int32	ParameterID = 2;
+  string	Name = 3;
+  string	Value =4;
+  string	Txt =5;
+  int32	SortCode = 6;
+
+
+}
+
+message ParameterChildReplyList{
+  repeated ParameterChildReply ParameterChilds = 1;
+}

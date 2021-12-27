@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.SellerCredit.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "SellerCreditProto";
+option objc_class_prefix = "HLW";
+
+
+package Sales;
+
+service SellerCredit{
+  rpc GetSellerCredit(SellerCreditRequest) returns(SellerCreditReplyList);
+}
+
+message SellerCreditRequest{
+  string SellerIDs = 1;
+}
+
+message SellerCreditReply{
+  int32   SellerID = 1;
+  int64	MaxRialCredit = 2;
+  int64	MaxDocumentCredit = 3;
+  int32	MaxQuantityCredit = 4;
+  int32	MaxDurationCredit = 5;
+  int64	PersonalDocumentRialCredit = 6;
+  int32	PersonalDocumentQuantityCredit = 7;
+  int32	PersonalDocumentDurationCredit = 8;
+  int64	CustomerDocumentRialCredit = 9;
+  int32	CustomerDocumentQuantityCredit = 10;
+  int32	CustomerDocumentDurationCredit= 11;
+  int64	PostponedRialCredit = 12;
+  int32	PostponedQuantityCredit = 13;
+  int32	PostponedDurationCredit = 14;
+  int64	ReturnedRialCredit = 15;
+  int32	ReturnedQuantityCredit = 16;
+  int32	ReturnedDurationCredit = 17;
+  int32	RecieptDuration = 18;
+  int64	DocumentRial = 19;
+  int32	DocumentQuantity = 20;
+  int32	DocumentDuration = 21;
+  int64	PostponedRial = 22;
+  int32	PostponedQuantity = 23;
+  int32	PostponedDuration = 24;
+  int64	ReturnedRial = 25;
+  int32	ReturnedQuantity = 26;
+  int32	ReturnedDuration = 27;
+
+}
+
+message SellerCreditReplyList{
+  repeated SellerCreditReply SellerCredits = 1;
+}
+
+
+
+
+
+
+

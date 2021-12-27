@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.PersonCustomer.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "PersonCustomerProto";
+option objc_class_prefix = "HLW";
+
+package Sales;
+
+
+service PersonCustomer{
+  rpc GetPersonCustomer(PersonCustomerRequest) returns(PersonCustomerReplyList);
+}
+
+message PersonCustomerRequest{
+  string CustomersID = 1;
+}
+
+message PersonCustomerReply{
+  int32	PersonCustomerID =1;
+  int32	CustomerID =2;
+  int32	PersonID =3;
+  string	FullNamePersonCustomer =4;
+  bool	AllowSignature =5;
+  bool	AccountParty =6;
+  string	FullName = 7;
+  string	LastName = 8;
+
+}
+
+message PersonCustomerReplyList{
+  repeated PersonCustomerReply PersonCustomers = 1;
+}

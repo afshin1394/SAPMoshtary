@@ -22,6 +22,14 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllBrandResult;
+import com.saphamrah.protos.AllBrandGrpc;
+import com.saphamrah.protos.AllBrandReply;
+import com.saphamrah.protos.AllBrandReplyList;
+import com.saphamrah.protos.AllBrandRequest;
+import com.saphamrah.protos.BrandGrpc;
+import com.saphamrah.protos.BrandReply;
+import com.saphamrah.protos.BrandReplyList;
+import com.saphamrah.protos.BrandRequest;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -69,78 +77,202 @@ public class BrandDAO
         };
     }
 
+    public void fetchBrandGrpc(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse) {
+        try {
 
-    public void fetchBrand(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
-    {
-        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
-        {
-            String message = "can't find server";
+
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            serverIpModel.setPort("5000");
+
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, BrandDAO.class.getSimpleName(), activityNameForLog, "fetchBrandGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                AllBrandGrpc.AllBrandBlockingStub allBrandBlockingStub = AllBrandGrpc.newBlockingStub(managedChannel);
+                AllBrandRequest allBrandRequest = AllBrandRequest.newBuilder().build();
+                Callable<AllBrandReplyList> allBrandReplyListCallable = () -> allBrandBlockingStub.getAllBrand(allBrandRequest);
+                RxAsync.makeObservable(allBrandReplyListCallable)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(allBrandReplyList -> {
+                            ArrayList<BrandModel> models = new ArrayList<>();
+                            for (AllBrandReply reply  : allBrandReplyList.getAllbrandsList()) {
+                                BrandModel model = new BrandModel();
+
+                                model.setNameBrand(reply.getBrandName());
+                                model.setCcBrand(reply.getBrandID());
+
+
+
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        }).subscribe(new Observer<ArrayList<BrandModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ArrayList<BrandModel> brandModels) {
+                        retrofitResponse.onSuccess(brandModels);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (!compositeDisposable.isDisposed()) {
+                            compositeDisposable.dispose();
+                        }
+                        compositeDisposable.clear();
+                    }
+                });
+            }
+        } catch (
+                Exception exception) {
             PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, BrandDAO.class.getSimpleName(), activityNameForLog, "fetchBrand", "");
-            retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR() , message);
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), BrandDAO.class.getSimpleName(), activityNameForLog, "fetchBrandGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
         }
-        else
-        {
-            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-            Call<GetAllBrandResult> call = apiServiceGet.getAllBrand();
-            call.enqueue(new Callback<GetAllBrandResult>() {
-                @Override
-                public void onResponse(Call<GetAllBrandResult> call, Response<GetAllBrandResult> response)
-                {
-                    try
-                    {
-                        if (response.raw().body() != null)
-                        {
-                            long contentLength = response.raw().body().contentLength();
-                            PubFunc.Logger logger = new PubFunc().new Logger();
-                            logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, BrandDAO.class.getSimpleName(), "", "fetchBrand", "onResponse");
-                        }
-                    }
-                    catch (Exception e){e.printStackTrace();}
-                    try
-                    {
-                        if (response.isSuccessful())
-                        {
-                            GetAllBrandResult result = response.body();
-                            if (result != null)
-                            {
-                                if (result.getSuccess())
-                                {
-                                    retrofitResponse.onSuccess(result.getData());
-                                }
-                                else
-                                {
-                                    PubFunc.Logger logger = new PubFunc().new Logger();
-                                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), BrandDAO.class.getSimpleName(), activityNameForLog, "fetchBrand", "onResponse");
-                                    retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
-                                }
+    }
+
+    public void fetchAmargarBrandGrpc ( final Context context, final String activityNameForLog,
+                                        final RetrofitResponse retrofitResponse){
+        try {
+
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, BrandDAO.class.getSimpleName(), activityNameForLog, "fetchAmargarBrandGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT(), message);
+            } else {
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                BrandGrpc.BrandBlockingStub brandBlockingStub = BrandGrpc.newBlockingStub(managedChannel);
+                BrandRequest brandRequest = BrandRequest.newBuilder().build();
+                Callable<BrandReplyList> brandReplyListCallable = () -> brandBlockingStub.getBrand(brandRequest);
+                RxAsync.makeObservable(brandReplyListCallable)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(brandReplyList -> {
+                            ArrayList<BrandModel> brandModels = new ArrayList<>();
+                            for (BrandReply brandReply : brandReplyList.getBrandReplysList()) {
+                                BrandModel brandModel = new BrandModel();
+                                brandModel.setCcBrand(brandReply.getBrandID());
+                                brandModel.setNameBrand(brandReply.getBrandName());
+                                brandModel.setCcKalaGoroh(brandReply.getGoodsGroupID());
+                                brandModels.add(brandModel);
                             }
-                            else
-                            {
-                                String endpoint = getEndpoint(call);
+
+                            return brandModels;
+
+                        }).subscribe(new Observer<ArrayList<BrandModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ArrayList<BrandModel> kalaModels) {
+                        retrofitResponse.onSuccess(kalaModels);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (!compositeDisposable.isDisposed()) {
+                            compositeDisposable.dispose();
+                        }
+                        compositeDisposable.clear();
+                    }
+                });
+
+            }
+
+        } catch (Exception exception) {
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), BrandDAO.class.getSimpleName(), activityNameForLog, "fetchAmargarBrandGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+
+    }
+
+        public void fetchBrand ( final Context context, final String activityNameForLog,
+        final RetrofitResponse retrofitResponse){
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, BrandDAO.class.getSimpleName(), activityNameForLog, "fetchBrand", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+                APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+                Call<GetAllBrandResult> call = apiServiceGet.getAllBrand();
+                call.enqueue(new Callback<GetAllBrandResult>() {
+                    @Override
+                    public void onResponse(Call<GetAllBrandResult> call, Response<GetAllBrandResult> response) {
+                        try {
+                            if (response.raw().body() != null) {
+                                long contentLength = response.raw().body().contentLength();
                                 PubFunc.Logger logger = new PubFunc().new Logger();
-                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", context.getResources().getString(R.string.resultIsNull), endpoint), BrandDAO.class.getSimpleName(), activityNameForLog, "fetchBrand", "onResponse");
-                                retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
+                                logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, BrandDAO.class.getSimpleName(), "", "fetchBrand", "onResponse");
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        else
-                        {
-                            String endpoint = getEndpoint(call);
-                            String message = String.format("error body : %1$s , code : %2$s * %3$s" , response.message() , response.code(), endpoint);
+                        try {
+                            if (response.isSuccessful()) {
+                                GetAllBrandResult result = response.body();
+                                if (result != null) {
+                                    if (result.getSuccess()) {
+                                        retrofitResponse.onSuccess(result.getData());
+                                    } else {
+                                        PubFunc.Logger logger = new PubFunc().new Logger();
+                                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), BrandDAO.class.getSimpleName(), activityNameForLog, "fetchBrand", "onResponse");
+                                        retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
+                                    }
+                                } else {
+                                    String endpoint = getEndpoint(call);
+                                    PubFunc.Logger logger = new PubFunc().new Logger();
+                                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", context.getResources().getString(R.string.resultIsNull), endpoint), BrandDAO.class.getSimpleName(), activityNameForLog, "fetchBrand", "onResponse");
+                                    retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
+                                }
+                            } else {
+                                String endpoint = getEndpoint(call);
+                                String message = String.format("error body : %1$s , code : %2$s * %3$s", response.message(), response.code(), endpoint);
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, BrandDAO.class.getSimpleName(), activityNameForLog, "fetchBrand", "onResponse");
+                                retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), message);
+                            }
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
                             PubFunc.Logger logger = new PubFunc().new Logger();
-                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, BrandDAO.class.getSimpleName(), activityNameForLog, "fetchBrand", "onResponse");
-                            retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), message);
+                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), BrandDAO.class.getSimpleName(), activityNameForLog, "fetchBrand", "onResponse");
+                            retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION(), exception.toString());
                         }
                     }
-                    catch (Exception exception)
-                    {
-                        exception.printStackTrace();
-                        PubFunc.Logger logger = new PubFunc().new Logger();
-                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), BrandDAO.class.getSimpleName(), activityNameForLog, "fetchBrand", "onResponse");
-                        retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION() , exception.toString());
-                    }
-                }
 
                 @Override
                 public void onFailure(Call<GetAllBrandResult> call, Throwable t)

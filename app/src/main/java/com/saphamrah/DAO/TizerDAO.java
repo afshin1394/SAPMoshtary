@@ -8,7 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Base64;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.Model.ServerIpModel;
@@ -17,14 +20,27 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetTizeriResult;
+import com.saphamrah.protos.TizerGrpc;
+import com.saphamrah.protos.TizerReply;
+import com.saphamrah.protos.TizerReplyList;
+import com.saphamrah.protos.TizerRequest;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,6 +69,77 @@ public class TizerDAO
             exception.printStackTrace();
             PubFunc.Logger logger = new PubFunc().new Logger();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), "TizerDAO" , "" , "constructor" , "");
+        }
+    }
+
+    public void fetchTizerGrpc(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, TizerDAO.class.getSimpleName(), activityNameForLog, "fetchTizerGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                TizerGrpc.TizerBlockingStub blockingStub = TizerGrpc.newBlockingStub(managedChannel);
+                TizerRequest request = TizerRequest.newBuilder().build();
+
+                Callable<TizerReplyList> tizerReplyListCallable = () -> blockingStub.getTizers(request);
+                RxAsync.makeObservable(tizerReplyListCallable)
+
+                        .map(tizerReplyList -> {
+                            ArrayList<TizerModel> models = new ArrayList<>();
+                            for (TizerReply reply : tizerReplyList.getTizersList()) {
+                                TizerModel model = new TizerModel();
+
+                                model.setCcTizer(reply.getTizerID());
+                                model.setNameTizer(reply.getTizerName());
+                                model.setImage(Base64.decode(reply.getImage(), Base64.NO_WRAP));
+                                model.setNameTizer_Farsi(reply.getPersianTizerName());
+                                model.setNameFolder(reply.getFolderName());
+
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<TizerModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<TizerModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), TizerDAO.class.getSimpleName(), activityNameForLog, "fetchTizerGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
         }
     }
 

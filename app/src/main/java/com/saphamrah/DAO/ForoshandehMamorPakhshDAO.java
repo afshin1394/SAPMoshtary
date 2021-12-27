@@ -6,20 +6,35 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetForoshandehMamorPakhshResult;
+import com.saphamrah.protos.SalesManDistributorGrpc;
+import com.saphamrah.protos.SalesManDistributorReply;
+import com.saphamrah.protos.SalesManDistributorReplyList;
+import com.saphamrah.protos.SalesManDistributorRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -107,6 +122,109 @@ public class ForoshandehMamorPakhshDAO
         };
     }
 
+    public void fetchForoshandehMamorPakhshForUpdateGrpc(final Context context,final String activityNameForLog, String imei, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MessageBoxDAO.class.getSimpleName(), activityNameForLog, "fetchForoshandehMamorPakhshForUpdateGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                SalesManDistributorGrpc.SalesManDistributorBlockingStub salesManDistributorBlockingStub = SalesManDistributorGrpc.newBlockingStub(managedChannel);
+                SalesManDistributorRequest request = SalesManDistributorRequest.newBuilder().setDeviceSerialNumber(imei).build();
+
+                Callable<SalesManDistributorReplyList> replyListCallable = () -> salesManDistributorBlockingStub.getSalesManDistributor(request);
+                RxAsync.makeObservable(replyListCallable)
+
+                        .map(replyList -> {
+                            ArrayList<ForoshandehMamorPakhshModel> models = new ArrayList<>();
+                            for (SalesManDistributorReply reply : replyList.getSalesManDistributorsList()) {
+                                ForoshandehMamorPakhshModel model = new ForoshandehMamorPakhshModel();
+                                model.setNoeMasouliat(reply.getResponsibilityType());
+                                model.setCcForoshandeh(reply.getSalesManID());
+                                model.setCcMamorPakhsh(reply.getDistributorID());
+                                model.setCcAfrad(reply.getPersonID());
+                                model.setCcAfradModir(reply.getManagerPersonID());
+                                model.setCodeForoshandeh(reply.getSalesManCode());
+                                model.setFullName(reply.getFullName());
+                                model.setDeviceSerialNumber(reply.getDeviceSerialNumber());
+                                model.setCanGetProgram(reply.getCanGetProgram());
+                                model.setCanSetFaktorKharejAzMahal(reply.getCanGetInvoiceOutOfArea());
+                                model.setCanGetDarkhastTelephoni(reply.getCanGetPhoneRequest());
+                                model.setCanGetPhotoChidman(reply.getCanGetSortPhoto());
+                                model.setCanChangeMoshtaryPosition(reply.getCanChangeCustomerPosition());
+                                model.setNoeForoshandehMamorPakhsh(reply.getSalesManDistributorType());
+                                model.setCcMarkazForosh(reply.getSellCenterID());
+                                model.setCcMarkazAnbar(reply.getStoreCenterID());
+                                model.setNameMarkazForosh(reply.getSellCenterName());
+                                model.setNameMarkazAnbar(reply.getStoreCenterName());
+                                model.setMaxTedadCheckBargashty(reply.getReturnedChequeMaxNumber());
+                                model.setMaxModatCheckBargashty(reply.getReturnedChequeMaxDuration());
+                                model.setMaxMablaghCheckBargashty(reply.getReturnedChequeMaxPrice());
+                                model.setMaxResidNaghd(reply.getMaxCashReceipt());
+                                model.setMaxResidCheck(reply.getMaxChequeReceipt());
+                                model.setNameMarkazSazmanForoshSakhtarForosh(reply.getSellStructureSellOrganizationCenterName());
+                                model.setNameSazmanForosh(reply.getSellOrganizationName());
+                                model.setTelephoneShobeh(reply.getBranchPhoneNumber());
+                                model.setTelephoneForoshandehMamorPakhsh(reply.getSalesManDistributerPhoneNumber());
+                                model.setPosNumber(reply.getPosNumber());
+                                model.setCcPosShomarehHesab(reply.getPosAccountNumberID());
+                                model.setCcMarkaz(reply.getCenterID());
+                                model.setIsMojazForSabtDarkhast(reply.getIsValidForRegisterRequest());
+                                model.setCcMarkazSazmanForoshSakhtarForosh(reply.getSellStructureSellOrganizationCenterID());
+                                model.setCcMarkazSazmanForosh(reply.getSellOrganizationCenterID());
+                                model.setCcSazmanForosh(reply.getSellOrganizationID());
+                                model.setCanGetMarjoee(reply.getCanGetReturned());
+                                model.setCcMashin(reply.getMachineID());
+                                model.setFlagSabtNaghd(reply.getFlagRegisterCash());
+                                model.setCcForoshandehs(reply.getSalesManIDs());
+                                model.setCcAnbar(reply.getStoreID());
+                                model.setCcAnbarak(reply.getBinID());
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<ForoshandehMamorPakhshModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<ForoshandehMamorPakhshModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), MessageBoxDAO.class.getSimpleName(), activityNameForLog, "fetchForoshandehMamorPakhshForUpdateGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+    }
 
     public void fetchForoshandehMamorPakhshForUpdate(final Context context,final String activityNameForLog, String imei, final RetrofitResponse retrofitResponse)
     {

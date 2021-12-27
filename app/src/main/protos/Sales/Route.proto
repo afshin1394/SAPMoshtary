@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.Route.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RouteProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+
+service Route{
+	rpc GetRoute(RouteRequest) returns(RouteReplyList);
+}
+
+message RouteRequest{
+    string SellerID = 1;
+    string SellCenterID = 2;
+    string FromDate =3;
+    string ToDate =4;
+    string TypeCode =5;
+
+}
+
+message RouteReply{
+         int32 RouteID = 1;
+         int32 SellerID = 2;
+         string RouteName = 3;
+         int32 VisitTour  = 4;
+         int32 VisitTodayRouteID = 5;
+         
+}
+
+message RouteReplyList{
+	repeated RouteReply Routes = 1;
+}
+

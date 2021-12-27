@@ -30,6 +30,7 @@ public interface GetProgramMVP
         void showCompletedUpdateGharardadKalaMosavabeh();
         void showErrorAlert(boolean closeActivity, int titleResId, String message, int messageType, int buttonTextResId);
 
+        void showGetProgramDetails(String message);
     }
 
 
@@ -80,7 +81,7 @@ public interface GetProgramMVP
         void onGetServerTime(boolean validDiffTime, String message);
         void notFoundServerIP();
 
-
+        void showGetProgramDetails(long elapseTime,long responseSize);
     }
 
 

@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.GuildDiscount.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "GuildDiscountProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+
+service GuildDiscount{
+  rpc GetGuildDiscount(GuildDiscountRequest) returns(GuildDiscountReplyList);
+}
+
+message GuildDiscountRequest{
+  string RowTitleType = 1;
+  string SellCenterID = 2;
+  string GuildDiscountID = 3;
+}
+
+message GuildDiscountReply{
+  int32	GuildDiscountID = 1;
+  int32	TypeCode= 2;
+  string	DiscountDescription= 3;
+  int32	RialCountType= 4;
+  int32	CustomerFieldTypeName=5;
+  int32	CustomerFieldTypeID= 6;
+  int32	Degree= 7;
+  int32	Row= 8;
+  int32	SellOrganizationCenterID= 9;
+  int32	GuildTypeID= 10;
+  string	GuildTypeName= 11;
+  int32	CustomerContractID= 12;
+  int32	Priority= 13;
+  int32	PriceType= 14;
+  int32	ReceiptType= 15;
+  int32    AreaId = 17;
+  int32    IsStepByStep = 18;
+  int32    EmphasisedGroupID = 19;
+  string   TxtReceiptType = 20;
+  int32    ForBonus = 21;
+  int32    CarryingCodeType = 22;
+
+
+
+}
+
+message GuildDiscountReplyList{
+  repeated GuildDiscountReply GuildDiscounts = 1;
+}
+
+
+

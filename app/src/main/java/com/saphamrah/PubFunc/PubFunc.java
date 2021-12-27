@@ -1,5 +1,8 @@
 package com.saphamrah.PubFunc;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -40,6 +43,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -67,6 +71,7 @@ import com.saphamrah.Model.EmailLogPPCModel;
 import com.saphamrah.Model.ForoshandehAmoozeshiModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.LogPPCModel;
+import com.saphamrah.Model.LoginInfoModel;
 import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.AsyncSendMail;
@@ -77,10 +82,15 @@ import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Shared.UserTypeShared;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoResult;
+import com.saphamrah.protos.LoginInfoGrpc;
+import com.saphamrah.protos.LoginInfoReply;
+import com.saphamrah.protos.LoginInfoRequest;
 
 import java.io.ByteArrayOutputStream;
 import java.net.NetworkInterface;
@@ -94,12 +104,19 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -658,6 +675,10 @@ public class PubFunc
                     , ""));
             serverIpModel.setPort(serverIPShared.getString(serverIPShared.PORT_GET_REQUEST()
                     , ""));
+
+            serverIpModel.setWebServiceType(serverIPShared.getInt(serverIPShared.TYPE_GET_REQUEST()
+                    , 1));
+
             return serverIpModel;
         }
 
@@ -673,6 +694,8 @@ public class PubFunc
                     , ""));
             serverIpModel.setPort(serverIPShared.getString(serverIPShared.PORT_POST_REQUEST()
                     , ""));
+            serverIpModel.setWebServiceType(serverIPShared.getInt(serverIPShared.TYPE_POST_REQUEST()
+                    , 1));
             return serverIpModel;
         }
 
@@ -688,6 +711,8 @@ public class PubFunc
                     , ""));
             serverIpModel.setPort(serverIPShared.getString(serverIPShared.PORT_MULTI_REQUEST()
                     , ""));
+            serverIpModel.setWebServiceType(serverIPShared.getInt(serverIPShared.TYPE_MULTI_REQUEST()
+                    , 1));
             return serverIpModel;
         }
     }
@@ -695,71 +720,153 @@ public class PubFunc
 
     public class LoginInfo
     {
-        public void callLoginInfoService(final Context context , String serverIP , String port , final GetLoginInfoCallback callback)
-        {
-            ServerIpModel serverIpModel=new PubFunc().new NetworkUtils().getServerFromShared(context);
-
-            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-            Call<GetLoginInfoResult> call = apiServiceGet.getLoginInfo();
-            call.enqueue(new Callback<GetLoginInfoResult>()
-            {
-                @Override
-                public void onResponse(Call<GetLoginInfoResult> call, Response<GetLoginInfoResult> response)
-                {
-                    if (response.raw().body() != null)
-                    {
-                        Log.d("intercept" , "in on response PubFunc.LoginInfo.callLoginInfoService and response : " + response.raw().body().contentLength());
-                        long contentLength = response.raw().body().contentLength();
-                        Logger logger = new Logger();
-                        logger.insertLogToDB(context,Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, "PubFunc.LoginInfo", "", "callLoginInfoService", "onResponse");
-                    }
-                    if (response.isSuccessful())
-                    {
-                        try
-                        {
-                            GetLoginInfoResult loginInfoResult = response.body();
-                            String dateTime = loginInfoResult.getData().get(0).getServerDateTime();
-                            SimpleDateFormat formatter = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
-							SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_WITH_SPACE());																			  
-                            Date serverDate = formatter.parse(dateTime);
-                            Date deviceDate = Calendar.getInstance().getTime();
-                            long diff = Math.abs(serverDate.getTime() - deviceDate.getTime()) / 1000;
-                            Log.d("deviceTime" , deviceDate.toString());
-                            Log.d("serverTime" , serverDate.toString());
-                            Log.d("diffTime" , String.valueOf(diff));
-                            if (diff > Constants.ALLOWABLE_SERVER_LOCAL_TIME_DIFF())
-                            {
-                                callback.onSuccess(false, sdf.format(serverDate), sdf.format(deviceDate), diff);
+        public void callLoginInfoService(final Context context , String serverIP , String port , final GetLoginInfoCallback callback) {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            switch (serverIpModel.getWebServiceType()) {
+                case REST:
+                    APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+                    Log.d("splashModel", "serverIpModel" + serverIpModel.toString());
+                    Call<GetLoginInfoResult> call = apiServiceGet.getLoginInfo();
+                    call.enqueue(new Callback<GetLoginInfoResult>() {
+                        @Override
+                        public void onResponse(Call<GetLoginInfoResult> call, Response<GetLoginInfoResult> response) {
+                            if (response.raw().body() != null) {
+                                Log.d("splashModel", "in on response PubFunc.LoginInfo.callLoginInfoService and response : " + response.raw().body().contentLength());
+                                long contentLength = response.raw().body().contentLength();
+                                Logger logger = new Logger();
+                                logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, "PubFunc.LoginInfo", "", "callLoginInfoService", "onResponse");
                             }
-                            else
-                            {
-                                callback.onSuccess(true, sdf.format(serverDate), sdf.format(deviceDate), diff);
+                            if (response.isSuccessful()) {
+                                try {
+                                    GetLoginInfoResult loginInfoResult = response.body();
+                                    String dateTime = loginInfoResult.getData().get(0).getServerDateTime();
+                                    //todo Format
+                                    SimpleDateFormat formatter = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
+                                    SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_WITH_SPACE());
+                                    Date serverDate = formatter.parse(dateTime);
+                                    Date deviceDate = Calendar.getInstance().getTime();
+                                    long diff = Math.abs(serverDate.getTime() - deviceDate.getTime()) / 1000;
+                                    Log.d("splashModel deviceTime", deviceDate.toString());
+                                    Log.d("splashModel serverTime", serverDate.toString());
+                                    Log.d("splashModel diffTime", String.valueOf(diff));
+                                    if (diff > Constants.ALLOWABLE_SERVER_LOCAL_TIME_DIFF()) {
+                                        callback.onSuccess(false, sdf.format(serverDate), sdf.format(deviceDate), diff);
+                                    } else {
+                                        callback.onSuccess(true, sdf.format(serverDate), sdf.format(deviceDate), diff);
+                                    }
+                                } catch (Exception exception) {
+                                    exception.printStackTrace();
+                                    Logger logger = new Logger();
+                                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), "PubFunc.LoginInfo", "", "callLoginInfoService", "onResponse");
+                                    callback.onFailure(null);
+                                }
+                            } else {
+                                callback.onFailure(response.errorBody().toString());
                             }
                         }
-                        catch (Exception exception)
-                        {
-                            exception.printStackTrace();
+
+                        @Override
+                        public void onFailure(Call<GetLoginInfoResult> call, Throwable t) {
+                            Log.d("fail", "" + t.getMessage());
                             Logger logger = new Logger();
-                            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), exception.toString(), "PubFunc.LoginInfo", "", "callLoginInfoService", "onResponse");
-                            callback.onFailure(null);
+                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), t.toString(), "PubFunc.LoginInfo", "", "callLoginInfoService", "onFailure");
+                            callback.onFailure(t.toString());
                         }
-                    }
-                    else
-                    {
-                        callback.onFailure(response.errorBody().toString());
-                    }
-                }
+                    });
 
-                @Override
-                public void onFailure(Call<GetLoginInfoResult> call, Throwable t)
-                {
-                    Log.d("fail" , "" + t.getMessage());
-                    Logger logger = new Logger();
-                    logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), t.toString(), "PubFunc.LoginInfo", "", "callLoginInfoService", "onFailure");
-                    callback.onFailure(t.toString());
-                }
-            });
-        }
+                    break;
+//                }
+                case gRPC:
+
+                   try {
+                       if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                           String message = "can't find server";
+                           PubFunc.Logger logger = new PubFunc().new Logger();
+                           logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, PubFunc.class.getSimpleName(), "", "callLoginInfoService", "");
+                           callback.onFailure(message);
+                       } else {
+
+                           CompositeDisposable compositeDisposable = new CompositeDisposable();
+                           ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                           LoginInfoGrpc.LoginInfoBlockingStub loginInfoBlockingStub = LoginInfoGrpc.newBlockingStub(managedChannel);
+                           LoginInfoRequest request = LoginInfoRequest.newBuilder().build();
+
+                           Callable<LoginInfoReply> replyCallable = () -> loginInfoBlockingStub.getLoginInfo(request);
+                           RxAsync.makeObservable(replyCallable)
+
+                                   .map(reply -> {
+                                       LoginInfoModel loginInfoModel = new LoginInfoModel();
+                                       loginInfoModel.setServerDateTime(reply.getServerDateTime());
+
+                                       return loginInfoModel;
+
+                                   })
+                                   .subscribeOn(Schedulers.io())
+                                   .observeOn(AndroidSchedulers.mainThread())
+                                   .subscribe(new Observer<LoginInfoModel>() {
+                                       @Override
+                                       public void onSubscribe(@NonNull Disposable d) {
+                                           compositeDisposable.add(d);
+                                       }
+
+                                       @Override
+                                       public void onNext(@NonNull LoginInfoModel model) {
+                                           try {
+
+                                               String dateTime = model.getServerDateTime();
+                                               SimpleDateFormat formatter = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
+                                               SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_WITH_SPACE());
+                                               Date serverDate = formatter.parse(dateTime);
+                                               Date deviceDate = Calendar.getInstance().getTime();
+                                               long diff = Math.abs(serverDate.getTime() - deviceDate.getTime()) / 1000;
+                                               Log.d("deviceTime", deviceDate.toString());
+                                               Log.d("serverTime", serverDate.toString());
+                                               Log.d("diffTime", String.valueOf(diff));
+                                               if (diff > Constants.ALLOWABLE_SERVER_LOCAL_TIME_DIFF()) {
+                                                   callback.onSuccess(false, sdf.format(serverDate), sdf.format(deviceDate), diff);
+                                               } else {
+                                                   callback.onSuccess(true, sdf.format(serverDate), sdf.format(deviceDate), diff);
+                                               }
+                                           } catch (Exception exception) {
+                                               exception.printStackTrace();
+                                               Logger logger = new Logger();
+                                               logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), "PubFunc.LoginInfo", "", "callLoginInfoService", "onResponse");
+                                               callback.onFailure(null);
+                                           }
+
+                                       }
+
+                                       @Override
+                                       public void onError(@NonNull Throwable e) {
+                                           callback.onFailure(e.getMessage());
+                                       }
+
+                                       @Override
+                                       public void onComplete() {
+                                           if (!compositeDisposable.isDisposed()) {
+                                               compositeDisposable.dispose();
+                                           }
+                                           compositeDisposable.clear();
+                                       }
+                                   });
+
+                       }
+                   } catch (Exception exception) {
+                       PubFunc.Logger logger = new PubFunc().new Logger();
+                       logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(),PubFunc.class.getSimpleName(), "", "fetchMessagesGrpc", "");
+                       callback.onFailure(exception.getMessage());
+                   }
+
+
+                break;
+
+              }
+
+
+
+
+//            }
+      }
     }
 
 

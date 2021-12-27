@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.Group.proto.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "GroupProto";
+option objc_class_prefix = "HLW";
+
+package Global;
+
+
+
+service Group {
+  rpc GetGroup (GroupRequest) returns (GroupReplyList);
+}
+
+message GroupRequest {
+
+}
+
+// The response message containing the greetings.
+message GroupReply {
+  int32 groupID = 1;
+  string groupName = 2;
+  int32 linkGroupID = 3;
+  int32 rootID= 4;
+  int32 groupTypeCode = 5;
+
+}
+
+message GroupReplyList{
+  repeated GroupReply Groups = 1;
+}

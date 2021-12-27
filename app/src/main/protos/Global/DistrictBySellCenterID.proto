@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.District.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "DistrictProto";
+option objc_class_prefix = "HLW";
+package Global;
+
+service DistrictBySellCenterID{
+  rpc GetDistrictBySellCenterID(DistrictBySellCenterIDRequest) returns(DistrictBySellCenterIDReplyList);
+}
+
+message DistrictBySellCenterIDRequest{
+  string SellOrganizationCenterID = 1;
+}
+
+message DistrictBySellCenterIDReply{
+  int32 DistrictID = 1;
+  string DistrictName = 2;
+  int32 DistrictTypeCode = 3;
+  int32 LinkDistrictID = 4;
+  string AreaCode = 5;
+}
+
+message DistrictBySellCenterIDReplyList{
+  repeated DistrictBySellCenterIDReply DistrictBySellCenterIDs = 1;
+}

@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.InvoiceRequestDraftRow.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "InvoiceRequestDraftRowProto";
+option objc_class_prefix = "HLW";
+
+package Sales;
+
+
+service InvoiceRequestDraftRow{
+	rpc GetInvoiceRequestDraftRow(InvoiceRequestDraftRowRequest) returns(InvoiceRequestDraftRowReplyList);
+}
+
+message InvoiceRequestDraftRowRequest{
+    string DraftInvoiceType = 1;
+    string InvoiceRequestsID = 2;
+  
+
+}
+
+message InvoiceRequestDraftRowReply{
+int32	RowInvoiceRequestID = 1;
+int64	InvoiceRequestID = 2;
+int32	ProviderID = 3;
+int32	GoodID = 4;
+int32	GoodCodeID =5;
+int32	Queantity3 = 6;
+int32	GoodTypeCode = 7;
+string	BatchNumber = 8;
+string	ProductionDate = 9;
+float	SellPrice = 10;
+float	PureGoodSellPrice = 11;
+float	UnitedCashDiscountPrice = 12;
+float	Tax = 13;
+float	Complications = 14;
+int32	PersonsID = 15;
+string	ExpirationDate =16;
+int32	ReturnStoreID =17;
+int32	StorePortionID =18;
+float	BuyPrice=19;
+float	ConsumerPrice=20;
+float	OriginalSellPrice=21;
+float	OrginalConsumerPrice=22;
+float	Weight=23;
+
+}
+
+message InvoiceRequestDraftRowReplyList{
+	repeated InvoiceRequestDraftRowReply InvoiceRequestDraftRows = 1;
+}
+

@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.PurchaseRialCustomerType.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "PurchaseRialCustomerTypeProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+service PurchaseRialCustomerType{
+  rpc GetPurchaseRialCustomerType(PurchaseRialCustomerTypeRequest) returns(PurchaseRialCustomerTypeReplyList);
+}
+
+message PurchaseRialCustomerTypeRequest{
+  string SellStructureSellOrganizationCenterID = 1;
+}
+
+message PurchaseRialCustomerTypeReply{
+  int32	PurchaseRialCustomerType =1;
+  int32	GroupID =2;
+  float	MinPurchasePrice =3;
+  float	MinOutOfRoutePurchasePrice =4;
+  int32	MinPurchaseCount=5;
+  int32	SellStructureSellOrganizationCenterID =6;
+  int32	Degree=7;
+
+}
+
+message PurchaseRialCustomerTypeReplyList{
+  repeated PurchaseRialCustomerTypeReply PurchaseRialCustomerTypes = 1;
+}

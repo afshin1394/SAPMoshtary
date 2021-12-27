@@ -86,6 +86,7 @@ public class RptJashnvarehDAO {
 
     public void fetchRptJashnvareh(final Context context, final String activityNameForLog, int ccForoshandeh, String ccMoshtaries, final RetrofitResponse retrofitResponse) {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+        serverIpModel.setPort("8040");
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
             String message = "can't find server";
             PubFunc.Logger logger = new PubFunc().new Logger();

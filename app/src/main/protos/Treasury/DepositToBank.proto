@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Treasury.DepositToBank.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "DepositToBankProto";
+package Treasury;
+
+
+service DepositToBank{
+  rpc GetDepositToBank(DepositToBankRequest) returns(DepositToBankReplyList);
+}
+
+message DepositToBankRequest{
+
+  string PersonID = 1;
+
+
+}
+
+message DepositToBankReply{
+
+  int32	ReceivePaymentID = 1;
+  string	CustomerName = 2;
+  int32	CustomerID = 3;
+  double	Price = 4;
+  int32	CollectionTypeCode = 5;
+  int32	Confirm = 6;
+
+
+
+
+}
+
+message DepositToBankReplyList{
+  repeated DepositToBankReply DepositToBanks = 1;
+}

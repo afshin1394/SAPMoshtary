@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.PricePriorityGoods.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "PricePriorityGoodsProto";
+
+package Sales;
+
+
+service PricePriorityGoods{
+  rpc GetPricePriorityGoods(PricePriorityGoodsRequest) returns(PricePriorityGoodsReplyList);
+}
+
+message PricePriorityGoodsRequest{
+  string SalesManID = 1;
+  string DistributorID =2;
+  string BinID  = 3;
+  string GoodCodeID = 4;
+
+
+}
+
+message PricePriorityGoodsReply{
+  int32	GoodsCodeID = 1;
+  int32	Priority = 2;
+  double	SellPrice = 3;
+  int32	Quantity = 4;
+  string	ProductionDate = 5;
+  int32	Row = 6;
+
+
+}
+
+message PricePriorityGoodsReplyList{
+  repeated PricePriorityGoodsReply PricePriorityGoodss = 1;
+}

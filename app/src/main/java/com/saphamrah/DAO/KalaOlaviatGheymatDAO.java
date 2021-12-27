@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.Model.CompanyModel;
 import com.saphamrah.Model.KalaOlaviatGheymatModel;
@@ -14,12 +16,25 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetKalaOlaviatGheymatResult;
+import com.saphamrah.protos.PricePriorityGoodsGrpc;
+import com.saphamrah.protos.PricePriorityGoodsReply;
+import com.saphamrah.protos.PricePriorityGoodsReplyList;
+import com.saphamrah.protos.PricePriorityGoodsRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,6 +65,99 @@ public class KalaOlaviatGheymatDAO
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), "KalaOlaviatGheymatDAO" , "" , "constructor" , "");
         }
     }
+
+    /*
+  get name all columns in model
+   */
+    private String[] allColumns()
+    {
+        return new String[]
+                {
+                        modelGetTABLE_NAME.getCOLUMN_cckalaCode(),
+                        modelGetTABLE_NAME.getCOLUMN_Olaviat(),
+                        modelGetTABLE_NAME.getCOLUMN_GheymatForosh(),
+                        modelGetTABLE_NAME.getCOLUMN_TarikhTolid(),
+                        modelGetTABLE_NAME.getCOLUMN_Radif(),
+
+
+
+                };
+    }
+
+    public void fetchKalaOlaviatGrpc(final Context context, final String activityNameForLog,String ccAnbarak ,int ccForoshandeh ,int ccMamorPakhsh , String ccKalaCode ,  final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+            {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchConfigNoeVosolMojazeFaktorGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR() , message);
+            }
+            else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                PricePriorityGoodsGrpc.PricePriorityGoodsBlockingStub blockingStub = PricePriorityGoodsGrpc.newBlockingStub(managedChannel);
+                PricePriorityGoodsRequest request = PricePriorityGoodsRequest.newBuilder().setBinID(ccAnbarak).setDistributorID(String.valueOf(ccMamorPakhsh)).setGoodCodeID(String.valueOf(ccKalaCode)).setSalesManID(String.valueOf( ccForoshandeh)).build();
+
+                Callable<PricePriorityGoodsReplyList> replyListCallable  = () -> blockingStub.getPricePriorityGoods(request);
+                RxAsync.makeObservable(replyListCallable)
+
+                        .map(replyList -> {
+                            ArrayList<KalaOlaviatGheymatModel> models = new ArrayList<>();
+                            for (PricePriorityGoodsReply reply : replyList.getPricePriorityGoodssList()) {
+                                KalaOlaviatGheymatModel model = new KalaOlaviatGheymatModel();
+
+                                model.setCckalaCode(reply.getGoodsCodeID());
+                                model.setOlaviat(reply.getPriority());
+                                model.setGheymatForosh(reply.getSellPrice());
+                                model.setTarikhTolid(reply.getProductionDate());
+                                model.setRadif(reply.getRow());
+
+
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<KalaOlaviatGheymatModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<KalaOlaviatGheymatModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), KalaOlaviatGheymatDAO.class.getSimpleName(), activityNameForLog, "fetchConfigNoeVosolMojazeFaktorGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
+        }
+    }
+
 
     /*
     fetch = request server and get result
@@ -155,23 +263,7 @@ public class KalaOlaviatGheymatDAO
         }
     }
 
-    /*
-    get name all columns in model
-     */
-    private String[] allColumns()
-    {
-        return new String[]
-        {
-                modelGetTABLE_NAME.getCOLUMN_cckalaCode(),
-                modelGetTABLE_NAME.getCOLUMN_Olaviat(),
-                modelGetTABLE_NAME.getCOLUMN_GheymatForosh(),
-                modelGetTABLE_NAME.getCOLUMN_TarikhTolid(),
-                modelGetTABLE_NAME.getCOLUMN_Radif(),
 
-
-
-        };
-    }
 
     /*
     set result model to DB

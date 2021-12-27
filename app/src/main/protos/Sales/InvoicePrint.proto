@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.InvoicePrint.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "InvoicePrintProto";
+option objc_class_prefix = "HLW";
+
+package Sales;
+
+
+service InvoicePrint{
+  rpc GetInvoicePrint(InvoicePrintRequest) returns(InvoicePrintReplyList);
+}
+
+message InvoicePrintRequest{
+  string PersonID = 1;
+
+
+}
+
+message InvoicePrintReply{
+  string	CustomerCode = 1;
+  string	CustomerName =2 ;
+  string	UniqID_Tablet = 3;
+  string	InvoiceNumber = 4;
+  double	InvoicePrice = 5;
+  int32	Row = 6 ;
+
+
+
+}
+
+message InvoicePrintReplyList{
+  repeated InvoicePrintReply InvoicePrints = 1;
+}

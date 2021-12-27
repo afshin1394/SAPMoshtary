@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.Model.MarjoeeMamorPakhshModel;
 import com.saphamrah.Model.ServerIpModel;
@@ -15,12 +17,25 @@ import com.saphamrah.PubFunc.ConcurrencyUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.MarjoeeMamorPakhshResult;
+import com.saphamrah.protos.DistributerReturnGrpc;
+import com.saphamrah.protos.DistributerReturnReply;
+import com.saphamrah.protos.DistributerReturnReplyList;
+import com.saphamrah.protos.DistributerReturnRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,9 +66,122 @@ public class MarjoeeMamorPakhshDAO
     }
 
     /*
-    fetch = request server and get result
-     */
-    //TODO::
+get name all columns in model
+ */
+    private String[] allColumns()
+    {
+        return new String[]
+                {
+                        modelGetTABLE_NAME.getCOLUM_ccMarjoeeMamorPakhsh(),
+                        modelGetTABLE_NAME.getCOLUM_ccKala(),
+                        modelGetTABLE_NAME.getCOLUM_ccKalaCode(),
+                        modelGetTABLE_NAME.getCOLUM_CodeKalaOld(),
+                        modelGetTABLE_NAME.getCOLUM_NameKala(),
+                        modelGetTABLE_NAME.getCOLUM_ccTaminKonandeh(),
+                        modelGetTABLE_NAME.getCOLUM_ShomarehBach(),
+                        modelGetTABLE_NAME.getCOLUM_TarikhTolid(),
+                        modelGetTABLE_NAME.getCOLUM_TarikhTolidShamsi(),
+                        modelGetTABLE_NAME.getCOLUM_TarikhEngheza(),
+                        modelGetTABLE_NAME.getCOLUM_ccMoshtary(),
+                        modelGetTABLE_NAME.getCOLUM_NameMoshtary(),
+                        modelGetTABLE_NAME.getCOLUM_ccAnbarMarjoee(),
+                        modelGetTABLE_NAME.getCOLUM_mablaghKharid(),
+                        modelGetTABLE_NAME.getCOLUM_mablaghForosh(),
+                        modelGetTABLE_NAME.getCOLUM_mablaghForoshKhales(),
+                        modelGetTABLE_NAME.getCOLUM_mablaghMasrafKonandeh(),
+                        modelGetTABLE_NAME.getCOLUM_Tedad3(),
+                        modelGetTABLE_NAME.getCOLUM_ExtraProp_ccElatMarjoee(),
+                        modelGetTABLE_NAME.getCOLUM_ExtraProp_NameElatMarjoee(),
+                        modelGetTABLE_NAME.getCOLUM_ExtraProp_TedadNahaeeMarjoee(),
+                        modelGetTABLE_NAME.getCOLUM_ccAnbarGhesmat()
+                };
+    }
+
+    public void fetchMarjoeeMamorPakhshGrpc(Context context  ,  String activityNameForLog, String ccMoshtarys,  RetrofitResponse retrofitResponse) {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MarjoeeMamorPakhshDAO.class.getSimpleName(), activityNameForLog, "fetchMahalCodePostiGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                DistributerReturnGrpc.DistributerReturnBlockingStub blockingStub = DistributerReturnGrpc.newBlockingStub(managedChannel);
+                DistributerReturnRequest request = DistributerReturnRequest.newBuilder().setCustomersID(ccMoshtarys).build();
+
+                Callable<DistributerReturnReplyList> replyListCallable = () -> blockingStub.getDistributerReturn(request);
+                RxAsync.makeObservable(replyListCallable)
+
+                        .map(replyList -> {
+                            ArrayList<MarjoeeMamorPakhshModel> models = new ArrayList<>();
+                            for (DistributerReturnReply reply : replyList.getDistributerReturnsList()) {
+                                MarjoeeMamorPakhshModel model = new MarjoeeMamorPakhshModel();
+
+                                model.setCcMarjoeeMamorPakhsh(reply.getDistributerReturnID());
+                                model.setCcKala(reply.getGoodsID());
+                                model.setCcKalaCode(reply.getGoodsCodeID());
+                                model.setCodeKalaOld(reply.getOldGoodsCode());
+                                model.setNameKala(reply.getGoodsName());
+                                model.setCcTaminKonandeh(reply.getPrividerID());
+                                model.setShomarehBach(reply.getBatchNumber());
+                                model.setTarikhTolid(reply.getProductionDate());
+                                model.setTarikhTolidShamsi(reply.getShamsiProductionDate());
+                                model.setTarikhEngheza(reply.getExpirationDate());
+                                model.setCcMoshtary(reply.getCustomerID());
+                                model.setNameMoshtary(reply.getCustomerName());
+                                model.setCcAnbarMarjoee(reply.getReturnStoreName());
+                                model.setMablaghKharid(reply.getBuyPrice());
+                                model.setMablaghForosh(reply.getSellPrice());
+                                model.setMablaghForoshKhales(reply.getPureSellPrice());
+                                model.setMablaghMasrafKonandeh(reply.getConsumerPrice());
+                                model.setTedad3(reply.getQuantity3());
+                                model.setCcAnbarGhesmat(reply.getStorePortionID());
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<MarjoeeMamorPakhshModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<MarjoeeMamorPakhshModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), MarjoeeMamorPakhshDAO.class.getSimpleName(), activityNameForLog, "fetchMahalCodePostiGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+
+    }
+
     public void fetchMarjoeeMamorPakhsh( Context context  ,  String activityNameForLog, String ccMoshtarys,  RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
@@ -155,37 +283,7 @@ public class MarjoeeMamorPakhshDAO
         }
     }
 
-    /*
-    get name all columns in model
-     */
-    private String[] allColumns()
-    {
-        return new String[]
-                {
-                        modelGetTABLE_NAME.getCOLUM_ccMarjoeeMamorPakhsh(),
-                        modelGetTABLE_NAME.getCOLUM_ccKala(),
-                        modelGetTABLE_NAME.getCOLUM_ccKalaCode(),
-                        modelGetTABLE_NAME.getCOLUM_CodeKalaOld(),
-                        modelGetTABLE_NAME.getCOLUM_NameKala(),
-                        modelGetTABLE_NAME.getCOLUM_ccTaminKonandeh(),
-                        modelGetTABLE_NAME.getCOLUM_ShomarehBach(),
-                        modelGetTABLE_NAME.getCOLUM_TarikhTolid(),
-                        modelGetTABLE_NAME.getCOLUM_TarikhTolidShamsi(),
-                        modelGetTABLE_NAME.getCOLUM_TarikhEngheza(),
-                        modelGetTABLE_NAME.getCOLUM_ccMoshtary(),
-                        modelGetTABLE_NAME.getCOLUM_NameMoshtary(),
-                        modelGetTABLE_NAME.getCOLUM_ccAnbarMarjoee(),
-                        modelGetTABLE_NAME.getCOLUM_mablaghKharid(),
-                        modelGetTABLE_NAME.getCOLUM_mablaghForosh(),
-                        modelGetTABLE_NAME.getCOLUM_mablaghForoshKhales(),
-                        modelGetTABLE_NAME.getCOLUM_mablaghMasrafKonandeh(),
-                        modelGetTABLE_NAME.getCOLUM_Tedad3(),
-                        modelGetTABLE_NAME.getCOLUM_ExtraProp_ccElatMarjoee(),
-                        modelGetTABLE_NAME.getCOLUM_ExtraProp_NameElatMarjoee(),
-                        modelGetTABLE_NAME.getCOLUM_ExtraProp_TedadNahaeeMarjoee(),
-                        modelGetTABLE_NAME.getCOLUM_ccAnbarGhesmat()
-                };
-    }
+
 
     /*
     set result model to DB

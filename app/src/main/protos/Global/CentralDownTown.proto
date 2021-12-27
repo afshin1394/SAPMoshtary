@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.CentralDownTown.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CentralDownTownProto";
+option objc_class_prefix = "HLW";
+package Global;
+
+
+service CentralDownTown{
+  rpc GetCentralDownTown(CentralDownTownRequest) returns(CentralDownTownReplyList);
+}
+
+message CentralDownTownRequest{
+
+}
+
+message CentralDownTownReply{
+  int32	CityCenterCenterID =1;
+  int32	CenterID=2;
+  int32	DistrictID=3;
+
+
+}
+
+message CentralDownTownReplyList{
+  repeated CentralDownTownReply CentralDownTownReplies = 1;
+}

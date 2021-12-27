@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Amargar.Rank.proto.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RankProto";
+option objc_class_prefix = "HLW";
+package Amargar;
+
+service Rank{
+  rpc GetRank(RankRequest) returns(RankReplyList);
+}
+
+message RankRequest{
+
+}
+
+message RankReply{
+  int32 RankID = 1;
+  string RankName = 2;
+  int32 ViewInPPC_forNewCar = 3;
+}
+
+message RankReplyList{
+  repeated RankReply RankReplys = 1;
+}

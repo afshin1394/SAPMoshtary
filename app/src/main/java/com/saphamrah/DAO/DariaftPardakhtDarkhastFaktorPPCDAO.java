@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
@@ -18,17 +20,30 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetDariaftPardakhtDarkhastFaktorHavalehPPCResult;
+import com.saphamrah.protos.InvoiceRequestReceivePaymentPPCGrpc;
+import com.saphamrah.protos.InvoiceRequestReceivePaymentPPCReply;
+import com.saphamrah.protos.InvoiceRequestReceivePaymentPPCReplyList;
+import com.saphamrah.protos.InvoiceRequestReceivePaymentPPCRequest;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -90,6 +105,95 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
             DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_IsTaeedShodeh(),
         };
     }
+
+    public void fetchDariaftPardakhtDarkhastFaktorPPCGrpc(final Context context, final String activityNameForLog,final String noeFaktorHavale, final String ccDarkhastFaktor, final RetrofitResponse retrofitResponse) {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, DariaftPardakhtDarkhastFaktorPPCDAO.class.getSimpleName(), activityNameForLog, "fetchDariaftPardakhtDarkhastFaktorPPCGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                InvoiceRequestReceivePaymentPPCGrpc.InvoiceRequestReceivePaymentPPCBlockingStub blockingStub = InvoiceRequestReceivePaymentPPCGrpc.newBlockingStub(managedChannel);
+                InvoiceRequestReceivePaymentPPCRequest request = InvoiceRequestReceivePaymentPPCRequest.newBuilder().setInvoicesRequestID(ccDarkhastFaktor).setDraftInvoiceType(noeFaktorHavale).build();
+
+                Callable<InvoiceRequestReceivePaymentPPCReplyList> replyListCallable = () -> blockingStub.getInvoiceRequestReceivePaymentPPC(request);
+                RxAsync.makeObservable(replyListCallable)
+
+                        .map(replyList -> {
+                            ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> models = new ArrayList<>();
+                            for (InvoiceRequestReceivePaymentPPCReply reply : replyList.getInvoiceRequestReceivePaymentPPCsList()) {
+                                DariaftPardakhtDarkhastFaktorPPCModel model = new DariaftPardakhtDarkhastFaktorPPCModel();
+
+                                model.setCcDariaftPardakhtDarkhastFaktor(reply.getInvoiceRequestReceivePaymentID());
+                                model.setCcDarkhastFaktor(reply.getInvoiceRequestID());
+                                model.setCcDariaftPardakht(reply.getReceivePaymentID());
+                                model.setCodeNoeVosol(reply.getCollectionTypeCode());
+                                model.setNameNoeVosol(reply.getCollectionTypeName());
+                                model.setShomarehSanad(reply.getDocumentNumber());
+                                model.setTarikhSanad(reply.getDocumentDate());
+                                model.setTarikhSanadShamsi(reply.getSolardocumentDate());
+                                model.setMablaghDariaftPardakht(reply.getReceivePaymentPrice());
+                                model.setMablagh(reply.getPrice());
+                                model.setCodeVazeiat(reply.getSituationCode());
+                                model.setZamaneTakhsiseFaktor(reply.getInvoiceAllocationTime());
+                                model.setCcAfradErsalKonandeh(reply.getSenderPersonsID());
+                                model.setCcMarkazAnbar(reply.getStoreCenterID());
+                                model.setTabdil_NaghdBeFish(reply.getConvertCashToFish());
+                                model.setCcTafkikJoze(reply.getPartialSeporationID());
+                                model.setNaghlAzGhabl(reply.getQuotedFromPast());
+                                model.setIsForTasviehTakhir(reply.getIsforClearingLatency());
+                                model.setZamaneTakhsiseFaktorShamsi(reply.getAllocationInvoiceSolarDate());
+                                model.setCcMarkazForosh(reply.getSellCenterID());
+                                model.setCcMarkazSazmanForoshSakhtarForosh(reply.getSellStructureSellOrganizationCenterID());
+
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        })
+                        .subscribeOn(Schedulers.single())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<DariaftPardakhtDarkhastFaktorPPCModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), ParameterDAO.class.getSimpleName(), activityNameForLog, "fetchMahalCodePostiGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+
+    }
+
 
     public void fetchDariaftPardakhtDarkhastFaktorPPC(final Context context, final String activityNameForLog,final String noeFaktorHavale, final String ccDarkhastFaktor, final RetrofitResponse retrofitResponse)
     {

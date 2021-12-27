@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.ProposalType.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "ProposalTypeProto";
+option objc_class_prefix = "HLW";
+
+package Global;
+
+
+service ProposalType {
+  rpc GetProposalType (ProposalTypeRequest) returns (ProposalTypeReplyList);
+}
+
+
+message ProposalTypeRequest {
+
+}
+
+message ProposalTypeReply {
+   int32 ProposalTypeID = 1;
+   string ProposalTypeName = 2;
+   int32 ProposalType = 3;
+   
+}
+
+message ProposalTypeReplyList{
+	repeated ProposalTypeReply ProposalTypes = 1;
+}

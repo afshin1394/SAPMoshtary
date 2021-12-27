@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Warehouse.ReasonReturnGoods.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "ReasonReturnGoodsProto";
+option objc_class_prefix = "HLW";
+
+
+service ReasonReturnGoods {
+  rpc GetReasonReturnGoods (ReasonReturnGoodsRequest) returns (ReasonReturnGoodsReplyList);
+}
+
+message ReasonReturnGoodsRequest {
+
+}
+
+message ReasonReturnGoodsReply {
+
+  int32 ReturnReasonTypeID = 1;
+  string  Description = 2;
+  int32 ReasonTypeCode = 3;
+  int32 GetImage = 4;
+  int32 IsWaste = 5;
+  int32 IsProductionWaste = 6;
+
+
+}
+
+message ReasonReturnGoodsReplyList{
+  repeated ReasonReturnGoodsReply allReasonReturnGoods = 1;
+}
+

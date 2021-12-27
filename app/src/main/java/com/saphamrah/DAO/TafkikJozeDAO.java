@@ -5,19 +5,34 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.TafkikJozeModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetTafkikJozePakhshResult;
+import com.saphamrah.protos.PartialSeparationGrpc;
+import com.saphamrah.protos.PartialSeparationReply;
+import com.saphamrah.protos.PartialSeparationReplyList;
+import com.saphamrah.protos.PartialSeparationRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,6 +66,73 @@ public class TafkikJozeDAO
                         TafkikJozeModel.COLUMN_ccTafkikJoze(),
                         TafkikJozeModel.COLUMN_ShomarehTafkikJoze()
                 };
+    }
+
+    public void fetchTafkikJozePakhshGrpc(final Context context, final String activityNameForLog, String ccDarkhastFaktors, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            //       ServerIpModel serverIpModel = new ServerIpModel();
+            //       serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, TafkikJozeDAO.class.getSimpleName(), activityNameForLog, "fetchTafkikJozePakhshGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                PartialSeparationGrpc.PartialSeparationBlockingStub partialSeparationBlockingStub = PartialSeparationGrpc.newBlockingStub(managedChannel);
+                PartialSeparationRequest partialSeparationRequest = PartialSeparationRequest.newBuilder().setInvoiceRequestsID(ccDarkhastFaktors).build();
+                Callable<PartialSeparationReplyList> partialSeparationReplyListCallable = () -> partialSeparationBlockingStub.getPartialSeparation(partialSeparationRequest);
+                RxAsync.makeObservable(partialSeparationReplyListCallable)
+                        .map(partialSeparationReplyList ->  {
+                            ArrayList<TafkikJozeModel> models = new ArrayList<>();
+                            for (PartialSeparationReply reply : partialSeparationReplyList.getPartialSeparationsList()) {
+                                TafkikJozeModel model = new TafkikJozeModel();
+                                model.setCcTafkikJoze(reply.getPartialSeparationID());
+                                model.setShomarehTafkikJoze(reply.getPartialSeparationNumber());
+                                models.add(model);
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<TafkikJozeModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<TafkikJozeModel> rptSanadModels) {
+                                retrofitResponse.onSuccess(rptSanadModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), TafkikJozeDAO.class.getSimpleName(), activityNameForLog, "fetchTafkikJozePakhshGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
     }
 
 

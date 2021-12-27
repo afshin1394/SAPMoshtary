@@ -21,6 +21,14 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvForoshandehByccForoshandehResult;
+import com.saphamrah.protos.SellerBySellerIDGrpc;
+import com.saphamrah.protos.SellerBySellerIDReply;
+import com.saphamrah.protos.SellerBySellerIDReplyList;
+import com.saphamrah.protos.SellerBySellerIDRequest;
+import com.saphamrah.protos.SellerGrpc;
+import com.saphamrah.protos.SellerReply;
+import com.saphamrah.protos.SellerReplyList;
+import com.saphamrah.protos.SellerRequest;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -77,6 +85,171 @@ public class ForoshandehDAO
             ForoshandehModel.COLUMN_NameSazmanForosh()
         };
     }
+
+    public void fetchForoshandehByccForoshandehGrpc(final Context context, final String activityNameForLog, final String ccForoshandeh, final RetrofitResponse retrofitResponse)
+    {
+        try {
+
+
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+            {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, ForoshandehDAO.class.getSimpleName(), activityNameForLog, "fetchAllForoshandehGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
+            }
+            else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                SellerBySellerIDGrpc.SellerBySellerIDBlockingStub sellerBySellerIDBlockingStub = SellerBySellerIDGrpc.newBlockingStub(managedChannel);
+                SellerBySellerIDRequest sellerBySellerIDRequest = SellerBySellerIDRequest.newBuilder().setSalesManID(ccForoshandeh).build();
+
+                Callable<SellerBySellerIDReplyList> replyListCallable  = () -> sellerBySellerIDBlockingStub.getSellerBySellerID(sellerBySellerIDRequest);
+                RxAsync.makeObservable(replyListCallable)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(sellerReplyList -> {
+                            ArrayList<ForoshandehModel> foroshandehModels = new ArrayList<>();
+                            for (SellerBySellerIDReply sellerReply : sellerReplyList.getSellersBySellerIDList()) {
+                                ForoshandehModel foroshandehModel = new ForoshandehModel();
+                                foroshandehModel.setCcForoshandeh(sellerReply.getSalesManID());
+                                foroshandehModel.setCcAfradForoshandeh(sellerReply.getSalesManIDPersonID());
+                                foroshandehModel.setCodeForoshandeh(sellerReply.getSalesManIDCode());
+                                foroshandehModel.setNameMarkazForosh(sellerReply.getSellCenterName());
+                                foroshandehModel.setFullNameForoshandeh(sellerReply.getSalesManIDFullName());
+                                foroshandehModel.setCcSazmanForosh(sellerReply.getSellOrganizationID());
+                                foroshandehModel.setCcMarkazForosh(sellerReply.getSellCenterID());
+                                foroshandehModel.setCcMarkazSazmanForoshSakhtarForosh(sellerReply.getSellOrganizationCenterSellStructureID());
+                                foroshandehModel.setNameMarkazSazmanForoshSakhtarForosh(sellerReply.getSellOrganizationCenterSellStructureName());
+                                foroshandehModel.setNameSazmanForosh(sellerReply.getSellOrganizationName());
+
+                                foroshandehModels.add(foroshandehModel);
+                            }
+
+                            return foroshandehModels;
+
+                        }).subscribe(new Observer<ArrayList<ForoshandehModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ArrayList<ForoshandehModel> foroshandehModels) {
+                        retrofitResponse.onSuccess(foroshandehModels);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (!compositeDisposable.isDisposed()) {
+                            compositeDisposable.dispose();
+                        }
+                        compositeDisposable.clear();
+                    }
+                });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), ForoshandehDAO.class.getSimpleName(), activityNameForLog, "fetchAllForoshandehGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
+        }
+
+    }
+
+    public void fetchAllForoshandehGrpc(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
+    {
+        try {
+
+
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+            {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, ForoshandehDAO.class.getSimpleName(), activityNameForLog, "fetchAllForoshandehGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
+            }
+            else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                SellerGrpc.SellerBlockingStub sellerBlockingStub = SellerGrpc.newBlockingStub(managedChannel);
+                SellerRequest sellerRequest = SellerRequest.newBuilder().build();
+
+                Callable<SellerReplyList> replyListCallable  = () -> sellerBlockingStub.getSeller(sellerRequest);
+                RxAsync.makeObservable(replyListCallable)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(sellerReplyList -> {
+                            ArrayList<ForoshandehModel> foroshandehModels = new ArrayList<>();
+                            for (SellerReply sellerReply : sellerReplyList.getSellersList()) {
+                                ForoshandehModel foroshandehModel = new ForoshandehModel();
+                                foroshandehModel.setCcForoshandeh(sellerReply.getSellerID());
+                                foroshandehModel.setCcAfradForoshandeh(sellerReply.getSellerPersonID());
+                                foroshandehModel.setCodeForoshandeh(sellerReply.getSellerCode());
+                                foroshandehModel.setNameMarkazForosh(sellerReply.getSellCenterName());
+                                foroshandehModel.setFullNameForoshandeh(sellerReply.getSellerFullName());
+                                foroshandehModel.setCcSazmanForosh(sellerReply.getSellOrganizationID());
+                                foroshandehModel.setCcMarkazForosh(sellerReply.getSellCenterID());
+                                foroshandehModel.setCcMarkazSazmanForoshSakhtarForosh(sellerReply.getSellOrganizationCenterSellStructureID());
+                                foroshandehModel.setNameMarkazSazmanForoshSakhtarForosh(sellerReply.getSellOrganizationCenterSellStructureName());
+                                foroshandehModel.setNameSazmanForosh(sellerReply.getSellOrganizationName());
+
+                                foroshandehModels.add(foroshandehModel);
+                            }
+
+                            return foroshandehModels;
+
+                        }).subscribe(new Observer<ArrayList<ForoshandehModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ArrayList<ForoshandehModel> foroshandehModels) {
+                        retrofitResponse.onSuccess(foroshandehModels);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (!compositeDisposable.isDisposed()) {
+                            compositeDisposable.dispose();
+                        }
+                        compositeDisposable.clear();
+                    }
+                });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), ForoshandehDAO.class.getSimpleName(), activityNameForLog, "fetchAllForoshandehGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
+        }
+
+    }
+
 
     public void fetchForoshandeh(final Context context, final String activityNameForLog, final String ccForoshandeh, final RetrofitResponse retrofitResponse)
     {

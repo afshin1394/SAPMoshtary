@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.RptFaktorTozieNashodehModel;
 import com.saphamrah.Model.RptMoshtaryKharidNakardeModel;
 import com.saphamrah.Model.RptMandehdarModel;
@@ -15,13 +17,26 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllMoshtarianKharidNakardeResult;
+import com.saphamrah.protos.RptUnprocureCustomerGrpc;
+import com.saphamrah.protos.RptUnprocureCustomerReply;
+import com.saphamrah.protos.RptUnprocureCustomerReplyList;
+import com.saphamrah.protos.RptUnprocureCustomerRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,9 +72,84 @@ public class RptMoshtarianKharidNakardehDAO {
                 };
     }
 
+
+    public void fetchAllMoshtarianKharidNakardeGrpc(final Context context, final String activityNameForLog, final String ccForoshandeh,final String ccMasirs, final RetrofitResponse retrofitResponse)
+    {
+        try {
+
+
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+            {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, PrintFaktorDAO.class.getSimpleName(), activityNameForLog, "fetchAllMoshtarianKharidNakardeGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
+            }
+            else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                RptUnprocureCustomerGrpc.RptUnprocureCustomerBlockingStub blockingStub = RptUnprocureCustomerGrpc.newBlockingStub(managedChannel);
+                RptUnprocureCustomerRequest request = RptUnprocureCustomerRequest.newBuilder().setSalesManID(ccForoshandeh).setRoutesID(ccMasirs).build();
+                Callable<RptUnprocureCustomerReplyList> rptUnprocureCustomerReplyListCallable  = () -> blockingStub.getRptUnprocureCustomer(request);
+                RxAsync.makeObservable(rptUnprocureCustomerReplyListCallable)
+                        .map(invoicePrintReplyList -> {
+                            ArrayList<RptMoshtaryKharidNakardeModel> models = new ArrayList<>();
+                            for (RptUnprocureCustomerReply reply : invoicePrintReplyList.getRptUnprocureCustomersList()) {
+                                RptMoshtaryKharidNakardeModel model = new RptMoshtaryKharidNakardeModel();
+                                model.setRadif(reply.getRow());
+                                model.setNameMoshtary(reply.getCustomerName());
+                                model.setTarikhFaktor(reply.getInvoiceDate());
+                                model.setCodeMoshtary(reply.getCustomerCode());
+
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        })
+                        .subscribeOn(Schedulers.single())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<RptMoshtaryKharidNakardeModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<RptMoshtaryKharidNakardeModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), PrintFaktorDAO.class.getSimpleName(), activityNameForLog, "fetchAllMoshtarianKharidNakardeGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
+        }
+    }
+
     public void fetchAllMoshtarianKharidNakarde(final Context context, final String activityNameForLog, final String ccForoshandeh,final String ccMasirs, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+        serverIpModel.setPort("8040");
+
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
         {
             String message = "can't find server";

@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.ReceiptDuration.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "ReceiptDurationGoodsProto";
+option objc_class_prefix = "HLW";
+
+package Sales;
+
+service ReceiptDurationByGroupSellCenterID{
+  rpc GetReceiptDurationByGroupSellCenterID(ReceiptDurationByGroupSellCenterIDRequest) returns(ReceiptDurationByGroupSellCenterIDReplyList);
+}
+
+message ReceiptDurationByGroupSellCenterIDRequest{
+  string SellCenterID = 1;
+  string GroupsID = 2;
+
+
+}
+
+message ReceiptDurationByGroupSellCenterIDReply{
+  int32  ReceiptDurationID = 1;
+  int32 SellStructureSellOrganizationCenterID = 2;
+  int32 TypeCode =3;
+  string ReceiptDurationDescription = 4;
+  float From = 5;
+  float To = 6;
+  int32 ReceiptDuration = 7;
+  int32 Degree =8;
+  int32 BrandID =9;
+  int32 GoodsGroupID =10;
+  int32 GroupID =11;
+
+}
+
+message ReceiptDurationByGroupSellCenterIDReplyList{
+  repeated ReceiptDurationByGroupSellCenterIDReply ReceiptDurationByGroupSellCenterIDs = 1;
+}
+

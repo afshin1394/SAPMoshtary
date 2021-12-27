@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.RptDocument.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RptDocumentProto";
+option objc_class_prefix = "HLW";
+service RptDocument{
+  rpc GetRptDocument(RptDocumentRequest) returns(RptDocumentReplyList);
+}
+
+message RptDocumentRequest{
+  string SalesManID = 1;
+}
+
+message RptDocumentReply
+{
+
+  int64   InvoiceRequestID = 1;
+  int32 	CustomerID = 2;
+  string	CustomerName = 3;
+  string 	OldCustomerCode = 4;
+  int32 	InvoiceNumber = 5;
+  string 	InvoiceDate = 6;
+  string 	SendDate = 7;
+  string 	DocumentDate = 8;
+  float   PureInvoicePrice = 9;
+  string 	DocumentNumber = 10;
+  float 	CheckPrice = 11;
+  float 	SpecifiedPrice = 12;
+  int32 	receivingPaymentStatusCode = 13;
+  int32 	SellCenterID = 14;
+  int32 	SellGroupID = 15;
+  int32 	SalesManID = 16;
+
+
+}
+
+message RptDocumentReplyList{
+  repeated RptDocumentReply RptDocuments = 1;
+}
+
+

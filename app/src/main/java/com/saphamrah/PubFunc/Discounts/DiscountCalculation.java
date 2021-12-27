@@ -135,7 +135,7 @@ public class DiscountCalculation
             noeVosol = 2;
         }
 
-        return takhfifHajmiDAO.getByMoshtaryWithSatr(moshtary, darkhastFaktorModel.getCodeNoeHaml(), shebheOmdeh, noeVosol);
+        return takhfifHajmiDAO.getByMoshtaryWithSatr(moshtary, darkhastFaktorModel.getCodeNoeHaml(), shebheOmdeh, noeVosol, darkhastFaktorModel.getDarajeh());
     }
 
     public ArrayList<TakhfifSenfiTitrSatrModel> getTakhfifSenfis(Context context, DarkhastFaktorModel darkhastFaktorModel, int noeVosol, boolean shebheOmdeh)
@@ -155,7 +155,7 @@ public class DiscountCalculation
             noeVosol = 2;
         }
 
-        return takhfifSenfiDAO.getByMoshtaryWithSatr(moshtary, darkhastFaktorModel.getCodeNoeHaml(), shebheOmdeh, noeVosol);
+        return takhfifSenfiDAO.getByMoshtaryWithSatr(moshtary, darkhastFaktorModel.getCodeNoeHaml(), shebheOmdeh, noeVosol, darkhastFaktorModel.getDarajeh());
     }
     public int calculateZarib(double beEza, int noeTedadRialTakhfif, int codeNoeBasteBandiTakhfif, double tedadCarton, double tedadBaste, double tedadAdad, double sumMablagh, double sumVazn, double tedadAghlam)
     {

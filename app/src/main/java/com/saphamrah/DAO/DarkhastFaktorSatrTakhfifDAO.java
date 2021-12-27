@@ -73,7 +73,7 @@ public class DarkhastFaktorSatrTakhfifDAO
         else
         {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-Call<GetAllDarkhastFaktorSatrTakhfifByCcForoshandehAndDateResult> call = apiServiceGet.getAllDarkhastFaktorSatrTakhfifByCcForoshandehAndDate(ccforoshandeh , fromDate , endDate);
+            Call<GetAllDarkhastFaktorSatrTakhfifByCcForoshandehAndDateResult> call = apiServiceGet.getAllDarkhastFaktorSatrTakhfifByCcForoshandehAndDate(ccforoshandeh , fromDate , endDate);
             call.enqueue(new Callback<GetAllDarkhastFaktorSatrTakhfifByCcForoshandehAndDateResult>() {
                 @Override
                 public void onResponse(Call<GetAllDarkhastFaktorSatrTakhfifByCcForoshandehAndDateResult> call, Response<GetAllDarkhastFaktorSatrTakhfifByCcForoshandehAndDateResult> response)

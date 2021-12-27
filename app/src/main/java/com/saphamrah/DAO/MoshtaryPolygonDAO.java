@@ -20,6 +20,10 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetMoshtaryPolygonResult;
+import com.saphamrah.protos.CustomerPolygonGrpc;
+import com.saphamrah.protos.CustomerPolygonReply;
+import com.saphamrah.protos.CustomerPolygonReplyList;
+import com.saphamrah.protos.CustomerPolygonRequest;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -67,6 +71,84 @@ public class MoshtaryPolygonDAO
         };
     }
 
+    public void fetchMoshtaryPolygonGrpc(final Context context, final String activityNameForLog, final String ccMasirs, final String ccMoshtarys, final RetrofitResponse retrofitResponse)
+    {
+        try {
+
+
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            serverIpModel.setPort("5000");
+
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+            {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
+            }
+            else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                CustomerPolygonGrpc.CustomerPolygonBlockingStub customerPolygonBlockingStub = CustomerPolygonGrpc.newBlockingStub(managedChannel);
+                CustomerPolygonRequest customerPolygonRequest = CustomerPolygonRequest.newBuilder().setRoutesID(ccMasirs).setCustomersID(ccMoshtarys).build();
+                Callable<CustomerPolygonReplyList> getCustomerPolygonCallable  = () -> customerPolygonBlockingStub.getCustomerPolygon(customerPolygonRequest);
+                RxAsync.makeObservable(getCustomerPolygonCallable)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(customerPolygonReplyList -> {
+                            ArrayList<MoshtaryPolygonModel> moshtaryPolygonModels = new ArrayList<>();
+                            for (CustomerPolygonReply customerPolygonReply : customerPolygonReplyList.getCustomerPolygonsList()) {
+                                MoshtaryPolygonModel moshtaryPolygonModel = new MoshtaryPolygonModel();
+
+                                moshtaryPolygonModel.setCcPolygonForosh(customerPolygonReply.getSellPolygonID());
+                                moshtaryPolygonModel.setCcMoshtary(customerPolygonReply.getCustomerID());
+                                moshtaryPolygonModel.setCanVisitKharejAzMahal(customerPolygonReply.getCanVisitOutOfRange());
+                                moshtaryPolygonModel.setCcMasir(customerPolygonReply.getRouteID());
+                                moshtaryPolygonModel.setToorVisit(customerPolygonReply.getVisitTour());
+
+
+                                moshtaryPolygonModels.add(moshtaryPolygonModel);
+                            }
+
+                            return moshtaryPolygonModels;
+
+                        }).subscribe(new Observer<ArrayList<MoshtaryPolygonModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ArrayList<MoshtaryPolygonModel> moshtaryPolygonModels) {
+                        retrofitResponse.onSuccess(moshtaryPolygonModels);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (!compositeDisposable.isDisposed()) {
+                            compositeDisposable.dispose();
+                        }
+                        compositeDisposable.clear();
+                    }
+                });
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
+        }
+
+
+
+
+    }
 
     public void fetchMoshtaryPolygon(final Context context, final String activityNameForLog, final String ccMasirs, final String ccMoshtarys, final RetrofitResponse retrofitResponse)
     {

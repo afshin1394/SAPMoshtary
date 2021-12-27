@@ -83,9 +83,9 @@
         <item>{\"name\":\"گروه کالا\" , \"function\":\"getKalaGoroh\"}</item>
         <item>{\"name\":\"ضریب فروش کالا\" , \"function\":\"getZaribForoshKala\"}</item>
         <item>{\"name\":\"جوایز\" , \"function\":\"getJayezeh\"}</item>
-        <item>{\"name\":\"جایزه انتخابی\" , \"function\":\"getJayezehSatr\"}</item>
+        <item>{\"name\":\"اقلام جوایز\" , \"function\":\"getJayezehSatr\"}</item>
         <item>{\"name\":\"مبلغ فروش جایزه\" , \"function\":\"getJayezeh\"}</item>
-        <item>{\"name\":\"اقلام جوایز \" , \"function\":\"getJayezehSatr\"}</item>
+        <item>{\"name\":\"جایزه انتخابی\" , \"function\":\"getJayezehEntekhabi\"}</item>
         <item>{\"name\":\"نوع حساب\" , \"function\":\"getNoeHesab\"}</item>
         <item>{\"name\":\"نوع مالکیت مشتری\" , \"function\":\"getNoeMalekiatMoshtary\"}</item>
         <item>{\"name\":\"تعداد فاکتور مشتری\" , \"function\":\"getTedadFaktorMoshtary\"}</item>
@@ -98,7 +98,7 @@
         <item>{\"name\":\"نوع وصول\" , \"function\":\"getCodeNoeVosol\"}</item>
         <item>{\"name\":\"کاردکس\" , \"function\":\"deleteKardex\"}</item>
         <item>{\"name\":\"کاردکس - سطر\" , \"function\":\"deleteKardexSatr\"}</item>
-        <item>{\"name\":\"عکس مرجوعی کامل\" , \"function\":\"deleteMarjoeeKamelImage\"}</item>
+        <item>{\"name\":\"تصویر مرجوعی کامل\" , \"function\":\"deleteMarjoeeKamelImage\"}</item>
         <item>{\"name\":\"گزارش موجودی انبار\" , \"function\":\"getRptMojodyAnbar\"}</item>
         <item>{\"name\":\"گزارش کالا\" , \"function\":\"getRptKalaInfo\"}</item>
         <item>{\"name\":\"گزارش فاکتورهای توزیع نشده\" , \"functdion\":\"getRptFaktorTozieNashode\"}</item>

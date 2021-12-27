@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.VersionModification.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "VersionModificationProto";
+option objc_class_prefix = "HLW";
+package Global;
+
+
+
+// The greeting service definition.
+service VersionModification {
+  // Sends a greeting
+  rpc GetVersionModification (VersionModificationRequest) returns (VersionModificationReplyList);
+}
+
+// The request message containing the user's name.
+message VersionModificationRequest {
+  string Type = 1;
+  string Version = 2;
+}
+
+// The response message containing the greetings.
+message VersionModificationReply {
+  int32	ModificationsID = 1;
+  int32	Type = 2;
+  string	PocketPCversion =3;
+  string	Description = 4;
+
+}
+
+message VersionModificationReplyList{
+  repeated VersionModificationReply VersionModifications = 1;
+}

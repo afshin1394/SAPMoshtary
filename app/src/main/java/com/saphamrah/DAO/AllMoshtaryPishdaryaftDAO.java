@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.AllMoshtaryPishdaryaftModel;
 import com.saphamrah.Model.MasirModel;
 import com.saphamrah.Model.ServerIpModel;
@@ -12,13 +14,26 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllMoshtaryForoshandehResult;
 import com.saphamrah.WebService.ServiceResponse.GetAllMoshtaryPishdaryaftResult;
+import com.saphamrah.protos.UpFrontReceiptCustomerGrpc;
+import com.saphamrah.protos.UpFrontReceiptCustomerReply;
+import com.saphamrah.protos.UpFrontReceiptCustomerReplyList;
+import com.saphamrah.protos.UpFrontReceiptCustomerRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,6 +78,91 @@ public class AllMoshtaryPishdaryaftDAO
             AllMoshtaryPishdaryaftModel.COLUMN_ccNoeMoshtary()
 
         };
+    }
+
+    public void fetchAllMoshtaryforoshandehGrpc(final Context context, final String activityNameForLog, final String ccForoshandeh, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+            {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, AllMoshtaryForoshandehDAO.class.getSimpleName(), activityNameForLog, "fetchRotbehGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR() , message);
+            }
+            else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                UpFrontReceiptCustomerGrpc.UpFrontReceiptCustomerBlockingStub blockingStub = UpFrontReceiptCustomerGrpc.newBlockingStub(managedChannel);
+                UpFrontReceiptCustomerRequest request = UpFrontReceiptCustomerRequest.newBuilder().setSalesManID(ccForoshandeh).build();
+
+                Callable<UpFrontReceiptCustomerReplyList> replyListCallable  = () -> blockingStub.getUpFrontReceiptCustomer(request);
+                RxAsync.makeObservable(replyListCallable)
+
+                        .map(replyList -> {
+                            ArrayList<AllMoshtaryPishdaryaftModel> models = new ArrayList<>();
+                            for (UpFrontReceiptCustomerReply reply : replyList.getUpFrontReceiptCustomersList()) {
+                                AllMoshtaryPishdaryaftModel model = new AllMoshtaryPishdaryaftModel();
+
+
+                                model.setCcMoshtary(reply.getCustomerID());
+                                model.setCodeMoshtary(reply.getCustomerCode());
+                                model.setNameMoshtary(reply.getCustomerName());
+                                model.setAddress(reply.getAddress());
+                                model.setTelephone(reply.getPhone());
+                                model.setCcMasir(reply.getRoutID());
+                                model.setNameMasir(reply.getRouteName());
+                                model.setCcForoshandeh(reply.getSalesManID());
+                                model.setLatitude(reply.getLatitude());
+                                model.setLongitude(reply.getLongitude());
+                                model.setDarajeh(reply.getDegree());
+                                model.setCcNoeMoshtary(reply.getCustomerID());
+
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<AllMoshtaryPishdaryaftModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<AllMoshtaryPishdaryaftModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), AllMoshtaryForoshandehDAO.class.getSimpleName(), activityNameForLog, "fetchAllMoshtaryforoshandehGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
+        }
+
+
+
+
     }
 
     public void fetchAllMoshtaryforoshandeh(final Context context, final String activityNameForLog, final String ccForoshandeh, final RetrofitResponse retrofitResponse)

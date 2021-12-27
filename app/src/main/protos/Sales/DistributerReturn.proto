@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.DistributerReturn.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "DistributerReturnProto";
+package Sales;
+
+service DistributerReturn{
+  rpc GetDistributerReturn(DistributerReturnRequest) returns(DistributerReturnReplyList);
+}
+
+message DistributerReturnRequest{
+  string CustomersID = 1;
+}
+
+message DistributerReturnReply{
+  int32	DistributerReturnID = 1;
+  int32	GoodsID=2;
+  int32	GoodsCodeID=3;
+  string	OldGoodsCode=4;
+  string	GoodsName=5;
+  int32	PrividerID=6;
+  string	BatchNumber=7;
+  string	ProductionDate=8;
+  string	ShamsiProductionDate=9;
+  string	ExpirationDate=10;
+  int32	CustomerID=11;
+  string	CustomerName=12;
+  int32	ReturnStoreName=13;
+  int64	BuyPrice=14;
+  int64	SellPrice=15;
+  double	PureSellPrice=16;
+  int64	ConsumerPrice=17;
+  int32	Quantity3=18;
+  int32	StorePortionID=19;
+
+}
+
+message DistributerReturnReplyList{
+  repeated DistributerReturnReply DistributerReturns = 1;
+}

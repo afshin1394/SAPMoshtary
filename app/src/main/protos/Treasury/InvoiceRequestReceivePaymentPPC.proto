@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Treasury.InvoiceRequestReceivePaymentPPC.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "InvoiceRequestReceivePaymentPPCProto";
+package Treasury;
+
+
+service InvoiceRequestReceivePaymentPPC{
+	rpc GetInvoiceRequestReceivePaymentPPC(InvoiceRequestReceivePaymentPPCRequest) returns(InvoiceRequestReceivePaymentPPCReplyList);
+}
+
+message InvoiceRequestReceivePaymentPPCRequest{
+
+string DraftInvoiceType = 1;
+string InvoicesRequestID = 2;
+
+}
+
+message InvoiceRequestReceivePaymentPPCReply{
+
+int32	InvoiceRequestReceivePaymentID = 1;
+int64	InvoiceRequestID = 2;
+int64	ReceivePaymentID = 3;
+int32	CollectionTypeCode = 4;
+string	CollectionTypeName = 5;
+string	DocumentNumber = 6;
+string	DocumentDate = 7;
+string	SolardocumentDate =8;
+double	ReceivePaymentPrice = 9;
+float	Price = 10;
+int32	SituationCode = 11;
+string	InvoiceAllocationTime = 12;
+int32	SenderPersonsID = 13;
+int32	StoreCenterID =14;
+int32	ConvertCashToFish =15;
+int64	PartialSeporationID =16;
+int32	QuotedFromPast =17;
+int32	IsforClearingLatency =18;
+string	AllocationInvoiceSolarDate = 19;
+int32	SellCenterID =20;
+int32	SellStructureSellOrganizationCenterID = 21;
+
+
+}
+
+message InvoiceRequestReceivePaymentPPCReplyList{
+	repeated InvoiceRequestReceivePaymentPPCReply InvoiceRequestReceivePaymentPPCs = 1;
+}

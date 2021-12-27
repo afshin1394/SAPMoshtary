@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Treasury.DraftReceivePaymentPPC.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "DraftReceivePaymentPPCProto";
+option objc_class_prefix = "HLW";
+package Treasury;
+
+
+service DraftReceivePaymentPPC{
+  rpc GetDraftReceivePaymentPPC(DraftReceivePaymentPPCRequest) returns(DraftReceivePaymentPPCReplyList);
+}
+
+message DraftReceivePaymentPPCRequest{
+
+  string DraftInvoiceType = 1;
+  string InvoicesRequestID = 2;
+
+}
+
+message DraftReceivePaymentPPCReply{
+
+  int32	ReceivePaymentID =1;
+  int32	StoreCenterID =2;
+  int32	CollectionTypeCode=3;
+  string	CollectionTypeName =4;
+  int32	AccountNumberID =5;
+  string	AccountDescription=6;
+  string	RegisterTime =7;
+  string	AccountOwnerName=8;
+  int32	BankDocumentID=9;
+  string	DocumentBankName=10;
+  string	DocumentBranchName=11;
+  string	DocumentBranchCode=12;
+  string	DocumentAccountNumber=13;
+  int32	DocumentAccountTypeID=14;
+  string	DoucumentAccountTypeName=15;
+  int32	ChequeCodeType=16;
+  string	ChequeNameType=17;
+  string	DocumentNumber=18;
+  string	DocumentDate=19;
+  string	DocumentSolarDate=20;
+  double	Price = 21;
+  double	RemainingPrice=22;
+  int64	ReceivePaymentLink=23;
+  int64	KardexID=24;
+  int32	SituationCode=25;
+  int32	CustomerID=26;
+  int32	IsUpFrontReciept=27;
+  int64	InvoiceRequestID=28;
+  int32	ConvertCashToFish=29;
+  int32	QuotedFromPast=30;
+  int32	BrandID=31;
+  int32	SenderPersonsID=32;
+  int32	IsCustomerCheque=33;
+  int32	SellCenterID=34;
+  int32	SellStructureSellOrganizationCenterID=35;
+
+
+
+
+}
+
+message DraftReceivePaymentPPCReplyList{
+  repeated DraftReceivePaymentPPCReply DraftReceivePaymentPPCs = 1;
+}

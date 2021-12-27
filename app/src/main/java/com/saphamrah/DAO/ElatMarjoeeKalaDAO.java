@@ -5,19 +5,34 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.ElatMarjoeeKalaModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllElatMarjoeeKalaResult;
+import com.saphamrah.protos.ReasonReturnGoodsGrpc;
+import com.saphamrah.protos.ReasonReturnGoodsReply;
+import com.saphamrah.protos.ReasonReturnGoodsReplyList;
+import com.saphamrah.protos.ReasonReturnGoodsRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,6 +71,84 @@ public class ElatMarjoeeKalaDAO
                 ElatMarjoeeKalaModel.COLUMN_GetImage(),
                 ElatMarjoeeKalaModel.COLUMN_IsZayeatTolid()
         };
+    }
+    public void fetchElatMarjoeeKalaGrpc(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse){
+        try {
+//           ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            ServerIpModel serverIpModel = new ServerIpModel();
+            serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, ElatMarjoeeKalaDAO.class.getSimpleName(), activityNameForLog, "fetchElatMarjoeeKalaGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                ReasonReturnGoodsGrpc.ReasonReturnGoodsBlockingStub reasonReturnGoodsBlockingStub = ReasonReturnGoodsGrpc.newBlockingStub(managedChannel);
+                ReasonReturnGoodsRequest reasonReturnGoodsRequest = ReasonReturnGoodsRequest.newBuilder().build();
+
+                Callable<ReasonReturnGoodsReplyList> reasonReturnGoodsReplyListCallable = () -> reasonReturnGoodsBlockingStub.getReasonReturnGoods(reasonReturnGoodsRequest);
+                RxAsync.makeObservable(reasonReturnGoodsReplyListCallable)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(reasonReturnGoodsReplyList -> {
+                            ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels = new ArrayList<>();
+                            for (ReasonReturnGoodsReply reasonReturnGoodsReply : reasonReturnGoodsReplyList.getAllReasonReturnGoodsList()) {
+                                ElatMarjoeeKalaModel elatMarjoeeKalaModel = new ElatMarjoeeKalaModel();
+                                elatMarjoeeKalaModel.setCcElatMarjoeeKala(reasonReturnGoodsReply.getReturnReasonTypeID());
+                                elatMarjoeeKalaModel.setCodeNoeElat(reasonReturnGoodsReply.getReasonTypeCode());
+                                elatMarjoeeKalaModel.setGetImage(reasonReturnGoodsReply.getGetImage());
+                                elatMarjoeeKalaModel.setSharh(reasonReturnGoodsReply.getDescription());
+                                elatMarjoeeKalaModel.setIsZayeat(reasonReturnGoodsReply.getIsWaste());
+                                elatMarjoeeKalaModel.setIsZayeatTolid(reasonReturnGoodsReply.getIsProductionWaste());
+
+                                elatMarjoeeKalaModels.add(elatMarjoeeKalaModel);
+                            }
+
+                            return elatMarjoeeKalaModels;
+
+                        }).subscribe(new Observer<ArrayList<ElatMarjoeeKalaModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels) {
+                        retrofitResponse.onSuccess(elatMarjoeeKalaModels);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        e.printStackTrace();
+                        PubFunc.Logger logger = new PubFunc().new Logger();
+                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.toString(), ElatMarjoeeKalaDAO.class.getSimpleName(), activityNameForLog, "fetchElatMarjoeeKalaGrpc", "CatchException");
+                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (!managedChannel.isShutdown()) {
+                            managedChannel.shutdown();
+                        }
+                        if (!compositeDisposable.isDisposed()) {
+                            compositeDisposable.dispose();
+                        }
+                        compositeDisposable.clear();
+                    }
+                });
+
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), ElatMarjoeeKalaDAO.class.getSimpleName(), activityNameForLog, "fetchElatMarjoeeKalaGrpc", "CatchException");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
     }
 
     public void fetchElatMarjoeeKala(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)

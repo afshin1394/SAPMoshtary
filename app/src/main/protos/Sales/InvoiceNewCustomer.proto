@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.InvoiceNewCustomer.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "InvoiceNewCustomerProto";
+option objc_class_prefix = "HLW";
+
+package Sales;
+
+
+service InvoiceNewCustomer{
+  rpc GetInvoiceNewCustomer(InvoiceNewCustomerRequest) returns(InvoiceNewCustomerReplyList);
+}
+
+message InvoiceNewCustomerRequest{
+
+}
+
+message InvoiceNewCustomerReply{
+  int32	NewCustomerRequestID = 1;
+  int32	CustomerTypeID = 2;
+  int32	GoodCodeID= 3;
+  int32	FlagForNewCustomer= 4;
+  int32	Level= 5;
+
+}
+
+message InvoiceNewCustomerReplyList{
+  repeated InvoiceNewCustomerReply InvoiceNewCustomers = 1;
+}

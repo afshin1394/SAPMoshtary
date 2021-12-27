@@ -5,19 +5,34 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.ForoshandehEtebarModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetEtebarForoshandehResult;
+import com.saphamrah.protos.SellerCreditGrpc;
+import com.saphamrah.protos.SellerCreditReply;
+import com.saphamrah.protos.SellerCreditReplyList;
+import com.saphamrah.protos.SellerCreditRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,6 +93,107 @@ public class ForoshandehEtebarDAO
             ForoshandehEtebarModel.COLUMN_ModatBargashty()
         };
     }
+
+    public void fetchEtebarForoshandehGrpc(final Context context, final String activityNameForLog, final String ccForoshandehs, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MoshtaryEtebarSazmanForoshDAO.class.getSimpleName(), activityNameForLog, "fetchAllvMoshtaryEtebarSazmanForoshGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                SellerCreditGrpc.SellerCreditBlockingStub sellerCreditBlockingStub = SellerCreditGrpc.newBlockingStub(managedChannel);
+                SellerCreditRequest sellerCreditRequest = SellerCreditRequest.newBuilder().setSellerIDs(ccForoshandehs).build();
+
+                Callable<SellerCreditReplyList> sellerCreditReplyListCallable = () -> sellerCreditBlockingStub.getSellerCredit(sellerCreditRequest);
+                RxAsync.makeObservable(sellerCreditReplyListCallable)
+                        .map(sellerCreditReplyList -> {
+                            ArrayList<ForoshandehEtebarModel> foroshandehEtebarModels = new ArrayList<>();
+                            for (SellerCreditReply sellerCreditReply : sellerCreditReplyList.getSellerCreditsList()) {
+                                ForoshandehEtebarModel foroshandehEtebarModel = new ForoshandehEtebarModel();
+                                foroshandehEtebarModel.setCcForoshandeh(sellerCreditReply.getSellerID());
+                                foroshandehEtebarModel.setSaghfEtebarRiali(sellerCreditReply.getMaxRialCredit());
+                                foroshandehEtebarModel.setSaghfEtebarAsnad(sellerCreditReply.getMaxDocumentCredit());
+                                foroshandehEtebarModel.setSaghfEtebarModat(sellerCreditReply.getMaxDurationCredit());
+                                foroshandehEtebarModel.setEtebarRialAsnadShakhsi(sellerCreditReply.getPersonalDocumentRialCredit());
+                                foroshandehEtebarModel.setEtebarTedadAsnadShakhsi(sellerCreditReply.getPersonalDocumentQuantityCredit());
+                                foroshandehEtebarModel.setEtebarModatAsnadShakhsi(sellerCreditReply.getPersonalDocumentDurationCredit());
+                                foroshandehEtebarModel.setEtebarRialAsnadMoshtary(sellerCreditReply.getCustomerDocumentRialCredit());
+                                foroshandehEtebarModel.setEtebarTedadAsnadMoshtary(sellerCreditReply.getCustomerDocumentQuantityCredit());
+                                foroshandehEtebarModel.setEtebarModatAsnadMoshtary(sellerCreditReply.getCustomerDocumentQuantityCredit());
+                                foroshandehEtebarModel.setEtebarRialMoavagh(sellerCreditReply.getPostponedRialCredit());
+                                foroshandehEtebarModel.setEtebarTedadMoavagh(sellerCreditReply.getPostponedQuantityCredit());
+                                foroshandehEtebarModel.setEtebarModatMoavagh(sellerCreditReply.getPostponedDurationCredit());
+                                foroshandehEtebarModel.setEtebarRialBargashty(sellerCreditReply.getReturnedRialCredit());
+                                foroshandehEtebarModel.setEtebarTedadBargashty(sellerCreditReply.getReturnedQuantityCredit());
+                                foroshandehEtebarModel.setEtebarModatBargashty(sellerCreditReply.getReturnedDurationCredit());
+                                foroshandehEtebarModel.setRialAsnad(sellerCreditReply.getDocumentRial());
+                                foroshandehEtebarModel.setTedadAsnad(sellerCreditReply.getDocumentQuantity());
+                                foroshandehEtebarModel.setModatAsnad(sellerCreditReply.getDocumentDuration());
+                                foroshandehEtebarModel.setRialMoavagh(sellerCreditReply.getPostponedRial());
+                                foroshandehEtebarModel.setTedadMoavagh(sellerCreditReply.getPostponedQuantity());
+                                foroshandehEtebarModel.setModatMoavagh(sellerCreditReply.getPostponedDuration());
+                                foroshandehEtebarModel.setRialBargashty(sellerCreditReply.getReturnedRial());
+                                foroshandehEtebarModel.setModatBargashty(sellerCreditReply.getReturnedDuration());
+                                foroshandehEtebarModel.setTedadBargashty(sellerCreditReply.getReturnedDuration());
+                                foroshandehEtebarModel.setModatVosol(sellerCreditReply.getRecieptDuration());
+                                foroshandehEtebarModels.add(foroshandehEtebarModel);
+                            }
+
+                            return foroshandehEtebarModels;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<ForoshandehEtebarModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<ForoshandehEtebarModel> foroshandehEtebarModels) {
+                                retrofitResponse.onSuccess(foroshandehEtebarModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                e.printStackTrace();
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.toString(), ForoshandehEtebarDAO.class.getSimpleName(), activityNameForLog, "fetchEtebarForoshandehGrpc", "CatchException");
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!managedChannel.isShutdown()) {
+                                    managedChannel.shutdown();
+                                }
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), ModatVosolGorohDAO.class.getSimpleName(), activityNameForLog, "fetchEtebarForoshandehGrpc", "CatchException");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+    }
+
 
     public void fetchEtebarForoshandeh(final Context context, final String activityNameForLog, final String ccForoshandehs, final RetrofitResponse retrofitResponse)
     {

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.InvoiceInsertControl.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "InvoiceInsertControlProto";
+
+package Sales;
+
+
+service InvoiceInsertControl{
+  rpc GetInvoiceInsertControl(InvoiceInsertControlRequest) returns(InvoiceInsertControlReply);
+}
+
+message InvoiceInsertControlRequest{
+
+  string TabletUniqueID = 1;
+  int32 CustomersID = 2;
+  int32 SalesManID = 3;
+
+}
+
+message InvoiceInsertControlReply{
+
+  int32 Flag = 1;
+  int32 ID = 2;
+
+}
+
+
+

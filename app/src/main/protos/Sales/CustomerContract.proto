@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.CustomerContract.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CustomerContractProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+service CustomerContract{
+  rpc GetCustomerContract(CustomerContractRequest) returns(CustomerContractReplyList);
+  rpc GetDistributerCustomerContract(CustomerContractRequest) returns(CustomerContractReplyList);
+}
+
+message CustomerContractRequest{
+  int32 Type = 1;
+  int32 SellOrganizationID = 2;
+  int32 CustomerContractID = 3;
+  string SalesManID = 4;
+}
+
+
+message CustomerContractReply{
+  int32  Index = 1 ;
+  int32  CustomerContractID = 2;
+  int32  CustomerID = 3;
+  int32  CustomerContractTypeID = 4;
+  string  CustomerContractName = 5;
+  string  ContractNumber = 6;
+  string ContractDate = 7;
+  string FromDate = 8;
+  string EndDate = 9;
+  string CreditDate = 10;
+  int32  VisitTypeID = 11;
+  string VisitTypeName = 12;
+  int32  CarryingCodeType = 13;
+  int32  ReceiptDuration = 14;
+  int32  ValidDelayDuration = 15;
+  int32  SellTypeInvoiceRequestID = 16;
+  int32  ReceiptTypeFromCustomerCode = 17;
+  string ReceiptTypeFromCustomerName = 18;
+  int32  SellOrganizationID = 19;
+  string SellOrganizationName = 20;
+
+}
+
+message CustomerContractReplyList{
+  repeated CustomerContractReply CustomerContracts = 1;
+}

@@ -6,19 +6,34 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.TakhfifHajmiSatrModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvTakhfifHajmiSatrResult;
+import com.saphamrah.protos.VolumetricDiscountRowGrpc;
+import com.saphamrah.protos.VolumetricDiscountRowReply;
+import com.saphamrah.protos.VolumetricDiscountRowReplyList;
+import com.saphamrah.protos.VolumetricDiscountRowRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -67,6 +82,84 @@ public class TakhfifHajmiSatrDAO
         };
     }
 
+
+    public void fetchTakhfifHajmiSatrGrpc(final Context context, final String activityNameForLog, String ccMarkazSazmanForosh, String ccTakhfifHajmis, final RetrofitResponse retrofitResponse) {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            //       ServerIpModel serverIpModel = new ServerIpModel();
+            //       serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, TakhfifHajmiSatrDAO.class.getSimpleName(), activityNameForLog, "fetchTakhfifHajmiSatrGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                VolumetricDiscountRowGrpc.VolumetricDiscountRowBlockingStub volumetricDiscountBlockingStub = VolumetricDiscountRowGrpc.newBlockingStub(managedChannel);
+                VolumetricDiscountRowRequest volumetricDiscountRowRequest = VolumetricDiscountRowRequest.newBuilder().setVolumetricDiscountID(ccTakhfifHajmis).setSellOrganizationCenterID(ccMarkazSazmanForosh).setRowTitleType("2").build();
+                Callable<VolumetricDiscountRowReplyList> volumetricDiscountRowReplyListCallable = () -> volumetricDiscountBlockingStub.getVolumetricDiscountRow(volumetricDiscountRowRequest);
+                RxAsync.makeObservable(volumetricDiscountRowReplyListCallable)
+                        .map(volumetricDiscountRowReplyList -> {
+                            ArrayList<TakhfifHajmiSatrModel> models = new ArrayList<>();
+                            for (VolumetricDiscountRowReply reply : volumetricDiscountRowReplyList.getVolumetricDiscountsRowList()) {
+                                TakhfifHajmiSatrModel model = new TakhfifHajmiSatrModel();
+                                model.setCcTakhfifHajmi(reply.getVolumetricDiscountID());
+                                model.setAz(reply.getFrom());
+                                model.setCcTakhfifHajmiSatr(reply.getRowVolumetricDiscountID());
+                                model.setBeEza(reply.getPer());
+                                model.setDarsadTakhfif(reply.getDiscountPercentage());
+                                model.setCcGorohMohasebeh(reply.getCalculationGroupID());
+                                model.setCcNoeField(reply.getFieldTypeID());
+                                model.setNameNoeField(reply.getFieldTypeName());
+                                model.setCodeNoeBastehBandy(reply.getEncapsulationTypeCode());
+                                model.setCodeNoeBastehBandyBeEza(reply.getPerEncapsulationTypeCode());
+                                model.setMinRial(reply.getMinRial());
+                                model.setMinTedadAghlam(reply.getMinNumberOfItems());
+                                model.setTa(reply.getTill());
+
+
+                                models.add(model);
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<TakhfifHajmiSatrModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<TakhfifHajmiSatrModel> takhfifHajmiSatrModels) {
+                                retrofitResponse.onSuccess(takhfifHajmiSatrModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), TakhfifHajmiSatrDAO.class.getSimpleName(), activityNameForLog, "fetchTakhfifHajmiSatrGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+    }
 
     /**
      * @deprecated

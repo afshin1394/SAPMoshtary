@@ -19,6 +19,10 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetElatAdamMoarefiMoshtaryResult;
+import com.saphamrah.protos.ReasonNotIntroducingCustomerGrpc;
+import com.saphamrah.protos.ReasonNotIntroducingCustomerReply;
+import com.saphamrah.protos.ReasonNotIntroducingCustomerReplyList;
+import com.saphamrah.protos.ReasonNotIntroducingCustomerRequest;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -66,7 +70,79 @@ public class ElatAdamMoarefiMoshtaryDAO
         };
     }
 
+    public void fetchElatAdamMoarefiMoshtaryGrpc(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
 
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+            {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, ElatAdamMoarefiMoshtaryDAO.class.getSimpleName(), activityNameForLog, "fetchElatAdamMoarefiMoshtaryGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
+            }
+            else
+            {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                ReasonNotIntroducingCustomerGrpc.ReasonNotIntroducingCustomerBlockingStub reasonNotIntroducingCustomerBlockingStub = ReasonNotIntroducingCustomerGrpc.newBlockingStub(managedChannel);
+                ReasonNotIntroducingCustomerRequest reasonNotIntroducingCustomerRequest = ReasonNotIntroducingCustomerRequest.newBuilder().build();
+
+                Callable<ReasonNotIntroducingCustomerReplyList> reasonNotIntroducingCustomerReplyListCallable  = () -> reasonNotIntroducingCustomerBlockingStub.getReasonNotIntroducingCustomer(reasonNotIntroducingCustomerRequest);
+                RxAsync.makeObservable(reasonNotIntroducingCustomerReplyListCallable)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(reasonNotIntroducingCustomerReplyList -> {
+                            ArrayList<ElatAdamMoarefiMoshtaryModel> elatAdamMoarefiMoshtaryModels = new ArrayList<>();
+                            for (ReasonNotIntroducingCustomerReply reasonNotIntroducingCustomerReply : reasonNotIntroducingCustomerReplyList.getReasonNotIntroducingCustomersList()) {
+                                ElatAdamMoarefiMoshtaryModel elatAdamMoarefiMoshtaryModel = new ElatAdamMoarefiMoshtaryModel();
+                                elatAdamMoarefiMoshtaryModel.setCcElatAdamMoarefiMoshtary(reasonNotIntroducingCustomerReply.getReasonNotIntroducingCustomerID());
+                                elatAdamMoarefiMoshtaryModel.setNameElatAdamMoarefiMoshtary(reasonNotIntroducingCustomerReply.getNameElatAdamMoarefiMoshtary());
+
+                                elatAdamMoarefiMoshtaryModels.add(elatAdamMoarefiMoshtaryModel);
+                            }
+
+                            return elatAdamMoarefiMoshtaryModels;
+
+                        }).subscribe(new Observer<ArrayList<ElatAdamMoarefiMoshtaryModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ArrayList<ElatAdamMoarefiMoshtaryModel> mahalModels) {
+                        retrofitResponse.onSuccess(mahalModels);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (!compositeDisposable.isDisposed()) {
+                            compositeDisposable.dispose();
+                        }
+                        compositeDisposable.clear();
+                    }
+                });
+            }
+        }catch (Exception exception){
+            String message = "can't find server";
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, ElatAdamMoarefiMoshtaryDAO.class.getSimpleName(), activityNameForLog, "fetchElatAdamMoarefiMoshtaryGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),exception.getMessage());
+
+        }
+
+    }
 
     public void fetchElatAdamMoarefiMoshtary(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
     {

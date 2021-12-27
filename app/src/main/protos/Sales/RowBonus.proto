@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.RowBonus.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RowBonusProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+
+service RowBonus{
+  rpc GetRowBonus(RowBonusRequest) returns(RowBonusReplyList);
+}
+
+message RowBonusRequest{
+  string BonusIDs =1;
+  string SellOrganizationCenterID =2;
+  string Title_Row_Type = 3;
+
+}
+
+message RowBonusReply{
+  int32 	BonusRowID = 1;
+  int32	BonusID = 2;
+  int32	FieldTypeName = 3;
+  int32	FieldTypeID = 4;
+  float	From = 5;
+  float	To = 6;
+  int32	EncapsulationCodeType = 7;
+  float	Per=8;
+  int32	PerEncapsulationCodeType=9;
+  int32	BonusQuantity=10;
+  float	BonusRial= 11;
+  int32	BonusGoodCodeID=12;
+  int32	CalculationFromExtra = 13;
+  int32	BonusRialType = 14;
+  int32	BonusGoodID = 15;
+  int32	ExtraBonusKalaID = 16;
+  int32	ExtraBonusGoodCodeID = 17;
+  int32	Cash = 18;
+}
+
+message RowBonusReplyList{
+  repeated RowBonusReply RowBonuses = 1;
+}

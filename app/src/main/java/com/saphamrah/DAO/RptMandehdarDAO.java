@@ -5,19 +5,34 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.RptMandehdarModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllrptListMoavaghForoshandehResult;
+import com.saphamrah.protos.RptRemainingInvoiceGrpc;
+import com.saphamrah.protos.RptRemainingInvoiceReply;
+import com.saphamrah.protos.RptRemainingInvoiceReplyList;
+import com.saphamrah.protos.RptRemainingInvoiceRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,9 +86,101 @@ public class RptMandehdarDAO
         };
     }
 
+    public void fetchAllMandehdarGrpc(final Context context, final String activityNameForLog, final String ccForoshandeh, final RetrofitResponse retrofitResponse)
+    {
+
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            //       ServerIpModel serverIpModel = new ServerIpModel();
+            //       serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RptMandehdarDAO.class.getSimpleName(), activityNameForLog, "fetchAllMandehdarGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                RptRemainingInvoiceGrpc.RptRemainingInvoiceBlockingStub remainingInventoryBlockingStub = RptRemainingInvoiceGrpc.newBlockingStub(managedChannel);
+                RptRemainingInvoiceRequest rptRemainingInvoiceRequest = RptRemainingInvoiceRequest.newBuilder().setSalesManID(ccForoshandeh).build();
+                Callable<RptRemainingInvoiceReplyList> rptRemainingInvoiceReplyListCallable = () -> remainingInventoryBlockingStub.getRptRemainingInvoice(rptRemainingInvoiceRequest);
+                RxAsync.makeObservable(rptRemainingInvoiceReplyListCallable)
+                        .map(rptRemainingInvoiceReplyList ->  {
+                            ArrayList<RptMandehdarModel> models = new ArrayList<>();
+                            for (RptRemainingInvoiceReply reply : rptRemainingInvoiceReplyList.getRptRemainingInvoicesList()) {
+                                RptMandehdarModel model = new RptMandehdarModel();
+
+                                model.setCcRpt_Mandehdar(reply.getRptRemainingID());
+                                model.setCcDarkhastFaktor(reply.getInvoiceRequestID());
+                                model.setCodeMoshtary(reply.getCustomerCode());
+                                model.setCcMoshtary(reply.getCustomerID());
+                                model.setNameMoshtary(reply.getCustomerName());
+                                model.setCcGorohForosh(reply.getSellGroupID());
+                                model.setCcMarkazForosh(reply.getSellCenterID());
+                                model.setCodeNoeVosolAsliMoshtary(reply.getCustomerOriginialReceiptTypeCode());
+                                model.setCodeNoeVosolFaktor(reply.getInvoiceReceiptTypeCode());
+                                model.setCodeVazeiat(reply.getStatusCode());
+                                model.setMablaghMandehMoshtary(reply.getCustomerRemainingAmount());
+                                model.setMablaghKhalesFaktor(reply.getPureInvoicPrice());
+                                model.setTarikhFaktor(reply.getInvoiceDate());
+                                model.setNameForoshandeh(reply.getSalesManName());
+                                model.setShomarehFaktor(reply.getInvoiceNumber());
+                                model.setNameGorohForosh(reply.getSellGroupName());
+                                model.setNameMarkazForosh(reply.getSellCenterName());
+                                model.setTarikhErsal(reply.getSendDate());
+                                model.setVaznFaktor(reply.getInvoiceWeight());
+                                model.setCcForoshandeh(reply.getSalesManID());
+
+
+                                models.add(model);
+
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<RptMandehdarModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<RptMandehdarModel> rptMandehdarModels) {
+                                retrofitResponse.onSuccess(rptMandehdarModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), RptMandehdarDAO.class.getSimpleName(), activityNameForLog, "fetchAllMandehdarGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+    }
+
     public void fetchAllMandehdar(final Context context, final String activityNameForLog, final String ccForoshandeh, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+        serverIpModel.setPort("8040");
+
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
         {
             String message = "can't find server";

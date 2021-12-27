@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.RptSaleGoal.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RptSaleGoalProto";
+option objc_class_prefix = "HLW";
+
+package Sales;
+
+
+
+service RptSaleGoal{
+  rpc GetRptSaleGoal(RptSaleGoalRequest) returns(RptSaleGoalReplyList);
+}
+
+message RptSaleGoalRequest{
+  string SalesManID = 1;
+
+}
+
+message RptSaleGoalReply{
+  int32	    BrandID =1;
+  string	BrandName=2;
+  string	GroupName=3;
+  int32	    SellPrice=4;
+  double	GroupGoodID=5;
+  string	OldGoodCode=6;
+  string	GoodName=7;
+  int32	    SalesManID=8;
+  string	SalesManOldCode=9;
+  int32	    TodaySalesQuantity=10;
+  int32	    TodayGoalQuantity=11;
+  int32	    MonthSalesQuantity=12;
+  int32	    MonthSalesGoal=13;
+  int32	    ShowType=14;
+  string	SalesManDescription=15;
+  int32     GoodCodeID = 16;
+
+}
+
+message RptSaleGoalReplyList{
+  repeated RptSaleGoalReply rptSaleGoals = 1;
+}

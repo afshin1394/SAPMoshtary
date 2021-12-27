@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.InvoiceRequestSignatureImage.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "InvoiceRequestSignatureImageProto";
+option objc_class_prefix = "HLW";
+
+package Global;
+
+service InvoiceRequestSignatureImage {
+
+  rpc GetInvoiceRequestSignatureImage (InvoiceRequestSignatureImageRequest) returns (InvoiceRequestSignatureImageReplyList);
+}
+
+message InvoiceRequestSignatureImageRequest {
+  int64 InvoiceRequestID = 1;
+  int64 DraftRequestID = 2;
+}
+
+message InvoiceRequestSignatureImageReply {
+  string InvoiceImage = 1;
+
+}
+
+message InvoiceRequestSignatureImageReplyList{
+  repeated InvoiceRequestSignatureImageReply InvoiceRequestSignatureImage = 1;
+}

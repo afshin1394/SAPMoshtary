@@ -14,6 +14,7 @@ public class ServerIpModel
     private static final String COLUMN_IsTest = "IsTest";
     private static final String COLUMN_Server_Type = "ServerType";
     private static final String COLUMN_NameServerPersian = "NameServerPersian";
+    private static final String COLUMN_WebServiceType = "WebServiceType";
 
 
     public static String TableName() {
@@ -36,6 +37,7 @@ public class ServerIpModel
     }
     public static String COLUMN_Server_Type(){return COLUMN_Server_Type;}
     public static String COLUMN_NameServerPersian(){return COLUMN_NameServerPersian;}
+    public static String COLUMN_WebServiceType(){return COLUMN_WebServiceType;}
 
 
     @SerializedName("id")
@@ -59,6 +61,11 @@ public class ServerIpModel
     @SerializedName("NameServerPersian")
     @Expose
     private String NameServerPersian;
+
+
+    @SerializedName("WebServiceType")
+    @Expose
+    private int WebServiceType;
 
     public int getId() {
         return id;
@@ -114,5 +121,13 @@ public class ServerIpModel
 
     public void setNameServerPersian(String nameServerPersian) {
         NameServerPersian = nameServerPersian;
+    }
+
+    public int getWebServiceType() {
+        return WebServiceType;
+    }
+
+    public void setWebServiceType(int webServiceType) {
+        WebServiceType = webServiceType;
     }
 }

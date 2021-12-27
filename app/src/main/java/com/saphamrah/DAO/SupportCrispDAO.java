@@ -6,19 +6,34 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.SupportCrispModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.SupportCrispResult;
+import com.saphamrah.protos.SupportCrispGrpc;
+import com.saphamrah.protos.SupportCrispReply;
+import com.saphamrah.protos.SupportCrispReplyList;
+import com.saphamrah.protos.SupportCrispRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,27 +60,87 @@ public class SupportCrispDAO
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), "SupportCrispDAO" , "" , "constructor" , "");
         }
     }
-    private String getEndpoint(Call call)
-    {
-        String endpoint = "";
-        try
-        {
-            endpoint = call.request().url().toString();
-            endpoint = endpoint.substring(endpoint.lastIndexOf("/")+1);
-        }
-        catch (Exception e)
-        {e.printStackTrace();}
-        return endpoint;
-    }
 
     private String[] allColumns()
     {
         return new String[]
-        {
-                crispModel.getOLUMN_ccSupportCrisp,
-                crispModel.getCOLUMN_ccSazmanForosh,
-                crispModel.getCOLUMN_CrispID
-        };
+                {
+                        crispModel.getOLUMN_ccSupportCrisp,
+                        crispModel.getCOLUMN_ccSazmanForosh,
+                        crispModel.getCOLUMN_CrispID
+                };
+    }
+
+    public void fetchSupportCrispGrpc(final Context context, final String activityNameForLog, int ccsazmanforosh, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, SupportCrispDAO.class.getSimpleName(), activityNameForLog, "fetchSupportCrispGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                SupportCrispGrpc.SupportCrispBlockingStub supportCrispBlockingStub = SupportCrispGrpc.newBlockingStub(managedChannel);
+                SupportCrispRequest supportCrispRequest = SupportCrispRequest.newBuilder().setSellOrganizationID(ccsazmanforosh).build();
+                Callable<SupportCrispReplyList> supportCrispReplyListCallable = () -> supportCrispBlockingStub.getSupportCrisp(supportCrispRequest);
+                RxAsync.makeObservable(supportCrispReplyListCallable)
+                        .map(supportCrispReplyList ->  {
+                            ArrayList<SupportCrispModel> models = new ArrayList<>();
+                            for (SupportCrispReply reply : supportCrispReplyList.getSupportCrispsList()) {
+
+                                SupportCrispModel model = new SupportCrispModel();
+                                model.setCcSupportCrisp(reply.getSupportCrispID());
+                                model.setCrispID(reply.getCrispID());
+                                model.setCcSazmanForosh(reply.getSellOrganizationID());
+
+
+
+                                models.add(model);
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<SupportCrispModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<SupportCrispModel> supportCrispModels) {
+                                retrofitResponse.onSuccess(supportCrispModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), SupportCrispDAO.class.getSimpleName(), activityNameForLog, "fetchSupportCrispGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
     }
 
     public void fetchSupportCrisp(final Context context, final String activityNameForLog, int ccsazmanforosh, final RetrofitResponse retrofitResponse)
@@ -145,6 +220,24 @@ public class SupportCrispDAO
             });
         }
     }
+
+
+    private String getEndpoint(Call call)
+    {
+        String endpoint = "";
+        try
+        {
+            endpoint = call.request().url().toString();
+            endpoint = endpoint.substring(endpoint.lastIndexOf("/")+1);
+        }
+        catch (Exception e)
+        {e.printStackTrace();}
+        return endpoint;
+    }
+
+
+
+
 
     public boolean insertGroup(ArrayList<SupportCrispModel> supportCrispModels)
     {

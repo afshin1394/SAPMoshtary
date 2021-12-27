@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.AccountType.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "AccountTypeProto";
+option objc_class_prefix = "HLW";
+
+package Amargar;
+
+service AccountType{
+  rpc GetAccountType(AccountTypeRequest) returns(AccountTypeReplyList);
+}
+
+message AccountTypeRequest{
+
+}
+
+message AccountTypeReply{
+  int32	AccountTypeID = 1;
+  string	AccountTypeName = 2;
+}
+
+message AccountTypeReplyList{
+  repeated AccountTypeReply AccountTypeReplys = 1;
+}

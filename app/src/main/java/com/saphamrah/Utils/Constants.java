@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE = 0 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest
+    private static final int CURRENT_VERSION_TYPE = 8 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest 8-Pegah-grpc
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 
@@ -1337,5 +1337,8 @@ public class Constants
     public static final int AMARGAR = 7;
     public static final int RAEEIS = 8;
 
+
+    public static final int REST = 1;
+    public static final int gRPC = 2;
 }
 

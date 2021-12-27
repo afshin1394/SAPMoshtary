@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Warehouse.GoodPriority.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "GoodPriorityProto";
+option objc_class_prefix = "HLW";
+
+
+package Warehouse;
+
+service GoodPriority {
+  rpc GetGoodPriority (GoodPriorityRequest) returns (GoodPriorityReplyList);
+}
+
+message GoodPriorityRequest {
+  int32 BinID = 1;
+}
+
+message GoodPriorityReply {
+  int32 GoodCodeID = 1;
+  int32 Priority = 2;
+}
+
+message GoodPriorityReplyList{
+  repeated GoodPriorityReply GoodPriorities = 1;
+}
+

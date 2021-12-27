@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.CustomerCollectType.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CustomerCollectTypeProto";
+package Sales;
+
+service CustomerCollectType{
+  rpc GetCustomerCollectType(CustomerCollectTypeRequest) returns(CustomerCollectTypeReplyList);
+}
+
+message CustomerCollectTypeRequest{
+  string SellOrganizationCenterID = 1;
+  string CustomerTypeID = 2;
+
+}
+
+message CustomerCollectTypeReply{
+
+  int32	SellOrganizationCenterID = 1;
+  int32	CustomerTypeID = 2;
+  int32	DegreeID = 3;
+  int32	CustomerCollectCodeType = 4;
+  int32	CollectTypeCode = 5;
+  string	CollectTypeName = 6;
+  string	CustomerRecieptionTypeName = 7;
+
+}
+
+message CustomerCollectTypeReplyList{
+  repeated CustomerCollectTypeReply CustomerCollectTypes = 1;
+}

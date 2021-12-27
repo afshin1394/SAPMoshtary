@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.RptSellStatistic.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RptSellStatisticProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+
+service RptSellStatistic{
+  rpc GetRptSellStatistic(RptSellStatisticRequest) returns(RptSellStatisticReplyList);
+}
+
+message RptSellStatisticRequest{
+  string SalesManID =1;
+  string TillDate = 2;
+
+
+}
+
+message RptSellStatisticReply{
+  int32	TodayInvoiceCount = 1;
+  float	TodaySumInvoicePrice = 2;
+  int32	MonthInvoiceCount= 3;
+  float	MonthSumInvoicePrice = 4;
+  float	TodayReturnedCount = 5;
+  int32	TodayReturnedSumPrice = 6;
+  float	MonthReturnedCount = 7;
+  float	MonthReturnedSumPrice = 8;
+  int32	ValidTodaySellAvarage = 9;
+  int32	SellGroupID = 10;
+  string	SellGroupDescription = 11;
+  int32	SalesManID = 12;
+  string	SalesManDescription = 13;
+
+}
+
+message RptSellStatisticReplyList{
+  repeated RptSellStatisticReply RptSellStatistics = 1;
+}

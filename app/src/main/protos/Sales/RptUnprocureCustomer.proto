@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.RptUnprocureCustomer.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RptUnprocureCustomerProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+
+service RptUnprocureCustomer{
+	rpc GetRptUnprocureCustomer(RptUnprocureCustomerRequest) returns(RptUnprocureCustomerReplyList);
+}
+
+message RptUnprocureCustomerRequest
+{
+    string SalesManID =1;
+    string RoutesID = 2;
+}
+
+message RptUnprocureCustomerReply
+{
+int32	Row = 1;
+string	CustomerName = 2;
+string	InvoiceDate = 3;
+string	CustomerCode = 4;
+}
+
+message RptUnprocureCustomerReplyList{
+	repeated RptUnprocureCustomerReply RptUnprocureCustomers = 1;
+}

@@ -5,13 +5,17 @@ import android.util.Log;
 
 import com.saphamrah.BaseMVP.GetProgramMVP;
 import com.saphamrah.DAO.SystemConfigTabletDAO;
+import com.saphamrah.MVP.Model.GetProgramGrpcModel;
 import com.saphamrah.MVP.Model.GetProgramModel;
 import com.saphamrah.MVP.Model.GetProgramModelRx;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.Logger;
+import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -27,18 +31,20 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
     public GetProgramPresenter(GetProgramMVP.RequiredViewOps viewOps)
     {
         this.mView = new WeakReference<>(viewOps);
-        SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(getAppContext());
-        int getProgramService = systemConfigTabletDAO.getProgramService();
 
-        switch (getProgramService){
-            case Constants.GET_PROGRAM_RETROFIT:
+//        SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(getAppContext());
+//        int getProgramService = systemConfigTabletDAO.getProgramService();
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(getAppContext());
+
+        switch (serverIpModel.getWebServiceType()){
+            case Constants.REST:
                 mModel = new GetProgramModel(this);
                 break;
-            case Constants.GET_PROGRAM_RX:
-                mModel = new GetProgramModelRx(this);
-                break;
-            case Constants.GET_PROGRAM_GRPC:
-               // mModel = new GetProgramGrpcModel(this);
+//            case Constants.GET_PROGRAM_RX:
+//                mModel = new GetProgramModelRx(this);
+//                break;
+            case Constants.gRPC:
+                mModel = new GetProgramGrpcModel(this);
                 break;
         }
 
@@ -297,9 +303,16 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
     @Override
     public void onFailedGetProgram(int itemIndex, String error)
     {
-        mView.get().updateStatusOfFailedItem(Constants.GET_PROGRAM_FULL() , itemIndex , error);
-        Logger logger  = new Logger();
-        logger.insertLogToDB(getAppContext(),Constants.LOG_EXCEPTION(),error,"GetProgramPresenter","GetProgramActivity","onFailedGetProgram","");
+         GrpcChannel.shutDown();
+         PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(new PubFunc.ConcurrencyEvents() {
+            @Override
+            public void uiThreadIsReady() {
+                mView.get().updateStatusOfFailedItem(Constants.GET_PROGRAM_FULL() , itemIndex , error);
+                Logger logger  = new Logger();
+                logger.insertLogToDB(getAppContext(),Constants.LOG_EXCEPTION(),error,"GetProgramPresenter","GetProgramActivity","onFailedGetProgram","");
+            }
+        });
+
     }
 
     @Override
@@ -456,6 +469,15 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
         {
             mView.get().showErrorAlert(true, R.string.errorLocalDateTimeTitle, message, Constants.FAILED_MESSAGE(), R.string.apply);
         }
+    }
+
+    @Override
+    public void showGetProgramDetails(long elapseTime,long responseSize) {
+
+
+        String message = String.format("%1$s : %2$s %3$s \n %4$s : %5$s %6$s",getAppContext().getString(R.string.timeDiffGetProgram),elapseTime,getAppContext().getString(R.string.second), getAppContext().getString(R.string.DataCapacityGetProgram),responseSize , getAppContext().getString(R.string.kiloByte));
+
+        mView.get().showGetProgramDetails(message);
     }
 
 }

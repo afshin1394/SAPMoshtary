@@ -4,19 +4,35 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.RptDarkhastFaktorVazeiatPPCModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllrptDarkhastFaktorHavalehVazeiatResult;
+import com.saphamrah.protos.RptInvoiceRequestStatusGrpc;
+import com.saphamrah.protos.RptInvoiceRequestStatusReply;
+import com.saphamrah.protos.RptInvoiceRequestStatusReplyList;
+import com.saphamrah.protos.RptInvoiceRequestStatusRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,9 +93,104 @@ public class RptDarkhastFaktorVazeiatPPCDAO
         };
     }
 
+    public void fetchRptDarkhastFaktorVazeiatGrpc(final Context context, final String activityNameForLog,final String ccForoshandeh, final String ccMamorPakhsh, final RetrofitResponse retrofitResponse) {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RptDarkhastFaktorVazeiatPPCDAO.class.getSimpleName(), activityNameForLog, "fetchMahalCodePostiGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                RptInvoiceRequestStatusGrpc.RptInvoiceRequestStatusBlockingStub blockingStub = RptInvoiceRequestStatusGrpc.newBlockingStub(managedChannel);
+                RptInvoiceRequestStatusRequest request = RptInvoiceRequestStatusRequest.newBuilder().setSalesManId(ccForoshandeh).setDistributerID(ccMamorPakhsh).build();
+
+                Callable<RptInvoiceRequestStatusReplyList> replyListCallable = () -> blockingStub.getRptInvoiceRequestStatus(request);
+                RxAsync.makeObservable(replyListCallable)
+
+                        .map(replyList -> {
+                            ArrayList<RptDarkhastFaktorVazeiatPPCModel> models = new ArrayList<>();
+                            for (RptInvoiceRequestStatusReply reply : replyList.getRptInvoiceRequestStatussList()) {
+                                RptDarkhastFaktorVazeiatPPCModel model = new RptDarkhastFaktorVazeiatPPCModel();
+
+                                model.setCcRpt_DarkhastFaktorVazeiatPPC(reply.getRptInvoiceRequestStatusPPCID());
+                                model.setCcDarkhastFaktor(reply.getInvoiceRequestID());
+                                model.setCcMarkazForosh(reply.getSellCenterID());
+                                model.setCcGorohForosh(reply.getSellGroupID());
+                                model.setCcForoshandeh(reply.getSalesManID());
+                                model.setCcMoshtary(reply.getCustomerID());
+                                model.setNameMarkazForosh(reply.getSellCenterName());
+                                model.setSharhGorohForosh(reply.getSellGroupDescription());
+                                model.setSharhForoshandeh(reply.getSalesManDescription());
+                                model.setFullNameForoshandeh(reply.getSalesManFullName());
+                                model.setCodeMoshtary(reply.getCustomerCode());
+                                model.setNameMoshtary(reply.getCustomerName());
+                                model.setShomarehDarkhast(reply.getRequestNumber());
+                                model.setTarikhDarkhast(reply.getRequestDate());
+                                model.setTarikhDarkhastWithSlash(reply.getRequestDateWithSlash());
+                                model.setSaatDarkhast(reply.getRequestTime());
+                                model.setShomarehFaktor(reply.getInvoiceNumber());
+                                model.setTarikhFaktor(reply.getInvoiceDate());
+                                model.setTarikhFaktorWithSlash(reply.getInvoiceDateWithSlash());
+                                model.setRoundMablaghKhalesFaktor(reply.getRoundPureInvoicePrice());
+                                model.setCodeNoeVorod(reply.getEntranceCodeType());
+                                model.setTxtCodeNoeVorod(reply.getTxtEntranceCodeType());
+                                model.setCodeVazeiat(reply.getStatusCode());
+                                model.setTxtCodeVazeiat(reply.getTxtStatusCode());
+                                model.setCcDarkhastFaktorPPC(reply.getInvoiceRequestIDPPC());
+                                model.setMablaghNahaeeFaktor(reply.getFinalInvoicePrice());
+                                model.setIsFaktorBaz(reply.getIsInvoiceOpen());
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<RptDarkhastFaktorVazeiatPPCModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<RptDarkhastFaktorVazeiatPPCModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), RptDarkhastFaktorVazeiatPPCDAO.class.getSimpleName(), activityNameForLog, "fetchMahalCodePostiGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+
+    }
+
     public void fetchRptDarkhastFaktorVazeiat(final Context context, final String activityNameForLog,final String ccForoshandeh, final String ccMamorPakhsh, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+        serverIpModel.setPort("8040");
+
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
         {
             String message = "can't find server";

@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Warehouse.RptBinInventory.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RptBinInventoryProto";
+package Warehouse;
+
+
+service RptBinInventory {
+
+  rpc GetRptBinInventory (RptBinInventoryRequest) returns (RptBinInventoryReplyList);
+}
+
+
+message RptBinInventoryRequest {
+  string BinID = 1;
+  string SalesManID = 2;
+  string DistributerID = 3;
+
+}
+
+
+message RptBinInventoryReply {
+  int32	ID = 1;
+  int32	Row = 2;
+  int32	GoodsCodeID = 3;
+  string	GoodsCode = 4;
+  string	GoodsName = 5;
+  int32	BoxRemainingInventory =6;
+  int32	PakageRemainingInventory = 7;
+  int32	NumberRemainingInventory = 8;
+  int32	IsNonSell = 9;
+  int32	SellOrganizationID = 10;
+  string	SellOrganizationName = 11;
+
+}
+
+message RptBinInventoryReplyList{
+  repeated RptBinInventoryReply RptBinInventorys = 1;
+}

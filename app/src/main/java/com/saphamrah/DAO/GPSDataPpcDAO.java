@@ -6,19 +6,34 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.GPSDataModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetGPSDataResult;
+import com.saphamrah.protos.GPSDataGrpc;
+import com.saphamrah.protos.GPSDataReply;
+import com.saphamrah.protos.GPSDataReplyList;
+import com.saphamrah.protos.GPSDataRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,6 +86,89 @@ public class GPSDataPpcDAO
         };
     }
 
+    public void fetchGPSDataGrpc(final Context context, final String activityNameForLog,final String ccForoshandeh, final String ccMamorPakhsh, final RetrofitResponse retrofitResponse)
+    {
+
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, GPSDataPpcDAO.class.getSimpleName(), activityNameForLog, "fetchGPSDataByccForoshandehGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                GPSDataGrpc.GPSDataBlockingStub gpsDataBlockingStub = GPSDataGrpc.newBlockingStub(managedChannel);
+                GPSDataRequest gpsDataRequest = GPSDataRequest.newBuilder().setSalesManID(ccForoshandeh).setDistributorID(ccMamorPakhsh).build();
+                Callable<GPSDataReplyList> gpsDataReplyListCallable = () -> gpsDataBlockingStub.getGPSData(gpsDataRequest);
+                RxAsync.makeObservable(gpsDataReplyListCallable)
+                        .map(gpsDataReplyList ->  {
+                            ArrayList<GPSDataModel> models = new ArrayList<>();
+                            for (GPSDataReply reply : gpsDataReplyList.getGPSDatasList()) {
+                                GPSDataModel model = new GPSDataModel();
+                                model.setCcForoshandeh(reply.getSelasManID());
+                                model.setAccurancy(reply.getAccuracy());
+                                model.setAltitude(reply.getAltitude());
+                                model.setBearing(reply.getBearing());
+                                model.setCcGpsData_PPC(reply.getGpsDateIDPPC());
+                                model.setBearing(reply.getBearing());
+                                model.setCcDarkhastFaktor(reply.getInvoiceRequestID());
+                                model.setCcMamorPakhsh(reply.getDistributerID());
+                                model.setCcMasir(reply.getRouteID());
+                                model.setSpeed(reply.getSpeed());
+                                model.setStatus(reply.getStatus());
+                                model.setTarikh(reply.getDate());
+                                model.setLatitude(reply.getLatitude());
+                                model.setLongitude(reply.getLongitude());
+                                model.setDistance(reply.getDistance());
+                                model.setCcAfrad(reply.getPersonID());
+                                model.setElapsedRealTimeNanos(reply.getElapsedRealTimeNanos());
+
+                                models.add(model);
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<GPSDataModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<GPSDataModel> jayezehModels) {
+                                retrofitResponse.onSuccess(jayezehModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), GPSDataPpcDAO.class.getSimpleName(), activityNameForLog, "fetchGPSDataByccForoshandehGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+    }
 
     public void fetchGPSDataByccForoshandeh(final Context context, final String activityNameForLog,final String ccForoshandeh, final RetrofitResponse retrofitResponse)
     {

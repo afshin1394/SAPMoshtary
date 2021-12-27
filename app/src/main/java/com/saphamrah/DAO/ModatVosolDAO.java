@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.ModatVosolModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.ServerIpModel;
@@ -13,13 +15,26 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvModatVosolByccMarkazForoshGorohResult;
+import com.saphamrah.protos.ReceiptDurationByGroupSellCenterIDGrpc;
+import com.saphamrah.protos.ReceiptDurationByGroupSellCenterIDReply;
+import com.saphamrah.protos.ReceiptDurationByGroupSellCenterIDReplyList;
+import com.saphamrah.protos.ReceiptDurationByGroupSellCenterIDRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,6 +78,92 @@ public class ModatVosolDAO
             ModatVosolModel.COLUMN_ccGorohKala()
         };
     }
+
+
+    public void fetchAllvModatVosolByccMarkazForoshGorohGrpc(final Context context, final String activityNameForLog, final String ccMarkazForosh, final String ccGorohs, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, ModatVosolDAO.class.getSimpleName(), activityNameForLog, "fetchAllvModatVosolByccMarkazForoshGorohGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                ReceiptDurationByGroupSellCenterIDGrpc.ReceiptDurationByGroupSellCenterIDBlockingStub receiptDurationByGroupSellCenterIDBlockingStub = ReceiptDurationByGroupSellCenterIDGrpc.newBlockingStub(managedChannel);
+                ReceiptDurationByGroupSellCenterIDRequest receiptDurationByGroupSellCenterIDRequest = ReceiptDurationByGroupSellCenterIDRequest.newBuilder().setSellCenterID(ccMarkazForosh).setGroupsID(ccGorohs).build();
+                Callable<ReceiptDurationByGroupSellCenterIDReplyList> receiptDurationByGroupSellCenterIDReplyListCallable = () -> receiptDurationByGroupSellCenterIDBlockingStub.getReceiptDurationByGroupSellCenterID(receiptDurationByGroupSellCenterIDRequest);
+                RxAsync.makeObservable(receiptDurationByGroupSellCenterIDReplyListCallable)
+                        .map(receiptDurationByGroupSellCenterIDReplyList -> {
+                            ArrayList<ModatVosolModel> modatVosolModels = new ArrayList<>();
+                            for (ReceiptDurationByGroupSellCenterIDReply receiptDurationByGroupSellCenterIDReply : receiptDurationByGroupSellCenterIDReplyList.getReceiptDurationByGroupSellCenterIDsList()) {
+
+                                ModatVosolModel modatVosolModel = new ModatVosolModel();
+
+                                modatVosolModel.setCcModatVosol(receiptDurationByGroupSellCenterIDReply.getReceiptDurationID());
+                                modatVosolModel.setCcMarkazSazmanForoshSakhtarForosh(receiptDurationByGroupSellCenterIDReply.getSellStructureSellOrganizationCenterID());
+                                modatVosolModel.setCodeNoe(receiptDurationByGroupSellCenterIDReply.getTypeCode());
+                                modatVosolModel.setSharhModatVosol(receiptDurationByGroupSellCenterIDReply.getReceiptDurationDescription());
+                                modatVosolModel.setCcBrand(receiptDurationByGroupSellCenterIDReply.getBrandID());
+                                modatVosolModel.setCcGorohKala(receiptDurationByGroupSellCenterIDReply.getGoodsGroupID());
+                                modatVosolModel.setCcGoroh(receiptDurationByGroupSellCenterIDReply.getGroupID());
+                                modatVosolModel.setAz(receiptDurationByGroupSellCenterIDReply.getFrom());
+                                modatVosolModel.setTa(receiptDurationByGroupSellCenterIDReply.getTo());
+                                modatVosolModel.setModatVosol(receiptDurationByGroupSellCenterIDReply.getReceiptDuration());
+
+                                modatVosolModels.add(modatVosolModel);
+                            }
+
+                            return modatVosolModels;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<ModatVosolModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<ModatVosolModel> darkhastFaktorModels) {
+                                retrofitResponse.onSuccess(darkhastFaktorModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                e.printStackTrace();
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.toString(), ModatVosolDAO.class.getSimpleName(), activityNameForLog, "fetchAllvModatVosolByccMarkazForoshGorohGrpc", "CatchException");
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), ModatVosolDAO.class.getSimpleName(), activityNameForLog, "fetchAllvModatVosolByccMarkazForoshGorohGrpc", "CatchException");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+    }
+
 
     public void fetchAllvModatVosolByccMarkazForoshGoroh(final Context context, final String activityNameForLog, final String ccMarkazForosh, final String ccGorohs, final RetrofitResponse retrofitResponse)
     {

@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.CashDiscount.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CashDiscountProto";
+option objc_class_prefix = "HLW";
+
+package Sales;
+
+
+
+service CashDiscount{
+  rpc GetCashDiscounts(CashDiscountRequest) returns(CashDiscountReplyList);
+}
+
+message CashDiscountRequest{
+  string sellOrganizationCenterID = 1;
+}
+
+message CashDiscountReply{
+  int32	CashDiscountID = 1;
+  string	DiscountDescription = 2;
+  int32	CustomerFieldTypeID = 3;
+  int32	CalculationTypeCode = 4;
+  float	DiscountPercentage = 5;
+  int32	TypeCode = 6;
+  int32	CustomerFieldTypeName = 7;
+  int32	Degree = 8;
+  int32	SellOrganizationCenterID =9;
+  int32	GuildTypeID = 10;
+  string	GuildTypeName = 11;
+
+
+}
+
+message CashDiscountReplyList{
+  repeated CashDiscountReply CashDiscounts = 1;
+}

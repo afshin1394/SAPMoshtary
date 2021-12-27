@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.BarkhordForoshandehBaMoshtaryModel;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
 import com.saphamrah.Model.LogPPCModel;
@@ -13,15 +15,28 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.BarkhordForoshandehBaMoshtaryResult;
+import com.saphamrah.protos.SalesManBehaviorWithCustomerGrpc;
+import com.saphamrah.protos.SalesManBehaviorWithCustomerReply;
+import com.saphamrah.protos.SalesManBehaviorWithCustomerReplyList;
+import com.saphamrah.protos.SalesManBehaviorWithCustomerRequest;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,6 +78,80 @@ public class BarkhordForoshandehBaMoshtaryDAO
             BarkhordForoshandehBaMoshtaryModel.COLUMN_ExtraProp_Recent(),
 
         };
+    }
+
+    public void fetchBarkhordForoshandehBaMoshtaryGrpc(final Context context, final String activityNameForLog,final String ccForoshandeh, final String ccMoshtarys, final String tedadMah, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+            {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, BarkhordForoshandehBaMoshtaryDAO.class.getSimpleName(), activityNameForLog, "fetchRotbehGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR() , message);
+            }
+            else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                SalesManBehaviorWithCustomerGrpc.SalesManBehaviorWithCustomerBlockingStub blockingStub = SalesManBehaviorWithCustomerGrpc.newBlockingStub(managedChannel);
+                SalesManBehaviorWithCustomerRequest request = SalesManBehaviorWithCustomerRequest.newBuilder().setSalesManID(ccForoshandeh).setCustomersID(ccMoshtarys).setNumberMonths(tedadMah).build();
+
+                Callable<SalesManBehaviorWithCustomerReplyList> replyListCallable  = () -> blockingStub.getSalesManBehaviorWithCustomer(request);
+                RxAsync.makeObservable(replyListCallable)
+
+                        .map(replyList -> {
+                            ArrayList<BarkhordForoshandehBaMoshtaryModel> models = new ArrayList<>();
+                            for (SalesManBehaviorWithCustomerReply reply : replyList.getSalesManBehaviorWithCustomersList()) {
+                                BarkhordForoshandehBaMoshtaryModel model = new BarkhordForoshandehBaMoshtaryModel();
+
+                                model.setCcBarkhordForoshandeh(reply.getSalesManBehaviorID());
+                                model.setCcForoshandeh(reply.getSalesManID());
+                                model.setCcMoshtary(reply.getCustomerID());
+                                model.setTarikh(reply.getDate());
+                                model.setTozihat(reply.getDescription());
+                                model.setIsFavorite(reply.getIsFavorite());
+
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<BarkhordForoshandehBaMoshtaryModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<BarkhordForoshandehBaMoshtaryModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), BarkhordForoshandehBaMoshtaryDAO.class.getSimpleName(), activityNameForLog, "fetchBarkhordForoshandehBaMoshtaryGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
+        }
     }
 
 

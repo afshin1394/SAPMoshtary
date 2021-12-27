@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Application.BaseApplication;
 
 import com.saphamrah.Model.MahalCodePostiModel;
@@ -18,13 +20,26 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetRtpThreeMonthPurchaseResult;
+import com.saphamrah.protos.RptCustomer3MonthPurchaseGrpc;
+import com.saphamrah.protos.RptCustomer3MonthPurchaseReply;
+import com.saphamrah.protos.RptCustomer3MonthPurchaseReplyList;
+import com.saphamrah.protos.RptCustomer3MonthPurchaseRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,8 +60,99 @@ public class Rpt3MonthPurchaseDAO {
         }
     }
 
+    private String[] allColumns() {
+        return new String[]
+                {
+                        modelGetTABLE_NAME.getCOLUMN_ccMoshtary(),
+                        modelGetTABLE_NAME.getCOLUMN_ccDarkhastFaktor(),
+                        modelGetTABLE_NAME.getCOLUMN_CodeMoshtary(),
+                        modelGetTABLE_NAME.getCOLUMN_NameMoshtary(),
+                        modelGetTABLE_NAME.getCOLUMN_ShomarehFaktor(),
+                        modelGetTABLE_NAME.getCOLUMN_TarikhFaktor(),
+                        modelGetTABLE_NAME.getCOLUMN_MablaghKhalesFaktor(),
+                        modelGetTABLE_NAME.getCOLUMN_MarjoeeKamel(),
+                };
+    }
+
+    public void fetchRptThreeMonthPurchaseGrpc(final Context context, final String activityNameForLog, int ccForoshandeh, final RetrofitResponse retrofitResponse) {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            //       ServerIpModel serverIpModel = new ServerIpModel();
+            //       serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, Rpt3MonthPurchaseDAO.class.getSimpleName(), activityNameForLog, "fetchRptThreeMonthPurchaseGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                RptCustomer3MonthPurchaseGrpc.RptCustomer3MonthPurchaseBlockingStub rptCustomer3MonthPurchaseBlockingStub = RptCustomer3MonthPurchaseGrpc.newBlockingStub(managedChannel);
+                RptCustomer3MonthPurchaseRequest rptCustomer3MonthPurchaseRequest = RptCustomer3MonthPurchaseRequest.newBuilder().setSalesManID(String.valueOf(ccForoshandeh)).build();
+                Callable<RptCustomer3MonthPurchaseReplyList> RptCustomer3MonthPurchaseReplyListCallable = () -> rptCustomer3MonthPurchaseBlockingStub.getRptCustomer3MonthPurchase(rptCustomer3MonthPurchaseRequest);
+                RxAsync.makeObservable(RptCustomer3MonthPurchaseReplyListCallable)
+                        .map(rptCustomer3MonthPurchaseReplyList ->  {
+                            ArrayList<Rpt3MonthPurchaseModel> models = new ArrayList<>();
+                            for (RptCustomer3MonthPurchaseReply reply : rptCustomer3MonthPurchaseReplyList.getRptCustomer3MonthPurchasesList()) {
+                                Rpt3MonthPurchaseModel model = new Rpt3MonthPurchaseModel();
+
+                                model.setCcMoshtary(reply.getCustomerID());
+                                model.setCcDarkhastFaktor(reply.getInvoiceRequestID());
+                                model.setCodeMoshtary(reply.getCustomerCode());
+                                model.setMarjoeeKamel(reply.getCompleteReturn());
+                                model.setNameMoshtary(reply.getCustomerName());
+                                model.setShomarehFaktor(reply.getInvoiceNumber());
+                                model.setTarikhFaktor(reply.getInvoiceDate());
+                                model.setMablaghKhalesFaktor(reply.getPureInvoicePrice());
+
+
+                                models.add(model);
+
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<Rpt3MonthPurchaseModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<Rpt3MonthPurchaseModel> rpt3MonthPurchaseModels) {
+                                retrofitResponse.onSuccess(rpt3MonthPurchaseModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), Rpt3MonthPurchaseDAO.class.getSimpleName(), activityNameForLog, "fetchRptThreeMonthPurchaseGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+    }
+
     public void fetchRptThreeMonthPurchas(final Context context, final String activityNameForLog, int ccForoshandeh, final RetrofitResponse retrofitResponse) {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+        serverIpModel.setPort("8040");
+
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
             String message = "can't find server";
             PubFunc.Logger logger = new PubFunc().new Logger();
@@ -128,19 +234,7 @@ public class Rpt3MonthPurchaseDAO {
         }
     }
 
-    private String[] allColumns() {
-        return new String[]
-                {
-                        modelGetTABLE_NAME.getCOLUMN_ccMoshtary(),
-                        modelGetTABLE_NAME.getCOLUMN_ccDarkhastFaktor(),
-                        modelGetTABLE_NAME.getCOLUMN_CodeMoshtary(),
-                        modelGetTABLE_NAME.getCOLUMN_NameMoshtary(),
-                        modelGetTABLE_NAME.getCOLUMN_ShomarehFaktor(),
-                        modelGetTABLE_NAME.getCOLUMN_TarikhFaktor(),
-                        modelGetTABLE_NAME.getCOLUMN_MablaghKhalesFaktor(),
-                        modelGetTABLE_NAME.getCOLUMN_MarjoeeKamel(),
-                };
-    }
+
 
     @SuppressLint("LongLogTag")
     public boolean insertGroup(ArrayList<Rpt3MonthPurchaseModel> rptThreeMonthPurchaseModel) {

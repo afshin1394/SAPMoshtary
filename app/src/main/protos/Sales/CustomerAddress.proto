@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.CustomerAddress.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CustomerAddressProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+service CustomerAddress{
+  rpc GetCustomerAddress(CustomerAddressRequest) returns(CustomerAddressReplyList);
+}
+
+message CustomerAddressRequest{
+
+  string SalesManID= 1;
+  string CustomerID = 2;
+  string RoutesID = 3;
+
+}
+
+message CustomerAddressReply{
+  int32 AddressCustomerID = 1 ;
+  int32 CustomerID = 2;
+  int32 AddressID = 3;
+  int32 AddressTypeID = 4;
+  int32 DistrictID = 5;
+  string AddressTypeName = 6;
+  string Address = 7;
+  int32 CityID = 8;
+  string MainStreet = 9;
+  string ByStreet1 = 10;
+  string ByStreet2 = 11;
+  string MainAlley = 12;
+  string ByAlley1 = 13;
+  string ByAlley2 = 14;
+  string Plague = 15;
+  string Phone = 16;
+  string PostalCode = 17;
+  double Longitude = 18;
+  double Latitude = 19;
+
+}
+
+message CustomerAddressReplyList{
+  repeated CustomerAddressReply CustomerAddresss = 1;
+}

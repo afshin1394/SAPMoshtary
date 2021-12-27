@@ -5,19 +5,34 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.KalaOlaviatModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetKalaOlaviatResult;
+import com.saphamrah.protos.GoodPriorityGrpc;
+import com.saphamrah.protos.GoodPriorityReply;
+import com.saphamrah.protos.GoodPriorityReplyList;
+import com.saphamrah.protos.GoodPriorityRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,6 +68,85 @@ public class KalaOlaviatDAO
                 };
 
 
+    }
+
+
+    public void fetchKalaOlaviatGrpc(final Context context, final String activityNameForLog, final String ccAnbarak, final RetrofitResponse retrofitResponse) {
+
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchKalaOlaviatGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                GoodPriorityGrpc.GoodPriorityBlockingStub goodPriorityBlockingStub = GoodPriorityGrpc.newBlockingStub(managedChannel);
+                GoodPriorityRequest goodPriorityRequest = GoodPriorityRequest.newBuilder().setBinID(Integer.parseInt(ccAnbarak)).build();
+
+                Callable<GoodPriorityReplyList> goodPriorityReplyListCallable = () -> goodPriorityBlockingStub.getGoodPriority(goodPriorityRequest);
+                RxAsync.makeObservable(goodPriorityReplyListCallable)
+
+                        .map(goodPriorityReplyList -> {
+                            ArrayList<KalaOlaviatModel> kalaGorohModels = new ArrayList<>();
+                            for (GoodPriorityReply goodPriorityReply : goodPriorityReplyList.getGoodPrioritiesList()) {
+                                KalaOlaviatModel kalaOlaviatModel = new KalaOlaviatModel();
+                                kalaOlaviatModel.setCcKalaCode(goodPriorityReply.getGoodCodeID());
+                                kalaOlaviatModel.setOlaviat(goodPriorityReply.getPriority());
+
+                                kalaGorohModels.add(kalaOlaviatModel);
+                            }
+
+                            return kalaGorohModels;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<KalaOlaviatModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<KalaOlaviatModel> kalaOlaviatModels) {
+                                retrofitResponse.onSuccess(kalaOlaviatModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                e.printStackTrace();
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.toString(), KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchKalaOlaviatGrpc", "CatchException");
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!managedChannel.isShutdown()) {
+                                    managedChannel.shutdown();
+                                }
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), KalaOlaviatDAO.class.getSimpleName(), activityNameForLog, "fetchKalaOlaviatGrpc", "CatchException");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
     }
 
     public void fetchKalaOlaviat(final Context context, final String activityNameForLog, final String ccAnbarak, final RetrofitResponse retrofitResponse)

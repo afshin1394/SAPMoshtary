@@ -5,19 +5,34 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.MoshtaryEtebarPishFarzModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetMoshtaryEtebarPishfarzResult;
+import com.saphamrah.protos.CustomerDefaultCreditGrpc;
+import com.saphamrah.protos.CustomerDefaultCreditReply;
+import com.saphamrah.protos.CustomerDefaultCreditReplyList;
+import com.saphamrah.protos.CustomerDefaultCreditRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -73,6 +88,92 @@ public class MoshtaryEtebarPishFarzDAO
         };
     }
 
+    public void fetchMoshtaryEtebarPishFarzGrpc(final Context context, final String activityNameForLog, String ccForoshandeh, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            //       ServerIpModel serverIpModel = new ServerIpModel();
+            //       serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MoshtaryEtebarPishFarzDAO.class.getSimpleName(), activityNameForLog, "fetchMoshtaryEtebarPishFarzGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                CustomerDefaultCreditGrpc.CustomerDefaultCreditBlockingStub customerDefaultCreditBlockingStub = CustomerDefaultCreditGrpc.newBlockingStub(managedChannel);
+                CustomerDefaultCreditRequest customerDefaultCreditRequest = CustomerDefaultCreditRequest.newBuilder().setSalesManID(ccForoshandeh).build();
+                Callable<CustomerDefaultCreditReplyList> customerDefaultCreditReplyListCallable = () -> customerDefaultCreditBlockingStub.getCustomerDefaultCredit(customerDefaultCreditRequest);
+                RxAsync.makeObservable(customerDefaultCreditReplyListCallable)
+                        .map(customerDefaultCreditReplyList ->  {
+                            ArrayList<MoshtaryEtebarPishFarzModel> models = new ArrayList<>();
+                            for (CustomerDefaultCreditReply reply : customerDefaultCreditReplyList.getCustomerDefaultCreditsList()) {
+                                MoshtaryEtebarPishFarzModel model = new MoshtaryEtebarPishFarzModel();
+
+                                model.setCcMoshtaryEtebarPishFarz(reply.getCustomerDefaultCreditID());
+                                model.setCcNoeMoshtary(reply.getCustomerTypeID());
+                                model.setModatMoavagh(reply.getPostponedPeriod());
+                                model.setSaghfEtebarRiali(reply.getMaxRialCredit());
+                                model.setSaghfEtebarAsnad(reply.getMaxDocuments());
+                                model.setSaghfEtebarModat(reply.getMaxPeriodCredit());
+                                model.setSaghfEtebarTedadi((int) reply.getMaxQuantityCredit());
+                                model.setRialTazamin(reply.getAssuranceRial());
+                                model.setRialAsnadShakhsi((int) reply.getPersonalDocumentsRial());
+                                model.setTedadAsnadShakhsi(reply.getPersonalDocumentsCount());
+                                model.setModatAsnadMoshtary(reply.getPersonalDocumentsPeriod());
+                                model.setTedadAsnadMoshtary(reply.getCustomerDocumentsCount());
+                                model.setModatAsnadMoshtary(reply.getCustomerDocumentsPeriod());
+                                model.setModatMoavagh(reply.getPostponedPeriod());
+                                model.setRialMoavagh(reply.getPostponedRial());
+                                model.setTedadMoavagh(reply.getPostponedCount());
+                                model.setTedadBargashty(reply.getReturnedCount());
+                                model.setModatBargashty(reply.getReturnedPeriod());
+                                model.setRialBargashty(reply.getReturnedRial());
+                                model.setModatVosol(reply.getReceiptPeriod());
+                                model.setModatAsnadShakhsi(reply.getPersonalDocumentsPeriod());
+                                model.setRialAsnadMoshtary(reply.getCustomerDocumentsRial());
+                                models.add(model);
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<MoshtaryEtebarPishFarzModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<MoshtaryEtebarPishFarzModel> moshtaryEtebarPishFarzModels) {
+                                retrofitResponse.onSuccess(moshtaryEtebarPishFarzModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), MoshtaryEtebarPishFarzDAO.class.getSimpleName(), activityNameForLog, "fetchMarkazShahrMarkaziGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+    }
 
     public void fetchMoshtaryEtebarPishFarz(final Context context, final String activityNameForLog, String ccForoshandeh, final RetrofitResponse retrofitResponse)
     {

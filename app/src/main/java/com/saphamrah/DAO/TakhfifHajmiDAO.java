@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.TakhfifHajmiModel;
@@ -17,13 +19,26 @@ import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvTakhfifHajmiByccMarkazForoshResult;
+import com.saphamrah.protos.VolumetricDiscountGrpc;
+import com.saphamrah.protos.VolumetricDiscountReply;
+import com.saphamrah.protos.VolumetricDiscountReplyList;
+import com.saphamrah.protos.VolumetricDiscountRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,7 +93,91 @@ public class TakhfifHajmiDAO
         };
     }
 
+    public void fetchTakhfifHajmiTitrGrpc(final Context context, final String activityNameForLog, final String ccMarkazSazmanForosh, final String ccTakhfifHajmi, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            //       ServerIpModel serverIpModel = new ServerIpModel();
+            //       serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
 
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, TakhfifHajmiDAO.class.getSimpleName(), activityNameForLog, "fetchTakhfifHajmiGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                VolumetricDiscountGrpc.VolumetricDiscountBlockingStub volumetricDiscountBlockingStub = VolumetricDiscountGrpc.newBlockingStub(managedChannel);
+                VolumetricDiscountRequest volumetricDiscountRequest = VolumetricDiscountRequest.newBuilder().setVolumetricDiscountID(ccTakhfifHajmi).setRowTitleType("1").setSellOrganizationCenterID(ccMarkazSazmanForosh).build();
+                Callable<VolumetricDiscountReplyList> volumetricDiscountReplyListCallable = () -> volumetricDiscountBlockingStub.getVolumetricDiscount(volumetricDiscountRequest);
+                RxAsync.makeObservable(volumetricDiscountReplyListCallable)
+                        .map(volumetricDiscountReplyList ->  {
+                            ArrayList<TakhfifHajmiModel> models = new ArrayList<>();
+                            for (VolumetricDiscountReply reply : volumetricDiscountReplyList.getVolumetricDiscountsList()) {
+                                TakhfifHajmiModel model = new TakhfifHajmiModel();
+                                model.setCcTakhfifHajmi(reply.getVolumetricDiscountID());
+                                model.setCcMantagheh(reply.getAreaID());
+                                model.setCcGorohTakidi(reply.getInjuctiveGroupID());
+                                model.setCcMarkazSazmanForosh(reply.getSellOrganizationCenterID());
+                                model.setCcNoeFieldMoshtary(reply.getCustomerFieldTypeID());
+                                model.setCcNoeSenf(reply.getGuildTypeID());
+                                model.setNameNoeSenf(reply.getGuildTypeName());
+                                model.setCodeNoe(reply.getTypeCode());
+                                model.setCodeNoeHaml(reply.getCarryingTypeCode());
+                                model.setDarajeh(reply.getDegree());
+                                model.setForJayezeh(reply.getForBonus());
+                                model.setIsPelekani(reply.getIsStepByStep());
+                                model.setNameNoeFieldMoshtary(reply.getCustomerFieldTypeName());
+                                model.setNameNoeSenf(reply.getGuildTypeName());
+                                model.setOlaviat(reply.getPriority());
+                                model.setRadif(reply.getIndex());
+                                model.setNoeVosol(reply.getReceiptType());
+                                model.setTxtNoeVosol(reply.getReceiptTypeTxt());
+                                model.setSharhTakhfif(reply.getDiscountDescription());
+                                model.setNoeTedadRial(reply.getRialCountType());
+                                model.setNoeGheymat(reply.getPriceType());
+
+                                models.add(model);
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<TakhfifHajmiModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<TakhfifHajmiModel> rptSanadModels) {
+                                retrofitResponse.onSuccess(rptSanadModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), TakhfifHajmiDAO.class.getSimpleName(), activityNameForLog, "fetchTakhfifHajmiGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+    }
 
     public void fetchTakhfifHajmi(final Context context, final String activityNameForLog, final String ccMarkazForosh, final RetrofitResponse retrofitResponse)
     {
@@ -486,7 +585,7 @@ Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiServiceGet.getTakhfifH
     }
 
 
-    public ArrayList<TakhfifHajmiTitrSatrModel> getByMoshtaryWithSatr(MoshtaryModel moshtary, int codeNoeHaml, boolean ShebhOmdeh, int CodeNoeVosol)
+    public ArrayList<TakhfifHajmiTitrSatrModel> getByMoshtaryWithSatr(MoshtaryModel moshtary, int codeNoeHaml, boolean ShebhOmdeh, int CodeNoeVosol, int Darajeh)
     {
         final int NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY = 1;
         final int NAME_NOE_FIELD_MOSHTARY_CC_GOROH = 2;
@@ -509,14 +608,16 @@ Call<GetAllvTakhfifHajmiByccMarkazForoshResult> call = apiServiceGet.getTakhfifH
                 query += " ((NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= " + moshtary.getCcMoshtary() + ")"
                         + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= "+ccMoshtaryParent+")"
                         + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_GOROH + " AND ccNoeFieldMoshtary IN(" + ccNoeFieldMoshtarys + ") AND ccNoeSenf in (" + ccNoeSenfMoshtary + " , 0)))"
-                        + " AND CodeNoeHaml= " + codeNoeHaml + " AND NoeVosol IN(" + noeVosols + ") AND (Darajeh in ( " + moshtary.getDarajeh() + " , 0 ) AND ccMarkazSazmanForosh = "+ ccMarkazSazmanForosh +")";
+                       // + " AND CodeNoeHaml= " + codeNoeHaml + " AND NoeVosol IN(" + noeVosols + ") AND (Darajeh in ( " + moshtary.getDarajeh() + " , 0 ) AND ccMarkazSazmanForosh = "+ ccMarkazSazmanForosh +")";
+                        + " AND CodeNoeHaml= " + codeNoeHaml + " AND NoeVosol IN(" + noeVosols + ") AND (Darajeh in ( " + Darajeh + " , 0 ) AND ccMarkazSazmanForosh = "+ ccMarkazSazmanForosh +")";
             }
             else
             {
                 query += " ((NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= " + moshtary.getCcMoshtary() + ")"
                         + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= "+ccMoshtaryParent+")"
                         + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_GOROH + " AND ccNoeFieldMoshtary IN(" + ccNoeFieldMoshtarys + ") AND ccNoeSenf in (" + ccNoeSenfMoshtary + " , 0)))"
-                        + " AND CodeNoeHaml= " + codeNoeHaml + " AND ccTakhfifHajmi<>1620  AND NoeVosol IN(" + noeVosols + ") AND (Darajeh in ( " + moshtary.getDarajeh() + " , 0) AND ccMarkazSazmanForosh = "+ ccMarkazSazmanForosh +")";
+                        //+ " AND CodeNoeHaml= " + codeNoeHaml + " AND ccTakhfifHajmi<>1620  AND NoeVosol IN(" + noeVosols + ") AND (Darajeh in ( " + moshtary.getDarajeh() + " , 0) AND ccMarkazSazmanForosh = "+ ccMarkazSazmanForosh +")";
+                        + " AND CodeNoeHaml= " + codeNoeHaml + " AND ccTakhfifHajmi<>1620  AND NoeVosol IN(" + noeVosols + ") AND (Darajeh in ( " + Darajeh + " , 0) AND ccMarkazSazmanForosh = "+ ccMarkazSazmanForosh +")";
             }
             Log.d("TakhfifHajmi" , "query : " + query);
             Cursor cursor = db.rawQuery(query , null);

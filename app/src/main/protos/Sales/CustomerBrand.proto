@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.CustomerBrand.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CustomerBrandProto";
+option objc_class_prefix = "HLW";
+
+package Sales;
+
+service CustomerBrand{
+  rpc GetCustomerBrand(CustomerBrandRequest) returns(CustomerBrandReplyList);
+}
+
+message CustomerBrandRequest{
+
+  string CustomersID = 1;
+
+}
+
+message CustomerBrandReply{
+  int32	CustomerBrandID =1;
+  int32	CustomerID = 2;
+  int32	BrandID = 3;
+
+
+}
+
+message CustomerBrandReplyList{
+  repeated CustomerBrandReply CustomerBrands = 1;
+}

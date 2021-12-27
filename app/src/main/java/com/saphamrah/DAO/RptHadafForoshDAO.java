@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.AllMoshtaryForoshandehModel;
 
 import com.saphamrah.Model.HadafForosh.BaseHadafForoshModel;
@@ -18,15 +20,28 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllrptHadafeForoshResult;
+import com.saphamrah.protos.RptSaleGoalGrpc;
+import com.saphamrah.protos.RptSaleGoalReply;
+import com.saphamrah.protos.RptSaleGoalReplyList;
+import com.saphamrah.protos.RptSaleGoalRequest;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -66,6 +81,165 @@ public class RptHadafForoshDAO {
                         RptHadafForoshModel.getCOLUMN_NoeNamayesh()
 
                 };
+    }
+
+    public void fetchAllrptHadafForoshGrpc(final Context context, final String activityNameForLog, final String ccForoshandeh, final RetrofitResponse retrofitResponse) {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RptHadafForoshDAO.class.getSimpleName(), activityNameForLog, "fetchAllrptHadafForoshGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                RptSaleGoalGrpc.RptSaleGoalBlockingStub rptSaleGoalBlockingStub = RptSaleGoalGrpc.newBlockingStub(managedChannel);
+                RptSaleGoalRequest rptSaleGoalRequest = RptSaleGoalRequest.newBuilder().setSalesManID(String.valueOf(ccForoshandeh)).build();
+                Callable<RptSaleGoalReplyList> rptSaleGoalReplyListCallable = () -> rptSaleGoalBlockingStub.getRptSaleGoal(rptSaleGoalRequest);
+                RxAsync.makeObservable(rptSaleGoalReplyListCallable)
+                        .map(RptSaleGoalReplyList ->  {
+                            ArrayList<RptHadafForoshModel> models = new ArrayList<>();
+                            for (RptSaleGoalReply reply : RptSaleGoalReplyList.getRptSaleGoalsList()) {
+                                RptHadafForoshModel model = new RptHadafForoshModel();
+
+                                model.setccBrand(reply.getSalesManID());
+                                model.setccForoshandeh(reply.getSalesManID());
+                                model.setccGorohKala(reply.getGroupGoodID());
+                                model.setCodeForoshandehOld(reply.getSalesManOldCode());
+                                model.setCodeKalaOld(reply.getOldGoodCode());
+                                model.setNameBrand(reply.getBrandName());
+                                model.setNameGoroh(reply.getGroupName());
+                                model.setNameKala(reply.getGoodName());
+                                model.setSharhForoshandeh(reply.getSalesManDescription());
+                                model.setccKalaCode(reply.getGoodCodeID());
+                                model.setNoeNamayesh(reply.getShowType());
+                                model.setTedadForoshMah(reply.getMonthSalesQuantity());
+                                model.setTedadForoshRooz(reply.getTodaySalesQuantity());
+                                model.setTedadHadafMah(reply.getMonthSalesGoal());
+                                model.setTedadHadafRooz(reply.getTodayGoalQuantity());
+
+                                models.add(model);
+
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<RptHadafForoshModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<RptHadafForoshModel> rptHadafForoshModels) {
+                                retrofitResponse.onSuccess(rptHadafForoshModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), RptHadafForoshDAO.class.getSimpleName(), activityNameForLog, "fetchAllrptHadafForoshGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+    }
+
+    public void fetchAllrptHadafForosh(final Context context, final String activityNameForLog, final String ccForoshandeh, final RetrofitResponse retrofitResponse) {
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+        serverIpModel.setPort("8040");
+
+        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+            String message = "can't find server";
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RptHadafForoshDAO.class.getSimpleName(), activityNameForLog, "fetchAllrptAmarForosh", "");
+            retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+        } else {
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetAllrptHadafeForoshResult> call = apiServiceGet.getAllRptHadafForosh(ccForoshandeh);
+            call.enqueue(new Callback<GetAllrptHadafeForoshResult>() {
+                @Override
+                public void onResponse(Call<GetAllrptHadafeForoshResult> call, Response<GetAllrptHadafeForoshResult> response) {
+                    try {
+                        Log.i("fetchAllReport", "onResponse");
+                        if (response.raw().body() != null) {
+                            long contentLength = response.raw().body().contentLength();
+                            PubFunc.Logger logger = new PubFunc().new Logger();
+                            logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, RptHadafForoshDAO.class.getSimpleName(), "", "fetchAllrptHadfeForosh", "onResponse");
+                        }
+
+
+                    } catch (Exception e) {
+                        Log.i("fetchAllReport", "onCatchException " + e.getMessage());
+                        e.printStackTrace();
+
+                    }
+                    try {
+                        if (response.isSuccessful()) {
+                            GetAllrptHadafeForoshResult result = response.body();
+                            if (result != null) {
+                                Log.i("fetchAllReport", "result not null ");
+                                if (result.getSuccess()) {
+                                    retrofitResponse.onSuccess(result.getData());
+
+                                    Log.i("fetchAllReport", "result not null and successful ");
+                                } else {
+                                    Log.i("fetchAllReport", "result not null but not successful " + result.getMessage());
+
+                                    PubFunc.Logger logger = new PubFunc().new Logger();
+                                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), RptHadafForoshDAO.class.getSimpleName(), activityNameForLog, "fetchAllrptHadafeForosh", "onResponse");
+                                    retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
+                                }
+                            } else {
+                                Log.i("fetchAllReport", "result not null " + result.getMessage());
+
+                                String endpoint = getEndpoint(call);
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", context.getResources().getString(R.string.resultIsNull), endpoint), RptHadafForoshDAO.class.getSimpleName(), activityNameForLog, "fetchAllrptHadafeForosh", "onResponse");
+                                retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
+                            }
+                        } else {
+                            String endpoint = getEndpoint(call);
+                            String message = String.format("error body : %1$s , code : %2$s * %3$s", response.message(), response.code(), endpoint);
+                            PubFunc.Logger logger = new PubFunc().new Logger();
+                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RptHadafForoshDAO.class.getSimpleName(), activityNameForLog, "fetchAllrptHadafeForosh", "onResponse");
+                            retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), message);
+                        }
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                        PubFunc.Logger logger = new PubFunc().new Logger();
+                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), RptHadafForoshDAO.class.getSimpleName(), activityNameForLog, "fetchAllrptHadafeForosh", "onResponse");
+                        retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION(), exception.toString());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<GetAllrptHadafeForoshResult> call, Throwable t) {
+                    Log.i("fetchAllSaleReport", "onFailure: ");
+                    String endpoint = getEndpoint(call);
+                    PubFunc.Logger logger = new PubFunc().new Logger();
+                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", t.getMessage(), endpoint), RptHadafForoshDAO.class.getSimpleName(), activityNameForLog, "fetchAllrptHadafeForosh", "onFailure");
+                    retrofitResponse.onFailed(Constants.RETROFIT_THROWABLE(), t.getMessage());
+                }
+            });
+        }
     }
 
     public void fetchAllrpHadafeForosh(final Context context, final String activityNameForLog, final String ccForoshandeh, final RetrofitResponse retrofitResponse) {

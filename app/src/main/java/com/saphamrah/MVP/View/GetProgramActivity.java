@@ -67,6 +67,7 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
     private ListView lstview;
     private GetProgramAdapter adapter;
     private CustomAlertDialog customAlertDialog;
+    private CustomAlertDialog showDetails;
     private ForoshandehMamorPakhshModel foroshandehMamorPakhshModel;
     private ArrayList<ForoshandehMamorPakhshModel> arrayListForoshandehMamorPakhshModel;
     private String selectedDate;
@@ -101,6 +102,7 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
         startMVPOps();
 
         customAlertDialog = new CustomAlertDialog(GetProgramActivity.this);
+        showDetails = new CustomAlertDialog(GetProgramActivity.this);
         foroshandehMamorPakhshModel = new ForoshandehMamorPakhshModel();
         selectedDate = new PubFunc().new DateUtils().todayDateWithSlash(GetProgramActivity.this);
 
@@ -557,6 +559,11 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
     }
 
     @Override
+    public void showGetProgramDetails(String message) {
+        showDetails.showMessageAlert(GetProgramActivity.this, false, getString(R.string.details_text)  ,message , Constants.INFO_MESSAGE(), getString(R.string.apply));
+    }
+
+    @Override
     public void showResourceError(boolean closeActivity, int titleResId, int messageResId, int messageType, int buttonTextResId) {
         try {
             if (show != null) {
@@ -608,6 +615,9 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
                         break;
 
                     case Constants.GET_PROGRAM_RX:
+                        itemsTitle = Arrays.asList(getAppContext(). getResources().getStringArray(R.array.getProgramItemsRx));
+                        break;
+                    case Constants.GET_PROGRAM_GRPC:
                         itemsTitle = Arrays.asList(getAppContext(). getResources().getStringArray(R.array.getProgramItemsRx));
                         break;
                 }

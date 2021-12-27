@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.RptRemainingInvoice.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RptRemainingInvoiceProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+service RptRemainingInvoice{
+  rpc GetRptRemainingInvoice(RptRemainingInvoiceRequest) returns(RptRemainingInvoiceReplyList);
+}
+
+message RptRemainingInvoiceRequest{
+  string SalesManID = 1;
+}
+
+message RptRemainingInvoiceReply{
+  int32	RptRemainingID =1;
+  int64	InvoiceRequestID=2;
+  int32	CustomerID=3;
+  string	CustomerName=4;
+  string	CustomerCode=5;
+  float	PureInvoicPrice=6;
+  float	CustomerRemainingAmount=7;
+  string	InvoiceDate=8;
+  string	SendDate=9;
+  int32	InvoiceNumber=10;
+  int32	StatusCode=11;
+  int32	SellCenterID=12;
+  int32	SellGroupID=13;
+  int32	SalesManID=14;
+  string	SellCenterName=15;
+  string	SellGroupName=16;
+  string	SalesManName=17;
+  float	InvoiceWeight=18;
+  int32	CustomerOriginialReceiptTypeCode=19;
+  int32	InvoiceReceiptTypeCode=20;
+}
+
+message RptRemainingInvoiceReplyList{
+  repeated RptRemainingInvoiceReply RptRemainingInvoices = 1;
+}

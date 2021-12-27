@@ -2720,7 +2720,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(darkhastFaktorModel.getCcMoshtary());
 
                 TakhfifNaghdyDAO takhfifNaghdyDAO = new TakhfifNaghdyDAO(mPresenter.getAppContext());
-                ArrayList<TakhfifNaghdyModel> takhfifNaghdyModels = takhfifNaghdyDAO.getByMoshtary(moshtaryModel, moshtaryModel.getCcNoeMoshtary());
+                ArrayList<TakhfifNaghdyModel> takhfifNaghdyModels = takhfifNaghdyDAO.getByMoshtary(moshtaryModel, moshtaryModel.getCcNoeMoshtary(), darkhastFaktorModel.getDarajeh());
                 Log.d("takhfifNaghdi" , "takhfifNaghdyModels.size = " + takhfifNaghdyModels.size());
                 Log.d("takhfifNaghdi" , "moshtaryModel = " + moshtaryModel.toString());
                 if (takhfifNaghdyModels.size()== 0)

@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.BuyGoods.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "BuyGoodsBySalesManIDProto";
+option objc_class_prefix = "HLW";
+
+package Sales;
+
+
+service BuyGoodsBySalesManID{
+	rpc GetBuyGoodsBySalesManID(BuyGoodsBySalesManIDRequest) returns(BuyGoodsBySalesManIDReplyList);
+}
+
+message BuyGoodsBySalesManIDRequest{
+  string Level = 1;
+  string SalesManID = 2;
+  string GroupGoodsID = 3;
+
+}
+
+message BuyGoodsBySalesManIDReply{
+int32	Row = 1;
+int32	GroupGoodsID = 2;
+string	GroupGoodsName = 3;
+string	GroupCode = 4;
+int32	GoodsCodeID = 5;
+string	GoodsCode = 6;
+string	GoodsName = 7;
+int32	CustomerID = 8;
+int64	BuyPrice = 9;
+int32	Box = 10;
+int32	Package =11;
+int32	Number =12;
+
+
+
+}
+
+message BuyGoodsBySalesManIDReplyList{
+	repeated BuyGoodsBySalesManIDReply BuyGoodsBySalesManIDs = 1;
+}
+

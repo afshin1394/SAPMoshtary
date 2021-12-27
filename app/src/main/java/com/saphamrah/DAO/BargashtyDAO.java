@@ -22,6 +22,10 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetListBargashtyForoshandehResult;
+import com.saphamrah.protos.ReturnedChequeGrpc;
+import com.saphamrah.protos.ReturnedChequeReply;
+import com.saphamrah.protos.ReturnedChequeReplyList;
+import com.saphamrah.protos.ReturnedChequeRequest;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,10 +94,105 @@ public class BargashtyDAO
         };
     }
 
+    public void fetchBargashtyGrpc(final Context context, final String activityNameForLog,final String ccForoshandeh, final RetrofitResponse retrofitResponse)
+    {
+        try {
+
+
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            serverIpModel.setPort("5000");
+
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+            {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
+            }
+            else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                ReturnedChequeGrpc.ReturnedChequeBlockingStub returnedChequeBlockingStub = ReturnedChequeGrpc.newBlockingStub(managedChannel);
+                ReturnedChequeRequest returnedChequeRequest = ReturnedChequeRequest.newBuilder().setSalesManID(ccForoshandeh).build();
+                Callable<ReturnedChequeReplyList> getReturnedChequeCallable  = () -> returnedChequeBlockingStub.getReturnedCheque(returnedChequeRequest);
+                RxAsync.makeObservable(getReturnedChequeCallable)
+                        .map(returnedChequeReplyList -> {
+                            ArrayList<BargashtyModel> bargashtyModels = new ArrayList<>();
+                            for (ReturnedChequeReply returnedChequeReply : returnedChequeReplyList.getReturnedChequesList()) {
+                                BargashtyModel bargashtyModel = new BargashtyModel();
+                                bargashtyModel.setCcAfradErsalKonandeh(returnedChequeReply.getSenderPersonsID());
+                                bargashtyModel.setCcDarkhastFaktor(returnedChequeReply.getInvoiceRequestID());
+                                bargashtyModel.setCcDariaftPardakht(returnedChequeReply.getReceivePaymentID());
+                                bargashtyModel.setCcMarkazAnbar(returnedChequeReply.getWarehouseCenterID());
+                                bargashtyModel.setCcMarkazForosh(returnedChequeReply.getSellCenterID());
+                                bargashtyModel.setNameMarkazForosh(returnedChequeReply.getSellCenterName());
+                                bargashtyModel.setCcSazmanForosh(returnedChequeReply.getSellOrganizationID());
+                                bargashtyModel.setNameSazmanForosh(returnedChequeReply.getSellOrganizationName());
+                                bargashtyModel.setCcMarkazSazmanForoshSakhtarForosh(returnedChequeReply.getSellStructureSellOrganizationCenterID());
+                                bargashtyModel.setNameMarkazSazmanForoshSakhtarForosh(returnedChequeReply.getSellStructureSellOrganizationCenterName());
+                                bargashtyModel.setCcForoshandeh(returnedChequeReply.getSellerID());
+                                bargashtyModel.setCcMoshtary(returnedChequeReply.getCustomerID());
+                                bargashtyModel.setNameMoshtary(returnedChequeReply.getCustomerName());
+                                bargashtyModel.setCodeMoshtary(returnedChequeReply.getCustomerCode());
+                                bargashtyModel.setTarikhSanad(returnedChequeReply.getDucumentDate());
+                                bargashtyModel.setShomarehSanad(returnedChequeReply.getDucumentNumber());
+                                bargashtyModel.setMablagh(returnedChequeReply.getPrice());
+                                bargashtyModel.setMablaghMandeh(returnedChequeReply.getRemainingPrice());
+                                bargashtyModel.setTarikhSanadWithSlash(returnedChequeReply.getDucumentDateWithSlash());
+                                bargashtyModel.setZamaneSabt(returnedChequeReply.getRegisterTime());
+                                bargashtyModel.setZamaneSabtWithSlash(returnedChequeReply.getRegisterTimeWithSlash());
+                                bargashtyModel.setCcNoeMoshtary(returnedChequeReply.getCustomerTypeID());
+                                bargashtyModel.setCcDarajeh(returnedChequeReply.getDegreeID());
+
+
+                                bargashtyModels.add(bargashtyModel);
+                            }
+
+                            return bargashtyModels;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<BargashtyModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<BargashtyModel> bargashtyModels) {
+                                retrofitResponse.onSuccess(bargashtyModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), AmargarGorohDAO.class.getSimpleName(), activityNameForLog, "fetchamrgarGorohGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
+        }
+
+    }
+
 
     public void fetchBargashty(final Context context, final String activityNameForLog,final String ccForoshandeh, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+        serverIpModel.setPort("8040");
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
         {
             String message = "can't find server";

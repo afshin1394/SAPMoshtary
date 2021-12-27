@@ -6,19 +6,34 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.MoshtaryEtebarSazmanForoshModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvMoshtaryEtebarSazmanForoshResult;
+import com.saphamrah.protos.CustomerSellOrganizationCreditGrpc;
+import com.saphamrah.protos.CustomerSellOrganizationCreditReply;
+import com.saphamrah.protos.CustomerSellOrganizationCreditReplyList;
+import com.saphamrah.protos.CustomerSellOrganizationCreditRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -80,6 +95,107 @@ public class MoshtaryEtebarSazmanForoshDAO
         };
     }
 
+    public void fetchAllvMoshtaryEtebarSazmanForoshGrpc(final Context context, final String activityNameForLog, final String ccMoshtarys, final String ccSazmanForosh, final RetrofitResponse retrofitResponse) {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MoshtaryEtebarSazmanForoshDAO.class.getSimpleName(), activityNameForLog, "fetchAllvMoshtaryEtebarSazmanForoshGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                CustomerSellOrganizationCreditGrpc.CustomerSellOrganizationCreditBlockingStub customerSellOrganizationCreditBlockingStub = CustomerSellOrganizationCreditGrpc.newBlockingStub(managedChannel);
+                CustomerSellOrganizationCreditRequest customerSellOrganizationCreditRequest = CustomerSellOrganizationCreditRequest.newBuilder().setCustomersID(ccMoshtarys).setSellOranizationsID(ccSazmanForosh).build();
+                Callable<CustomerSellOrganizationCreditReplyList> customerSellOrganizationCreditReplyListCallable = () -> customerSellOrganizationCreditBlockingStub.getCustomerSellOrganizationCredit(customerSellOrganizationCreditRequest);
+                RxAsync.makeObservable(customerSellOrganizationCreditReplyListCallable)
+                        .map(customerSellOrganizationCreditReplyList -> {
+                            ArrayList<MoshtaryEtebarSazmanForoshModel> moshtaryEtebarSazmanForoshModels = new ArrayList<>();
+                            for (CustomerSellOrganizationCreditReply customerSellOrganizationCreditReply : customerSellOrganizationCreditReplyList.getCustomerSellOrganizationCreditsList()) {
+                                MoshtaryEtebarSazmanForoshModel moshtaryEtebarSazmanForoshModel = new MoshtaryEtebarSazmanForoshModel();
+                                moshtaryEtebarSazmanForoshModel.setCcMoshtary(customerSellOrganizationCreditReply.getCustomerID());
+                                moshtaryEtebarSazmanForoshModel.setSaghfEtebarRiali(customerSellOrganizationCreditReply.getMaxRialCredit());
+                                moshtaryEtebarSazmanForoshModel.setSaghfEtebarAsnad(customerSellOrganizationCreditReply.getMaxDocumentCredit());
+                                moshtaryEtebarSazmanForoshModel.setSaghfEtebarModat(customerSellOrganizationCreditReply.getMaxDurationCredit());
+                                moshtaryEtebarSazmanForoshModel.setEtebarRialAsnadShakhsi(customerSellOrganizationCreditReply.getPersonalDocumentRialCredit());
+                                moshtaryEtebarSazmanForoshModel.setEtebarTedadAsnadShakhsi(customerSellOrganizationCreditReply.getPersonalDocumentQuantityCredit());
+                                moshtaryEtebarSazmanForoshModel.setEtebarModatAsnadShakhsi(customerSellOrganizationCreditReply.getPersonalDocumentDurationCredit());
+                                moshtaryEtebarSazmanForoshModel.setEtebarRialAsnadMoshtary(customerSellOrganizationCreditReply.getCustomerDocumentRialCredit());
+                                moshtaryEtebarSazmanForoshModel.setEtebarTedadAsnadMoshtary(customerSellOrganizationCreditReply.getCustomerDocumentQuantityCredit());
+                                moshtaryEtebarSazmanForoshModel.setEtebarRialMoavagh(customerSellOrganizationCreditReply.getPostponedRialCredit());
+                                moshtaryEtebarSazmanForoshModel.setEtebarTedadMoavagh(customerSellOrganizationCreditReply.getPostponedQuantityCredit());
+                                moshtaryEtebarSazmanForoshModel.setEtebarModatMoavagh(customerSellOrganizationCreditReply.getPostponedDurationCredit());
+                                moshtaryEtebarSazmanForoshModel.setEtebarRialBargashty(customerSellOrganizationCreditReply.getReturnedRialCredit());
+                                moshtaryEtebarSazmanForoshModel.setEtebarTedadBargashty(customerSellOrganizationCreditReply.getReturnedQuantityCredit());
+                                moshtaryEtebarSazmanForoshModel.setEtebarModatBargashty(customerSellOrganizationCreditReply.getReturnedDurationCredit());
+                                moshtaryEtebarSazmanForoshModel.setEtebarModatAsnadMoshtary(customerSellOrganizationCreditReply.getCustomerDocumentDurationCredit());
+                                moshtaryEtebarSazmanForoshModel.setRialAsnad(customerSellOrganizationCreditReply.getDocumentRial());
+                                moshtaryEtebarSazmanForoshModel.setTedadAsnad(customerSellOrganizationCreditReply.getDocumentQuantity());
+                                moshtaryEtebarSazmanForoshModel.setModatAsnad(customerSellOrganizationCreditReply.getDocumentDuration());
+                                moshtaryEtebarSazmanForoshModel.setRialMoavagh(customerSellOrganizationCreditReply.getPostponedRial());
+                                moshtaryEtebarSazmanForoshModel.setTedadMoavagh(customerSellOrganizationCreditReply.getPostponedQuantity());
+                                moshtaryEtebarSazmanForoshModel.setModatMoavagh(customerSellOrganizationCreditReply.getPostponedDuration());
+                                moshtaryEtebarSazmanForoshModel.setRialBargashty(customerSellOrganizationCreditReply.getReturnedRial());
+                                moshtaryEtebarSazmanForoshModel.setModatBargashty(customerSellOrganizationCreditReply.getReturnedDuration());
+                                moshtaryEtebarSazmanForoshModel.setTedadAsnad(customerSellOrganizationCreditReply.getDocumentQuantity());
+                                moshtaryEtebarSazmanForoshModel.setModatVosol(customerSellOrganizationCreditReply.getRecieptDuration());
+                                moshtaryEtebarSazmanForoshModel.setCcSazmanForosh(customerSellOrganizationCreditReply.getSellOrganizationID());
+                                moshtaryEtebarSazmanForoshModel.setSaghfEtebarTedadi(customerSellOrganizationCreditReply.getMaxQuantityCredit());
+
+                                moshtaryEtebarSazmanForoshModels.add(moshtaryEtebarSazmanForoshModel);
+                            }
+
+                            return moshtaryEtebarSazmanForoshModels;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<MoshtaryEtebarSazmanForoshModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<MoshtaryEtebarSazmanForoshModel> moshtaryEtebarSazmanForoshModels) {
+                                retrofitResponse.onSuccess(moshtaryEtebarSazmanForoshModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                e.printStackTrace();
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.toString(), MoshtaryEtebarSazmanForoshDAO.class.getSimpleName(), activityNameForLog, "fetchAllModatVosolGorohGrpc", "CatchException");
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!managedChannel.isShutdown()) {
+                                    managedChannel.shutdown();
+                                }
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), ModatVosolGorohDAO.class.getSimpleName(), activityNameForLog, "fetchAllModatVosolGorohGrpc", "CatchException");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+    }
 
     public void fetchAllvMoshtaryEtebarSazmanForosh(final Context context, final String activityNameForLog,final String ccMoshtarys, final String ccSazmanForosh, final RetrofitResponse retrofitResponse)
     {

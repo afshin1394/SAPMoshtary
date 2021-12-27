@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.Model.ConfigNoeVosolMojazeFaktorModel;
 import com.saphamrah.Model.ServerIpModel;
@@ -15,12 +17,25 @@ import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetConfigNoeVosolMojazefaktorResult;
+import com.saphamrah.protos.InvoiceAllowCollectionTypeConfigGrpc;
+import com.saphamrah.protos.InvoiceAllowCollectionTypeConfigReply;
+import com.saphamrah.protos.InvoiceAllowCollectionTypeConfigReplyList;
+import com.saphamrah.protos.InvoiceAllowCollectionTypeConfigRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,6 +65,106 @@ public class ConfigNoeVosolMojazeFaktorDAO
             PubFunc.Logger logger = new PubFunc().new Logger();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), "ConfigNoeVosolMojazeFaktorDAO" , "" , "constructor" , "");
         }
+    }
+
+    /*
+get name all columns in model
+ */
+    private String[] allColumns()
+    {
+        return new String[]
+                {
+                        modelGetTABLE_NAME.getCOLUMN_ccConfig_NoeVosolMojaze_Faktor(),
+                        modelGetTABLE_NAME.getCOLUMN_txtNoeVosol(),
+                        modelGetTABLE_NAME.getCOLUMN_CodeNoeVosol_Tablet(),
+                        modelGetTABLE_NAME.getCOLUMN_CodeNoeVosolAzMoshtary(),
+                        modelGetTABLE_NAME.getCOLUMN_CodeVazeiat(),
+                        modelGetTABLE_NAME.getCOLUMN_MashmoolTakhfifNaghdi(),
+                        modelGetTABLE_NAME.getCOLUMN_MashmoolDirkardVosol(),
+                        modelGetTABLE_NAME.getCOLUMN_MaxModatTajil(),
+                        modelGetTABLE_NAME.getCOLUMN_MinMablaghForIsShow()
+                };
+    }
+
+    public void fetchConfigNoeVosolMojazeFaktorGrpc(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+            {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, ConfigNoeVosolMojazeFaktorDAO.class.getSimpleName(), activityNameForLog, "fetchConfigNoeVosolMojazeFaktorGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR() , message);
+            }
+            else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                InvoiceAllowCollectionTypeConfigGrpc.InvoiceAllowCollectionTypeConfigBlockingStub blockingStub = InvoiceAllowCollectionTypeConfigGrpc.newBlockingStub(managedChannel);
+                InvoiceAllowCollectionTypeConfigRequest request = InvoiceAllowCollectionTypeConfigRequest.newBuilder().build();
+
+                Callable<InvoiceAllowCollectionTypeConfigReplyList> replyListCallable  = () -> blockingStub.getInvoiceAllowCollectionTypeConfig(request);
+                RxAsync.makeObservable(replyListCallable)
+
+                        .map(replyList -> {
+                            ArrayList<ConfigNoeVosolMojazeFaktorModel> models = new ArrayList<>();
+                            for (InvoiceAllowCollectionTypeConfigReply reply : replyList.getInvoiceAllowCollectionTypeConfigsList()) {
+                                ConfigNoeVosolMojazeFaktorModel model = new ConfigNoeVosolMojazeFaktorModel();
+
+                                model.setCcConfigNoeVosolMojazeFaktor(reply.getInvoiceAllowCollectionTypeConfigID());
+                                model.setCodeNoeVosol_Tablet(reply.getCollectionTypeCodeTablet());
+                                model.setCodeNoeVosolAzMoshtary(reply.getCollectionTypeCodeFromCustomer());
+                                model.setCodeVazeiat(reply.getSituationCode());
+                                model.setTxtNoeVosol(reply.getCollectionTypeTxt());
+                                model.setMashmoolTakhfifNaghdi(reply.getCashDiscountSubject());
+                                model.setMashmoolDirkardVosol(reply.getCollectionDelaySubject());
+                                model.setMaxModatTajil(reply.getAcceleratedDurationMax());
+                                model.setMinMablaghForIsShow(reply.getPriceMinForIsShow());
+
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<ConfigNoeVosolMojazeFaktorModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<ConfigNoeVosolMojazeFaktorModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), ConfigNoeVosolMojazeFaktorDAO.class.getSimpleName(), activityNameForLog, "fetchConfigNoeVosolMojazeFaktorGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
+        }
+
+
+
+
     }
 
     /**
@@ -156,27 +271,7 @@ public class ConfigNoeVosolMojazeFaktorDAO
         }
     }
 
-    /*
-    get name all columns in model
-     */
-    private String[] allColumns()
-    {
-        return new String[]
-        {
-              modelGetTABLE_NAME.getCOLUMN_ccConfig_NoeVosolMojaze_Faktor(),
-                modelGetTABLE_NAME.getCOLUMN_txtNoeVosol(),
-                modelGetTABLE_NAME.getCOLUMN_CodeNoeVosol_Tablet(),
-                modelGetTABLE_NAME.getCOLUMN_CodeNoeVosolAzMoshtary(),
-                modelGetTABLE_NAME.getCOLUMN_CodeVazeiat(),
-                modelGetTABLE_NAME.getCOLUMN_MashmoolTakhfifNaghdi(),
-                modelGetTABLE_NAME.getCOLUMN_MashmoolDirkardVosol(),
-                modelGetTABLE_NAME.getCOLUMN_MaxModatTajil(),
-                modelGetTABLE_NAME.getCOLUMN_MinMablaghForIsShow()
 
-
-
-        };
-    }
 
     /*
     set result model to DB

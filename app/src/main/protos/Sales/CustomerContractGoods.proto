@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.CustomerContractGoods.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CustomerContractGoodsProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+service CustomerContractGoods{
+  rpc GetCustomerContractGoods(CustomerContractGoodsRequest) returns(CustomerContractGoodsReplyList);
+}
+
+message CustomerContractGoodsRequest{
+  string SellOrganizationID = 1;
+  string CustomerContractID = 2;
+
+
+}
+
+message CustomerContractGoodsReply{
+  int32	Index = 1;
+  int32	CustomerContractID = 2;
+  int32	GoodCodeID = 3;
+  int64	SellPrice = 4;
+  int64	ConsumerPrice = 5;
+  int32	PriceControl = 6;
+
+
+}
+
+message CustomerContractGoodsReplyList{
+  repeated CustomerContractGoodsReply CustomerContractGoods = 1;
+}

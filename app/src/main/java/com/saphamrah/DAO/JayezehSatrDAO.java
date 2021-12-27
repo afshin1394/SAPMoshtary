@@ -6,19 +6,34 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.JayezehSatrModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvJayezehSatrResult;
+import com.saphamrah.protos.RowBonusGrpc;
+import com.saphamrah.protos.RowBonusReply;
+import com.saphamrah.protos.RowBonusReplyList;
+import com.saphamrah.protos.RowBonusRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,6 +86,90 @@ public class JayezehSatrDAO
         };
     }
 
+    public void fetchJayezehSatrGrpc(final Context context, final String activityNameForLog, String ccMarkazSazmanForosh, String ccJayezehs, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, JayezehSatrDAO.class.getSimpleName(), activityNameForLog, "fetchJayezehSatrGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                RowBonusGrpc.RowBonusBlockingStub rowBonusBlockingStub = RowBonusGrpc.newBlockingStub(managedChannel);
+                RowBonusRequest rowBonusRequest = RowBonusRequest.newBuilder().setTitleRowType("2").setSellOrganizationCenterID(ccMarkazSazmanForosh).setBonusIDs(ccJayezehs).build();
+                Callable<RowBonusReplyList> rowBonusReplyListCallable = () -> rowBonusBlockingStub.getRowBonus(rowBonusRequest);
+                RxAsync.makeObservable(rowBonusReplyListCallable)
+                        .map(rowBonusReplyList ->  {
+                            ArrayList<JayezehSatrModel> models = new ArrayList<>();
+                            for (RowBonusReply reply : rowBonusReplyList.getRowBonusesList()) {
+                                JayezehSatrModel model = new JayezehSatrModel();
+
+                                model.setCcJayezehSatr(reply.getBonusRowID());
+                                model.setCcJayezeh(reply.getBonusID());
+                                model.setNameNoeField(reply.getFieldTypeName());
+                                model.setCcNoeField(reply.getFieldTypeID());
+                                model.setAz(reply.getFrom());
+                                model.setTa(reply.getTo());
+                                model.setCodeNoeBastehBandy(reply.getEncapsulationCodeType());
+                                model.setBeEza(reply.getPer());
+                                model.setCodeNoeBastehBandyBeEza(reply.getPerEncapsulationCodeType());
+                                model.setTedadJayezeh(reply.getBonusQuantity());
+                                model.setRialJayezeh(reply.getBonusRial());
+                                model.setCcKalaJayezeh(reply.getBonusGoodID());
+                                model.setCcKalaJayezehMazad(reply.getExtraBonusKalaID());
+                                model.setCcKalaCodeJayezehMazad(reply.getExtraBonusGoodCodeID());
+                                model.setNaghdy(reply.getCash());
+                                model.setCcKalaCodeJayezeh(reply.getBonusGoodCodeID());
+
+
+
+                                models.add(model);
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<JayezehSatrModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<JayezehSatrModel> jayezehSatrModels) {
+                                retrofitResponse.onSuccess(jayezehSatrModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), JayezehSatrDAO.class.getSimpleName(), activityNameForLog, "fetchJayezehSatrGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+    }
 
     /**
      *  وب سرویس جدید برای دریافت لیست کلیه جایزه ها بر اساس مرکز فروش و جایزه ها برای اعمال جایزه انتخابی

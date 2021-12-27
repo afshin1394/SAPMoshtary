@@ -427,6 +427,10 @@ public class SplashPresenter implements SplashMVP.PresenterOps, SplashMVP.Requir
             {
                 mView.get().setLblVersionName(versionName , getAppContext().getResources().getString(R.string.Test));
             }
+            else if (Constants.CURRENT_VERSION_TYPE() == 8)
+            {
+                mView.get().setLblVersionName(versionName , getAppContext().getResources().getString(R.string.gRPC));
+            }
         }
         checkServerVersion();
     }

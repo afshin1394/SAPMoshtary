@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.CheckPersons.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CheckPersonsProto";
+option objc_class_prefix = "HLW";
+
+package Global;
+
+service CheckPersons{
+  rpc GetCheckPersons(CheckPersonsRequest) returns(CheckPersonsReply);
+}
+
+message CheckPersonsRequest{
+  string IdentityCode = 1;
+}
+
+message CheckPersonsReply{
+  string Output = 1;
+}

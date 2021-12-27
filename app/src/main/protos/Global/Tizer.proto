@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.Tizer.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "TizerProto";
+option objc_class_prefix = "HLW";
+package Global;
+
+
+
+// The greeting service definition.
+service Tizer {
+  // Sends a greeting
+  rpc GetTizers (TizerRequest) returns (TizerReplyList);
+}
+
+// The request message containing the user's name.
+message TizerRequest {
+
+}
+
+// The response message containing the greetings.
+message TizerReply {
+  int32	TizerID = 1;
+  string	TizerName = 2;
+  string	Persian_TizerName = 3;
+  string	FolderName = 4;
+  string	Image = 5;
+
+
+
+}
+
+message TizerReplyList{
+  repeated TizerReply Tizers = 1;
+}

@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.GuildTypeGoodGroup.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "GuildTypeGoodGroupProto";
+package Sales;
+
+
+service GuildTypeGoodGroup{
+  rpc GetGuildTypeGoodGroup(GuildTypeGoodGroupRequest) returns(GuildTypeGoodGroupReplyList);
+}
+
+message GuildTypeGoodGroupRequest{
+
+
+}
+
+message GuildTypeGoodGroupReply{
+  int32 GuildTypeGoodGroupID = 1;
+  int32 GuildTypeID = 2;
+  int32 GoodGroupID = 3;
+}
+
+message GuildTypeGoodGroupReplyList{
+  repeated GuildTypeGoodGroupReply GuildTypeGoodGroups = 1;
+}
+

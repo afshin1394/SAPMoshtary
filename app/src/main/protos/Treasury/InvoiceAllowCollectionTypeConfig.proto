@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Treasury.InvoiceAllowCollectionTypeConfig.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "InvoiceAllowCollectionTypeConfigProto";
+option objc_class_prefix = "HLW";
+package Treasury;
+
+
+service InvoiceAllowCollectionTypeConfig{
+  rpc GetInvoiceAllowCollectionTypeConfig(InvoiceAllowCollectionTypeConfigRequest) returns(InvoiceAllowCollectionTypeConfigReplyList);
+}
+
+message InvoiceAllowCollectionTypeConfigRequest{
+
+}
+
+message InvoiceAllowCollectionTypeConfigReply{
+
+  int32	InvoiceAllowCollectionTypeConfigID = 1;
+  int32	CollectionTypeCode_Tablet = 2;
+  int32	CollectionTypeCodeFromCustomer = 3;
+  int32	SituationCode = 4;
+  string	CollectionTypeTxt = 5;
+  int32	CashDiscountSubject = 6;
+  int32	CollectionDelaySubject = 7;
+  int32	AcceleratedDurationMax = 8;
+  int64	PriceMinForIsShow = 9;
+
+
+
+
+}
+
+message InvoiceAllowCollectionTypeConfigReplyList{
+  repeated InvoiceAllowCollectionTypeConfigReply InvoiceAllowCollectionTypeConfigs = 1;
+}

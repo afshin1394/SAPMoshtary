@@ -19,6 +19,14 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllMahalByccMarkazForoshResult;
+import com.saphamrah.protos.DistrictBySellCenterIDGrpc;
+import com.saphamrah.protos.DistrictBySellCenterIDReply;
+import com.saphamrah.protos.DistrictBySellCenterIDReplyList;
+import com.saphamrah.protos.DistrictBySellCenterIDRequest;
+import com.saphamrah.protos.PlaceByCenterIDGrpc;
+import com.saphamrah.protos.PlaceByCenterIDReply;
+import com.saphamrah.protos.PlaceByCenterIDReplyList;
+import com.saphamrah.protos.PlaceByCenterIDRequest;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -68,6 +76,164 @@ public class MahalDAO
             MahalModel.COLUMN_ccMahalLink(),
             MahalModel.COLUMN_PishShomareh()
         };
+    }
+    public void fetchAllMahalByccMarkazForoshGrpc(final Context context, final String activityNameForLog,final String ccMarkazSazmanForosh, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MahalDAO.class.getSimpleName(), activityNameForLog, "fetchAllMahalByccMarkazForoshGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                DistrictBySellCenterIDGrpc.DistrictBySellCenterIDBlockingStub districtBySellCenterIDBlockingStub = DistrictBySellCenterIDGrpc.newBlockingStub(managedChannel);
+                DistrictBySellCenterIDRequest districtBySellCenterIDRequest = DistrictBySellCenterIDRequest.newBuilder().setSellOrganizationCenterID(ccMarkazSazmanForosh).build();
+                Callable<DistrictBySellCenterIDReplyList> districtBySellCenterIDReplyListCallable = () -> districtBySellCenterIDBlockingStub.getDistrictBySellCenterID(districtBySellCenterIDRequest);
+                RxAsync.makeObservable(districtBySellCenterIDReplyListCallable)
+                        .map(districtBySellCenterIDReplyList -> {
+                            ArrayList<MahalModel> mahalModels = new ArrayList<>();
+                            for (DistrictBySellCenterIDReply districtBySellCenterIDReply : districtBySellCenterIDReplyList.getDistrictBySellCenterIDsList()) {
+
+                                MahalModel mahalModel = new MahalModel();
+
+                                mahalModel.setPishShomareh(districtBySellCenterIDReply.getAreaCode());
+                                mahalModel.setNameMahal(districtBySellCenterIDReply.getDistrictName());
+                                mahalModel.setCcMahalLink(districtBySellCenterIDReply.getLinkDistrictID());
+                                mahalModel.setCodeNoeMahal(districtBySellCenterIDReply.getDistrictTypeCode());
+                                mahalModel.setCcMahal(districtBySellCenterIDReply.getDistrictID());
+
+
+                                mahalModels.add(mahalModel);
+                            }
+
+                            return mahalModels;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<MahalModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d)
+                            {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<MahalModel> darkhastFaktorModels) {
+                                retrofitResponse.onSuccess(darkhastFaktorModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                e.printStackTrace();
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.toString(), MahalDAO.class.getSimpleName(), activityNameForLog, "fetchAllMahalByccMarkazForoshGrpc", "CatchException");
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), MahalDAO.class.getSimpleName(), activityNameForLog, "fetchAllMahalByccMarkazForoshGrpc", "CatchException");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+    }
+
+    public void fetchAllMahalByccMarkazForoshAmargarGrpc(final Context context, final String activityNameForLog,final String ccMarkazSazmanForosh, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MahalDAO.class.getSimpleName(), activityNameForLog, "fetchAllMahalByccMarkazForoshAmargarGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                PlaceByCenterIDGrpc.PlaceByCenterIDBlockingStub placeByCenterIDBlockingStub = PlaceByCenterIDGrpc.newBlockingStub(managedChannel);
+                PlaceByCenterIDRequest placeByCenterIDRequest = PlaceByCenterIDRequest.newBuilder().setCenterID(Integer.parseInt(ccMarkazSazmanForosh)).build();
+
+                Callable<PlaceByCenterIDReplyList> getStatisticGoodsCallable = new Callable<PlaceByCenterIDReplyList>() {
+                    @Override
+                    public PlaceByCenterIDReplyList call() {
+                        return placeByCenterIDBlockingStub.getPlacesByCenterID(placeByCenterIDRequest);
+                    }
+                };
+                RxAsync.makeObservable(getStatisticGoodsCallable)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(placeByCenterIDReplyList -> {
+                            ArrayList<MahalModel> mahalModels = new ArrayList<>();
+                            for (PlaceByCenterIDReply placeByCenterIDReply : placeByCenterIDReplyList.getPlacesByCenterIdList()) {
+                                MahalModel mahalModel = new MahalModel();
+                                mahalModel.setCcMahal(placeByCenterIDReply.getPlaceID());
+                                mahalModel.setCcMahalLink(placeByCenterIDReply.getLinkPlaceID());
+                                mahalModel.setNameMahal(placeByCenterIDReply.getPlaceName());
+                                mahalModel.setCodeNoeMahal(placeByCenterIDReply.getPlaceTypeCode());
+                                mahalModel.setPishShomareh(placeByCenterIDReply.getAreaCode());
+                                mahalModels.add(mahalModel);
+                            }
+
+                            return mahalModels;
+
+                        }).subscribe(new Observer<ArrayList<MahalModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ArrayList<MahalModel> mahalModels) {
+                        retrofitResponse.onSuccess(mahalModels);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (!compositeDisposable.isDisposed()) {
+                            compositeDisposable.dispose();
+                        }
+                        compositeDisposable.clear();
+                    }
+                });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), MahalDAO.class.getSimpleName(), activityNameForLog, "fetchAllMahalByccMarkazForoshAmargarGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
     }
 
     public void fetchAllMahalByccMarkazForosh(final Context context, final String activityNameForLog,final String ccMarkazSazmanForosh, final RetrofitResponse retrofitResponse)

@@ -33,8 +33,10 @@ import com.saphamrah.DAO.KalaMojodiDAO;
 import com.saphamrah.DAO.LogPPCDAO;
 import com.saphamrah.DAO.MandehMojodyMashinDAO;
 import com.saphamrah.DAO.MarkazDAO;
+import com.saphamrah.DAO.ModatVosolGorohDAO;
 import com.saphamrah.DAO.MojoodiGiriDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
+import com.saphamrah.DAO.MoshtaryEtebarSazmanForoshDAO;
 import com.saphamrah.DAO.MoshtaryMorajehShodehRoozDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.DAO.SuggestDAO;
@@ -43,6 +45,7 @@ import com.saphamrah.Model.AdamDarkhastModel;
 import com.saphamrah.Model.AnbarakAfradModel;
 import com.saphamrah.Model.BarkhordForoshandehBaMoshtaryModel;
 import com.saphamrah.Model.ControlDataErsaliTabletModel;
+import com.saphamrah.Model.ControlInsertFaktorModel;
 import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
 import com.saphamrah.Model.DarkhastFaktorAfradForoshModel;
@@ -77,10 +80,12 @@ import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.UIModel.CustomerAdamDarkhastModel;
 import com.saphamrah.UIModel.CustomerDarkhastFaktorModel;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.APIServicePost;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.RxService.APIServiceRxjava;
 import com.saphamrah.WebService.RxService.Response.DataResponse.GetMandehMojodyMashinResponse;
 import com.saphamrah.WebService.ServiceResponse.ControlInsertFaktorResult;
@@ -96,6 +101,9 @@ import com.saphamrah.WebService.ServiceResponse.CreateLogPPCResult;
 import com.saphamrah.WebService.ServiceResponse.CreateMojoodiGiriResult;
 import com.saphamrah.WebService.ServiceResponse.SuggestResult;
 import com.saphamrah.WebService.ServiceResponse.UpdateDarkhastFaktorWithJSONResult;
+import com.saphamrah.protos.InvoiceInsertControlGrpc;
+import com.saphamrah.protos.InvoiceInsertControlReply;
+import com.saphamrah.protos.InvoiceInsertControlRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -112,11 +120,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
+import javax.mail.internet.ParameterList;
+
+import io.grpc.ManagedChannel;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
@@ -1542,6 +1555,79 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         }
         return check;
     }
+    private void controlInsertFaktorGrpc(String uniqID_Tablet , String ccMoshtary , String ccForoshandeh , final OnControlFaktor onControlFaktor)
+    {
+        try {
+            ServerIpModel serverIpModel = new ServerIpModel();
+
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), message, MoshtaryEtebarSazmanForoshDAO.class.getSimpleName(), TemporaryRequestsListActivity.class.getSimpleName(), "controlInsertFaktorGrpc", "");
+                onControlFaktor.onError(R.string.cantFindServer);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                InvoiceInsertControlGrpc.InvoiceInsertControlBlockingStub invoiceInsertControlBlockingStub = InvoiceInsertControlGrpc.newBlockingStub(managedChannel);
+                InvoiceInsertControlRequest invoiceInsertControlRequest = InvoiceInsertControlRequest.newBuilder().setCustomersID(Integer.parseInt(ccMoshtary)).setSalesManID(Integer.parseInt(ccForoshandeh)).setTabletUniqueID(uniqID_Tablet).build();
+                Callable<InvoiceInsertControlReply> invoiceInsertControlReplyListCallable = () -> invoiceInsertControlBlockingStub.getInvoiceInsertControl(invoiceInsertControlRequest);
+                RxAsync.makeObservable(invoiceInsertControlReplyListCallable)
+                        .map(reply -> {
+
+                                ControlInsertFaktorModel model = new ControlInsertFaktorModel();
+                                model.setFlag(reply.getFlag());
+                                model.setId(reply.getID());
+
+                            return model;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ControlInsertFaktorModel>() {
+                            @Override
+                            public void onSubscribe(@androidx.annotation.NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@androidx.annotation.NonNull ControlInsertFaktorModel model) {
+
+                                onControlFaktor.onSuccess(model.getFlag());
+                            }
+
+                            @Override
+                            public void onError(@androidx.annotation.NonNull Throwable e) {
+                                e.printStackTrace();
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), e.toString(), TemporaryRequestsListModel.class.getSimpleName(), TemporaryRequestsListActivity.class.getSimpleName(), "controlInsertFaktorGrpc", "CatchException");
+                                onControlFaktor.onError(R.string.errorConnectServer);
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!managedChannel.isShutdown()) {
+                                    managedChannel.shutdown();
+                                }
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_EXCEPTION(), exception.toString(), ModatVosolGorohDAO.class.getSimpleName(), TemporaryRequestsListActivity.class.getSimpleName(), "controlInsertFaktorGrpc", "CatchException");
+            onControlFaktor.onError(R.string.errorException);
+        }
+
+
+
+    }
 
     private void controlInsertFaktor(String uniqID_Tablet , String ccMoshtary , String ccForoshandeh , final OnControlFaktor onControlFaktor)
     {
@@ -1557,7 +1643,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         else
         {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_Tablet, ccMoshtary, ccForoshandeh);
+            Call<ControlInsertFaktorResult> call = apiServiceGet.controlInsertFaktor(uniqID_Tablet, ccMoshtary, ccForoshandeh);
             call.enqueue(new Callback<ControlInsertFaktorResult>() {
                 @Override
                 public void onResponse(Call<ControlInsertFaktorResult> call, Response<ControlInsertFaktorResult> response)

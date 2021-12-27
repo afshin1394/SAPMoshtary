@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.SupportCrisp.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "SupportCrispProto";
+option objc_class_prefix = "HLW";
+package Global;
+
+
+
+
+service SupportCrisp {
+
+  rpc GetSupportCrisp (SupportCrispRequest) returns (SupportCrispReplyList);
+}
+
+
+message SupportCrispRequest {
+  int32 SellOrganizationID = 1;
+}
+
+message SupportCrispReply {
+  int32	SupportCrispID = 1;
+  int32	SellOrganizationID = 2;
+  string	CrispID = 3;
+
+
+}
+
+message SupportCrispReplyList{
+  repeated SupportCrispReply SupportCrisps = 1;
+}

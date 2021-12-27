@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.HolidayCalendar.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "HolidayCalendarProto";
+option objc_class_prefix = "HLW";
+package Global;
+
+
+
+
+
+
+// The greeting service definition.
+service HolidayCalendar {
+  // Sends a greeting
+  rpc GetHolidayCalendar (HolidayCalendarRequest) returns (HolidayCalendarReplyList);
+}
+
+// The request message containing the user's name.
+message HolidayCalendarRequest {
+  string CenterID = 1;
+}
+
+// The response message containing the greetings.
+message HolidayCalendarReply {
+  int32	HolidayCalendarID = 1;
+  int32	CenterID = 2;
+  string	HolidayDate = 3;
+
+
+}
+
+message HolidayCalendarReplyList{
+  repeated HolidayCalendarReply HolidayCalendar = 1;
+}

@@ -1,0 +1,35 @@
+
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.RptCustomer3MonthPurchase.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RptCustomer3MonthPurchaseProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+
+service RptCustomer3MonthPurchase{
+  rpc GetRptCustomer3MonthPurchase(RptCustomer3MonthPurchaseRequest) returns(RptCustomer3MonthPurchaseReplyList);
+}
+
+message RptCustomer3MonthPurchaseRequest{
+  string SalesManID = 1;
+}
+
+message RptCustomer3MonthPurchaseReply{
+  int32	CustomerID = 1;
+  int32	InvoiceRequestID = 2;
+  string	CustomerCode = 3;
+  string	CustomerName = 4;
+  string	InvoiceNumber = 5;
+  string	InvoiceDate = 6;
+  int64	PureInvoicePrice = 7;
+  int32	CompleteReturn = 8;
+
+
+}
+
+message RptCustomer3MonthPurchaseReplyList{
+  repeated RptCustomer3MonthPurchaseReply RptCustomer3MonthPurchases = 1;
+}

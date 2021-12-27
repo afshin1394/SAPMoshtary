@@ -13,17 +13,23 @@ public class ServerIPShared
     private Context context;
 
     //IP && PORT GET REQUESTS
-    private final String IP_GET = "IP_GET";
-    private final String PORT_GET = "PORT_GET";
+    private final String IP_GET = ";wegkpwdwegregl";
+    private final String PORT_GET = "dflaefflpm[w";
+    private final String TYPE_GET = "kgpekk[gw";
+
 
     //IP && PORT POST REQUESTS
-    private final String IP_POST = "IP_POST";
-    private final String PORT_POST = "PORT_POST";
+    private final String IP_POST = "alkgsdjewwef";
+    private final String PORT_POST = "wrhwryqwhwhwh";
+    private final String TYPE_POST = "erghrhwrewrhwh";
+
+
 
 
     //IP && PORT MULTI REQUESTS
-    private final String IP_MULTI = "IP_MULTI";
-    private final String PORT_MULTI = "PORT_MULTI";
+    private final String IP_MULTI = "wrhwhrhdwwhr";
+    private final String PORT_MULTI = "wrhwhfeghwhrwh";
+    private final String TYPE_MULTI = "sbgfhrjhergsht";
 
     private final String DEVICE_IP = "6cBqwh1YxUH0O33l";
     private final String SERVER_TYPE ="serverType";
@@ -131,6 +137,9 @@ public class ServerIPShared
             editor.remove(PORT_MULTI);
             editor.remove(DEVICE_IP);
             editor.remove(SERVER_TYPE);
+            editor.remove(TYPE_GET);
+            editor.remove(TYPE_POST);
+            editor.remove(TYPE_MULTI);
             editor.apply();
         }
         catch (Exception exception)
@@ -172,4 +181,16 @@ public class ServerIPShared
     public String PORT_MULTI_REQUEST() {
         return PORT_MULTI;
     }
+
+    public String TYPE_GET_REQUEST() {
+        return TYPE_GET;
+    }
+
+    public String TYPE_POST_REQUEST() {
+        return TYPE_POST;
+    }
+    public String TYPE_MULTI_REQUEST() {
+        return TYPE_MULTI;
+    }
+
 }

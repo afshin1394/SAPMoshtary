@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.RptInvoiceRequestStatus.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RptInvoiceRequestStatusProto";
+
+package Sales;
+
+
+service RptInvoiceRequestStatus{
+  rpc GetRptInvoiceRequestStatus(RptInvoiceRequestStatusRequest) returns(RptInvoiceRequestStatusReplyList);
+}
+
+message RptInvoiceRequestStatusRequest{
+  string SalesManId = 1;
+  string DistributerID = 2;
+
+
+}
+
+message RptInvoiceRequestStatusReply{
+  int32	RptInvoiceRequestStatusPPCID = 1;
+  int64	InvoiceRequestID = 2;
+  int32	SellCenterID = 3;
+  int32	SellGroupID =4;
+  int32	SalesManID = 5;
+  int32	CustomerID = 6;
+  string	SellCenterName = 7;
+  string	SellGroupDescription = 8;
+  string	SalesManDescription = 9;
+  string	SalesManFullName =10;
+  string	CustomerCode = 11;
+  string	CustomerName = 12;
+  int32	RequestNumber = 13;
+  string	RequestDate = 14;
+  string	RequestDateWithSlash = 15;
+  string	RequestTime = 16;
+  int32	InvoiceNumber = 17;
+  string	InvoiceDate = 18;
+  string	InvoiceDateWithSlash = 19;
+  float	RoundPureInvoicePrice = 20;
+  int32	EntranceCodeType = 21;
+  string	TxtEntranceCodeType = 22 ;
+  int32	StatusCode = 23;
+  string	TxtStatusCode = 24 ;
+  int64	InvoiceRequestIDPPC = 25;
+  float	FinalInvoicePrice = 26;
+  int32	IsInvoiceOpen =27;
+
+
+}
+
+
+message RptInvoiceRequestStatusReplyList{
+  repeated RptInvoiceRequestStatusReply RptInvoiceRequestStatuss = 1;
+
+}

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "990264866375",
+    "project_id": "saphamrah",
+    "storage_bucket": "saphamrah.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990264866375:android:42772ed22ee545b578e362",
+        "android_client_info": {
+          "package_name": "com.saphamrah"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "990264866375-q5ckbb9mfvn40efetjasnsf76gl01d1c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxVkKgp4r8_Ay0NL3ScXKHG--XarYM5wQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "990264866375-q5ckbb9mfvn40efetjasnsf76gl01d1c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

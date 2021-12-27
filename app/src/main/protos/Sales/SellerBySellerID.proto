@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.Seller.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "SellerBySellerIDProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+service SellerBySellerID{
+	rpc GetSellerBySellerID(SellerBySellerIDRequest) returns(SellerBySellerIDReplyList);
+}
+
+message SellerBySellerIDRequest{
+string SalesManID =1;
+}
+
+message SellerBySellerIDReply{
+         int32 SalesManID = 1;
+         string SalesManIDFullName = 2;
+         int32 SellOrganizationCenterSellStructureID = 3;
+         string SellOrganizationCenterSellStructureName  = 4;
+         string SalesManIDCode = 5;
+         int32 SalesManIDPersonID = 6;
+         int32 SellCenterID  = 7;
+         string SellCenterName  = 8;
+         int32 SellOrganizationID = 9;
+         string SellOrganizationName = 10;
+
+}
+
+message SellerBySellerIDReplyList{
+	repeated SellerBySellerIDReply SellersBySellerID = 1;
+}
+

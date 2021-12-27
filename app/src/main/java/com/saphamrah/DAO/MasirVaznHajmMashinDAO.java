@@ -5,19 +5,34 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.MasirVaznHajmMashinModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetMairVaznHajmMashinResult;
+import com.saphamrah.protos.DirectionCarWeightVolumeGrpc;
+import com.saphamrah.protos.DirectionCarWeightVolumeReply;
+import com.saphamrah.protos.DirectionCarWeightVolumeReplyList;
+import com.saphamrah.protos.DirectionCarWeightVolumeRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,6 +69,77 @@ public class MasirVaznHajmMashinDAO
             MasirVaznHajmMashinModel.COLUMN_VaznMashin(),
             MasirVaznHajmMashinModel.COLUMN_HajmMashin()
         };
+    }
+
+    public void fetchMasirVaznHajmMashinGrpc(final Context context, final String activityNameForLog,final String ccMasir, final RetrofitResponse retrofitResponse) {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MasirVaznHajmMashinDAO.class.getSimpleName(), activityNameForLog, "fetchMasirVaznHajmMashinGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                DirectionCarWeightVolumeGrpc.DirectionCarWeightVolumeBlockingStub blockingStub = DirectionCarWeightVolumeGrpc.newBlockingStub(managedChannel);
+                DirectionCarWeightVolumeRequest request =DirectionCarWeightVolumeRequest.newBuilder().setRouteID(ccMasir).build();
+
+                Callable<DirectionCarWeightVolumeReplyList> replyListCallable = () -> blockingStub.getDirectionCarWeightVolume(request);
+                RxAsync.makeObservable(replyListCallable)
+
+                        .map(replyList -> {
+                            ArrayList<MasirVaznHajmMashinModel> models = new ArrayList<>();
+                            for (DirectionCarWeightVolumeReply reply : replyList.getDirectionCarWeightVolumesList()) {
+                                MasirVaznHajmMashinModel model = new MasirVaznHajmMashinModel();
+
+                                model.setCcMasir(reply.getRouteID());
+                                model.setCcMoshtary(reply.getCustomerID());
+                                model.setVaznMashin(reply.getCarWeight());
+                                model.setHajmMashin(reply.getCarCapacity());
+
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<MasirVaznHajmMashinModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<MasirVaznHajmMashinModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), ParameterDAO.class.getSimpleName(), activityNameForLog, "fetchMahalCodePostiGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+
     }
 
     public void fetchMasirVaznHajmMashin(final Context context, final String activityNameForLog,final String ccMasir, final RetrofitResponse retrofitResponse)
@@ -139,6 +225,7 @@ public class MasirVaznHajmMashinDAO
             });
         }
     }
+
 
     private String getEndpoint(Call call)
     {

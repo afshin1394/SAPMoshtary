@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.SalesManBehaviorWithCustomer.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "SalesManBehaviorWithCustomerProto";
+package Sales;
+
+
+service SalesManBehaviorWithCustomer{
+  rpc GetSalesManBehaviorWithCustomer(SalesManBehaviorWithCustomerRequest) returns(SalesManBehaviorWithCustomerReplyList);
+}
+
+message SalesManBehaviorWithCustomerRequest{
+  string SalesManID = 1;
+  string CustomersID = 2;
+  string NumberMonths =3;
+}
+
+message SalesManBehaviorWithCustomerReply{
+  int32	SalesManBehaviorID = 1;
+  int32	SalesManID = 2;
+  int32	CustomerID = 3;
+  string	Date =4;
+  string	Description = 5;
+  int32	IsFavorite = 6;
+}
+
+message SalesManBehaviorWithCustomerReplyList{
+  repeated SalesManBehaviorWithCustomerReply SalesManBehaviorWithCustomers = 1;
+}
+

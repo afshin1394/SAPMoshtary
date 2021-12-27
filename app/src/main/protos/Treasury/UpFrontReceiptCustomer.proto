@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Treasury.UpFrontReceiptCustomer.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "UpFrontReceiptCustomerProto";
+
+package Treasury;
+
+
+service UpFrontReceiptCustomer{
+  rpc GetUpFrontReceiptCustomer(UpFrontReceiptCustomerRequest) returns(UpFrontReceiptCustomerReplyList);
+}
+
+message UpFrontReceiptCustomerRequest{
+
+  string SalesManID = 1;
+
+}
+
+message UpFrontReceiptCustomerReply{
+
+  int32	CustomerID =1;
+  string	CustomerCode =2;
+  string	CustomerName=3;
+  string	Address=4;
+  string	Phone=5;
+  int32	RoutID=6;
+  string	RouteName=7;
+  int32	SalesManID=8;
+  int32	ID=9;
+  float	Latitude=10;
+  float	Longitude=11;
+  int32	Degree=12;
+  int32	CustomerTypeID=13;
+
+
+}
+
+message UpFrontReceiptCustomerReplyList{
+  repeated UpFrontReceiptCustomerReply UpFrontReceiptCustomers = 1;
+}

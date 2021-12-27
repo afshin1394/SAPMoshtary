@@ -2,23 +2,15 @@ package com.saphamrah.Application;
 
 import android.app.Activity;
 import android.content.Context;
-import android.transition.TransitionInflater;
 import android.util.Log;
-import android.view.LayoutInflater;
-
-import androidx.multidex.MultiDexApplication;
-
 
 import com.samiei.central.exceptionHandling.Crash;
 import com.samiei.central.exceptionHandling.ExceptionHandlerApplication;
-import com.saphamrah.MVP.View.MainActivity;
-import com.saphamrah.MVP.splash.SplashActivity;
 import com.saphamrah.PubFunc.Logger;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 
 import java.util.List;
-import java.util.logging.Handler;
 
 public class BaseApplication extends ExceptionHandlerApplication {
 

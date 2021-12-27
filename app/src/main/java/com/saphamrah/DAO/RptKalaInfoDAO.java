@@ -70,6 +70,7 @@ public class RptKalaInfoDAO {
 
     public void fetchRptKalaInfoRx(final Context context, final String activityNameForLog, String ccMarkazSazmanSakhtarForosh, final RxResponseHandler rxResponseHandler){
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+        serverIpModel.setPort("8040");
 
         APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
         RxHttpRequest.getInstance().execute(apiServiceRxjava.getAllrptKalaInfo(ccMarkazSazmanSakhtarForosh),activityNameForLog, CLASS_NAME,"fetchRptKalaInfoRx", new RxCallback<GetAllrptKalaInfoResponse>() {

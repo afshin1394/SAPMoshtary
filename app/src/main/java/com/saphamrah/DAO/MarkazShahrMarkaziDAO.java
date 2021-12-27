@@ -5,19 +5,34 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.MarkazShahrMarkaziModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllMarkazShahrMarkaziResult;
+import com.saphamrah.protos.CentralDownTownGrpc;
+import com.saphamrah.protos.CentralDownTownReply;
+import com.saphamrah.protos.CentralDownTownReplyList;
+import com.saphamrah.protos.CentralDownTownRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,6 +70,73 @@ public class MarkazShahrMarkaziDAO
         };
     }
 
+    public void fetchMarkazShahrMarkaziGrpc(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            //       ServerIpModel serverIpModel = new ServerIpModel();
+            //       serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MarkazShahrMarkaziDAO.class.getSimpleName(), activityNameForLog, "fetchMarkazShahrMarkaziGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                CentralDownTownGrpc.CentralDownTownBlockingStub centralDownTownBlockingStub = CentralDownTownGrpc.newBlockingStub(managedChannel);
+                CentralDownTownRequest customerBrandRequest = CentralDownTownRequest.newBuilder().build();
+                Callable<CentralDownTownReplyList> centralDownTownReplyListCallable = () -> centralDownTownBlockingStub.getCentralDownTown(customerBrandRequest);
+                RxAsync.makeObservable(centralDownTownReplyListCallable)
+                        .map(centralDownTownReplyList ->  {
+                            ArrayList<MarkazShahrMarkaziModel> models = new ArrayList<>();
+                            for (CentralDownTownReply reply : centralDownTownReplyList.getCentralDownTownRepliesList()) {
+                                MarkazShahrMarkaziModel model = new MarkazShahrMarkaziModel();
+                                model.setCcMarkazShahrMarkazi(reply.getCityCenterCenterID());
+                                model.setCcMarkaz(reply.getCenterID());
+                                model.setCcMahaleh(reply.getDistrictID());
+
+                                models.add(model);
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<MarkazShahrMarkaziModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<MarkazShahrMarkaziModel> markazShahrMarkaziModels) {
+                                retrofitResponse.onSuccess(markazShahrMarkaziModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), MarkazShahrMarkaziDAO.class.getSimpleName(), activityNameForLog, "fetchMarkazShahrMarkaziGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+    }
 
     public void fetchMarkazShahrMarkazi(final Context context, final String activityNameForLog, final RetrofitResponse retrofitResponse)
     {

@@ -5,19 +5,35 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.ListMoshtarianModel;
+import com.saphamrah.Model.RotbehModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetMoshtaryByRadiusResult;
+import com.saphamrah.protos.CustomerByRadiusGrpc;
+import com.saphamrah.protos.CustomerByRadiusReply;
+import com.saphamrah.protos.CustomerByRadiusReplyList;
+import com.saphamrah.protos.CustomerByRadiusRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -84,7 +100,105 @@ public class ListMoshtarianDAO
             ListMoshtarianModel.COLUMN_ExtraProp_Status()
         };
     }
+    public void fetchByRadiusGrpc(final Context context, final String activityNameForLog, String radius, String latitude, String longitude, final RetrofitResponse retrofitResponse) {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RotbehModel.class.getSimpleName(), activityNameForLog, "fetchConfigNoeVosolMojazeFaktorGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
 
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                CustomerByRadiusGrpc.CustomerByRadiusBlockingStub blockingStub = CustomerByRadiusGrpc.newBlockingStub(managedChannel);
+                CustomerByRadiusRequest request = CustomerByRadiusRequest.newBuilder().setRadius(radius).setLatitude(latitude).setLongitude(longitude).build();
+
+                Callable<CustomerByRadiusReplyList> replyListCallable = () -> blockingStub.getCustomerByRadius(request);
+                RxAsync.makeObservable(replyListCallable)
+
+                        .map(replyList -> {
+                            ArrayList<ListMoshtarianModel> models = new ArrayList<>();
+                            for (CustomerByRadiusReply reply : replyList.getCustomerByRadiussList()) {
+                                ListMoshtarianModel model = new ListMoshtarianModel();
+
+
+                                model.setRadif(reply.getIndex());
+                                model.setCcMoshtary(reply.getCustomerID());
+                                model.setCcPorseshnameh(reply.getQuestionnaireID());
+                                model.setCodeMoshtaryOld(reply.getCustomerLastName());
+                                model.setNameMoshtary(reply.getCustomerName());
+                                model.setFNameMoshtary(reply.getCustomerFullName());
+                                model.setLNameMoshtary(reply.getCustomerLastName());
+                                model.setMoshtaryCodeVazeiat(reply.getSituationCustomerCode());
+                                model.setTxtMoshtaryCodeVazeiat(reply.getSituationCustomerCodeTxt());
+                                model.setNameTablo(reply.getSignsName());
+                                model.setNameNoeMoshtary(reply.getCustomerTypeName());
+                                model.setCodeMely(reply.getNationalCode());
+                                model.setLatitudeY(reply.getLatitude());
+                                model.setLongitudeX(reply.getLongitude());
+                                model.setAddress(reply.getAddress());
+                                model.setTelephone(reply.getPhone());
+                                model.setMobile(reply.getMobile());
+                                model.setIsMoshtaryAmargar(reply.getIsStatisticianCustomer());
+                                model.setPelak(reply.getPlague());
+                                model.setCodePosty(reply.getPostalCode());
+                                model.setCcMahaleh(reply.getDistrictID());
+                                model.setCodeVazeiatAmargar(reply.getStatisticianSituationCode());
+                                model.setKhiabanAsli(reply.getMainStreet());
+                                model.setKhiabanFarei1(reply.getByStreet1());
+                                model.setKhiabanFarei2(reply.getByStreet2());
+                                model.setKoocheAsli(reply.getMainAlley());
+                                model.setKoocheFarei1(reply.getByAlley1());
+                                model.setKoocheFarei2(reply.getByAlley2());
+                                model.setTarikhAkharinFaktor(reply.getLastInvoiceDate());
+                                model.setMablaghAkharinFaktor(reply.getLastInvoicePrice());
+                                model.setMasahatMaghazeh(reply.getShopArea());
+                                model.setHasAnbar(reply.getHasStore());
+
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<ListMoshtarianModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<ListMoshtarianModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), RotbehModel.class.getSimpleName(), activityNameForLog, "fetchConfigNoeVosolMojazeFaktorGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+
+    }
 
     public void fetchByRadius(final Context context, final String activityNameForLog, String radius, String latitude, String longitude, final RetrofitResponse retrofitResponse)
     {

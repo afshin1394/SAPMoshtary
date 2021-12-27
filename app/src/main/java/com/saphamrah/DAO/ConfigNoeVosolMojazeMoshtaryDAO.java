@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.Model.ConfigNoeVosolMojazeMoshtaryModel;
 import com.saphamrah.Model.ServerIpModel;
@@ -15,12 +17,25 @@ import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.CustomerAdamDarkhastModel;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetConfigNoeVosolMojazeMoshtaryResult;
+import com.saphamrah.protos.CustomerAllowedReceiptionTypeConfigGrpc;
+import com.saphamrah.protos.CustomerAllowedReceiptionTypeConfigReply;
+import com.saphamrah.protos.CustomerAllowedReceiptionTypeConfigReplyList;
+import com.saphamrah.protos.CustomerAllowedReceiptionTypeConfigRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,6 +64,106 @@ public class ConfigNoeVosolMojazeMoshtaryDAO
             exception.printStackTrace();
             PubFunc.Logger logger = new PubFunc().new Logger();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), "ConfigNoeVosolMojazeMoshtaryDAO" , "" , "constructor" , "");
+        }
+    }
+
+    /*
+ get name all columns in model
+  */
+    private String[] allColumns()
+    {
+        return new String[]
+                {
+                        modelGetTABLE_NAME.getCOLUMNccConfigNoeVosolMojazeMoshtary(),
+                        modelGetTABLE_NAME.getCOLUMN_ccDarajeh(),
+                        modelGetTABLE_NAME.getCOLUMN_ccNoeMoshtary(),
+                        modelGetTABLE_NAME.getCOLUMN_CodeVazeiat(),
+                        modelGetTABLE_NAME.getCOLUMNCodeNoeVosol_Tablet(),
+                        modelGetTABLE_NAME.getCOLUMN_txtNoeVosol(),
+                        modelGetTABLE_NAME.getCOLUMN_IsPishDariaft(),
+                        modelGetTABLE_NAME.getCOLUMN_modatVosolMazad(),
+                        modelGetTABLE_NAME.getCOLUMN_MashmoolTakhfifNaghdi(),
+                        modelGetTABLE_NAME.getCOLUMN_MashmoolDirkardVosol(),
+
+
+                };
+    }
+
+    public void fetchConfigNoeVosolMojazeMoshtaryGrpc(final Context context, final String activityNameForLog, String ccNoeMoshtarys , final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+            {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, ConfigNoeVosolMojazeMoshtaryDAO.class.getSimpleName(), activityNameForLog, "fetchRotbehGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR() , message);
+            }
+            else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                CustomerAllowedReceiptionTypeConfigGrpc.CustomerAllowedReceiptionTypeConfigBlockingStub blockingStub = CustomerAllowedReceiptionTypeConfigGrpc.newBlockingStub(managedChannel);
+                CustomerAllowedReceiptionTypeConfigRequest request = CustomerAllowedReceiptionTypeConfigRequest.newBuilder().setCustomersID(ccNoeMoshtarys).build();
+
+                Callable<CustomerAllowedReceiptionTypeConfigReplyList> replyListCallable  = () -> blockingStub.getCustomerAllowedReceiptionTypeConfig(request);
+                RxAsync.makeObservable(replyListCallable)
+                        .map(replyList -> {
+                            ArrayList<ConfigNoeVosolMojazeMoshtaryModel> models = new ArrayList<>();
+                            for (CustomerAllowedReceiptionTypeConfigReply reply : replyList.getCustomerAllowedReceiptionTypeConfigsList()) {
+                                ConfigNoeVosolMojazeMoshtaryModel model = new ConfigNoeVosolMojazeMoshtaryModel();
+
+                                model.setCcConfigNoeVosolMojazeMoshtary(reply.getCustomerAllowedReceiptionTypeConfigID());
+                                model.setCodeNoeVosol_Tablet(reply.getReceiptionTypeCodeTablet());
+                                model.setCcDarajeh(reply.getDegreeID());
+                                model.setCcNoeMoshtary(reply.getCustomerTypeID());
+                                model.setCodeVazeiat(reply.getSituationCode());
+                                model.setTxtNoeVosol(reply.getReceiptionTypeTxt());
+                                model.setIsPishDariaft(reply.getIsUpFrontReciept());
+                                model.setModatVosolMazad(reply.getExtraReceiptionDuration());
+                                model.setMashmoolTakhfifNaghdi(reply.getCashDiscountSubject());
+                                model.setMashmoolDirkardVosol(reply.getReciptionDelaySubject());
+
+
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<ConfigNoeVosolMojazeMoshtaryModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<ConfigNoeVosolMojazeMoshtaryModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), ConfigNoeVosolMojazeMoshtaryDAO.class.getSimpleName(), activityNameForLog, "fetchConfigNoeVosolMojazeMoshtaryGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
         }
     }
 
@@ -156,27 +271,7 @@ public class ConfigNoeVosolMojazeMoshtaryDAO
         }
     }
 
-    /*
-    get name all columns in model
-     */
-    private String[] allColumns()
-    {
-        return new String[]
-        {
-                modelGetTABLE_NAME.getCOLUMNccConfigNoeVosolMojazeMoshtary(),
-                modelGetTABLE_NAME.getCOLUMN_ccDarajeh(),
-                modelGetTABLE_NAME.getCOLUMN_ccNoeMoshtary(),
-                modelGetTABLE_NAME.getCOLUMN_CodeVazeiat(),
-                modelGetTABLE_NAME.getCOLUMNCodeNoeVosol_Tablet(),
-                modelGetTABLE_NAME.getCOLUMN_txtNoeVosol(),
-                modelGetTABLE_NAME.getCOLUMN_IsPishDariaft(),
-                modelGetTABLE_NAME.getCOLUMN_modatVosolMazad(),
-                modelGetTABLE_NAME.getCOLUMN_MashmoolTakhfifNaghdi(),
-                modelGetTABLE_NAME.getCOLUMN_MashmoolDirkardVosol(),
 
-
-        };
-    }
 
     /*
     set result model to DB

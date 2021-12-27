@@ -10,6 +10,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.Model.PrintFaktorModel;
 import com.saphamrah.Model.ServerIpModel;
@@ -18,14 +20,27 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetPrintFaktorResult;
 import com.saphamrah.WebService.ServiceResponse.GetTizeriResult;
+import com.saphamrah.protos.InvoicePrintGrpc;
+import com.saphamrah.protos.InvoicePrintReply;
+import com.saphamrah.protos.InvoicePrintReplyList;
+import com.saphamrah.protos.InvoicePrintRequest;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,6 +68,102 @@ public class PrintFaktorDAO
             exception.printStackTrace();
             PubFunc.Logger logger = new PubFunc().new Logger();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), "PrintFaktorDAO" , "" , "constructor" , "");
+        }
+    }
+
+
+    /*
+ get name all columns in model
+  */
+    private String[] allColumns()
+    {
+        return new String[]
+                {
+                        modelGetTABLE_NAME.getCOLUMN_CodeMoshtary(),
+                        modelGetTABLE_NAME.getCOLUMN_MablaghFaktor(),
+                        modelGetTABLE_NAME.getCOLUMN_NameMoshtary(),
+                        modelGetTABLE_NAME.getCOLUMN_Radif(),
+                        modelGetTABLE_NAME.getCOLUMN_ShomarehFaktor(),
+                        modelGetTABLE_NAME.getCOLUMN_UniqID_Tablet(),
+                        modelGetTABLE_NAME.getCOLUMN_FaktorImage(),
+                        modelGetTABLE_NAME.getCOLUMN_ccDarkhastFaktorNoeForosh(),
+                };
+    }
+
+    public void fetchPrintFaktorGrpc(final Context context, final String activityNameForLog, int ccAfrad ,  final RetrofitResponse retrofitResponse)
+    {
+        try {
+
+
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            serverIpModel.setPort("5000");
+
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+            {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, PrintFaktorDAO.class.getSimpleName(), activityNameForLog, "fetchPrintFaktorGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT() , message);
+            }
+            else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                InvoicePrintGrpc.InvoicePrintBlockingStub invoicePrintBlockingStub = InvoicePrintGrpc.newBlockingStub(managedChannel);
+                InvoicePrintRequest invoicePrintRequest = InvoicePrintRequest.newBuilder().setPersonID(String.valueOf(ccAfrad)).build();
+                Callable<InvoicePrintReplyList> invoicePrintReplyListCallable  = () -> invoicePrintBlockingStub.getInvoicePrint(invoicePrintRequest);
+                RxAsync.makeObservable(invoicePrintReplyListCallable)
+                        .map(invoicePrintReplyList -> {
+                            ArrayList<PrintFaktorModel> printFaktorModels = new ArrayList<>();
+                            for (InvoicePrintReply invoicePrintReply : invoicePrintReplyList.getInvoicePrintsList()) {
+                                PrintFaktorModel printFaktorModel = new PrintFaktorModel();
+                                printFaktorModel.setRadif(invoicePrintReply.getRow());
+                                printFaktorModel.setCodeMoshtary(invoicePrintReply.getCustomerCode());
+                                printFaktorModel.setNameMoshtary(invoicePrintReply.getCustomerName());
+                                printFaktorModel.setUniqID_Tablet(invoicePrintReply.getUniqIDTablet());
+                                printFaktorModel.setShomarehFaktor(invoicePrintReply.getInvoiceNumber());
+                                printFaktorModel.setMablaghFaktor(invoicePrintReply.getInvoicePrice());
+
+
+
+                                printFaktorModels.add(printFaktorModel);
+                            }
+
+                            return printFaktorModels;
+
+                        })
+                        .subscribeOn(Schedulers.single())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<PrintFaktorModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<PrintFaktorModel> printFaktorModels) {
+                                retrofitResponse.onSuccess(printFaktorModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(),e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), PrintFaktorDAO.class.getSimpleName(), activityNameForLog, "fetchPrintFaktorGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION() , exception.getMessage());
         }
     }
 
@@ -160,23 +271,7 @@ public class PrintFaktorDAO
         }
     }
 
-    /*
-    get name all columns in model
-     */
-    private String[] allColumns()
-    {
-        return new String[]
-        {
-                modelGetTABLE_NAME.getCOLUMN_CodeMoshtary(),
-                modelGetTABLE_NAME.getCOLUMN_MablaghFaktor(),
-                modelGetTABLE_NAME.getCOLUMN_NameMoshtary(),
-                modelGetTABLE_NAME.getCOLUMN_Radif(),
-                modelGetTABLE_NAME.getCOLUMN_ShomarehFaktor(),
-                modelGetTABLE_NAME.getCOLUMN_UniqID_Tablet(),
-                modelGetTABLE_NAME.getCOLUMN_FaktorImage(),
-                modelGetTABLE_NAME.getCOLUMN_ccDarkhastFaktorNoeForosh(),
-        };
-    }
+
 
     /*
     set result model to DB

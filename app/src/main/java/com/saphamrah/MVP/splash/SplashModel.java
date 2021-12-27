@@ -1,5 +1,8 @@
 package com.saphamrah.MVP.splash;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -25,6 +28,7 @@ import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.AsyncFindServerTask;
 import com.saphamrah.Network.AsyncTaskFindWebServices;
 import com.saphamrah.Network.AsyncTaskResponse;
+import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.Network.RxNetwork.RxCallback;
 import com.saphamrah.Network.RxNetwork.RxHttpRequest;
 import com.saphamrah.Network.RxNetwork.RxResponseHandler;
@@ -77,6 +81,8 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
     @Override
     public void getIsRoot()
     {
+        Log.d("splashModel", "getIsRoot" );
+
         if (RootTools.isAccessGiven())
         {
             mPresenter.onGetIsRoot(true);
@@ -99,6 +105,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
      */
     @Override
     public void getDeviceLanguage() {
+        Log.d("splashModel", "getDeviceLanguage" );
         if (Locale.getDefault().getLanguage().trim().toLowerCase().equals("en"))
         {
             mPresenter.onGetDeviceLanguage(true);
@@ -115,6 +122,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
     @Override
     public void getFakeLocation()
     {
+        Log.d("splashModel", "getFakeLocation" );
         FakeLocation fakeLocation = new FakeLocation();
         boolean useFakeLocation = fakeLocation.useFakeLocation(mPresenter.getAppContext());
         mPresenter.onGetFakeLocation(useFakeLocation);
@@ -126,6 +134,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
     @Override
     public void getGPS()
     {
+        Log.d("splashModel", "getGPS" );
         boolean gps_enabled = false;
         boolean network_enabled = false;
         Context context = mPresenter.getAppContext();
@@ -168,6 +177,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
     @Override
     public void getInternetType()
     {
+        Log.d("splashModel", "getInternetType" );
         int networkType = new NetworkUtils().checkInternetType(BaseApplication.getContext());
         mPresenter.onGetInternetType(networkType);
     }
@@ -178,6 +188,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
     @Override
     public void getWifiStatus()
     {
+        Log.d("splashModel", "getWifiStatus" );
         boolean forceWifiOnForGPS = false;
         try
         {
@@ -205,6 +216,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
     @Override
     public void getGooglePlayServices()
     {
+        Log.d("splashModel", "getGooglePlayServices" );
         int status = ConnectionResult.SERVICE_INVALID;
         try
         {
@@ -240,6 +252,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
      */
     @Override
     public void getInvalidPackages() {
+        Log.d("splashModel", "getInvalidPackages" );
         ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
         String invalidPackageNames = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_UNINSTALL_INVALID_PACKAGE());
         mPresenter.onGetInvalidPackages(invalidPackageNames);
@@ -252,23 +265,24 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
      */
     @Override
     public void getServerIP(boolean first) {
-
+        Log.d("splashModel", "getServerIP" );
         serverIPShared.removeAll();
         ArrayList<ServerIpModel> arrayListServerIPs = serverIPDAO.getServerIPwithIsTestFilter(Constants.CURRENT_VERSION_TYPE());
-        mPresenter.onGetServerIPs(arrayListServerIPs , first);
+        mPresenter.onGetServerIPs(arrayListServerIPs, first);
 
     }
 
     /**
      * selected Ip
+     *
      * @param ip
      */
     @Override
     public void selectIp(String ip) {
-
+        Log.d("splashModel", "selectIp" );
         if (NetworkUtils.isNetworkAvailable(BaseApplication.getContext())) {
-            ArrayList<ServerIpModel> arrayListServerIPs = serverIPDAO.getServerISelected(Constants.CURRENT_VERSION_TYPE() , ip);
-
+            ArrayList<ServerIpModel> arrayListServerIPs = serverIPDAO.getServerISelected(Constants.CURRENT_VERSION_TYPE(), ip);
+            Log.d("splashModel", "selectIp" +arrayListServerIPs.toString());
             if (arrayListServerIPs.size() > 0) {
                 AsyncFindServerTask asyncFindServerTask = new AsyncFindServerTask((Activity) mPresenter.getAppContext());
                 asyncFindServerTask.delegate = SplashModel.this;
@@ -285,7 +299,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
     @Override
     public void processFinished(ArrayList<Object> objects) {
 
-
+        Log.d("splashModel", "processFinished" );
         if (objects.size() > 0) {
 
             ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
@@ -297,7 +311,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
 
                     ServerIpModel serverIpModel = (ServerIpModel) object;
 
-                    Log.i("serverType", "processFinished: " + serverIpModel.getServerType() + ", " + serverIpModel.getServerIp() +":"+ serverIpModel.getPort());
+                    Log.i("serverType", "processFinished: " + serverIpModel.getServerType() + ", " + serverIpModel.getServerIp() + ":" + serverIpModel.getPort());
 /***********************************************************   X server has divided webservice base URls for get post and multi *******************************************************/
 
 
@@ -306,19 +320,25 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
                             case Constants.POST_REQUEST:
                                 serverIPShared.putString(serverIPShared.IP_POST_REQUEST(), serverIpModel.getServerIp());
                                 serverIPShared.putString(serverIPShared.PORT_POST_REQUEST(), serverIpModel.getPort());
-                                Log.i("serverType","POST_REQUEST");
+                                serverIPShared.putInt(serverIPShared.TYPE_POST_REQUEST(), serverIpModel.getWebServiceType());
+
+                                Log.i("serverType", "POST_REQUEST");
                                 break;
 
                             case Constants.MULTI_REQUEST:
                                 serverIPShared.putString(serverIPShared.IP_MULTI_REQUEST(), serverIpModel.getServerIp());
                                 serverIPShared.putString(serverIPShared.PORT_MULTI_REQUEST(), serverIpModel.getPort());
-                                Log.i("serverType","MULTI_REQUEST");
+                                serverIPShared.putInt(serverIPShared.TYPE_MULTI_REQUEST(), serverIpModel.getWebServiceType());
+
+                                Log.i("serverType", "MULTI_REQUEST");
                                 break;
 
                             case Constants.GET_REQUESTS:
                                 serverIPShared.putString(serverIPShared.IP_GET_REQUEST(), serverIpModel.getServerIp());
                                 serverIPShared.putString(serverIPShared.PORT_GET_REQUEST(), serverIpModel.getPort());
-                                Log.i("serverType","GET_REQUESTS");
+                                serverIPShared.putInt(serverIPShared.TYPE_GET_REQUEST(), serverIpModel.getWebServiceType());
+
+                                Log.i("serverType", "GET_REQUESTS");
                                 break;
 
                         }
@@ -331,14 +351,20 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
                             case Constants.MULTI_REQUEST:
                                 serverIPShared.putString(serverIPShared.IP_MULTI_REQUEST(), serverIpModel.getServerIp());
                                 serverIPShared.putString(serverIPShared.PORT_MULTI_REQUEST(), serverIpModel.getPort());
+                                serverIPShared.putInt(serverIPShared.TYPE_MULTI_REQUEST(), serverIpModel.getWebServiceType());
+
 
                                 serverIPShared.putString(serverIPShared.IP_POST_REQUEST(), serverIpModel.getServerIp());
                                 serverIPShared.putString(serverIPShared.PORT_POST_REQUEST(), serverIpModel.getPort());
+                                serverIPShared.putInt(serverIPShared.TYPE_POST_REQUEST(), serverIpModel.getWebServiceType());
+
                                 break;
 
                             case Constants.GET_REQUESTS:
                                 serverIPShared.putString(serverIPShared.IP_GET_REQUEST(), serverIpModel.getServerIp());
                                 serverIPShared.putString(serverIPShared.PORT_GET_REQUEST(), serverIpModel.getPort());
+                                serverIPShared.putInt(serverIPShared.TYPE_GET_REQUEST(), serverIpModel.getWebServiceType());
+
                                 break;
 
                         }
@@ -350,12 +376,18 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
                     else {
                         serverIPShared.putString(serverIPShared.IP_POST_REQUEST(), serverIpModel.getServerIp());
                         serverIPShared.putString(serverIPShared.PORT_POST_REQUEST(), serverIpModel.getPort());
+                        serverIPShared.putInt(serverIPShared.TYPE_POST_REQUEST(), serverIpModel.getWebServiceType());
+
 
                         serverIPShared.putString(serverIPShared.IP_MULTI_REQUEST(), serverIpModel.getServerIp());
                         serverIPShared.putString(serverIPShared.PORT_MULTI_REQUEST(), serverIpModel.getPort());
+                        serverIPShared.putInt(serverIPShared.TYPE_MULTI_REQUEST(), serverIpModel.getWebServiceType());
+
 
                         serverIPShared.putString(serverIPShared.IP_GET_REQUEST(), serverIpModel.getServerIp());
                         serverIPShared.putString(serverIPShared.PORT_GET_REQUEST(), serverIpModel.getPort());
+                        serverIPShared.putInt(serverIPShared.TYPE_GET_REQUEST(), serverIpModel.getWebServiceType());
+
                     }
                 }
             }
@@ -378,6 +410,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
      */
     @Override
     public void getServerTime() {
+        Log.d("splashModel", "getServerTime" );
         ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
         String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
                 , "");
@@ -386,6 +419,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
         if (serverIP.equals("") || port.equals("")) {
             mPresenter.notFoundServerIP();
         } else {
+            Log.d("splashModel", "getServerTime else" );
             PubFunc.LoginInfo loginInfo = new PubFunc().new LoginInfo();
             loginInfo.callLoginInfoService(mPresenter.getAppContext(), serverIP, port, new GetLoginInfoCallback() {
                 @Override
@@ -394,6 +428,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
                             mPresenter.getAppContext().getString(R.string.serverTime), serverDateTime, mPresenter.getAppContext().getString(R.string.deviceTime), deviceDateTime,
                             mPresenter.getAppContext().getString(R.string.timeDiff), Constants.ALLOWABLE_SERVER_LOCAL_TIME_DIFF(),
                             mPresenter.getAppContext().getString(R.string.second), diff, mPresenter.getAppContext().getString(R.string.second));
+                    Log.d("splashModel", "getServerTime" + validDiffTime + message);
                     mPresenter.onGetServerTime(validDiffTime, message);
                 }
 
@@ -405,14 +440,14 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
                 }
             });
         }
-        Log.d("test",Build.getRadioVersion());
-        Log.d("test",Build.BOARD);
-        Log.d("test",Build.DEVICE);
-        Log.d("test",Build.HOST);
-        Log.d("test",Build.ID);
-        Log.d("test",Build.CPU_ABI);
-        Log.d("test",Build.CPU_ABI2);
-        Log.d("test",Build.SERIAL);
+        Log.d("test", Build.getRadioVersion());
+        Log.d("test", Build.BOARD);
+        Log.d("test", Build.DEVICE);
+        Log.d("test", Build.HOST);
+        Log.d("test", Build.ID);
+        Log.d("test", Build.CPU_ABI);
+        Log.d("test", Build.CPU_ABI2);
+        Log.d("test", Build.SERIAL);
 
 
     }
@@ -421,7 +456,8 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
      * check Authentication with national code
      */
     @Override
-    public void  checkAuthentication() {
+    public void checkAuthentication() {
+        Log.d("splashModel", "checkAuthentication" );
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             boolean authFileExist = Authentication.getInstance().checkIfFileExists();
@@ -447,7 +483,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
 
     @Override
     public void authenticateUser(String identityCode) {
-
+        Log.d("splashModel", "authenticateUser" );
         fetchUserHashKey(identityCode, new RxResponseHandler() {
 
             @Override
@@ -469,7 +505,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
             @Override
             public void onFailed(String message, String type) {
                 mPresenter.finishLoading();
-                mPresenter.onGetInvalidIdentityCode(message,type);
+                mPresenter.onGetInvalidIdentityCode(message, type);
 
             }
 
@@ -484,52 +520,88 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
     }
 
     private void fetchUserHashKey(String identityCode, RxResponseHandler rxResponseHandler) {
-
+        Log.d("splashModel", "fetchUserHashKey" );
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
-        Log.i("fetchUserHashKey", "fetchUserHashKey: " + serverIpModel.getPort() + " " + serverIpModel.getServerIp());
-        APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
-        RxHttpRequest.getInstance().execute(apiServiceRxjava.checkAfrad(identityCode), SplashActivity.class.getSimpleName(), SplashModel.class.getSimpleName(), "authenticateUser", new RxCallback<CodeMelyResponse>() {
-            @Override
-            public void onStart(Disposable disposable) {
-                rxResponseHandler.onStart(disposable);
-            }
+        switch (serverIpModel.getWebServiceType()) {
+            case REST:
+                Log.i("fetchUserHashKey", "fetchUserHashKey: " + serverIpModel.getPort() + " " + serverIpModel.getServerIp());
+                APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
+                RxHttpRequest.getInstance().execute(apiServiceRxjava.checkAfrad(identityCode), SplashActivity.class.getSimpleName(), SplashModel.class.getSimpleName(), "authenticateUser", new RxCallback<CodeMelyResponse>() {
+                    @Override
+                    public void onStart(Disposable disposable) {
+                        rxResponseHandler.onStart(disposable);
+                    }
 
-            @Override
-            public void onSuccess(CodeMelyResponse response) {
-                Log.i("fetchUserHashKey", "onSuccess: " + response.getMessage());
-                if (response != null) {
-                    if (response.getMessage() != null) {
-                        switch (response.getMessage()) {
+                    @Override
+                    public void onSuccess(CodeMelyResponse response) {
+                        Log.i("fetchUserHashKey", "onSuccess: " + response.getMessage());
+                        if (response.getMessage() != null) {
+                            switch (response.getMessage()) {
+                                /**INVALID_IDENTITY_CODE**/
+                                case "-1":
+                                    onError(mPresenter.getAppContext().getString(R.string.invalidIdentityCodeLength), "INVALID_IDENTITY_CODE_LENGTH");
+
+                                    break;
+                                /**INVALID_IDENTITY_CODE_LENGTH**/
+                                case "-2":
+                                    onError(mPresenter.getAppContext().getString(R.string.invalidIdentityCode), "INVALID_IDENTITY_CODE");
+
+                                    break;
+                                /**VALID_IDENTITY_CODE**/
+                                case "1":
+                                    ArrayList hashCode = new ArrayList();
+                                    hashCode.add(response.getHashCode());
+                                    rxResponseHandler.onSuccess(hashCode);
+                                    break;
+
+                            }
+                        } else {
+                            onError(mPresenter.getAppContext().getString(R.string.invalidIdentityCodeLength), "INVALID_IDENTITY_CODE_LENGTH");
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(String message, String type) {
+                        rxResponseHandler.onFailed(message, type);
+                    }
+                });
+            break;
+            case gRPC:
+                Authentication.getInstance().fetchUserHashKeyGrpc(mPresenter.getAppContext(), identityCode, new RetrofitResponse() {
+                    @Override
+                    public void onSuccess(ArrayList response) {
+                        String output = response.get(0).toString();
+                        switch (output) {
                             /**INVALID_IDENTITY_CODE**/
                             case "-1":
-                                onError(mPresenter.getAppContext().getString(R.string.invalidIdentityCodeLength), "INVALID_IDENTITY_CODE_LENGTH");
+                                onFailed(mPresenter.getAppContext().getString(R.string.invalidIdentityCodeLength), "INVALID_IDENTITY_CODE_LENGTH");
 
                                 break;
                             /**INVALID_IDENTITY_CODE_LENGTH**/
                             case "-2":
-                                onError(mPresenter.getAppContext().getString(R.string.invalidIdentityCode), "INVALID_IDENTITY_CODE");
+                                onFailed(mPresenter.getAppContext().getString(R.string.invalidIdentityCode), "INVALID_IDENTITY_CODE");
 
                                 break;
                             /**VALID_IDENTITY_CODE**/
-                            case "1":
-                                ArrayList hashCode = new ArrayList();
-                                hashCode.add(response.getHashCode());
-                                rxResponseHandler.onSuccess(hashCode);
+                            default:
+
+                                rxResponseHandler.onSuccess(response);
                                 break;
 
                         }
-                    } else {
-                        onError(mPresenter.getAppContext().getString(R.string.invalidIdentityCodeLength), "INVALID_IDENTITY_CODE_LENGTH");
                     }
-                }
 
-            }
+                    @Override
+                    public void onFailed(String message, String type) {
+                        rxResponseHandler.onFailed(message, type);
 
-            @Override
-            public void onError(String message, String type) {
-                rxResponseHandler.onFailed(message, type);
-            }
-        });
+                    }
+                });
+                break;
+
+        }
+
     }
 
     /**
@@ -540,6 +612,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
      */
     @Override
     public void getForoshandehAmoozeshi(ServerIpModel serverIpModel) {
+        Log.d("splashModel", "getForoshandehAmoozeshi" );
         PubFunc.DeviceInfo deviceInfo = new PubFunc().new DeviceInfo();
         final String IMEI = deviceInfo.getIMEI(mPresenter.getAppContext());
         Log.d("SplashModel", "getForoshandehAmoozeshi Imei:" + IMEI);
@@ -552,50 +625,75 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
             if (ip.equals("") || port.equals("")) {
                 mPresenter.onNetworkError(true);
             } else {
-                APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);//ApiClient.getClient(serverIP, port).create(APIServiceGet.class);
-                final String deviceIMEI = deviceInfo.getIMEI(mPresenter.getAppContext());
-                Log.d("SplashModel","getForoshandehAmoozeshi deviceIMEI:" + deviceIMEI);
-                Call<GetForoshandehAmoozeshiResult> call = apiServiceGet.getForoshandehAmoozeshi(deviceIMEI);
-                call.enqueue(new Callback<GetForoshandehAmoozeshiResult>() {
-                    @Override
-                    public void onResponse(Call<GetForoshandehAmoozeshiResult> call, Response<GetForoshandehAmoozeshiResult> response) {
-                        if (response.raw().body() != null) {
-                            Log.d("intercept", "in on response SplashModel.getForoshandehAmoozeshi and response : " + response.raw().body().contentLength());
-                            long contentLength = response.raw().body().contentLength();
-                            PubFunc.Logger logger = new PubFunc().new Logger();
-                            logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, SplashModel.class.getSimpleName(), "", "getForoshandehAmoozeshi", "onResponse");
-                        }
-                        if (response.isSuccessful()) {
-                            try {
-                                List<ForoshandehAmoozeshiModel> foroshandehAmoozeshiModelList = response.body().getData();
-                                if (foroshandehAmoozeshiModelList.size() > 0) {
-                                    ForoshandehAmoozeshiDeviceNumberDAO foroshandehAmoozeshiDAO = new ForoshandehAmoozeshiDeviceNumberDAO(mPresenter.getAppContext());
-                                    foroshandehAmoozeshiDAO.deleteAll();
-                                    foroshandehAmoozeshiDAO.insertGroup(foroshandehAmoozeshiModelList);
+
+                ForoshandehAmoozeshiDeviceNumberDAO foroshandehAmoozeshiDeviceNumberDAO = new ForoshandehAmoozeshiDeviceNumberDAO(mPresenter.getAppContext());
+                switch (serverIpModel.getWebServiceType()){
+                    case REST:
+                        foroshandehAmoozeshiDeviceNumberDAO.getForoshandehAmoozeshi(mPresenter.getAppContext(), serverIpModel, SplashActivity.class.getSimpleName(), new RetrofitResponse() {
+                            @Override
+                            public void onSuccess(ArrayList arrayListData) {
+                                try {
+                                    List<ForoshandehAmoozeshiModel> foroshandehAmoozeshiModelList = arrayListData;
+                                    if (foroshandehAmoozeshiModelList.size() > 0) {
+                                        ForoshandehAmoozeshiDeviceNumberDAO foroshandehAmoozeshiDAO = new ForoshandehAmoozeshiDeviceNumberDAO(mPresenter.getAppContext());
+                                        foroshandehAmoozeshiDAO.deleteAll();
+                                        foroshandehAmoozeshiDAO.insertGroup(foroshandehAmoozeshiModelList);
+                                    }
+
+                                    PubFunc.UserType userType = new PubFunc().new UserType();
+                                    Log.d("SplashModel", "foroshandehAmoozeshiModelList:" + foroshandehAmoozeshiModelList.toString() + " , IMEI: " + IMEI);
+                                    userType.checkUserType(mPresenter.getAppContext(), foroshandehAmoozeshiModelList, IMEI);
+
+                                    mPresenter.onGetForoshandehAmoozeshi(true, false);
+                                } catch (Exception exception) {
+                                    exception.printStackTrace();
+                                    setLogToDB(exception.getMessage(), SplashModel.class.getSimpleName(), "", "getForoshandehAmoozeshi", "onResponse");
+                                    mPresenter.onNetworkError(true);
                                 }
+                            }
 
-                                PubFunc.UserType userType = new PubFunc().new UserType();
-                                Log.d("SplashModel", "foroshandehAmoozeshiModelList:" + foroshandehAmoozeshiModelList.toString() + " , IMEI: " + IMEI);
-                                userType.checkUserType(mPresenter.getAppContext(), foroshandehAmoozeshiModelList, IMEI);
-
-                                mPresenter.onGetForoshandehAmoozeshi(true, false);
-                            } catch (Exception exception) {
-                                exception.printStackTrace();
-                                setLogToDB(exception.getMessage(), SplashModel.class.getSimpleName(), "", "getForoshandehAmoozeshi", "onResponse");
+                            @Override
+                            public void onFailed(String type, String error) {
+                                setLogToDB(error, SplashModel.class.getSimpleName(), "", "getForoshandehAmoozeshi", "onFailure");
                                 mPresenter.onNetworkError(true);
                             }
-                        } else {
-                            mPresenter.onNetworkError(true);
-                        }
-                    }
+                        });
 
-                    @Override
-                    public void onFailure(Call<GetForoshandehAmoozeshiResult> call, Throwable t) {
-                        Log.d("fail", "error message : " + t.getMessage());
-                        setLogToDB(t.getMessage(), SplashModel.class.getSimpleName(), "", "getForoshandehAmoozeshi", "onFailure");
-                        mPresenter.onNetworkError(true);
-                    }
-                });
+                        break;
+
+                    case gRPC:
+                        foroshandehAmoozeshiDeviceNumberDAO.getForoshandehAmoozeshiGrpc(mPresenter.getAppContext(), serverIpModel, SplashActivity.class.getSimpleName(), new RetrofitResponse() {
+                            @Override
+                            public void onSuccess(ArrayList arrayListData) {
+                                try {
+                                    List<ForoshandehAmoozeshiModel> foroshandehAmoozeshiModelList = arrayListData;
+                                    if (foroshandehAmoozeshiModelList.size() > 0) {
+                                        ForoshandehAmoozeshiDeviceNumberDAO foroshandehAmoozeshiDAO = new ForoshandehAmoozeshiDeviceNumberDAO(mPresenter.getAppContext());
+                                        foroshandehAmoozeshiDAO.deleteAll();
+                                        foroshandehAmoozeshiDAO.insertGroup(foroshandehAmoozeshiModelList);
+                                    }
+
+                                    PubFunc.UserType userType = new PubFunc().new UserType();
+                                    Log.d("SplashModel", "foroshandehAmoozeshiModelList:" + foroshandehAmoozeshiModelList.toString() + " , IMEI: " + IMEI);
+                                    userType.checkUserType(mPresenter.getAppContext(), foroshandehAmoozeshiModelList, IMEI);
+
+                                    mPresenter.onGetForoshandehAmoozeshi(true, false);
+                                } catch (Exception exception) {
+                                    exception.printStackTrace();
+                                    setLogToDB(exception.getMessage(), SplashModel.class.getSimpleName(), "", "getForoshandehAmoozeshi", "onResponse");
+                                    mPresenter.onNetworkError(true);
+                                }
+                            }
+
+                            @Override
+                            public void onFailed(String type, String error) {
+                                setLogToDB(error, SplashModel.class.getSimpleName(), "", "getForoshandehAmoozeshi", "onFailure");
+                                mPresenter.onNetworkError(true);
+                            }
+                        });
+
+                        break;
+                }
             }
         }
     }
@@ -606,6 +704,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
      **/
     @Override
     public void getForoshandehMamorPakhsh() {
+        Log.d("splashModel", "getForoshandehMamorPakhsh" );
         PubFunc.DeviceInfo deviceInfo = new PubFunc().new DeviceInfo();
         final String deviceIMEI = deviceInfo.getIMEI(mPresenter.getAppContext());
         Log.d("SplashModel", "deviceIMEI:" + deviceIMEI);
@@ -621,63 +720,100 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
             if (serverIpModel.getServerIp().equals("") || serverIpModel.getPort().equals("")) {
                 mPresenter.onNetworkError(true);
             } else {
-                APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);//ApiClient.getClient(serverIP, port).create(APIServiceGet.class);
-                Call<GetForoshandehMamorPakhshResult> call = apiServiceGet.getForoshandehMamorPakhsh(usingIMEI);
-                call.enqueue(new Callback<GetForoshandehMamorPakhshResult>() {
-                    @Override
-                    public void onResponse(Call<GetForoshandehMamorPakhshResult> call, Response<GetForoshandehMamorPakhshResult> response) {
-                        if (response.raw().body() != null) {
-                            Log.d("intercept", "in on response SplashModel.getForoshandehMamorPakhsh and response : " + response.raw().body().contentLength());
-                            long contentLength = response.raw().body().contentLength();
-                            PubFunc.Logger logger = new PubFunc().new Logger();
-                            logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, SplashModel.class.getSimpleName(), "", "getForoshandehMamorPakhsh", "onResponse");
-                        }
-                        if (response.isSuccessful()) {
-                            try {
-                                List<ForoshandehMamorPakhshModel> listForoshandehMamorPakhsh = response.body().getData();
-                                Log.d("SplashModel", "listForoshandehMamorPakhsh:" + listForoshandehMamorPakhsh.toString());
-                                if (listForoshandehMamorPakhsh.size() > 0) {
-                                    ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-                                    foroshandehMamorPakhshDAO.deleteAll();
+                switch (serverIpModel.getWebServiceType()){
+                    case REST:
+                        new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).fetchForoshandehMamorPakhshForUpdate(mPresenter.getAppContext(), SplashActivity.class.getSimpleName(), usingIMEI, new RetrofitResponse() {
+                            @Override
+                            public void onSuccess(ArrayList arrayListData) {
+                                try {
+                                    List<ForoshandehMamorPakhshModel> listForoshandehMamorPakhsh = arrayListData;
+                                    Log.d("SplashModel", "listForoshandehMamorPakhsh:" + listForoshandehMamorPakhsh.toString());
+                                    if (listForoshandehMamorPakhsh.size() > 0) {
+                                        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
+                                        foroshandehMamorPakhshDAO.deleteAll();
 //                                    ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = listForoshandehMamorPakhsh.get(0);
 //                                    foroshandehMamorPakhshModel.setExtraPropIsSelect(0);
 //                                    foroshandehMamorPakhshDAO.insert(foroshandehMamorPakhshModel);
-                                    foroshandehMamorPakhshDAO.insertGroup(listForoshandehMamorPakhsh);
-                                    GetProgramShared getProgramShared = new GetProgramShared(mPresenter.getAppContext());
-                                    int selectCcforoshandeh = Integer.valueOf(getProgramShared.getString(getProgramShared.SELECT_FOROSHANDEH() , "0"));
-                                    if(selectCcforoshandeh!=0 && foroshandehMamorPakhshDAO.getByccForoshandeh(selectCcforoshandeh)!=null)
-                                        foroshandehMamorPakhshDAO.updateIsSelect(selectCcforoshandeh);
-                                    else
-                                        foroshandehMamorPakhshDAO.updateIsSelect(foroshandehMamorPakhshDAO.getSplash().getCcForoshandeh());
-                                    mPresenter.onGetForoshandehMamorPakhsh(true, false);
-                                } else {
-                                    mPresenter.onGetEmptyForoshandehMamorPakhsh(deviceIMEI);
+                                        foroshandehMamorPakhshDAO.insertGroup(listForoshandehMamorPakhsh);
+                                        GetProgramShared getProgramShared = new GetProgramShared(mPresenter.getAppContext());
+                                        int selectCcforoshandeh = Integer.valueOf(getProgramShared.getString(getProgramShared.SELECT_FOROSHANDEH(), "0"));
+                                        if (selectCcforoshandeh != 0 && foroshandehMamorPakhshDAO.getByccForoshandeh(selectCcforoshandeh) != null)
+                                            foroshandehMamorPakhshDAO.updateIsSelect(selectCcforoshandeh);
+                                        else
+                                            foroshandehMamorPakhshDAO.updateIsSelect(foroshandehMamorPakhshDAO.getSplash().getCcForoshandeh());
+                                        mPresenter.onGetForoshandehMamorPakhsh(true, false);
+                                    } else {
+                                        mPresenter.onGetEmptyForoshandehMamorPakhsh(deviceIMEI);
+                                    }
+                                } catch (Exception exception) {
+                                    setLogToDB(exception.getMessage(), SplashModel.class.getSimpleName(), "", "getForoshandehMamorPakhsh", "onResponse");
+                                    exception.printStackTrace();
+                                    mPresenter.onNetworkError(true);
                                 }
-                            } catch (Exception exception) {
-                                setLogToDB(exception.getMessage(), SplashModel.class.getSimpleName(), "", "getForoshandehMamorPakhsh", "onResponse");
-                                exception.printStackTrace();
+                            }
+
+                            @Override
+                            public void onFailed(String type, String error) {
+                                setLogToDB(error, SplashModel.class.getSimpleName(), "", "getForoshandehMamorPakhsh", "onFailure");
                                 mPresenter.onNetworkError(true);
                             }
-                        } else {
-                            mPresenter.onNetworkError(true);
-                        }
-                    }
+                        });
+                        break;
 
-                    @Override
-                    public void onFailure(Call<GetForoshandehMamorPakhshResult> call, Throwable t) {
-                        setLogToDB(t.getMessage(), SplashModel.class.getSimpleName(), "", "getForoshandehMamorPakhsh", "onFailure");
-                        mPresenter.onNetworkError(true);
-                    }
-                });
+
+                    case gRPC:
+                        new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).fetchForoshandehMamorPakhshForUpdateGrpc(mPresenter.getAppContext(), SplashActivity.class.getSimpleName(), usingIMEI, new RetrofitResponse() {
+                            @Override
+                            public void onSuccess(ArrayList arrayListData) {
+                                try {
+                                    List<ForoshandehMamorPakhshModel> listForoshandehMamorPakhsh = arrayListData;
+                                    Log.d("SplashModel", "listForoshandehMamorPakhsh:" + listForoshandehMamorPakhsh.toString());
+                                    if (listForoshandehMamorPakhsh.size() > 0) {
+                                        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
+                                        foroshandehMamorPakhshDAO.deleteAll();
+//                                    ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = listForoshandehMamorPakhsh.get(0);
+//                                    foroshandehMamorPakhshModel.setExtraPropIsSelect(0);
+//                                    foroshandehMamorPakhshDAO.insert(foroshandehMamorPakhshModel);
+                                        foroshandehMamorPakhshDAO.insertGroup(listForoshandehMamorPakhsh);
+                                        GetProgramShared getProgramShared = new GetProgramShared(mPresenter.getAppContext());
+                                        int selectCcforoshandeh = Integer.valueOf(getProgramShared.getString(getProgramShared.SELECT_FOROSHANDEH(), "0"));
+                                        if (selectCcforoshandeh != 0 && foroshandehMamorPakhshDAO.getByccForoshandeh(selectCcforoshandeh) != null)
+                                            foroshandehMamorPakhshDAO.updateIsSelect(selectCcforoshandeh);
+                                        else
+                                            foroshandehMamorPakhshDAO.updateIsSelect(foroshandehMamorPakhshDAO.getSplash().getCcForoshandeh());
+                                        mPresenter.onGetForoshandehMamorPakhsh(true, false);
+                                    } else {
+                                        mPresenter.onGetEmptyForoshandehMamorPakhsh(deviceIMEI);
+                                    }
+                                } catch (Exception exception) {
+                                    setLogToDB(exception.getMessage(), SplashModel.class.getSimpleName(), "", "getForoshandehMamorPakhsh", "onResponse");
+                                    exception.printStackTrace();
+                                    mPresenter.onNetworkError(true);
+                                }
+                            }
+
+                            @Override
+                            public void onFailed(String type, String error) {
+                                setLogToDB(error, SplashModel.class.getSimpleName(), "", "getForoshandehMamorPakhsh", "onFailure");
+                                mPresenter.onNetworkError(true);
+                            }
+                        });
+
+                        break;
+                }
+
+
             }
         }
     }
+
 
     /**
      * get user type
      */
     @Override
     public void getUserType() {
+        Log.d("splashModel", "getUserType" );
         UserTypeShared userTypeShared = new UserTypeShared(mPresenter.getAppContext());
         int isTest = userTypeShared.getInt(userTypeShared.USER_TYPE(), 0); //0-Main , 1-Test
         mPresenter.onGetUserType(isTest);
@@ -689,6 +825,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
     @Override
     public void getIMEI()
     {
+        Log.d("splashModel", "getIMEI" );
         PubFunc.DeviceInfo deviceInfo = new PubFunc().new DeviceInfo();
         String IMEI = deviceInfo.getIMEI(mPresenter.getAppContext());
         Log.d("SplashModel","IMEI: "+IMEI);
@@ -701,6 +838,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
     @Override
     public void getAvailableEmail()
     {
+        Log.d("splashModel", "getAvailableEmail" );
         EmailLogPPCDAO emailLogPPCDAO = new EmailLogPPCDAO(mPresenter.getAppContext());
         EmailLogPPCModel emailLogPPCModel = emailLogPPCDAO.getRandom();
 
@@ -724,6 +862,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
     @Override
     public void getAppVersionName()
     {
+        Log.d("splashModel", "getAppVersionName" );
         Context context = mPresenter.getAppContext();
         try
         {
@@ -744,8 +883,10 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
      */
     @Override
     public void getServerVersion() {
+        Log.d("splashModel", "getServerVersion" );
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
-
+        //TODO must be modified
+        serverIpModel.setPort("8040");
         final ArrayList<ParameterChildModel> childParameterModelsDownloadUrls = new ParameterChildDAO(mPresenter.getAppContext()).getAllByccParameter(String.valueOf(Constants.CC_DOWNLOAD_URL()));
 
         if (serverIpModel.getServerIp().equals("") || serverIpModel.getPort().equals("")) {
@@ -809,6 +950,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
     @Override
     public void sendEmail(String message, String logClass, String logActivity,String logFunctionParent, String logFunctionChild)
     {
+        Log.d("splashModel", "sendEmail" );
         PubFunc.Logger logger = new PubFunc().new Logger();
         logger.sendLogToMail(mPresenter.getAppContext(), message, logClass, logActivity, logFunctionParent, logFunctionChild, new AsyncTaskResponse() {
             @Override
@@ -822,6 +964,7 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
     @Override
     public void getLastLog()
     {
+        Log.d("splashModel", "getLastLog" );
         LogPPCDAO logPPCDAO = new LogPPCDAO(mPresenter.getAppContext());
         LogPPCModel logPPCModel = logPPCDAO.getLastUnsendLog();
         Log.d("logPPC" , logPPCModel.toString());

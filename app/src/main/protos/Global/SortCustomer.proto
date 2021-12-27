@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.SortCustomer.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "SortCustomerProto";
+
+package Global;
+
+
+
+
+service SortCustomer {
+
+  rpc GetSortCustomers (SortCustomerRequest) returns (SortCustomerReplyList);
+}
+
+
+message SortCustomerRequest {
+  string RoutesID = 1;
+}
+
+
+message SortCustomerReply {
+  int32	SortCustomerID = 1;
+  int32	CustomerID = 2;
+  int64	InvoiceRequestID = 3;
+  int32	RouteID = 4;
+  string	Date = 5;
+  string	Description = 6;
+  string	Image = 7;
+
+
+}
+
+message SortCustomerReplyList{
+  repeated SortCustomerReply SellReplies = 1;
+}

@@ -6,19 +6,34 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.MahalCodePostiModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetMahalCodePostiResult;
+import com.saphamrah.protos.AllDistrictPostalCodeGrpc;
+import com.saphamrah.protos.AllDistrictPostalCodeReply;
+import com.saphamrah.protos.AllDistrictPostalCodeReplyList;
+import com.saphamrah.protos.AllDistrictPostalCodeRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,6 +58,91 @@ public class MahalCodePostiDAO
             PubFunc.Logger logger = new PubFunc().new Logger();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), "MahalCodePostiDAO" , "" , "constructor" , "");
         }
+    }
+
+    private String[] allColumns()
+    {
+        return new String[]
+                {
+                        MahalCodePostiModel.COLUMN_ccMahal(),
+                        MahalCodePostiModel.COLUMN_ccMahalCodePosti(),
+                        MahalCodePostiModel.COLUMN_ccMantagheh(),
+                        MahalCodePostiModel.COLUMN_CodePosti_from(),
+                        MahalCodePostiModel.COLUMN_CodePosti_to(),
+                };
+    }
+
+    public void fetchMahalCodePostiGrpc(final Context context, final String activityNameForLog,final int ccMarkazForosh, final RetrofitResponse retrofitResponse) {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MahalCodePostiDAO.class.getSimpleName(), activityNameForLog, "fetchMahalCodePostiGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                AllDistrictPostalCodeGrpc.AllDistrictPostalCodeBlockingStub blockingStub = AllDistrictPostalCodeGrpc.newBlockingStub(managedChannel);
+                AllDistrictPostalCodeRequest request = AllDistrictPostalCodeRequest.newBuilder().setSellCenterID(String.valueOf(ccMarkazForosh)).build();
+
+                Callable<AllDistrictPostalCodeReplyList> replyListCallable = () -> blockingStub.getAllDistrictPostalCode(request);
+                RxAsync.makeObservable(replyListCallable)
+
+                        .map(replyList -> {
+                            ArrayList<MahalCodePostiModel> models = new ArrayList<>();
+                            for (AllDistrictPostalCodeReply reply : replyList.getAllDistrictPostalCodesList()) {
+                                MahalCodePostiModel model = new MahalCodePostiModel();
+
+
+                                model.setCcMahalCodePosti(reply.getPostalCodeDistrictID());
+                                model.setCcMahal(reply.getDistrictID());
+                                model.setCodePostiFrom(reply.getPostalCodeFrom());
+                                model.setCodePostiTo(reply.getPostalCodeTo());
+                                model.setCcMantagheh(reply.getAreaID());
+
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<MahalCodePostiModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<MahalCodePostiModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), MahalCodePostiDAO.class.getSimpleName(), activityNameForLog, "fetchMahalCodePostiGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+
     }
 
     public void fetchMahalCodePosti(final Context context, final String activityNameForLog,final int ccMarkazForosh, final RetrofitResponse retrofitResponse)
@@ -145,17 +245,7 @@ public class MahalCodePostiDAO
         }
     }
 
-    private String[] allColumns()
-    {
-        return new String[]
-        {
-            MahalCodePostiModel.COLUMN_ccMahal(),
-            MahalCodePostiModel.COLUMN_ccMahalCodePosti(),
-            MahalCodePostiModel.COLUMN_ccMantagheh(),
-            MahalCodePostiModel.COLUMN_CodePosti_from(),
-            MahalCodePostiModel.COLUMN_CodePosti_to(),
-        };
-    }
+
 
     public boolean insertGroup(ArrayList<MahalCodePostiModel> mahalCodePostiModels)
     {

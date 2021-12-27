@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.OptionalBonus.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "OptionalBonusProto";
+option objc_class_prefix = "HLW";
+
+package Sales;
+
+
+service OptionalBonus{
+  rpc GetOptionalBonus(OptionalBonusRequest) returns(OptionalBonusReplyList);
+}
+
+message OptionalBonusRequest{
+  string ccMarkazForosh = 1;
+
+
+}
+
+message OptionalBonusReply{
+  int32	JayezehID =1;
+  int32	RowBonusID =2;
+  int32	RowGoodBonusID = 3;
+  int32	GoodID =4;
+  int32	GoodCodeID=5;
+  string	OldGoodCode=6;
+  string	GoodName= 7;
+  int32	SellCenterID= 8;
+  float	SellPrice = 9;
+  int32	CustomerTypeID = 10;
+  int32	TypeCode = 11;
+  int32	VolumetricDiscountID  = 12;
+  int32	OriginalGoodCodeID = 13;
+
+
+}
+
+message OptionalBonusReplyList{
+  repeated OptionalBonusReply OptionalBonuses = 1;
+}

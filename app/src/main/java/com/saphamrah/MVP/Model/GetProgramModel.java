@@ -2571,7 +2571,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                         boolean insertResult = jayezehSatrDAO.insertGroup(arrayListData);
                         if (deleteResult && insertResult) {
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
-                            getJayezehSatr(getProgramType);
+                            getJayezehEntekhabi(getProgramType);
                         } else {
                             sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
                         }
@@ -2585,40 +2585,10 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                 mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
             }
         });
-        /*jayezehSatrDAO.fetchJayezehSatr(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        boolean deleteResult = jayezehSatrDAO.deleteAll();
-                        boolean insertResult = jayezehSatrDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult)
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            getJayezehSatr(getProgramType , String.valueOf(ccMarkazSazmanForosh));
-                        }
-                        else
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
-                        }
-                    }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
-            }
-        });*/
+
     }
 
-    private void getJayezehSatr(final int getProgramType) {
+    private void getJayezehEntekhabi(final int getProgramType) {
         final JayezehEntekhabiDAO jayezehEntekhabiDAO = new JayezehEntekhabiDAO(mPresenter.getAppContext());
         if (noeMasouliat != 4) {
             jayezehEntekhabiDAO.fetchJayezehEntekhabi(mPresenter.getAppContext(), activityNameForLog, String.valueOf(ccMarkazSazmanForosh), new RetrofitResponse() {

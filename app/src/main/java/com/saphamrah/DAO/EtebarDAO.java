@@ -71,7 +71,7 @@ public class EtebarDAO
         else
         {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-Call<GetEtebarResult> call = apiServiceGet.getEtebar(ccForoshandeh , ccAnbarak, flagUpdateEtebar);
+            Call<GetEtebarResult> call = apiServiceGet.getEtebar(ccForoshandeh , ccAnbarak, flagUpdateEtebar);
             call.enqueue(new Callback<GetEtebarResult>() {
                 @Override
                 public void onResponse(Call<GetEtebarResult> call, Response<GetEtebarResult> response)

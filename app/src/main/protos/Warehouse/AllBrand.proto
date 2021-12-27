@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Warehouse.AllBrand.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "AllBrandProto";
+option objc_class_prefix = "HLW";
+service AllBrand {
+  rpc GetAllBrand (AllBrandRequest) returns (AllBrandReplyList);
+}
+
+message AllBrandRequest {
+
+}
+
+message AllBrandReply {
+  int32 BrandID = 1;
+  string BrandName = 2;
+}
+
+message AllBrandReplyList{
+  repeated AllBrandReply allbrands = 1;
+}
+

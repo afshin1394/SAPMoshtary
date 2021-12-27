@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.Customer.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CustomerProto";
+
+package Sales;
+
+service CustomerByRouteID{
+  rpc GetCustomerByRouteID(CustomerByRouteIDRequest) returns(CustomerByRouteIDReplyList);
+}
+
+message CustomerByRouteIDRequest{
+  string SellerID = 1;
+  string  RouteID = 2;
+  string  CustomerCode= 3;
+}
+
+message CustomerByRouteIDReply{
+
+
+  int32	CustomerID = 1;
+  int32	PersonalID = 2;
+  string	CustomerName = 3;
+  string	SignsName = 4;
+  int32	Priority =5;
+  int32	RecieptionDuration=6;
+  string	CustomerCode =7;
+  string	Mobile =8;
+  int32	CustomerAllocationCodeType = 9;
+  int32	SaleManID = 10;
+  int32	RouteID = 11;
+  int32	VisitTour = 12;
+  int32	CarryingCodeType = 13;
+  string	FullCustomerName = 14;
+  string	LastCustomerName = 15;
+  int32	Degree = 16;
+  string	DegreeName = 17;
+  string	NationalCode = 18;
+  int32	PersonalityTypeCode = 19;
+  int32   CustomerTypeID = 20;
+  int32	GuildTypeID = 21;
+  string	NationalID = 22;
+  int32	SituationCode= 23;
+  int32	ShopArea = 24;
+  int32	HasStore = 25;
+  int32	ParentCustomerID = 26;
+  string	DateOfRoute = 27;
+  int32	SaleManCrediteConterol = 28;
+  int32	CashDuration = 29;
+  string	CustomerIntroductionDate = 30;
+  int32	OutOfRange = 31;
+
+}
+
+message CustomerByRouteIDReplyList{
+  repeated CustomerByRouteIDReply CustomerByRouteIDs = 1;
+}

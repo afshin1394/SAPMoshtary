@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.TakhfifSenfiModel;
@@ -17,13 +19,26 @@ import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvTakhfifSenfiByccMarkazForoshResult;
+import com.saphamrah.protos.GuildDiscountGrpc;
+import com.saphamrah.protos.GuildDiscountReply;
+import com.saphamrah.protos.GuildDiscountReplyList;
+import com.saphamrah.protos.GuildDiscountRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,38 +64,115 @@ public class TakhfifSenfiDAO {
 
     private String[] allColumns() {
         return new String[]
-                {
+        {
 
 
-                        TakhfifSenfiModel.COLUMN_Radif(),
-                        TakhfifSenfiModel.COLUMN_ccTakhfifSenfi(),
-                        TakhfifSenfiModel.COLUMN_CodeNoe(),
-                        TakhfifSenfiModel.COLUMN_SharhTakhfif(),
-                        TakhfifSenfiModel.COLUMN_NoeTedadRial(),
-                        TakhfifSenfiModel.COLUMN_NameNoeFieldMoshtary(),
-                        TakhfifSenfiModel.COLUMN_ccNoeFieldMoshtary(),
-                        TakhfifSenfiModel.COLUMN_Darajeh(),
-                        TakhfifSenfiModel.COLUMN_ccMarkazSazmanForosh(),
-                        TakhfifSenfiModel.COLUMN_ccNoeSenf(),
-                        TakhfifSenfiModel.COLUMN_NameNoeSenf(),
-                        TakhfifSenfiModel.COLUMN_NoeGheymat(),
-                        TakhfifSenfiModel.COLUMN_ccMoshtaryGharardad(),
-                        TakhfifSenfiModel.COLUMN_ccGorohTakidi(),
-                        TakhfifSenfiModel.COLUMN_ccMantagheh(),
-                        TakhfifSenfiModel.COLUMN_CodeNoeHaml(),
-                        TakhfifSenfiModel.COLUMN_ForJayezeh(),
-                        TakhfifSenfiModel.COLUMN_IsPelekani(),
-                        TakhfifSenfiModel.COLUMN_NameNoeField(),
-                        TakhfifSenfiModel.COLUMN_NoeVosol(),
-                        TakhfifSenfiModel.COLUMN_Olaviat(),
-                        TakhfifSenfiModel.COLUMN_txtNoeVosol()
+            TakhfifSenfiModel.COLUMN_Radif(),
+            TakhfifSenfiModel.COLUMN_ccTakhfifSenfi(),
+            TakhfifSenfiModel.COLUMN_CodeNoe(),
+            TakhfifSenfiModel.COLUMN_SharhTakhfif(),
+            TakhfifSenfiModel.COLUMN_NoeTedadRial(),
+            TakhfifSenfiModel.COLUMN_NameNoeFieldMoshtary(),
+            TakhfifSenfiModel.COLUMN_ccNoeFieldMoshtary(),
+            TakhfifSenfiModel.COLUMN_Darajeh(),
+            TakhfifSenfiModel.COLUMN_ccMarkazSazmanForosh(),
+            TakhfifSenfiModel.COLUMN_ccNoeSenf(),
+            TakhfifSenfiModel.COLUMN_NameNoeSenf(),
+            TakhfifSenfiModel.COLUMN_NoeGheymat(),
+            TakhfifSenfiModel.COLUMN_ccMoshtaryGharardad(),
+            TakhfifSenfiModel.COLUMN_ccGorohTakidi(),
+            TakhfifSenfiModel.COLUMN_ccMantagheh(),
+            TakhfifSenfiModel.COLUMN_CodeNoeHaml(),
+            TakhfifSenfiModel.COLUMN_ForJayezeh(),
+            TakhfifSenfiModel.COLUMN_IsPelekani(),
+            TakhfifSenfiModel.COLUMN_NameNoeField(),
+            TakhfifSenfiModel.COLUMN_NoeVosol(),
+            TakhfifSenfiModel.COLUMN_Olaviat(),
+            TakhfifSenfiModel.COLUMN_txtNoeVosol()
+        };
+    }
+
+    public void fetchTakhfifSenfiGrpc(final Context context, final String activityNameForLog, final String ccMarkazSazmanForosh, String ccTakhfifSenfi, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+//        ServerIpModel serverIpModel = new ServerIpModel();
+//        serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, TakhfifSenfiDAO.class.getSimpleName(), activityNameForLog, "fetchTakhfifSenfiGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                GuildDiscountGrpc.GuildDiscountBlockingStub guildDiscountBlockingStub = GuildDiscountGrpc.newBlockingStub(managedChannel);
+                GuildDiscountRequest guildDiscountRequest = GuildDiscountRequest.newBuilder().setRowTitleType("1").setGuildDiscountID(ccTakhfifSenfi).setSellCenterID(ccMarkazSazmanForosh).build();
+                Callable<GuildDiscountReplyList> guildDiscountReplyListCallable = () -> guildDiscountBlockingStub.getGuildDiscount(guildDiscountRequest);
+                RxAsync.makeObservable(guildDiscountReplyListCallable)
+                        .map(guildDiscountReplyList ->  {
+                            ArrayList<TakhfifSenfiModel> models = new ArrayList<>();
+                            for (GuildDiscountReply reply : guildDiscountReplyList.getGuildDiscountsList()) {
+
+                                TakhfifSenfiModel model = new TakhfifSenfiModel();
+                                model.setCcTakhfifSenfi(reply.getGuildDiscountID());
+                                model.setCodeNoe(reply.getTypeCode());
+                                model.setSharhTakhfif(reply.getDiscountDescription());
+                                model.setNoeTedadRial(reply.getRialCountType());
+                                model.setNameNoeFieldMoshtary(reply.getCustomerFieldTypeName());
+                                model.setCcNoeFieldMoshtary(reply.getCustomerFieldTypeID());
+                                model.setDarajeh(reply.getDegree());
+                                model.setRadif(reply.getRow());
+                                model.setCcMarkazSazmanForosh(reply.getSellOrganizationCenterID());
+                                model.setCcNoeSenf(reply.getGuildTypeID());
+                                model.setNameNoeSenf(reply.getGuildTypeName());
+                                model.setCcMoshtrayGharardad(reply.getCustomerContractID());
+                                model.setOlaviat(reply.getPriority());
+                                model.setNoeGheymat(reply.getPriceType());
+                                model.setNoeVosol(reply.getReceiptType());
+                                model.setTxtNoeVosol(reply.getTxtReceiptType());
 
 
+                                models.add(model);
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<TakhfifSenfiModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
 
+                            @Override
+                            public void onNext(@NonNull ArrayList<TakhfifSenfiModel> takhfifSenfiModels) {
+                                retrofitResponse.onSuccess(takhfifSenfiModels);
+                            }
 
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
 
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
 
-                };
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), TakhfifSenfiDAO.class.getSimpleName(), activityNameForLog, "fetchTakhfifSenfiGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
     }
 
 
@@ -378,7 +470,7 @@ public class TakhfifSenfiDAO {
         return takhfifSenfiModels;
     }
 
-    public ArrayList<TakhfifSenfiTitrSatrModel> getByMoshtaryWithSatr(MoshtaryModel moshtary, int codeNoeHaml, boolean ShebhOmdeh, int CodeNoeVosol)
+    public ArrayList<TakhfifSenfiTitrSatrModel> getByMoshtaryWithSatr(MoshtaryModel moshtary, int codeNoeHaml, boolean ShebhOmdeh, int CodeNoeVosol, int Darajeh)
     {
         final int NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY = 1;
         final int NAME_NOE_FIELD_MOSHTARY_CC_GOROH = 2;
@@ -402,7 +494,8 @@ public class TakhfifSenfiDAO {
                 query += " ((NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= " + moshtary.getCcMoshtary() + ")"
                         + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= "+ccMoshtaryParent+")"
                         + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_GOROH + " AND ccNoeFieldMoshtary IN(" + ccNoeFieldMoshtarys + ") AND ccNoeSenf in (" + ccNoeSenfMoshtary + " , 0)))"
-                        + " AND CodeNoeHaml= " + codeNoeHaml + " AND NoeVosol IN(" + noeVosols + ") AND (Darajeh in ( " + moshtary.getDarajeh() + " , 0 ) AND ccMarkazSazmanForosh = "+ ccMarkazSazmanForosh +")"
+                       // + " AND CodeNoeHaml= " + codeNoeHaml + " AND NoeVosol IN(" + noeVosols + ") AND (Darajeh in ( " + moshtary.getDarajeh() + " , 0 ) AND ccMarkazSazmanForosh = "+ ccMarkazSazmanForosh +")"
+                        + " AND CodeNoeHaml= " + codeNoeHaml + " AND NoeVosol IN(" + noeVosols + ") AND (Darajeh in ( " + Darajeh + " , 0 ) AND ccMarkazSazmanForosh = "+ ccMarkazSazmanForosh +")"
                         + " AND (ccMoshtaryGharardad in (" + ccMoshtaryGharardad + " , 0 ))" ;
             }
             else
@@ -410,7 +503,7 @@ public class TakhfifSenfiDAO {
                 query += " ((NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= " + moshtary.getCcMoshtary() + ")"
                         + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= "+ccMoshtaryParent+")"
                         + " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_GOROH + " AND ccNoeFieldMoshtary IN(" + ccNoeFieldMoshtarys + ") AND ccNoeSenf in (" + ccNoeSenfMoshtary + " , 0)))"
-                        + " AND CodeNoeHaml= " + codeNoeHaml + " AND ccTakhfifSenfi<>1620  AND NoeVosol IN(" + noeVosols + ") AND (Darajeh in ( " + moshtary.getDarajeh() + " , 0) AND ccMarkazSazmanForosh = "+ ccMarkazSazmanForosh +")";
+                        + " AND CodeNoeHaml= " + codeNoeHaml + " AND ccTakhfifSenfi<>1620  AND NoeVosol IN(" + noeVosols + ") AND (Darajeh in ( " + Darajeh + " , 0) AND ccMarkazSazmanForosh = "+ ccMarkazSazmanForosh +")";
             }
             Log.d("TakhfifSatr" , "query : " + query);
             Cursor cursor = db.rawQuery(query , null);

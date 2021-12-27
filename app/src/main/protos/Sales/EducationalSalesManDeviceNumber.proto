@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.EducationalSalesManDeviceNumber.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "EducationalSalesManDeviceNumberProto";
+
+package Sales;
+
+
+service EducationalSalesManDeviceNumber{
+  rpc GetEducationalSalesManDeviceNumber(EducationalSalesManDeviceNumberRequest) returns(EducationalSalesManDeviceNumberReplyList);
+}
+
+message EducationalSalesManDeviceNumberRequest{
+  string DeviceSerialNumber = 1;
+
+
+
+}
+
+message EducationalSalesManDeviceNumberReply{
+  int32	DiveceNumberID = 1;
+  string	EducationalSalesManDeviceNumber = 2;
+  string	OrginalSalesManDeviceNumber = 3;
+
+}
+
+message EducationalSalesManDeviceNumberReplyList{
+  repeated EducationalSalesManDeviceNumberReply EducationalSalesManDeviceNumbers = 1;
+}

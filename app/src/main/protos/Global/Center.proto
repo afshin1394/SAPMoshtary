@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.Center.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "CenterProto";
+option objc_class_prefix = "HLW";
+package Global;
+
+
+service Center {
+  rpc GetCenter (CenterRequest) returns (CenterReplyList);
+}
+
+
+message CenterRequest {
+  string CenterID = 1;
+}
+
+message CenterReply {
+  int32 CenterID = 1;
+  string CenterCode = 2;
+  string CenterName = 3;
+  float latitude= 4;
+  float longitude = 5;
+
+}
+
+message CenterReplyList{
+  repeated CenterReply Centers = 1;
+}

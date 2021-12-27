@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Warehouse.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "PersonBinProto";
+option objc_class_prefix = "HLW";
+package Warehouse;
+
+
+service PersonsBin{
+  rpc GetPersonsBin(PersonsBinRequest) returns(PersonsBinReplyList);
+}
+
+message PersonsBinRequest{
+  string SellerPersonsDistributorID = 1;
+}
+
+message PersonsBinReply{
+  int32  SellerPersonsID = 1;
+  int32 DistributorPersonsID = 2;
+  int32 DriverPersonsID =3 ;
+  int32 AlternativeSellerPersonsID = 4;
+  int32 AlternativeDistributorPersonsID = 5;
+  int32 AlternativeDriverPersonsID =6;
+  int32 SellerTypeID =  7;
+  int32 BinID = 8;
+  string BinName = 9;
+
+
+}
+
+message PersonsBinReplyList{
+  repeated PersonsBinReply PersonsBins = 1;
+}
+

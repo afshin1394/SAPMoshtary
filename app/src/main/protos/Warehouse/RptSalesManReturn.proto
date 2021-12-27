@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Warehouse.RptSalesManReturn.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RptSalesManReturnProto";
+
+package Sales;
+
+
+service RptSalesManReturn{
+  rpc GetRptSalesManReturn(RptSalesManReturnRequest) returns(RptSalesManReturnReplyList);
+}
+
+message RptSalesManReturnRequest{
+  string PersonID = 1;
+}
+
+message RptSalesManReturnReply{
+  int32	Row = 1;
+  int64	ReturnAnnouncementID = 2;
+  int64	ReturnAnnouncementRowID = 3;
+  int64	InvoiceRequestID = 4;
+  string	InvoiceNumber = 5;
+  int32	CustomerID = 6;
+  string	CustomerCode = 7;
+  string	CustomerName = 8;
+  string	GoodsCode = 9;
+  string	GoodsName = 10;
+  int32	Quantity3 = 11;
+  string	BatchNumber = 12;
+  string	ProductionDate = 13;
+  string	ExpirationDate = 14;
+  int64	Price = 15;
+  int32	PrividerID = 16;
+  int64	ConsumerPrice = 17;
+
+
+}
+
+message RptSalesManReturnReplyList{
+  repeated RptSalesManReturnReply RptSalesManReturns = 1;
+}

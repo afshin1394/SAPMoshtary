@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.AllDistrictPostalCode.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "AllDistrictPostalCodeProto";
+package Global;
+
+service AllDistrictPostalCode{
+  rpc GetAllDistrictPostalCode(AllDistrictPostalCodeRequest) returns(AllDistrictPostalCodeReplyList);
+}
+
+message AllDistrictPostalCodeRequest{
+  string SellCenterID = 1;
+}
+
+message AllDistrictPostalCodeReply{
+  int32	PostalCodeDistrictID = 1;
+  int32	DistrictID =2;
+  string	PostalCodeFrom =3;
+  string	PostalCodeTo = 4;
+  int32	AreaID = 5;
+
+
+}
+
+message AllDistrictPostalCodeReplyList{
+  repeated AllDistrictPostalCodeReply AllDistrictPostalCodes = 1;
+}

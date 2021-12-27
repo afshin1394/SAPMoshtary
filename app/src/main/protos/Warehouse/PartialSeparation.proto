@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Warehouse.PartialSeparation.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "PartialSeparationProto";
+option objc_class_prefix = "HLW";
+package Warehouse;
+
+
+service PartialSeparation{
+  rpc GetPartialSeparation(PartialSeparationRequest) returns(PartialSeparationReplyList);
+}
+
+message PartialSeparationRequest{
+  string InvoiceRequestsID = 1;
+}
+
+message PartialSeparationReply
+{
+  int32	PartialSeparationID = 1;
+  int32	PartialSeparationNumber  = 2;
+}
+
+message PartialSeparationReplyList{
+  repeated PartialSeparationReply PartialSeparations = 1;
+}
+

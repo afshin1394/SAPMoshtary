@@ -1,12 +1,36 @@
 package com.saphamrah.PubFunc;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Application.BaseApplication;
+import com.saphamrah.DAO.MessageBoxDAO;
 import com.saphamrah.MVP.splash.SplashActivity;
+import com.saphamrah.MVP.splash.SplashModel;
+import com.saphamrah.Model.MessageBoxModel;
+import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.Network.RetrofitResponse;
+import com.saphamrah.Network.RxNetwork.RxCallback;
+import com.saphamrah.Network.RxNetwork.RxHttpRequest;
+import com.saphamrah.Network.RxNetwork.RxResponseHandler;
+import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
+import com.saphamrah.WebService.RxService.APIServiceRxjava;
+import com.saphamrah.WebService.RxService.Response.DataResponse.CodeMelyResponse;
+import com.saphamrah.protos.CheckPersonsGrpc;
+import com.saphamrah.protos.CheckPersonsReply;
+import com.saphamrah.protos.CheckPersonsRequest;
+import com.saphamrah.protos.MessageBoxGrpc;
+import com.saphamrah.protos.MessageBoxReply;
+import com.saphamrah.protos.MessageBoxReplyList;
+import com.saphamrah.protos.MessageBoxRequest;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,7 +40,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.Callable;
+
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 public class Authentication {
 
@@ -48,9 +82,111 @@ public class Authentication {
         return encryptedString;
 
     }
+    public void fetchUserHashKeyGrpc(Context context, String identityCode, RetrofitResponse retrofitResponse)
+        {
+            try {
+                ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+                if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                    String message = "can't find server";
+                    PubFunc.Logger logger = new PubFunc().new Logger();
+                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, MessageBoxDAO.class.getSimpleName(),context.getClass().getSimpleName() , "fetchMessagesGrpc", "");
+                    retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+                } else {
 
+                    CompositeDisposable compositeDisposable = new CompositeDisposable();
+                    ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                    CheckPersonsGrpc.CheckPersonsBlockingStub checkPersonsBlockingStub = CheckPersonsGrpc.newBlockingStub(managedChannel);
+                    CheckPersonsRequest request = CheckPersonsRequest.newBuilder().setIdentityCode(identityCode).build();
 
+                    Callable<CheckPersonsReply> replyListCallable = () -> checkPersonsBlockingStub.getCheckPersons(request);
+                    RxAsync.makeObservable(replyListCallable)
+                            .map(CheckPersonsReply::getOutput)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Observer<String>() {
+                                @Override
+                                public void onSubscribe(@NonNull Disposable d) {
+                                    compositeDisposable.add(d);
+                                }
 
+                                @Override
+                                public void onNext(@NonNull String output) {
+                                    ArrayList<String> outputs = new ArrayList<>();
+                                    outputs.add(output);
+
+                                    retrofitResponse.onSuccess(outputs);
+                                }
+
+                                @Override
+                                public void onError(@NonNull Throwable e) {
+                                    retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                                }
+
+                                @Override
+                                public void onComplete() {
+                                    if (!compositeDisposable.isDisposed()) {
+                                        compositeDisposable.dispose();
+                                    }
+                                    compositeDisposable.clear();
+                                }
+                            });
+
+                }
+            } catch (Exception exception) {
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), Authentication.class.getSimpleName(), context.getClass().getSimpleName() , "fetchMessagesGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+            }
+        }
+
+    private void fetchUserHashKey(Context context, String identityCode, RxResponseHandler rxResponseHandler) {
+
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+        Log.i("fetchUserHashKey", "fetchUserHashKey: " + serverIpModel.getPort() + " " + serverIpModel.getServerIp());
+        APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
+        RxHttpRequest.getInstance().execute(apiServiceRxjava.checkAfrad(identityCode), SplashActivity.class.getSimpleName(), SplashModel.class.getSimpleName(), "authenticateUser", new RxCallback<CodeMelyResponse>() {
+            @Override
+            public void onStart(Disposable disposable) {
+                rxResponseHandler.onStart(disposable);
+            }
+
+            @Override
+            public void onSuccess(CodeMelyResponse response) {
+                Log.i("fetchUserHashKey", "onSuccess: " + response.getMessage());
+                if (response != null) {
+                    if (response.getMessage() != null) {
+                        switch (response.getMessage()) {
+                            /**INVALID_IDENTITY_CODE**/
+                            case "-1":
+                                onError(context.getString(R.string.invalidIdentityCodeLength), "INVALID_IDENTITY_CODE_LENGTH");
+
+                                break;
+                            /**INVALID_IDENTITY_CODE_LENGTH**/
+                            case "-2":
+                                onError(context.getString(R.string.invalidIdentityCode), "INVALID_IDENTITY_CODE");
+
+                                break;
+                            /**VALID_IDENTITY_CODE**/
+                            case "1":
+                                ArrayList hashCode = new ArrayList();
+                                hashCode.add(response.getHashCode());
+                                rxResponseHandler.onSuccess(hashCode);
+                                break;
+
+                        }
+                    } else {
+                        onError(context.getString(R.string.invalidIdentityCodeLength), "INVALID_IDENTITY_CODE_LENGTH");
+                    }
+                }
+
+            }
+
+            @Override
+            public void onError(String message, String type) {
+                rxResponseHandler.onFailed(message, type);
+            }
+        });
+    }
 
     public String convertCharacters(String string) {
 
@@ -119,15 +255,22 @@ public class Authentication {
         }
     }
 
-    private String convertStreamToString(InputStream is) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-        String line = null;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line).append("\n");
+    private String convertStreamToString(InputStream is)  {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            reader.close();
+            return sb.toString();
         }
-        reader.close();
-        return sb.toString();
+        catch (Exception exception){
+            Log.i("convertStreamToString", "convertStreamToString: "+exception.getMessage());
+            return null;
+        }
+
     }
 
     private String getStringFromFile(String filePath) {
@@ -151,12 +294,14 @@ public class Authentication {
             logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), e.getMessage(), CLASS_NAME, SplashActivity.class.getSimpleName(), "encrypt", "getStringFromFile");
         }
         /**Make sure you close all streams.**/
-        try {
-            fin.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), e.getMessage(), CLASS_NAME, SplashActivity.class.getSimpleName(), "encrypt", "getStringFromFile");
+        if (fin!=null) {
+            try {
+                fin.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), e.getMessage(), CLASS_NAME, SplashActivity.class.getSimpleName(), "encrypt", "getStringFromFile");
+            }
         }
         return ret;
     }

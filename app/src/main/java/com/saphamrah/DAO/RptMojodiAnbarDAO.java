@@ -6,19 +6,35 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.saphamrah.Model.RotbehModel;
 import com.saphamrah.Model.RptMojodiAnbarModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetRptMojodiAnbarakResult;
+import com.saphamrah.protos.RptBinInventoryGrpc;
+import com.saphamrah.protos.RptBinInventoryReply;
+import com.saphamrah.protos.RptBinInventoryReplyList;
+import com.saphamrah.protos.RptBinInventoryRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,6 +81,102 @@ public class RptMojodiAnbarDAO
         };
     }
 
+
+    public void fetchRptMojodyAnbarakGrpc(final Context context, final String activityNameForLog, final String ccAnbarak , int ccForoshandeh , int ccMamorPakhsh ,int noeMasouliat , final RetrofitResponse retrofitResponse) {
+         /*
+        check noe masoliat for request
+         */
+        String ccAnbarakReq = ccAnbarak;
+        int ccForoshandehReq = ccForoshandeh;
+        int ccMamorPakhshReq = ccMamorPakhsh;
+
+        if (noeMasouliat ==  2 || noeMasouliat == 3){
+            ccMamorPakhshReq = 0;
+        }
+
+        if (noeMasouliat ==  4 || noeMasouliat == 5){
+            ccForoshandehReq = 0;
+        }
+        if (noeMasouliat ==  1 ){
+            ccAnbarakReq = "0";
+            ccMamorPakhshReq = 0;
+        }
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RotbehModel.class.getSimpleName(), activityNameForLog, "fetchMahalCodePostiGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                RptBinInventoryGrpc.RptBinInventoryBlockingStub blockingStub = RptBinInventoryGrpc.newBlockingStub(managedChannel);
+                RptBinInventoryRequest request = RptBinInventoryRequest.newBuilder().setBinID(ccAnbarakReq).setSalesManID(String.valueOf(ccForoshandehReq)).setDistributerID(String.valueOf(ccMamorPakhshReq)).build();
+
+                Callable<RptBinInventoryReplyList> replyListCallable = () -> blockingStub.getRptBinInventory(request);
+                RxAsync.makeObservable(replyListCallable)
+
+                        .map(replyList -> {
+                            ArrayList<RptMojodiAnbarModel> models = new ArrayList<>();
+                            for (RptBinInventoryReply reply : replyList.getRptBinInventorysList()) {
+                                RptMojodiAnbarModel model = new RptMojodiAnbarModel();
+
+
+                                model.setRadif(reply.getRow());
+                                model.setCcKalaCode(reply.getGoodsCodeID());
+                                model.setCodeKala(reply.getGoodsCode());
+                                model.setNameKala(reply.getGoodsName());
+                                model.setMandehMojodi_Karton(reply.getBoxRemainingInventory());
+                                model.setMandehMojodi_Basteh(reply.getPakageRemainingInventory());
+                                model.setMandehMojodi_Adad(reply.getNumberRemainingInventory());
+                                model.setIsAdamForosh(reply.getIsNonSell());
+                                model.setCcSazmanForosh(reply.getSellOrganizationID());
+                                model.setNameSazmanForosh(reply.getSellOrganizationName());
+                                models.add(model);
+                            }
+
+                            return models;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<RptMojodiAnbarModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<RptMojodiAnbarModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), RotbehModel.class.getSimpleName(), activityNameForLog, "fetchMahalCodePostiGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+
+    }
+
     public void fetchRptMojodyAnbarak(final Context context, final String activityNameForLog, final String ccAnbarak , int ccForoshandeh , int ccMamorPakhsh ,int noeMasouliat , final RetrofitResponse retrofitResponse)
     {
 
@@ -89,6 +201,8 @@ public class RptMojodiAnbarDAO
         Log.d("RptMojodyAnbarak","ccMamorPakhshReq"+ccMamorPakhshReq +" ,ccForoshandehReq"+ccForoshandehReq+", ccAnbarakReq:"+ccAnbarakReq);
 
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+        serverIpModel.setPort("8040");
+
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
         {
             String message = "can't find server";

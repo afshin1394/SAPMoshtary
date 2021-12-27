@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Warehouse.StorInventory.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "StorInventoryProto";
+option objc_class_prefix = "HLW";
+package Warehouse;
+
+
+service StorInventory{
+  rpc GetStorInventory(StorInventoryRequest) returns(StorInventoryReplyList);
+}
+
+message StorInventoryRequest{
+
+  string PersonID = 1;
+  string SellStructureSellOrganizationCenterID = 2;
+}
+
+message StorInventoryReply{
+  int32	Row = 1;
+  int32	GoodCodeID=2;
+  string	GoodCode=3;
+  string	GoodName=4;
+  int32	ConsumableIncentoryQuantity=5;
+  int32	ProviderID =6;
+  int32	QuantityInBox=7;
+  int32	QuantityInPackage=8;
+  int32	Number=9;
+  string	SortCode=10;
+  int32	Taxable =11;
+  float	SellPrice=12;
+  float	LastSellPrice=13;
+  float	ConsumerPrice=14;
+  int32	GoodGroupID=15;
+  int32	BrandID=16;
+  float	BuyPrice=17;
+  float	Length=18;
+  float	Width=19;
+  float	Height=20;
+  int32	SizeUnitID=21;
+  float	NetWeight=22;
+  float	GrossWeight=23;
+  float	BoxWeight=24;
+  int32	UnitWeightID=25;
+  string	Barcode=26;
+  string	ProductionDate=27;
+  string	UnitWeightName=28;
+  string	BrandName=29;
+  string	SizeUnitName=30;
+  int32	CountingUnitID=31;
+  string	CountingUnitName=32;
+  string	ExpirationDate=33;
+  string	BatchNumber=34;
+  float	OriginalSellPrice=35;
+  float	OrginalConsumerPrice=36;
+
+}
+
+message StorInventoryReplyList{
+  repeated StorInventoryReply StorInventorys = 1;
+}

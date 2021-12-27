@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.DirectionCarWeightVolume.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "DirectionCarWeightVolumeProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+
+service DirectionCarWeightVolume{
+	rpc GetDirectionCarWeightVolume(DirectionCarWeightVolumeRequest) returns(DirectionCarWeightVolumeReplyList);
+}
+
+message DirectionCarWeightVolumeRequest{
+ string RouteID = 1;
+}
+
+message DirectionCarWeightVolumeReply{
+         int32 RouteID = 1;
+         int32 CustomerID = 2;
+         int32 CarWeight = 3;
+         float CarCapacity  = 4;
+}
+
+message DirectionCarWeightVolumeReplyList{
+	repeated DirectionCarWeightVolumeReply DirectionCarWeightVolumes = 1;
+}
+

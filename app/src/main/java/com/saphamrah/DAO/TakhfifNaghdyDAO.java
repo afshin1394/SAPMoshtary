@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.TakhfifNaghdyModel;
@@ -13,13 +15,26 @@ import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllvTakhfifNaghdyByccMarkazForoshResult;
+import com.saphamrah.protos.CashDiscountGrpc;
+import com.saphamrah.protos.CashDiscountReply;
+import com.saphamrah.protos.CashDiscountReplyList;
+import com.saphamrah.protos.CashDiscountRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,6 +78,81 @@ public class TakhfifNaghdyDAO
             TakhfifNaghdyModel.COLUMN_ccNoeSenf(),
             TakhfifNaghdyModel.COLUMN_NameNoeSenf()
         };
+    }
+
+    public void fetchTakhfifNaghdyGrpc(final Context context, final String activityNameForLog,final String ccMarkazSazmanForosh, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            //       ServerIpModel serverIpModel = new ServerIpModel();
+            //       serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, TakhfifNaghdyDAO.class.getSimpleName(), activityNameForLog, "fetchTakhfifNaghdyGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                CashDiscountGrpc.CashDiscountBlockingStub cashDiscountBlockingStub = CashDiscountGrpc.newBlockingStub(managedChannel);
+                CashDiscountRequest cashDiscountRequest = CashDiscountRequest.newBuilder().setSellOrganizationCenterID(ccMarkazSazmanForosh).build();
+                Callable<CashDiscountReplyList> cashDiscountReplyListCallable = () -> cashDiscountBlockingStub.getCashDiscounts(cashDiscountRequest);
+                RxAsync.makeObservable(cashDiscountReplyListCallable)
+                        .map(cashDiscountReplyList ->  {
+                            ArrayList<TakhfifNaghdyModel> models = new ArrayList<>();
+                            for (CashDiscountReply reply : cashDiscountReplyList.getCashDiscountsList()) {
+                                TakhfifNaghdyModel model = new TakhfifNaghdyModel();
+                                model.setDarsadTakhfif(reply.getDiscountPercentage());
+                                model.setCcTakhfifNaghdy(reply.getCashDiscountID());
+                                model.setSharhTakhfif(reply.getDiscountDescription());
+                                model.setDarajeh(reply.getDegree());
+                                model.setCcNoeFieldMoshtary(reply.getCustomerFieldTypeID());
+                                model.setCodeNoe(reply.getTypeCode());
+                                model.setCcNoeSenf(reply.getGuildTypeID());
+                                model.setCodeNoeMohasebeh(reply.getCalculationTypeCode());
+                                model.setNameNoeFieldMoshtary(reply.getCustomerFieldTypeName());
+                                model.setNameNoeSenf(reply.getGuildTypeName());
+                                model.setCcMarkazSazmanForosh(reply.getSellOrganizationCenterID());
+                                models.add(model);
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<TakhfifNaghdyModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<TakhfifNaghdyModel> rptSanadModels) {
+                                retrofitResponse.onSuccess(rptSanadModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), TakhfifNaghdyDAO.class.getSimpleName(), activityNameForLog, "fetchTakhfifNaghdyGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
     }
 
     public void fetchTakhfifNaghdy(final Context context, final String activityNameForLog,final String ccMarkazSazmanForosh, final RetrofitResponse retrofitResponse)
@@ -301,7 +391,7 @@ Call<GetAllvTakhfifNaghdyByccMarkazForoshResult> call = apiServiceGet.getAllvTak
         return takhfifNaghdyModels;
     }
 
-    public ArrayList<TakhfifNaghdyModel> getByMoshtary(MoshtaryModel moshtaryModel  , int ccGoroh)
+    public ArrayList<TakhfifNaghdyModel> getByMoshtary(MoshtaryModel moshtaryModel  , int ccGoroh, int Darajeh)
     {
         final int NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY = 1;
         final int NAME_NOE_FIELD_MOSHTARY_CC_GOROH = 2;
@@ -316,7 +406,8 @@ Call<GetAllvTakhfifNaghdyByccMarkazForoshResult> call = apiServiceGet.getAllvTak
                             " (ccMarkazSazmanForosh = ? AND Darajeh in (? , 0) And ((NameNoeFieldMoshtary = ? AND ccNoeFieldMoshtary = ?)"
                                     //+ " OR (NameNoeFieldMoshtary = ? AND ccNoeFieldMoshtary = ?)"
                                     + " OR (NameNoeFieldMoshtary = ? AND ccNoeFieldMoshtary IN(?, ?) AND ccNoeSenf in (" + moshtaryModel.getCcMoshtary() + " , 0))))",
-                            new String[]{String.valueOf(ccMarkazSazmanForosh) ,String.valueOf(moshtaryModel.getDarajeh()), String.valueOf(NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY), String.valueOf(moshtaryModel.getCcMoshtary()),
+                         //   new String[]{String.valueOf(ccMarkazSazmanForosh) ,String.valueOf(moshtaryModel.getDarajeh()), String.valueOf(NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY), String.valueOf(moshtaryModel.getCcMoshtary()),
+                            new String[]{String.valueOf(ccMarkazSazmanForosh) ,String.valueOf(Darajeh), String.valueOf(NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY), String.valueOf(moshtaryModel.getCcMoshtary()),
                                     String.valueOf(NAME_NOE_FIELD_MOSHTARY_CC_GOROH), String.valueOf(ccGoroh), String.valueOf(GOROH_LINK_NOE_MOSHTARY)},
                             null, null, null);
             if (cursor != null)

@@ -44,7 +44,8 @@ public class ServerIPDAO
             ServerIpModel.COLUMN_NameServerIP(),
             ServerIpModel.COLUMN_IsTest(),
             ServerIpModel.COLUMN_Server_Type(),
-            ServerIpModel.COLUMN_NameServerPersian()
+            ServerIpModel.COLUMN_NameServerPersian(),
+            ServerIpModel.COLUMN_WebServiceType()
         };
     }
 
@@ -276,6 +277,7 @@ public class ServerIPDAO
             serverIpModel.setTest(cursor.getInt(cursor.getColumnIndex(ServerIpModel.COLUMN_IsTest())));
             serverIpModel.setServerType(cursor.getInt(cursor.getColumnIndex(ServerIpModel.COLUMN_Server_Type())));
             serverIpModel.setNameServerPersian(cursor.getString(cursor.getColumnIndex(ServerIpModel.COLUMN_NameServerPersian())));
+            serverIpModel.setWebServiceType(cursor.getInt(cursor.getColumnIndex(ServerIpModel.COLUMN_WebServiceType())));
 
             arrayListServerIPs.add(serverIpModel);
             cursor.moveToNext();

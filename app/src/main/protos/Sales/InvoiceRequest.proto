@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.InvoiceRequest.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "InvoiceRequestProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+service InvoiceRequest{
+  rpc GetInvoiceRequest(InvoiceRequestRequest) returns(InvoiceRequestReplyList);
+}
+
+message InvoiceRequestRequest{
+  int32 PersonsID = 1;
+  string CustomersID = 2;
+}
+
+message InvoiceRequestReply{
+  int32 InvoiceRequestID = 1;
+  string InvoiceDate = 2;
+  int32 RequestNumber = 3;
+  int32 InvoiceNumber  = 4;
+  int32 SellerID = 5;
+  int32 CustomerID = 6;
+  string SendDate  = 7;
+  int32 HeadingDayDuration  = 8;
+  int32 ReceiptDuration = 9;
+  int32 CustomerReceiptCodeType = 10;
+  float InvoicePriceBeforeDiscount = 11;
+  float PureInvoicePrice = 12;
+  int32 ToResponsibilityOf = 13;
+  int32 CarryingCodeType  = 14;
+  float TaxSum = 15;
+  float ComplicationsSum = 16;
+  string ShopEntranceTime  = 17;
+  string ShopExitTime  = 18;
+  int32 SituationCode = 19;
+  float Latitude = 20;
+  float Longitude = 21;
+  string PPC_VersionNumber = 22;
+  string PPC_Version_Date = 23;
+  float CashDiscount  = 24;
+  int32 CustomerAddressID = 25;
+  int32 RequestSumPrice = 26;
+  int32 CompleteReturn  = 27;
+  string CustomerReceiptTypeName  =28;
+  string CarryingNameType = 29;
+  string SituationName = 30;
+  string DeliveryTypeName = 31;
+  int32 SellCenterID = 32;
+  int32 SellOrganizationID = 33;
+  int32 SellOrganizationCenterID = 34;
+  int32 SellStructureSellOrganizationCenterID  = 35;
+  int32 StoreCenterID = 36;
+  int32 DiscountDuration =37;
+  int64 TodayInvoice  = 38;
+  int64 ReceiptPrice  = 39;
+  int64 RemainingPrice = 40;
+  int64 PartialSeparationID = 41;
+  int32 Degree = 42;
+  string CenterCode = 43;
+  int32 ForSell = 44;
+  int32 ForClearingTreasury  = 45;
+  string Tablet_UniqueID = 46;
+  string CustomerCode = 47;
+  int32 DraftInvoiceType  = 48;
+  int32 UserID  = 49;
+  int32 EnterCodeType = 51;
+  int32 InvoiceDiscountAmountTitle = 54;
+  int32 InvoiceDiscountAmountRow = 55;
+  int32 ExtrasPrice = 56;
+  int32 CustomerTypeID = 58;
+  int32 GuildTypeID = 59;
+  float InvoiceNumberIndex = 60;
+  int32 FinancialDurationID = 61;
+  float CustomerRemainingPrice = 62;
+  string RequestAbsence = 64;
+  string GetInventories = 65;
+  int32 SellTypeInvoiceRequestID = 67;
+  int32 IsAccelerated = 68;
+  int32 IsDelayed = 69;
+  int32 SellOrganizationCustomerContractID = 70;
+  int32 CustomerContractID = 71;
+  int32 DiscountInvoiceRequests = 72;
+  int32 RowInvoiceRequests = 73;
+  string DeliveryPredictDate = 74;
+  float InvoiceSumPrice = 75;
+
+}
+
+message InvoiceRequestReplyList{
+  repeated InvoiceRequestReply InvoiceRequests = 1;
+}
+

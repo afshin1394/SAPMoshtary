@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Global.SalesManDistributor.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "SalesManDistributorProto";
+option objc_class_prefix = "HLW";
+package Global;
+
+service SalesManDistributor {
+
+  rpc GetSalesManDistributor (SalesManDistributorRequest) returns (SalesManDistributorReplyList);
+}
+
+
+message SalesManDistributorRequest {
+  string DeviceSerialNumber = 1;
+}
+
+
+message SalesManDistributorReply {
+  int32	ResponsibilityType = 1;
+  int32	SalesManID =2;
+  int32	DistributorID =3;
+  int32  StatisticianID = 4;
+  int32	PersonID =5;
+  int32	ManagerPersonID = 6;
+  string	SalesManCode = 7;
+  string	FullName = 8;
+  string	DeviceSerialNumber = 9;
+  int32	CanGetProgram = 10;
+  int32	CanGetInvoiceOutOfArea = 11;
+  int32	CanGetPhoneRequest = 12;
+  int32	CanGetSortPhoto = 13;
+  int32	CanChangeCustomerPosition =14;
+  int32	SalesManDistributorType=15;
+  int32	SellCenterID=16;
+  int32	StoreCenterID=17;
+  string	SellCenterName=18;
+  string	StoreCenterName=19;
+  int32	ReturnedChequeMaxNumber=20;
+  int64	ReturnedChequeMaxPrice=21;
+  int32	ReturnedChequeMaxDuration= 22;
+  int32	MaxChequeReceipt= 23;
+  int32	MaxCashReceipt = 24;
+  string	SellStructureSellOrganizationCenterName = 25;
+  string	SellOrganizationName = 26;
+  string	BranchPhoneNumber = 27;
+  string	SalesManDistributerPhoneNumber = 28;
+  string	PosNumber = 29;
+  int32	PosAccountNumberID = 30;
+  int32	CenterID = 31;
+  int32	IsValidForRegisterRequest = 32;
+  int32	SellStructureSellOrganizationCenterID = 33;
+  int32	SellOrganizationCenterID = 34;
+  int32	SellOrganizationID = 35;
+  int32	CanGetReturned = 36;
+  int32 ReturnedRegisteredType =37;
+  int32  SellTypeInvoiceRequestID = 38;
+  int32	MachineID = 39;
+  int32	flag_RegisterCash =40;
+  string	SalesManIDs = 41;
+  int32	StoreID = 42;
+  int32	BinID = 43;
+  int32  CheckCustomerPriority = 44;
+  string FromDateOutOfArea = 45;
+  string EndDateOutOfArea = 46;
+  int32 ReceiptStoreCenterID = 47;
+  int32 ReturnedStoreID = 48;
+  int32 ReturnedStoreTypeCode = 49;
+
+
+
+
+}
+
+
+
+
+message SalesManDistributorReplyList{
+  repeated SalesManDistributorReply SalesManDistributors = 1;
+}
