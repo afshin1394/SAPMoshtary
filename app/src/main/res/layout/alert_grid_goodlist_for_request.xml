@@ -7,42 +7,50 @@
     android:layout_height="match_parent"
     android:background="@drawable/altdlg_bg"
     android:layoutDirection="rtl">
+
     <LinearLayout
+        android:id="@+id/linTopLevel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="18"
-        android:id="@+id/linTopLevel">
+        android:orientation="horizontal">
 
         <com.saphamrah.CustomView.CustomTextInputLayout
+            android:id="@+id/txtinputSearchKalaName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/txtinputSearchKalaName"
-            android:layout_weight="16"
-            android:layout_marginRight="5dp"
+            android:layout_alignParentTop="true"
             android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="0.5"
             android:layoutDirection="rtl"
             android:textDirection="rtl"
-            android:theme="@style/TextInputLayoutTheme"
-            android:layout_alignParentTop="true">
+            android:theme="@style/TextInputLayoutTheme">
+
             <EditText
+                android:id="@+id/txtSearchKalaNameGridView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtSearchKalaNameGridView"
                 android:hint="@string/searchKalaName"
-                android:textSize="@dimen/FontSize16"
-                android:textColor="@color/colorTextPrimary"
                 android:inputType="text"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/FontSize16" />
         </com.saphamrah.CustomView.CustomTextInputLayout>
+
+        <Spinner
+            android:id="@+id/spinnerKalaFilter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3" />
+
         <ImageButton
+            android:id="@+id/btnChooseShowType"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:id="@+id/btnChooseShowType"
-            android:background="@color/mdtp_white"
-            android:layout_marginTop="@dimen/_4sdp"
             android:layout_marginLeft="@dimen/_5sdp"
-            android:layout_weight="2"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_weight="0.1"
+            android:background="@color/mdtp_white"
             android:gravity="center"
             android:scaleType="fitXY"
             android:text="@string/chooseItemShowType"

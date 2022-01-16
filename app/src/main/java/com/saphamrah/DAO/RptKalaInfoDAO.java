@@ -5,20 +5,36 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.RptKalaInfoModel;
 import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.Network.RxNetwork.RxCallback;
 import com.saphamrah.Network.RxNetwork.RxHttpRequest;
 import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.RxService.APIServiceRxjava;
 import com.saphamrah.WebService.RxService.Response.DataResponse.GetAllrptKalaInfoResponse;
+import com.saphamrah.protos.RptGoodsInfoGrpc;
+import com.saphamrah.protos.RptGoodsInfoReply;
+import com.saphamrah.protos.RptGoodsInfoReplyList;
+import com.saphamrah.protos.RptGoodsInfoRequest;
+
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 
 public class RptKalaInfoDAO {
@@ -70,7 +86,7 @@ public class RptKalaInfoDAO {
 
     public void fetchRptKalaInfoRx(final Context context, final String activityNameForLog, String ccMarkazSazmanSakhtarForosh, final RxResponseHandler rxResponseHandler){
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-        serverIpModel.setPort("8040");
+        //serverIpModel.setPort("8040");
 
         APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
         RxHttpRequest.getInstance().execute(apiServiceRxjava.getAllrptKalaInfo(ccMarkazSazmanSakhtarForosh),activityNameForLog, CLASS_NAME,"fetchRptKalaInfoRx", new RxCallback<GetAllrptKalaInfoResponse>() {
@@ -102,6 +118,92 @@ public class RptKalaInfoDAO {
 
 
     }
+
+    public void fetchRptKalaInfoGrpc(final Context context, final String activityNameForLog, String ccMarkazSazmanSakhtarForosh, final RetrofitResponse retrofitResponse)
+        {
+            try {
+                ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+
+
+                if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                    String message = "can't find server";
+                    PubFunc.Logger logger = new PubFunc().new Logger();
+                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RptKalaInfoDAO.class.getSimpleName(), activityNameForLog, "fetchRptKalaInfoGrpc", "");
+                    retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+                } else {
+
+                    CompositeDisposable compositeDisposable = new CompositeDisposable();
+                    ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                    RptGoodsInfoGrpc.RptGoodsInfoBlockingStub RptGoodsInfoBlockingStub = RptGoodsInfoGrpc.newBlockingStub(managedChannel);
+                    RptGoodsInfoRequest RptGoodsInfoRequest = com.saphamrah.protos.RptGoodsInfoRequest.newBuilder().setSellStructureOrganizationCenterID(ccMarkazSazmanSakhtarForosh).build();
+                    Callable<RptGoodsInfoReplyList> RptGoodsInfoReplyListCallable = () -> RptGoodsInfoBlockingStub.getRptGoodsInfo(RptGoodsInfoRequest);
+                    RxAsync.makeObservable(RptGoodsInfoReplyListCallable)
+                            .map(RptGoodsInfoReplyList ->  {
+                                ArrayList<RptKalaInfoModel> models = new ArrayList<>();
+                                for (RptGoodsInfoReply reply : RptGoodsInfoReplyList.getRptGoodsInfosList()) {
+                                    RptKalaInfoModel model = new RptKalaInfoModel();
+                                    model.setNameBrand(reply.getBrandName());
+                                    model.setNameVahedShomaresh(reply.getCountUnitName());
+                                    model.setCodeKala(reply.getGoodCode());
+                                    model.setCcKalaCode(reply.getGoodCodeID());
+                                    model.setNameKala(reply.getGoodName());
+                                    model.setErtefa(reply.getHeight());
+                                    model.setTol(reply.getLength());
+                                    model.setArz(reply.getWidth());
+                                    model.setVaznKhales(reply.getPureWeight());
+                                    model.setVaznNaKhales(reply.getNonPureWeight());
+                                    model.setNameVahedSize(reply.getSizeUnitName());
+                                    model.setTedadDarKarton(reply.getQuantityInBox());
+                                    model.setTedadDarBasteh(reply.getQuantityInPackage());
+                                    model.setVaznKartonTabdili(reply.getConversionBoxWeight());
+                                    model.setHajmKartonTabdili(reply.getConversionBoxVolume());
+                                    model.setGheymatForoshAsli(reply.getOriginalSellPrice());
+                                    model.setGheymatMasrafKonandeh(reply.getConsumerPrice());
+                                    model.setShomarehBach(reply.getBatchNumber());
+                                    model.setMashmolMaliatAvarez(reply.getTaxable());
+                                    model.setCcBrand(reply.getBrandID());
+                                    model.setCcGoroh(reply.getGroupID());
+                                    model.setNameGoroh(reply.getGroupName());
+
+                                    models.add(model);
+
+                                }
+                                return models;
+                            })
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Observer<ArrayList<RptKalaInfoModel>>() {
+                                @Override
+                                public void onSubscribe(@NonNull Disposable d) {
+                                    compositeDisposable.add(d);
+                                }
+
+                                @Override
+                                public void onNext(@NonNull ArrayList<RptKalaInfoModel> models) {
+                                    retrofitResponse.onSuccess(models);
+                                }
+
+                                @Override
+                                public void onError(@NonNull Throwable e) {
+                                    retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                                }
+
+                                @Override
+                                public void onComplete() {
+                                    if (!compositeDisposable.isDisposed()) {
+                                        compositeDisposable.dispose();
+                                    }
+                                    compositeDisposable.clear();
+                                }
+                            });
+
+                }
+            }catch (Exception exception){
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), RptKalaInfoDAO.class.getSimpleName(), activityNameForLog, "fetchRptKalaInfoGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+            }
+        }
 
 //    public void fetchRptKalaInfo(final Context context, final String activityNameForLog, String ccMarkazSazmanSakhtarForosh, final RetrofitResponse retrofitResponse) {
 //        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);

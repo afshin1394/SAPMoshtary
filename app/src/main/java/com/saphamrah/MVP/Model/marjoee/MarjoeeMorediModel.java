@@ -111,10 +111,12 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
                 model.getCcTaminKonandeh(),
                 model.getMablaghForosh(),
                 model.getMablaghMasrafKonandeh(),
-                selectedCount);
+                selectedCount,
+                elatMarjoee.get(0).getCcElatMarjoeeKala(),
+                elatMarjoee.get(0).getSharh());
 
         if (updateTedadMarjoee){
-            mPresenter.onTaeidSabtMarjoee(selectedCount , position);
+            mPresenter.onTaeidSabtMarjoee(selectedCount, elatMarjoee.get(0).getSharh(), position);
         }
     }
 
@@ -137,7 +139,9 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
 
         try
         {
-            kardex = kardexDAO.SetForInsert_Kardex(ccMarkazAnbar,
+            kardex = kardexDAO.SetForInsert_Kardex(
+                    //ccMarkazAnbar,
+                    darkhastFaktorModel.getCcMarkazAnbar(),
                     darkhastFaktorModel.getCcMarkazForosh(),
                     darkhastFaktorModel.getCcAnbar(),
                     //entity.getCcAnbarMarjoee(),
@@ -171,9 +175,12 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
     {
         KardexSatrModel kardexSatr= new KardexSatrModel();
         int ccElatMarjoee = 0;
+        String nameElatMarjoee= "";
         if (elatMarjoee !=null)
-            if (elatMarjoee.size() > 0)
+            if (elatMarjoee.size() > 0) {
                 ccElatMarjoee = elatMarjoee.get(0).getCcElatMarjoeeKala();
+                nameElatMarjoee = elatMarjoee.get(0).getSharh();
+            }
         int mamorPakhash = foroshandehMamorPakhshDAO.getIsSelect().getCcMamorPakhsh();
         try
         {
@@ -191,7 +198,7 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
                     entity.getMablaghMasrafKonandeh(),
                     entity.getMablaghForosh(),
                     ccElatMarjoee,
-                    "",
+                    nameElatMarjoee,
                     1,
                     entity.getCodeKalaOld(),
                     entity.getNameKala(),

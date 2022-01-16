@@ -468,6 +468,7 @@ public class ConfigNoeVosolMojazeMoshtaryDAO
         contentValues.put(configNoeVosolMojazeMoshtary.getCOLUMN_IsPishDariaft() , configNoeVosolMojazeMoshtaryModel.getIsPishDariaft());
         contentValues.put(configNoeVosolMojazeMoshtary.getCOLUMN_MashmoolTakhfifNaghdi() , configNoeVosolMojazeMoshtaryModel.getMashmoolTakhfifNaghdi());
         contentValues.put(configNoeVosolMojazeMoshtary.getCOLUMN_MashmoolDirkardVosol() , configNoeVosolMojazeMoshtaryModel.getMashmoolDirkardVosol());
+        contentValues.put(configNoeVosolMojazeMoshtary.getCOLUMN_modatVosolMazad(), configNoeVosolMojazeMoshtaryModel.getModatVosolMazad());
         return contentValues;
     }
 
@@ -492,6 +493,7 @@ public class ConfigNoeVosolMojazeMoshtaryDAO
            model.setIsPishDariaft(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_IsPishDariaft())));
            model.setMashmoolTakhfifNaghdi(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_MashmoolTakhfifNaghdi())));
            model.setMashmoolDirkardVosol(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_MashmoolDirkardVosol())));
+           model.setModatVosolMazad(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_modatVosolMazad())));
            configNoeVosolMojazeMoshtaryModels.add(model);
             cursor.moveToNext();
         }

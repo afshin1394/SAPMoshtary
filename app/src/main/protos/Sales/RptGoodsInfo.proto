@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.RptGoodsInfo.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RptGoodsInfoProto";
+package Sales;
+
+
+service RptGoodsInfo{
+	rpc GetRptGoodsInfo(RptGoodsInfoRequest) returns(RptGoodsInfoReplyList);
+}
+
+message RptGoodsInfoRequest{
+    string SellStructureOrganizationCenterID = 1;
+}
+
+message RptGoodsInfoReply{
+	int32 GoodCodeID = 1;
+	string GoodName =  2;
+	string GoodCode = 3;
+	string BrandName = 4;
+	double	ConsumerPrice = 5;
+	double	OriginalSellPrice = 6;
+	int32	QuantityInBox = 7;
+	int32	QuantityInPackage = 8;
+	double length = 9;
+	double width = 10;
+	double height = 11;
+	string SizeUnitName = 12;
+	string CountUnitName = 13;
+	double PureWeight = 14;
+	double NonPureWeight = 15;
+	double	ConversionBoxWeight = 16;
+	double	ConversionBoxVolume = 17;
+	string	BatchNumber = 18;
+	int32	Taxable = 19;
+	int32	BrandID = 20;
+	int32	GroupID = 21;
+	string	GroupName = 22;
+
+}
+
+message RptGoodsInfoReplyList{
+	repeated RptGoodsInfoReply RptGoodsInfos = 1;
+}

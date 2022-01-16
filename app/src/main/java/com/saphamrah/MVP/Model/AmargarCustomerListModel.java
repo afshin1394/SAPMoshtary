@@ -1,5 +1,8 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.util.Log;
 
 import com.saphamrah.BaseMVP.AmargarCustomerListMVP;
@@ -24,6 +27,7 @@ import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.PorseshnamehModel;
 import com.saphamrah.Model.PorseshnamehShomareshModel;
 import com.saphamrah.Model.PorseshnamehTablighatModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.VisitMoshtaryModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.DeviceInfo;
@@ -130,25 +134,53 @@ public class AmargarCustomerListModel implements AmargarCustomerListMVP.ModelOps
     public void getCustomerListByLocation(String selectedItem, String latitude, String longitude)
     {
         final ListMoshtarianDAO listMoshtarianDAO = new ListMoshtarianDAO(mPresenter.getAppContext());
-        listMoshtarianDAO.fetchByRadius(mPresenter.getAppContext(), "AmargarCustomerListActivity", selectedItem, latitude, longitude, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(ArrayList arrayListData)
-            {
-                boolean deleteResult = listMoshtarianDAO.deleteAll();
-                boolean insertResult = listMoshtarianDAO.insertGroup(arrayListData);
-                if (deleteResult && insertResult)
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        switch (serverIpModel.getWebServiceType()){
+            case REST:
+                listMoshtarianDAO.fetchByRadius(mPresenter.getAppContext(), "AmargarCustomerListActivity", selectedItem, latitude, longitude, new RetrofitResponse()
                 {
-                    mPresenter.onGetListMoshtarianByLocation(arrayListData);
-                }
-            }
+                    @Override
+                    public void onSuccess(ArrayList arrayListData)
+                    {
+                        boolean deleteResult = listMoshtarianDAO.deleteAll();
+                        boolean insertResult = listMoshtarianDAO.insertGroup(arrayListData);
+                        if (deleteResult && insertResult)
+                        {
+                            mPresenter.onGetListMoshtarianByLocation(arrayListData);
+                        }
+                    }
 
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onGetListMoshtarianByLocation(null);
-            }
-        });
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onGetListMoshtarianByLocation(null);
+                    }
+                });
+                break;
+            case gRPC:
+                listMoshtarianDAO.fetchByRadiusGrpc(mPresenter.getAppContext(), "AmargarCustomerListActivity", selectedItem, latitude, longitude, new RetrofitResponse()
+                {
+                    @Override
+                    public void onSuccess(ArrayList arrayListData)
+                    {
+                        boolean deleteResult = listMoshtarianDAO.deleteAll();
+                        boolean insertResult = listMoshtarianDAO.insertGroup(arrayListData);
+                        if (deleteResult && insertResult)
+                        {
+                            mPresenter.onGetListMoshtarianByLocation(arrayListData);
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onGetListMoshtarianByLocation(null);
+                    }
+                });
+                break;
+
+        }
+
     }
 
     @Override

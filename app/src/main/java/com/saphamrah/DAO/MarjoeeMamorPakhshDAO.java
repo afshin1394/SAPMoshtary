@@ -404,8 +404,11 @@ get name all columns in model
 
     }
 
-    public boolean updateTedadMarjoee(int ccMarjoeeMamorPakhsh , String  ShomarehBach ,int ccTaminKonandeh ,float mablaghForosh  ,float mablaghMasrafKonandeh  , int ExtraProp_TedadMarjoee)
-    { String query = "update " + modelGetTABLE_NAME.getCOLUM_TABLE_NAME() + " set " + modelGetTABLE_NAME.getCOLUM_ExtraProp_TedadNahaeeMarjoee() + " = " + ExtraProp_TedadMarjoee +
+    public boolean updateTedadMarjoee(int ccMarjoeeMamorPakhsh , String  ShomarehBach ,int ccTaminKonandeh ,float mablaghForosh  ,float mablaghMasrafKonandeh  , int ExtraProp_TedadMarjoee, int ExtraProp_ccElatMarjoee, String ExtraProp_NameElatMarjoee)
+    { String query = "update " + modelGetTABLE_NAME.getCOLUM_TABLE_NAME() +
+            " set " + modelGetTABLE_NAME.getCOLUM_ExtraProp_TedadNahaeeMarjoee() + " = " + ExtraProp_TedadMarjoee +
+            " , " + modelGetTABLE_NAME.getCOLUM_ExtraProp_ccElatMarjoee() + " = " + ExtraProp_ccElatMarjoee +
+            " , " + modelGetTABLE_NAME.getCOLUM_ExtraProp_NameElatMarjoee() + " = '" + ExtraProp_NameElatMarjoee + "'" +
             " where " + modelGetTABLE_NAME.getCOLUM_ccMarjoeeMamorPakhsh() + " = " + ccMarjoeeMamorPakhsh + " AND " + modelGetTABLE_NAME.getCOLUM_ShomarehBach() + " = '" + ShomarehBach + "' AND "
             + modelGetTABLE_NAME.getCOLUM_ccTaminKonandeh() + " = " + ccTaminKonandeh + " AND "
             + modelGetTABLE_NAME.getCOLUM_mablaghForosh() + " = " + mablaghForosh + " AND " + modelGetTABLE_NAME.getCOLUM_mablaghMasrafKonandeh() + " = " + mablaghMasrafKonandeh ;

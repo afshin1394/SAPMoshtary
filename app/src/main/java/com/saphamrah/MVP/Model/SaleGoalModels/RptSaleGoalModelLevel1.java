@@ -1,5 +1,8 @@
 package com.saphamrah.MVP.Model.SaleGoalModels;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -10,6 +13,7 @@ import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.RptHadafForoshDAO;
 
 import com.saphamrah.Model.HadafForosh.BaseHadafForoshModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.Utils.Constants;
@@ -38,66 +42,139 @@ public class RptSaleGoalModelLevel1 implements RptSaleGoalLevel1MVP.ModelOps{
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         String ccForoshandeh = String.valueOf(foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh());
         Log.i("foroshande", "updateSaleGoalReport: "+ccForoshandeh);
-        RptHadafForoshDAO.fetchAllrpHadafeForosh(mPresenter.getAppContext(), "SaleGoalReportActivity", ccForoshandeh, new RetrofitResponse() {
-            @Override
-            public void onSuccess(final ArrayList arrayListData) {
-                Log.i("updateSaleGoalReport", "onSuccess: ");
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
 
 
-                final Handler handler = new Handler(new Handler.Callback() {
+
+        switch (serverIpModel.getWebServiceType()){
+            case REST:
+                RptHadafForoshDAO.fetchAllrpHadafeForosh(mPresenter.getAppContext(), "SaleGoalReportActivity", ccForoshandeh, new RetrofitResponse() {
                     @Override
-                    public boolean handleMessage(Message msg) {
-                        Log.i("massage.arg1", "handleMessage: "+msg.arg1);
-                        if (msg.arg1 == 1)
-                        {
+                    public void onSuccess(final ArrayList arrayListData) {
+                        Log.i("updateSaleGoalReport", "onSuccess: ");
+
+
+                        final Handler handler = new Handler(new Handler.Callback() {
+                            @Override
+                            public boolean handleMessage(Message msg) {
+                                Log.i("massage.arg1", "handleMessage: "+msg.arg1);
+                                if (msg.arg1 == 1)
+                                {
 //                            Log.d("saleGoalReport" , "on update sale Goal report : " + arrayListData.get(0).toString());
 
-                            ArrayList<BaseHadafForoshModel> rptBrandHadafForoshModels =RptHadafForoshDAO.getHadafForoshAllBrands();
-                            mPresenter.onSuccessUpdateSaleGoalReport();
-                            mPresenter.onGetSaleGoalReport(rptBrandHadafForoshModels);
+                                    ArrayList<BaseHadafForoshModel> rptBrandHadafForoshModels =RptHadafForoshDAO.getHadafForoshAllBrands();
+                                    mPresenter.onSuccessUpdateSaleGoalReport();
+                                    mPresenter.onGetSaleGoalReport(rptBrandHadafForoshModels);
 
 
-                        }
-                        else
+                                }
+                                else
+                                {
+                                    mPresenter.onErrorUpdateSaleGoalReport();
+                                    mPresenter.onNetworkError();
+                                }
+                                return false;
+                            }
+                        });
+
+                        Thread thread = new Thread()
                         {
-                            mPresenter.onErrorUpdateSaleGoalReport();
-                            mPresenter.onNetworkError();
-                        }
-                        return false;
+                            @Override
+                            public void run()
+                            {
+                                boolean deleteResult = RptHadafForoshDAO.deleteAll();
+                                boolean insertResult = RptHadafForoshDAO.insertGroup(arrayListData);
+                                if (deleteResult && insertResult)
+                                {
+                                    Message msg = new Message();
+                                    msg.arg1 = 1;
+                                    handler.sendMessage(msg);
+                                }
+                                else
+                                {
+                                    Message msg = new Message();
+                                    msg.arg1 = -1;
+                                    handler.sendMessage(msg);
+                                }
+                            }
+                        };
+                        thread.start();
+                    }
+
+                    @Override
+                    public void onFailed(String type, String error) {
+                        Log.i("SaleGoal", "onFailed: Sale Goal Failed");
+                        setLogToDB(Constants.LOG_EXCEPTION(), error, "SaleReportModel", "SaleReportActivity", "updateSaleReport", "");
+                        mPresenter.onNetworkError();
                     }
                 });
+                break;
 
-                Thread thread = new Thread()
-                {
+
+            case gRPC:
+                RptHadafForoshDAO.fetchAllrptHadafForoshGrpc(mPresenter.getAppContext(), "SaleGoalReportActivity", ccForoshandeh, new RetrofitResponse() {
                     @Override
-                    public void run()
-                    {
-                        boolean deleteResult = RptHadafForoshDAO.deleteAll();
-                        boolean insertResult = RptHadafForoshDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult)
-                        {
-                            Message msg = new Message();
-                            msg.arg1 = 1;
-                            handler.sendMessage(msg);
-                        }
-                        else
-                        {
-                            Message msg = new Message();
-                            msg.arg1 = -1;
-                            handler.sendMessage(msg);
-                        }
-                    }
-                };
-                thread.start();
-            }
+                    public void onSuccess(final ArrayList arrayListData) {
+                        Log.i("updateSaleGoalReport", "onSuccess: ");
 
-            @Override
-            public void onFailed(String type, String error) {
-                Log.i("SaleGoal", "onFailed: Sale Goal Failed");
-                setLogToDB(Constants.LOG_EXCEPTION(), error, "SaleReportModel", "SaleReportActivity", "updateSaleReport", "");
-                mPresenter.onNetworkError();
-            }
-        });
+
+                        final Handler handler = new Handler(new Handler.Callback() {
+                            @Override
+                            public boolean handleMessage(Message msg) {
+                                Log.i("massage.arg1", "handleMessage: "+msg.arg1);
+                                if (msg.arg1 == 1)
+                                {
+//                            Log.d("saleGoalReport" , "on update sale Goal report : " + arrayListData.get(0).toString());
+
+                                    ArrayList<BaseHadafForoshModel> rptBrandHadafForoshModels =RptHadafForoshDAO.getHadafForoshAllBrands();
+                                    mPresenter.onSuccessUpdateSaleGoalReport();
+                                    mPresenter.onGetSaleGoalReport(rptBrandHadafForoshModels);
+
+
+                                }
+                                else
+                                {
+                                    mPresenter.onErrorUpdateSaleGoalReport();
+                                    mPresenter.onNetworkError();
+                                }
+                                return false;
+                            }
+                        });
+
+                        Thread thread = new Thread()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                boolean deleteResult = RptHadafForoshDAO.deleteAll();
+                                boolean insertResult = RptHadafForoshDAO.insertGroup(arrayListData);
+                                if (deleteResult && insertResult)
+                                {
+                                    Message msg = new Message();
+                                    msg.arg1 = 1;
+                                    handler.sendMessage(msg);
+                                }
+                                else
+                                {
+                                    Message msg = new Message();
+                                    msg.arg1 = -1;
+                                    handler.sendMessage(msg);
+                                }
+                            }
+                        };
+                        thread.start();
+                    }
+
+                    @Override
+                    public void onFailed(String type, String error) {
+                        Log.i("SaleGoal", "onFailed: Sale Goal Failed");
+                        setLogToDB(Constants.LOG_EXCEPTION(), error, "SaleReportModel", "SaleReportActivity", "updateSaleReport", "");
+                        mPresenter.onNetworkError();
+                    }
+                });
+                break;
+        }
+
     }
 
     @Override

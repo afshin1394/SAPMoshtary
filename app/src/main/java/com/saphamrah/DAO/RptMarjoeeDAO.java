@@ -174,7 +174,7 @@ public class RptMarjoeeDAO
     public void fetchRPTMarjoee(final Context context, final String activityNameForLog, final String ccAfrad, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-        serverIpModel.setPort("8040");
+        //serverIpModel.setPort("8040");
 
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
         {

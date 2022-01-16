@@ -1159,4 +1159,6 @@
     <string name="mojodiAnbarakReportFaktor">گزارش موجودی کالا (فاکتور)</string>
     <string name="rptKalaZaribForosh">ضریب فروش کالا</string>
     <string name="gRPC">Grpc</string>
+    <string name="ErrorSendRasGiri">تاریخ چک وارد شده مجاز نمی باشد</string>
+    <string name="shomarehCheck">شماره چک</string>
 </resources>

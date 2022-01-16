@@ -13,6 +13,7 @@ import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.UIModel.KalaFilterUiModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
@@ -523,6 +524,51 @@ Call<GetAllvKalaGorohResult> call = apiServiceGet.getAllKalaGorohAmargar();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaGorohDAO" , "" , "getAll" , "");
         }
         return kalaGorohModels;
+    }
+
+    public ArrayList<KalaFilterUiModel> getKalaFilter()
+    {
+        ArrayList<KalaFilterUiModel> kalaFilterUiModels = new ArrayList<>();
+        String query = "select 0 as ccGoroh ,'همه' as NameGoroh\n" +
+                "UNION ALL\n" +
+                "SELECT DISTINCT ccGoroh, NameGoroh\n" +
+                "FROM KalaGoroh \n" +
+                "WHERE ccGorohLink=560 AND ccKalaCode IN (SELECT DISTINCT ccKalaCode FROM Kala)";
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+            Cursor cursor = db.rawQuery(query,null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+
+
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast())
+                    {
+                        KalaFilterUiModel model = new KalaFilterUiModel();
+
+                        model.setCcGoroh(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_ccGoroh())));
+                        model.setNameGoroh(cursor.getString(cursor.getColumnIndex(model.getCOLUMN_NameGoroh())));
+
+                        kalaFilterUiModels.add(model);
+                        cursor.moveToNext();
+                    }
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , KalaGorohModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaGorohDAO" , "" , "getAll" , "");
+        }
+        return kalaFilterUiModels;
     }
 
 

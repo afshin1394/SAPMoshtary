@@ -192,7 +192,7 @@ public class BargashtyDAO
     public void fetchBargashty(final Context context, final String activityNameForLog,final String ccForoshandeh, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-        serverIpModel.setPort("8040");
+        //serverIpModel.setPort("8040");
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
         {
             String message = "can't find server";

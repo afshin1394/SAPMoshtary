@@ -51,13 +51,14 @@ public class JayezehEntekhabiMojodiDAO
                     " from JayezehEntekhabi j inner join \n" +
                     " (select k.* , m.sumTedad, m.GheymatForosh, m.ZamaneSabt, m.ccKalaMojodi, m.ccForoshandeh, m.ccDarkhastFaktor, m.TarikhDarkhast, m.GheymatMasrafKonandeh, m.Max_Mojody, m.Max_MojodyByShomarehBach \n" +
                     " from Kala k left join (select KalaMojodi.* , sum(Tedad) sumTedad from KalaMojodi where IsAdamForosh = 0 \n" +
-                    " group by ccKalaCode , ShomarehBach, GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh) m \n" +
+                    " group by ccKalaCode , ShomarehBach, GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh, TarikhTolid, TarikhEngheza) m \n" +
                     " on k.ccKalaCode = m.ccKalaCode and k.ccTaminKonandeh = m.ccTaminkonandeh and \n" +
                     " k.ShomarehBach = m.ShomarehBach and k.MablaghMasrafKonandeh = m.GheymatMasrafKonandeh and k.MablaghForosh = m.GheymatForosh \n" +
+                    " k.TarikTolid = m.TarikhTolid and k.TarikhEngheza = m.TarikhEngheza  \n" +
                     " where k.TedadMojodyGhabelForosh > 0 and m.sumTedad > 0  \n" +
                     " order by codekala desc) km \n" +
                     " on j.ccKalaCode = km.ccKalaCode and km.sumTedad > 0 and j.ccTakhfifHajmi = " + ccTakhfifHajmi +
-                    " group by km.ccKalaCode, km.ShomarehBach, km.ccTaminKonandeh, km.GheymatForosh, km.GheymatMasrafKonandeh";
+                    " group by km.ccKalaCode, km.ShomarehBach, km.ccTaminKonandeh, km.GheymatForosh, km.GheymatMasrafKonandeh, km.TarikhTolid, km.TarikhEngheza";
             Log.d("jayezeh" , "query : " + query);
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
@@ -89,7 +90,7 @@ public class JayezehEntekhabiMojodiDAO
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             String query = "select * , sum(m.Tedad) sumTedad from JayezehEntekhabi j inner join KalaMojodi m \n" +
                     " on j.ccKalaCode = m.ccKalaCode and j.ccJayezeh = " + ccJayezeh + " and j.ccJayezehSatr = " + ccJayezehSatr +
-                    " group by  m.ccKalaCode, m.ShomarehBach, m.ccTaminKonandeh, m.GheymatForosh, m.GheymatMasrafKonandeh having sum(m.Tedad) > 0";
+                    " group by  m.ccKalaCode, m.ShomarehBach, m.ccTaminKonandeh, m.GheymatForosh, m.GheymatMasrafKonandeh, m.TarikhTolid, m.TarikhEngheza having sum(m.Tedad) > 0";
             Log.d("jayezeh" , "query : " + query);
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
@@ -145,6 +146,7 @@ public class JayezehEntekhabiMojodiDAO
             jayezehEntekhabiMojodiModel.setTarikhDarkhast(cursor.getString(cursor.getColumnIndex(KalaMojodiModel.COLUMN_TarikhDarkhast())));
             jayezehEntekhabiMojodiModel.setShomarehBach(cursor.getString(cursor.getColumnIndex(KalaMojodiModel.COLUMN_ShomarehBach())));
             jayezehEntekhabiMojodiModel.setTarikhTolid(cursor.getString(cursor.getColumnIndex(KalaMojodiModel.COLUMN_TarikhTolid())));
+            jayezehEntekhabiMojodiModel.setTarikhEngheza(cursor.getString(cursor.getColumnIndex(KalaMojodiModel.COLUMN_TarikhEngheza())));
             jayezehEntekhabiMojodiModel.setZamaneSabt(cursor.getString(cursor.getColumnIndex(KalaMojodiModel.COLUMN_ZamaneSabt())));
             jayezehEntekhabiMojodiModel.setGheymatMasrafKonandeh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatMasrafKonandeh())));
             jayezehEntekhabiMojodiModel.setGheymatForosh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatForosh())));

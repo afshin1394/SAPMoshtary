@@ -5,10 +5,11 @@ import android.os.Message;
 import android.util.Log;
 
 import com.saphamrah.BaseMVP.RptCustomersListByDistanceMVP;
-import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.DAO.ListMoshtarianDAO;
-import com.saphamrah.Model.ParameterChildModel;
+import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.Model.ListMoshtarianModel;
+import com.saphamrah.Model.ParameterChildModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.Utils.Constants;
@@ -74,41 +75,86 @@ public class RptCustomersListByDistanceModel implements RptCustomersListByDistan
             }
         });
 
-        listMoshtarianDAO.fetchByRadius(mPresenter.getAppContext(), "RptCustomersListByDistanceActivity", radius, latitude, longitude, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
+
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        switch (serverIpModel.getWebServiceType()){
+            case Constants.REST:
+                listMoshtarianDAO.fetchByRadius(mPresenter.getAppContext(), "RptCustomersListByDistanceActivity", radius, latitude, longitude, new RetrofitResponse()
                 {
                     @Override
-                    public void run()
+                    public void onSuccess(final ArrayList arrayListData)
                     {
-                        boolean deleteResult = listMoshtarianDAO.deleteAll();
-                        boolean insertResult = listMoshtarianDAO.insertGroup(arrayListData);
-                        Log.d("moshtarian" , "size arrayListData : " + arrayListData.size());
-                        Log.d("moshtarian" , "deleteResult : " + deleteResult);
-                        Message message = new Message();
-                        if (deleteResult && insertResult)
+                        Thread thread = new Thread()
                         {
-                            message.arg1 = 1;
-                        }
-                        else
-                        {
-                            message.arg1 = -1;
-                        }
-                        handler.sendMessage(message);
+                            @Override
+                            public void run()
+                            {
+                                boolean deleteResult = listMoshtarianDAO.deleteAll();
+                                boolean insertResult = listMoshtarianDAO.insertGroup(arrayListData);
+                                Log.d("moshtarian" , "size arrayListData : " + arrayListData.size());
+                                Log.d("moshtarian" , "deleteResult : " + deleteResult);
+                                Message message = new Message();
+                                if (deleteResult && insertResult)
+                                {
+                                    message.arg1 = 1;
+                                }
+                                else
+                                {
+                                    message.arg1 = -1;
+                                }
+                                handler.sendMessage(message);
+                            }
+                        };
+                        thread.start();
                     }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onErrorGetCustomerList();
-                setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptCustomersListByDistanceModel", "RptListVosolActivity", "updateListVosol", "onFailed");
-            }
-        });
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onErrorGetCustomerList();
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptCustomersListByDistanceModel", "RptListVosolActivity", "updateListVosol", "onFailed");
+                    }
+                });
+                break;
+
+            case Constants.gRPC:
+                listMoshtarianDAO.fetchByRadiusGrpc(mPresenter.getAppContext(), "RptCustomersListByDistanceActivity", radius, latitude, longitude, new RetrofitResponse()
+                {
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData)
+                    {
+                        Thread thread = new Thread()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                boolean deleteResult = listMoshtarianDAO.deleteAll();
+                                boolean insertResult = listMoshtarianDAO.insertGroup(arrayListData);
+                                Log.d("moshtarian" , "size arrayListData : " + arrayListData.size());
+                                Log.d("moshtarian" , "deleteResult : " + deleteResult);
+                                Message message = new Message();
+                                if (deleteResult && insertResult)
+                                {
+                                    message.arg1 = 1;
+                                }
+                                else
+                                {
+                                    message.arg1 = -1;
+                                }
+                                handler.sendMessage(message);
+                            }
+                        };
+                        thread.start();
+                    }
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onErrorGetCustomerList();
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptCustomersListByDistanceModel", "RptListVosolActivity", "updateListVosol", "onFailed");
+                    }
+                });
+                break;
+        }
+
     }
 
     @Override

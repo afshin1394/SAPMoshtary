@@ -1,15 +1,10 @@
 package com.saphamrah.MVP.Model;
 
-import android.content.ContentValues;
-
-import com.samiei.central.exceptionHandling.AsyncUtils;
 import com.saphamrah.BaseMVP.BarkhordAvalieMVP;
 import com.saphamrah.DAO.BarkhordForoshandehBaMoshtaryDAO;
 import com.saphamrah.Model.BarkhordForoshandehBaMoshtaryModel;
-import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
-import com.saphamrah.Repository.BarkhordForoshandehBaMoshtaryRepository;
 import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.Utils.Constants;
 
@@ -17,10 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 public class BarkhordAvalieModel implements BarkhordAvalieMVP.ModelOps {
 

@@ -143,7 +143,7 @@ public class MoshtaryAddressDAO
                                 moshtaryAddressModel.setTelephone(customerAddressReply.getPhone());
                                 moshtaryAddressModel.setCodePosty(customerAddressReply.getPostalCode());
                                 moshtaryAddressModel.setLatitude_y(customerAddressReply.getLatitude());
-                                moshtaryAddressModel.setLongitude_x(customerAddressReply.getLatitude());
+                                moshtaryAddressModel.setLongitude_x(customerAddressReply.getLongitude());
 
 
                                 moshtaryAddressModels.add(moshtaryAddressModel);

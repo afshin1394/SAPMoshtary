@@ -121,6 +121,8 @@ public class TemporaryRequestsAdapter extends RecyclerSwipeAdapter<TemporaryRequ
         {
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right , holder.itemView.findViewById(R.id.layRight));
         }
+
+
         holder.bind(position , listener);
     }
 

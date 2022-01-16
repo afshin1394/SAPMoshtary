@@ -160,6 +160,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
                     kalaMojodiModel.setTedad(-1 * model.getSelectedCount());
                     kalaMojodiModel.setTarikhDarkhast(currentDate);
                     kalaMojodiModel.setTarikhTolid(model.getTarikhTolid());
+                    kalaMojodiModel.setTarikhEngheza(model.getTarikhEngheza());
                     kalaMojodiModel.setZamaneSabt(model.getZamaneSabt());
                     kalaMojodiModel.setShomarehBach(model.getShomarehBach());
                     kalaMojodiModel.setGheymatMasrafKonandeh(model.getGheymatMasrafKonandeh());
@@ -183,7 +184,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
                         darkhastFaktorSatrModel.setCodeNoeKala(2);
                         darkhastFaktorSatrModel.setShomarehBach(model.getShomarehBach());
                         darkhastFaktorSatrModel.setTarikhTolid(model.getTarikhTolid());
-                        darkhastFaktorSatrModel.setTarikhEngheza(new KalaDAO(mPresenter.getAppContext()).getByccKalaCode(model.getCcKalaCode()).getTarikhEngheza());
+                        darkhastFaktorSatrModel.setTarikhEngheza(model.getTarikhEngheza());
                         darkhastFaktorSatrModel.setMablaghForosh(1);
                         darkhastFaktorSatrModel.setMablaghForoshKhalesKala(model.getGheymatForosh());
                         Log.d("bonus", "model.setMablaghForoshKhalesKala() : " + darkhastFaktorSatrModel.getMablaghForoshKhalesKala());

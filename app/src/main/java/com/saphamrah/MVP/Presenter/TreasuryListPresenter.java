@@ -295,6 +295,12 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     }
 
     @Override
+    public void onErrorSendRasGiri(String error) {
+        mView.get().closeLoading();
+        mView.get().onErrorSendRasGiri(error);
+    }
+
+    @Override
     public void openInvoiceSettlement(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel,boolean openInvoiceSettlement) {
         if (openInvoiceSettlement)
             mView.get().openInvoiceSettlementActivity(darkhastFaktorMoshtaryForoshandeModel);

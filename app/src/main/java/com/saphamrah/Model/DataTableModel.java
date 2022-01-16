@@ -77,6 +77,14 @@ public class DataTableModel
         this.filed9 = filed9;
     }
 
+    private String filed10;
+    public String getFiled10() {
+        return filed10;
+    }
+    public void setFiled10(String filed10) {
+        this.filed10 = filed10;
+    }
+
 
     @NonNull
     @Override
@@ -92,6 +100,7 @@ public class DataTableModel
                 ", filed7='" + filed7 + '\'' +
                 ", filed8='" + filed8 + '\'' +
                 ", filed9='" + filed9 + '\'' +
+                ", filed10='" + filed10 + '\'' +
                 '}';
     }
 

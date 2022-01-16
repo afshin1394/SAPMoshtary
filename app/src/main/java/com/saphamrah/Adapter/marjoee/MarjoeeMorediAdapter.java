@@ -67,7 +67,7 @@ public class MarjoeeMorediAdapter extends RecyclerSwipeAdapter<MarjoeeMorediAdap
         holder.lblCount.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.adad), models.get(position).getTedad3()));
         holder.lblTedadMarjoee.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.adad), models.get(position).getExtraProp_TedadNahaeeMarjoee()));
         holder.lblCost.setText(String.format("%1$s : %2$s",context.getResources().getString(R.string.tarikhTolid) , models.get(position).getTarikhTolidShamsi() ));
-//        holder.lblDesc.setText(models.get(position).getNameElatMarjoeeKala());
+        holder.lblDesc.setText(models.get(position).getExtraProp_NameElatMarjoee());
         holder.lblShomareBach.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.shomareBach), models.get(position).getShomarehBach()));
 
         holder.bind(models.get(position) , position , listener);

@@ -1,5 +1,8 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -295,7 +298,7 @@ public class CheckBargashtiModel implements CheckBargashtiMVP.ModelOps
     @Override
     public void updateListBargashty()
     {
-
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(BaseApplication.getContext());
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(BaseApplication.getContext()).getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
 
@@ -318,42 +321,87 @@ public class CheckBargashtiModel implements CheckBargashtiMVP.ModelOps
 
         if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat ==8)
         {
-            bargashtyDAO.fetchBargashty(BaseApplication.getContext(), "RptCheckBargashtyActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse() {
-                @Override
-                public void onSuccess(final ArrayList arrayListData)
-                {
-                    Thread thread = new Thread()
-                    {
-                        @Override
-                        public void run(){
-                            boolean deleteResult = bargashtyDAO.deleteAll();
-                            boolean insertResult = bargashtyDAO.insertGroup(arrayListData);
-                            Message message = new Message();
-                            if (deleteResult && insertResult)
-                            {
-                                for (int i = 0; i < arrayListData.size(); i++) {
-                                    ccdpBargashty  += ((BargashtyModel)arrayListData.get(i)).getCcDariaftPardakht() + ",";
 
-                                }
-                                getDariaftPardakhtBargashty(ccdpBargashty);
-                                message.arg1 = 1;
-                            }
-                            else
+            switch (serverIpModel.getWebServiceType()){
+                case REST:
+                    bargashtyDAO.fetchBargashty(BaseApplication.getContext(), "RptCheckBargashtyActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse() {
+                        @Override
+                        public void onSuccess(final ArrayList arrayListData)
+                        {
+                            Thread thread = new Thread()
                             {
-                                message.arg1 = -1;
-                            }
-                            handler.sendMessage(message);
+                                @Override
+                                public void run(){
+                                    boolean deleteResult = bargashtyDAO.deleteAll();
+                                    boolean insertResult = bargashtyDAO.insertGroup(arrayListData);
+                                    Message message = new Message();
+                                    if (deleteResult && insertResult)
+                                    {
+                                        for (int i = 0; i < arrayListData.size(); i++) {
+                                            ccdpBargashty  += ((BargashtyModel)arrayListData.get(i)).getCcDariaftPardakht() + ",";
+
+                                        }
+                                        getDariaftPardakhtBargashty(ccdpBargashty);
+                                        message.arg1 = 1;
+                                    }
+                                    else
+                                    {
+                                        message.arg1 = -1;
+                                    }
+                                    handler.sendMessage(message);
+                                }
+                            };
+                            thread.start();
                         }
-                    };
-                    thread.start();
-                }
-                @Override
-                public void onFailed(String type, String error)
-                {
-                    mPresenter.onErrorUpdateListBargashty();
-                    setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptCheckBargashtyModel", "RptCheckBargashtyActivity", "updateListBargashty", "onFailed");
-                }
-            });
+                        @Override
+                        public void onFailed(String type, String error)
+                        {
+                            mPresenter.onErrorUpdateListBargashty();
+                            setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptCheckBargashtyModel", "RptCheckBargashtyActivity", "updateListBargashty", "onFailed");
+                        }
+                    });
+                    break;
+
+                case gRPC:
+                    bargashtyDAO.fetchBargashtyGrpc(BaseApplication.getContext(), "RptCheckBargashtyActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse() {
+                        @Override
+                        public void onSuccess(final ArrayList arrayListData)
+                        {
+                            Thread thread = new Thread()
+                            {
+                                @Override
+                                public void run(){
+                                    boolean deleteResult = bargashtyDAO.deleteAll();
+                                    boolean insertResult = bargashtyDAO.insertGroup(arrayListData);
+                                    Message message = new Message();
+                                    if (deleteResult && insertResult)
+                                    {
+                                        for (int i = 0; i < arrayListData.size(); i++) {
+                                            ccdpBargashty  += ((BargashtyModel)arrayListData.get(i)).getCcDariaftPardakht() + ",";
+
+                                        }
+                                        getDariaftPardakhtBargashty(ccdpBargashty);
+                                        message.arg1 = 1;
+                                    }
+                                    else
+                                    {
+                                        message.arg1 = -1;
+                                    }
+                                    handler.sendMessage(message);
+                                }
+                            };
+                            thread.start();
+                        }
+                        @Override
+                        public void onFailed(String type, String error)
+                        {
+                            mPresenter.onErrorUpdateListBargashty();
+                            setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptCheckBargashtyModel", "RptCheckBargashtyActivity", "updateListBargashty", "onFailed");
+                        }
+                    });
+                    break;
+            }
+
         }
         else if (noeMasouliat == 4 || noeMasouliat == 5)
         {
@@ -379,43 +427,90 @@ public class CheckBargashtiModel implements CheckBargashtiMVP.ModelOps
 
             for (String strccForoshandeh : foroshandehArray)
             {
-                bargashtyDAO.fetchBargashty(BaseApplication.getContext(), "RptCheckBargashtyActivity", strccForoshandeh, new RetrofitResponse() {
-                    @Override
-                    public void onSuccess(final ArrayList arrayListData)
-                    {
 
-                        Thread thread = new Thread()
-                        {
+                switch (serverIpModel.getWebServiceType()){
+                    case REST:
+                        bargashtyDAO.fetchBargashty(BaseApplication.getContext(), "RptCheckBargashtyActivity", strccForoshandeh, new RetrofitResponse() {
                             @Override
-                            public void run(){
-                                boolean insertResult = bargashtyDAO.insertGroup(arrayListData);
-                                if (insertResult)
+                            public void onSuccess(final ArrayList arrayListData)
+                            {
+
+                                Thread thread = new Thread()
                                 {
-                                    arrayListCounter.add(1);
-                                    if (arrayListCounter.size() == foroshandehArray.length)
-                                    {
-                                        Message message = new Message();
-                                        message.arg1 = 1;
-                                        handler.sendMessage(message);
+                                    @Override
+                                    public void run(){
+                                        boolean insertResult = bargashtyDAO.insertGroup(arrayListData);
+                                        if (insertResult)
+                                        {
+                                            arrayListCounter.add(1);
+                                            if (arrayListCounter.size() == foroshandehArray.length)
+                                            {
+                                                Message message = new Message();
+                                                message.arg1 = 1;
+                                                handler.sendMessage(message);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Message message = new Message();
+                                            message.arg1 = -1;
+                                            handler.sendMessage(message);
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    Message message = new Message();
-                                    message.arg1 = -1;
-                                    handler.sendMessage(message);
-                                }
+                                };
+                                thread.start();
                             }
-                        };
-                        thread.start();
-                    }
-                    @Override
-                    public void onFailed(String type, String error)
-                    {
-                        mPresenter.onErrorUpdateListBargashty();
-                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptCheckBargashtyModel", "RptCheckBargashtyActivity", "updateListBargashty", "onFailed");
-                    }
-                });
+                            @Override
+                            public void onFailed(String type, String error)
+                            {
+                                mPresenter.onErrorUpdateListBargashty();
+                                setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptCheckBargashtyModel", "RptCheckBargashtyActivity", "updateListBargashty", "onFailed");
+                            }
+                        });
+                        break;
+
+                    case gRPC:
+                        bargashtyDAO.fetchBargashtyGrpc(BaseApplication.getContext(), "RptCheckBargashtyActivity", strccForoshandeh, new RetrofitResponse() {
+                            @Override
+                            public void onSuccess(final ArrayList arrayListData)
+                            {
+
+                                Thread thread = new Thread()
+                                {
+                                    @Override
+                                    public void run(){
+                                        boolean insertResult = bargashtyDAO.insertGroup(arrayListData);
+                                        if (insertResult)
+                                        {
+                                            arrayListCounter.add(1);
+                                            if (arrayListCounter.size() == foroshandehArray.length)
+                                            {
+                                                Message message = new Message();
+                                                message.arg1 = 1;
+                                                handler.sendMessage(message);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Message message = new Message();
+                                            message.arg1 = -1;
+                                            handler.sendMessage(message);
+                                        }
+                                    }
+                                };
+                                thread.start();
+                            }
+                            @Override
+                            public void onFailed(String type, String error)
+                            {
+                                mPresenter.onErrorUpdateListBargashty();
+                                setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptCheckBargashtyModel", "RptCheckBargashtyActivity", "updateListBargashty", "onFailed");
+                            }
+                        });
+                        break;
+
+                }
+
             }
         }
     }

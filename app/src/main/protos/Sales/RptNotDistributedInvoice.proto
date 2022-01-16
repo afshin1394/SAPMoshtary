@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.RptNotDistributedInvoice.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RptNotDistributedInvoiceProto";
+
+package Sales;
+
+
+service RptNotDistributedInvoice{
+	rpc GetRptNotDistributedInvoice(RptNotDistributedInvoiceRequest) returns(RptNotDistributedInvoiceReplyList);
+}
+
+message RptNotDistributedInvoiceRequest{
+    string SalesManID = 1;
+
+
+}
+
+message RptNotDistributedInvoiceReply{
+
+string	SellGroupDescription = 1;
+int32	SalesManID =2;
+string	SalesManDescription = 3;
+string	SalesManFullName = 4;
+int32	CustomerId = 5;
+string	CustomerCode = 6;
+string	CustomerName = 7;
+int32	RequestNumber = 8;
+string	RequestDate = 9;
+string	RequestDateWithSlash = 10;
+string	RequestTime = 11;
+int32	InvoiceNumber = 12;
+string	InvoiceDate = 13;
+string	InvoiceDateWithSlash = 14;
+string	SellCenterName = 15;
+int32	StatusCode = 16;
+string	StatusCodeTxt = 17;
+float	PureInvoicePriceRound =18;
+int32	EnteryTypeCode = 19;
+string	EnteryTypeCodeTxt = 20;
+string	SendDate = 21;
+string	DistributerName = 22;
+int32   RptNotDistributedInvoiceID = 23;
+int32   InvoiceRequestID = 24;
+int32   SellCenterID = 25;
+int32   SellGroupID = 26;     
+}
+
+message RptNotDistributedInvoiceReplyList{
+	repeated RptNotDistributedInvoiceReply RptNotDistributedInvoices = 1;
+}
+

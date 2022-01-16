@@ -78,8 +78,8 @@ public class MarjoeeMorediPresenter implements MarjoeeMorediMVP.PresenterOps, Ma
     }
 
     @Override
-    public void onTaeidSabtMarjoee(int selectedCount, int position) {
-        mView.get().onTaeidSabtMarjoee(selectedCount,position);
+    public void onTaeidSabtMarjoee(int selectedCount,String nameElatMarjoee, int position) {
+        mView.get().onTaeidSabtMarjoee(selectedCount, nameElatMarjoee,position);
     }
 
     @Override

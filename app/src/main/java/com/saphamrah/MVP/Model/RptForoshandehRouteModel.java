@@ -1,5 +1,8 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.os.Handler;
 import android.os.Message;
 
@@ -8,6 +11,7 @@ import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.RptMasirDAO;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.RptMasirModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -59,38 +63,82 @@ public class RptForoshandehRouteModel implements RptForoshandehRouteMVP.ModelOps
             });
 
             final RptMasirDAO rptMasirDAO = new RptMasirDAO(mPresenter.getAppContext());
-            rptMasirDAO.fetchRPTMasirForoshandeh(mPresenter.getAppContext(), "RptForoshandehRouteActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse()
-            {
-                @Override
-                public void onSuccess(final ArrayList arrayListData)
-                {
-                    Thread thread = new Thread()
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+            switch (serverIpModel.getWebServiceType()){
+                case REST :
+                    rptMasirDAO.fetchRPTMasirForoshandeh(mPresenter.getAppContext(), "RptForoshandehRouteActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse()
                     {
                         @Override
-                        public void run()
+                        public void onSuccess(final ArrayList arrayListData)
                         {
-                            boolean deleteResult = rptMasirDAO.deleteAll();
-                            boolean insertResult = rptMasirDAO.insertGroup(arrayListData);
-                            Message message = new Message();
-                            if (deleteResult && insertResult)
+                            Thread thread = new Thread()
                             {
-                                message.arg1 = 1;
-                            }
-                            else
-                            {
-                                message.arg1 = -1;
-                            }
-                            handler.sendMessage(message);
+                                @Override
+                                public void run()
+                                {
+                                    boolean deleteResult = rptMasirDAO.deleteAll();
+                                    boolean insertResult = rptMasirDAO.insertGroup(arrayListData);
+                                    Message message = new Message();
+                                    if (deleteResult && insertResult)
+                                    {
+                                        message.arg1 = 1;
+                                    }
+                                    else
+                                    {
+                                        message.arg1 = -1;
+                                    }
+                                    handler.sendMessage(message);
+                                }
+                            };
+                            thread.start();
                         }
-                    };
-                    thread.start();
-                }
-                @Override
-                public void onFailed(String type, String error)
-                {
-                    mPresenter.onFailedUpdateRouteList(R.string.errorGetData);
-                }
-            });
+                        @Override
+                        public void onFailed(String type, String error)
+                        {
+                            mPresenter.onFailedUpdateRouteList(R.string.errorGetData);
+                        }
+                    });
+                    break;
+
+                case gRPC:
+                    rptMasirDAO.fetchRPTMasirForoshandehGrpc(mPresenter.getAppContext(), "RptForoshandehRouteActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse()
+                    {
+                        @Override
+                        public void onSuccess(final ArrayList arrayListData)
+                        {
+                            Thread thread = new Thread()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    boolean deleteResult = rptMasirDAO.deleteAll();
+                                    boolean insertResult = rptMasirDAO.insertGroup(arrayListData);
+                                    Message message = new Message();
+                                    if (deleteResult && insertResult)
+                                    {
+                                        message.arg1 = 1;
+                                    }
+                                    else
+                                    {
+                                        message.arg1 = -1;
+                                    }
+                                    handler.sendMessage(message);
+                                }
+                            };
+                            thread.start();
+                        }
+                        @Override
+                        public void onFailed(String type, String error)
+                        {
+                            mPresenter.onFailedUpdateRouteList(R.string.errorGetData);
+                        }
+                    });
+                    break;
+            }
+
+
+
+
         }
         else
         {

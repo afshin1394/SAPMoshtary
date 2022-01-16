@@ -13,6 +13,7 @@ public interface PrintAndShareMVP
 
         void showToast(int resId, int messageType , int duration);
         void onGetAllPrintFaktor(ArrayList<PrintFaktorModel> modelArrayList);
+        void onGetImagePrintFaktor(PrintFaktorModel model);
         void closeLoadingDialog();
     }
 
@@ -23,6 +24,7 @@ public interface PrintAndShareMVP
         void onConfigurationChanged(PrintAndShareMVP.RequiredViewOps view);
         void update();
         void getAllPrintFaktor();
+        void getImagePrintFaktor(String UniqeID);
 
     }
 
@@ -30,6 +32,7 @@ public interface PrintAndShareMVP
     interface RequiredPresenterOps
     {
         void onGetAllPrintFaktor(ArrayList<PrintFaktorModel> modelArrayList);
+        void onGetImagePrintFaktor(PrintFaktorModel model);
         void onUpdateData();
         void failedUpdate();
     }
@@ -39,6 +42,7 @@ public interface PrintAndShareMVP
     {
         void update();
         void getAllPrintFaktor();
+        void getImagePrintFaktor(String UniqeID);
 
     }
 

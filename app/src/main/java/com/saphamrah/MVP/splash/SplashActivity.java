@@ -349,6 +349,7 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
 
             }
         });
+
     }
 
     /**

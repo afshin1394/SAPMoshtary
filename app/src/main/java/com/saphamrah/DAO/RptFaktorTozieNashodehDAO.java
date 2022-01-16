@@ -5,19 +5,35 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.RptFaktorTozieNashodehModel;
+import com.saphamrah.Model.RptMandehdarModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllrptFaktorTozieNashodehResult;
+import com.saphamrah.protos.RptNotDistributedInvoiceGrpc;
+import com.saphamrah.protos.RptNotDistributedInvoiceReply;
+import com.saphamrah.protos.RptNotDistributedInvoiceReplyList;
+import com.saphamrah.protos.RptNotDistributedInvoiceRequest;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -75,11 +91,104 @@ public class RptFaktorTozieNashodehDAO
             RptFaktorTozieNashodehModel.COLUMN_NameMamorPakhsh()
         };
     }
+    public void fetchAllrptFaktorTozieNashodehGrpc(final Context context, final String activityNameForLog, final String ccForoshandeh, final RetrofitResponse retrofitResponse)
+    {
 
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+            //       ServerIpModel serverIpModel = new ServerIpModel();
+            //       serverIpModel.setServerIp("192.168.80.181");
+            serverIpModel.setPort("5000");
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RptMandehdarDAO.class.getSimpleName(), activityNameForLog, "fetchAllMandehdarGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                RptNotDistributedInvoiceGrpc.RptNotDistributedInvoiceBlockingStub remainingInventoryBlockingStub = RptNotDistributedInvoiceGrpc.newBlockingStub(managedChannel);
+                RptNotDistributedInvoiceRequest RptNotDistributedInvoiceRequest = com.saphamrah.protos.RptNotDistributedInvoiceRequest.newBuilder().setSalesManID(ccForoshandeh).build();
+                Callable<RptNotDistributedInvoiceReplyList> RptNotDistributedInvoiceReplyListCallable = () -> remainingInventoryBlockingStub.getRptNotDistributedInvoice(RptNotDistributedInvoiceRequest);
+                RxAsync.makeObservable(RptNotDistributedInvoiceReplyListCallable)
+                        .map(RptNotDistributedInvoiceReplyList ->  {
+                            ArrayList<RptFaktorTozieNashodehModel> models = new ArrayList<>();
+                            for (RptNotDistributedInvoiceReply reply : RptNotDistributedInvoiceReplyList.getRptNotDistributedInvoicesList()) {
+                                RptFaktorTozieNashodehModel model = new RptFaktorTozieNashodehModel();
+
+                                model.setSharhGorohForosh(reply.getSellGroupDescription());
+                                model.setCcForoshandeh(reply.getSalesManID());
+                                model.setSharhForoshandeh(reply.getSalesManDescription());
+                                model.setFullNameForoshandeh(reply.getSalesManFullName());
+                                model.setCcMoshtary(reply.getCustomerId());
+                                model.setCodeMoshtary(reply.getCustomerCode());
+                                model.setNameMoshtary(reply.getCustomerName());
+                                model.setShomarehDarkhast(reply.getRequestNumber());
+                                model.setTarikhDarkhast(reply.getRequestDate());
+                                model.setTarikhDarkhastWithSlash(reply.getRequestDateWithSlash());
+                                model.setSaatDarkhast(reply.getRequestTime());
+                                model.setShomarehFaktor(reply.getInvoiceNumber());
+                                model.setTarikhFaktor(reply.getInvoiceDate());
+                                model.setTarikhFaktorWithSlash(reply.getInvoiceDateWithSlash());
+                                model.setCodeVazeiat(reply.getStatusCode());
+                                model.setTxtCodeVazeiat(reply.getStatusCodeTxt());
+                                model.setRoundMablaghKhalesFaktor(reply.getPureInvoicePriceRound());
+                                model.setCodeNoeVorod(reply.getEnteryTypeCode());
+                                model.setTarikhErsal(reply.getSendDate());
+                                model.setNameMamorPakhsh(reply.getDistributerName());
+                                model.setCcDarkhastFaktor(reply.getInvoiceRequestID());
+                                model.setCcRpt_FaktorTozieNashodeh(reply.getRptNotDistributedInvoiceID());
+                                model.setCcMarkazForosh(reply.getSellCenterID());
+                                model.setCcGorohForosh(reply.getSellGroupID());
+                                model.setNameMarkazForosh(reply.getSellCenterName());
+
+
+                                models.add(model);
+
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<RptFaktorTozieNashodehModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<RptFaktorTozieNashodehModel> models) {
+                                retrofitResponse.onSuccess(models);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), RptMandehdarDAO.class.getSimpleName(), activityNameForLog, "fetchAllMandehdarGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+    }
     public void fetchAllrptFaktorTozieNashodeh(final Context context, final String activityNameForLog, final String ccForoshandeh, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-        serverIpModel.setPort("8040");
+        //serverIpModel.setPort("8040");
 
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
         {

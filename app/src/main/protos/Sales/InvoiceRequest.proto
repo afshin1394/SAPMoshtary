@@ -66,27 +66,28 @@ message InvoiceRequestReply{
   string CustomerCode = 47;
   int32 DraftInvoiceType  = 48;
   int32 UserID  = 49;
-  int32 EnterCodeType = 51;
-  int32 InvoiceDiscountAmountTitle = 54;
-  int32 InvoiceDiscountAmountRow = 55;
-  int32 ExtrasPrice = 56;
-  int32 CustomerTypeID = 58;
-  int32 GuildTypeID = 59;
-  float InvoiceNumberIndex = 60;
-  int32 FinancialDurationID = 61;
-  float CustomerRemainingPrice = 62;
-  string RequestAbsence = 64;
-  string GetInventories = 65;
-  int32 SellTypeInvoiceRequestID = 67;
-  int32 IsAccelerated = 68;
-  int32 IsDelayed = 69;
-  int32 SellOrganizationCustomerContractID = 70;
-  int32 CustomerContractID = 71;
-  int32 DiscountInvoiceRequests = 72;
-  int32 RowInvoiceRequests = 73;
-  string DeliveryPredictDate = 74;
-  float InvoiceSumPrice = 75;
 
+  int32 EnterCodeType = 50;
+  float InvoiceWholePrice = 51;
+  int32 InvoiceDiscountAmountTitle = 52;
+  int32 InvoiceDiscountAmountRow = 53;
+  int32 ExtrasPrice = 54;
+  int32 CustomerTypeID = 55;
+  int32 GuildTypeID = 56;
+  float InvoiceNumberIndex = 57;
+  int32 FinancialDurationID = 58;
+  float CustomerRemainingPrice = 59;
+
+  int32 SellTypeInvoiceRequestID = 60;
+  int32 IsAccelerated = 61;
+  int32 IsDelayed = 62;
+  int32 SellOrganizationCustomerContractID = 63;
+  int32 CustomerContractID = 64;
+  int32 DiscountInvoiceRequests = 65;
+  int32 RowInvoiceRequests = 66;
+  string  DeliveryPredictDate = 67;
+  float InvoiceSumPrice =68;
+  int32 StoreID = 69;
 }
 
 message InvoiceRequestReplyList{

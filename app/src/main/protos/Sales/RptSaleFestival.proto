@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.RptSaleFestival.Protos";
+option java_multiple_files = true;
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "RptSaleFestivalProto";
+option objc_class_prefix = "HLW";
+package Sales;
+
+service RptSaleFestival{
+	rpc GetRptSaleFestival(RptSaleFestivalRequest) returns(RptSaleFestivalReplyList);
+}
+
+message RptSaleFestivalRequest{
+    string SalesManID = 1;
+	string CustomersID =2;
+}
+
+message RptSaleFestivalReply{
+int32	Row =1;
+int32	SaleFestivalID = 2;
+int32	SaleFestivalIDRow = 3;
+string	FestivalDescription =4;
+int32	InvoiceRequestID =5;
+int32	CustomerID =6;
+string	CustomerCode =7;
+string	CustomerName =8;
+int32	SellOrganizationCenterID = 9;
+string	CenterName = 10;
+string	SellOrganizationName = 11;
+int32	CalculationType = 12;
+int32	CalculationBase =13;
+string	CalculationBaseDescription = 14;
+string	CalculationTypeTxt = 15;
+string	BaseOnCalculation = 16;
+string	FestivalFromDate = 17;
+string	FestivalUntilDate = 18;
+string	FestivalFromDateRow = 19;
+string	FestivalUntilDateRow =20;
+string	PackingTypeCodeTxt = 21;
+string	PerPackingTypeCodeTxt = 22;
+int32	From =23;
+int32	Until =24;
+int32	Per = 25;
+int32	FestivalScore =26;
+double	FestivalScoreOneRial = 27;
+int32	CustomerScore = 28;
+double	CustomerScoreRial =29;
+int32	Period = 30;
+string	ScoreCalculationDate =31;
+
+}
+
+message RptSaleFestivalReplyList{
+	repeated RptSaleFestivalReply RptSaleFestivals = 1;
+}

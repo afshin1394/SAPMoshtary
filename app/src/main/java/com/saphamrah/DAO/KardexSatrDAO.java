@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.saphamrah.Model.KardexModel;
 import com.saphamrah.Model.KardexSatrModel;
+import com.saphamrah.PubFunc.DateUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;

@@ -5,7 +5,9 @@ option java_multiple_files = true;
 option java_package = "com.saphamrah.protos";
 option java_outer_classname = "SalesManDistributorProto";
 option objc_class_prefix = "HLW";
+
 package Global;
+
 
 service SalesManDistributor {
 
@@ -68,6 +70,7 @@ message SalesManDistributorReply {
   int32 ReceiptStoreCenterID = 47;
   int32 ReturnedStoreID = 48;
   int32 ReturnedStoreTypeCode = 49;
+  string Version = 50;
 
 
 

@@ -217,8 +217,9 @@ public class MarjoeeMorediFragment extends Fragment implements MarjoeeMorediMVP.
     }
 
     @Override
-    public void onTaeidSabtMarjoee(int selectedCount, int position) {
+    public void onTaeidSabtMarjoee(int selectedCount,String nameelatMarjoee, int position) {
         marjoeeMamorPakhshModelsAdpater.get(position).setExtraProp_TedadNahaeeMarjoee(selectedCount);
+        marjoeeMamorPakhshModelsAdpater.get(position).setExtraProp_NameElatMarjoee(nameelatMarjoee);
         adapter.notifyItemChanged(position);
     }
 

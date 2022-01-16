@@ -23,6 +23,7 @@ public interface TreasuryListMVP
         void onError(boolean closeActivity , int errorResId);
 		void onError(boolean closeActivity , String message);													 
         void showAlertMessage(int resId, int messageType);
+        void onErrorSendRasGiri(String error);
         void showAlertMessage(int resId , String parameter, int messageType);
         void showToast(int resId, int messageType , int duration);
         void showLoading();
@@ -78,6 +79,7 @@ public interface TreasuryListMVP
         void onErrorAccessToLocation();
         void onErrorGetCustomerLocation(int resId , String customerName);
         void onError(int resId);
+        void onErrorSendRasGiri(String error);
         void onSuccess(int resId);
         void onSuccessLocation(int resId,int position);
         void openInvoiceSettlement(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel,boolean openInvoiceSettlement);

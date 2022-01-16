@@ -35,6 +35,10 @@ public class PrintAndSharePresenter implements PrintAndShareMVP.PresenterOps, Pr
         mView.get().onGetAllPrintFaktor(modelArrayList);
     }
 
+    public void onGetImagePrintFaktor(PrintFaktorModel model) {
+        mView.get().onGetImagePrintFaktor(model);
+    }
+
     @Override
     public void onUpdateData() {
         mView.get().closeLoadingDialog();
@@ -61,6 +65,9 @@ public class PrintAndSharePresenter implements PrintAndShareMVP.PresenterOps, Pr
         mModel.getAllPrintFaktor();
     }
 
-
+    @Override
+    public void getImagePrintFaktor(String UniqID) {
+        mModel.getImagePrintFaktor(UniqID);
+    }
 
 }

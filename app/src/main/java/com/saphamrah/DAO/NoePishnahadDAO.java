@@ -149,7 +149,7 @@ public class NoePishnahadDAO
     public void fetchNoePishnahad(final Context context, final String activityNameForLog , final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-        serverIpModel.setPort("8040");
+        //serverIpModel.setPort("8040");
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
         {
             String message = "can't find server";

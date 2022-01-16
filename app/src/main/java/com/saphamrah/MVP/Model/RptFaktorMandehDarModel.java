@@ -1,5 +1,8 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.os.Handler;
 import android.os.Message;
 
@@ -9,6 +12,7 @@ import com.saphamrah.DAO.RptMandehdarDAO;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.RptListVosolModel;
 import com.saphamrah.Model.RptMandehdarModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.Utils.Constants;
@@ -57,40 +61,82 @@ public class RptFaktorMandehDarModel implements RptFaktorMandehDarMVP.ModelOps
                 return false;
             }
         });
-
-        rptMandehdarDAO.fetchAllMandehdar(mPresenter.getAppContext(), "RptFaktorMandehDarActivity", String.valueOf(foroshandehMamorPakhshModel.getCcAfrad()), new RetrofitResponse()
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        switch (serverIpModel.getWebServiceType())
         {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
+            case REST:
+                rptMandehdarDAO.fetchAllMandehdar(mPresenter.getAppContext(), "RptFaktorMandehDarActivity", String.valueOf(foroshandehMamorPakhshModel.getCcAfrad()), new RetrofitResponse()
                 {
                     @Override
-                    public void run()
+                    public void onSuccess(final ArrayList arrayListData)
                     {
-                        boolean deleteResult = rptMandehdarDAO.deleteAll();
-                        boolean insertResult = rptMandehdarDAO.insertGroup(arrayListData);
-                        Message message = new Message();
-                        if (deleteResult && insertResult)
+                        Thread thread = new Thread()
                         {
-                            message.arg1 = 1;
-                        }
-                        else
-                        {
-                            message.arg1 = -1;
-                        }
-                        handler.sendMessage(message);
+                            @Override
+                            public void run()
+                            {
+                                boolean deleteResult = rptMandehdarDAO.deleteAll();
+                                boolean insertResult = rptMandehdarDAO.insertGroup(arrayListData);
+                                Message message = new Message();
+                                if (deleteResult && insertResult)
+                                {
+                                    message.arg1 = 1;
+                                }
+                                else
+                                {
+                                    message.arg1 = -1;
+                                }
+                                handler.sendMessage(message);
+                            }
+                        };
+                        thread.start();
                     }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onErrorUpdateListMandehDar();
-                setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptListVosolModel", "RptListVosolActivity", "updateListVosol", "onFailed");
-            }
-        });
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onErrorUpdateListMandehDar();
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptListVosolModel", "RptListVosolActivity", "updateListVosol", "onFailed");
+                    }
+                });
+                break;
+
+            case gRPC:
+                rptMandehdarDAO.fetchAllMandehdarGrpc(mPresenter.getAppContext(), "RptFaktorMandehDarActivity", String.valueOf(foroshandehMamorPakhshModel.getCcAfrad()), new RetrofitResponse()
+                {
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData)
+                    {
+                        Thread thread = new Thread()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                boolean deleteResult = rptMandehdarDAO.deleteAll();
+                                boolean insertResult = rptMandehdarDAO.insertGroup(arrayListData);
+                                Message message = new Message();
+                                if (deleteResult && insertResult)
+                                {
+                                    message.arg1 = 1;
+                                }
+                                else
+                                {
+                                    message.arg1 = -1;
+                                }
+                                handler.sendMessage(message);
+                            }
+                        };
+                        thread.start();
+                    }
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onErrorUpdateListMandehDar();
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptListVosolModel", "RptListVosolActivity", "updateListVosol", "onFailed");
+                    }
+                });
+                break;
+        }
+
     }
 
     @Override

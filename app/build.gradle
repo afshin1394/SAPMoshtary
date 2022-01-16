@@ -8,8 +8,8 @@ android {
         applicationId "com.saphamrah"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 97
-        versionName "2.2.6.7"
+        versionCode 98
+        versionName "2.2.6.9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         sourceSets {
@@ -23,14 +23,14 @@ android {
     buildTypes {
         debug {
            // useProguard true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
         }
         release {
             minifyEnabled false
             //useProguard true
             //proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             lintOptions {
                 abortOnError false
                 disable 'MissingTranslation'
@@ -57,7 +57,8 @@ android {
 }
 
 dependencies {
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.31"
+    //implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.31"
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10"
     // default and Practical
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.2.0'

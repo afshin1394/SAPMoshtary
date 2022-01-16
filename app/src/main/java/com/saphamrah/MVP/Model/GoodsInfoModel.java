@@ -1,5 +1,8 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +22,7 @@ import com.saphamrah.MVP.View.GoodsInfoActivity;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.Model.RptKalaInfoModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
@@ -103,48 +107,84 @@ public class GoodsInfoModel implements GoodsInfoMVP.ModelOps
         if (ccMarkazSazmanSakhtarForosh == null || ccMarkazSazmanSakhtarForosh.trim().equals("")) {
             mPresenter.onUpdateGoodsList(false,mPresenter.getAppContext().getString( R.string.notFoundMarkazSazmanSakhtarForosh));
         } else {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
             final RptKalaInfoDAO rptKalaInfoDAO = new RptKalaInfoDAO(mPresenter.getAppContext());
-            rptKalaInfoDAO.fetchRptKalaInfoRx(mPresenter.getAppContext(), "GoodsInfoActivity", ccMarkazSazmanSakhtarForosh, new RxResponseHandler() {
-                @Override
-                public void onStart(Disposable disposable) {
-                    super.onStart(disposable);
-                }
-
-                @Override
-                public void onSuccess(final ArrayList arrayListData) {
-                    new Thread() {
+            switch (serverIpModel.getWebServiceType()){
+                case REST:
+                    rptKalaInfoDAO.fetchRptKalaInfoRx(mPresenter.getAppContext(), "GoodsInfoActivity", ccMarkazSazmanSakhtarForosh, new RxResponseHandler() {
                         @Override
-                        public void run() {
-                            boolean deleteResult = rptKalaInfoDAO.deleteAll();
-                            boolean insertResult = rptKalaInfoDAO.insertGroup(arrayListData);
-                            if (deleteResult && insertResult) {
-                                Message message = new Message();
-                                message.arg1 = 1;
-                                handler.sendMessage(message);
-                            } else {
-                                Message message = new Message();
-                                message.arg1 = -1;
-                                handler.sendMessage(message);
-                            }
+                        public void onStart(Disposable disposable) {
+                            super.onStart(disposable);
                         }
-                    }.start();
 
-                }
+                        @Override
+                        public void onSuccess(final ArrayList arrayListData) {
+                            new Thread() {
+                                @Override
+                                public void run() {
+                                    boolean deleteResult = rptKalaInfoDAO.deleteAll();
+                                    boolean insertResult = rptKalaInfoDAO.insertGroup(arrayListData);
+                                    if (deleteResult && insertResult) {
+                                        Message message = new Message();
+                                        message.arg1 = 1;
+                                        handler.sendMessage(message);
+                                    } else {
+                                        Message message = new Message();
+                                        message.arg1 = -1;
+                                        handler.sendMessage(message);
+                                    }
+                                }
+                            }.start();
+
+                        }
 
 
 
 
-                @Override
-                public void onFailed(String message, String type) {
+                        @Override
+                        public void onFailed(String message, String type) {
 
-                    mPresenter.onUpdateGoodsList(false,message );
-                }
+                            mPresenter.onUpdateGoodsList(false,message );
+                        }
 
-                @Override
-                public void onComplete() {
-                    super.onComplete();
-                }
-            });
+                        @Override
+                        public void onComplete() {
+                            super.onComplete();
+                        }
+                    });
+                    break;
+
+                case gRPC:
+                    rptKalaInfoDAO.fetchRptKalaInfoGrpc(mPresenter.getAppContext(), activityNameForLog, ccMarkazSazmanSakhtarForosh, new RetrofitResponse() {
+                        @Override
+                        public void onSuccess(ArrayList arrayListData) {
+                            new Thread() {
+                                @Override
+                                public void run() {
+                                    boolean deleteResult = rptKalaInfoDAO.deleteAll();
+                                    boolean insertResult = rptKalaInfoDAO.insertGroup(arrayListData);
+                                    if (deleteResult && insertResult) {
+                                        Message message = new Message();
+                                        message.arg1 = 1;
+                                        handler.sendMessage(message);
+                                    } else {
+                                        Message message = new Message();
+                                        message.arg1 = -1;
+                                        handler.sendMessage(message);
+                                    }
+                                }
+                            }.start();
+                        }
+
+                        @Override
+                        public void onFailed(String type, String error) {
+                            mPresenter.onUpdateGoodsList(false,error );
+                        }
+                    });
+                    break;
+
+            }
+
         }
     }
 

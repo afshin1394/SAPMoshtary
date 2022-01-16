@@ -47,7 +47,7 @@ public class KalaDarkhastFaktorSatrDAO
                     " k.NameVahedShomaresh, k.NameBrand, k.NameVahedSize, k.NameVahedVazn, k.VaznKarton, k.VaznKhales \n" +
                     " from DarkhastFaktorSatr fs inner join Kala k on k.ccKalaCode = fs.ccKalaCode and k.ShomarehBach = fs.ShomarehBach \n" +
                     " and k.gheymatForoshAsli = fs.gheymatForoshAsli and k.GheymatMasrafKonandehAsli = fs.GheymatMasrafKonandehAsli\n" +
-                    " and k.ccTaminKonandeh = fs.ccTaminKonandeh where fs.CodeNoeKala != 2 And ccDarkhastFaktor = " + ccDarkhastFaktor;
+                    " and k.ccTaminKonandeh = fs.ccTaminKonandeh and k.TarikhTolid = fs.TarikhTolid and k.TarikhEngheza = fs.TarikhEngheza where fs.CodeNoeKala != 2 And ccDarkhastFaktor = " + ccDarkhastFaktor;
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
@@ -82,7 +82,7 @@ public class KalaDarkhastFaktorSatrDAO
                         " k.NameVahedShomaresh, k.NameBrand, k.NameVahedSize, k.NameVahedVazn, k.VaznKarton, k.VaznKhales \n" +
                         " from DarkhastFaktorSatr fs inner join Kala k on k.ccKalaCode = fs.ccKalaCode and k.ShomarehBach = fs.ShomarehBach \n" +
                         " and k.gheymatForoshAsli = fs.gheymatForoshAsli and k.GheymatMasrafKonandehAsli = fs.GheymatMasrafKonandehAsli\n" +
-                        " and k.ccTaminKonandeh = fs.ccTaminKonandeh where fs.CodeNoeKala != 2 And ccDarkhastFaktor = " + ccDarkhastFaktor;
+                        " and k.ccTaminKonandeh = fs.ccTaminKonandeh and k.TarikhTolid = fs.TarikhTolid and k.TarikhEngheza = fs.TarikhEngheza where fs.CodeNoeKala != 2 And ccDarkhastFaktor = " + ccDarkhastFaktor;
             }
             else if (ccNoeMoshtary==350)
             {
@@ -92,7 +92,7 @@ public class KalaDarkhastFaktorSatrDAO
                         " from DarkhastFaktorSatr fs " +
                         " inner join Kala k on k.ccKalaCode = fs.ccKalaCode and k.ShomarehBach = fs.ShomarehBach " +
                         " and k.gheymatForoshAsli = fs.gheymatForoshAsli and k.GheymatMasrafKonandehAsli = fs.GheymatMasrafKonandehAsli " +
-                        " and k.ccTaminKonandeh = fs.ccTaminKonandeh " +
+                        " and k.ccTaminKonandeh = fs.ccTaminKonandeh and k.TarikhTolid = fs.TarikhTolid and k.TarikhEngheza = fs.TarikhEngheza " +
                         " LEFT JOIN (SELECT * FROM MoshtaryGharardadKala ) mgk " +
                         "            ON mgk.ccKalaCode= fs.ccKalaCode AND "+
                         " (CASE WHEN mgk.ControlMablagh = 1 AND fs.mablaghforosh = mgk.mablaghforosh AND fs.GheymatMasrafKonandeh = mgk.MablaghMasrafKonandeh "+

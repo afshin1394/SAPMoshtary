@@ -11,6 +11,7 @@ public class MandehMojodyMashinModel
     private static final String COLUMN_Mojody = "Mojody";
     private static final String COLUMN_ShomarehBach = "ShomarehBach";
     private static final String COLUMN_TarikhTolid = "TarikhTolid";
+    private static final String COLUMN_TarikhEngheza = "TarikhEngheza";
     private static final String COLUMN_GheymatMasrafKonandeh = "GheymatMasrafKonandeh";
     private static final String COLUMN_GheymatForosh = "GheymatForosh";
     private static final String COLUMN_ccTaminKonandeh = "ccTaminKonandeh";
@@ -36,6 +37,9 @@ public class MandehMojodyMashinModel
     }
     public static String COLUMN_TarikhTolid() {
         return COLUMN_TarikhTolid;
+    }
+    public static String COLUMN_TarikhEngheza() {
+        return COLUMN_TarikhEngheza;
     }
     public static String COLUMN_GheymatMasrafKonandeh() {
         return COLUMN_GheymatMasrafKonandeh;
@@ -64,6 +68,7 @@ public class MandehMojodyMashinModel
     private int Mojody;
     private String ShomarehBach;
     private String TarikhTolid;
+    private String TarikhEngheza;
     private int GheymatMasrafKonandeh;
     private int GheymatForosh;
     private int ccTaminKonandeh;
@@ -112,6 +117,13 @@ public class MandehMojodyMashinModel
     }
     public String getTarikhTolid(){
         return this.TarikhTolid;
+    }
+
+    public void setTarikhEngheza(String TarikhEngheza){
+        this.TarikhEngheza = TarikhEngheza;
+    }
+    public String getTarikhEngheza(){
+        return this.TarikhEngheza;
     }
 
     public void setGheymatMasrafKonandeh(int GheymatMasrafKonandeh){
@@ -180,6 +192,7 @@ public class MandehMojodyMashinModel
                 ", Mojody=" + Mojody +
                 ", ShomarehBach='" + ShomarehBach + '\'' +
                 ", TarikhTolid='" + TarikhTolid + '\'' +
+                ", TarikhEngheza='" + TarikhEngheza + '\'' +
                 ", GheymatMasrafKonandeh=" + GheymatMasrafKonandeh +
                 ", GheymatForosh=" + GheymatForosh +
                 ", ccTaminKonandeh=" + ccTaminKonandeh +

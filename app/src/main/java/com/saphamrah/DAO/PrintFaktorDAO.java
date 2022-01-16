@@ -13,6 +13,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.saphamrah.Application.BaseApplication;
+import com.saphamrah.Model.DarkhastFaktorRoozSortModel;
 import com.saphamrah.Model.PrintFaktorModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.TizerModel;
@@ -340,7 +341,67 @@ public class PrintFaktorDAO
         }
         return models;
     }
+    public ArrayList<PrintFaktorModel> getAllWithOutImage()
+    {
+        ArrayList<PrintFaktorModel> models = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query =  "SELECT Radif,CodeMoshtary,NameMoshtary,ShomarehFaktor,MablaghFaktor,UniqID_Tablet,ccDarkhastFaktorNoeForosh,'' AS FaktorImage \n" +
+                            "FROM PrintFaktor";
+            Cursor cursor = db.rawQuery(query , null);
 
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    models = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = BaseApplication.getContext().getResources().getString(R.string.errorSelectAll , modelGetTABLE_NAME.getTABLE_NAME()) + "\n" + exception.toString();
+            logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), message, "PrintFaktorDAO" , "" , "getAll" , "");
+        }
+        return models;
+    }
+
+
+    public PrintFaktorModel getImageWithUniqID(String UniqID_Tablet)
+    {
+        PrintFaktorModel printFaktorModel = new PrintFaktorModel();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query =  " SELECT * \n" +
+                    " FROM PrintFaktor \n" +
+                    " WHERE (UniqID_Tablet = '" + UniqID_Tablet + "')";
+            Cursor cursor = db.rawQuery(query , null);
+
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    printFaktorModel = cursorToModel(cursor).get(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = BaseApplication.getContext().getResources().getString(R.string.errorSelectAll , modelGetTABLE_NAME.getTABLE_NAME()) + "\n" + exception.toString();
+            logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), message, "PrintFaktorDAO" , "" , "getImageWithUniqID" , "");
+        }
+        return printFaktorModel;
+    }
 
     public boolean deleteAll()
     {

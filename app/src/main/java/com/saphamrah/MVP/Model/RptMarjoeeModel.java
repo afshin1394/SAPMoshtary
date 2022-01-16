@@ -1,10 +1,14 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import com.saphamrah.BaseMVP.RptMarjoeeMVP;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.RptMarjoeeDAO;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.RptMarjoeeKalaModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 
@@ -36,30 +40,64 @@ public class RptMarjoeeModel implements RptMarjoeeMVP.ModelOps
         final RptMarjoeeDAO rptMarjoeeDAO = new RptMarjoeeDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
-        rptMarjoeeDAO.fetchRPTMarjoee(mPresenter.getAppContext(), "RptMarjoeeActivity", String.valueOf(foroshandehMamorPakhshModel.getCcAfrad()), new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(ArrayList arrayListData)
-            {
-                boolean deleteResult = rptMarjoeeDAO.deleteAll();
-                boolean insertResult = rptMarjoeeDAO.insertGroup(arrayListData);
-                if (deleteResult && insertResult)
-                {
-                    mPresenter.onSuccessUpdateMarjoee();
-                    getMarjoeeList();
-                }
-                else
-                {
-                    mPresenter.onErrorUpdateMarjoee();
-                }
-            }
 
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onErrorUpdateMarjoee();
-            }
-        });
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        switch (serverIpModel.getWebServiceType()){
+            case REST:
+                rptMarjoeeDAO.fetchRPTMarjoee(mPresenter.getAppContext(), "RptMarjoeeActivity", String.valueOf(foroshandehMamorPakhshModel.getCcAfrad()), new RetrofitResponse()
+                {
+                    @Override
+                    public void onSuccess(ArrayList arrayListData)
+                    {
+                        boolean deleteResult = rptMarjoeeDAO.deleteAll();
+                        boolean insertResult = rptMarjoeeDAO.insertGroup(arrayListData);
+                        if (deleteResult && insertResult)
+                        {
+                            mPresenter.onSuccessUpdateMarjoee();
+                            getMarjoeeList();
+                        }
+                        else
+                        {
+                            mPresenter.onErrorUpdateMarjoee();
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onErrorUpdateMarjoee();
+                    }
+                });
+                break;
+            case gRPC:
+                rptMarjoeeDAO.fetchRPTMarjoeeGrpc(mPresenter.getAppContext(), "RptMarjoeeActivity", foroshandehMamorPakhshModel.getCcAfrad(), new RetrofitResponse()
+                {
+                    @Override
+                    public void onSuccess(ArrayList arrayListData)
+                    {
+                        boolean deleteResult = rptMarjoeeDAO.deleteAll();
+                        boolean insertResult = rptMarjoeeDAO.insertGroup(arrayListData);
+                        if (deleteResult && insertResult)
+                        {
+                            mPresenter.onSuccessUpdateMarjoee();
+                            getMarjoeeList();
+                        }
+                        else
+                        {
+                            mPresenter.onErrorUpdateMarjoee();
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onErrorUpdateMarjoee();
+                    }
+                });
+                break;
+        }
+
+
     }
 
     @Override

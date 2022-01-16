@@ -78,14 +78,14 @@ public class CalculateHajmiDiscountKala extends DiscountCalculation
                         Log.d("takhfif", "takhfifKala sumTedadDarBaste : " + sumTedadDarBaste);
                         Log.d("takhfif", "takhfifKala takhfifHajmiSatrModel : " + takhfifHajmiSatrModel);
                         zarib = calculateZarib(takhfifHajmiSatrModel.getBeEza(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(),
-                                sumTedadDarKarton, sumTedadDarBaste, Integer.parseInt(model.getFiled3()), Double.parseDouble(model.getFiled6()), ((darkhastFaktorSatrModel.getTedad3()* darkhastFaktorSatrModel.getVazn())/1000.0),0);
+                                sumTedadDarKarton, sumTedadDarBaste, Integer.parseInt(model.getFiled3()), Double.parseDouble(model.getFiled6()), ((darkhastFaktorSatrModel.getTedad3()* darkhastFaktorSatrModel.getVazn())/1000.0),1);
                         Log.d("takhfif" , "takhfifKala MablaghKolFaktor : " + darkhastFaktorModel.getMablaghKolFaktor());
                         Log.d("takhfif" , "takhfifKala zarib : " + zarib);
 
                         //int tedad = calculateTedad(takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(), kalaMohasebeh.getTedadDarKarton(), kalaMohasebeh.getTedadDarBasteh(), Double.parseDouble(model.getFiled3()));
                         int tedad = calculateTedad(takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(), sumTedadDarKarton, sumTedadDarBaste, Double.parseDouble(model.getFiled3()));
                         Log.d("takhfif" , "tedad : " + tedad);
-                        int mablaghVahedKalaMohasebeh = (int)calculateMablaghVahed( takhfifHajmiTitrSatrModel.getNoeTedadRial(),tedad,0,(long)Double.parseDouble(model.getFiled6()),1);
+                        int mablaghVahedKalaMohasebeh = (int)calculateMablaghVahed( takhfifHajmiTitrSatrModel.getNoeTedadRial(),tedad,Math.round(((darkhastFaktorSatrModel.getTedad3()* darkhastFaktorSatrModel.getVazn()))),(long)Double.parseDouble(model.getFiled6()),1);
                         Log.d("takhfif" , "takhfifKala mablaghVahedKalaMohasebeh : " + mablaghVahedKalaMohasebeh);
 
                         long MablaghTakhfifDarkhast = Math.round(Double.valueOf(model.getFiled8()));
@@ -97,18 +97,11 @@ public class CalculateHajmiDiscountKala extends DiscountCalculation
                         Log.d("takhfif" , "takhfifKala tedadLong : " + tedad);
 
                         long mablaghVahedKalaMohasebehLong = (long) mablaghVahedKalaMohasebeh;
-//                        if(takhfifHajmiTitrSatrModel.getOlaviat() == 0 || takhfifHajmiTitrSatrModel.getOlaviat() == 1 )//|| (takhfifHajmiTitrSatrModel.getCcTakhfifHajmi() == Integer.valueOf(model.getFiled7())))
-//                        {
-
-                            MablaghKol = (long) (tedadLong * mablaghVahedKalaMohasebehLong);
-                            Log.d("takhfif","takhfifKala if MablaghKol :" + MablaghKol);
-//                        }
-//                        else
-//                        {
 //
-//                            MablaghKol = (long) ((tedadLong * mablaghVahedKalaMohasebehLong)-MablaghTakhfifDarkhast);
-//                            Log.d("takhfif","takhfifKala else MablaghKol :" + MablaghKol);
-//                        }
+                        //MablaghKol = (long) (tedadLong * mablaghVahedKalaMohasebehLong);
+                        MablaghKol = (long)Double.parseDouble(model.getFiled6());
+                        Log.d("takhfif","takhfifKala if MablaghKol :" + MablaghKol);
+//
                         Log.d("takhfif" , "takhfifKala MablaghKol : " + MablaghKol + "takhfifHajmiTitrSatrModel.getOlaviat:" +takhfifHajmiTitrSatrModel.getOlaviat());
                        Mablagh =  calculateMablagh(takhfifHajmiTitrSatrModel.getNoeTedadRial(), (int) takhfifHajmiSatrModel.getBeEza(), (long) MablaghKol, (long) mablaghVahedKalaMohasebeh, takhfifHajmiSatrModel.getCcNoeField(), takhfifHajmiSatrModel.getCcGorohMohasebeh());
                         //Mablagh =  calculateMablagh(takhfifHajmiTitrSatrModel.getNoeTedadRial(), (int) takhfifHajmiSatrModel.getBeEza(), (long) MablaghKol, (long) MablaghKol, takhfifHajmiSatrModel.getCcNoeField(), takhfifHajmiSatrModel.getCcGorohMohasebeh());

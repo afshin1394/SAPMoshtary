@@ -37,7 +37,7 @@ public interface TreasuryListMapMVP
         void showToast(int resId, int messageType , int duration);
         void closeLoadingDialog();
         void onGetSortList(int sortList);
-
+        void onErrorSendRasGiri(String error);
         void showLoadingDialog();
 
         void onOpenInvoiceSettlement(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
@@ -88,7 +88,7 @@ public interface TreasuryListMapMVP
         void onSuccessRouting(String customerName, ArrayList<GeoPoint> pointsOfPolyline, String routingResponse);
         void onError(int resId);
         void onGetSortList(int sortList);
-
+        void onErrorSendRasGiri(String error);
         void onWarning(int emptyList);
 
         void onSuccess(int successSendData);

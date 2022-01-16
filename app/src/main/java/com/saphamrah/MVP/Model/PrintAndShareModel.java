@@ -76,7 +76,13 @@ public class PrintAndShareModel implements PrintAndShareMVP.ModelOps {
 
     @Override
     public void getAllPrintFaktor() {
-        ArrayList<PrintFaktorModel> modelArrayList = printFaktorDAO.getAll();
+        //ArrayList<PrintFaktorModel> modelArrayList = printFaktorDAO.getAll();
+        ArrayList<PrintFaktorModel> modelArrayList = printFaktorDAO.getAllWithOutImage();
         mPresenter.onGetAllPrintFaktor(modelArrayList);
+    }
+
+    public void getImagePrintFaktor(String UniqID) {
+        PrintFaktorModel model = printFaktorDAO.getImageWithUniqID(UniqID);
+        mPresenter.onGetImagePrintFaktor(model);
     }
 }

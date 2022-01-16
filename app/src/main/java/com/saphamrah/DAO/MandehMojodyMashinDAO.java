@@ -76,6 +76,7 @@ public class MandehMojodyMashinDAO
             MandehMojodyMashinModel.COLUMN_Mojody(),
             MandehMojodyMashinModel.COLUMN_ShomarehBach(),
             MandehMojodyMashinModel.COLUMN_TarikhTolid(),
+            MandehMojodyMashinModel.COLUMN_TarikhEngheza(),
             MandehMojodyMashinModel.COLUMN_GheymatMasrafKonandeh(),
             MandehMojodyMashinModel.COLUMN_GheymatForosh(),
             MandehMojodyMashinModel.COLUMN_ccTaminKonandeh(),
@@ -123,6 +124,7 @@ public class MandehMojodyMashinDAO
                                 mandehMojodyMashinModel.setMojody(remainingInventoryReply.getInventory());
                                 mandehMojodyMashinModel.setShomarehBach(remainingInventoryReply.getBachNumber());
                                 mandehMojodyMashinModel.setTarikhTolid(remainingInventoryReply.getProductionDate());
+                                mandehMojodyMashinModel.setTarikhEngheza(remainingInventoryReply.getProductionDate());//todo Engheza
                                 mandehMojodyMashinModel.setGheymatMasrafKonandeh(remainingInventoryReply.getConsumerPrice());
                                 mandehMojodyMashinModel.setGheymatForosh(remainingInventoryReply.getSellPrice());
                                 mandehMojodyMashinModel.setCcTaminKonandeh(remainingInventoryReply.getProviderID());
@@ -175,7 +177,7 @@ public class MandehMojodyMashinDAO
     public void fetchMandehMojodyMashin(final Context context, final String activityNameForLog, final String ccAnbarak, String ccForoshandeh, String ccMamorPakhsh, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-        serverIpModel.setPort("8040");
+        //serverIpModel.setPort("8040");
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
         {
             String message = "can't find server";
@@ -377,6 +379,7 @@ public class MandehMojodyMashinDAO
         contentValues.put(MandehMojodyMashinModel.COLUMN_Mojody() , mandehMojodyMashinModel.getMojody());
         contentValues.put(MandehMojodyMashinModel.COLUMN_ShomarehBach() , mandehMojodyMashinModel.getShomarehBach());
         contentValues.put(MandehMojodyMashinModel.COLUMN_TarikhTolid() , mandehMojodyMashinModel.getTarikhTolid());
+        contentValues.put(MandehMojodyMashinModel.COLUMN_TarikhEngheza() , mandehMojodyMashinModel.getTarikhEngheza());
         contentValues.put(MandehMojodyMashinModel.COLUMN_GheymatMasrafKonandeh() , mandehMojodyMashinModel.getGheymatMasrafKonandeh());
         contentValues.put(MandehMojodyMashinModel.COLUMN_GheymatForosh() , mandehMojodyMashinModel.getGheymatForosh());
         contentValues.put(MandehMojodyMashinModel.COLUMN_ccTaminKonandeh() , mandehMojodyMashinModel.getCcTaminKonandeh());
@@ -402,6 +405,7 @@ public class MandehMojodyMashinDAO
             mandehMojodyMashinModel.setMojody(cursor.getInt(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_Mojody())));
             mandehMojodyMashinModel.setShomarehBach(cursor.getString(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_ShomarehBach())));
             mandehMojodyMashinModel.setTarikhTolid(cursor.getString(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_TarikhTolid())));
+            mandehMojodyMashinModel.setTarikhEngheza(cursor.getString(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_TarikhEngheza())));
             mandehMojodyMashinModel.setGheymatMasrafKonandeh(cursor.getInt(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_GheymatMasrafKonandeh())));
             mandehMojodyMashinModel.setGheymatForosh(cursor.getInt(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_GheymatForosh())));
             mandehMojodyMashinModel.setCcTaminKonandeh(cursor.getInt(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_ccTaminKonandeh())));

@@ -300,6 +300,11 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
     }
 
     @Override
+    public void onErrorSendRasGiri(String error) {
+        customAlertDialog.showMessageAlert(TreasuryListMapActivity.this, false, "", error, Constants.FAILED_MESSAGE(), getString(R.string.apply));
+    }
+
+    @Override
     public void showLoadingDialog() {
         if (customLoadingDialog!=null)
             alertDialog = customLoadingDialog.showLoadingDialog(TreasuryListMapActivity.this);

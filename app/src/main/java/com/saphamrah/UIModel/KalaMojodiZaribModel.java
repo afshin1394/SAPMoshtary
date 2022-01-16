@@ -43,6 +43,7 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
     private float GheymatMasrafKonandehAsli;
     private float GheymatForoshAsli;
     private Bitmap imageDb;
+    private int ccGorohKala;
 
 
 
@@ -263,6 +264,13 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
         this.kalaDoSetareh = kalaDoSetareh;
     }
 
+    public int getCcGorohKala() {
+        return ccGorohKala;
+    }
+
+    public void setCcGorohKala(int ccGorohKala) {
+        this.ccGorohKala = ccGorohKala;
+    }
 
     public float getGheymatMasrafKonandehAsli() {
         return GheymatMasrafKonandehAsli;
@@ -409,6 +417,7 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
                 ", kalaDoSetareh=" + kalaDoSetareh +
                 ", GheymatMasrafKonandehAsli=" + GheymatMasrafKonandehAsli +
                 ", GheymatForoshAsli=" + GheymatForoshAsli +
+                ", ccGorohKala=" + ccGorohKala +
                 '}';
     }
 

@@ -1,6 +1,9 @@
 package com.saphamrah.MVP.Model;
 
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
@@ -38,6 +41,7 @@ import com.saphamrah.DAO.RptDarkhastFaktorVazeiatPPCDAO;
 import com.saphamrah.DAO.RptForoshDAO;
 import com.saphamrah.DAO.RptMandehdarDAO;
 import com.saphamrah.DAO.RptSanadDAO;
+import com.saphamrah.MVP.View.TreasuryListMapActivity;
 import com.saphamrah.Model.AnbarakAfradModel;
 import com.saphamrah.Model.BargashtyModel;
 import com.saphamrah.Model.ForoshandehAmoozeshiModel;
@@ -152,7 +156,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             Date dtGregorianGetProgramDate = sdf.parse(gregorianGetProgramDate);
             //---------------------- For Test -----------------
 
-            int isTest= 0;// userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
+            int isTest=  userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
             Log.d("date" , "istest : " + isTest);
             if (isTest == 1)
             {
@@ -850,6 +854,9 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             int ccSazmanForosh = foroshandehMamorPakhshModel.getCcSazmanForosh();
             int tedadBargashti = bargashtyDAO.getCountByccMoshtaryAndSazmanForosh(ccMoshtary, ccSazmanForosh);
             int tedadEtebarCheckBargashti = moshtaryetebarsazmanforoshDAO.getByccMoshtary(ccMoshtary).getTedadBargashty();
+            long rialBargashti = (long) bargashtyDAO.getSumBargashtyByccMoshtary(ccMoshtary);
+            long rialEtebarBargashti = moshtaryetebarsazmanforoshDAO.getByccMoshtary(ccMoshtary).getEtebarRialBargashty();
+
             int countDarkhastFaktorErsalNashodeh = darkhastfaktorDAO.getCountErsalNashode();
             Log.d("customer" , "count ersal nashode : " + countDarkhastFaktorErsalNashodeh);
             if(checkMojazForDarkhast && !isMojazForDarkhast)// & PubFuncs.DeviceInfo_TestBarnameh(context) == false)
@@ -888,12 +895,18 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     return -13;
                 }
                 Log.d("getCustomer" , "checkCheckBargashty : " + checkCheckBargashty + " , tedadBargashti : " + tedadBargashti + " , tedadEtebarCheckBargashti : " + tedadEtebarCheckBargashti);
+                Log.d("getCustomer" , "checkCheckBargashty : " + checkCheckBargashty + " , rialBargashti : " + rialBargashti + " , rialEtebarBargashti : " + rialEtebarBargashti);
                 if(checkFaktorErsalNashode && countDarkhastFaktorErsalNashodeh > 0)
                 {
                     return -3;
                     //Toast.makeText(context, "به علت عدم ارسال درخواست مشتری شما قادر به ثبت درخواست نمی باشید.\nلطفا تمامی درخواست ها را ارسال نمائید.", Toast.LENGTH_LONG).show();
                 }
                 else if(checkCheckBargashty && tedadBargashti > tedadEtebarCheckBargashti)
+                {
+                    return -4;
+                    //Toast.makeText(context, "به علت چک برگشتی مشتری شما قادر به ثبت درخواست نمی باشید.\n", Toast.LENGTH_LONG).show();
+                }
+                else if(checkCheckBargashty &&  rialBargahsty > rialEtebarBargashti)
                 {
                     return -4;
                     //Toast.makeText(context, "به علت چک برگشتی مشتری شما قادر به ثبت درخواست نمی باشید.\n", Toast.LENGTH_LONG).show();
@@ -1086,7 +1099,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             }
             //---------------------- For Test -----------------
             UserTypeShared userTypeShared = new UserTypeShared(weakReferenceContext.get());
-            int isTest = 0;// userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
+            int isTest =  userTypeShared.getInt(userTypeShared.USER_TYPE() , 0);
             Log.d("kharejAzMasir" , "istest : " + isTest);
             if (isTest == 1)
             {
@@ -1407,59 +1420,84 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 ccMamorPakhsh = "0";
             }
             String ccKalaCode="-1";
+
             /**fetch all kala with -1
              * if you want to fetch a specific list of kala append their cckala in a string
              * **/
-            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(weakReferenceContext.get());
-            serverIpModel.setPort("8040");
-            APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
-
             String finalCcForoshandeh = ccForoshandeh;
-            apiServiceRxjava.getMandehMojodyMashin(ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh, ccKalaCode, ccSazmanForosh)
-                    .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, "RequestCustomerListActivity", "getAllKalaApis", "getMojodyAnbar"))
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new Observer<Response<GetMandehMojodyMashinResponse>>() {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(weakReferenceContext.get());
+
+            switch (serverIpModel.getWebServiceType()){
+
+                case REST:
+                    APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
+                    apiServiceRxjava.getMandehMojodyMashin(ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh, ccKalaCode, ccSazmanForosh)
+                            .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, "RequestCustomerListActivity", "getAllKalaApis", "getMojodyAnbar"))
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(new Observer<Response<GetMandehMojodyMashinResponse>>() {
+                                @Override
+                                public void onSubscribe(Disposable d) {
+                                    compositeDisposable.add(d);
+                                }
+
+                                @Override
+                                public void onNext(Response<GetMandehMojodyMashinResponse> getMandehMojodyMashinResponseResponse) {
+                                    if (getMandehMojodyMashinResponseResponse.body()!=null)
+                                    updateMandehMojodiMashinTable(getMandehMojodyMashinResponseResponse.body().getMandehMojodyMashinModels(), finalCcForoshandeh, ccAfrad);
+                                    else
+                                        onError(new Throwable(weakReferenceContext.get().getString(R.string.resultIsNull)));
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    Log.i("MandehMojodiOnline", "onError: "+ e.getMessage());
+                                    publishProgress(-4);
+                                }
+
+                                @Override
+                                public void onComplete() {
+                                    Log.i("MandehMojodiOnline", "onComplete: ");
+
+                                }
+                            });
+                    break;
+
+
+                case gRPC:
+                    mandehMojodyMashinDAO.fetchMandehMojodyMashinGrpc(weakReferenceContext.get(), TreasuryListMapActivity.class.getSimpleName(), ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh, new RetrofitResponse() {
                         @Override
-                        public void onSubscribe(Disposable d) {
-                            compositeDisposable.add(d);
+                        public void onSuccess(ArrayList arrayListData) {
+                            updateMandehMojodiMashinTable(arrayListData, finalCcForoshandeh, ccAfrad);
+
                         }
 
                         @Override
-                        public void onNext(Response<GetMandehMojodyMashinResponse> getMandehMojodyMashinResponseResponse) {
-                            updateMandehMojodiMashinTable(getMandehMojodyMashinResponseResponse.body(), finalCcForoshandeh, ccAfrad);
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.i("MandehMojodiOnline", "onError: ");
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            Log.i("MandehMojodiOnline", "onComplete: ");
+                        public void onFailed(String type, String error) {
+                           publishProgress(-4);
 
                         }
                     });
+                    break;
+            }
+
+
+
 
         }
 
-        private void updateMandehMojodiMashinTable(GetMandehMojodyMashinResponse body,String ccForoshandeh,String ccAfrad) {
-            if (body != null) {
+        private void updateMandehMojodiMashinTable(ArrayList<MandehMojodyMashinModel> models,String ccForoshandeh,String ccAfrad) {
+
                 MandehMojodyMashinRepository mandehMojodyMashinRepository = new MandehMojodyMashinRepository(weakReferenceContext.get());
                 Disposable disposable = mandehMojodyMashinRepository.deleteAll()
                         .subscribe(deleteAll -> {
                             if (deleteAll) {
 
-                                Disposable insertGroup = mandehMojodyMashinRepository.insertGroup(body.getMandehMojodyMashinModels())
-                                        .subscribe(new Consumer<Boolean>() {
-                                            @Override
-                                            public void accept(Boolean insertGroup) throws Exception {
-                                                if (insertGroup) {
-                                                    updateKalaMojodiTable(body.getMandehMojodyMashinModels(), Integer.parseInt(ccForoshandeh), Integer.parseInt(ccAfrad));
-                                                } else {
-                                                    publishProgress(-4);
-                                                }
+                                Disposable insertGroup = mandehMojodyMashinRepository.insertGroup(models)
+                                        .subscribe(insertGroup1 -> {
+                                            if (insertGroup1) {
+                                                updateKalaMojodiTable(models, Integer.parseInt(ccForoshandeh), Integer.parseInt(ccAfrad));
+                                            } else {
+                                                publishProgress(-4);
                                             }
                                         }, throwable -> publishProgress(-4));
                                 compositeDisposable.add(insertGroup);
@@ -1468,9 +1506,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 compositeDisposable.add(disposable);
 
 
-            }else{
-                publishProgress(-4);
-            }
+
         }
 
         private void updateKalaMojodiTable(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels,int ccForoshandeh,int ccAfrad) {
@@ -1489,6 +1525,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                                 kalaMojodiModel.setTarikhDarkhast(currentDate);
                                 kalaMojodiModel.setShomarehBach(mandehMojodyMashinModel.getShomarehBach());
                                 kalaMojodiModel.setTarikhTolid(mandehMojodyMashinModel.getTarikhTolid());
+                                kalaMojodiModel.setTarikhEngheza(mandehMojodyMashinModel.getTarikhEngheza());
                                 kalaMojodiModel.setGheymatMasrafKonandeh(mandehMojodyMashinModel.getGheymatMasrafKonandeh());
                                 kalaMojodiModel.setGheymatForosh(mandehMojodyMashinModel.getGheymatForosh());
                                 kalaMojodiModel.setCcTaminKonandeh(mandehMojodyMashinModel.getCcTaminKonandeh());
@@ -1502,8 +1539,8 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
 
                             ).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<KalaMojodiModel>() {
+                        .observeOn(AndroidSchedulers.mainThread())
+                       .subscribe(new Observer<KalaMojodiModel>() {
                         @Override
                         public void onSubscribe( Disposable d) {
                             compositeDisposable.add(d);

@@ -31,6 +31,7 @@ public class GPSDataModel
     private static final String COLUMN_Provider = "Provider";
     private static final String COLUMN_ccMoshtary = "ccMoshtary";
     private static final String COLUMN_ccDarkhastFaktor = "ccDarkhastFaktor";
+    private static final String COLUMN_ccDarkhastHavaleh = "ccDarkhastHavaleh";
 
     public static String COLUMN_ccMoshtary() {
         return COLUMN_ccMoshtary;
@@ -99,6 +100,9 @@ public class GPSDataModel
     public static String COLUMN_Provider() {
         return COLUMN_Provider;
     }
+    public static String COLUMN_ccDarkhastHavaleh() {
+        return COLUMN_ccDarkhastHavaleh;
+    }
 
 
 
@@ -145,6 +149,9 @@ public class GPSDataModel
     @SerializedName("ccDarkhastFaktor")
     @Expose
     private long ccDarkhastFaktor;
+    @SerializedName("ccDarkhastHavaleh")
+    @Expose
+    private long ccDarkhastHavaleh;
 
     @SerializedName("ccMoshtary")
     @Expose
@@ -309,6 +316,14 @@ public class GPSDataModel
     }
 
 
+    public long getCcDarkhastHavaleh() {
+        return ccDarkhastHavaleh;
+    }
+
+    public void setCcDarkhastHavaleh(long ccDarkhastHavaleh) {
+        this.ccDarkhastHavaleh = ccDarkhastHavaleh;
+    }
+
     public JSONObject toJsonObject()
     {
         try
@@ -330,6 +345,7 @@ public class GPSDataModel
             jsonObject.put(COLUMN_Speed() , speed);
             jsonObject.put(COLUMN_ccDarkhastFaktor() , ccDarkhastFaktor);
             jsonObject.put(COLUMN_ccMoshtary() , ccMoshtary);
+            jsonObject.put(COLUMN_ccDarkhastHavaleh() , ccDarkhastHavaleh);
             return jsonObject;
         }
         catch (Exception e)
@@ -359,6 +375,7 @@ public class GPSDataModel
         jsonObject.addProperty(COLUMN_Speed() , speed);
         jsonObject.addProperty(COLUMN_ccDarkhastFaktor() , ccDarkhastFaktor);
         jsonObject.addProperty(COLUMN_ccMoshtary() , ccMoshtary);
+        jsonObject.addProperty(COLUMN_ccDarkhastHavaleh() , ccDarkhastHavaleh);
         return jsonObject.toString();
     }
 
@@ -384,6 +401,9 @@ public class GPSDataModel
                 ", status=" + status +
                 ", distance=" + distance +
                 ", ccMamorPakhsh=" + ccMamorPakhsh +
+                ", ccDarkhastFaktor=" + ccDarkhastFaktor +
+                ", ccDarkhastHavaleh=" + ccDarkhastHavaleh +
+                ", ccMoshtary=" + ccMoshtary +
                 ", ccAfrad=" + ccAfrad +
                 '}';
     }

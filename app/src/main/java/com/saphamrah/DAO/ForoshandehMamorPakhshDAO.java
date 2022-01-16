@@ -115,7 +115,6 @@ public class ForoshandehMamorPakhshDAO
 			ForoshandehMamorPakhshModel.COLUMN_CheckOlaviatMoshtary(),
 			ForoshandehMamorPakhshModel.COLUMN_FromDateKharejAzMahal(),
 			ForoshandehMamorPakhshModel.COLUMN_EndDateKharejAzMahal(),
-			ForoshandehMamorPakhshModel.COLUMN_ccAnbarMarjoee(),
 			ForoshandehMamorPakhshModel.COLUMN_CodeNoeAnbarMarjoee(),
             ForoshandehMamorPakhshModel.COLUMN_Version()
 
@@ -185,6 +184,14 @@ public class ForoshandehMamorPakhshDAO
                                 model.setCcForoshandehs(reply.getSalesManIDs());
                                 model.setCcAnbar(reply.getStoreID());
                                 model.setCcAnbarak(reply.getBinID());
+                                model.setFromDateKharejAzMahal(reply.getFromDateOutOfArea());
+                                model.setEndDateKharejAzMahal(reply.getEndDateOutOfArea());
+                                model.setNoeSabtMarjoee(reply.getReturnedRegisteredType());
+                                model.setCcMarkazAnbarVosol(reply.getReceiptStoreCenterID());
+                                model.setVersion(reply.getVersion());
+                                model.setCcDarkhastFaktorNoeForosh(reply.getSellTypeInvoiceRequestID());
+                                model.setCheckOlaviatMoshtary(reply.getCheckCustomerPriority());
+                                model.setCodeNoeAnbarMarjoee(reply.getReturnedStoreTypeCode());
                                 models.add(model);
                             }
 
@@ -714,7 +721,6 @@ public class ForoshandehMamorPakhshDAO
 				foroshandehMamorPakhshModel.setCheckOlaviatMoshtary(cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_CheckOlaviatMoshtary())));																																									 
 				foroshandehMamorPakhshModel.setFromDateKharejAzMahal(cursor.getString(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_FromDateKharejAzMahal())));
 				foroshandehMamorPakhshModel.setEndDateKharejAzMahal(cursor.getString(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_EndDateKharejAzMahal())));
-				foroshandehMamorPakhshModel.setCcAnbarMarjoee(cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_ccAnbarMarjoee())));
 				foroshandehMamorPakhshModel.setCodeNoeAnbarMarjoee(cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_CodeNoeAnbarMarjoee())));
                 foroshandehMamorPakhshModel.setVersion(cursor.getString(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_Version())));
 
@@ -777,7 +783,6 @@ public class ForoshandehMamorPakhshDAO
 		contentValues.put(ForoshandehMamorPakhshModel.COLUMN_CheckOlaviatMoshtary() , model.getCheckOlaviatMoshtary());																													   
 		contentValues.put(ForoshandehMamorPakhshModel.COLUMN_FromDateKharejAzMahal() , model.getFromDateKharejAzMahal());
 		contentValues.put(ForoshandehMamorPakhshModel.COLUMN_EndDateKharejAzMahal() , model.getEndDateKharejAzMahal());
-		contentValues.put(ForoshandehMamorPakhshModel.COLUMN_ccAnbarMarjoee() , model.getCcAnbarMarjoee());
 		contentValues.put(ForoshandehMamorPakhshModel.COLUMN_CodeNoeAnbarMarjoee() , model.getCodeNoeAnbarMarjoee());
         contentValues.put(ForoshandehMamorPakhshModel.COLUMN_Version(), model.getVersion());
 

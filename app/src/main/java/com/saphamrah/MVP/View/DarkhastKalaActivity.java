@@ -20,10 +20,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,6 +44,7 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.saphamrah.Adapter.CustomSpinnerAdapter;
 import com.saphamrah.Adapter.JayezehParentAlertAdapter;
 import com.saphamrah.Adapter.RequestGoodsAdapter;
 import com.saphamrah.Adapter.RequestGoodsListAdapter;
@@ -59,12 +62,12 @@ import com.saphamrah.MVP.Presenter.DarkhastKalaPresenter;
 import com.saphamrah.Model.ElatAdamDarkhastModel;
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.KalaPhotoModel;
-import com.saphamrah.Model.KalaZaribForoshModel;
+import com.saphamrah.PubFunc.LanguageUtil;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
-import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.UIModel.JayezehByccKalaCodeModel;
 import com.saphamrah.UIModel.KalaDarkhastFaktorSatrModel;
+import com.saphamrah.UIModel.KalaFilterUiModel;
 import com.saphamrah.UIModel.KalaMojodiZaribModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
@@ -73,11 +76,8 @@ import com.saphamrah.Utils.CustomLoadingDialog;
 import com.saphamrah.Utils.CustomSpinnerResponse;
 import com.saphamrah.Utils.StateMaintainer;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import me.anwarshahriar.calligrapher.Calligrapher;
 
@@ -131,7 +131,8 @@ private FloatingActionButton fabShowMoshtaryGharardad;
     private GridLayoutManager mLayoutManager;
     private ImageView btn_menu;
 
-
+    private ArrayList<KalaFilterUiModel> kalaFilterUiModels = new ArrayList<>();
+    private ArrayList<String> itemsKalaFilter = new ArrayList<>();
     public int numberOfDisplayItems = 4;
     private int SpanCount = 2;
 
@@ -231,7 +232,7 @@ private FloatingActionButton fabShowMoshtaryGharardad;
         customAlertDialog = new CustomAlertDialog(DarkhastKalaActivity.this);
         customLoadingDialog = new CustomLoadingDialog();
         startMVPOps();
-
+        mPresenter.getKalaFilter();
         mPresenter.checkZanjiree();
 
 
@@ -669,6 +670,7 @@ private FloatingActionButton fabShowMoshtaryGharardad;
         final ArrayList<KalaMojodiZaribModel> selectedItem = new ArrayList<>();
 
         final ArrayList<KalaMojodiZaribModel> arrayListKalaModel = new ArrayList<>(kalaMojodiZaribModels); //local list for using in adapter
+        final ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModelsFilter = new ArrayList<>(kalaMojodiZaribModels); //local list for using in adapter
         Log.d("DarkhastKalaActivity", "arrayListKalaModel : " + arrayListKalaModel);
         for (int i = 0; i < arrayListKalaModel.size(); i++) {
             if (arrayListKalaModel.get(i).getTedad() == 0) {
@@ -678,15 +680,18 @@ private FloatingActionButton fabShowMoshtaryGharardad;
             }
         }
 
-
+        CustomSpinnerAdapter adapterSpinner = new CustomSpinnerAdapter(this, android.R.layout.simple_spinner_item, itemsKalaFilter);
         final AlertDialog.Builder builder = new AlertDialog.Builder(DarkhastKalaActivity.this);
         alertView = getLayoutInflater().inflate(R.layout.alert_goodslist_for_request, null);
         final CustomTextInputLayout txtinputCountCarton = alertView.findViewById(R.id.txtinputCartonCount);
         final CustomTextInputLayout txtinputCountBaste = alertView.findViewById(R.id.txtinputBastehCount);
         final CustomTextInputLayout txtinputCountAdad = alertView.findViewById(R.id.txtinputAdadCount);
+         Spinner spinnerKalaFilter = alertView.findViewById(R.id.spinnerKalaFilter);
         edttxtCountCarton = alertView.findViewById(R.id.txtCartonCount);
         edttxtCountBaste = alertView.findViewById(R.id.txtBastehCount);
         edttxtCountAdad = alertView.findViewById(R.id.txtAdadCount);
+
+        spinnerKalaFilter.setAdapter(adapterSpinner);
 
 
         final RecyclerView recyclerView = alertView.findViewById(R.id.recyclerView);
@@ -790,6 +795,41 @@ private FloatingActionButton fabShowMoshtaryGharardad;
                 logger.insertLogToDB(DarkhastKalaActivity.this, Constants.LOG_EXCEPTION(), exception.toString(), "", "DarkhastKalaActivity", "showAddItemAlert", "");
             }
 
+            spinnerKalaFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                {
+                    edttxtSearch.setText("");
+                    arrayListKalaModel.clear();
+                    kalaMojodiZaribModelsFilter.clear();
+                    selectedItem.clear();
+                    selectedPosition.clear();
+                    if (kalaFilterUiModels.get(position).getCcGoroh() == 0 ){
+                        kalaMojodiZaribModelsFilter.addAll(kalaMojodiZaribModels) ;
+                        arrayListKalaModel.addAll(kalaMojodiZaribModels) ;
+                        adapterRequestKalaListGrid.notifyDataSetChanged();
+                        adapterRequestKala.notifyDataSetChanged();
+                        adapterRequestKalaList.notifyDataSetChanged();
+                    } else {
+                        for (int i = 0; i < kalaMojodiZaribModels.size(); i++) {
+                            String nameKala = new LanguageUtil().convertFaNumberToEN(String.valueOf(kalaMojodiZaribModels.get(i).getCcGorohKala()));
+                            if (nameKala.contains(String.valueOf(kalaFilterUiModels.get(position).getCcGoroh()))) {
+                                arrayListKalaModel.add(kalaMojodiZaribModels.get(i));
+                                kalaMojodiZaribModelsFilter.add(kalaMojodiZaribModels.get(i));
+                                adapterRequestKalaListGrid.notifyDataSetChanged();
+                                adapterRequestKala.notifyDataSetChanged();
+                                adapterRequestKalaList.notifyDataSetChanged();
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
             edttxtSearch.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -799,7 +839,7 @@ private FloatingActionButton fabShowMoshtaryGharardad;
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if (s.length() != 0) {
-                        String searchWord = new PubFunc().new LanguageUtil().convertFaNumberToEN(s.toString());
+                        String searchWord = new LanguageUtil().convertFaNumberToEN(s.toString());
                         arrayListKalaModel.clear();
                         adapterRequestKalaListGrid.notifyDataSetChanged();
                         adapterRequestKala.notifyDataSetChanged();
@@ -807,10 +847,10 @@ private FloatingActionButton fabShowMoshtaryGharardad;
                         selectedItem.clear();
                         selectedPosition.clear();
                         //adapterRequestKala.clearSelecedItem();
-                        for (int i = 0; i < kalaMojodiZaribModels.size(); i++) {
-                            String nameKala = new PubFunc().new LanguageUtil().convertFaNumberToEN(kalaMojodiZaribModels.get(i).getNameKala() + kalaMojodiZaribModels.get(i).getBarCode());
+                        for (int i = 0; i < kalaMojodiZaribModelsFilter.size(); i++) {
+                            String nameKala = new LanguageUtil().convertFaNumberToEN(kalaMojodiZaribModelsFilter.get(i).getNameKala() + kalaMojodiZaribModelsFilter.get(i).getBarCode());
                             if (nameKala.contains(searchWord)) {
-                                arrayListKalaModel.add(kalaMojodiZaribModels.get(i));
+                                arrayListKalaModel.add(kalaMojodiZaribModelsFilter.get(i));
                                 adapterRequestKalaListGrid.notifyDataSetChanged();
                                 adapterRequestKala.notifyDataSetChanged();
                                 adapterRequestKalaList.notifyDataSetChanged();
@@ -820,7 +860,7 @@ private FloatingActionButton fabShowMoshtaryGharardad;
                     {
                         arrayListKalaModel.clear();
                         //adapterRequestKala.clearSelecedItem();
-                        arrayListKalaModel.addAll(kalaMojodiZaribModels);
+                        arrayListKalaModel.addAll(kalaMojodiZaribModelsFilter);
                     }
                 }
 
@@ -981,6 +1021,10 @@ private FloatingActionButton fabShowMoshtaryGharardad;
         recyclerViewNew = alertView.findViewById(R.id.recyclerViewGrid);
         final ArrayList<KalaMojodiZaribModel> arrayListKalaModel = new ArrayList<>(kalaMojodiZaribModels); //local list for using in adapter
 
+        Spinner spinnerKalaFilter = alertView.findViewById(R.id.spinnerKalaFilter);
+        final ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModelsFilter = new ArrayList<>(kalaMojodiZaribModels); //local list for using in adapter
+        CustomSpinnerAdapter adapterSpinner = new CustomSpinnerAdapter(this, android.R.layout.simple_spinner_item, itemsKalaFilter);
+        spinnerKalaFilter.setAdapter(adapterSpinner);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(DarkhastKalaActivity.this);
         CustomTextInputLayout txtinputSearch = alertView.findViewById(R.id.txtinputSearchKalaName);
@@ -1065,6 +1109,41 @@ private FloatingActionButton fabShowMoshtaryGharardad;
                 }
             });
 
+
+            spinnerKalaFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                {
+                    edttxtSearch.setText("");
+                    arrayListKalaModel.clear();
+                    kalaMojodiZaribModelsFilter.clear();
+                    selectedItem.clear();
+                    selectedPosition.clear();
+                    if (kalaFilterUiModels.get(position).getCcGoroh() == 0 ){
+                        kalaMojodiZaribModelsFilter.addAll(kalaMojodiZaribModels) ;
+                        arrayListKalaModel.addAll(kalaMojodiZaribModels) ;
+                        adapterRequestKalaListGrid.notifyDataSetChanged();
+                        adapterRequestKala.notifyDataSetChanged();
+                        adapterRequestKalaList.notifyDataSetChanged();
+                    } else {
+                        for (int i = 0; i < kalaMojodiZaribModels.size(); i++) {
+                            String nameKala = new LanguageUtil().convertFaNumberToEN(String.valueOf(kalaMojodiZaribModels.get(i).getCcGorohKala()));
+                            if (nameKala.contains(String.valueOf(kalaFilterUiModels.get(position).getCcGoroh()))) {
+                                arrayListKalaModel.add(kalaMojodiZaribModels.get(i));
+                                kalaMojodiZaribModelsFilter.add(kalaMojodiZaribModels.get(i));
+                                adapterRequestKalaListGrid.notifyDataSetChanged();
+                                adapterRequestKala.notifyDataSetChanged();
+                                adapterRequestKalaList.notifyDataSetChanged();
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
 
             edttxtSearch.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -1210,6 +1289,12 @@ private FloatingActionButton fabShowMoshtaryGharardad;
     @Override
     public void onCheckZanjiree() {
         fabShowMoshtaryGharardad.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onKalaFilter(ArrayList<KalaFilterUiModel> kalaFilterUiModels,ArrayList<String> itemsKalaFilter) {
+        this.kalaFilterUiModels = kalaFilterUiModels;
+        this.itemsKalaFilter = itemsKalaFilter;
     }
 
 

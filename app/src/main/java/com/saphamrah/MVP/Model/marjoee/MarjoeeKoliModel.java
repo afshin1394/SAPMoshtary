@@ -28,6 +28,7 @@ import com.saphamrah.Model.KardexModel;
 import com.saphamrah.Model.KardexSatrModel;
 import com.saphamrah.Model.MarjoeeKamelImageModel;
 import com.saphamrah.Model.MoshtaryModel;
+import com.saphamrah.PubFunc.DateUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.UIModel.KalaDarkhastFaktorSatrModel;
 import com.saphamrah.Utils.Constants;
@@ -45,6 +46,7 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
     private int ccKardex;
     private DarkhastFaktorModel darkhastFaktorModel;
     private DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
+    private DateUtils dateUtils = new DateUtils();
     public MarjoeeKoliModel(MarjoeekoliMVP.RequiredPresenterOps mPresenter)
     {
         this.mPresenter = mPresenter;
@@ -179,16 +181,19 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
 
     private void insert_KardexSatr(long ccKardex ,  int ccElatMarjoee , String NameElatMarjoee)
     {
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_SHORT_FORMAT_WITH_SLASH());
+
         KardexSatrDAO kardexSatrDAO= new KardexSatrDAO(BaseApplication.getContext());
         DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(BaseApplication.getContext());
         ArrayList<DarkhastFaktorSatrModel> items_MarjoeeMamorPakhsh_Kol = darkhastFaktorSatrDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
         KalaDAO kalaDAO = new KalaDAO(BaseApplication.getContext());
-
+        String TarikhTolidShamsi = "";
         try
         {
             ArrayList<KardexSatrModel> kardexSatrModels = new ArrayList<>();
             for (DarkhastFaktorSatrModel darkhastFaktorSatrModel : items_MarjoeeMamorPakhsh_Kol)
             {
+                TarikhTolidShamsi = dateUtils.gregorianWithSlashToPersianSlash(sdf.format(new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).parse(darkhastFaktorSatrModel.getTarikhTolid())));
                 KalaModel kalaModel = kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode());
                 KardexSatrModel model = new KardexSatrModel();
                 model = kardexSatrDAO.setForInsert_KardexSatr(ccKardex,
@@ -212,7 +217,7 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
                         0,
                         0,
                         CcMoshtary,
-                        darkhastFaktorSatrModel.getTarikhTolid(),
+                        TarikhTolidShamsi,
                         darkhastFaktorSatrModel.getCcAnbarGhesmat());
 
                 kardexSatrModels.add(model);

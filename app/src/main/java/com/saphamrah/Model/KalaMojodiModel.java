@@ -15,6 +15,7 @@ public class KalaMojodiModel
     private static final String COLUMN_TarikhDarkhast = "TarikhDarkhast";
     private static final String COLUMN_ShomarehBach = "ShomarehBach";
     private static final String COLUMN_TarikhTolid = "TarikhTolid";
+    private static final String COLUMN_TarikhEngheza = "TarikhEngheza";
     private static final String COLUMN_GheymatMasrafKonandeh = "GheymatMasrafKonandeh";
     private static final String COLUMN_GheymatForosh = "GheymatForosh";
     private static final String COLUMN_ccTaminKonandeh = "ccTaminKonandeh";
@@ -52,6 +53,9 @@ public class KalaMojodiModel
     }
     public static String COLUMN_TarikhTolid() {
         return COLUMN_TarikhTolid;
+    }
+    public static String COLUMN_TarikhEngheza() {
+        return COLUMN_TarikhEngheza;
     }
     public static String COLUMN_GheymatMasrafKonandeh() {
         return COLUMN_GheymatMasrafKonandeh;
@@ -91,6 +95,7 @@ public class KalaMojodiModel
     private String TarikhDarkhast;
     private String ShomarehBach;
     private String TarikhTolid;
+    private String TarikhEngheza;
     private float GheymatMasrafKonandeh;
     private float GheymatForosh;
     private int ccTaminKonandeh;
@@ -166,6 +171,14 @@ public class KalaMojodiModel
     }
     public void setTarikhTolid(String tarikhTolid) {
         TarikhTolid = tarikhTolid;
+    }
+
+
+    public String getTarikhEngheza() {
+        return TarikhEngheza;
+    }
+    public void setTarikhEngheza(String tarikhEngheza) {
+        TarikhEngheza = tarikhEngheza;
     }
 
     public float getGheymatMasrafKonandeh() {
@@ -254,6 +267,7 @@ public class KalaMojodiModel
             jsonObject.put("TarikhDarkhast" , TarikhDarkhast);
             jsonObject.put("ShomarehBach" , ShomarehBach);
             jsonObject.put("TarikhTolid" , TarikhTolid);
+            jsonObject.put("TarikhEngheza" , TarikhEngheza);
             jsonObject.put("GheymatMasrafKonandeh" , GheymatMasrafKonandeh);
             jsonObject.put("GheymatForosh" , GheymatForosh);
             jsonObject.put("ccTaminKonandeh" , ccTaminKonandeh);
@@ -285,6 +299,7 @@ public class KalaMojodiModel
                 ", TarikhDarkhast='" + TarikhDarkhast + '\'' +
                 ", ShomarehBach='" + ShomarehBach + '\'' +
                 ", TarikhTolid='" + TarikhTolid + '\'' +
+                ", TarikhEngheza='" + TarikhEngheza + '\'' +
                 ", GheymatMasrafKonandeh=" + GheymatMasrafKonandeh +
                 ", GheymatForosh=" + GheymatForosh +
                 ", ccTaminKonandeh=" + ccTaminKonandeh +

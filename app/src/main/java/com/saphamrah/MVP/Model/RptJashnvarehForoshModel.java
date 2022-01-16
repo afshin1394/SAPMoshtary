@@ -1,12 +1,20 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
+import android.os.Handler;
+import android.os.Message;
+
 import androidx.annotation.NonNull;
 
 import com.saphamrah.BaseMVP.RptJashnvarehForoshMVP;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
+import com.saphamrah.DAO.RptJashnvarehDAO;
 import com.saphamrah.MVP.View.RptJashnvarehActivity;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -116,59 +124,117 @@ public class RptJashnvarehForoshModel implements RptJashnvarehForoshMVP.ModelOps
     private void getJashnvarehFromServer(String ccforoshandehString, String ccMoshtaryString) {
         RptJashnvarehForoshRepository rptJashnvarehForoshRepository = new RptJashnvarehForoshRepository(mPresenter.getAppContext());
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        RptJashnvarehDAO rptJashnvarehDAO = new RptJashnvarehDAO(mPresenter.getAppContext());
 
-        rptJashnvarehForoshRepository.fetchApiServiceRx(serverIpModel,RptJashnvarehActivity.class.getSimpleName(), ccforoshandehString, ccMoshtaryString)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ArrayList<com.saphamrah.Model.RptJashnvarehForoshModel>>() {
+        final Handler handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg)
+            {
+                if (msg.arg1 == 1)
+                {
+
+                    mPresenter.onSuccess(R.string.updateSuccessed);
+
+                }
+                else if (msg.arg1 == -1)
+                {
+                    mPresenter.onError(R.string.updateFailed);
+                }
+                return false;
+            }
+        });
+
+        switch (serverIpModel.getWebServiceType()){
+            case REST :
+                rptJashnvarehForoshRepository.fetchApiServiceRx(serverIpModel,RptJashnvarehActivity.class.getSimpleName(), ccforoshandehString, ccMoshtaryString)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<com.saphamrah.Model.RptJashnvarehForoshModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<com.saphamrah.Model.RptJashnvarehForoshModel> rptJashnvarehForoshModels) {
+                                compositeDisposable.add(rptJashnvarehForoshRepository.deleteAll()
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(deleteAll -> {
+                                            if (deleteAll) {
+                                                compositeDisposable.add(rptJashnvarehForoshRepository.insertGroup(rptJashnvarehForoshModels)
+                                                        .observeOn(AndroidSchedulers.mainThread())
+                                                        .subscribe(insertGroup -> {
+                                                            if (insertGroup) {
+                                                                mPresenter.onSuccess(R.string.updateSuccessed);
+                                                                mPresenter.onGetAll(rptJashnvarehForoshModels);
+                                                            } else {
+                                                                setLogToDB(Constants.LOG_EXCEPTION(),"insertGroup",RptJashnvarehForoshModel.class.getSimpleName(),RptJashnvarehActivity.class.getSimpleName(),"insertGroup","OnError");
+
+                                                                mPresenter.onError(R.string.updateFailed);
+                                                            }
+                                                        }, e -> {
+                                                            setLogToDB(Constants.LOG_EXCEPTION(),e.getMessage(),RptJashnvarehForoshModel.class.getSimpleName(),RptJashnvarehActivity.class.getSimpleName(),"rptJashnvarehForoshRepository.insertGroup","OnError");
+                                                            mPresenter.onError(R.string.updateFailed);
+
+                                                        }));
+                                            } else {
+                                                setLogToDB(Constants.LOG_EXCEPTION(),"deleteAll",RptJashnvarehForoshModel.class.getSimpleName(),RptJashnvarehActivity.class.getSimpleName(),"deleteAll","OnError");
+                                                mPresenter.onError(R.string.updateFailed);
+                                            }
+                                        }, throwable -> {
+                                            setLogToDB(Constants.LOG_EXCEPTION(),throwable.getMessage(),RptJashnvarehForoshModel.class.getSimpleName(),RptJashnvarehActivity.class.getSimpleName(),"rptJashnvarehForoshRepository.deleteAll()","OnError");
+                                            mPresenter.onError(R.string.updateFailed);
+                                        }));
+
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                setLogToDB(Constants.LOG_EXCEPTION(),e.getMessage(),RptJashnvarehForoshModel.class.getSimpleName(),RptJashnvarehActivity.class.getSimpleName(),"error","OnError");
+                                mPresenter.onError(R.string.updateFailed);
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
+                break;
+            case gRPC:
+                rptJashnvarehDAO.fetchRptJashnvarehGrpc(mPresenter.getAppContext(), RptJashnvarehActivity.class.getSimpleName(), Integer.parseInt(ccforoshandehString), ccMoshtaryString, new RetrofitResponse() {
                     @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        compositeDisposable.add(d);
+                    public void onSuccess(ArrayList arrayListData) {
+                        Thread thread = new Thread()
+                        {
+                            @Override
+                            public void run(){
+                                boolean deleteResult = rptJashnvarehDAO.deleteAll();
+                                boolean insertResult = rptJashnvarehDAO.insertGroup(arrayListData);
+                                Message message = new Message();
+                                if (deleteResult && insertResult)
+                                {
+                                    message.arg1 = 1;
+                                    mPresenter.onGetAll(arrayListData);
+                                }
+                                else
+                                {
+                                    message.arg1 = -1;
+//                            sendThreadMessage(Constants.BULK_INSERT_FAILED() ,++ itemCounter);
+                                }
+                                handler.sendMessage(message);
+                            }
+                        };
+                        thread.start();
                     }
 
                     @Override
-                    public void onNext(@NonNull ArrayList<com.saphamrah.Model.RptJashnvarehForoshModel> rptJashnvarehForoshModels) {
-                        compositeDisposable.add(rptJashnvarehForoshRepository.deleteAll()
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(deleteAll -> {
-                                    if (deleteAll) {
-                                        compositeDisposable.add(rptJashnvarehForoshRepository.insertGroup(rptJashnvarehForoshModels)
-                                                .observeOn(AndroidSchedulers.mainThread())
-                                                .subscribe(insertGroup -> {
-                                                    if (insertGroup) {
-                                                        mPresenter.onSuccess(R.string.updateSuccessed);
-                                                        mPresenter.onGetAll(rptJashnvarehForoshModels);
-                                                    } else {
-                                                        setLogToDB(Constants.LOG_EXCEPTION(),"insertGroup",RptJashnvarehForoshModel.class.getSimpleName(),RptJashnvarehActivity.class.getSimpleName(),"insertGroup","OnError");
-
-                                                        mPresenter.onError(R.string.updateFailed);
-                                                    }
-                                                }, e -> {
-                                                    setLogToDB(Constants.LOG_EXCEPTION(),e.getMessage(),RptJashnvarehForoshModel.class.getSimpleName(),RptJashnvarehActivity.class.getSimpleName(),"rptJashnvarehForoshRepository.insertGroup","OnError");
-                                                    mPresenter.onError(R.string.updateFailed);
-
-                                                }));
-                                    } else {
-                                        setLogToDB(Constants.LOG_EXCEPTION(),"deleteAll",RptJashnvarehForoshModel.class.getSimpleName(),RptJashnvarehActivity.class.getSimpleName(),"deleteAll","OnError");
-                                        mPresenter.onError(R.string.updateFailed);
-                                    }
-                                }, throwable -> {
-                                    setLogToDB(Constants.LOG_EXCEPTION(),throwable.getMessage(),RptJashnvarehForoshModel.class.getSimpleName(),RptJashnvarehActivity.class.getSimpleName(),"rptJashnvarehForoshRepository.deleteAll()","OnError");
-                                    mPresenter.onError(R.string.updateFailed);
-                                }));
-
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        setLogToDB(Constants.LOG_EXCEPTION(),e.getMessage(),RptJashnvarehForoshModel.class.getSimpleName(),RptJashnvarehActivity.class.getSimpleName(),"error","OnError");
+                    public void onFailed(String type, String error) {
+                        setLogToDB(Constants.LOG_EXCEPTION(),error,RptJashnvarehForoshModel.class.getSimpleName(),RptJashnvarehActivity.class.getSimpleName(),"error","OnError");
                         mPresenter.onError(R.string.updateFailed);
                     }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
                 });
+                break;
+        }
+
     }
 
     @Override

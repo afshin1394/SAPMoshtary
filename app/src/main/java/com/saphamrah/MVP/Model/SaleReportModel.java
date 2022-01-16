@@ -1,5 +1,8 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -8,6 +11,7 @@ import com.saphamrah.BaseMVP.SaleReportMVP;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.RptForoshDAO;
 import com.saphamrah.Model.RptForoshModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.Utils.Constants;
@@ -40,55 +44,116 @@ public class SaleReportModel implements SaleReportMVP.ModelOps
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         String today = new PubFunc().new DateUtils().todayDateGregorianWithSlash();
         String ccForoshandeh = String.valueOf(foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh());
-        rptForoshDAO.fetchAllrptAmarForosh(mPresenter.getAppContext(), "SaleReportActivity", ccForoshandeh, today, new RetrofitResponse() {
-            @Override
-            public void onSuccess(final ArrayList arrayListData) {
-                final Handler handler = new Handler(new Handler.Callback() {
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+
+        switch (serverIpModel.getWebServiceType()){
+            case REST:
+                rptForoshDAO.fetchAllrptAmarForosh(mPresenter.getAppContext(), "SaleReportActivity", ccForoshandeh, today, new RetrofitResponse() {
                     @Override
-                    public boolean handleMessage(Message msg) {
-                        if (msg.arg1 == 1)
+                    public void onSuccess(final ArrayList arrayListData) {
+                        final Handler handler = new Handler(new Handler.Callback() {
+                            @Override
+                            public boolean handleMessage(Message msg) {
+                                if (msg.arg1 == 1)
+                                {
+                                    Log.d("saleReport" , "on update sale report : " + arrayListData.get(0).toString());
+                                    mPresenter.onGetSaleReport(arrayListData);
+                                }
+                                else
+                                {
+                                    mPresenter.onNetworkError();
+                                }
+                                return false;
+                            }
+                        });
+
+                        Thread thread = new Thread()
                         {
-                            Log.d("saleReport" , "on update sale report : " + arrayListData.get(0).toString());
-                            mPresenter.onGetSaleReport(arrayListData);
-                        }
-                        else
-                        {
-                            mPresenter.onNetworkError();
-                        }
-                        return false;
+                            @Override
+                            public void run()
+                            {
+                                boolean deleteResult = rptForoshDAO.deleteAll();
+                                boolean insertResult = rptForoshDAO.insertGroup(arrayListData);
+                                if (deleteResult && insertResult)
+                                {
+                                    Message msg = new Message();
+                                    msg.arg1 = 1;
+                                    handler.sendMessage(msg);
+                                }
+                                else
+                                {
+                                    Message msg = new Message();
+                                    msg.arg1 = -1;
+                                    handler.sendMessage(msg);
+                                }
+                            }
+                        };
+                        thread.start();
+                    }
+
+                    @Override
+                    public void onFailed(String type, String error) {
+                        setLogToDB(Constants.LOG_EXCEPTION(), error, "SaleReportModel", "SaleReportActivity", "updateSaleReport", "");
+                        mPresenter.onNetworkError();
                     }
                 });
+                break;
 
-                Thread thread = new Thread()
-                {
+
+            case gRPC:
+                rptForoshDAO.fetchAllrptAmarForoshGrpc(mPresenter.getAppContext(), "SaleReportActivity", ccForoshandeh, today, new RetrofitResponse() {
                     @Override
-                    public void run()
-                    {
-                        boolean deleteResult = rptForoshDAO.deleteAll();
-                        boolean insertResult = rptForoshDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult)
-                        {
-                            Message msg = new Message();
-                            msg.arg1 = 1;
-                            handler.sendMessage(msg);
-                        }
-                        else
-                        {
-                            Message msg = new Message();
-                            msg.arg1 = -1;
-                            handler.sendMessage(msg);
-                        }
-                    }
-                };
-                thread.start();
-            }
+                    public void onSuccess(final ArrayList arrayListData) {
+                        final Handler handler = new Handler(new Handler.Callback() {
+                            @Override
+                            public boolean handleMessage(Message msg) {
+                                if (msg.arg1 == 1)
+                                {
+                                    Log.d("saleReport" , "on update sale report : " + arrayListData.get(0).toString());
+                                    mPresenter.onGetSaleReport(arrayListData);
+                                }
+                                else
+                                {
+                                    mPresenter.onNetworkError();
+                                }
+                                return false;
+                            }
+                        });
 
-            @Override
-            public void onFailed(String type, String error) {
-                setLogToDB(Constants.LOG_EXCEPTION(), error, "SaleReportModel", "SaleReportActivity", "updateSaleReport", "");
-                mPresenter.onNetworkError();
-            }
-        });
+                        Thread thread = new Thread()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                boolean deleteResult = rptForoshDAO.deleteAll();
+                                boolean insertResult = rptForoshDAO.insertGroup(arrayListData);
+                                if (deleteResult && insertResult)
+                                {
+                                    Message msg = new Message();
+                                    msg.arg1 = 1;
+                                    handler.sendMessage(msg);
+                                }
+                                else
+                                {
+                                    Message msg = new Message();
+                                    msg.arg1 = -1;
+                                    handler.sendMessage(msg);
+                                }
+                            }
+                        };
+                        thread.start();
+                    }
+
+                    @Override
+                    public void onFailed(String type, String error) {
+                        setLogToDB(Constants.LOG_EXCEPTION(), error, "SaleReportModel", "SaleReportActivity", "updateSaleReport", "");
+                        mPresenter.onNetworkError();
+                    }
+                });
+                break;
+
+        }
+
 
     }
 

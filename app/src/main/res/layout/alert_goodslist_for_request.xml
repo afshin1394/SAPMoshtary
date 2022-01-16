@@ -7,27 +7,45 @@
     android:background="@drawable/altdlg_bg"
     android:layoutDirection="rtl">
 
-    <com.saphamrah.CustomView.CustomTextInputLayout
+    <LinearLayout
+        android:id="@+id/laytxtinputSearchKalaName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtinputSearchKalaName"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
-        android:layoutDirection="rtl"
-        android:textDirection="rtl"
-        android:theme="@style/TextInputLayoutTheme"
+        android:orientation="horizontal"
         android:layout_alignParentTop="true">
-        <EditText
-            android:layout_width="match_parent"
+        <com.saphamrah.CustomView.CustomTextInputLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/txtSearchKalaName"
-            android:hint="@string/searchKalaName"
-            android:textSize="@dimen/FontSize16"
-            android:textColor="@color/colorTextPrimary"
-            android:inputType="text"
-            android:maxLines="1" />
-    </com.saphamrah.CustomView.CustomTextInputLayout>
+            android:layout_weight="0.7"
+            android:id="@+id/txtinputSearchKalaName"
+            android:layoutDirection="rtl"
+            android:textDirection="rtl"
+            android:theme="@style/TextInputLayoutTheme"
+            >
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtSearchKalaName"
+                android:hint="@string/searchKalaName"
+                android:textSize="@dimen/FontSize16"
+                android:textColor="@color/colorTextPrimary"
+                android:inputType="text"
+                android:maxLines="1" />
+        </com.saphamrah.CustomView.CustomTextInputLayout>
+
+        <Spinner
+            android:id="@+id/spinnerKalaFilter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+           android:layout_weight="0.3"
+            />
+
+
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
@@ -38,7 +56,7 @@
         android:paddingBottom="10dp"
         android:paddingRight="5dp"
         android:paddingLeft="5dp"
-        android:layout_below="@+id/txtinputSearchKalaName"
+        android:layout_below="@+id/laytxtinputSearchKalaName"
         android:layout_above="@+id/layCounts">
     </androidx.recyclerview.widget.RecyclerView>
 

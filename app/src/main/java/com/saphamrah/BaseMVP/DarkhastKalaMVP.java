@@ -9,6 +9,7 @@ import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.KalaPhotoModel;
 import com.saphamrah.UIModel.JayezehByccKalaCodeModel;
 import com.saphamrah.UIModel.KalaDarkhastFaktorSatrModel;
+import com.saphamrah.UIModel.KalaFilterUiModel;
 import com.saphamrah.UIModel.KalaMojodiZaribModel;
 
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public interface DarkhastKalaMVP
         void onCheckJayezehParent(ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels, int tedadKala,double mablaghForosh ,int ccKalaCode ,Long ccDarkhastFaktor);
         void onGetGridRecyclerDetails(int goodsNumberEachSection, ArrayList<KalaPhotoModel> kalaPhotoModels);
         void onCheckZanjiree();
+        void onKalaFilter(ArrayList<KalaFilterUiModel> kalaFilterUiModels,ArrayList<String> itemsKalaFilter);
     }
 
 
@@ -68,6 +70,8 @@ public interface DarkhastKalaMVP
         void checkJayezehParent(int ccKalaCode , int tedadKala , Long ccDarkhastFaktor, double mablaghForosh);
         void getRecyclerDetails();
         void checkZanjiree();
+        void getKalaFilter();
+
     }
 
 
@@ -94,6 +98,7 @@ public interface DarkhastKalaMVP
         void onCheckJayezehParent(ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels, int tedadKala, double mablaghForosh , int ccKalaCode , Long ccDarkhastFaktor);
         void onGetRecyclerDetails(int ItemCountPerScreen,ArrayList<KalaPhotoModel> kalaPhotoModels);
     void onCheckZanjiree();
+    void onKalaFilter(ArrayList<KalaFilterUiModel> kalaFilterUiModels);
     }
 
 
@@ -118,6 +123,7 @@ public interface DarkhastKalaMVP
         int getItemCountPerScreen();
         ArrayList<KalaPhotoModel> getGallery();
         void checkZanjiree();
+        void getKalaFilter();
     }
 
 }

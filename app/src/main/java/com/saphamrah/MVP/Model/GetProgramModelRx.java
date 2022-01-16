@@ -11038,6 +11038,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                         kalaMojodiModel.setTarikhDarkhast(currentDate);
                         kalaMojodiModel.setShomarehBach(mandehMojodyMashinModel.getShomarehBach());
                         kalaMojodiModel.setTarikhTolid(mandehMojodyMashinModel.getTarikhTolid());
+                        kalaMojodiModel.setTarikhEngheza(mandehMojodyMashinModel.getTarikhEngheza());
                         kalaMojodiModel.setGheymatMasrafKonandeh(mandehMojodyMashinModel.getGheymatMasrafKonandeh());
                         kalaMojodiModel.setGheymatForosh(mandehMojodyMashinModel.getGheymatForosh());
                         kalaMojodiModel.setCcTaminKonandeh(mandehMojodyMashinModel.getCcTaminKonandeh());

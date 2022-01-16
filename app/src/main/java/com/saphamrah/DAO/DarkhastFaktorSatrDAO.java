@@ -524,7 +524,8 @@ public class DarkhastFaktorSatrDAO
             query += " , " + gheymat;
             query += " , (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
                      + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghTakhfif ";
-            query += "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN (SELECT DISTINCT ccKalaCode, ccBrand, TedadDarKarton, TedadDarBasteh FROM Kala) K ON A.ccKalaCode= K.ccKalaCode "
+            //query += " ,SUM(Tedad3 * K.VaznKhales) AS Vazn, COUNT(ccDarkhastFaktorSatr) AS TedadAghlam ";
+            query += "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN (SELECT DISTINCT ccKalaCode, ccBrand, TedadDarKarton, TedadDarBasteh, VaznKhales FROM Kala) K ON A.ccKalaCode= K.ccKalaCode "
                     + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " and A.ccKalaCode = " + ccKalaCode + " GROUP BY A.ccKalaCode";
             //  + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " and A.ccKalaCode = " + ccKalaCode + " GROUP BY A.ccDarkhastFaktorSatr";
             Log.d("takhfif" , "takhfifKala query : " + query);
@@ -1770,7 +1771,7 @@ public class DarkhastFaktorSatrDAO
                     + "               )G ON A.ccKalaCode= G.ccKalaCode "
                     + "       )B ON A.ccKalaCode= B.ccKalaCode "
                     + " WHERE ccDarkhastFaktor= ? AND  B.ccGoroh IS NOT NULL "
-                    + " ORDER BY B.ccGoroh ASC, A.Tedad3 DESC, A.MablaghForosh DESC";
+                    + " ORDER BY B.ccGoroh ASC, A.Tedad3 ASC, A.MablaghForosh DESC";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Log.d("faktorsatrGorohMoh" , "query : " + query);
             Cursor cursor = db.rawQuery(query , new String[]{String.valueOf(ccTakhfifHajmi), String.valueOf(ccDarkhastFaktor)});
@@ -2024,15 +2025,16 @@ public class DarkhastFaktorSatrDAO
         return gorohs;
     }
 
-    public int getTedadByKalaInfo(long ccDarkhastFaktor , int ccTaminKonandeh , int ccKala , int ccKalaCode , String shomareBach)
+    public int getTedadByKalaInfo(long ccDarkhastFaktor , int ccTaminKonandeh , int ccKala , int ccKalaCode , String shomareBach, String TarikhTolid, String TarikhEngheza)
     {
         int tedad = 0;
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             String query = "select Tedad3 from darkhastFaktorSatr where ccDarkhastFaktor = " + ccDarkhastFaktor + " and ccTaminKonandeh = " + ccTaminKonandeh +
-                    " and ccKala = " + ccKala + " and ccKalaCode = " + ccKalaCode + " and ShomarehBach = '" + shomareBach + "'";
-            //Log.d("faktor" , "query : " + query);
+                    " and ccKala = " + ccKala + " and ccKalaCode = " + ccKalaCode + " and ShomarehBach = '" + shomareBach + "' and TarikhTolid = '" + TarikhTolid + "'" +
+                    " and TarikhEngheza = '" + TarikhEngheza + "'";
+            Log.d("faktor" , "query : " + query);
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
@@ -2265,7 +2267,7 @@ public class DarkhastFaktorSatrDAO
         }
     }
 
-    public boolean delete(long ccDarkhastFaktor , int ccTaminKonandeh , int ccKala , int ccKalaCode , String shomareBach, float gheymatForoshAsli, float gheymatMasrafKonandehAsli)
+    public boolean delete(long ccDarkhastFaktor , int ccTaminKonandeh , int ccKala , int ccKalaCode , String shomareBach, String TarikhTolid, String TarikhEngheza, float gheymatForoshAsli, float gheymatMasrafKonandehAsli)
     {
 
         try
@@ -2276,6 +2278,8 @@ public class DarkhastFaktorSatrDAO
                     " and " + DarkhastFaktorSatrModel.COLUMN_ccKala() + " = " + ccKala +
                     " and " + DarkhastFaktorSatrModel.COLUMN_ccKalaCode() + " = " + ccKalaCode +
                     " and " + DarkhastFaktorSatrModel.COLUMN_ShomarehBach() + " = '" + shomareBach + "'" +
+                    " and " + DarkhastFaktorSatrModel.COLUMN_TarikhTolid() + " = '" + TarikhTolid + "'" +
+                    " and " + DarkhastFaktorSatrModel.COLUMN_TarikhEngheza() + " = '" + TarikhEngheza + "'" +
                     " and " + DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli() + " = '" + gheymatMasrafKonandehAsli + "'" +
                     " and " + DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli() + " = '" + gheymatForoshAsli + "'"
                     , null);

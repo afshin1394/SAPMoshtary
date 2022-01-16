@@ -1,5 +1,8 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.os.Handler;
 import android.os.Message;
 
@@ -8,6 +11,7 @@ import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.RptDarkhastFaktorVazeiatPPCDAO;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.RptDarkhastFaktorVazeiatPPCModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
@@ -69,40 +73,81 @@ public class RptDarkhastFaktorVazeiatModel implements RptDarkhastFaktorVazeiatMV
                 return false;
             }
         });
-
-        rptDarkhastFaktorVazeiatPPCDAO.fetchRptDarkhastFaktorVazeiat(mPresenter.getAppContext(), "RptDarkhastFaktorVazeiatActivity", ccForoshandeh, ccMamorPakhsh, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        switch (serverIpModel.getWebServiceType()){
+            case REST:
+                rptDarkhastFaktorVazeiatPPCDAO.fetchRptDarkhastFaktorVazeiat(mPresenter.getAppContext(), "RptDarkhastFaktorVazeiatActivity", ccForoshandeh, ccMamorPakhsh, new RetrofitResponse()
                 {
                     @Override
-                    public void run()
+                    public void onSuccess(final ArrayList arrayListData)
                     {
-                        boolean deleteResult = rptDarkhastFaktorVazeiatPPCDAO.deleteAll();
-                        boolean insertResult = rptDarkhastFaktorVazeiatPPCDAO.insertGroup(arrayListData);
-                        Message message = new Message();
-                        if (deleteResult && insertResult)
+                        Thread thread = new Thread()
                         {
-                            message.arg1 = 1;
-                        }
-                        else
-                        {
-                            message.arg1 = -1;
-                        }
-                        handler.sendMessage(message);
+                            @Override
+                            public void run()
+                            {
+                                boolean deleteResult = rptDarkhastFaktorVazeiatPPCDAO.deleteAll();
+                                boolean insertResult = rptDarkhastFaktorVazeiatPPCDAO.insertGroup(arrayListData);
+                                Message message = new Message();
+                                if (deleteResult && insertResult)
+                                {
+                                    message.arg1 = 1;
+                                }
+                                else
+                                {
+                                    message.arg1 = -1;
+                                }
+                                handler.sendMessage(message);
+                            }
+                        };
+                        thread.start();
                     }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onErrorUpdateData();
-                setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptDarkhastFaktorVazeiatPPCModel", "RptDarkhastFaktorVazeiatActivity", "updateData", "onFailed");
-            }
-        });
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onErrorUpdateData();
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptDarkhastFaktorVazeiatPPCModel", "RptDarkhastFaktorVazeiatActivity", "updateData", "onFailed");
+                    }
+                });
+             break;
+
+            case gRPC:
+                rptDarkhastFaktorVazeiatPPCDAO.fetchRptDarkhastFaktorVazeiatGrpc(mPresenter.getAppContext(), "RptDarkhastFaktorVazeiatActivity", ccForoshandeh, ccMamorPakhsh, new RetrofitResponse()
+                {
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData)
+                    {
+                        Thread thread = new Thread()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                boolean deleteResult = rptDarkhastFaktorVazeiatPPCDAO.deleteAll();
+                                boolean insertResult = rptDarkhastFaktorVazeiatPPCDAO.insertGroup(arrayListData);
+                                Message message = new Message();
+                                if (deleteResult && insertResult)
+                                {
+                                    message.arg1 = 1;
+                                }
+                                else
+                                {
+                                    message.arg1 = -1;
+                                }
+                                handler.sendMessage(message);
+                            }
+                        };
+                        thread.start();
+                    }
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onErrorUpdateData();
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptDarkhastFaktorVazeiatPPCModel", "RptDarkhastFaktorVazeiatActivity", "updateData", "onFailed");
+                    }
+                });
+                break;
+        }
+
     }
 
 

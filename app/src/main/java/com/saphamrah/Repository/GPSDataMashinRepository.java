@@ -34,15 +34,7 @@ public class GPSDataMashinRepository {
         };
 
     }
-//    private Callable<Boolean> insertGroupCallable(ArrayList<GPSDataMashinModel> gpsDataMashinModels) {
-//        return new Callable<Boolean>() {
-//            @Override
-//            public Boolean call() throws Exception {
-//                return gpsDataMashinDAO.insertGroup(gpsDataMashinModels);
-//            }
-//        };
-//
-//    }
+
 
     /*******************************************************************Observable*****************************************************************/
     public Observable<Boolean> deleteAll() {
@@ -50,11 +42,5 @@ public class GPSDataMashinRepository {
                 .subscribeOn(Schedulers.io());
     }
 
-
-
-//    public Observable<Boolean> insertGroup(ArrayList<GorohModel> gorohModels) {
-//        return RxAsync.makeObservable(insertGroupCallable(gorohModels))
-//                .subscribeOn(Schedulers.io());
-//    }
 
 }

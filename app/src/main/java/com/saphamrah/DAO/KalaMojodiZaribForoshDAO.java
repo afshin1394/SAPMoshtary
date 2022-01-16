@@ -62,9 +62,10 @@ public class KalaMojodiZaribForoshDAO
                    " k.MablaghMasrafKonandeh MablaghMasrafKonandehKala, m.sumTedad, m.ccKalaMojodi, m.sumMax_MojodyByShomarehBach Max_MojodyByShomarehBach \n" +
                    " FROM Kala k \n" +
                    "              LEFT JOIN (SELECT KalaMojodi.* , SUM(Tedad) sumTedad, sum(Max_Mojody) sumMax_Mojody, sum(Max_MojodyByShomarehBach) sumMax_MojodyByShomarehBach FROM KalaMojodi where IsAdamForosh = 0 group by ccKalaCode , ShomarehBach, \n" +
-                   " GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh) m \n" +
+                   " GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh,TarikhTolid,TarikhEngheza) m \n" +
                    "    ON k.ccKalaCode = m.ccKalaCode AND k.ccTaminKonandeh = m.ccTaminkonandeh AND \n" +
                    "       k.ShomarehBach = m.ShomarehBach AND k.GheymatMasrafKonandehAsli = m.GheymatMasrafKonandeh AND k.GheymatForoshAsli = m.GheymatForosh \n" +
+                   " AND k.TarikhTolid = m.TarikhTolid AND k.TarikhEngheza = m.TarikhEngheza \n" +
                    " WHERE k.TedadMojodyGhabelForosh > 0 \n" +
                    " ORDER BY codekala DESC ) km \n" +
                    " LEFT JOIN (SELECT * FROM KalaZaribForosh z  WHERE ccGorohMoshtary =   " + noeMoshtary + " AND z.Darajeh IN ( 0," + darajeh + ")) z  ON km.ccKalaCode = z.ccKalaCode \n" +
@@ -87,9 +88,10 @@ public class KalaMojodiZaribForoshDAO
            query = "select km.* , IFNULL(ZaribForosh,1)ZaribForosh , Darajeh, o.Olaviat , Kp.Photo from \n" +
                    " (select k.* , m.sumTedad, m.GheymatForosh, m.ccKalaMojodi, m.sumMax_MojodyByShomarehBach Max_MojodyByShomarehBach \n" +
                    " from Kala k left join (select KalaMojodi.* , sum(Tedad) sumTedad, sum(Max_Mojody) sumMax_Mojody, sum(Max_MojodyByShomarehBach) sumMax_MojodyByShomarehBach from KalaMojodi where IsAdamForosh = 0 group by ccKalaCode , ShomarehBach, \n" +
-                   " GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh) m \n" +
+                   " GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh,TarikhTolid,TarikhEngheza) m \n" +
                    " on k.ccKalaCode = m.ccKalaCode and k.ccTaminKonandeh = m.ccTaminkonandeh and \n" +
                    " k.ShomarehBach = m.ShomarehBach and k.MablaghMasrafKonandeh = m.GheymatMasrafKonandeh and k.MablaghForosh = m.GheymatForosh \n" +
+                   " AND k.TarikhTolid = m.TarikhTolid AND k.TarikhEngheza = m.TarikhEngheza \n" +
                    " where k.TedadMojodyGhabelForosh > 0 \n" +
                    " order by codekala desc ) km left join \n" +
                    " (select * from KalaZaribForosh z \n" +
@@ -145,9 +147,10 @@ public class KalaMojodiZaribForoshDAO
                     " k.MablaghMasrafKonandeh MablaghMasrafKonandehKala, m.sumTedad, m.ccKalaMojodi, m.sumMax_MojodyByShomarehBach Max_MojodyByShomarehBach \n" +
                     " FROM Kala k \n" +
                     "              LEFT JOIN (SELECT KalaMojodi.* , SUM(Tedad) sumTedad , sum(Max_Mojody) sumMax_Mojody, sum(Max_MojodyByShomarehBach) sumMax_MojodyByShomarehBach  FROM KalaMojodi where  ccKalaCode = " + ccKalaCode + " AND  IsAdamForosh = 0 group by ccKalaCode , ShomarehBach, \n" +
-                    " GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh) m \n" +
+                    " GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh,TarikhTolid,TarikhEngheza) m \n" +
                     "    ON k.ccKalaCode = m.ccKalaCode AND k.ccTaminKonandeh = m.ccTaminkonandeh AND \n" +
                     "       k.ShomarehBach = m.ShomarehBach AND k.GheymatMasrafKonandehAsli = m.GheymatMasrafKonandeh AND k.GheymatForoshAsli = m.GheymatForosh \n" +
+                    " AND k.TarikhTolid = m.TarikhTolid AND k.TarikhEngheza = m.TarikhEngheza \n" +
                     " WHERE k.TedadMojodyGhabelForosh > 0 \n" +
                     " ORDER BY codekala DESC ) km \n" +
                     " LEFT JOIN (SELECT * FROM KalaZaribForosh z  WHERE ccGorohMoshtary =   " + noeMoshtary + " AND z.Darajeh IN ( 0," + darajeh + ")) z  ON km.ccKalaCode = z.ccKalaCode \n" +
@@ -169,9 +172,10 @@ public class KalaMojodiZaribForoshDAO
                     " (select k.* , m.sumTedad, m.GheymatForosh, m.ccKalaMojodi, m.sumMax_MojodyByShomarehBach Max_MojodyByShomarehBach \n" +
                     " from Kala k left join (select KalaMojodi.* , sum(Tedad) sumTedad , sum(Max_Mojody) sumMax_Mojody, sum(Max_MojodyByShomarehBach) sumMax_MojodyByShomarehBach  from KalaMojodi where ccKalaCode = " + ccKalaCode + " and IsAdamForosh = 0 " +
                     " group by ccKalaCode , ShomarehBach, \n" +
-                    " GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh) m \n" +
+                    " GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh,TarikhTolid,TarikhEngheza) m \n" +
                     " on k.ccKalaCode = m.ccKalaCode and k.ccTaminKonandeh = m.ccTaminkonandeh and \n" +
                     " k.ShomarehBach = m.ShomarehBach and k.MablaghMasrafKonandeh = m.GheymatMasrafKonandeh and k.MablaghForosh = m.GheymatForosh \n" +
+                    " AND k.TarikhTolid = m.TarikhTolid AND k.TarikhEngheza = m.TarikhEngheza \n" +
                     " where k.TedadMojodyGhabelForosh > 0 \n" +
                     " order by codekala desc ) km left join \n" +
                     " (select * from KalaZaribForosh z \n" +
@@ -256,6 +260,7 @@ public class KalaMojodiZaribForoshDAO
             kalaMojodiZaribModel.setShomarehBach(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_ShomarehBach())));
             kalaMojodiZaribModel.setTarikhTolid(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_TarikhTolid())));
             kalaMojodiZaribModel.setTarikhEngheza(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_TarikhEngheza())));
+            kalaMojodiZaribModel.setCcGorohKala(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccGorohKala())));
 
             // KalaOlaviat
             kalaMojodiZaribModel.setOlaviat(cursor.getInt(cursor.getColumnIndex(KalaOlaviatModel.COLUMN_Olaviat())));

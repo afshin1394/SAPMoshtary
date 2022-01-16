@@ -38,6 +38,7 @@ message GPSDataReply{
   int64	InvoiceRequestID=15;
   int32	CustomerID=16;
   int32	PersonID=17;
+  int64 DraftRequestID = 18;
 
 
 }

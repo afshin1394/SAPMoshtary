@@ -502,6 +502,11 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
     }
 
     @Override
+    public void onErrorSendRasGiri(String error) {
+        customAlertDialog.showMessageAlert(TreasuryListActivity.this, false, "", error, Constants.FAILED_MESSAGE(), getString(R.string.apply));
+    }
+
+    @Override
     public void showAlertMessage(int resId, String parameter, int messageType) {
         customAlertDialog.showMessageAlert(TreasuryListActivity.this, false, "", getResources().getString(resId, parameter), messageType, getResources().getString(R.string.apply));
     }

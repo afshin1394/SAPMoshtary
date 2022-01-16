@@ -14,7 +14,7 @@ public interface MarjoeeMorediMVP
         void showToast(int resId, int messageType, int duration);
         void onGetMarjoeeMoredi(ArrayList<MarjoeeMamorPakhshModel> marjoeeMamorPakhshModels);
         void onGetElatMarjoeeMoredi  (ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels, ArrayList<String> elatMarjoeeKalaTitles);
-        void onTaeidSabtMarjoee(int selectedCount, int position);
+        void onTaeidSabtMarjoee(int selectedCount,String nameElatMarjoee, int position);
         void onGetSearch(ArrayList<MarjoeeMamorPakhshModel> marjoeeMamorPakhshModelsSearch);
     }
 
@@ -36,7 +36,7 @@ public interface MarjoeeMorediMVP
 
         void onGetMarjoeeMoredi(ArrayList<MarjoeeMamorPakhshModel> marjoeeMamorPakhshModels);
         void onGetElatMarjoeeMoredi  (ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels, ArrayList<String> elatMarjoeeKalaTitles);
-        void onTaeidSabtMarjoee(int selectedCount, int position);
+        void onTaeidSabtMarjoee(int selectedCount,String nameElatMarjoee, int position);
         void onGetSearch(ArrayList<MarjoeeMamorPakhshModel> marjoeeMamorPakhshModelsSearch);
     }
 

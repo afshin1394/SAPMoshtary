@@ -1,5 +1,8 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -13,6 +16,7 @@ import com.saphamrah.DAO.RptMoshtarianKharidNakardehDAO;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.RptMandehdarModel;
 import com.saphamrah.Model.RptMoshtaryKharidNakardeModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.Utils.Constants;
@@ -64,44 +68,91 @@ public class RptMoshtarianKharidNakardehModel implements RptMoshtarianKharidNaka
             }
         });
 //        String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh())
-        rptMoshtarianKharidNakardehDAO.fetchAllMoshtarianKharidNakarde(mPresenter.getAppContext(), "RptFaktorMandehDarActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh())  ,strCcmasir, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        switch (serverIpModel.getWebServiceType()){
+            case REST:
+                rptMoshtarianKharidNakardehDAO.fetchAllMoshtarianKharidNakarde(mPresenter.getAppContext(), "RptFaktorMandehDarActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh())  ,strCcmasir, new RetrofitResponse()
                 {
                     @Override
-                    public void run()
+                    public void onSuccess(final ArrayList arrayListData)
                     {
-                        Log.i(TAG, "run: "+arrayListData.size());
-                        boolean deleteResult = rptMoshtarianKharidNakardehDAO.deleteAll();
-                        boolean insertResult = rptMoshtarianKharidNakardehDAO.insertGroup(arrayListData);
-                        Message message = new Message();
-                        if (deleteResult && insertResult)
+                        Thread thread = new Thread()
                         {
-                            Log.i("resaultosk", "run: "+foroshandehMamorPakhshModel.getCcForoshandeh());
+                            @Override
+                            public void run()
+                            {
+                                Log.i(TAG, "run: "+arrayListData.size());
+                                boolean deleteResult = rptMoshtarianKharidNakardehDAO.deleteAll();
+                                boolean insertResult = rptMoshtarianKharidNakardehDAO.insertGroup(arrayListData);
+                                Message message = new Message();
+                                if (deleteResult && insertResult)
+                                {
+                                    Log.i("resaultosk", "run: "+foroshandehMamorPakhshModel.getCcForoshandeh());
 
-                            Log.i(TAG, "run: ");
-                            message.arg1 = 1;
-                        }
-                        else
-                        {
-                            Log.i("resaultok", "run: ");
-                            message.arg1 = -1;
-                        }
-                        handler.sendMessage(message);
+                                    Log.i(TAG, "run: ");
+                                    message.arg1 = 1;
+                                }
+                                else
+                                {
+                                    Log.i("resaultok", "run: ");
+                                    message.arg1 = -1;
+                                }
+                                handler.sendMessage(message);
+                            }
+                        };
+                        thread.start();
                     }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onErrorUpdateListMandehDar(type);
-                setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptListVosolModel", "RptListVosolActivity", "updateListVosol", "onFailed");
-            }
-        });
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onErrorUpdateListMandehDar(type);
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptListVosolModel", "RptListVosolActivity", "updateListVosol", "onFailed");
+                    }
+                });
+                break;
+            case gRPC:
+                rptMoshtarianKharidNakardehDAO.fetchAllMoshtarianKharidNakardeGrpc(mPresenter.getAppContext(), "RptFaktorMandehDarActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh())  ,strCcmasir, new RetrofitResponse()
+                {
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData)
+                    {
+                        Thread thread = new Thread()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                Log.i(TAG, "run: "+arrayListData.size());
+                                boolean deleteResult = rptMoshtarianKharidNakardehDAO.deleteAll();
+                                boolean insertResult = rptMoshtarianKharidNakardehDAO.insertGroup(arrayListData);
+                                Message message = new Message();
+                                if (deleteResult && insertResult)
+                                {
+                                    Log.i("resaultosk", "run: "+foroshandehMamorPakhshModel.getCcForoshandeh());
+
+                                    Log.i(TAG, "run: ");
+                                    message.arg1 = 1;
+                                }
+                                else
+                                {
+                                    Log.i("resaultok", "run: ");
+                                    message.arg1 = -1;
+                                }
+                                handler.sendMessage(message);
+                            }
+                        };
+                        thread.start();
+                    }
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onErrorUpdateListMandehDar(type);
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptListVosolModel", "RptListVosolActivity", "updateListVosol", "onFailed");
+                    }
+                });
+                break;
+        }
+
+
     }
 
     @Override

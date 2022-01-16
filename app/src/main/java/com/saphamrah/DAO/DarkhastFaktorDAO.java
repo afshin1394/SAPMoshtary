@@ -229,6 +229,8 @@ public class DarkhastFaktorDAO
                                 darkhastFaktorModel.setIsTakhir(invoiceRequestReply.getIsDelayed());
                                 darkhastFaktorModel.setCcMoshtaryGhardad(invoiceRequestReply.getCustomerContractID());
                                 darkhastFaktorModel.setNameVazeiat(invoiceRequestReply.getSituationName());
+                                darkhastFaktorModel.setCcAnbar(invoiceRequestReply.getStoreID());
+                                darkhastFaktorModel.setTarikhPishbinyTahvil(invoiceRequestReply.getDeliveryPredictDate());
 
                                 darkhastFaktorModels.add(darkhastFaktorModel);
                             }
@@ -1802,7 +1804,7 @@ public class DarkhastFaktorDAO
 
         try
         {
-            String query = " select DISTINCT df.ccForoshandeh, df.ccMoshtaryGharardad, df.MoshtaryGharardadccSazmanForosh   from darkhastFaktor df \n" +
+            String query = " select DISTINCT df.ccMoshtaryGharardad, df.MoshtaryGharardadccSazmanForosh   from darkhastFaktor df \n" +
                     " left join moshtary m on df.ccMoshtary = m.ccMoshtary where m.ccNoeMoshtary = 350 and df.ccDarkhastFaktorNoeForosh = 2" ;
             Log.d("GetProgram", "getAllMoshtaryGharardadAndGharardadKala4"+query );
 
@@ -1818,9 +1820,8 @@ public class DarkhastFaktorDAO
                     while(!cursor.isAfterLast()) {
                         JSONObject jsonObject = new JSONObject();
 
-                        jsonObject.put("ccForoshandeh", cursor.getInt(0));
-                        jsonObject.put("ccMoshtaryGharardad", cursor.getInt(1));
-                        jsonObject.put("MoshtaryGharardadccSazmanForosh", cursor.getInt(2));
+                        jsonObject.put("ccMoshtaryGharardad", cursor.getInt(0));
+                        jsonObject.put("MoshtaryGharardadccSazmanForosh", cursor.getInt(1));
                         jsonArray.put(jsonObject);
                         cursor.moveToNext();
                     }

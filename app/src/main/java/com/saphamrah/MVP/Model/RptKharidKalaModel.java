@@ -1,5 +1,8 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.os.Handler;
 import android.os.Message;
 
@@ -8,6 +11,7 @@ import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.RptKharidKalaDAO;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
@@ -69,40 +73,80 @@ public class RptKharidKalaModel implements RptKharidKalaMVP.ModelOps
         {
             foroshandeh = String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh());
         }
-
-        rptKharidKalaDAO.fetchKharidKalaByccForoshandeh(mPresenter.getAppContext(), "RptKharidKalaActivity", "2" , foroshandeh, "", new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        switch (serverIpModel.getWebServiceType()){
+            case REST :
+                rptKharidKalaDAO.fetchKharidKalaByccForoshandeh(mPresenter.getAppContext(), "RptKharidKalaActivity", "2" , foroshandeh, "", new RetrofitResponse()
                 {
                     @Override
-                    public void run()
+                    public void onSuccess(final ArrayList arrayListData)
                     {
-                        boolean deleteResult = rptKharidKalaDAO.deleteAll();
-                        boolean insertResult = rptKharidKalaDAO.insertGroup(arrayListData);
-                        Message message = new Message();
-                        if (deleteResult && insertResult)
+                        Thread thread = new Thread()
                         {
-                            message.arg1 = 1;
-                        }
-                        else
-                        {
-                            message.arg1 = -1;
-                        }
-                        handler.sendMessage(message);
+                            @Override
+                            public void run()
+                            {
+                                boolean deleteResult = rptKharidKalaDAO.deleteAll();
+                                boolean insertResult = rptKharidKalaDAO.insertGroup(arrayListData);
+                                Message message = new Message();
+                                if (deleteResult && insertResult)
+                                {
+                                    message.arg1 = 1;
+                                }
+                                else
+                                {
+                                    message.arg1 = -1;
+                                }
+                                handler.sendMessage(message);
+                            }
+                        };
+                        thread.start();
                     }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onErrorUpdate();
-                setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptListVosolModel", "RptListVosolActivity", "updateListVosol", "onFailed");
-            }
-        });
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onErrorUpdate();
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptListVosolModel", "RptListVosolActivity", "updateListVosol", "onFailed");
+                    }
+                });
+                break;
+            case gRPC:
+                rptKharidKalaDAO.fetchKharidKalaByccForoshandehGrpc(mPresenter.getAppContext(), "RptKharidKalaActivity", "2" , foroshandeh, "", new RetrofitResponse()
+                {
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData)
+                    {
+                        Thread thread = new Thread()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                boolean deleteResult = rptKharidKalaDAO.deleteAll();
+                                boolean insertResult = rptKharidKalaDAO.insertGroup(arrayListData);
+                                Message message = new Message();
+                                if (deleteResult && insertResult)
+                                {
+                                    message.arg1 = 1;
+                                }
+                                else
+                                {
+                                    message.arg1 = -1;
+                                }
+                                handler.sendMessage(message);
+                            }
+                        };
+                        thread.start();
+                    }
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onErrorUpdate();
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "RptListVosolModel", "RptListVosolActivity", "updateListVosol", "onFailed");
+                    }
+                });
+                break;
+        }
+
     }
 
     @Override

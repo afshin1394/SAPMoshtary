@@ -19,6 +19,7 @@ import com.saphamrah.R;
 import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.UIModel.JayezehByccKalaCodeModel;
 import com.saphamrah.UIModel.KalaDarkhastFaktorSatrModel;
+import com.saphamrah.UIModel.KalaFilterUiModel;
 import com.saphamrah.UIModel.KalaMojodiZaribModel;
 import com.saphamrah.Utils.Constants;
 
@@ -387,6 +388,10 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
         mModel.checkZanjiree();
     }
 
+    @Override
+    public void getKalaFilter() {
+        mModel.getKalaFilter();
+    }
 
 
     @Override
@@ -547,6 +552,18 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
     @Override
     public void  onCheckZanjiree(){
         mView.get().onCheckZanjiree();
+    }
+
+    @Override
+    public void onKalaFilter(ArrayList<KalaFilterUiModel> kalaFilterUiModels) {
+
+        ArrayList<String> itemsKalaFilter = new ArrayList<>();
+        for (KalaFilterUiModel model : kalaFilterUiModels){
+            itemsKalaFilter.add(model.getNameGoroh());
+        }
+
+        mView.get().onKalaFilter(kalaFilterUiModels,itemsKalaFilter);
+
     }
 
 

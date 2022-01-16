@@ -201,7 +201,7 @@ public class RptMojodiAnbarDAO
         Log.d("RptMojodyAnbarak","ccMamorPakhshReq"+ccMamorPakhshReq +" ,ccForoshandehReq"+ccForoshandehReq+", ccAnbarakReq:"+ccAnbarakReq);
 
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-        serverIpModel.setPort("8040");
+        //serverIpModel.setPort("8040");
 
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
         {

@@ -157,7 +157,9 @@ import java.util.Date;
 
        try
        {
-           kardex = kardexDAO.SetForInsert_Kardex(ccMarkazAnbar,
+           kardex = kardexDAO.SetForInsert_Kardex(
+//                   ccMarkazAnbar,
+                   darkhastFaktorModel.getCcMarkazAnbar(),
                    darkhastFaktorModel.getCcMarkazForosh(),
                    darkhastFaktorModel.getCcAnbar(),
                    entity.getCcMoshtary(),

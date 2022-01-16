@@ -19,3 +19,24 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+#-keep class io.grpc.internal.DnsNameResolverProvider
+#-keep class io.grpc.okhttp.OkHttpChannelProvider
+#
+#
+#-keepclassmembers class io.grpc.okhttp.OkHttpChannelBuilder {
+#
+#io.grpc.okhttp.OkHttpChannelBuilder forTarget(java.lang.String);
+#
+#io.grpc.okhttp.OkHttpChannelBuilder scheduledExecutorService(java.util.concurrent.ScheduledExecutorService);
+#
+#io.grpc.okhttp.OkHttpChannelBuilder sslSocketFactory(javax.net.ssl.SSLSocketFactory);
+#
+#io.grpc.okhttp.OkHttpChannelBuilder transportExecutor(java.util.concurrent.Executor);
+#
+#}
+#
+#-keep public class com.saphamrah.protos.** {
+#  public protected *;
+#}

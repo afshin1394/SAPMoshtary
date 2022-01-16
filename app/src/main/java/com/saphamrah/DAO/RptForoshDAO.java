@@ -164,7 +164,7 @@ public class RptForoshDAO
     public void fetchAllrptAmarForosh(final Context context, final String activityNameForLog, final String ccForoshandeh, final String taTarikh, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-        serverIpModel.setPort("8040");
+        //serverIpModel.setPort("8040");
 
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
         {

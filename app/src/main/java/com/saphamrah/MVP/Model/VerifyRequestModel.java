@@ -51,7 +51,6 @@ import com.saphamrah.Model.DarkhastFaktorTakhfifModel;
 import com.saphamrah.Model.DataTableModel;
 import com.saphamrah.Model.ForoshandehEtebarModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
-import com.saphamrah.Model.GPSDataMashinModel;
 import com.saphamrah.Model.GPSDataModel;
 import com.saphamrah.Model.JayezehEntekhabiModel;
 import com.saphamrah.Model.JayezehModel;
@@ -740,16 +739,25 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         int ccMasirRooz = selectFaktorShared.getInt(selectFaktorShared.getCcMasirRooz() , 0);
         int ccMamorPakhsh = 0;
         int ccForoshandeh = selectFaktorShared.getInt(selectFaktorShared.getCcForoshandeh() , 0);
-        if (noeMasouliat == 4 || noeMasouliat == 5)
+//        if (noeMasouliat == 4 || noeMasouliat == 5)
+//        {
+//            ccMamorPakhsh = foroshandehMamorPakhshModel.getCcMamorPakhsh();
+//            ccForoshandeh = 0;
+//            insertGPSDataMashinPPC(locationProvider, ccDarkhastFaktor, ccMamorPakhsh, foroshandehMamorPakhshModel, selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary() , 0), currentDate);
+//        }
+        switch (darkhastFaktorModel.getCcDarkhastFaktorNoeForosh())
         {
-            ccMamorPakhsh = foroshandehMamorPakhshModel.getCcMamorPakhsh();
-            ccForoshandeh = 0;
-            insertGPSDataMashinPPC(locationProvider, ccDarkhastFaktor, ccMamorPakhsh, foroshandehMamorPakhshModel, selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary() , 0), currentDate);
+            case Constants.FAKTOR_GHATI:
+                insertGPSDataPPC(locationProvider, foroshandehMamorPakhshModel.getCcAfrad(), ccForoshandeh, ccMamorPakhsh, ccMasirRooz, ccDarkhastFaktor ,0L , ccMoshtary);
+                break;
+            case Constants.FAKTOR_HAVALEH:
+                insertGPSDataPPC(locationProvider, foroshandehMamorPakhshModel.getCcAfrad(), ccForoshandeh, ccMamorPakhsh, ccMasirRooz,0L, ccDarkhastFaktor, ccMoshtary);
+                break;
+
         }
-        insertGPSDataPPC(locationProvider, foroshandehMamorPakhshModel.getCcAfrad(), ccForoshandeh, ccMamorPakhsh, ccMasirRooz, ccDarkhastFaktor, ccMoshtary);
     }
 
-    private void insertGPSDataPPC(PubFunc.LocationProvider locationProvider, int ccAfrad, int ccForoshandeh, int ccMamorPakhsh, int ccMasirRooz, long ccDarkhastFaktor, int ccMoshtary)
+    private void insertGPSDataPPC(PubFunc.LocationProvider locationProvider, int ccAfrad, int ccForoshandeh, int ccMamorPakhsh, int ccMasirRooz, long ccDarkhastFaktor,long ccDarkhastHavaleh , int ccMoshtary)
     {
         GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
         GPSDataModel gpsDataModel = new GPSDataModel();
@@ -768,26 +776,12 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         gpsDataModel.setDistance(0D);
         gpsDataModel.setTarikh(new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(Calendar.getInstance().getTime()));
         gpsDataModel.setCcDarkhastFaktor(ccDarkhastFaktor);
+        gpsDataModel.setCcDarkhastHavaleh(ccDarkhastHavaleh);
         gpsDataModel.setCcMoshtary(ccMoshtary);
         gpsDataPpcDAO.insert(gpsDataModel);
     }
 
-    private void insertGPSDataMashinPPC(PubFunc.LocationProvider locationProvider , long ccDarkhastFaktor, int ccMamorPakhsh, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int ccMsohtary, String zamaneSabt)
-    {
-        GPSDataMashinModel gpsDataMashinModel = new GPSDataMashinModel();
-        gpsDataMashinModel.setCcMamorPakhsh(ccMamorPakhsh);
-        gpsDataMashinModel.setCcAfradMamorPakhsh(foroshandehMamorPakhshModel.getCcAfrad());
-        gpsDataMashinModel.setCcDarkhastFaktor(ccDarkhastFaktor);
-        gpsDataMashinModel.setCcMoshtary(ccMsohtary);
-        gpsDataMashinModel.setZamaneSabt(zamaneSabt);
-        gpsDataMashinModel.setCcMashin(foroshandehMamorPakhshModel.getCcMashin());
-        gpsDataMashinModel.setLatitude_y((float) locationProvider.getLatitude());
-        gpsDataMashinModel.setLongitude_x((float)locationProvider.getLongitude());
 
-        GPSDataMashinDAO gpsDataMashinDAO = new GPSDataMashinDAO(mPresenter.getAppContext());
-        gpsDataMashinDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
-        gpsDataMashinDAO.insert(gpsDataMashinModel);
-    }
 
     @Override
     public void deleteBonus(long ccDarkhastFaktor , boolean openSelectBonusActivity)
@@ -3277,7 +3271,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 {
                     int countNew = (kala.getTedad() >= tedadJayezeh) ? tedadJayezeh : kala.getTedad();
                     Log.d("bonus" , "count new : " + countNew + " , kala.getTedad() : " + kala.getTedad() + " , tedadJayezeh : " + tedadJayezeh + " , FinalccAfrad : " + kala.getCcAfrad());
-                    if (insertKalaMojodi(kalaMojodiDAO, kala.getCcTaminKonandeh(), countNew, kala.getShomarehBach(), kala.getTarikhTolid(), kala.getGheymatMasrafKonandeh(), kala.getGheymatForosh(), kala.getCcKalaCode(), kala.getCcForoshandeh(), kala.getCcAfrad()))
+                    Log.d("bonus" , "kala model " + kala.toString());
+                    if (insertKalaMojodi(kalaMojodiDAO, kala.getCcTaminKonandeh(), countNew, kala.getShomarehBach(), kala.getTarikhTolid(), kala.getGheymatMasrafKonandeh(), kala.getGheymatForosh(), kala.getCcKalaCode(), kala.getCcForoshandeh(), kala.getCcAfrad(), kala.getTarikhEngheza()))
                     {
                         insertedKala += countNew;
                     }
@@ -3287,10 +3282,9 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             return insertedKala == tedadJayezeh;
         }
 
-        private boolean insertKalaMojodi(KalaMojodiDAO kalaMojodiDAO, int ccTaminKonandeh, int count, String shomarehBach, String tarikhTolid, float gheymatMasrafKonandeh, float gheymatForosh, int ccKalaCode, int ccForoshandeh, int ccAfrad)
+        private boolean insertKalaMojodi(KalaMojodiDAO kalaMojodiDAO, int ccTaminKonandeh, int count, String shomarehBach, String tarikhTolid, float gheymatMasrafKonandeh, float gheymatForosh, int ccKalaCode, int ccForoshandeh, int ccAfrad,  String tarikhEngheza)
         {
             String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
-            KalaMojodiModel kalaMojodiModelFromDB = kalaMojodiDAO.getOneByccKalaCode(String.valueOf(ccKalaCode));
             KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
             kalaMojodiModel.setCcTaminKonandeh(ccTaminKonandeh);
             kalaMojodiModel.setTedad(-1 * count);
@@ -3306,9 +3300,11 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             kalaMojodiModel.setMax_Mojody(-1 * count);
             kalaMojodiModel.setMax_MojodyByShomarehBach(-1 * count);
             kalaMojodiModel.setCcAfrad(ccAfrad);
+            kalaMojodiModel.setTarikhTolid(tarikhTolid);
+            kalaMojodiModel.setTarikhEngheza(tarikhEngheza);
             if (kalaMojodiDAO.insert(kalaMojodiModel))
             {
-                return insertDarkhastFaktorSatr(ccTaminKonandeh, ccKalaCode, count, shomarehBach, tarikhTolid, gheymatForosh, gheymatMasrafKonandeh);
+                return insertDarkhastFaktorSatr(ccTaminKonandeh, ccKalaCode, count, shomarehBach, tarikhTolid, tarikhEngheza, gheymatForosh, gheymatMasrafKonandeh);
             }
             else
             {
@@ -3316,7 +3312,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             }
         }
 
-        private boolean insertDarkhastFaktorSatr(int ccTaminKonandeh, int ccKalaCode, int count, String shomarehBach, String tarikhTolid, float gheymatForosh, float gheymatMasrafKonandeh)
+        private boolean insertDarkhastFaktorSatr(int ccTaminKonandeh, int ccKalaCode, int count, String shomarehBach, String tarikhTolid, String tarikhEngheza, float gheymatForosh, float gheymatMasrafKonandeh)
         {
             DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
             DarkhastFaktorSatrModel darkhastFaktorSatrModel = new DarkhastFaktorSatrModel();
@@ -3328,7 +3324,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             darkhastFaktorSatrModel.setCodeNoeKala(2);
             darkhastFaktorSatrModel.setShomarehBach(shomarehBach);
             darkhastFaktorSatrModel.setTarikhTolid(tarikhTolid);
-            darkhastFaktorSatrModel.setTarikhEngheza(new KalaDAO(mPresenter.getAppContext()).getByccKalaCode(ccKalaCode).getTarikhEngheza());
+            darkhastFaktorSatrModel.setTarikhEngheza(tarikhEngheza);
             darkhastFaktorSatrModel.setMablaghForosh(1);
             darkhastFaktorSatrModel.setMablaghForoshKhalesKala(gheymatForosh);
             darkhastFaktorSatrModel.setMablaghTakhfifNaghdiVahed(0);

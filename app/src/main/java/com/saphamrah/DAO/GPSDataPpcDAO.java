@@ -82,7 +82,8 @@ public class GPSDataPpcDAO
             GPSDataModel.COLUMN_Speed(),
             GPSDataModel.COLUMN_Status(),
             GPSDataModel.COLUMN_ElapsedRealtimeNanos(),
-            GPSDataModel.COLUMN_Provider()
+            GPSDataModel.COLUMN_Provider(),
+            GPSDataModel.COLUMN_ccDarkhastHavaleh()
         };
     }
 
@@ -129,7 +130,7 @@ public class GPSDataPpcDAO
                                 model.setDistance(reply.getDistance());
                                 model.setCcAfrad(reply.getPersonID());
                                 model.setElapsedRealTimeNanos(reply.getElapsedRealTimeNanos());
-
+                                model.setCcDarkhastHavaleh(reply.getDraftRequestID());
                                 models.add(model);
                             }
                             return models;
@@ -677,6 +678,7 @@ public class GPSDataPpcDAO
         contentValues.put(GPSDataModel.COLUMN_Provider() , model.getProvider());
         contentValues.put(GPSDataModel.COLUMN_ccMoshtary() , model.getCcMoshtary());
         contentValues.put(GPSDataModel.COLUMN_ccDarkhastFaktor() , model.getCcDarkhastFaktor());
+        contentValues.put(GPSDataModel.COLUMN_ccDarkhastHavaleh() , model.getCcDarkhastHavaleh());
 
         return contentValues;
     }
@@ -710,6 +712,7 @@ public class GPSDataPpcDAO
                 gpsDataModel.setProvider(cursor.getString(cursor.getColumnIndex(GPSDataModel.COLUMN_Provider())));
                 gpsDataModel.setCcMoshtary(cursor.getInt(cursor.getColumnIndex(GPSDataModel.COLUMN_ccMoshtary())));
                 gpsDataModel.setCcDarkhastFaktor(cursor.getLong(cursor.getColumnIndex(GPSDataModel.COLUMN_ccDarkhastFaktor())));
+                gpsDataModel.setCcDarkhastHavaleh(cursor.getLong(cursor.getColumnIndex(GPSDataModel.COLUMN_ccDarkhastHavaleh())));
 
                 arrayListGpsDataModel.add(gpsDataModel);
                 cursor.moveToNext();

@@ -414,6 +414,11 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
     }
 
     @Override
+    public void onErrorSendRasGiri(String error) {
+        mView.get().onErrorSendRasGiri(error);
+    }
+
+    @Override
     public void onWarning(int resId) {
         mView.get().showToast(resId, Constants.INFO_MESSAGE(), Constants.DURATION_SHORT());
         mView.get().closeLoadingDialog();

@@ -2323,6 +2323,7 @@ public class GetProgramGrpcModel implements GetProgramMVP.ModelOps {
                         kalaMojodiModel.setTarikhDarkhast(currentDate);
                         kalaMojodiModel.setShomarehBach(mandehMojodyMashinModel.getShomarehBach());
                         kalaMojodiModel.setTarikhTolid(mandehMojodyMashinModel.getTarikhTolid());
+                        kalaMojodiModel.setTarikhEngheza(mandehMojodyMashinModel.getTarikhEngheza());
                         kalaMojodiModel.setGheymatMasrafKonandeh(mandehMojodyMashinModel.getGheymatMasrafKonandeh());
                         kalaMojodiModel.setGheymatForosh(mandehMojodyMashinModel.getGheymatForosh());
                         kalaMojodiModel.setCcTaminKonandeh(mandehMojodyMashinModel.getCcTaminKonandeh());
@@ -4148,7 +4149,7 @@ public class GetProgramGrpcModel implements GetProgramMVP.ModelOps {
 //        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
 //        getParameter(getProgramType);
 
-        noePishnahadDAO.fetchNoePishnahad(BaseApplication.getContext(), "GetProgramActivity", new RetrofitResponse() {
+        noePishnahadDAO.fetchNoePishnahadGRPC(BaseApplication.getContext(), "GetProgramActivity", new RetrofitResponse() {
             @Override
             public void onSuccess(ArrayList arrayListData) {
                 Thread thread = new Thread() {
@@ -4194,7 +4195,7 @@ public class GetProgramGrpcModel implements GetProgramMVP.ModelOps {
 //        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
 //        getParameter(getProgramType);
 
-        rptJashnvarehDAO.fetchRptJashnvareh(BaseApplication.getContext(), "GetProgramActivity", ccForoshandeh, ccMoshtarys, new RetrofitResponse() {
+        rptJashnvarehDAO.fetchRptJashnvarehGrpc(BaseApplication.getContext(), "GetProgramActivity", ccForoshandeh, ccMoshtarys, new RetrofitResponse() {
             @Override
             public void onSuccess(ArrayList arrayListData) {
                 Thread thread = new Thread() {

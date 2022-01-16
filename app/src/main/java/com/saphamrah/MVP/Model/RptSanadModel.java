@@ -1,5 +1,8 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -10,6 +13,7 @@ import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.RptSanadDAO;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.ForoshandehModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
@@ -80,33 +84,67 @@ public class RptSanadModel implements RptSanadMVP.ModelOps {
             }
         }
         Log.d(TAG, "updateRptSanad: " + "cCForoshande = " + cCForoshande);
-        if (cCForoshande != "") {
-            rptSanadDAO.fetchAllRptSanad(mPresenter.getAppContext(), mPresenter.getAppContext().getClass().getSimpleName(), cCForoshande, new RetrofitResponse() {
-                @Override
-                public void onSuccess(final ArrayList arrayListData) {
-                    Thread thread = new Thread() {
+        if (!cCForoshande.equals("")) {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+            switch (serverIpModel.getWebServiceType()){
+                case REST:
+                    rptSanadDAO.fetchAllRptSanad(mPresenter.getAppContext(), mPresenter.getAppContext().getClass().getSimpleName(), cCForoshande, new RetrofitResponse() {
                         @Override
-                        public void run() {
-                            boolean deleteResult = rptSanadDAO.deleteAll();
-                            boolean insertResult = rptSanadDAO.insertGroup(arrayListData);
-                            Message message = new Message();
-                            if (deleteResult && insertResult)
-                                message.arg1 = 1;
-                            else
-                                message.arg1 = -1;
+                        public void onSuccess(final ArrayList arrayListData) {
+                            Thread thread = new Thread() {
+                                @Override
+                                public void run() {
+                                    boolean deleteResult = rptSanadDAO.deleteAll();
+                                    boolean insertResult = rptSanadDAO.insertGroup(arrayListData);
+                                    Message message = new Message();
+                                    if (deleteResult && insertResult)
+                                        message.arg1 = 1;
+                                    else
+                                        message.arg1 = -1;
 
-                            handler.sendMessage(message);
+                                    handler.sendMessage(message);
+                                }
+                            };
+                            thread.start();
                         }
-                    };
-                    thread.start();
-                }
 
-                @Override
-                public void onFailed(String type, String error) {
-                    mPresenter.onFailedGetRptSanad(R.string.errorGetDataAndGetProgram);
-                    setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type, error), "RptSanadModel", mPresenter.getAppContext().getClass().getSimpleName(), "updateRptSanad", "onFailed");
-                }
-            });
+                        @Override
+                        public void onFailed(String type, String error) {
+                            mPresenter.onFailedGetRptSanad(R.string.errorGetDataAndGetProgram);
+                            setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type, error), "RptSanadModel", mPresenter.getAppContext().getClass().getSimpleName(), "updateRptSanad", "onFailed");
+                        }
+                    });
+                    break;
+                case gRPC:
+                    rptSanadDAO.fetchAllRptSanadGrpc(mPresenter.getAppContext(), mPresenter.getAppContext().getClass().getSimpleName(), cCForoshande, new RetrofitResponse() {
+                        @Override
+                        public void onSuccess(final ArrayList arrayListData) {
+                            Thread thread = new Thread() {
+                                @Override
+                                public void run() {
+                                    boolean deleteResult = rptSanadDAO.deleteAll();
+                                    boolean insertResult = rptSanadDAO.insertGroup(arrayListData);
+                                    Message message = new Message();
+                                    if (deleteResult && insertResult)
+                                        message.arg1 = 1;
+                                    else
+                                        message.arg1 = -1;
+
+                                    handler.sendMessage(message);
+                                }
+                            };
+                            thread.start();
+                        }
+
+                        @Override
+                        public void onFailed(String type, String error) {
+                            mPresenter.onFailedGetRptSanad(R.string.errorGetDataAndGetProgram);
+                            setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type, error), "RptSanadModel", mPresenter.getAppContext().getClass().getSimpleName(), "updateRptSanad", "onFailed");
+                        }
+                    });
+                    break;
+
+            }
         }
 
 

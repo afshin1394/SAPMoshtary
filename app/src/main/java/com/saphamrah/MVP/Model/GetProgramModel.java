@@ -2329,47 +2329,49 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
         ccForoshandeh = String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh());
         String ccSazmanForosh = String.valueOf(foroshandehMamorPakhshModel.getCcSazmanForosh());
         String ccKalaCode = "-1";
-        if (noeMasouliat == 1 || noeMasouliat == 6 || noeMasouliat == 8)//1-Foroshandeh-Sard
-        {
-            anbarakAfrad = "0";
-            ccMamorPakhsh = "0";
-        } else if (noeMasouliat == 2 || noeMasouliat == 3)//2-Foroshandeh-Garm //3-Foroshandeh-Smart
-        {
-            ccMamorPakhsh = "0";
-        } else if (noeMasouliat == 4 || noeMasouliat == 5)//4-MamorPakhsh-Sard // 5-MamorPakhsh-Smart
-        {
-            ccForoshandeh = "0";
-        } else //6-SarparastForoshandeh 7-Amargar
-        {
-            ccForoshandeh = "0";
-            ccMamorPakhsh = "0";
-        }
-
-        Log.d("GetProgram", "Online: " + anbarakAfrad + " - " + ccForoshandeh + " - " + ccMamorPakhsh + " - " + ccKalaCode + " - " + ccSazmanForosh);
-        mandehMojodyMashinDAO.fetchMandehMojodyMashin(mPresenter.getAppContext(), activityNameForLog, anbarakAfrad, ccForoshandeh, ccMamorPakhsh, new RetrofitResponse() {
-            @Override
-            public void onSuccess(final ArrayList arrayListData) {
-                Thread thread = new Thread() {
-                    @Override
-                    public void run() {
-                        boolean deleteResult = mandehMojodyMashinDAO.deleteAll();
-                        boolean insertResult = mandehMojodyMashinDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult) {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
-                            getKalaMojodi(getProgramType);
-                        } else {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
-                        }
-                    }
-                };
-                thread.start();
-            }
-
-            @Override
-            public void onFailed(String type, String error) {
-                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
-            }
-        });
+//        if (noeMasouliat == 1 || noeMasouliat == 6 || noeMasouliat == 8)//1-Foroshandeh-Sard
+//        {
+//            anbarakAfrad = "0";
+//            ccMamorPakhsh = "0";
+//        } else if (noeMasouliat == 2 || noeMasouliat == 3)//2-Foroshandeh-Garm //3-Foroshandeh-Smart
+//        {
+//            ccMamorPakhsh = "0";
+//        } else if (noeMasouliat == 4 || noeMasouliat == 5)//4-MamorPakhsh-Sard // 5-MamorPakhsh-Smart
+//        {
+//            ccForoshandeh = "0";
+//        } else //6-SarparastForoshandeh 7-Amargar
+//        {
+//            ccForoshandeh = "0";
+//            ccMamorPakhsh = "0";
+//        }
+//
+//        Log.d("GetProgram", "Online: " + anbarakAfrad + " - " + ccForoshandeh + " - " + ccMamorPakhsh + " - " + ccKalaCode + " - " + ccSazmanForosh);
+//        mandehMojodyMashinDAO.fetchMandehMojodyMashin(mPresenter.getAppContext(), activityNameForLog, anbarakAfrad, ccForoshandeh, ccMamorPakhsh, new RetrofitResponse() {
+//            @Override
+//            public void onSuccess(final ArrayList arrayListData) {
+//                Thread thread = new Thread() {
+//                    @Override
+//                    public void run() {
+//                        boolean deleteResult = mandehMojodyMashinDAO.deleteAll();
+//                        boolean insertResult = mandehMojodyMashinDAO.insertGroup(arrayListData);
+//                        if (deleteResult && insertResult) {
+//                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+//                            getKalaMojodi(getProgramType);
+//                        } else {
+//                            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+//                        }
+//                    }
+//                };
+//                thread.start();
+//            }
+//
+//            @Override
+//            public void onFailed(String type, String error) {
+//                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
+//            }
+//        });
+        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+        getKalaMojodi(getProgramType);
     }
 
 
@@ -2394,6 +2396,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                         kalaMojodiModel.setTarikhDarkhast(currentDate);
                         kalaMojodiModel.setShomarehBach(mandehMojodyMashinModel.getShomarehBach());
                         kalaMojodiModel.setTarikhTolid(mandehMojodyMashinModel.getTarikhTolid());
+                        kalaMojodiModel.setTarikhEngheza(mandehMojodyMashinModel.getTarikhEngheza());
                         kalaMojodiModel.setGheymatMasrafKonandeh(mandehMojodyMashinModel.getGheymatMasrafKonandeh());
                         kalaMojodiModel.setGheymatForosh(mandehMojodyMashinModel.getGheymatForosh());
                         kalaMojodiModel.setCcTaminKonandeh(mandehMojodyMashinModel.getCcTaminKonandeh());
@@ -4258,7 +4261,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
         if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3)
             getAllMoshtaryGharardad(getProgramType, String.valueOf(ccForoshandeh));
         else if (noeMasouliat == 4 || noeMasouliat == 5)
-            getAllMoshtaryGharardad(getProgramType, jsonArray);
+            getAllMoshtaryGharardad_pakhsh(getProgramType, jsonArray);
         else
             getAllMoshtaryGharardad(getProgramType, "-1");
 
@@ -4268,24 +4271,24 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
     /**
      * overload getAllMoshtaryGharardad
-     * {@link #getAllMoshtaryGharardad(int, String)}
+     * {@link #getAllMoshtaryGharardad_pakhsh(int, JSONArray)}
      *
      * @param getProgramType
      * @param jsonArray
      * @throws
      */
-    public void getAllMoshtaryGharardad(int getProgramType, JSONArray jsonArray) {
+    public void getAllMoshtaryGharardad_pakhsh(int getProgramType, JSONArray jsonArray) {
 
             try {
 
                 MoshtaryGharardadDAO moshtaryGharardadDAO = new MoshtaryGharardadDAO(mPresenter.getAppContext());
-                int ccForoshandeh;
+                int ccForoshandeh=-1;
                 int ccMoshtaryGharardad;
                 int moshtaryGharardadccSazmanForosh;
                 ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels = new ArrayList<>();
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    ccForoshandeh = jsonObject.getInt("ccForoshandeh");
+                    //ccForoshandeh = jsonObject.getInt("ccForoshandeh");
                     ccMoshtaryGharardad = jsonObject.getInt("ccMoshtaryGharardad");
                     moshtaryGharardadccSazmanForosh = jsonObject.getInt("MoshtaryGharardadccSazmanForosh");
                     Log.d("getProgram", "getAllMoshtaryGharardad ccForoshandeh:" + ccForoshandeh + " ,ccMoshtaryGharardad:" + ccMoshtaryGharardad + " , moshtaryGharardadccSazmanForosh:" + moshtaryGharardadccSazmanForosh);
@@ -4349,7 +4352,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
     /**
      * overload getAllMoshtaryGharardad
-     * {@link #getAllMoshtaryGharardad(int, JSONArray)}
+     * {@link #getAllMoshtaryGharardad(int, String)}
      * get All contractions which a seller can sell to them weather a cold seller, a warm seller and a smart seller or a distributer
      * {@link #getKalaMosavabBySazmanGharardad(int, int)
      *

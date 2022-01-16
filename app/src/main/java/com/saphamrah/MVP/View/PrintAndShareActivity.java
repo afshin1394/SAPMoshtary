@@ -64,6 +64,7 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
     private static final int REQUEST_ENABLE_BT = 3;
     private PrintAndShareAdapter adapter;
     private ArrayList<PrintFaktorModel> printFaktorModels = new ArrayList<>();
+    private PrintFaktorModel printFaktorModel = new PrintFaktorModel();
     private SystemConfigTabletDAO systemconfig_tabletDAO;
     private Printer printer;
     //-------------------bluetooth----------------------------
@@ -124,7 +125,9 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
         adapter = new PrintAndShareAdapter(BaseApplication.getContext(), printFaktorModels, (action, position) -> {
             String fileName = "Print-" + printFaktorModels.get(position).getUniqID_Tablet() + ".jpg";
 
-            boolean isFileExists = checkFileExists(printFaktorModels.get(position), fileName);
+            mPresenter.getImagePrintFaktor(printFaktorModels.get(position).getUniqID_Tablet());
+
+            boolean isFileExists = checkFileExists(printFaktorModel, fileName);
             if (action == Constants.PRINT()) {
                 if (isFileExists){
                     try {
@@ -150,7 +153,7 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
                 }
 
             } else if (action == Constants.IMAGE){
-                byte[] image = Base64.decode(printFaktorModels.get(position).getFaktorImage(), Base64.NO_WRAP);
+                byte[] image = Base64.decode(printFaktorModel.getFaktorImage(), Base64.NO_WRAP);
 
                 customAlertDialog.showImage(PrintAndShareActivity.this,image , false, new CustomAlertDialogResponse() {
                     @Override
@@ -311,6 +314,11 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
         printFaktorModels.clear();
         printFaktorModels.addAll(modelArrayList);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onGetImagePrintFaktor(PrintFaktorModel model) {
+        printFaktorModel=model;
     }
 
     @Override

@@ -7,24 +7,44 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Model.DataTableModel;
 import com.saphamrah.Model.RptJashnvarehForoshModel;
+import com.saphamrah.Model.RptListVosolModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.DateUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllRptJashnvarehResult;
+import com.saphamrah.protos.RptReceiptListGrpc;
+import com.saphamrah.protos.RptReceiptListReply;
+import com.saphamrah.protos.RptReceiptListReplyList;
+import com.saphamrah.protos.RptReceiptListRequest;
+import com.saphamrah.protos.RptSaleFestivalGrpc;
+import com.saphamrah.protos.RptSaleFestivalReply;
+import com.saphamrah.protos.RptSaleFestivalReplyList;
+import com.saphamrah.protos.RptSaleFestivalRequest;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
+import io.grpc.ManagedChannel;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -82,11 +102,106 @@ public class RptJashnvarehDAO {
 
                 };
     }
+    public void fetchRptJashnvarehGrpc(final Context context, final String activityNameForLog, int ccForoshandeh, String ccMoshtaries, final RetrofitResponse retrofitResponse)
+    {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
 
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, RptHadafForoshDAO.class.getSimpleName(), activityNameForLog, "fetchAllrptHadafForoshGrpc", "");
+                retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                RptSaleFestivalGrpc.RptSaleFestivalBlockingStub blockingStub = RptSaleFestivalGrpc.newBlockingStub(managedChannel);
+                RptSaleFestivalRequest request = RptSaleFestivalRequest.newBuilder().setSalesManID(String.valueOf(ccForoshandeh)).setCustomersID(ccMoshtaries).build();
+                Callable<RptSaleFestivalReplyList> replyCallable = () -> blockingStub.getRptSaleFestival(request);
+                RxAsync.makeObservable(replyCallable)
+                        .map(rptReceiptListReplyList ->  {
+                            ArrayList<RptJashnvarehForoshModel> models = new ArrayList<>();
+                            for (RptSaleFestivalReply reply : rptReceiptListReplyList.getRptSaleFestivalsList()) {
+                                RptJashnvarehForoshModel model = new RptJashnvarehForoshModel();
+
+                                model.setRadif(reply.getRow());
+                                model.setCcJashnvarehForosh(reply.getSaleFestivalID());
+                                model.setCcJashnvarehForoshSatr(reply.getSaleFestivalIDRow());
+                                model.setSharhJashnvareh(reply.getFestivalDescription());
+                                model.setCcDarkhastFaktor(reply.getInvoiceRequestID());
+                                model.setCcMoshtary(reply.getCustomerID());
+                                model.setCodeMoshtary(reply.getCustomerCode());
+                                model.setNameMoshtary(reply.getCustomerName());
+                                model.setCcMarkazSazmanForosh(reply.getSellOrganizationCenterID());
+                                model.setNameMarkaz(reply.getCenterName());
+                                model.setNameSazmanForosh(reply.getSellOrganizationName());
+                                model.setNoeMohasebeh(reply.getCalculationType());
+                                model.setMabnaMohasebeh(reply.getCalculationBase());
+                                model.setSharhMabnaMohasebeh(reply.getCalculationBaseDescription());
+                                model.setTxtNoeMohasebeh(reply.getCalculationTypeTxt());
+                                model.setMohasebehBarAsase(reply.getBaseOnCalculation());
+                                model.setAzTarikhJashnvareh(reply.getFestivalFromDate());
+                                model.setTaTarikhJashnvareh(reply.getFestivalUntilDate());
+                                model.setAzTarikhJashnvarehSatr(reply.getFestivalFromDateRow());
+                                model.setTaTarikhJashnvarehSatr(reply.getFestivalUntilDateRow());
+                                model.setTxtCodeNoeBastehBandy(reply.getPackingTypeCodeTxt());
+                                model.setTxtCodeNoeBastehBandyBeEza(reply.getPerPackingTypeCodeTxt());
+                                model.setAz(reply.getFrom());
+                                model.setTa(reply.getUntil());
+                                model.setBeEza(reply.getPer());
+                                model.setEmtiazJashnvareh(reply.getFestivalScore());
+                                model.setRialEmtiazMoshtary(reply.getFestivalScoreOneRial());
+                                model.setEmtiazMoshtary(reply.getCustomerScore());
+                                model.setRialEmtiazMoshtary(reply.getCustomerScoreRial());
+                                model.setDoreh(reply.getPeriod());
+                                model.setTarikhMohasebehEmtiaz(reply.getScoreCalculationDate());
+
+                                models.add(model);
+
+                            }
+                            return models;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<RptJashnvarehForoshModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<RptJashnvarehForoshModel> rptHadafForoshModels) {
+                                retrofitResponse.onSuccess(rptHadafForoshModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        }catch (Exception exception){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.getMessage(), RptHadafForoshDAO.class.getSimpleName(), activityNameForLog, "fetchAllrptHadafForoshGrpc", "");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+
+    }
 
     public void fetchRptJashnvareh(final Context context, final String activityNameForLog, int ccForoshandeh, String ccMoshtaries, final RetrofitResponse retrofitResponse) {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-        serverIpModel.setPort("8040");
+
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
             String message = "can't find server";
             PubFunc.Logger logger = new PubFunc().new Logger();
@@ -162,6 +277,7 @@ public class RptJashnvarehDAO {
             });
         }
     }
+
 
 
     private String getEndpoint(Call call) {

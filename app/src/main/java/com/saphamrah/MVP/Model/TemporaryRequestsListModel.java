@@ -1,8 +1,12 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Message;
 import android.util.Log;
 
 import com.saphamrah.Application.BaseApplication;
@@ -26,7 +30,6 @@ import com.saphamrah.DAO.ElamMarjoeeSatrPPCDAO;
 import com.saphamrah.DAO.ElamMarjoeeSatrPPCTedadDAO;
 import com.saphamrah.DAO.ForoshandehDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
-import com.saphamrah.DAO.GPSDataMashinDAO;
 import com.saphamrah.DAO.GPSDataPpcDAO;
 import com.saphamrah.DAO.KalaDAO;
 import com.saphamrah.DAO.KalaMojodiDAO;
@@ -41,6 +44,7 @@ import com.saphamrah.DAO.MoshtaryMorajehShodehRoozDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.DAO.SuggestDAO;
 import com.saphamrah.MVP.View.TemporaryRequestsListActivity;
+import com.saphamrah.MVP.View.TreasuryListMapActivity;
 import com.saphamrah.Model.AdamDarkhastModel;
 import com.saphamrah.Model.AnbarakAfradModel;
 import com.saphamrah.Model.BarkhordForoshandehBaMoshtaryModel;
@@ -58,7 +62,6 @@ import com.saphamrah.Model.ElamMarjoeePPCModel;
 import com.saphamrah.Model.ElamMarjoeeSatrPPCModel;
 import com.saphamrah.Model.ElamMarjoeeSatrPPCTedadModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
-import com.saphamrah.Model.GPSDataMashinModel;
 import com.saphamrah.Model.GPSDataModel;
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.KalaMojodiModel;
@@ -67,8 +70,10 @@ import com.saphamrah.Model.MandehMojodyMashinModel;
 import com.saphamrah.Model.MojoodiGiriModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.MoshtaryMorajehShodehRoozModel;
+import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.SuggestModel;
+import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.Network.RxNetwork.RxHttpRequest;
 import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
@@ -541,13 +546,6 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         }
 
 
-        GPSDataMashinDAO gpsDataMashinDAO = new GPSDataMashinDAO(mPresenter.getAppContext());
-        ArrayList<GPSDataMashinModel> gpsDataMashinModels = gpsDataMashinDAO.getByccMoshtary(ccMoshtary);
-        if (gpsDataMashinModels.size() > 0)
-        {
-            sendGPSDataMashinToServer(apiServicePost , gpsDataMashinModels);
-        }
-
         LogPPCDAO logPPCDAO = new LogPPCDAO(mPresenter.getAppContext());
         ArrayList<LogPPCModel> logPPCModels = logPPCDAO.getUnsendExceptionsOrderByIdDesc();
         if (logPPCModels.size() > 0)
@@ -855,77 +853,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         }*/
     }
 
-    private void sendGPSDataMashinToServer(APIServicePost apiServicePost , ArrayList<GPSDataMashinModel> gpsDataMashinModels)
-    {
-        final ArrayList<Integer> arrayListUpdatedccGPSData = new ArrayList<>();
-        for (final GPSDataMashinModel model : gpsDataMashinModels)
-        {
-            String jsonString = model.toJsonString();
-            Call<CreateGpsDataMashinResult> call = apiServicePost.createGpsDataMashinResult(jsonString);
-            call.enqueue(new Callback<CreateGpsDataMashinResult>()
-            {
-                @Override
-                public void onResponse(Call<CreateGpsDataMashinResult> call, Response<CreateGpsDataMashinResult> response)
-                {
-                    try
-                    {
-                        if (response.isSuccessful() && response.body() != null)
-                        {
-                            Log.d("noTemp" , "in if success and body not null");
-                            CreateGpsDataMashinResult result = response.body();
-                            if (result.getSuccess())
-                            {
-                                arrayListUpdatedccGPSData.add(model.getCcGPSDataMashin());
-                            }
-                            else
-                            {
-                                Log.d("noTemp" , "in else not success");
-                                setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "" , "sendGPSDataMashinToServer" , "onResponse");
-                                mPresenter.onError(R.string.errorSendGpsDataMashin);
-                            }
-                        }
-                        else
-                        {
-                            String errorMessage = "response not successful " + response.message() ;//+ "\n" + "can't send this log : " + logMessage;
-                            if (response.errorBody() != null)
-                            {
-                                errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string() ;//+ "\n" + "can't send this log : " + logMessage;
-                            }
-                            setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "" , "sendGPSDataMashinToServer" , "onResponse");
-                            Log.d("tempRequest" , "message : " + errorMessage);
-                            mPresenter.onError(R.string.errorSendGpsDataMashin);
-                        }
-                    }
-                    catch (Exception exception)
-                    {
-                        Log.d("noTemp" , "in exception");
-                        exception.printStackTrace();
-                        setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "" , "sendGPSDataMashinToServer" , "onResponse");
-                        mPresenter.onError(R.string.errorSendGpsDataMashin);
-                    }
-                }
 
-                @Override
-                public void onFailure(Call<CreateGpsDataMashinResult> call, Throwable t)
-                {
-                    Log.d("noTemp" , "in onFailure");
-                    setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "" , "sendGPSDataMashinToServer" , "onFailure");
-                    mPresenter.onError(R.string.errorSendGpsDataMashin);
-                }
-            });
-        }
-
-        String sendedccGPSData = "-1";
-        for (Integer ccGPSData : arrayListUpdatedccGPSData)
-        {
-            sendedccGPSData += "," + ccGPSData;
-        }
-        if (sendedccGPSData.trim().length() > 0)
-        {
-            GPSDataMashinDAO gpsDataMashinDAO = new GPSDataMashinDAO(mPresenter.getAppContext());
-            gpsDataMashinDAO.deleteByccGPSDataMashins(sendedccGPSData);
-        }
-    }
 
     private void sendSuggest(APIServicePost apiServicePost , ArrayList<SuggestModel> suggestModels,SuggestDAO suggestDAO)
     {
@@ -1835,6 +1763,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
             JSONArray jsonArrayDariaftPardakhtPPC = new JSONArray();
             JSONArray jsonDariaftPardakhtDarkhastFaktorPPCs = new JSONArray();
             ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
+            ArrayList<ParameterChildModel> childParameterModels = childParameterDAO.getAllByccParameter(Constants.REQUEST_CUSTOMER_CCPARAMETER_OF_CHECKS() + "," + Constants.UPDATE_MANDE_MOJODI());
             int codeNoeVosolVajhNaghd = Integer.parseInt(childParameterDAO.getAllByccChildParameter(String.valueOf(Constants.CC_CHILD_CODE_NOE_VOSOL_VAJH_NAGHD())).get(0).getValue());
             String currentVersionNumber = new PubFunc().new DeviceInfo().getCurrentVersion(mPresenter.getAppContext());
             double mablaghKolDariaftPardakht = 0;
@@ -2030,7 +1959,11 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
 
                         String jsonFinal = jsonObjectFinal.toString();
                         jsonFinal = jsonFinal.replace("\\" , "");
-
+                        //TODO
+                        boolean isValidTimeForSend = checkDateTimeForSend(childParameterModels);
+                        if (!isValidTimeForSend)
+                            return -5;
+                        else
                         sendDarkhastFaktorToServer(customerDarkhastFaktorModel.getCcMoshtary(), customerDarkhastFaktorModel.getCcDarkhastFaktor(), jsonFinal, position, foroshandehMamorPakhshModel);
                     }
                     catch (Exception exception)
@@ -2042,6 +1975,64 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                 }
             //}
             return 1;
+        }
+
+        private boolean checkDateTimeForSend(ArrayList<ParameterChildModel> childParameterModels)
+        {
+            String startRestTime = "23:45";
+            Date startDate;
+            Date endTime;
+            Date now = Calendar.getInstance().getTime();
+            boolean checkTimeDarkhast = true;
+            for (ParameterChildModel model : childParameterModels)
+            {
+                if (model.getCcParameterChild() == Constants.CHECK_MOSHTARY_MASIR_ROOZ_TIME_DARKHAST())
+                {
+                    checkTimeDarkhast = model.getValue().trim().equals("1");
+                }
+                if (model.getCcParameterChild() == Constants.CHECK_MOSHTARY_MASIR_ROOZ_CC_START_REST_TIME())
+                {
+                    startRestTime = model.getValue();
+                }
+            }
+            try
+            {
+                String[] timeSection = startRestTime.split(":");
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY , Integer.parseInt(timeSection[0]));
+                calendar.set(Calendar.MINUTE , Integer.parseInt(timeSection[1]));
+                startDate = calendar.getTime();
+            }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+                setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "RequestCustomerListModel", "", "checkDateTime", "");
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY , 23);
+                calendar.set(Calendar.MINUTE , 45);
+                startDate = calendar.getTime();
+            }
+
+            endTime = addMinutesToTime(startDate,10) ;
+
+            if (checkTimeDarkhast && (now.after(startDate) && now.before(endTime)))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        private Date addMinutesToTime(Date myTime,int min) {
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+            Log.i("addMinutesToTime", "myTime: "+df.format(myTime.getTime()));
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(myTime);
+            cal.add(Calendar.MINUTE, min);
+            String newTime = df.format(cal.getTime());
+            Log.i("addMinutesToTime", "newTime:" + newTime );
+            return cal.getTime();
         }
 
         @SuppressLint("LongLogTag")
@@ -2781,20 +2772,94 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
          * {@param noeMasouliat(3) فروشنده اسمارت
          * **/
         Log.i("checkMandehMojodi", "noeMasouliat: " + noeMasouliat);
-        if (noeMasouliat == 1 || noeMasouliat == 3  || noeMasouliat == 6 || noeMasouliat ==8) {
+        if (noeMasouliat == 1 || noeMasouliat == 3  || noeMasouliat == 6 || noeMasouliat == 8) {
             ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
-            APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
-            apiServiceRxjava.getMandehMojodyMashin( ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh,ccKalaCodes, ccSazmanForoshFaktor)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<Response<GetMandehMojodyMashinResponse>>() {
-                        @Override
-                        public void onSubscribe( Disposable d) {
 
-                        }
+            switch (serverIpModel.getWebServiceType()){
+                case REST:
+                    APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
+                    apiServiceRxjava.getMandehMojodyMashin( ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh,ccKalaCodes, ccSazmanForoshFaktor)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Observer<Response<GetMandehMojodyMashinResponse>>() {
+                                @Override
+                                public void onSubscribe( Disposable d) {
 
+                                }
+
+                                @Override
+                                public void onNext( Response<GetMandehMojodyMashinResponse> getMandehMojodyMashinResponseResponse) {
+                                    ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels = new ArrayList<>();
+
+                                    final Set<String> allContradictions = new HashSet<>();
+
+                                    checkContradicts(mandehMojodyMashinModels, darkhastFaktorSatrModels, new Observer<HashMap<Integer,String>>() {
+                                        @Override
+                                        public void onSubscribe(@NonNull Disposable d)
+                                        {
+                                            mPresenter.bindDisposable(d);
+                                        }
+
+                                        @Override
+                                        public void onNext(@NonNull HashMap<Integer,String> contradicts)
+                                        {
+
+
+                                            if (contradicts != null)
+                                                if (contradicts.size() > 0)
+                                                    for (Integer key : contradicts.keySet()) {
+
+                                                        allContradictions.add( contradicts.get(key));
+                                                    }
+
+
+                                            Log.i("contradicts", "onNext: "+contradicts);
+                                        }
+
+                                        @Override
+                                        public void onError(@NonNull Throwable e)
+                                        {
+                                            mPresenter.onErrorSendRequest(R.string.errorCheckMoghayerat, "");
+                                        }
+
+                                        @Override
+                                        public void onComplete()
+                                        {
+
+
+                                            switch (allContradictions.size()) {
+                                                ////**هیچ مغایرتی  نداریم**
+                                                case 0:
+                                                    sendTempFaktor(customerDarkhastFaktorModel, position);
+                                                    break;
+                                                default:
+                                                    String name="";
+                                                    for(String nameKala : allContradictions){
+                                                        name += " - " + nameKala ;
+                                                    }
+                                                    mPresenter.onErrorSendRequest(R.string.errormoghayeratdarmojodiKala, name);
+                                                    break;
+                                            }
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onError( Throwable e) {
+                                    mPresenter.onErrorSendRequest(R.string.errorSendData, "");
+                                }
+
+                                @Override
+                                public void onComplete() {
+
+                                }
+                            });
+                    break;
+
+                case gRPC:
+                    mandehMojodyMashinDAO.fetchMandehMojodyMashinGrpc(mPresenter.getAppContext(), TreasuryListMapActivity.class.getSimpleName(), ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh, new RetrofitResponse() {
                         @Override
-                        public void onNext( Response<GetMandehMojodyMashinResponse> getMandehMojodyMashinResponseResponse) {
+                        public void onSuccess(ArrayList arrayListData) {
                             ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels = new ArrayList<>();
 
                             final Set<String> allContradictions = new HashSet<>();
@@ -2851,15 +2916,15 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                         }
 
                         @Override
-                        public void onError( Throwable e) {
+                        public void onFailed(String type, String error) {
                             mPresenter.onErrorSendRequest(R.string.errorSendData, "");
-                        }
-
-                        @Override
-                        public void onComplete() {
 
                         }
                     });
+
+                    break;
+            }
+
 
         } else {
             sendTempFaktor(customerDarkhastFaktorModel, position);

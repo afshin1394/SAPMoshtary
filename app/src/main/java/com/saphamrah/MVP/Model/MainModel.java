@@ -1,5 +1,8 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -146,29 +149,62 @@ public class MainModel implements MainMVP.ModelOps
         {
             ccMarkazSazmanForosh = -1;										   
         }
-        parameterDAO.fetchParameter(mPresenter.getAppContext(), "MainActivity", "1", String.valueOf(ccMarkazSazmanForosh), String.valueOf(ccMarkazAnbar), lastDateTimeGetConfig, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(ArrayList arrayListData)
-            {
-                if (arrayListData.size() > 1)
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        switch (serverIpModel.getWebServiceType()){
+            case REST:
+                parameterDAO.fetchParameter(mPresenter.getAppContext(), "MainActivity", "1", String.valueOf(ccMarkazSazmanForosh), String.valueOf(ccMarkazAnbar), lastDateTimeGetConfig, new RetrofitResponse()
                 {
-                    parameterDAO.deleteAll();
-                    parameterDAO.insertGroup(arrayListData);
-                    getParameterChild(lastDateTimeGetConfig , foroshandehMamorPakhshModel.getCcMarkazSazmanForosh(), foroshandehMamorPakhshModel.getCcMarkazAnbar());
-                }
-                else
-                {
-                    checkJayezehTakhfifVersion();
-                }
-            }
+                    @Override
+                    public void onSuccess(ArrayList arrayListData)
+                    {
+                        if (arrayListData.size() > 1)
+                        {
+                            parameterDAO.deleteAll();
+                            parameterDAO.insertGroup(arrayListData);
+                            getParameterChild(lastDateTimeGetConfig , foroshandehMamorPakhshModel.getCcMarkazSazmanForosh(), foroshandehMamorPakhshModel.getCcMarkazAnbar());
+                        }
+                        else
+                        {
+                            checkJayezehTakhfifVersion();
+                        }
+                    }
 
-            @Override
-            public void onFailed(String type, String error)
-            {
-                setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "MainModel", "MainActivity", "checkForGetParameter", "onFailed");
-            }
-        });
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "MainModel", "MainActivity", "checkForGetParameter", "onFailed");
+                    }
+                });
+                break;
+            case gRPC:
+                parameterDAO.fetchParameterGrpc(mPresenter.getAppContext(), "MainActivity", "1", String.valueOf(ccMarkazSazmanForosh), String.valueOf(ccMarkazAnbar), lastDateTimeGetConfig, new RetrofitResponse()
+                {
+                    @Override
+                    public void onSuccess(ArrayList arrayListData)
+                    {
+                        if (arrayListData.size() > 1)
+                        {
+                            parameterDAO.deleteAll();
+                            parameterDAO.insertGroup(arrayListData);
+                            getParameterChild(lastDateTimeGetConfig , foroshandehMamorPakhshModel.getCcMarkazSazmanForosh(), foroshandehMamorPakhshModel.getCcMarkazAnbar());
+                        }
+                        else
+                        {
+                            checkJayezehTakhfifVersion();
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "MainModel", "MainActivity", "checkForGetParameter", "onFailed");
+                    }
+                });
+                break;
+
+        }
+
+
     }
 	
     @Override
@@ -304,16 +340,20 @@ public class MainModel implements MainMVP.ModelOps
         final MessageBoxDAO messageBoxDAO = new MessageBoxDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
-        messageBoxDAO.fetchMessages(mPresenter.getAppContext(), "MainActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), String.valueOf(foroshandehMamorPakhshModel.getCcMamorPakhsh()), new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                messageBoxDAO.deleteAll();
-                messageBoxDAO.insertGroup(arrayListData);
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
 
-                getCountUnreadMessages(messageBoxDAO);
-                getMessagesForShowNotif(messageBoxDAO);
+        switch (serverIpModel.getWebServiceType()){
+            case REST:
+                messageBoxDAO.fetchMessages(mPresenter.getAppContext(), "MainActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), String.valueOf(foroshandehMamorPakhshModel.getCcMamorPakhsh()), new RetrofitResponse()
+                {
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData)
+                    {
+                        messageBoxDAO.deleteAll();
+                        messageBoxDAO.insertGroup(arrayListData);
+
+                        getCountUnreadMessages(messageBoxDAO);
+                        getMessagesForShowNotif(messageBoxDAO);
 
                 /*final Handler handler = new Handler(new Handler.Callback()
                 {
@@ -340,15 +380,67 @@ public class MainModel implements MainMVP.ModelOps
                     }
                 };
                 thread.start();*/
-            }
+                    }
 
-            @Override
-            public void onFailed(String type, String error)
-            {
-                setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "MainModel", "MainActivity", "getMessages", "onFailed");
-                getCountUnreadMessages(messageBoxDAO);
-            }
-        });
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "MainModel", "MainActivity", "getMessages", "onFailed");
+                        getCountUnreadMessages(messageBoxDAO);
+                    }
+                });
+                break;
+
+
+            case gRPC:
+                messageBoxDAO.fetchMessagesGrpc(mPresenter.getAppContext(), "MainActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), String.valueOf(foroshandehMamorPakhshModel.getCcMamorPakhsh()), new RetrofitResponse()
+                {
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData)
+                    {
+                        messageBoxDAO.deleteAll();
+                        messageBoxDAO.insertGroup(arrayListData);
+
+                        getCountUnreadMessages(messageBoxDAO);
+                        getMessagesForShowNotif(messageBoxDAO);
+
+                /*final Handler handler = new Handler(new Handler.Callback()
+                {
+                    @Override
+                    public boolean handleMessage(Message msg)
+                    {
+                        getCountUnreadMessages(messageBoxDAO);
+                        getMessagesForShowNotif(messageBoxDAO);
+                        return false;
+                    }
+                });
+
+                Thread thread = new Thread()
+                {
+                    @Override
+                    public void run()
+                    {
+                        messageBoxDAO.deleteAll();
+                        messageBoxDAO.insertGroup(arrayListData);
+
+                        Message message = new Message();
+                        message.arg1 = 1;
+                        handler.sendMessage(message);
+                    }
+                };
+                thread.start();*/
+                    }
+
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "MainModel", "MainActivity", "getMessages", "onFailed");
+                        getCountUnreadMessages(messageBoxDAO);
+                    }
+                });
+            break;
+        }
+
     }
 
 
