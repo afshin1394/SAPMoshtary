@@ -674,11 +674,14 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
         String codeNoeVosolMoshtaryVajhNaghd = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD());
         String codeNoeVosolMoshtaryCheck = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_CHECK());
         long mablaghMandehFaktor = setMablaghMandehFaktor(ccDarkhastFaktor);
-        if ((darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Integer.parseInt(codeNoeVosolMoshtaryVajhNaghd) ||
-                (darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Integer.parseInt(codeNoeVosolMoshtaryCheck)))
-                && mablaghMandehFaktor > 0) {
-            mPresenter.onError(R.string.errorRemainBiggerThanZeroForNagh);
-            return;
+        int mandehFaktorIsZeroForNaghdCheckValue = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Mandeh_Faktor_Is_Zero_For_Naghd_Check()));
+        if(mandehFaktorIsZeroForNaghdCheckValue==1) {
+            if ((darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Integer.parseInt(codeNoeVosolMoshtaryVajhNaghd) ||
+                    (darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Integer.parseInt(codeNoeVosolMoshtaryCheck)))
+                    && mablaghMandehFaktor > 0) {
+                mPresenter.onError(R.string.errorRemainBiggerThanZeroForNagh);
+                return;
+            }
         }
 
 
