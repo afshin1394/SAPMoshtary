@@ -557,10 +557,22 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(BaseApplication.getContext());
         ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCs = dariaftPardakhtDarkhastFaktorPPCDAO.getByccDarkhastFaktorCheck(darkhastFaktorModel.getCcDarkhastFaktor());
         if (dariaftPardakhtDarkhastFaktorPPCs.size() > 0) {
-            double mablaghMandeh = 0;
+
+            /**
+             * اضافه کردن مبلغ مانده به تمامی دریافت پرداخت ها
+             */
+            double mablaghMandeh = darkhastFaktorModel.getMablaghKhalesFaktor();
             ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = dariaftPardakhtPPCDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+            for (int i = 0; i < dariaftPardakhtPPCModels.size(); i++) {
+                dariaftPardakhtPPCModels.get(i).setMablaghMandeh(mablaghMandeh - dariaftPardakhtPPCModels.get(i).getMablagh());
+                mablaghMandeh =  dariaftPardakhtPPCModels.get(i).getMablaghMandeh();
+            }
             try {
                 ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dpdfForCheck = new ArrayList<>();
+                /**
+                 * گرفتن دریافت پرداخت درخواست فاکتور های چک
+                 * گرفتن مبلغ مانده بر اساس CcDariaftPardakht
+                 */
                 for (int i = 0; i < dariaftPardakhtDarkhastFaktorPPCs.size(); i++) {
                     for (int d = 0; d < dariaftPardakhtPPCModels.size(); d++) {
                         if (dariaftPardakhtDarkhastFaktorPPCs.get(i).getCcDariaftPardakht() == dariaftPardakhtPPCModels.get(d).getCcDariaftPardakht()) {
@@ -599,12 +611,15 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         String codeNoeVosolMoshtaryVajhNaghd = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD());
         String codeNoeVosolMoshtaryCheck = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_CHECK());
         long mablaghMandehFaktor = setMablaghMandehFaktor(ccDarkhastFaktor);
-//        if ((darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Integer.parseInt(codeNoeVosolMoshtaryVajhNaghd) ||
-//                (darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Integer.parseInt(codeNoeVosolMoshtaryCheck)))
-//                && mablaghMandehFaktor > 0) {
-//            mPresenter.onError(R.string.errorRemainBiggerThanZeroForNagh);
-//            return;
-//        }
+        int mandehFaktorIsZeroForNaghdCheckValue = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Mandeh_Faktor_Is_Zero_For_Naghd_Check()));
+        if(mandehFaktorIsZeroForNaghdCheckValue==1) {
+            if ((darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Integer.parseInt(codeNoeVosolMoshtaryVajhNaghd) ||
+                    (darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Integer.parseInt(codeNoeVosolMoshtaryCheck)))
+                    && mablaghMandehFaktor > 0) {
+                mPresenter.onError(R.string.errorRemainBiggerThanZeroForNagh);
+                return;
+            }
+        }
 //        boolean haveOtherMarjoee = kardexDAO.deleteByccDarkhastFaktor(String.valueOf(ccDarkhastFaktor))
         ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = dariaftPardakhtPPCDAO.getForSendToSqlByccDarkhastFaktor(ccDarkhastFaktor);
         Log.d("treasury" , "dariaftPardakhtPPCModels.size : " + dariaftPardakhtPPCModels.size());

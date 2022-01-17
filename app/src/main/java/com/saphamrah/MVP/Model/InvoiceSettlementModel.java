@@ -431,7 +431,7 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
                     return;
                 }
                 if (CodeNoeVosolSabtShode != valueResid && strCodeNoeVosol.equals(Constants.VALUE_RESID())) {
-                    boolean checkMarjoeeMoredi = kardexDAO.checkMarjoeeMoredi(ccDarkhastFaktor);
+                    boolean checkMarjoeeMoredi = dariaftPardakhtDarkhastFaktorPPCDAO.checkMarjoeeMoredi(ccDarkhastFaktor);
                     if (!checkMarjoeeMoredi){
                         mPresenter.onErrorCheckInsert(R.string.errorDuplicateVosolForResid);
                         hasError = true;

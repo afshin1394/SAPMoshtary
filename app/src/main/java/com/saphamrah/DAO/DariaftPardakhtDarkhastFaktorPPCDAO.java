@@ -431,19 +431,10 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query = " SELECT *  FROM ( " +
-                    " 	SELECT * FROM DariaftPardakhtDarkhastFaktorPPC " +
-                    " 	WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeVosol = " + Constants.VALUE_CHECK() +
-                    " 	UNION ALL " +
-                    " 	SELECT 	0 ccDariaftPardakhtDarkhastFaktor,ccDarkhastFaktor, 0 ccDariaftPardakht,CodeNoeVosol, NameNoeVosol, 0 ShomarehSanad, TarikhSanad, TarikhSanadShamsi,SUM(MablaghDariaftPardakht) MablaghDariaftPardakht, " +
-                    "			sum(Mablagh) Mablagh,0 CodeVazeiat, ZamaneTakhsiseFaktor, 0 ccAfradMamorVosol,0 ccMarkazAnbar, " +
-                    "			0 AS Tabdil_NaghdBeFish, 0 AS ccTafkikJoze, 0 AS NaghlAzGhabl,0 AS IsForTasviehTakhir, ZamaneTakhsiseFaktorShamsi," +
-                    "			0 AS ExtraProp_IsDirkard, 0 AS ExtraProp_ccKardexSatr," +
-                    "			0 ExtraProp_IsBestankari_ForTasviehTakhir, ExtraProp_IsSend, 0 AS ExtraProp_CanDelete, 0 AS ExtraProp_IsTajil, 0 as ExtraProp_ccDarkhastFaktorServer, 0 as ccMarkazForosh, 0 as ccMarkazSazmanForoshSakhtarForosh , 0 as  ExtraProp_ccDaryaftPardakhtCheckBargashty , 0 IsTaeedShodeh " +
-                    " 	FROM DariaftPardakhtDarkhastFaktorPPC " +
-                    " 	WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeVosol = " + Constants.VALUE_MARJOEE() + " AND "+DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_Mablagh() + " <> 0  AND "+ DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_MablaghDariaftPardakht() + " <> 0 "+
-                    " 	GROUP BY CodeNoeVosol, NameNoeVosol, TarikhSanadShamsi, ccDarkhastFaktor" + " ) A" +
-                    " ORDER BY ccDariaftPardakhtDarkhastFaktor ";
+            String query = " 	SELECT * FROM DariaftPardakhtDarkhastFaktorPPC " +
+                    " 	WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeVosol = " + Constants.VALUE_CHECK() ;
+
+            Log.d("DariaftPardakhtDarkh","getByccDarkhastFaktorCheck query:" + query);
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
@@ -631,6 +622,37 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DariaftPardakhtDarkhastFaktorPPCDAO" , "" , "getByccDarkhastFaktor" , "");
         }
         return dariaftPardakhtDarkhastFaktorPPCModels;
+    }
+
+    public boolean checkMarjoeeMoredi( long ccDarkhastFaktor )
+    {
+        boolean checkMarjoeeMoredi=false;
+        String query = "SELECT * FROM DariaftPardakhtDarkhastFaktorPPC  " +
+                " WHERE ccDarkhastFaktor =  " + ccDarkhastFaktor  +
+                " AND ccDarkhastFaktor NOT IN (SELECT DISTINCT ccDarkhastFaktor FROM DarkhastFaktor WHERE ccDarkhastFaktor = " + ccDarkhastFaktor  + " AND ExtraProp_IsMarjoeeKamel=1 )";
+        try
+        {
+
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    checkMarjoeeMoredi =  true;
+                }
+
+            }
+            db.close();
+        }
+        catch (Exception e)
+        {
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DariaftPardakhtDarkhastFaktorPPCModel.TableName()) + "\n" + e.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KardexDAO" , "" , "checkMarjoeeMoredi" , "");
+        }
+
+        return checkMarjoeeMoredi;
     }
 
     public DariaftPardakhtDarkhastFaktorPPCModel SetForInsert_DariaftPardakhtDarkhastFaktorPPC(long ccDarkhastFaktor, long ccDariaftPardakht,

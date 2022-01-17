@@ -252,34 +252,7 @@ public class KardexDAO {
 
     }
 
-    public boolean checkMarjoeeMoredi( long ccDarkhastFaktor )
-    {
-        boolean checkMarjoeeMoredi=false;
-        String query = "select * from kardex where ccRefrence =  " + ccDarkhastFaktor  + " and marjoeeKamel = 0";
-        try
-        {
 
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.rawQuery(query, null);
-            if (cursor != null)
-            {
-                if (cursor.getCount() > 0)
-                {
-                    checkMarjoeeMoredi =  true;
-                }
-
-            }
-            db.close();
-        }
-        catch (Exception e)
-        {
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            String message = context.getResources().getString(R.string.errorSelectAll , DariaftPardakhtDarkhastFaktorPPCModel.TableName()) + "\n" + e.toString();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KardexDAO" , "" , "checkMarjoeeMoredi" , "");
-        }
-
-        return checkMarjoeeMoredi;
-    }
 
     public int findccKardexByccMoshtaryAndccMarjoeeMamorPakhsh(int ccMoshtary , int ccMarjoeeMamorPakhsh){
 
