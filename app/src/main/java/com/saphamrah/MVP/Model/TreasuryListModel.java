@@ -576,7 +576,10 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                 for (int i = 0; i < dariaftPardakhtDarkhastFaktorPPCs.size(); i++) {
                     for (int d = 0; d < dariaftPardakhtPPCModels.size(); d++) {
                         if (dariaftPardakhtDarkhastFaktorPPCs.get(i).getCcDariaftPardakht() == dariaftPardakhtPPCModels.get(d).getCcDariaftPardakht()) {
-                            mablaghMandeh = dariaftPardakhtPPCModels.get(d).getMablaghMandeh();
+                            if((d-1)<0)
+                                mablaghMandeh = dariaftPardakhtPPCModels.get(d).getMablaghMandeh();
+                            else
+                                mablaghMandeh = dariaftPardakhtPPCModels.get(d-1).getMablaghMandeh();
                         }
                     }
                     if (i > 0)
