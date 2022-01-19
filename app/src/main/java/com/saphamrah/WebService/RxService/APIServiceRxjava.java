@@ -564,7 +564,7 @@ public interface APIServiceRxjava {
     Observable<Response<GetAllTaghiratVersionPPCResult>>getAllTaghiratVersionPPC(@Query("Noe") String Noe , @Query("Version") String version);
 
     @GET("Api/ApiWarehouse/GetTafkikJoze_Pakhsh")
-    Observable<Response<GetTafkikJozePakhshResult>>getTafkikJozePakhsh(@Query("ccDarkhastFaktors") String ccDarkhastFaktors);
+    Observable<Response<GetTafkikJozePakhshResult>>getTafkikJozePakhsh(@Query("ccDarkhastFaktors") String ccDarkhastFaktors,@Query("ccDarkhastHavalehs") String ccDarkhastHavalehs);
 
 //    @GET("Api/ApiTablet/GetAllTizerTablighat")
 //    Observable<Response<GetAllTizerTablighatResult>>getAllTizerTablighat();

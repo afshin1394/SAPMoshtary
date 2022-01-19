@@ -6,6 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.bxl.config.editor.BXLConfigLoader;
+import com.saphamrah.Application.BaseApplication;
+
+import org.achartengine.chart.ScatterChart;
 
 import java.nio.ByteBuffer;
 
@@ -14,8 +17,7 @@ import jpos.POSPrinter;
 import jpos.POSPrinterConst;
 import jpos.config.JposEntry;
 
-public class BixolonPrinter extends Printer
-{
+public class BixolonPrinter extends Printer {
 
     private static BXLConfigLoader bxlConfigLoader;
     private static POSPrinter posPrinter;
@@ -147,6 +149,15 @@ public class BixolonPrinter extends Printer
         }
     }
 
+    @Override
+    public boolean checkIsAvailable() {
+        try {
+            new BXLConfigLoader(BaseApplication.getContext()).openFile();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
 
     private void closePrinter()
     {

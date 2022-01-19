@@ -431,34 +431,73 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     {
                         ccAnbarak = "-1";
                     }
-                    etebarDAO.fetchEtebarForoshandeh(mPresenter.getAppContext(), ACTIVITY_NAME_FOR_LOG, String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse()
-                    {
-                        @Override
-                        public void onSuccess(final ArrayList arrayListData)
-                        {
-                            if (arrayListData.size() > 0)
+                    //modified
+                    ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+                    switch (serverIpModel.getWebServiceType()){
+                        case REST:
+                            etebarDAO.fetchEtebarForoshandeh(mPresenter.getAppContext(), ACTIVITY_NAME_FOR_LOG, String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse()
                             {
-                                boolean deleteResult = etebarDAO.deleteByccForoshanhde(foroshandehMamorPakhshModel.getCcForoshandeh());
-
-                                boolean insertResult = etebarDAO.insertGroup(arrayListData);
-                                Log.d("updateEtebarForoshandeh","deleteResult: " + deleteResult + " , insertResult: " + insertResult);
-                                Log.d("updateEtebarForoshandeh","arrayListData: " + arrayListData.toString());
-                                if (!deleteResult && !insertResult)
+                                @Override
+                                public void onSuccess(final ArrayList arrayListData)
                                 {
-                                    mPresenter.onFailedUpdateForoshandehEtebar();
+                                    if (arrayListData.size() > 0)
+                                    {
+                                        boolean deleteResult = etebarDAO.deleteByccForoshanhde(foroshandehMamorPakhshModel.getCcForoshandeh());
+
+                                        boolean insertResult = etebarDAO.insertGroup(arrayListData);
+                                        Log.d("updateEtebarForoshandeh","deleteResult: " + deleteResult + " , insertResult: " + insertResult);
+                                        Log.d("updateEtebarForoshandeh","arrayListData: " + arrayListData.toString());
+                                        if (!deleteResult && !insertResult)
+                                        {
+                                            mPresenter.onFailedUpdateForoshandehEtebar();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        mPresenter.onFailedUpdateForoshandehEtebar();
+                                    }
                                 }
-                            }
-                            else
+                                @Override
+                                public void onFailed(String type, String error)
+                                {
+                                    setLogToDB(LogPPCModel.LOG_EXCEPTION, String.format(" type : %1$s \n error : %2$s", type , error), CLASS_NAME, "", "updateEtebarForoshandeh", "");
+                                }
+                            });
+                            break;
+
+                        case gRPC:
+                            etebarDAO.fetchEtebarForoshandehGrpc(mPresenter.getAppContext(), ACTIVITY_NAME_FOR_LOG, String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse()
                             {
-                                mPresenter.onFailedUpdateForoshandehEtebar();
-                            }
-                        }
-                        @Override
-                        public void onFailed(String type, String error)
-                        {
-                            setLogToDB(LogPPCModel.LOG_EXCEPTION, String.format(" type : %1$s \n error : %2$s", type , error), CLASS_NAME, "", "updateEtebarForoshandeh", "");
-                        }
-                    });
+                                @Override
+                                public void onSuccess(final ArrayList arrayListData)
+                                {
+                                    if (arrayListData.size() > 0)
+                                    {
+                                        boolean deleteResult = etebarDAO.deleteByccForoshanhde(foroshandehMamorPakhshModel.getCcForoshandeh());
+
+                                        boolean insertResult = etebarDAO.insertGroup(arrayListData);
+                                        Log.d("updateEtebarForoshandeh","deleteResult: " + deleteResult + " , insertResult: " + insertResult);
+                                        Log.d("updateEtebarForoshandeh","arrayListData: " + arrayListData.toString());
+                                        if (!deleteResult && !insertResult)
+                                        {
+                                            mPresenter.onFailedUpdateForoshandehEtebar();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        mPresenter.onFailedUpdateForoshandehEtebar();
+                                    }
+                                }
+                                @Override
+                                public void onFailed(String type, String error)
+                                {
+                                    setLogToDB(LogPPCModel.LOG_EXCEPTION, String.format(" type : %1$s \n error : %2$s", type , error), CLASS_NAME, "", "updateEtebarForoshandeh", "");
+                                }
+                            });
+
+                            break;
+                    }
+
                 }
             }
         }
@@ -906,7 +945,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     return -4;
                     //Toast.makeText(context, "به علت چک برگشتی مشتری شما قادر به ثبت درخواست نمی باشید.\n", Toast.LENGTH_LONG).show();
                 }
-                else if(checkCheckBargashty &&  rialBargahsty > rialEtebarBargashti)
+                else if(checkCheckBargashty &&  rialBargashti > rialEtebarBargashti)
                 {
                     return -4;
                     //Toast.makeText(context, "به علت چک برگشتی مشتری شما قادر به ثبت درخواست نمی باشید.\n", Toast.LENGTH_LONG).show();
@@ -1328,31 +1367,64 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     {
                         ccAnbarak = "-1";
                     }
-                    //etebarDAO.fetchEtebar(weakReferenceContext.get(), ACTIVITY_NAME_FOR_LOG, String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), ccAnbarak, "1", new RetrofitResponse()
-                    etebarDAO.fetchEtebarForoshandeh(weakReferenceContext.get(), ACTIVITY_NAME_FOR_LOG, String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse()
-                    {
-                        @Override
-                        public void onSuccess(final ArrayList arrayListData)
-                        {
-                            Thread thread = new Thread()
+                    //modified
+                    ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(weakReferenceContext.get());
+                    switch (serverIpModel.getWebServiceType()){
+                        case REST:
+                            etebarDAO.fetchEtebarForoshandeh(weakReferenceContext.get(), ACTIVITY_NAME_FOR_LOG, String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse()
                             {
                                 @Override
-                                public void run()
+                                public void onSuccess(final ArrayList arrayListData)
                                 {
-                                    etebarDAO.deleteByccForoshanhde(foroshandehMamorPakhshModel.getCcForoshandeh());
-                                    etebarDAO.insertGroup(arrayListData);
-                                    Log.d("updateEtebarForoshandeh","arrayListData:" + arrayListData.toString());
+                                    Thread thread = new Thread()
+                                    {
+                                        @Override
+                                        public void run()
+                                        {
+                                            etebarDAO.deleteByccForoshanhde(foroshandehMamorPakhshModel.getCcForoshandeh());
+                                            etebarDAO.insertGroup(arrayListData);
+                                            Log.d("updateEtebarForoshandeh","arrayListData:" + arrayListData.toString());
 
+                                        }
+                                    };
+                                    thread.start();
                                 }
-                            };
-                            thread.start();
-                        }
-                        @Override
-                        public void onFailed(String type, String error)
-                        {
-                            setLogToDB(LogPPCModel.LOG_EXCEPTION, String.format(" type : %1$s \n error : %2$s", type , error), CLASS_NAME, "", "updateEtebarForoshandeh", "");
-                        }
-                    });
+                                @Override
+                                public void onFailed(String type, String error)
+                                {
+                                    setLogToDB(LogPPCModel.LOG_EXCEPTION, String.format(" type : %1$s \n error : %2$s", type , error), CLASS_NAME, "", "updateEtebarForoshandeh", "");
+                                }
+                            });
+                            break;
+                        case gRPC:
+                            etebarDAO.fetchEtebarForoshandehGrpc(weakReferenceContext.get(), ACTIVITY_NAME_FOR_LOG, String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse()
+                            {
+                                @Override
+                                public void onSuccess(final ArrayList arrayListData)
+                                {
+                                    Thread thread = new Thread()
+                                    {
+                                        @Override
+                                        public void run()
+                                        {
+                                            etebarDAO.deleteByccForoshanhde(foroshandehMamorPakhshModel.getCcForoshandeh());
+                                            etebarDAO.insertGroup(arrayListData);
+                                            Log.d("updateEtebarForoshandeh","arrayListData:" + arrayListData.toString());
+
+                                        }
+                                    };
+                                    thread.start();
+                                }
+                                @Override
+                                public void onFailed(String type, String error)
+                                {
+                                    setLogToDB(LogPPCModel.LOG_EXCEPTION, String.format(" type : %1$s \n error : %2$s", type , error), CLASS_NAME, "", "updateEtebarForoshandeh", "");
+                                }
+                            });
+                            break;
+                    }
+                    //etebarDAO.fetchEtebar(weakReferenceContext.get(), ACTIVITY_NAME_FOR_LOG, String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), ccAnbarak, "1", new RetrofitResponse()
+
                 }
             }
         }

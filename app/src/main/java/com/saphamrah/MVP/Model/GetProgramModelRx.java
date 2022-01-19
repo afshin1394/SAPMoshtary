@@ -111,6 +111,9 @@
 package com.saphamrah.MVP.Model;
 
 
+import static com.saphamrah.Utils.Constants.FAKTOR_GHATI;
+import static com.saphamrah.Utils.Constants.FAKTOR_HAVALEH;
+
 import android.os.Handler;
 import android.os.Message;
 import android.util.Base64;
@@ -506,6 +509,8 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
 
     private String ccDarkhastFaktors = "-1";
+    private String ccDarkhastFaktorsGhati = "-1";
+    private String ccDarkhastFaktorsHavaleh = "-1";
     private String ccDarkhastFaktorPakhsh = "-1";
     private String ccMoshtaryPakhsh = "-1";
     private String ccForoshandehString = "-1";
@@ -2405,6 +2410,15 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                 .filter(darkhastFaktorModel -> darkhastFaktorModel.getCodeVazeiat() != Constants.CODE_VAZEIAT_FAKTOR_TASVIEH)
                 .filter(darkhastFaktorModel -> darkhastFaktorModel.getFaktorRooz() == 0)
                 .flatMap(darkhastFaktorModel -> {
+                    /**  separate havaleh and tafkik **/
+                    if (darkhastFaktorModel.getCcDarkhastFaktorNoeForosh() == FAKTOR_GHATI){
+                        ccDarkhastFaktorsGhati += "," + darkhastFaktorModel.getCcDarkhastFaktor();
+                    }
+                    if (darkhastFaktorModel.getCcDarkhastFaktorNoeForosh() == FAKTOR_HAVALEH){
+                        ccDarkhastFaktorsHavaleh += "," + darkhastFaktorModel.getCcDarkhastFaktor();
+                    }
+                    /**  separate havaleh and tafkik **/
+
                     ccDarkhastFaktors += "," + darkhastFaktorModel.getCcDarkhastFaktor();
                     if (darkhastFaktorModel.getForTasviehVosol() == 1) {
                         ccDarkhastFaktorPakhsh += "," + darkhastFaktorModel.getCcDarkhastFaktor();
@@ -9287,7 +9301,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         final int[] webCounter = {itemCounter};
         if (noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD && !ccDarkhastFaktors.trim().equals("-1")) {
 
-            apiServiceRxjava.getTafkikJozePakhsh(ccDarkhastFaktors)
+            apiServiceRxjava.getTafkikJozePakhsh(ccDarkhastFaktorsGhati,ccDarkhastFaktorsHavaleh)
                     .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, ACTIVITY_NAME, "getTafkikJozeApiRx", ""))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -9436,7 +9450,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
     private void getTafkikJozePakhsh(final int getProgramType) {
         if (noeMasouliat == ForoshandehMamorPakhshUtils.MAMOR_PAKHSH_SARD && !ccDarkhastFaktors.trim().equals("-1")) {
             final TafkikJozeDAO tafkikJozeDAO = new TafkikJozeDAO(mPresenter.getAppContext());
-            tafkikJozeDAO.fetchTafkikJozePakhsh(mPresenter.getAppContext(), activityNameForLog, ccDarkhastFaktors, new RetrofitResponse() {
+            tafkikJozeDAO.fetchTafkikJozePakhsh(mPresenter.getAppContext(), activityNameForLog, ccDarkhastFaktorsGhati,ccDarkhastFaktorsHavaleh, new RetrofitResponse() {
                 @Override
                 public void onSuccess(ArrayList arrayListData) {
                     boolean deleteResult = tafkikJozeDAO.deleteAll();

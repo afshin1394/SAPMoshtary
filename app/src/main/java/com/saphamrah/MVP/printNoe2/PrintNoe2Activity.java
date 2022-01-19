@@ -1,5 +1,8 @@
 package com.saphamrah.MVP.printNoe2;
 
+import static com.saphamrah.Utils.Constants.BIXOLON;
+import static com.saphamrah.Utils.Constants.UROVO;
+
 import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -70,6 +73,7 @@ import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.SystemConfigTabletModel;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
+import com.saphamrah.PubFunc.PrinterUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Service.BluetoothPrintService;

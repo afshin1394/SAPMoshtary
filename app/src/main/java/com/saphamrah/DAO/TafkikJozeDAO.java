@@ -7,8 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 import androidx.annotation.NonNull;
 
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.TafkikJozeModel;
+import com.saphamrah.Model.VarizBeBankModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -16,13 +18,17 @@ import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.WebService.APIServiceGet;
 
+import com.saphamrah.WebService.APIServicePost;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
+import com.saphamrah.WebService.RxService.Response.BaseResponse;
+import com.saphamrah.WebService.ServiceResponse.CreateDariaftPardakhtPPCJSONResult;
 import com.saphamrah.WebService.ServiceResponse.GetTafkikJozePakhshResult;
 import com.saphamrah.protos.PartialSeparationGrpc;
-import com.saphamrah.protos.PartialSeparationReply;
-import com.saphamrah.protos.PartialSeparationReplyList;
-import com.saphamrah.protos.PartialSeparationRequest;
+import com.saphamrah.protos.PartialSeparationProto;
+
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -64,11 +70,13 @@ public class TafkikJozeDAO
         return new String[]
                 {
                         TafkikJozeModel.COLUMN_ccTafkikJoze(),
-                        TafkikJozeModel.COLUMN_ShomarehTafkikJoze()
+                        TafkikJozeModel.COLUMN_ShomarehTafkikJoze(),
+                        TafkikJozeModel.COLUMN_CodeVazeiat()
+
                 };
     }
 
-    public void fetchTafkikJozePakhshGrpc(final Context context, final String activityNameForLog, String ccDarkhastFaktors, final RetrofitResponse retrofitResponse)
+    public void fetchTafkikJozePakhshGrpc(final Context context, final String activityNameForLog, String ccDarkhastFaktorsGhati,String ccDarkhastFaktorsHavaleh, final RetrofitResponse retrofitResponse)
     {
         try {
             ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
@@ -86,12 +94,12 @@ public class TafkikJozeDAO
                 CompositeDisposable compositeDisposable = new CompositeDisposable();
                 ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
                 PartialSeparationGrpc.PartialSeparationBlockingStub partialSeparationBlockingStub = PartialSeparationGrpc.newBlockingStub(managedChannel);
-                PartialSeparationRequest partialSeparationRequest = PartialSeparationRequest.newBuilder().setInvoiceRequestsID(ccDarkhastFaktors).build();
-                Callable<PartialSeparationReplyList> partialSeparationReplyListCallable = () -> partialSeparationBlockingStub.getPartialSeparation(partialSeparationRequest);
+                PartialSeparationProto.PartialSeparationRequest partialSeparationRequest = PartialSeparationProto.PartialSeparationRequest.newBuilder().setDefiniteInvoiceRequestsID(ccDarkhastFaktorsGhati).setDraftInvoiceRequestsID(ccDarkhastFaktorsHavaleh).build();
+                Callable<PartialSeparationProto.PartialSeparationReplyList> partialSeparationReplyListCallable = () -> partialSeparationBlockingStub.getPartialSeparation(partialSeparationRequest);
                 RxAsync.makeObservable(partialSeparationReplyListCallable)
                         .map(partialSeparationReplyList ->  {
                             ArrayList<TafkikJozeModel> models = new ArrayList<>();
-                            for (PartialSeparationReply reply : partialSeparationReplyList.getPartialSeparationsList()) {
+                            for (PartialSeparationProto.PartialSeparationReply reply : partialSeparationReplyList.getPartialSeparationsList()) {
                                 TafkikJozeModel model = new TafkikJozeModel();
                                 model.setCcTafkikJoze(reply.getPartialSeparationID());
                                 model.setShomarehTafkikJoze(reply.getPartialSeparationNumber());
@@ -136,7 +144,7 @@ public class TafkikJozeDAO
     }
 
 
-    public void fetchTafkikJozePakhsh(final Context context, final String activityNameForLog, String ccDarkhastFaktors, final RetrofitResponse retrofitResponse)
+    public void fetchTafkikJozePakhsh(final Context context, final String activityNameForLog, String ccDarkhastFaktorsGhati,String ccDarkhastFaktorsHavaleh, final RetrofitResponse retrofitResponse)
     {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
         if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
@@ -149,7 +157,7 @@ public class TafkikJozeDAO
         else
         {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-            Call<GetTafkikJozePakhshResult> call = apiServiceGet.getTafkikJozePakhsh(ccDarkhastFaktors);
+            Call<GetTafkikJozePakhshResult> call = apiServiceGet.getTafkikJozePakhsh(ccDarkhastFaktorsGhati,ccDarkhastFaktorsHavaleh);
             call.enqueue(new Callback<GetTafkikJozePakhshResult>() {
                 @Override
                 public void onResponse(Call<GetTafkikJozePakhshResult> call, Response<GetTafkikJozePakhshResult> response)
@@ -220,6 +228,67 @@ public class TafkikJozeDAO
         }
     }
 
+    public void sendTafkikJozeToServer(Context context,JSONObject jsonObject,RetrofitResponse retrofitResponse) {
+
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().postServerFromShared(context);
+            APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+            //saveToFile("treasury" + darkhastFaktorModel.getCcDarkhastFaktor() + ".txt" , strJsonObjectTreasury);
+
+            Call<BaseResponse> call = apiServicePost.createTafkikJozeCodeVazieatJSON(jsonObject.toString());
+            call.enqueue(new Callback<BaseResponse>() {
+                @Override
+                public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                    try {
+                        if (response.isSuccessful() && response.body() != null) {
+                            BaseResponse result = response.body();
+                            if (result.getSuccess()) {
+                                ArrayList<Boolean> arrayList = new ArrayList<>();
+                                arrayList.add(response.isSuccessful());
+                                retrofitResponse.onSuccess(arrayList);
+
+                            } else {
+                                retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                String message = context.getResources().getString(R.string.errorSelectAll , TafkikJozeModel.TableName()) + "\n" + result.getSuccess().toString();
+                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, CLASS_NAME , "" , "getAll" , "");                           }
+                        } else {
+                            String errorMessage = "response not successful " + response.message();
+                            if (response.errorBody() != null) {
+                                errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string();//+ "\n" + "can't send this log : " + logMessage;
+                            }
+                            retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
+                            PubFunc.Logger logger = new PubFunc().new Logger();
+                            String message = context.getResources().getString(R.string.errorSendTafkikJozeDataToServer , TafkikJozeModel.TableName()) + "\n" + errorMessage;
+                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, CLASS_NAME , "" , "sendTafkikJozeToServer" , "");
+                        }
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                        retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION() , exception.toString());                       PubFunc.Logger logger = new PubFunc().new Logger();
+                        String message = context.getResources().getString(R.string.errorSendTafkikJozeDataToServer , TafkikJozeModel.TableName()) + "\n" + exception.toString();
+                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, CLASS_NAME , "" , "sendTafkikJozeToServer" , "exception");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BaseResponse> call, Throwable t) {
+                    t.printStackTrace();
+                    retrofitResponse.onFailed(Constants.RETROFIT_THROWABLE() , t.getMessage());
+                    PubFunc.Logger logger = new PubFunc().new Logger();
+                    String message = context.getResources().getString(R.string.errorSendTafkikJozeDataToServer , TafkikJozeModel.TableName()) + "\n" + t.toString();
+                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, CLASS_NAME , "" , "sendTafkikJozeToServer" ,"");
+                }
+            });
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSendTafkikJozeDataToServer , TafkikJozeModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, CLASS_NAME , "" , "sendTafkikJozeToServer" , "exception on get serverIp");
+        }
+    }
+
+
+
 
     private String getEndpoint(Call call)
     {
@@ -267,6 +336,67 @@ public class TafkikJozeDAO
             return false;
         }
     }
+
+    public boolean UpdateAllCodeVazeiat(int statusCode)
+    {
+        ContentValues values = new ContentValues();
+
+        try
+        {
+                values.put(TafkikJozeModel.COLUMN_CodeVazeiat(), statusCode);
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                db.update(TafkikJozeModel.TableName(), values,null ,null);
+                db.close();
+            return true;
+
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , TafkikJozeModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, CLASS_NAME , "" , "getAll" , "");
+            return false;
+        }
+
+    }
+    public boolean IsSeparationReturned()
+    {
+
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query = "select *  from "+TafkikJozeModel.TableName();
+            Cursor cursor  = db.rawQuery(query,null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    ArrayList<TafkikJozeModel> tafkikJozeModels = cursorToModel(cursor);
+                    for (TafkikJozeModel tafkikJozeModel : tafkikJozeModels) {
+                       if (tafkikJozeModel.getCodeVazeiat()==Constants.RETURN_SEPARATION_STATUS)
+                       {
+                           return true;
+                       }
+                    }
+
+                }
+
+                cursor.close();
+            }
+            db.close();
+            return false;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , TafkikJozeModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, CLASS_NAME , "" , "getAll" , "");
+            return false;
+        }
+    }
+
 
 
     public ArrayList<TafkikJozeModel> getAll()
@@ -324,6 +454,7 @@ public class TafkikJozeDAO
             contentValues.put(TafkikJozeModel.COLUMN_ccTafkikJoze() , tafkikJozeModel.getCcTafkikJoze());
         }
         contentValues.put(TafkikJozeModel.COLUMN_ShomarehTafkikJoze() , tafkikJozeModel.getShomarehTafkikJoze());
+        contentValues.put(TafkikJozeModel.COLUMN_CodeVazeiat() , tafkikJozeModel.getCodeVazeiat());
 
         return contentValues;
     }
@@ -340,6 +471,7 @@ public class TafkikJozeDAO
 
             tafkikJozeModel.setCcTafkikJoze(cursor.getLong(cursor.getColumnIndex(TafkikJozeModel.COLUMN_ccTafkikJoze())));
             tafkikJozeModel.setShomarehTafkikJoze(cursor.getInt(cursor.getColumnIndex(TafkikJozeModel.COLUMN_ShomarehTafkikJoze())));
+            tafkikJozeModel.setCodeVazeiat(cursor.getInt(cursor.getColumnIndex(TafkikJozeModel.COLUMN_CodeVazeiat())));
 
             tafkikJozeModels.add(tafkikJozeModel);
             cursor.moveToNext();

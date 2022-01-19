@@ -1,6 +1,9 @@
 package com.saphamrah.MVP.Model;
 
 
+import static com.saphamrah.Utils.Constants.FAKTOR_GHATI;
+import static com.saphamrah.Utils.Constants.FAKTOR_HAVALEH;
+
 import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
@@ -91,6 +94,8 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     private String ccGorohs = "347";
     private String ccDarkhastFaktors = "-1";
     private String ccDarkhastFaktorPakhsh = "-1";
+    private String ccDarkhastFaktorsGhati = "-1";
+    private String ccDarkhastFaktorsHavaleh = "-1";
     private String ccMoshtaryPakhsh = "-1";
     private String ccForoshandehString = "-1";
     private String[] foroshandehArray;
@@ -1249,6 +1254,16 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                             ImageDarkhastFaktorDAO imageDarkhastFaktorDAO = new ImageDarkhastFaktorDAO(mPresenter.getAppContext());
                             for (int i = 0; i < arrayListData.size(); i++) {
                                 final DarkhastFaktorModel darkhastFaktorModel = (DarkhastFaktorModel) arrayListData.get(i);
+
+                                /**  separate havaleh and tafkik **/
+                                if (darkhastFaktorModel.getCcDarkhastFaktorNoeForosh() == FAKTOR_GHATI){
+                                    ccDarkhastFaktorsGhati += "," + darkhastFaktorModel.getCcDarkhastFaktor();
+                                }
+                                if (darkhastFaktorModel.getCcDarkhastFaktorNoeForosh() == FAKTOR_HAVALEH){
+                                    ccDarkhastFaktorsHavaleh += "," + darkhastFaktorModel.getCcDarkhastFaktor();
+                                }
+                                /**  separate havaleh and tafkik **/
+
                                 if (darkhastFaktorModel.getFaktorRooz() == 0) {
                                     getImageDarkhastFaktor(imageDarkhastFaktorDAO, darkhastFaktorEmzaMoshtaryDAO, darkhastFaktorModel.getCodeVazeiat(), darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcMoshtary(), darkhastFaktorModel.getCcDarkhastFaktorNoeForosh());
                                     ccDarkhastFaktors += "," + darkhastFaktorModel.getCcDarkhastFaktor();
@@ -3901,7 +3916,8 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     private void getTafkikJozePakhsh(final int getProgramType) {
         if (noeMasouliat == 4 && !ccDarkhastFaktors.trim().equals("-1")) {
             final TafkikJozeDAO tafkikJozeDAO = new TafkikJozeDAO(mPresenter.getAppContext());
-            tafkikJozeDAO.fetchTafkikJozePakhsh(mPresenter.getAppContext(), activityNameForLog, ccDarkhastFaktors, new RetrofitResponse() {
+
+            tafkikJozeDAO.fetchTafkikJozePakhsh(mPresenter.getAppContext(), activityNameForLog, ccDarkhastFaktorsGhati, ccDarkhastFaktorsHavaleh, new RetrofitResponse() {
                 @Override
                 public void onSuccess(ArrayList arrayListData) {
                     boolean deleteResult = tafkikJozeDAO.deleteAll();
@@ -4352,7 +4368,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
     /**
      * overload getAllMoshtaryGharardad
-     * {@link #getAllMoshtaryGharardad(int, String)}
+     * {@link #getAllMoshtaryGharardad(int, JSONArray)}
      * get All contractions which a seller can sell to them weather a cold seller, a warm seller and a smart seller or a distributer
      * {@link #getKalaMosavabBySazmanGharardad(int, int)
      *

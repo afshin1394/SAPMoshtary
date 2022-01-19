@@ -1,6 +1,7 @@
 package com.saphamrah.WebService;
 
 import com.saphamrah.Model.MoshtaryChidmanModel;
+import com.saphamrah.WebService.RxService.Response.BaseResponse;
 import com.saphamrah.WebService.ServiceResponse.CreateAdamDarkhastResult;
 import com.saphamrah.WebService.ServiceResponse.CreateAddressResult;
 import com.saphamrah.WebService.ServiceResponse.CreateAfradResult;
@@ -21,6 +22,7 @@ import com.saphamrah.WebService.ServiceResponse.CreateMoshtaryWithJSONResult;
 import com.saphamrah.WebService.ServiceResponse.CreateMoshtaryWithMadarekResult;
 import com.saphamrah.WebService.ServiceResponse.CreateShomarehHesabResult;
 import com.saphamrah.WebService.ServiceResponse.CreateVisitMoshtaryResult;
+import com.saphamrah.WebService.ServiceResponse.GetTafkikJozePakhshResult;
 import com.saphamrah.WebService.ServiceResponse.GetUpdateMoshtaryResult;
 import com.saphamrah.WebService.ServiceResponse.MarjoeeKardexResult;
 import com.saphamrah.WebService.ServiceResponse.MoshtaryChidmanResult;
@@ -187,5 +189,10 @@ public interface APIServicePost
     @FormUrlEncoded
     @POST("Api/ApiSales/CreateMoshtaryChidmanJSON")
     Call<MoshtaryChidmanResult> createMoshtaryChidmanJSON(@Field("jsonMoshtaryChidmanModel") String jsonMoshtaryChidmanModel);
+
+    @FormUrlEncoded
+    @POST("Api/ApiSales/UpdateTafkikJozeCodeVazieatJSON")
+    Call<BaseResponse> createTafkikJozeCodeVazieatJSON(@Field("") String Json);
+
 
 }

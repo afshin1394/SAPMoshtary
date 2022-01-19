@@ -556,6 +556,8 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(darkhastFaktorModel.getCcMoshtary());
         DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(BaseApplication.getContext());
         ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCs = dariaftPardakhtDarkhastFaktorPPCDAO.getByccDarkhastFaktorCheck(darkhastFaktorModel.getCcDarkhastFaktor());
+        int checkModatRassGiriBeforeSendVosolValue = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Check_Modat_RassGiri_Before_Send_Vosol()));
+        if(checkModatRassGiriBeforeSendVosolValue==1) {
         if (dariaftPardakhtDarkhastFaktorPPCs.size() > 0) {
 
             /**
@@ -598,15 +600,17 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                 e.printStackTrace();
                 return;
             }
-        }
+        }}
         /*
           چک کردن مرجوعی های ارسال نشده
          */
+        int checkSendMarjoeeBeforeSendVosolValue = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Check_Send_Marjoee_Before_Send_Vosol()));
+        if(checkSendMarjoeeBeforeSendVosolValue==1) {
         boolean isMarjoeeSend = dariaftPardakhtPPCDAO.isMarjoeeSend(ccDarkhastFaktor);
         if (isMarjoeeSend) {
             mPresenter.onErrorSend(R.string.isMarjoeeSend);
             return;
-        }
+        }}
 
         /*
           چک کردن مبلغ مانده فاکتور برای وصولی های چک و نقد ( باید باقیمانده صفر شود )
@@ -614,8 +618,8 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         String codeNoeVosolMoshtaryVajhNaghd = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD());
         String codeNoeVosolMoshtaryCheck = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_CHECK());
         long mablaghMandehFaktor = setMablaghMandehFaktor(ccDarkhastFaktor);
-        int mandehFaktorIsZeroForNaghdCheckValue = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Mandeh_Faktor_Is_Zero_For_Naghd_Check()));
-        if(mandehFaktorIsZeroForNaghdCheckValue==1) {
+        int checkMandehFaktorIsZeroForNaghdValue = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Check_Mandeh_Faktor_Is_Zero_For_Naghd_Before_Send_Vosol()));
+        if(checkMandehFaktorIsZeroForNaghdValue==1) {
             if ((darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Integer.parseInt(codeNoeVosolMoshtaryVajhNaghd) ||
                     (darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Integer.parseInt(codeNoeVosolMoshtaryCheck)))
                     && mablaghMandehFaktor > 0) {
@@ -651,7 +655,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                     ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
                     int codeNoeVosolVajhNaghd = Integer.parseInt(childParameterDAO.getAllByccChildParameter(String.valueOf(Constants.CC_CHILD_CODE_NOE_VOSOL_VAJH_NAGHD())).get(0).getValue());
                     String currentVersionNumber = new PubFunc().new DeviceInfo().getCurrentVersion(mPresenter.getAppContext());
-                    sendDariaftPardakhtToServer(position, ip, port, dariaftPardakhtPPCModels, foroshandehMamorPakhshModel, noeMasouliat, darkhastFaktorModel, codeNoeVosolVajhNaghd, currentVersionNumber);
+//                    sendDariaftPardakhtToServer(position, ip, port, dariaftPardakhtPPCModels, foroshandehMamorPakhshModel, noeMasouliat, darkhastFaktorModel, codeNoeVosolVajhNaghd, currentVersionNumber);
                 }
             }
         }

@@ -6,7 +6,9 @@ import android.util.Log;
 
 import com.samiei.central.exceptionHandling.Crash;
 import com.samiei.central.exceptionHandling.ExceptionHandlerApplication;
+import com.saphamrah.DAO.SystemConfigTabletDAO;
 import com.saphamrah.PubFunc.Logger;
+import com.saphamrah.PubFunc.PrinterUtils;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 
@@ -38,6 +40,11 @@ public class BaseApplication extends ExceptionHandlerApplication {
         super.onCreate();
         context = getApplicationContext();
         initBaseExceptionAlerts();
+
+       SystemConfigTabletDAO systemconfig_tabletDAO = new SystemConfigTabletDAO(getContext());
+       systemconfig_tabletDAO.updatePrinterType(PrinterUtils.checkUrovo((Activity) getCurrentActivity()));
+       int noeFaktorPrint = systemconfig_tabletDAO.getAll().get(0).getNoeFaktorPrint();
+       Log.i(TAG, "onCreate: printerType "+noeFaktorPrint);
     }
 
     private void initBaseExceptionAlerts() {

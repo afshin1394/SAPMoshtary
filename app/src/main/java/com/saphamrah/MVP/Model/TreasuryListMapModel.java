@@ -632,41 +632,61 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
         MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(darkhastFaktorModel.getCcMoshtary());
         DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(BaseApplication.getContext());
         ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCs = dariaftPardakhtDarkhastFaktorPPCDAO.getByccDarkhastFaktorCheck(darkhastFaktorModel.getCcDarkhastFaktor());
-        if (dariaftPardakhtDarkhastFaktorPPCs.size() > 0) {
-            double mablaghMandeh = 0;
-            ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = dariaftPardakhtPPCDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
-            try {
-                ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dpdfForCheck = new ArrayList<>();
-                for (int i = 0; i < dariaftPardakhtDarkhastFaktorPPCs.size(); i++) {
-                    for (int d = 0; d < dariaftPardakhtPPCModels.size(); d++) {
-                        if (dariaftPardakhtDarkhastFaktorPPCs.get(i).getCcDariaftPardakht() == dariaftPardakhtPPCModels.get(d).getCcDariaftPardakht()) {
-                            mablaghMandeh = dariaftPardakhtPPCModels.get(d).getMablaghMandeh();
+        int checkModatRassGiriBeforeSendVosolValue = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Check_Modat_RassGiri_Before_Send_Vosol()));
+        if(checkModatRassGiriBeforeSendVosolValue==1) {
+            if (dariaftPardakhtDarkhastFaktorPPCs.size() > 0) {
+
+                /**
+                 * اضافه کردن مبلغ مانده به تمامی دریافت پرداخت ها
+                 */
+                double mablaghMandeh = darkhastFaktorModel.getMablaghKhalesFaktor();
+                ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = dariaftPardakhtPPCDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+                for (int i = 0; i < dariaftPardakhtPPCModels.size(); i++) {
+                    dariaftPardakhtPPCModels.get(i).setMablaghMandeh(mablaghMandeh - dariaftPardakhtPPCModels.get(i).getMablagh());
+                    mablaghMandeh =  dariaftPardakhtPPCModels.get(i).getMablaghMandeh();
+                }
+                try {
+                    ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dpdfForCheck = new ArrayList<>();
+                    /**
+                     * گرفتن دریافت پرداخت درخواست فاکتور های چک
+                     * گرفتن مبلغ مانده بر اساس CcDariaftPardakht
+                     */
+                    for (int i = 0; i < dariaftPardakhtDarkhastFaktorPPCs.size(); i++) {
+                        for (int d = 0; d < dariaftPardakhtPPCModels.size(); d++) {
+                            if (dariaftPardakhtDarkhastFaktorPPCs.get(i).getCcDariaftPardakht() == dariaftPardakhtPPCModels.get(d).getCcDariaftPardakht()) {
+                                if((d-1)<0)
+                                    mablaghMandeh = dariaftPardakhtPPCModels.get(d).getMablaghMandeh();
+                                else
+                                    mablaghMandeh = dariaftPardakhtPPCModels.get(d-1).getMablaghMandeh();
+                            }
+                        }
+                        if (i > 0)
+                            dpdfForCheck.add(dariaftPardakhtDarkhastFaktorPPCs.get(i - 1));
+
+                        dateTarikhSarResidForCheck = sdf.parse(getTarikhSarResidForCheck(darkhastFaktorModel, Integer.parseInt(Constants.VALUE_CHECK()), mablaghMandeh, dpdfForCheck)[1]);
+                        int tedadRoozForRotbeh = getTedadRoozForRotbeh(moshtaryModel.getDarajeh(), Integer.parseInt(Constants.VALUE_CHECK()), moshtaryModel.getCcNoeMoshtary());
+                        tarikhSanad = sdf.parse(dateUtils.persianWithSlashToGregorianSlash(dariaftPardakhtDarkhastFaktorPPCs.get(i).getTarikhSanadShamsi()));
+                        if (tarikhSanad.getTime() > dateUtils.addDay(dateTarikhSarResidForCheck, tedadRoozForRotbeh + tedadRoozMazad).getTime()) {
+                            mPresenter.onErrorSendRasGiri(BaseApplication.getContext().getResources().getString(R.string.ErrorSendRasGiri) + " \n " + BaseApplication.getContext().getResources().getString(R.string.shomarehCheck) + " : " + dariaftPardakhtDarkhastFaktorPPCs.get(i).getShomarehSanad());
+                            return;
                         }
                     }
-                    if (i > 0)
-                        dpdfForCheck.add(dariaftPardakhtDarkhastFaktorPPCs.get(i - 1));
-
-                    dateTarikhSarResidForCheck = sdf.parse(getTarikhSarResidForCheck(darkhastFaktorModel, Integer.parseInt(Constants.VALUE_CHECK()), mablaghMandeh, dpdfForCheck)[1]);
-                    int tedadRoozForRotbeh = getTedadRoozForRotbeh(moshtaryModel.getDarajeh(), Integer.parseInt(Constants.VALUE_CHECK()), moshtaryModel.getCcNoeMoshtary());
-                    tarikhSanad = sdf.parse(dateUtils.persianWithSlashToGregorianSlash(dariaftPardakhtDarkhastFaktorPPCs.get(i).getTarikhSanadShamsi()));
-                    if (tarikhSanad.getTime() > dateUtils.addDay(dateTarikhSarResidForCheck, tedadRoozForRotbeh + tedadRoozMazad).getTime()) {
-                        mPresenter.onErrorSendRasGiri(BaseApplication.getContext().getResources().getString(R.string.ErrorSendRasGiri) + " \n " + BaseApplication.getContext().getResources().getString(R.string.shomarehCheck) + " : " + dariaftPardakhtDarkhastFaktorPPCs.get(i).getShomarehSanad());
-                        return;
-                    }
+                } catch (ParseException e) {
+                    mPresenter.onErrorSendRasGiri(BaseApplication.getContext().getResources().getString(R.string.ErrorSendRasGiri));
+                    e.printStackTrace();
+                    return;
                 }
-            } catch (ParseException e) {
-                mPresenter.onErrorSendRasGiri(BaseApplication.getContext().getResources().getString(R.string.ErrorSendRasGiri));
-                e.printStackTrace();
-                return;
-            }
-        }
+            }}
          /*
           چک کردن مرجوعی های ارسال نشده
          */
-        boolean isMarjoeeSend = dariaftPardakhtPPCDAO.isMarjoeeSend(ccDarkhastFaktor);
-        if (isMarjoeeSend) {
-            mPresenter.onError(R.string.isMarjoeeSend);
-            return;
+        int checkSendMarjoeeBeforeSendVosolValue = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Check_Send_Marjoee_Before_Send_Vosol()));
+        if(checkSendMarjoeeBeforeSendVosolValue==1) {
+            boolean isMarjoeeSend = dariaftPardakhtPPCDAO.isMarjoeeSend(ccDarkhastFaktor);
+            if (isMarjoeeSend) {
+                mPresenter.onError(R.string.isMarjoeeSend);
+                return;
+            }
         }
         /*
           چک کردن مبلغ مانده فاکتور برای وصولی های چک و نقد ( باید باقیمانده صفر شود )
@@ -674,8 +694,8 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
         String codeNoeVosolMoshtaryVajhNaghd = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD());
         String codeNoeVosolMoshtaryCheck = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_CHECK());
         long mablaghMandehFaktor = setMablaghMandehFaktor(ccDarkhastFaktor);
-        int mandehFaktorIsZeroForNaghdCheckValue = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Mandeh_Faktor_Is_Zero_For_Naghd_Check()));
-        if(mandehFaktorIsZeroForNaghdCheckValue==1) {
+        int checkMandehFaktorIsZeroForNaghdValue = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Check_Mandeh_Faktor_Is_Zero_For_Naghd_Before_Send_Vosol()));
+        if(checkMandehFaktorIsZeroForNaghdValue==1) {
             if ((darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Integer.parseInt(codeNoeVosolMoshtaryVajhNaghd) ||
                     (darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Integer.parseInt(codeNoeVosolMoshtaryCheck)))
                     && mablaghMandehFaktor > 0) {

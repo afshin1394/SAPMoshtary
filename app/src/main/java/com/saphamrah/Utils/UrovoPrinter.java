@@ -12,7 +12,7 @@ public class UrovoPrinter extends Printer
 {
 
     private Activity activity;
-    private PrinterManager mPrinterManager;
+    private static PrinterManager mPrinterManager;
 
 
     public UrovoPrinter(Activity activity , long ccDarkhastFaktor)
@@ -55,12 +55,23 @@ public class UrovoPrinter extends Printer
         mPrinterManager.close();
     }
 
+    @Override
+    public  boolean checkIsAvailable() {
 
-    private int getPrintState()
+       try{
+           mPrinterManager.open();
+           return true;
+       }catch (Exception e){
+           return false;
+       }
+    }
+
+
+    public int getPrintState()
     {
         return mPrinterManager.getStatus();
     }
-
+    @Override
     public String getPrinterStateMessage()
     {
         switch (getPrintState())

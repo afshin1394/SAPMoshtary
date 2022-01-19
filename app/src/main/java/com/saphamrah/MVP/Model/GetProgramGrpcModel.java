@@ -2,6 +2,9 @@ package com.saphamrah.MVP.Model;
 
 
 
+import static com.saphamrah.Utils.Constants.FAKTOR_GHATI;
+import static com.saphamrah.Utils.Constants.FAKTOR_HAVALEH;
+
 import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
@@ -86,6 +89,8 @@ public class GetProgramGrpcModel implements GetProgramMVP.ModelOps {
     private String ccMoshtarys = "-1,";
     private String ccGorohs = "347";
     private String ccDarkhastFaktors = "-1";
+    private String ccDarkhastFaktorsGhati = "-1";
+    private String ccDarkhastFaktorsHavaleh = "-1";
     private String ccDarkhastFaktorPakhsh = "-1";
     private String ccMoshtaryPakhsh = "-1";
     private String ccForoshandehString = "-1";
@@ -118,58 +123,6 @@ public class GetProgramGrpcModel implements GetProgramMVP.ModelOps {
             foroshandehMamorPakhshModels.get(i).setNameNoeForoshandehMamorPakhsh(mPresenter.getAppContext().getResources().getString(resId));
         }
         mPresenter.onGetAllForoshandehMamorPakhsh(foroshandehMamorPakhshModels);
-
-        /*final Handler handler = new Handler();
-        new Thread(new Runnable() {
-            @Override
-            public void run()
-            {
-                final ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-                final ArrayList<ForoshandehMamorPakhshModel> foroshandehMamorPakhshModels = foroshandehMamorPakhshDAO.getAll();
-                final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
-                PubFunc.ForoshandehMamorPakhsh foroshandehMamorPakhshUtil = new PubFunc().new ForoshandehMamorPakhsh();
-                for (int i=0 ; i < foroshandehMamorPakhshModels.size() ; i++)
-                {
-                    int resId = foroshandehMamorPakhshUtil.getNoeForoshandehMamorPakhsh(foroshandehMamorPakhshModels.get(i));
-                    foroshandehMamorPakhshModels.get(i).setNameNoeForoshandehMamorPakhsh(mPresenter.getAppContext().getResources().getString(resId));
-                }
-
-                File storageDir = new File(Environment.getExternalStorageDirectory() + "/SapHamrah/Pictures/Profile/");
-                if (storageDir.exists())
-                {
-                    if (storageDir.listFiles().length > 0)
-                    {
-                        storageDir = new File(Environment.getExternalStorageDirectory() + "/SapHamrah/Pictures/Profile/profile-" + foroshandehMamorPakhshModel.getCcAfrad() + ".jpg");
-                        Bitmap profile = BitmapFactory.decodeFile(storageDir.getAbsolutePath());
-                        final byte[] profileBytes = new PubFunc().new ImageUtils().convertBitmapToByteArray(mPresenter.getAppContext() , profile , Constants.BITMAP_TO_BYTE_QUALITY());
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mPresenter.onGetAllForoshandehMamorPakhsh(foroshandehMamorPakhshModels , profileBytes, foroshandehMamorPakhshModel.getCcAfrad());
-                            }
-                        });
-                    }
-                    else
-                    {
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mPresenter.onGetAllForoshandehMamorPakhsh(foroshandehMamorPakhshModels , new byte[]{}, foroshandehMamorPakhshModel.getCcAfrad());
-                            }
-                        });
-                    }
-                }
-                else
-                {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mPresenter.onGetAllForoshandehMamorPakhsh(foroshandehMamorPakhshModels , new byte[]{}, foroshandehMamorPakhshModel.getCcAfrad());
-                        }
-                    });
-                }
-            }
-        }).start();*/
     }
 
     @Override
@@ -1195,6 +1148,16 @@ public class GetProgramGrpcModel implements GetProgramMVP.ModelOps {
                             ImageDarkhastFaktorDAO imageDarkhastFaktorDAO = new ImageDarkhastFaktorDAO(mPresenter.getAppContext());
                             for (int i = 0; i < arrayListData.size(); i++) {
                                 final DarkhastFaktorModel darkhastFaktorModel = (DarkhastFaktorModel) arrayListData.get(i);
+
+                                /**  separate havaleh and tafkik **/
+                                if (darkhastFaktorModel.getCcDarkhastFaktorNoeForosh() == FAKTOR_GHATI){
+                                    ccDarkhastFaktorsGhati += "," + darkhastFaktorModel.getCcDarkhastFaktor();
+                                }
+                                if (darkhastFaktorModel.getCcDarkhastFaktorNoeForosh() == FAKTOR_HAVALEH){
+                                    ccDarkhastFaktorsHavaleh += "," + darkhastFaktorModel.getCcDarkhastFaktor();
+                                }
+                                /**  separate havaleh and tafkik **/
+
                                 if (darkhastFaktorModel.getFaktorRooz() == 0) {
                                     getImageDarkhastFaktor(imageDarkhastFaktorDAO, darkhastFaktorEmzaMoshtaryDAO, darkhastFaktorModel.getCodeVazeiat(), darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcMoshtary());
                                     ccDarkhastFaktors += "," + darkhastFaktorModel.getCcDarkhastFaktor();
@@ -2010,7 +1973,7 @@ public class GetProgramGrpcModel implements GetProgramMVP.ModelOps {
                 }
             });
         } else {
-            modatVosolDAO.fetchAllvModatVosolByccMarkazForoshGoroh(mPresenter.getAppContext(), activityNameForLog, ccMarkazSazmanForoshSakhtarForosh, ccGorohs, new RetrofitResponse() {
+            modatVosolDAO.fetchAllvModatVosolByccMarkazForoshGorohGrpc(mPresenter.getAppContext(), activityNameForLog, ccMarkazSazmanForoshSakhtarForosh, ccGorohs, new RetrofitResponse() {
                 @Override
                 public void onSuccess(final ArrayList arrayListData) {
                     Thread thread = new Thread() {
@@ -3462,7 +3425,7 @@ public class GetProgramGrpcModel implements GetProgramMVP.ModelOps {
     private void getTafkikJozePakhsh(final int getProgramType) {
         if (noeMasouliat == 4 && !ccDarkhastFaktors.trim().equals("-1")) {
             final TafkikJozeDAO tafkikJozeDAO = new TafkikJozeDAO(mPresenter.getAppContext());
-            tafkikJozeDAO.fetchTafkikJozePakhshGrpc(mPresenter.getAppContext(), activityNameForLog, ccDarkhastFaktors, new RetrofitResponse() {
+            tafkikJozeDAO.fetchTafkikJozePakhshGrpc(mPresenter.getAppContext(), activityNameForLog, ccDarkhastFaktorsGhati,ccDarkhastFaktorsHavaleh, new RetrofitResponse() {
                 @Override
                 public void onSuccess(ArrayList arrayListData) {
                     boolean deleteResult = tafkikJozeDAO.deleteAll();

@@ -1,5 +1,8 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.VarizNaghdBeBankMVP;
 import com.saphamrah.DAO.DariaftPardakhtDarkhastFaktorPPCDAO;
@@ -123,28 +126,58 @@ public class VarizNaghdBeBankModel implements VarizNaghdBeBankMVP.ModelOps {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
 
         ccAfrad = foroshandehMamorPakhshDAO.getCCAfrad();
+        //modified
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(BaseApplication.getContext());
+        switch (serverIpModel.getWebServiceType()){
+            case REST:
+                varizBeBankDAO.fetchVarizBeBanck(BaseApplication.getContext(), TAG, ccAfrad, new RetrofitResponse() {
+                    @Override
+                    public void onSuccess(ArrayList arrayListData) {
 
-        varizBeBankDAO.fetchVarizBeBanck(BaseApplication.getContext(), TAG, ccAfrad, new RetrofitResponse() {
-            @Override
-            public void onSuccess(ArrayList arrayListData) {
+                        boolean deleteResult = varizBeBankDAO.deleteAll();
+                        boolean insertResult = varizBeBankDAO.insertGroup(arrayListData);
+                        if (deleteResult && insertResult) {
+                            mPresenter.onGetRefresh(R.string.successUpdate, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
+                            getSumMablagh();
+                        } else {
+                            mPresenter.onGetRefresh(R.string.failUpdate, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                        }
 
-                boolean deleteResult = varizBeBankDAO.deleteAll();
-                boolean insertResult = varizBeBankDAO.insertGroup(arrayListData);
-                if (deleteResult && insertResult) {
-                    mPresenter.onGetRefresh(R.string.successUpdate, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
-                    getSumMablagh();
-                } else {
-                    mPresenter.onGetRefresh(R.string.failUpdate, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
-                }
-
-            }
+                    }
 
 
-            @Override
-            public void onFailed(String type, String error) {
-                mPresenter.onGetRefresh(R.string.failUpdate, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
-            }
-        });
+                    @Override
+                    public void onFailed(String type, String error) {
+                        mPresenter.onGetRefresh(R.string.failUpdate, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                    }
+                });
+                break;
+
+            case gRPC:
+                varizBeBankDAO.fetchVarizBeBankGrpc(BaseApplication.getContext(), TAG, ccAfrad, new RetrofitResponse() {
+                    @Override
+                    public void onSuccess(ArrayList arrayListData) {
+
+                        boolean deleteResult = varizBeBankDAO.deleteAll();
+                        boolean insertResult = varizBeBankDAO.insertGroup(arrayListData);
+                        if (deleteResult && insertResult) {
+                            mPresenter.onGetRefresh(R.string.successUpdate, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
+                            getSumMablagh();
+                        } else {
+                            mPresenter.onGetRefresh(R.string.failUpdate, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                        }
+
+                    }
+
+
+                    @Override
+                    public void onFailed(String type, String error) {
+                        mPresenter.onGetRefresh(R.string.failUpdate, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                    }
+                });
+                break;
+        }
+
     }
 
     @Override

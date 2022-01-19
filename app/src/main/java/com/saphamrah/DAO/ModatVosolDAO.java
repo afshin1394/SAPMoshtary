@@ -84,8 +84,6 @@ public class ModatVosolDAO
     {
         try {
             ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-//        ServerIpModel serverIpModel = new ServerIpModel();
-//        serverIpModel.setServerIp("192.168.80.181");
             serverIpModel.setPort("5000");
 
             if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {

@@ -757,16 +757,19 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
             try
             {
                 Date tarikhSanad = sdfDateTime.parse(model.getTarikhSanad());
-                Date zamaneTakhsiseFaktor = sdfDateWithoutTime.parse(model.getTarikhSanad());
+                Date zamaneTakhsiseFaktor = sdfDateWithoutTime.parse(model.getZamaneTakhsiseFaktor());
                 diffDays = 0;
                 codeNoeVosolCheck = String.valueOf(model.getCodeNoeVosol());
                 if(codeNoeVosolCheck.equals(Constants.VALUE_VAJH_NAGHD()) || codeNoeVosolCheck.equals(Constants.VALUE_IRANCHECK()))
                 {
                     diffDays = (zamaneTakhsiseFaktor.getTime() - tarikhErsal.getTime()) / ConvertToDay;
+                    Log.d("dariaftPardakhtDarkhast","naghd diffDays"+diffDays);
                 }
                 if(codeNoeVosolCheck.equals(Constants.VALUE_POS()) || codeNoeVosolCheck.equals(Constants.VALUE_FISH_BANKI()))
                 {
                     diffDays = (tarikhSanad.getTime() - tarikhErsal.getTime()) / ConvertToDay;
+                    Log.d("dariaftPardakhtDarkhast","POS diffDays"+diffDays);
+
                 }
                 if(codeNoeVosolCheck.equals(Constants.VALUE_CHECK()))
                 {
@@ -780,6 +783,8 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
                         maxRoozTarikhSanad = tarikhSanad;
                     }
                     diffDays = (maxRoozTarikhSanad.getTime() - tarikhErsal.getTime()) / ConvertToDay;
+                    Log.d("dariaftPardakhtDarkhast","Check diffDays"+diffDays);
+
                 }
                 sumMablaghTakhsisDiffdays += model.getMablagh() * diffDays;
             }
@@ -792,7 +797,10 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
 
         modatVosol +=1;
         //modatVosol += TedadRoozMazad;
+
         tedadRoozRaasGiri = (int) Math.round(((modatVosol * mablaghFaktor) - sumMablaghTakhsisDiffdays ) / mablaghMandeh);
+        Log.d("dariaftPardakhtDarkhast","modatVosol"+modatVosol+", mablaghFaktor"+mablaghFaktor+" sumMablaghTakhsisDiffdays"+ sumMablaghTakhsisDiffdays+ " mablaghMandeh"+mablaghMandeh);
+        Log.d("dariaftPardakhtDarkhast","tedadRoozRaasGiri"+tedadRoozRaasGiri);
         tarikhSarResid = new PubFunc().new DateUtils().addDay(tarikhErsal , tedadRoozRaasGiri);
         return tarikhSarResid;
     }

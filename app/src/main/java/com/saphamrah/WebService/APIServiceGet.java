@@ -518,8 +518,8 @@ public interface APIServiceGet
     @GET("Api/ApiTablet/GetAllTaghiratVersion")
     Call<GetAllTaghiratVersionPPCResult> getAllTaghiratVersionPPC(@Query("Noe") String Noe , @Query("Version") String version);
 
-    @GET("Api/ApiWarehouse/GetTafkikJoze_Pakhsh")
-    Call<GetTafkikJozePakhshResult> getTafkikJozePakhsh(@Query("ccDarkhastFaktors") String ccDarkhastFaktors);
+    @GET("Api/ApiWarehouse/GetTafkikJozePakhsh")
+    Call<GetTafkikJozePakhshResult> getTafkikJozePakhsh(@Query("ccDarkhastFaktors") String ccDarkhastFaktors,@Query("ccDarkhastHavalehs") String ccDarkhastHavalehs);
 
 //    @GET("Api/ApiTablet/GetAllTizerTablighat")
 //    Call<GetAllTizerTablighatResult> getAllTizerTablighat();

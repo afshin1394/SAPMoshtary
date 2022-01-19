@@ -1082,6 +1082,7 @@
     <string name="errorHaveNotImageForPrint">تصویر فاکتور برای چاپ وجود ندارد</string>
 
     // error send data
+    <string name="errorSendTafkikJozeDataToServer">خطا در ارسال اطلاعات تفکیک به سرور%1$s</string>
     <string name="errorSendDataToServer">خطا در ارسال اطلاعات به سرور</string>
     <string name="errorFromServer">خطای 500 از سمت سرور</string>
     <string name="errorException">خطایی رخ داده است دوباره تلاش کنید</string>
@@ -1161,4 +1162,8 @@
     <string name="gRPC">Grpc</string>
     <string name="ErrorSendRasGiri">تاریخ چک وارد شده مجاز نمی باشد</string>
     <string name="shomarehCheck">شماره چک</string>
+    <string name="ReturnSeparationWarning">.آیابرای عودت تفکیک خود مطمئن هستید؟در صورت ادامه اجازه تسویه وصولی های  خود را نخواهید داشت</string>
+    <string name="ReturnSeparationSucceed">تفکیک با موفقیت عودت داده شد</string>
+    <string name="ReturnSeparationFailed">عودت تفکیک با خطا مواجه شد!</string>
+    <string name="NotAllowedBecauseOfReturnedSeparation">شما به علت عودت تفکیک امروز خود قادر به ورود نیستید.</string>
 </resources>

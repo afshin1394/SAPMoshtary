@@ -209,32 +209,67 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
     @Override
     public void deleteTempRequest(final int position , final CustomerDarkhastFaktorModel customerDarkhastFaktorModel)
     {
-        controlInsertFaktor(customerDarkhastFaktorModel.getUniqID_Tablet(), String.valueOf(customerDarkhastFaktorModel.getCcMoshtary()), String.valueOf(customerDarkhastFaktorModel.getCcForoshandeh()), new OnControlFaktor() {
-            @Override
-            public void onError(int resErrorId) {
-                mPresenter.onError(resErrorId);
-            }
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        switch(serverIpModel.getWebServiceType()){
+            case REST:
+                controlInsertFaktor(customerDarkhastFaktorModel.getUniqID_Tablet(), String.valueOf(customerDarkhastFaktorModel.getCcMoshtary()), String.valueOf(customerDarkhastFaktorModel.getCcForoshandeh()), new OnControlFaktor() {
+                    @Override
+                    public void onError(int resErrorId) {
+                        mPresenter.onError(resErrorId);
+                    }
 
-            @Override
-            public void onSuccess(int flag) {
-                if (flag == 0)
-                {
-                    DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-                    if(darkhastFaktorDAO.deleteByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor()))
-                    {
-                        mPresenter.onSuccessDeleteTempRequest(position);
+                    @Override
+                    public void onSuccess(int flag) {
+                        if (flag == 0)
+                        {
+                            DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
+                            if(darkhastFaktorDAO.deleteByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor()))
+                            {
+                                mPresenter.onSuccessDeleteTempRequest(position);
+                            }
+                            else
+                            {
+                                mPresenter.onError(R.string.errorOperation);
+                            }
+                        }
+                        else
+                        {
+                            mPresenter.onError(R.string.errorDeleteSenededItem);
+                        }
                     }
-                    else
-                    {
-                        mPresenter.onError(R.string.errorOperation);
+                });
+                break;
+
+            case gRPC:
+                controlInsertFaktorGrpc(customerDarkhastFaktorModel.getUniqID_Tablet(), String.valueOf(customerDarkhastFaktorModel.getCcMoshtary()), String.valueOf(customerDarkhastFaktorModel.getCcForoshandeh()), new OnControlFaktor() {
+                    @Override
+                    public void onError(int resErrorId) {
+                        mPresenter.onError(resErrorId);
                     }
-                }
-                else
-                {
-                    mPresenter.onError(R.string.errorDeleteSenededItem);
-                }
-            }
-        });
+
+                    @Override
+                    public void onSuccess(int flag) {
+                        if (flag == 0)
+                        {
+                            DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
+                            if(darkhastFaktorDAO.deleteByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor()))
+                            {
+                                mPresenter.onSuccessDeleteTempRequest(position);
+                            }
+                            else
+                            {
+                                mPresenter.onError(R.string.errorOperation);
+                            }
+                        }
+                        else
+                        {
+                            mPresenter.onError(R.string.errorDeleteSenededItem);
+                        }
+                    }
+                });
+                break;
+        }
+
     }
 
 
@@ -368,24 +403,51 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
     @Override
     public void printTempRequest(final int position , final CustomerDarkhastFaktorModel customerDarkhastFaktorModel)
     {
-        controlInsertFaktor(customerDarkhastFaktorModel.getUniqID_Tablet(), String.valueOf(customerDarkhastFaktorModel.getCcMoshtary()), String.valueOf(customerDarkhastFaktorModel.getCcForoshandeh()), new OnControlFaktor() {
-            @Override
-            public void onError(int resErrorId) {
-                mPresenter.onError(resErrorId);
-            }
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        switch (serverIpModel.getWebServiceType()){
+            case REST:
+                controlInsertFaktor(customerDarkhastFaktorModel.getUniqID_Tablet(), String.valueOf(customerDarkhastFaktorModel.getCcMoshtary()), String.valueOf(customerDarkhastFaktorModel.getCcForoshandeh()), new OnControlFaktor() {
+                    @Override
+                    public void onError(int resErrorId) {
+                        mPresenter.onError(resErrorId);
+                    }
 
-            @Override
-            public void onSuccess(int flag) {
-                if (flag == 1)
-                {
-                    mPresenter.onCheckPrint(customerDarkhastFaktorModel);
-                }
-                else
-                {
-                    mPresenter.onError(R.string.errorNotSendedToSQL);
-                }
-            }
-        });
+                    @Override
+                    public void onSuccess(int flag) {
+                        if (flag == 1)
+                        {
+                            mPresenter.onCheckPrint(customerDarkhastFaktorModel);
+                        }
+                        else
+                        {
+                            mPresenter.onError(R.string.errorNotSendedToSQL);
+                        }
+                    }
+                });
+                break;
+
+            case gRPC:
+                controlInsertFaktorGrpc(customerDarkhastFaktorModel.getUniqID_Tablet(), String.valueOf(customerDarkhastFaktorModel.getCcMoshtary()), String.valueOf(customerDarkhastFaktorModel.getCcForoshandeh()), new OnControlFaktor() {
+                    @Override
+                    public void onError(int resErrorId) {
+                        mPresenter.onError(resErrorId);
+                    }
+
+                    @Override
+                    public void onSuccess(int flag) {
+                        if (flag == 1)
+                        {
+                            mPresenter.onCheckPrint(customerDarkhastFaktorModel);
+                        }
+                        else
+                        {
+                            mPresenter.onError(R.string.errorNotSendedToSQL);
+                        }
+                    }
+                });
+                break;
+        }
+
     }
 
     @Override
@@ -1486,7 +1548,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
     private void controlInsertFaktorGrpc(String uniqID_Tablet , String ccMoshtary , String ccForoshandeh , final OnControlFaktor onControlFaktor)
     {
         try {
-            ServerIpModel serverIpModel = new ServerIpModel();
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
 
 
             if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
@@ -2936,35 +2998,75 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         if (checkDateTime()) {
             if(checkMablaghMandehFaktor(customerDarkhastFaktorModel))
             {
-                controlInsertFaktor(customerDarkhastFaktorModel.getUniqID_Tablet(), String.valueOf(customerDarkhastFaktorModel.getCcMoshtary()), String.valueOf(customerDarkhastFaktorModel.getCcForoshandeh()), new OnControlFaktor() {
-                    @Override
-                    public void onError(int resErrorId) {
-                        mPresenter.onError(resErrorId);
-                    }
+                ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+                switch (serverIpModel.getWebServiceType()){
+                    case REST:
+                        controlInsertFaktor(customerDarkhastFaktorModel.getUniqID_Tablet(), String.valueOf(customerDarkhastFaktorModel.getCcMoshtary()), String.valueOf(customerDarkhastFaktorModel.getCcForoshandeh()), new OnControlFaktor() {
+                            @Override
+                            public void onError(int resErrorId) {
+                                mPresenter.onError(resErrorId);
+                            }
 
-                    @Override
-                    public void onSuccess(int flag) {
-                        if (flag == 1) {
-                            mPresenter.onErrorSendRequest(R.string.errorResend, "");
-                        } else {
-                            AsyncTaskSendRequest asyncTaskSendRequest = new AsyncTaskSendRequest(mPresenter.getAppContext(), customerDarkhastFaktorModel, position);
-                            asyncTaskSendRequest.sendRequestResponse = new SendRequestResponse() {
-                                @Override
-                                public void onError(int resId) {
-                                    mPresenter.onErrorSendRequest(resId, "");
+                            @Override
+                            public void onSuccess(int flag) {
+                                if (flag == 1) {
+                                    mPresenter.onErrorSendRequest(R.string.errorResend, "");
+                                } else {
+                                    AsyncTaskSendRequest asyncTaskSendRequest = new AsyncTaskSendRequest(mPresenter.getAppContext(), customerDarkhastFaktorModel, position);
+                                    asyncTaskSendRequest.sendRequestResponse = new SendRequestResponse() {
+                                        @Override
+                                        public void onError(int resId) {
+                                            mPresenter.onErrorSendRequest(resId, "");
+                                        }
+
+                                        @Override
+                                        public void onSuccess(int position, long ccDarkhastFaktorNew) {
+                                            mPresenter.onSuccessSendRequest(position, ccDarkhastFaktorNew);
+
+
+                                        }
+                                    };
+                                    asyncTaskSendRequest.execute();
                                 }
+                            }
+                        });
+                        break;
 
-                                @Override
-                                public void onSuccess(int position, long ccDarkhastFaktorNew) {
-                                    mPresenter.onSuccessSendRequest(position, ccDarkhastFaktorNew);
+                    case gRPC:
+                        controlInsertFaktorGrpc(customerDarkhastFaktorModel.getUniqID_Tablet(), String.valueOf(customerDarkhastFaktorModel.getCcMoshtary()), String.valueOf(customerDarkhastFaktorModel.getCcForoshandeh()), new OnControlFaktor() {
+                            @Override
+                            public void onError(int resErrorId) {
+                                mPresenter.onError(resErrorId);
+                            }
+
+                            @Override
+                            public void onSuccess(int flag) {
+                                if (flag == 1) {
+                                    mPresenter.onErrorSendRequest(R.string.errorResend, "");
+                                } else {
+                                    AsyncTaskSendRequest asyncTaskSendRequest = new AsyncTaskSendRequest(mPresenter.getAppContext(), customerDarkhastFaktorModel, position);
+                                    asyncTaskSendRequest.sendRequestResponse = new SendRequestResponse() {
+                                        @Override
+                                        public void onError(int resId) {
+                                            mPresenter.onErrorSendRequest(resId, "");
+                                        }
+
+                                        @Override
+                                        public void onSuccess(int position, long ccDarkhastFaktorNew) {
+                                            mPresenter.onSuccessSendRequest(position, ccDarkhastFaktorNew);
 
 
+                                        }
+                                    };
+                                    asyncTaskSendRequest.execute();
                                 }
-                            };
-                            asyncTaskSendRequest.execute();
-                        }
-                    }
-                });
+                            }
+                        });
+                        break;
+
+
+                }
+
             }
 
 

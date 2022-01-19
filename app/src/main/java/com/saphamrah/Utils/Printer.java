@@ -37,4 +37,14 @@ abstract public class Printer
      */
     public abstract void print(String filePath);
 
+
+    public  abstract boolean checkIsAvailable();
+
+
+
+
+
+
+
+
 }

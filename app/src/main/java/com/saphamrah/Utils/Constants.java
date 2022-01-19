@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE = 0 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest 8-Pegah-grpc 9-Badr
+    private static final int CURRENT_VERSION_TYPE = 8 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest 8-Pegah-grpc 9-Badr
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 
@@ -686,7 +686,9 @@ public class Constants
     public static final int CC_CHILD_MIN_TAKHFIF_NAGHDI_GHEIRE_KHORDE = 183;
     public static final int CC_CHILD_KALA_OLAVIAT_MABLAGH = 185;
     public static final int CC_CHILD_KALA_OLAVIAT_SABT = 186;
-    public static final int CC_CHILD_Mandeh_Faktor_Is_Zero_For_Naghd_Check = 186;
+    public static final int CC_CHILD_Check_Mandeh_Faktor_Is_Zero_For_Naghd_Before_Send_Vosol = 187;
+    public static final int CC_CHILD_Check_Send_Marjoee_Before_Send_Vosol = 188;
+    public static final int CC_CHILD_Check_Modat_RassGiri_Before_Send_Vosol = 189;
 
 
 
@@ -1126,9 +1128,17 @@ public class Constants
     {
         return CC_CHILD_STEP_RADIUS_FOR_CUSTOMERS_LIST;
     }
-    public static int CC_CHILD_Mandeh_Faktor_Is_Zero_For_Naghd_Check()
+    public static int CC_CHILD_Check_Mandeh_Faktor_Is_Zero_For_Naghd_Before_Send_Vosol()
     {
-        return CC_CHILD_Mandeh_Faktor_Is_Zero_For_Naghd_Check;
+        return CC_CHILD_Check_Mandeh_Faktor_Is_Zero_For_Naghd_Before_Send_Vosol;
+    }
+    public static int CC_CHILD_Check_Send_Marjoee_Before_Send_Vosol()
+    {
+        return CC_CHILD_Check_Send_Marjoee_Before_Send_Vosol;
+    }
+    public static int CC_CHILD_Check_Modat_RassGiri_Before_Send_Vosol()
+    {
+        return CC_CHILD_Check_Modat_RassGiri_Before_Send_Vosol;
     }
     public static int CC_CHILD_CHECK_LOCATION_IN_POLYGON_FOR_NEW_CUSTOMER()
     {
@@ -1351,6 +1361,9 @@ public class Constants
 
 
     public static final int TEDAD_ROOZ_MAZAD = 10;
+    public static final int RETURN_SEPARATION_STATUS = 100;
+    public static final int BIXOLON = 0;
+    public static final int UROVO = 2;
 
 }
 
