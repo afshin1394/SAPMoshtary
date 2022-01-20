@@ -28,7 +28,8 @@ public class RxHttpErrorHandler {
                 .onErrorResumeNext(Observable.empty())
                 .timeout(2, TimeUnit.MINUTES)
                 .doOnNext((Consumer<Response<T>>) t -> {
-                    Log.i("ObservableTransformer", "doOnNext: code" + t.code() + "body" + t.raw().body());
+                    Log.d("ObservableTransformer",t.raw().request().url().toString());
+                    Log.d("ObservableTransformer", "doOnNext: code" + t.code() + "body" + t.raw().body());
                     String errorBody = "";
                     String message = "";
 

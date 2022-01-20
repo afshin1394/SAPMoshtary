@@ -9,11 +9,15 @@ package Sales;
 
 service InvoiceRequest{
   rpc GetInvoiceRequest(InvoiceRequestRequest) returns(InvoiceRequestReplyList);
+  rpc GetInvoiceRequestByInvoiceRequestID(InvoiceRequestByInvoiceRequestIDRequest) returns(InvoiceRequestReplyList);
 }
 
 message InvoiceRequestRequest{
   int32 PersonsID = 1;
   string CustomersID = 2;
+}
+message InvoiceRequestByInvoiceRequestIDRequest{
+  string InvoiceRequestID = 1;
 }
 
 message InvoiceRequestReply{
@@ -42,7 +46,7 @@ message InvoiceRequestReply{
   string PPC_Version_Date = 23;
   float CashDiscount  = 24;
   int32 CustomerAddressID = 25;
-  int32 RequestSumPrice = 26;
+  double RequestSumPrice = 26;
   int32 CompleteReturn  = 27;
   string CustomerReceiptTypeName  =28;
   string CarryingNameType = 29;

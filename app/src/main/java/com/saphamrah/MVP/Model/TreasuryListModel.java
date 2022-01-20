@@ -1,6 +1,9 @@
 package com.saphamrah.MVP.Model;
 
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
@@ -566,7 +569,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             double mablaghMandeh = darkhastFaktorModel.getMablaghKhalesFaktor();
             ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = dariaftPardakhtPPCDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
             for (int i = 0; i < dariaftPardakhtPPCModels.size(); i++) {
-                dariaftPardakhtPPCModels.get(i).setMablaghMandeh(mablaghMandeh - dariaftPardakhtPPCModels.get(i).getMablagh());
+                dariaftPardakhtPPCModels.get(i).setMablaghMandeh((mablaghMandeh - dariaftPardakhtPPCModels.get(i).getMablagh())<=0?0:(mablaghMandeh - dariaftPardakhtPPCModels.get(i).getMablagh()));
                 mablaghMandeh =  dariaftPardakhtPPCModels.get(i).getMablaghMandeh();
             }
             try {
@@ -579,7 +582,12 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                     for (int d = 0; d < dariaftPardakhtPPCModels.size(); d++) {
                         if (dariaftPardakhtDarkhastFaktorPPCs.get(i).getCcDariaftPardakht() == dariaftPardakhtPPCModels.get(d).getCcDariaftPardakht()) {
                             if((d-1)<0)
-                                mablaghMandeh = dariaftPardakhtPPCModels.get(d).getMablaghMandeh();
+                            {
+                                if (dariaftPardakhtPPCModels.get(d).getMablaghMandeh() == 0)
+                                    mablaghMandeh = darkhastFaktorModel.getMablaghKhalesFaktor();
+                                else
+                                    mablaghMandeh = dariaftPardakhtPPCModels.get(d).getMablaghMandeh();
+                            }
                             else
                                 mablaghMandeh = dariaftPardakhtPPCModels.get(d-1).getMablaghMandeh();
                         }
@@ -655,7 +663,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                     ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
                     int codeNoeVosolVajhNaghd = Integer.parseInt(childParameterDAO.getAllByccChildParameter(String.valueOf(Constants.CC_CHILD_CODE_NOE_VOSOL_VAJH_NAGHD())).get(0).getValue());
                     String currentVersionNumber = new PubFunc().new DeviceInfo().getCurrentVersion(mPresenter.getAppContext());
-//                    sendDariaftPardakhtToServer(position, ip, port, dariaftPardakhtPPCModels, foroshandehMamorPakhshModel, noeMasouliat, darkhastFaktorModel, codeNoeVosolVajhNaghd, currentVersionNumber);
+                    sendDariaftPardakhtToServer(position, ip, port, dariaftPardakhtPPCModels, foroshandehMamorPakhshModel, noeMasouliat, darkhastFaktorModel, codeNoeVosolVajhNaghd, currentVersionNumber);
                 }
             }
         }
@@ -1635,7 +1643,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
         switch (serverIpModel.getWebServiceType()){
-            case Constants.REST:
+            case REST:
                 APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
                 apiServiceRxjava.getMandehMojodyMashin(ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh, ccKalaCode, ccSazmanForosh)
                         .compose(RxHttpErrorHandler.parseHttpErrors("TreasuryListModel", "TreasuryListActivity", "updateMandehMojodi", "updateMandehMojodi"))
@@ -2272,6 +2280,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
         final ArrayList<GPSDataModel> gpsDataModels = new ArrayList<>();
 
         final Handler handler = new Handler(new Handler.Callback() {
@@ -2296,90 +2305,189 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
         if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 7)
         {
-            gpsDataPpcDAO.fetchGPSDataByccForoshandeh(mPresenter.getAppContext(), "ForoshandehRouteMapActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse()
-            {
-                @Override
-                public void onSuccess(final ArrayList arrayListData)
-                {
-                    Thread thread = new Thread()
+            switch (serverIpModel.getWebServiceType()){
+                case REST:
+                    gpsDataPpcDAO.fetchGPSDataByccForoshandeh(mPresenter.getAppContext(), "ForoshandehRouteMapActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), new RetrofitResponse()
                     {
                         @Override
-                        public void run()
+                        public void onSuccess(final ArrayList arrayListData)
                         {
-                            boolean deleteResult = gpsDataPpcDAO.deleteAll();
-                            ArrayList<GPSDataModel> gpsDataModels = arrayListData;
-                            for (GPSDataModel gpsDataModel : gpsDataModels ) {
-                                gpsDataModel.setExtraProp_IsSend(1);
-                            }
-                            boolean insertResult = gpsDataPpcDAO.insertGroup(arrayListData);
-                            if (deleteResult && insertResult)
+                            Thread thread = new Thread()
                             {
-                                gpsDataModels.addAll(arrayListData);
+                                @Override
+                                public void run()
+                                {
+                                    boolean deleteResult = gpsDataPpcDAO.deleteAll();
+                                    ArrayList<GPSDataModel> gpsDataModels = arrayListData;
+                                    for (GPSDataModel gpsDataModel : gpsDataModels ) {
+                                        gpsDataModel.setExtraProp_IsSend(1);
+                                    }
+                                    boolean insertResult = gpsDataPpcDAO.insertGroup(arrayListData);
+                                    if (deleteResult && insertResult)
+                                    {
+                                        gpsDataModels.addAll(arrayListData);
 
-                                Message message = new Message();
-                                message.arg1 = 1;
-                                handler.sendMessage(message);
-                            }
-                            else
-                            {
-                                Message message = new Message();
-                                message.arg1 = -1;
-                                handler.sendMessage(message);
-                            }
+                                        Message message = new Message();
+                                        message.arg1 = 1;
+                                        handler.sendMessage(message);
+                                    }
+                                    else
+                                    {
+                                        Message message = new Message();
+                                        message.arg1 = -1;
+                                        handler.sendMessage(message);
+                                    }
+                                }
+                            };
+                            thread.start();
                         }
-                    };
-                    thread.start();
-                }
-                @Override
-                public void onFailed(String type, String error)
-                {
-                    mPresenter.onError(R.string.errorGetMamorPakhshLocations);
-                }
-            });
+                        @Override
+                        public void onFailed(String type, String error)
+                        {
+                            mPresenter.onError(R.string.errorGetMamorPakhshLocations);
+                        }
+                    });
+                    break;
+
+                case gRPC:
+                    gpsDataPpcDAO.fetchGPSDataGrpc(mPresenter.getAppContext(), "ForoshandehRouteMapActivity", String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()),"-1", new RetrofitResponse()
+                    {
+                        @Override
+                        public void onSuccess(final ArrayList arrayListData)
+                        {
+                            Thread thread = new Thread()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    boolean deleteResult = gpsDataPpcDAO.deleteAll();
+                                    ArrayList<GPSDataModel> gpsDataModels = arrayListData;
+                                    for (GPSDataModel gpsDataModel : gpsDataModels ) {
+                                        gpsDataModel.setExtraProp_IsSend(1);
+                                    }
+                                    boolean insertResult = gpsDataPpcDAO.insertGroup(arrayListData);
+                                    if (deleteResult && insertResult)
+                                    {
+                                        gpsDataModels.addAll(arrayListData);
+
+                                        Message message = new Message();
+                                        message.arg1 = 1;
+                                        handler.sendMessage(message);
+                                    }
+                                    else
+                                    {
+                                        Message message = new Message();
+                                        message.arg1 = -1;
+                                        handler.sendMessage(message);
+                                    }
+                                }
+                            };
+                            thread.start();
+                        }
+                        @Override
+                        public void onFailed(String type, String error)
+                        {
+                            mPresenter.onError(R.string.errorGetMamorPakhshLocations);
+                        }
+                    });
+
+                    break;
+
+            }
+
         }
         else if (noeMasouliat == 4 || noeMasouliat == 5)
         {
-            gpsDataPpcDAO.fetchGPSDataByccMamorPakhs(mPresenter.getAppContext(), "ForoshandehRouteMapActivity", String.valueOf(foroshandehMamorPakhshModel.getCcMamorPakhsh()), new RetrofitResponse()
-            {
-                @Override
-                public void onSuccess(final ArrayList arrayListData)
-                {
-                    Thread thread = new Thread()
+            switch (serverIpModel.getWebServiceType()){
+                case REST:
+                    gpsDataPpcDAO.fetchGPSDataByccMamorPakhs(mPresenter.getAppContext(), "ForoshandehRouteMapActivity", String.valueOf(foroshandehMamorPakhshModel.getCcMamorPakhsh()), new RetrofitResponse()
                     {
                         @Override
-                        public void run()
+                        public void onSuccess(final ArrayList arrayListData)
                         {
-                            boolean deleteResult = gpsDataPpcDAO.deleteAll();
-                            ArrayList<GPSDataModel> gpsDataModels = arrayListData;
-                            for (GPSDataModel gpsDataModel : gpsDataModels)
+                            Thread thread = new Thread()
                             {
-                                gpsDataModel.setExtraProp_IsSend(1);
-                            }
-                            boolean insertResult = gpsDataPpcDAO.insertGroup(arrayListData);
-                            if (deleteResult && insertResult)
-                            {
-                                gpsDataModels.addAll(arrayListData);
+                                @Override
+                                public void run()
+                                {
+                                    boolean deleteResult = gpsDataPpcDAO.deleteAll();
+                                    ArrayList<GPSDataModel> gpsDataModels = arrayListData;
+                                    for (GPSDataModel gpsDataModel : gpsDataModels)
+                                    {
+                                        gpsDataModel.setExtraProp_IsSend(1);
+                                    }
+                                    boolean insertResult = gpsDataPpcDAO.insertGroup(arrayListData);
+                                    if (deleteResult && insertResult)
+                                    {
+                                        gpsDataModels.addAll(arrayListData);
 
-                                Message message = new Message();
-                                message.arg1 = 1;
-                                handler.sendMessage(message);
-                            }
-                            else
-                            {
-                                Message message = new Message();
-                                message.arg1 = -1;
-                                handler.sendMessage(message);
-                            }
+                                        Message message = new Message();
+                                        message.arg1 = 1;
+                                        handler.sendMessage(message);
+                                    }
+                                    else
+                                    {
+                                        Message message = new Message();
+                                        message.arg1 = -1;
+                                        handler.sendMessage(message);
+                                    }
+                                }
+                            };
+                            thread.start();
                         }
-                    };
-                    thread.start();
-                }
-                @Override
-                public void onFailed(String type, String error)
-                {
-                    mPresenter.onError(R.string.errorGetMamorPakhshLocations);
-                }
-            });
+                        @Override
+                        public void onFailed(String type, String error)
+                        {
+                            mPresenter.onError(R.string.errorGetMamorPakhshLocations);
+                        }
+                    });
+                    break;
+
+                case gRPC:
+                    gpsDataPpcDAO.fetchGPSDataGrpc(mPresenter.getAppContext(), "ForoshandehRouteMapActivity","-1", String.valueOf(foroshandehMamorPakhshModel.getCcMamorPakhsh()), new RetrofitResponse()
+                    {
+                        @Override
+                        public void onSuccess(final ArrayList arrayListData)
+                        {
+                            Thread thread = new Thread()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    boolean deleteResult = gpsDataPpcDAO.deleteAll();
+                                    ArrayList<GPSDataModel> gpsDataModels = arrayListData;
+                                    for (GPSDataModel gpsDataModel : gpsDataModels)
+                                    {
+                                        gpsDataModel.setExtraProp_IsSend(1);
+                                    }
+                                    boolean insertResult = gpsDataPpcDAO.insertGroup(arrayListData);
+                                    if (deleteResult && insertResult)
+                                    {
+                                        gpsDataModels.addAll(arrayListData);
+
+                                        Message message = new Message();
+                                        message.arg1 = 1;
+                                        handler.sendMessage(message);
+                                    }
+                                    else
+                                    {
+                                        Message message = new Message();
+                                        message.arg1 = -1;
+                                        handler.sendMessage(message);
+                                    }
+                                }
+                            };
+                            thread.start();
+                        }
+                        @Override
+                        public void onFailed(String type, String error)
+                        {
+                            mPresenter.onError(R.string.errorGetMamorPakhshLocations);
+                        }
+                    });
+                    break;
+            }
+
         }
 
     }

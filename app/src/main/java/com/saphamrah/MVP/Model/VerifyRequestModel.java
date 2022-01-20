@@ -695,7 +695,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         darkhastFaktorModel.setModatRoozRaasGiri(modatRoozRaasGiri);
         darkhastFaktorModel.setModateVosol(Integer.valueOf(modatVosol));
         darkhastFaktorModel.setMablaghKolFaktor(sumMablaghKol);
-        darkhastFaktorModel.setMablaghKolDarkhast((int)sumMablaghKol);
+        darkhastFaktorModel.setMablaghKolDarkhast(sumMablaghKol);
         Log.d("verifyRequest" , "update faktor , sumMablaghKhales : " + sumMablaghKhales);
         darkhastFaktorModel.setMablaghKhalesFaktor(sumMablaghKhales);
         darkhastFaktorModel.setMablaghKhalesDarkhast(sumMablaghKhales);

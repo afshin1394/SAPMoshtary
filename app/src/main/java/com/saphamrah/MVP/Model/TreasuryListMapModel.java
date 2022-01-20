@@ -642,7 +642,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
                 double mablaghMandeh = darkhastFaktorModel.getMablaghKhalesFaktor();
                 ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels = dariaftPardakhtPPCDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
                 for (int i = 0; i < dariaftPardakhtPPCModels.size(); i++) {
-                    dariaftPardakhtPPCModels.get(i).setMablaghMandeh(mablaghMandeh - dariaftPardakhtPPCModels.get(i).getMablagh());
+                    dariaftPardakhtPPCModels.get(i).setMablaghMandeh((mablaghMandeh - dariaftPardakhtPPCModels.get(i).getMablagh())<=0?0:(mablaghMandeh - dariaftPardakhtPPCModels.get(i).getMablagh()));
                     mablaghMandeh =  dariaftPardakhtPPCModels.get(i).getMablaghMandeh();
                 }
                 try {
@@ -655,7 +655,12 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
                         for (int d = 0; d < dariaftPardakhtPPCModels.size(); d++) {
                             if (dariaftPardakhtDarkhastFaktorPPCs.get(i).getCcDariaftPardakht() == dariaftPardakhtPPCModels.get(d).getCcDariaftPardakht()) {
                                 if((d-1)<0)
-                                    mablaghMandeh = dariaftPardakhtPPCModels.get(d).getMablaghMandeh();
+                                {
+                                    if (dariaftPardakhtPPCModels.get(d).getMablaghMandeh() == 0)
+                                        mablaghMandeh = darkhastFaktorModel.getMablaghKhalesFaktor();
+                                    else
+                                        mablaghMandeh = dariaftPardakhtPPCModels.get(d).getMablaghMandeh();
+                                }
                                 else
                                     mablaghMandeh = dariaftPardakhtPPCModels.get(d-1).getMablaghMandeh();
                             }

@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/lblActivityTitle"
+            android:text="@string/printandShare"
             android:layout_centerInParent="true"
             fab:layout_constraintLeft_toLeftOf="parent"
             fab:layout_constraintRight_toRightOf="parent"

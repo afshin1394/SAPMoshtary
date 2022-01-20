@@ -447,6 +447,47 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
         }
     }
 
+    public boolean insertGroup(MoshtaryModel moshtaryModels)
+    {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        try
+        {
+                db.beginTransaction();
+
+                    moshtaryModels.setExtraProp_IsOld(1);
+                    ContentValues contentValues = modelToContentvalue(moshtaryModels , INSERT_OPERATION);
+                    db.insertOrThrow(MoshtaryModel.TableName() , null , contentValues);
+
+                db.setTransactionSuccessful();
+                db.endTransaction();
+                db.close();
+
+            return true;
+        }
+        catch (Exception exception)
+        {
+            String codeMoshtary = "";
+            if (moshtaryModels != null)
+            {
+                codeMoshtary = moshtaryModels.getCodeMoshtary();
+            }
+            exception.printStackTrace();
+            if (db.inTransaction())
+            {
+                db.endTransaction();
+            }
+            if (db.isOpen())
+            {
+                db.close();
+            }
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorGroupInsert , MoshtaryModel.TableName()) + "\n" + exception.toString() + " * CodeMoshtary : " + codeMoshtary + "*";
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "MoshtaryDAO" , "" , "insertGroup" , "");
+            return false;
+        }
+    }
+
 
     public long insert(MoshtaryModel moshtaryModel)
     {

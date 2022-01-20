@@ -63,6 +63,7 @@
     <string name="errorSendOtherData">خطا در ارسال سایر اطلاعات</string>
     <string name="successSendData">اطلاعات با موفقیت ارسال شد.</string>
     <string name="successSaveData">اطلاعات با موفقیت ثبت شد.</string>
+    <string name="successGetData">اطلاعات با موفقیت دریافت شد.</string>
     <string name="notFoundData">داده ای دریافت نشد.</string>
     <string name="unregisteredDeviceTitle">دستگاه ثبت نشده</string>
     <string name="unregisteredDevice">دستگاه شما در سیستم تعریف نشده است. لطفا با واحد کامپیوتر تماس بگیرید.</string>
@@ -1166,4 +1167,7 @@
     <string name="ReturnSeparationSucceed">تفکیک با موفقیت عودت داده شد</string>
     <string name="ReturnSeparationFailed">عودت تفکیک با خطا مواجه شد!</string>
     <string name="NotAllowedBecauseOfReturnedSeparation">شما به علت عودت تفکیک امروز خود قادر به ورود نیستید.</string>
+    <string name="mandehdarZangirei">وصول فاکتور معوق</string>
+    <string name="printandShare">چاپ فاکتور</string>
+
 </resources>

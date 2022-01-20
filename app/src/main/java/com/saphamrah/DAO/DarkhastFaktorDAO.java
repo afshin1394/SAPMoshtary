@@ -24,6 +24,7 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetDarkhastFaktorResult;
+import com.saphamrah.protos.InvoiceRequestByInvoiceRequestIDRequest;
 import com.saphamrah.protos.InvoiceRequestGrpc;
 import com.saphamrah.protos.InvoiceRequestReply;
 import com.saphamrah.protos.InvoiceRequestReplyList;
@@ -362,6 +363,137 @@ public class DarkhastFaktorDAO
         }
     }
 
+    public void fetchDarkhastFaktorByccDarkhastFaktorGrpc(final Context context, final String activityNameForLog,  final String ccDarkhastFaktor, final RetrofitResponse retrofitResponse) {
+        try {
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+
+            if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals("")) {
+                String message = "can't find server";
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, DarkhastFaktorDAO.class.getSimpleName(), activityNameForLog, "fetchDarkhastFaktorGrpc", "");
+                retrofitResponse.onFailed(Constants.HTTP_WRONG_ENDPOINT(), message);
+            } else {
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
+                ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
+                InvoiceRequestGrpc.InvoiceRequestBlockingStub invoiceRequestBlockingStub = InvoiceRequestGrpc.newBlockingStub(managedChannel);
+                InvoiceRequestByInvoiceRequestIDRequest invoiceRequestByInvoiceRequestIDRequest = InvoiceRequestByInvoiceRequestIDRequest.newBuilder().setInvoiceRequestID(ccDarkhastFaktor).build();
+                Callable<InvoiceRequestReplyList> invoiceRequestReplyListCallable = () -> invoiceRequestBlockingStub.getInvoiceRequestByInvoiceRequestID(invoiceRequestByInvoiceRequestIDRequest);
+                RxAsync.makeObservable(invoiceRequestReplyListCallable)
+                        .map(invoiceRequestReplyList -> {
+                            ArrayList<DarkhastFaktorModel> darkhastFaktorModels = new ArrayList<>();
+                            for (InvoiceRequestReply invoiceRequestReply : invoiceRequestReplyList.getInvoiceRequestsList()) {
+
+                                DarkhastFaktorModel darkhastFaktorModel = new DarkhastFaktorModel();
+
+                                darkhastFaktorModel.setCcDarkhastFaktor(invoiceRequestReply.getInvoiceRequestID());
+                                darkhastFaktorModel.setCcMoshtary(invoiceRequestReply.getCustomerID());
+                                darkhastFaktorModel.setTarikhFaktor(invoiceRequestReply.getInvoiceDate());
+                                darkhastFaktorModel.setShomarehDarkhast(invoiceRequestReply.getRequestNumber());
+                                darkhastFaktorModel.setShomarehFaktor(invoiceRequestReply.getInvoiceNumber());
+                                darkhastFaktorModel.setCcForoshandeh(invoiceRequestReply.getSellerID());
+                                darkhastFaktorModel.setTarikhErsal(invoiceRequestReply.getSendDate());
+                                darkhastFaktorModel.setModatRoozRaasGiri(invoiceRequestReply.getHeadingDayDuration());
+                                darkhastFaktorModel.setModateVosol(invoiceRequestReply.getReceiptDuration());
+                                darkhastFaktorModel.setCodeNoeVosolAzMoshtary(invoiceRequestReply.getCustomerReceiptCodeType());
+                                darkhastFaktorModel.setMablaghKhalesFaktor(invoiceRequestReply.getPureInvoicePrice());
+                                darkhastFaktorModel.setBeMasoliat(invoiceRequestReply.getToResponsibilityOf());
+                                darkhastFaktorModel.setCodeNoeHaml(invoiceRequestReply.getCarryingCodeType());
+                                darkhastFaktorModel.setSumMaliat(invoiceRequestReply.getTaxSum());
+                                darkhastFaktorModel.setSumAvarez(invoiceRequestReply.getComplicationsSum());
+                                darkhastFaktorModel.setSaatVorodBeMaghazeh(invoiceRequestReply.getShopEntranceTime());
+                                darkhastFaktorModel.setSaatKhorojAzMaghazeh(invoiceRequestReply.getShopExitTime());
+                                darkhastFaktorModel.setCodeVazeiat(invoiceRequestReply.getSituationCode());
+                                darkhastFaktorModel.setLatitude(invoiceRequestReply.getLatitude());
+                                darkhastFaktorModel.setLongitude(invoiceRequestReply.getLongitude());
+                                darkhastFaktorModel.setPPC_VersionNumber(invoiceRequestReply.getPPCVersionNumber());
+                                darkhastFaktorModel.setTakhfifNaghdy(invoiceRequestReply.getCashDiscount());
+                                darkhastFaktorModel.setCcDarkhastFaktor(invoiceRequestReply.getInvoiceRequestID());
+                                darkhastFaktorModel.setCcAddressMoshtary(invoiceRequestReply.getCustomerAddressID());
+                                darkhastFaktorModel.setMablaghKolFaktor(invoiceRequestReply.getInvoiceSumPrice());
+                                darkhastFaktorModel.setMablaghKolDarkhast(invoiceRequestReply.getRequestSumPrice());
+                                darkhastFaktorModel.setMarjoeeKamel(invoiceRequestReply.getCompleteReturn());
+                                darkhastFaktorModel.setNameNoeVosolAzMoshtary(invoiceRequestReply.getCustomerReceiptTypeName());
+                                darkhastFaktorModel.setNameNoeHaml(invoiceRequestReply.getCarryingNameType());
+                                darkhastFaktorModel.setNameNoeTahvil(invoiceRequestReply.getDeliveryTypeName());
+                                darkhastFaktorModel.setCcMarkazForosh(invoiceRequestReply.getSellCenterID());
+                                darkhastFaktorModel.setCcSazmanForosh(invoiceRequestReply.getSellOrganizationID());
+                                darkhastFaktorModel.setCcMarkazSazmanForosh(invoiceRequestReply.getSellOrganizationCenterID());
+                                darkhastFaktorModel.setCcMarkazSazmanForoshSakhtarForosh(invoiceRequestReply.getSellStructureSellOrganizationCenterID());
+                                darkhastFaktorModel.setCcMarkazAnbar(invoiceRequestReply.getStoreCenterID());
+                                darkhastFaktorModel.setModateTakhfif(invoiceRequestReply.getDiscountDuration());
+                                darkhastFaktorModel.setFaktorRooz(invoiceRequestReply.getTodayInvoice());
+                                darkhastFaktorModel.setMablaghVosol(invoiceRequestReply.getReceiptPrice());
+                                darkhastFaktorModel.setMablaghMandeh(invoiceRequestReply.getRemainingPrice());
+                                darkhastFaktorModel.setCcTafkikJoze(invoiceRequestReply.getPartialSeparationID());
+                                darkhastFaktorModel.setDarajeh(invoiceRequestReply.getDegree());
+                                darkhastFaktorModel.setCodeMarkaz(invoiceRequestReply.getCenterCode());
+                                darkhastFaktorModel.setForForosh(invoiceRequestReply.getForSell());
+                                darkhastFaktorModel.setForTasviehVosol(invoiceRequestReply.getForClearingTreasury());
+                                darkhastFaktorModel.setUniqID_Tablet(invoiceRequestReply.getTabletUniqueID());
+                                darkhastFaktorModel.setCodeMoshtary(invoiceRequestReply.getCustomerCode());
+                                darkhastFaktorModel.setNoeFaktorHavaleh(invoiceRequestReply.getDraftInvoiceType());
+                                darkhastFaktorModel.setCcUser(invoiceRequestReply.getUserID());
+                                darkhastFaktorModel.setCodeNoeVorod(invoiceRequestReply.getEnterCodeType());
+                                darkhastFaktorModel.setMablaghTakhfifDarkhastTitr(invoiceRequestReply.getInvoiceDiscountAmountTitle());
+                                darkhastFaktorModel.setMablaghTakhfifDarkhastSatr(invoiceRequestReply.getInvoiceDiscountAmountRow());
+                                darkhastFaktorModel.setMablaghEzafat(invoiceRequestReply.getExtrasPrice());
+                                darkhastFaktorModel.setModateVosol(invoiceRequestReply.getReceiptDuration());
+                                darkhastFaktorModel.setTarikhPishbinyTahvil(invoiceRequestReply.getDeliveryPredictDate());
+                                darkhastFaktorModel.setCcDarkhastFaktorNoeForosh(invoiceRequestReply.getSellTypeInvoiceRequestID());
+                                darkhastFaktorModel.setIsTajil(invoiceRequestReply.getIsAccelerated());
+                                darkhastFaktorModel.setIsTakhir(invoiceRequestReply.getIsDelayed());
+                                darkhastFaktorModel.setCcMoshtaryGhardad(invoiceRequestReply.getCustomerContractID());
+                                darkhastFaktorModel.setNameVazeiat(invoiceRequestReply.getSituationName());
+
+                                darkhastFaktorModels.add(darkhastFaktorModel);
+                            }
+
+                            return darkhastFaktorModels;
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ArrayList<DarkhastFaktorModel>>() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(@NonNull ArrayList<DarkhastFaktorModel> darkhastFaktorModels) {
+                                retrofitResponse.onSuccess(darkhastFaktorModels);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                e.printStackTrace();
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.toString(), DarkhastFaktorDAO.class.getSimpleName(), activityNameForLog, "fetchDarkhastFaktorGrpc", "CatchException");
+                                retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                                if (!compositeDisposable.isDisposed()) {
+                                    compositeDisposable.dispose();
+                                }
+                                compositeDisposable.clear();
+                            }
+                        });
+
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), DarkhastFaktorDAO.class.getSimpleName(), activityNameForLog, "fetchDarkhastFaktorGrpc", "CatchException");
+            retrofitResponse.onFailed(Constants.HTTP_EXCEPTION(), exception.getMessage());
+        }
+    }
+
+
+
     private String getEndpoint(Call call)
     {
         String endpoint = "";
@@ -429,6 +561,41 @@ public class DarkhastFaktorDAO
                 ContentValues contentValues = modelToContentvalue(darkhastFaktorModel);
                 db.insertOrThrow(DarkhastFaktorModel.TableName() , null , contentValues);
             }
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            if (db.inTransaction())
+            {
+                db.endTransaction();
+            }
+            if (db.isOpen())
+            {
+                db.close();
+            }
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorGroupInsert , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "insertGroup" , "");
+            return false;
+        }
+    }
+
+    public boolean insertGroup(DarkhastFaktorModel darkhastFaktorModel)
+    {
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try
+        {
+            db.beginTransaction();
+
+
+                ContentValues contentValues = modelToContentvalue(darkhastFaktorModel);
+                db.insertOrThrow(DarkhastFaktorModel.TableName() , null , contentValues);
+
             db.setTransactionSuccessful();
             db.endTransaction();
             db.close();

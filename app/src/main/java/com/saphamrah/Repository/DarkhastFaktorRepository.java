@@ -4,7 +4,11 @@ import android.content.Context;
 
 import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.Model.DarkhastFaktorModel;
+import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.Network.RxNetwork.RxHttpRequest;
 import com.saphamrah.Utils.RxUtils.RxAsync;
+import com.saphamrah.Utils.RxUtils.RxHttpErrorHandler;
+import com.saphamrah.WebService.RxService.APIServiceRxjava;
 
 import org.json.JSONArray;
 
@@ -35,10 +39,18 @@ public class DarkhastFaktorRepository {
     private Callable<Boolean> deleteAllCallable() {
         return () -> darkhastFaktorDAO.deleteAll();
     }
+    private Callable<Boolean> deleteByccDarkhastFaktorCallable(long ccDarkhastFaktor) {
+        return () -> darkhastFaktorDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
+    }
     private Callable<Boolean> insertGroupFromGetProgramCallable(ArrayList<DarkhastFaktorModel> darkhastFaktorModels,int noeMasouliat) {
         return () -> darkhastFaktorDAO.insertGroupFromGetProgram(darkhastFaktorModels,noeMasouliat);
 
     }
+    private Callable<Boolean> insertGroupCallable(DarkhastFaktorModel darkhastFaktorModel) {
+        return () -> darkhastFaktorDAO.insertGroup(darkhastFaktorModel);
+    }
+
+
 
     private Callable<String> getccDarkhastFaktorsByNoeFaktorHavaleRoozCallable(int ccNoeFaktor) {
         return () -> darkhastFaktorDAO.getccDarkhastFaktorsByNoeFaktorHavaleRooz(ccNoeFaktor);
@@ -67,8 +79,8 @@ public class DarkhastFaktorRepository {
         return () -> darkhastFaktorDAO.getAllByNoeFaktorHavaleAndNotCodeVazeiat(noeFaktorHavale,codeVaziat);
     }
 
-    private Callable<ArrayList<Integer>> getccMarkazSazmanForoshSakhtarForoshAllCallable() {
-        return () -> darkhastFaktorDAO.getccMarkazSazmanForoshSakhtarForoshAll();
+    private Callable<Integer> getccMarkazSazmanForoshSakhtarForoshAllCallable() {
+        return () -> darkhastFaktorDAO.getccMarkazSazmanForoshSakhtarForosh();
     }
 
     private Callable<String> getCcMoshtaryForZanjireCallable() {
@@ -90,10 +102,19 @@ public class DarkhastFaktorRepository {
                 .subscribeOn(Schedulers.io());
     }
 
+    public Observable<Boolean> deleteByccDarkhastFaktor(long ccDarkhastFaktor) {
+        return RxAsync.makeObservable(deleteByccDarkhastFaktorCallable(ccDarkhastFaktor))
+                .subscribeOn(Schedulers.io());
+    }
 
 
     public Observable<Boolean> insertGroupFromGetProgram(ArrayList<DarkhastFaktorModel> darkhastFaktorModels, int noeMasouliat) {
         return RxAsync.makeObservable(insertGroupFromGetProgramCallable(darkhastFaktorModels,noeMasouliat))
+                .subscribeOn(Schedulers.io());
+    }
+
+    public Observable<Boolean> insert(DarkhastFaktorModel darkhastFaktorModel) {
+        return RxAsync.makeObservable(insertGroupCallable(darkhastFaktorModel))
                 .subscribeOn(Schedulers.io());
     }
 
@@ -132,7 +153,7 @@ public class DarkhastFaktorRepository {
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<ArrayList<Integer>> getccMarkazSazmanForoshSakhtarForoshAll() {
+    public Observable<Integer> getccMarkazSazmanForoshSakhtarForoshAll() {
         return RxAsync.makeObservable(getccMarkazSazmanForoshSakhtarForoshAllCallable())
                 .subscribeOn(Schedulers.io());
     }
@@ -150,6 +171,20 @@ public class DarkhastFaktorRepository {
 
     public Observable<String> getAllccMoshtary() {
         return RxAsync.makeObservable(getAllccMoshtaryCallable())
+                .subscribeOn(Schedulers.io());
+    }
+
+    public Observable<ArrayList<DarkhastFaktorModel>> fetchDarkhastFaktorByccDarkhastFaktorServiceRx(ServerIpModel serverIpModel, String activityNameForLog, String ccDarkhastFaktor) {
+        APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
+
+        return apiServiceRxjava.getDarkhastFaktorByccDarkhastFaktor(ccDarkhastFaktor)
+                .compose(RxHttpErrorHandler.parseHttpErrors(this.getClass().getSimpleName(),activityNameForLog,"fetchApiServiceRx","getDarkhastFaktorByccDarkhastFaktor"))
+                .map(getAllDarkhastFaktorResult ->{
+                    if (getAllDarkhastFaktorResult.body().getData() !=null){
+                        return getAllDarkhastFaktorResult.body().getData();
+                    } else
+                        return new ArrayList<DarkhastFaktorModel>();
+                })
                 .subscribeOn(Schedulers.io());
     }
 

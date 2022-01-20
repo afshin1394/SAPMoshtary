@@ -390,7 +390,7 @@ public class DarkhastFaktorModel
     private int CodeVazeiat;
     @SerializedName("MablaghKolDarkhast")
     @Expose
-    private int MablaghKolDarkhast;
+    private double MablaghKolDarkhast;
     @SerializedName("MablaghTakhfifDarkhastTitr")
     @Expose
     private int MablaghTakhfifDarkhastTitr;
@@ -725,10 +725,10 @@ public class DarkhastFaktorModel
     public int getCodeVazeiat(){
         return this.CodeVazeiat;
     }
-    public void setMablaghKolDarkhast(int MablaghKolDarkhast){
+    public void setMablaghKolDarkhast(double MablaghKolDarkhast){
         this.MablaghKolDarkhast = MablaghKolDarkhast;
     }
-    public int getMablaghKolDarkhast(){
+    public double getMablaghKolDarkhast(){
         return this.MablaghKolDarkhast;
     }
     public void setMablaghTakhfifDarkhastTitr(int MablaghTakhfifDarkhastTitr){

@@ -110,6 +110,10 @@ public interface APIServiceRxjava {
     @GET("Api/ApiSales/GetDarkhastFaktor")
     Observable<Response<GetDarkhastFaktorResult>>getDarkhastFaktor(@Query("ccAfrad") String ccAfrad , @Query("ccMoshtarys") String ccMoshtarys);
 
+    @GET("Api/ApiSales/GetDarkhastFaktorByccDarkhastFaktor")
+    Observable<Response<GetDarkhastFaktorResult>>getDarkhastFaktorByccDarkhastFaktor(@Query("ccDarkhastFaktor") String ccDarkhastFaktor );
+
+
     @GET("Api/ApiSales/GetDarkhastFaktor_HavalehSatr")
     Observable<Response<GetDarkhastFaktorSatrResult>>getDarkhastFaktorSatr(@Query("Noe_Faktor_Havaleh") String noeFaktorHavaleh, @Query("ccDarkhastFaktors") String ccDarkhastFaktors);
 
@@ -222,6 +226,9 @@ public interface APIServiceRxjava {
     @GET("Api/ApiWareHouse/GetAllvKalaGoroh")
     Observable<Response<GetAllvKalaGorohResult>>getAllvKalaGoroh();
 
+    @GET("Api/apitablet/GetKalaOlaviatGheymat")
+    Observable<Response<GetKalaOlaviatGheymatResult>> getKalaOlaviatGheymat(@Query("ccAnbarak") String ccAnbarak , @Query("ccForoshandeh") int ccForoshandeh, @Query("ccMamorPakhsh") int ccMamorPakhsh, @Query("ccKalaCode") String ccKalaCode);
+
     @GET("Api/ApiSales/GetKalaZaribForosh")
     Observable<Response<GetAllvKalaZaribForoshResult>> getKalaZaribForosh(@Query("ccAnbarak") int ccAnbarak , @Query("ccForoshandeh") int ccForoshandeh, @Query("ccMamorPakhsh") int ccMamorPakhsh, @Query("ccGorohs") String ccGorohs);
 
@@ -276,7 +283,7 @@ public interface APIServiceRxjava {
 
     //P
     @GET("Api/ApiGlobal/GetPosShomarehHesab")
-    Observable<Response<GetPosShomarehHesabResult>>getPosShomarehHesab(@Query("ccPosShomarehHesab") String ccPosShomarehHesab);
+    Observable<Response<GetPosShomarehHesabResult>>getPosShomarehHesab(@Query("ccPosShomarehHesab") String ccPosShomarehHesab, @Query("ccMarkazAnbar") String ccMarkazAnbar);
 
     @GET("Api/ApiAmargar/GetPorseshnamehTozihat")
     Observable<Response<GetPorseshnamehTozihatResult>>getPorseshnamehTozihat();
