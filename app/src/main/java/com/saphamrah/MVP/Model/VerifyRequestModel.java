@@ -1,6 +1,9 @@
 package com.saphamrah.MVP.Model;
 
 
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
+
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -65,6 +68,7 @@ import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.NoeVosolMoshtaryModel;
 import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.RptKalaInfoModel;
+import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.TaghvimTatilModel;
 import com.saphamrah.Model.TakhfifHajmiSatrModel;
 import com.saphamrah.Model.TakhfifHajmiTitrSatrModel;
@@ -1606,38 +1610,79 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
     private void getMoshtaryEtebarSazmanForosh( MoshtaryModel moshtaryModel,  ForoshandehMamorPakhshModel foroshandehMamorPakhshModel,  int noeMasouliat)
     {
         final MoshtaryEtebarSazmanForoshDAO moshtaryEtebarSazmanForoshDAO = new MoshtaryEtebarSazmanForoshDAO(mPresenter.getAppContext());
-        moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForosh(mPresenter.getAppContext(), "VerifyRequestModel", String.valueOf(moshtaryModel.getCcMoshtary()), String.valueOf(foroshandehMamorPakhshModel.getCcSazmanForosh()), new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                if (arrayListData.size() > 0)
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        switch(serverIpModel.getWebServiceType()){
+            case REST:
+                moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForosh(mPresenter.getAppContext(), "VerifyRequestModel", String.valueOf(moshtaryModel.getCcMoshtary()), String.valueOf(foroshandehMamorPakhshModel.getCcSazmanForosh()), new RetrofitResponse()
                 {
-                    boolean deleteResult = moshtaryEtebarSazmanForoshDAO.deleteByccMoshtary(moshtaryModel.getCcMoshtary());
-                    boolean insertResult = moshtaryEtebarSazmanForoshDAO.insert((MoshtaryEtebarSazmanForoshModel) arrayListData.get(0));
-                    Log.d("updateEtebarMoshtary","deleteResult: " + deleteResult + " , insertResult: " + insertResult);
-                    Log.d("updateEtebarMoshtary","arrayListData: " + arrayListData.toString());
-                    if (deleteResult && insertResult)
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData)
                     {
-                        mPresenter.onSuccessUpdateMoshtaryEtebar();
+                        if (arrayListData.size() > 0)
+                        {
+                            boolean deleteResult = moshtaryEtebarSazmanForoshDAO.deleteByccMoshtary(moshtaryModel.getCcMoshtary());
+                            boolean insertResult = moshtaryEtebarSazmanForoshDAO.insert((MoshtaryEtebarSazmanForoshModel) arrayListData.get(0));
+                            Log.d("updateEtebarMoshtary","deleteResult: " + deleteResult + " , insertResult: " + insertResult);
+                            Log.d("updateEtebarMoshtary","arrayListData: " + arrayListData.toString());
+                            if (deleteResult && insertResult)
+                            {
+                                mPresenter.onSuccessUpdateMoshtaryEtebar();
+                            }
+                            else
+                            {
+                                mPresenter.onFailedUpdateMoshtaryEtebar();
+                            }
+                        }
+                        else
+                        {
+                            mPresenter.onFailedUpdateMoshtaryEtebar();
+                        }
                     }
-                    else
+                    @Override
+                    public void onFailed(String type, String error)
                     {
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "VerifyRequestModel", "VerifyRequestModel", "getMoshtaryEtebarSazmanForosh", "onFailed");
                         mPresenter.onFailedUpdateMoshtaryEtebar();
                     }
-                }
-                else
+                });
+                break;
+
+            case gRPC:
+                moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForoshGrpc(mPresenter.getAppContext(), "VerifyRequestModel", String.valueOf(moshtaryModel.getCcMoshtary()), String.valueOf(foroshandehMamorPakhshModel.getCcSazmanForosh()), new RetrofitResponse()
                 {
-                    mPresenter.onFailedUpdateMoshtaryEtebar();
-                }
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "VerifyRequestModel", "VerifyRequestModel", "getMoshtaryEtebarSazmanForosh", "onFailed");
-                mPresenter.onFailedUpdateMoshtaryEtebar();
-            }
-        });
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData)
+                    {
+                        if (arrayListData.size() > 0)
+                        {
+                            boolean deleteResult = moshtaryEtebarSazmanForoshDAO.deleteByccMoshtary(moshtaryModel.getCcMoshtary());
+                            boolean insertResult = moshtaryEtebarSazmanForoshDAO.insert((MoshtaryEtebarSazmanForoshModel) arrayListData.get(0));
+                            Log.d("updateEtebarMoshtary","deleteResult: " + deleteResult + " , insertResult: " + insertResult);
+                            Log.d("updateEtebarMoshtary","arrayListData: " + arrayListData.toString());
+                            if (deleteResult && insertResult)
+                            {
+                                mPresenter.onSuccessUpdateMoshtaryEtebar();
+                            }
+                            else
+                            {
+                                mPresenter.onFailedUpdateMoshtaryEtebar();
+                            }
+                        }
+                        else
+                        {
+                            mPresenter.onFailedUpdateMoshtaryEtebar();
+                        }
+                    }
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), "VerifyRequestModel", "VerifyRequestModel", "getMoshtaryEtebarSazmanForosh", "onFailed");
+                        mPresenter.onFailedUpdateMoshtaryEtebar();
+                    }
+                });
+                break;
+        }
+
     }
 
     interface OnCalculateDiscountResponse {

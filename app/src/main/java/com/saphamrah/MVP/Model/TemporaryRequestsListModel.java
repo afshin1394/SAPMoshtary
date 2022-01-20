@@ -2821,7 +2821,6 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         long ccDarkhastFaktor = customerDarkhastFaktorModel.getCcDarkhastFaktor();
         ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels = darkhastFaktorSatrDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
         DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
-        //todo ccsazmanforosh Faktor
         String ccSazmanForoshFaktor = String.valueOf(foroshandehMamorPakhshDAO.getIsSelect().getCcSazmanForosh());
         ArrayList<Integer> ccKalaCodesForUpdate = new ArrayList<>();
         for (DarkhastFaktorSatrModel darkhastFaktorSatrModel : darkhastFaktorSatrModels) {
@@ -2919,7 +2918,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                     break;
 
                 case gRPC:
-                    mandehMojodyMashinDAO.fetchMandehMojodyMashinGrpc(mPresenter.getAppContext(), TreasuryListMapActivity.class.getSimpleName(), ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh, new RetrofitResponse() {
+                    mandehMojodyMashinDAO.fetchMandehMojodyMashinGrpc(mPresenter.getAppContext(), TreasuryListMapActivity.class.getSimpleName(), ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh,ccKalaCodes,ccSazmanForoshFaktor, new RetrofitResponse() {
                         @Override
                         public void onSuccess(ArrayList arrayListData) {
                             ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels = new ArrayList<>();

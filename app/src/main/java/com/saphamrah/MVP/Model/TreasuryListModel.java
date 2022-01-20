@@ -1682,7 +1682,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                 break;
 
             case Constants.gRPC:
-                new MandehMojodyMashinDAO(mPresenter.getAppContext()).fetchMandehMojodyMashinGrpc(mPresenter.getAppContext(), TreasuryListMapActivity.class.getSimpleName(), ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh, new RetrofitResponse() {
+                new MandehMojodyMashinDAO(mPresenter.getAppContext()).fetchMandehMojodyMashinGrpc(mPresenter.getAppContext(), TreasuryListMapActivity.class.getSimpleName(), ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh , ccKalaCode,ccSazmanForosh, new RetrofitResponse() {
                     @Override
                     public void onSuccess(ArrayList arrayListData) {
                         updateMandehMojodiMashinTable(arrayListData, finalCcForoshandeh, ccAfrad,handler);

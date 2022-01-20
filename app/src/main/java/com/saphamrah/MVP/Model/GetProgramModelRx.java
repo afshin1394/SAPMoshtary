@@ -113,6 +113,8 @@ package com.saphamrah.MVP.Model;
 
 import static com.saphamrah.Utils.Constants.FAKTOR_GHATI;
 import static com.saphamrah.Utils.Constants.FAKTOR_HAVALEH;
+import static com.saphamrah.Utils.Constants.REST;
+import static com.saphamrah.Utils.Constants.gRPC;
 
 import android.os.Handler;
 import android.os.Message;
@@ -11512,30 +11514,65 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
     private void getMoshtaryEtebarSazmanForosh(final int getProgramType, final String ccMoshtarys, String ccSazmanForosh) {
         final MoshtaryEtebarSazmanForoshDAO moshtaryEtebarSazmanForoshDAO = new MoshtaryEtebarSazmanForoshDAO(mPresenter.getAppContext());
-        moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForosh(mPresenter.getAppContext(), activityNameForLog, ccMoshtarys, ccSazmanForosh, new RetrofitResponse() {
-            @Override
-            public void onSuccess(final ArrayList arrayListData) {
-                Thread thread = new Thread() {
-                    @Override
-                    public void run() {
-                        boolean deleteResult = moshtaryEtebarSazmanForoshDAO.deleteAll();
-                        boolean insertResult = moshtaryEtebarSazmanForoshDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult) {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
-                            getMoshtaryGoroh(getProgramType, ccMoshtarys);
-                        } else {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
-                        }
-                    }
-                };
-                thread.start();
-            }
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        switch (serverIpModel.getWebServiceType()){
+            case REST:
 
-            @Override
-            public void onFailed(String type, String error) {
-                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
-            }
-        });
+                moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForosh(mPresenter.getAppContext(), activityNameForLog, ccMoshtarys, ccSazmanForosh, new RetrofitResponse() {
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData) {
+                        Thread thread = new Thread() {
+                            @Override
+                            public void run() {
+                                boolean deleteResult = moshtaryEtebarSazmanForoshDAO.deleteAll();
+                                boolean insertResult = moshtaryEtebarSazmanForoshDAO.insertGroup(arrayListData);
+                                if (deleteResult && insertResult) {
+                                    sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                                    getMoshtaryGoroh(getProgramType, ccMoshtarys);
+                                } else {
+                                    sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+                                }
+                            }
+                        };
+                        thread.start();
+                    }
+
+                    @Override
+                    public void onFailed(String type, String error) {
+                        mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
+                    }
+                });
+                break;
+
+            case gRPC:
+                moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForoshGrpc(mPresenter.getAppContext(), activityNameForLog, ccMoshtarys, ccSazmanForosh, new RetrofitResponse() {
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData) {
+                        Thread thread = new Thread() {
+                            @Override
+                            public void run() {
+                                boolean deleteResult = moshtaryEtebarSazmanForoshDAO.deleteAll();
+                                boolean insertResult = moshtaryEtebarSazmanForoshDAO.insertGroup(arrayListData);
+                                if (deleteResult && insertResult) {
+                                    sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                                    getMoshtaryGoroh(getProgramType, ccMoshtarys);
+                                } else {
+                                    sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+                                }
+                            }
+                        };
+                        thread.start();
+                    }
+
+                    @Override
+                    public void onFailed(String type, String error) {
+                        mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
+                    }
+                });
+                break;
+
+        }
+
     }
 
 

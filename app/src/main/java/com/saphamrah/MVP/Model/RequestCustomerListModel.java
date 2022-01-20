@@ -342,38 +342,82 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
     private void getMoshtaryEtebarSazmanForosh(final MoshtaryModel moshtaryModel, final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, final int noeMasouliat)
     {
         final MoshtaryEtebarSazmanForoshDAO moshtaryEtebarSazmanForoshDAO = new MoshtaryEtebarSazmanForoshDAO(mPresenter.getAppContext());
-        moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForosh(mPresenter.getAppContext(), ACTIVITY_NAME_FOR_LOG, String.valueOf(moshtaryModel.getCcMoshtary()), String.valueOf(foroshandehMamorPakhshModel.getCcSazmanForosh()), new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                if (arrayListData.size() > 0)
+
+        //TODO alanbodo
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        switch(serverIpModel.getWebServiceType()){
+            case REST:
+                moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForosh(mPresenter.getAppContext(), ACTIVITY_NAME_FOR_LOG, String.valueOf(moshtaryModel.getCcMoshtary()), String.valueOf(foroshandehMamorPakhshModel.getCcSazmanForosh()), new RetrofitResponse()
                 {
-                    boolean deleteResult = moshtaryEtebarSazmanForoshDAO.deleteByccMoshtary(moshtaryModel.getCcMoshtary());
-                    boolean insertResult = moshtaryEtebarSazmanForoshDAO.insert((MoshtaryEtebarSazmanForoshModel) arrayListData.get(0));
-                    Log.d("updateEtebarMoshtary","deleteResult: " + deleteResult + " , insertResult: " + insertResult);
-                    Log.d("updateEtebarMoshtary","arrayListData: " + arrayListData.toString());
-                    if (deleteResult && insertResult)
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData)
                     {
-                        getRptListBargashty(foroshandehMamorPakhshModel.getCcForoshandeh(), noeMasouliat);
+                        if (arrayListData.size() > 0)
+                        {
+                            boolean deleteResult = moshtaryEtebarSazmanForoshDAO.deleteByccMoshtary(moshtaryModel.getCcMoshtary());
+                            boolean insertResult = moshtaryEtebarSazmanForoshDAO.insert((MoshtaryEtebarSazmanForoshModel) arrayListData.get(0));
+                            Log.d("updateEtebarMoshtary","deleteResult: " + deleteResult + " , insertResult: " + insertResult);
+                            Log.d("updateEtebarMoshtary","arrayListData: " + arrayListData.toString());
+                            if (deleteResult && insertResult)
+                            {
+                                getRptListBargashty(foroshandehMamorPakhshModel.getCcForoshandeh(), noeMasouliat);
+                            }
+                            else
+                            {
+                                mPresenter.onFailedUpdateMoshtaryEtebar();
+                            }
+                        }
+                        else
+                        {
+                            mPresenter.onFailedUpdateMoshtaryEtebar();
+                        }
                     }
-                    else
+                    @Override
+                    public void onFailed(String type, String error)
                     {
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), CLASS_NAME, ACTIVITY_NAME_FOR_LOG, "getMoshtaryEtebarSazmanForosh", "onFailed");
                         mPresenter.onFailedUpdateMoshtaryEtebar();
                     }
-                }
-                else
+                });
+                break;
+            case gRPC:
+                moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForoshGrpc(mPresenter.getAppContext(), ACTIVITY_NAME_FOR_LOG, String.valueOf(moshtaryModel.getCcMoshtary()), String.valueOf(foroshandehMamorPakhshModel.getCcSazmanForosh()), new RetrofitResponse()
                 {
-                    mPresenter.onFailedUpdateMoshtaryEtebar();
-                }
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), CLASS_NAME, ACTIVITY_NAME_FOR_LOG, "getMoshtaryEtebarSazmanForosh", "onFailed");
-                mPresenter.onFailedUpdateMoshtaryEtebar();
-            }
-        });
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData)
+                    {
+                        if (arrayListData.size() > 0)
+                        {
+                            boolean deleteResult = moshtaryEtebarSazmanForoshDAO.deleteByccMoshtary(moshtaryModel.getCcMoshtary());
+                            boolean insertResult = moshtaryEtebarSazmanForoshDAO.insert((MoshtaryEtebarSazmanForoshModel) arrayListData.get(0));
+                            Log.d("updateEtebarMoshtary","deleteResult: " + deleteResult + " , insertResult: " + insertResult);
+                            Log.d("updateEtebarMoshtary","arrayListData: " + arrayListData.toString());
+                            if (deleteResult && insertResult)
+                            {
+                                getRptListBargashty(foroshandehMamorPakhshModel.getCcForoshandeh(), noeMasouliat);
+                            }
+                            else
+                            {
+                                mPresenter.onFailedUpdateMoshtaryEtebar();
+                            }
+                        }
+                        else
+                        {
+                            mPresenter.onFailedUpdateMoshtaryEtebar();
+                        }
+                    }
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        setLogToDB(Constants.LOG_EXCEPTION(), String.format(" type : %1$s \n error : %2$s", type , error), CLASS_NAME, ACTIVITY_NAME_FOR_LOG, "getMoshtaryEtebarSazmanForosh", "onFailed");
+                        mPresenter.onFailedUpdateMoshtaryEtebar();
+                    }
+                });
+                break;
+
+
+        }
+
     }
 
     private void getRptListBargashty(int ccForoshandeh, int noeMasouliat)
@@ -525,12 +569,15 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
         MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(BaseApplication.getContext());
         int ccForoshandeh = foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh();
         String ccMasirs = masirDAO.getstrCcMasir();
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
 
-        moshtaryMorajehShodehRoozDAO.fetchMoshtaryMorajehShodehRooz(BaseApplication.getContext(), "RequestCustomerList", String.valueOf(ccForoshandeh), ccMasirs, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
+        switch (serverIpModel.getWebServiceType()){
+            case REST:
+                moshtaryMorajehShodehRoozDAO.fetchMoshtaryMorajehShodehRooz(BaseApplication.getContext(), "RequestCustomerList", String.valueOf(ccForoshandeh), ccMasirs, new RetrofitResponse()
+                {
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData)
+                    {
 
                         if (arrayListData.size() > 0)
                         {
@@ -553,27 +600,71 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                             mPresenter.onFailUpdateMoshtaryMorajehShodehRooz();
                         }
 
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onFailUpdateMoshtaryMorajehShodehRooz();
-                setLogToDB(LogPPCModel.LOG_EXCEPTION, String.format(" type : %1$s \n error : %2$s", type , error), CLASS_NAME, "", "updateMoshtaryMorajehShodehRooz", "");
+                    }
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onFailUpdateMoshtaryMorajehShodehRooz();
+                        setLogToDB(LogPPCModel.LOG_EXCEPTION, String.format(" type : %1$s \n error : %2$s", type , error), CLASS_NAME, "", "updateMoshtaryMorajehShodehRooz", "");
 
-            }
-        });
+                    }
+                });
+                break;
+
+            case gRPC:
+                moshtaryMorajehShodehRoozDAO.fetchMoshtaryMorajehShodehRoozGrpc(BaseApplication.getContext(), "RequestCustomerList", String.valueOf(ccForoshandeh), ccMasirs, new RetrofitResponse()
+                {
+                    @Override
+                    public void onSuccess(final ArrayList arrayListData)
+                    {
+
+                        if (arrayListData.size() > 0)
+                        {
+                            boolean deleteResult = moshtaryMorajehShodehRoozDAO.deleteAll();
+                            boolean insertResult = moshtaryMorajehShodehRoozDAO.insertGroup(arrayListData);
+                            if (deleteResult && insertResult)
+                            {
+                                getCustomers();
+                                mPresenter.onUpdateMoshtaryMorajehShodehRooz();
+                            }
+                            else
+                            {
+                                getCustomers();
+                                mPresenter.onFailUpdateMoshtaryMorajehShodehRooz();
+                            }
+                        }
+                        else
+                        {
+                            getCustomers();
+                            mPresenter.onFailUpdateMoshtaryMorajehShodehRooz();
+                        }
+
+                    }
+                    @Override
+                    public void onFailed(String type, String error)
+                    {
+                        mPresenter.onFailUpdateMoshtaryMorajehShodehRooz();
+                        setLogToDB(LogPPCModel.LOG_EXCEPTION, String.format(" type : %1$s \n error : %2$s", type , error), CLASS_NAME, "", "updateMoshtaryMorajehShodehRooz", "");
+
+                    }
+                });
+                break;
+
+        }
+
+
     }
 
-   private void updateOlaviat(){
-       MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(BaseApplication.getContext());
-       OlaviatMorajehModel olaviatMorajehModel = moshtaryMorajehShodehRoozDAO.getOlaviatMorajeh();
+    private void updateOlaviat(){
+        MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(BaseApplication.getContext());
+        OlaviatMorajehModel olaviatMorajehModel = moshtaryMorajehShodehRoozDAO.getOlaviatMorajeh();
 
-       LastOlaviatMoshtaryShared lastOlaviatMoshtaryShared = new LastOlaviatMoshtaryShared(mPresenter.getAppContext());
-       lastOlaviatMoshtaryShared.removeAll();
+        LastOlaviatMoshtaryShared lastOlaviatMoshtaryShared = new LastOlaviatMoshtaryShared(mPresenter.getAppContext());
+        lastOlaviatMoshtaryShared.removeAll();
 
-       lastOlaviatMoshtaryShared.putInt(LastOlaviatMoshtaryShared.OLAVIAT, olaviatMorajehModel.getOlaviat());
-       lastOlaviatMoshtaryShared.putInt(LastOlaviatMoshtaryShared.CCMOSHTARY, olaviatMorajehModel.getCcMoshtary());
-       lastOlaviatMoshtaryShared.putString(LastOlaviatMoshtaryShared.TARIKH, new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date()));
+        lastOlaviatMoshtaryShared.putInt(LastOlaviatMoshtaryShared.OLAVIAT, olaviatMorajehModel.getOlaviat());
+        lastOlaviatMoshtaryShared.putInt(LastOlaviatMoshtaryShared.CCMOSHTARY, olaviatMorajehModel.getCcMoshtary());
+        lastOlaviatMoshtaryShared.putString(LastOlaviatMoshtaryShared.TARIKH, new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date()));
     }
 
     interface OnCheckSelectedCustomerResponse
@@ -1197,7 +1288,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                             {
                                 isMorajehShodeh = 1;
                             }
-							int zaribKharejAzMahalMetr = 0;
+                            int zaribKharejAzMahalMetr = 0;
                             int GPSEnable = 1;
 
                             try
@@ -1499,77 +1590,81 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             String finalCcForoshandeh = ccForoshandeh;
             ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(weakReferenceContext.get());
 
-            switch (serverIpModel.getWebServiceType()){
-
-                case REST:
-                    APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
-                    apiServiceRxjava.getMandehMojodyMashin(ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh, ccKalaCode, ccSazmanForosh)
-                            .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, "RequestCustomerListActivity", "getAllKalaApis", "getMojodyAnbar"))
-                            .subscribeOn(Schedulers.io())
-                            .subscribe(new Observer<Response<GetMandehMojodyMashinResponse>>() {
-                                @Override
-                                public void onSubscribe(Disposable d) {
-                                    compositeDisposable.add(d);
-                                }
-
-                                @Override
-                                public void onNext(Response<GetMandehMojodyMashinResponse> getMandehMojodyMashinResponseResponse) {
-                                    if (getMandehMojodyMashinResponseResponse.body()!=null)
-                                    updateMandehMojodiMashinTable(getMandehMojodyMashinResponseResponse.body().getMandehMojodyMashinModels(), finalCcForoshandeh, ccAfrad);
-                                    else
-                                        onError(new Throwable(weakReferenceContext.get().getString(R.string.resultIsNull)));
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-                                    Log.i("MandehMojodiOnline", "onError: "+ e.getMessage());
-                                    publishProgress(-4);
-                                }
-
-                                @Override
-                                public void onComplete() {
-                                    Log.i("MandehMojodiOnline", "onComplete: ");
-
-                                }
-                            });
-                    break;
 
 
-                case gRPC:
-                    mandehMojodyMashinDAO.fetchMandehMojodyMashinGrpc(weakReferenceContext.get(), TreasuryListMapActivity.class.getSimpleName(), ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh, new RetrofitResponse() {
-                        @Override
-                        public void onSuccess(ArrayList arrayListData) {
-                            updateMandehMojodiMashinTable(arrayListData, finalCcForoshandeh, ccAfrad);
+           switch (serverIpModel.getWebServiceType()){
+               case REST:
+                   APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
+                   apiServiceRxjava.getMandehMojodyMashin(ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh, ccKalaCode, ccSazmanForosh)
+                           .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, "RequestCustomerListActivity", "getAllKalaApis", "getMojodyAnbar"))
+                           .subscribeOn(Schedulers.io())
+                           .subscribe(new Observer<Response<GetMandehMojodyMashinResponse>>() {
+                               @Override
+                               public void onSubscribe(Disposable d) {
+                                   compositeDisposable.add(d);
+                               }
 
-                        }
+                               @Override
+                               public void onNext(Response<GetMandehMojodyMashinResponse> getMandehMojodyMashinResponseResponse) {
+                                   if (getMandehMojodyMashinResponseResponse.body()!=null) {
 
-                        @Override
-                        public void onFailed(String type, String error) {
-                           publishProgress(-4);
+                                       updateMandehMojodiMashinTable(getMandehMojodyMashinResponseResponse.body().getMandehMojodyMashinModels(), finalCcForoshandeh, ccAfrad);
+                                   }
+                                   else{
+                                       publishProgress(-4);
+                                   }
+                               }
 
-                        }
-                    });
-                    break;
-            }
+                               @Override
+                               public void onError(Throwable e) {
+                                   Log.i("MandehMojodiOnline", "onError: ");
+                               }
 
+                               @Override
+                               public void onComplete() {
+                                   Log.i("MandehMojodiOnline", "onComplete: ");
 
+                               }
+                           });
+                   break;
+
+               case gRPC:
+                   String finalCcForoshandeh1 = ccForoshandeh;
+                   new MandehMojodyMashinDAO(weakReferenceContext.get()).
+                   fetchMandehMojodyMashinGrpc(weakReferenceContext.get(), TreasuryListMapActivity.class.getSimpleName(), ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh,ccKalaCode,ccSazmanForosh, new RetrofitResponse() {
+                       @Override
+                       public void onSuccess(ArrayList arrayListData) {
+                           updateMandehMojodiMashinTable(arrayListData, finalCcForoshandeh1, ccAfrad);
+
+                       }
+
+                       @Override
+                       public void onFailed(String type, String error) {
+
+                       }
+                   });
+                   break;
+           }
 
 
         }
 
-        private void updateMandehMojodiMashinTable(ArrayList<MandehMojodyMashinModel> models,String ccForoshandeh,String ccAfrad) {
+        private void updateMandehMojodiMashinTable(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels,String ccForoshandeh,String ccAfrad) {
 
                 MandehMojodyMashinRepository mandehMojodyMashinRepository = new MandehMojodyMashinRepository(weakReferenceContext.get());
                 Disposable disposable = mandehMojodyMashinRepository.deleteAll()
                         .subscribe(deleteAll -> {
                             if (deleteAll) {
 
-                                Disposable insertGroup = mandehMojodyMashinRepository.insertGroup(models)
-                                        .subscribe(insertGroup1 -> {
-                                            if (insertGroup1) {
-                                                updateKalaMojodiTable(models, Integer.parseInt(ccForoshandeh), Integer.parseInt(ccAfrad));
-                                            } else {
-                                                publishProgress(-4);
+                                Disposable insertGroup = mandehMojodyMashinRepository.insertGroup(mandehMojodyMashinModels)
+                                        .subscribe(new Consumer<Boolean>() {
+                                            @Override
+                                            public void accept(Boolean insertGroup) throws Exception {
+                                                if (insertGroup) {
+                                                    updateKalaMojodiTable(mandehMojodyMashinModels, Integer.parseInt(ccForoshandeh), Integer.parseInt(ccAfrad));
+                                                } else {
+                                                    publishProgress(-4);
+                                                }
                                             }
                                         }, throwable -> publishProgress(-4));
                                 compositeDisposable.add(insertGroup);
@@ -1610,9 +1705,9 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                             }
 
 
-                            ).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                       .subscribe(new Observer<KalaMojodiModel>() {
+                    ).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<KalaMojodiModel>() {
                         @Override
                         public void onSubscribe( Disposable d) {
                             compositeDisposable.add(d);
@@ -1621,13 +1716,13 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
                         @Override
                         public void onNext( KalaMojodiModel kalaMojodiModel) {
-                           kalaMojodiModels.add(kalaMojodiModel);
+                            kalaMojodiModels.add(kalaMojodiModel);
                         }
 
                         @Override
                         public void onError( Throwable e) {
                             Log.i("MandehMojodiOnline", "onError: ");
-                           publishProgress(-4);
+                            publishProgress(-4);
                         }
 
                         @Override
@@ -1651,7 +1746,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                                             publishProgress(-4);
                                         }
                                     }, throwable -> publishProgress(-4));
-                          compositeDisposable.add(delete);
+                            compositeDisposable.add(delete);
                         }
                     });
 
@@ -1727,7 +1822,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 catch (Exception exception)
                 {
                     exception.printStackTrace();
-					return false;
+                    return false;
                 }
                 shared.putString(shared.getLatitude(), String.valueOf(latitude));
                 shared.putString(shared.getLongitude(), String.valueOf(longitude));
@@ -1758,7 +1853,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 shared.putBoolean(shared.getHaveMojoodiGiri(), haveMojoodiGiri);
 
                 //------------------------------------- MoshtaryGoroh..-------------------------------------
-				shared.putInt(shared.getCcGorohNoeMoshtary(), moshtary.getCcNoeMoshtary());
+                shared.putInt(shared.getCcGorohNoeMoshtary(), moshtary.getCcNoeMoshtary());
                 shared.putInt(shared.getCcGorohNoeSenf(), moshtary.getCcNoeSenf());
 
                 //SystemConfigDAO systemConfigDAO = new SystemConfigDAO(weakReferenceContext.get());

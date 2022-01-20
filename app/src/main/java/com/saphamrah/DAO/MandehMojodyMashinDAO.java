@@ -82,18 +82,17 @@ public class MandehMojodyMashinDAO
             MandehMojodyMashinModel.COLUMN_ccTaminKonandeh(),
             MandehMojodyMashinModel.COLUMN_Max_Mojody(),
             MandehMojodyMashinModel.COLUMN_Max_MojodyByShomarehBach(),
-            MandehMojodyMashinModel.COLUMN_IsAdamForosh()
+            MandehMojodyMashinModel.COLUMN_IsAdamForosh(),
         };
     }
 
 
-    public void fetchMandehMojodyMashinGrpc(final Context context, final String activityNameForLog, final String ccAnbarak, String ccForoshandeh, String ccMamorPakhsh, final RetrofitResponse retrofitResponse)
+    public void fetchMandehMojodyMashinGrpc(final Context context, final String activityNameForLog, final String ccAnbarak, String ccForoshandeh, String ccMamorPakhsh, String ccKalaCode, String ccSazmanForosh, final RetrofitResponse retrofitResponse)
     {
         try {
 
 
             ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
-            serverIpModel.setPort("5000");
 
 
             if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
@@ -108,7 +107,7 @@ public class MandehMojodyMashinDAO
                 CompositeDisposable compositeDisposable = new CompositeDisposable();
                 ManagedChannel managedChannel = GrpcChannel.channel(serverIpModel);
                 RemainingInventoryGrpc.RemainingInventoryBlockingStub remainingInventoryBlockingStub = RemainingInventoryGrpc.newBlockingStub(managedChannel);
-                RemainingInventoryRequest remainingInventoryRequest = RemainingInventoryRequest.newBuilder().setSellerID(ccForoshandeh).setDistributerID(ccMamorPakhsh).setBinID(ccAnbarak).build();
+                RemainingInventoryRequest remainingInventoryRequest = RemainingInventoryRequest.newBuilder().setSellerID(ccForoshandeh).setDistributerID(ccMamorPakhsh).setBinID(ccAnbarak).setGoodCodeID(ccKalaCode).setSellOrganizationID(ccSazmanForosh).build();
 
                 Callable<RemainingInventoryReplyList> getRemainingInventoryCallable  = () -> remainingInventoryBlockingStub.getRemainingInventory(remainingInventoryRequest);
                 RxAsync.makeObservable(getRemainingInventoryCallable)
@@ -129,7 +128,7 @@ public class MandehMojodyMashinDAO
                                 mandehMojodyMashinModel.setGheymatForosh(remainingInventoryReply.getSellPrice());
                                 mandehMojodyMashinModel.setCcTaminKonandeh(remainingInventoryReply.getProviderID());
                                 mandehMojodyMashinModel.setMaxMojody(remainingInventoryReply.getMaxInventory());
-                                mandehMojodyMashinModel.setMax_MojodyByShomarehBach(0);
+                                mandehMojodyMashinModel.setMax_MojodyByShomarehBach(remainingInventoryReply.getMaxInventoryByBachNumber());
                                 mandehMojodyMashinModel.setIsAdamForosh(remainingInventoryReply.getIsNonSale());
 
 

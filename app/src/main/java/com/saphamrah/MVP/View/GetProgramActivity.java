@@ -29,7 +29,9 @@ import com.sackcentury.shinebuttonlib.ShineButton;
 import com.saphamrah.Adapter.AddCustomerAdapter;
 import com.saphamrah.Adapter.GetProgramAdapter;
 import com.saphamrah.Adapter.GetProgramItemsStatusAdapter;
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.GetProgramMVP;
+import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.MVP.Presenter.GetProgramPresenter;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.PubFunc.PubFunc;
@@ -209,6 +211,8 @@ public class GetProgramActivity extends AppCompatActivity implements GetProgramM
         lstview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //int MinPpiDisplayForAnimationValue = Integer.parseInt( new ParameterChildDAO(BaseApplication.getContext()).getValueByccChildParameter(Constants.CC_CHILD_Min_Ppi_Display_For_Animation()));
+
                 if (((FoldingCell) view).isUnfolded()) {
                     ((FoldingCell) view).fold(false);
                     adapter.registerFold(position);

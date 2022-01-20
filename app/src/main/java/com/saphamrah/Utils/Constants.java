@@ -689,7 +689,7 @@ public class Constants
     public static final int CC_CHILD_Check_Mandeh_Faktor_Is_Zero_For_Naghd_Before_Send_Vosol = 187;
     public static final int CC_CHILD_Check_Send_Marjoee_Before_Send_Vosol = 188;
     public static final int CC_CHILD_Check_Modat_RassGiri_Before_Send_Vosol = 189;
-
+    public static final int CC_CHILD_Min_Ppi_Display_For_Animation = 190;
 
 
     public static String NOE_SHAKHSIAT()
@@ -1140,6 +1140,11 @@ public class Constants
     {
         return CC_CHILD_Check_Modat_RassGiri_Before_Send_Vosol;
     }
+    public static int CC_CHILD_Min_Ppi_Display_For_Animation()
+    {
+        return CC_CHILD_Min_Ppi_Display_For_Animation;
+    }
+
     public static int CC_CHILD_CHECK_LOCATION_IN_POLYGON_FOR_NEW_CUSTOMER()
     {
         return CC_CHILD_CHECK_LOCATION_IN_POLYGON_FOR_NEW_CUSTOMER;

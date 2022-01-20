@@ -5,36 +5,38 @@ option java_multiple_files = true;
 option java_package = "com.saphamrah.protos";
 option java_outer_classname = "RemainingInventoryProto";
 option objc_class_prefix = "HLW";
-
-package Warehouse;
-
 service RemainingInventory {
   rpc GetRemainingInventory (RemainingInventoryRequest) returns (RemainingInventoryReplyList);
 }
 
 message RemainingInventoryRequest {
-    string BinID = 1;
-    string SellerID = 2;
-    string DistributerID = 3;
+
+  string BinID = 1;
+  string SellerID = 2;
+  string DistributerID = 3;
+  string GoodCodeID = 4;
+  string SellOrganizationID = 5;
 
 }
 
 message RemainingInventoryReply {
 
-       int32	GoodCodeID = 1;
-       int32	GoodTypeCode = 2;
-       int32	Inventory = 3;
-       string	BachNumber = 4;
-       string	ProductionDate = 5;
-       int32	ConsumerPrice = 6;
-       int32	SellPrice = 7;
-       int32	ProviderID = 8;
-       int32	MaxInventory = 9;
-       int32	IsNonSale = 10;
+  int32	GoodCodeID = 1;
+  int32	GoodTypeCode = 2;
+  int32	Inventory = 3;
+  string	BachNumber = 4;
+  string	ProductionDate = 5;
+  int32	ConsumerPrice = 6;
+  int32	SellPrice = 7;
+  int32	ProviderID = 8;
+  int32	MaxInventory = 9;
+  int32	MaxInventoryByBachNumber = 10;
+  int32	IsNonSale = 11;
+  string ExpirationDate = 12;
 
- 
+
 }
 
 message RemainingInventoryReplyList{
-	repeated RemainingInventoryReply RemainingInventories = 1;
+  repeated RemainingInventoryReply RemainingInventories = 1;
 }

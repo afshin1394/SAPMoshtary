@@ -317,56 +317,121 @@ public class CustomersListMapModel implements CustomerListMapMVP.ModelOps
     private void getMoshtaryEtebar(final ListMoshtarianModel listMoshtarianModel , String ccSazmanForosh)
     {
         final MoshtaryEtebarSazmanForoshDAO moshtaryEtebarSazmanForoshDAO = new MoshtaryEtebarSazmanForoshDAO(mPresenter.getAppContext());
-        moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForosh(mPresenter.getAppContext(), "CustomersListActivity", String.valueOf(listMoshtarianModel.getCcMoshtary()), ccSazmanForosh, new RetrofitResponse() {
-            @Override
-            public void onSuccess(ArrayList arrayListData) {
-                moshtaryEtebarSazmanForoshDAO.deleteByccMoshtary(listMoshtarianModel.getCcMoshtary());
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
 
-                if (moshtaryEtebarSazmanForoshDAO.insertGroup(arrayListData))
-                {
-                    sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                    sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
+        switch (serverIpModel.getWebServiceType()){
+            case REST:
+                moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForosh(mPresenter.getAppContext(), "CustomersListActivity", String.valueOf(listMoshtarianModel.getCcMoshtary()), ccSazmanForosh, new RetrofitResponse() {
+                    @Override
+                    public void onSuccess(ArrayList arrayListData) {
+                        moshtaryEtebarSazmanForoshDAO.deleteByccMoshtary(listMoshtarianModel.getCcMoshtary());
 
-                    getBargashty(listMoshtarianModel);
-                }
-            }
+                        if (moshtaryEtebarSazmanForoshDAO.insertGroup(arrayListData))
+                        {
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
 
-            @Override
-            public void onFailed(String type, String error) {
-                PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(() -> {
-                    mPresenter.onFailedGetNewItem(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
+                            getBargashty(listMoshtarianModel);
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(String type, String error) {
+                        PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(() -> {
+                            mPresenter.onFailedGetNewItem(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
+                        });
+                    }
                 });
-            }
-        });
+                break;
+
+            case gRPC:
+                moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForoshGrpc(mPresenter.getAppContext(), "CustomersListActivity", String.valueOf(listMoshtarianModel.getCcMoshtary()), ccSazmanForosh, new RetrofitResponse() {
+                    @Override
+                    public void onSuccess(ArrayList arrayListData) {
+                        moshtaryEtebarSazmanForoshDAO.deleteByccMoshtary(listMoshtarianModel.getCcMoshtary());
+
+                        if (moshtaryEtebarSazmanForoshDAO.insertGroup(arrayListData))
+                        {
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
+
+                            getBargashty(listMoshtarianModel);
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(String type, String error) {
+                        PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(() -> {
+                            mPresenter.onFailedGetNewItem(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
+                        });
+                    }
+                });
+
+                break;
+
+        }
+
     }
 
 
     private void getBargashty(final ListMoshtarianModel listMoshtarianModel)
     {
         final BargashtyDAO bargashtyDAO = new BargashtyDAO(mPresenter.getAppContext());
-        bargashtyDAO.fetchBargashty(mPresenter.getAppContext(), "CustomersListActivity", String.valueOf(ccForoshandeh), new RetrofitResponse() {
-            @Override
-            public void onSuccess(ArrayList arrayListData)
-            {
-                bargashtyDAO.deleteByccMoshtary(listMoshtarianModel.getCcMoshtary());
-                for ( int i=0 ; i < arrayListData.size() ; i++ )
-                {
-                    Log.d("GetcustomerInfo" , "BargashtyModel:" + ((BargashtyModel)arrayListData.get(i)).toString());
-                }
-                if (bargashtyDAO.insertGroup(arrayListData))
-                {
-                    sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                    getMoshtaryParent(listMoshtarianModel);
-                }
-            }
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+        switch (serverIpModel.getWebServiceType()){
+            case REST:
+                bargashtyDAO.fetchBargashty(mPresenter.getAppContext(), "CustomersListActivity", String.valueOf(ccForoshandeh), new RetrofitResponse() {
+                    @Override
+                    public void onSuccess(ArrayList arrayListData)
+                    {
+                        bargashtyDAO.deleteByccMoshtary(listMoshtarianModel.getCcMoshtary());
+                        for ( int i=0 ; i < arrayListData.size() ; i++ )
+                        {
+                            Log.d("GetcustomerInfo" , "BargashtyModel:" + ((BargashtyModel)arrayListData.get(i)).toString());
+                        }
+                        if (bargashtyDAO.insertGroup(arrayListData))
+                        {
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
+                            getMoshtaryParent(listMoshtarianModel);
+                        }
+                    }
 
-            @Override
-            public void onFailed(String type, String error) {
-                PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(() -> {
-                    mPresenter.onFailedGetNewItem(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
+                    @Override
+                    public void onFailed(String type, String error) {
+                        PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(() -> {
+                            mPresenter.onFailedGetNewItem(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
+                        });
+                    }
                 });
-            }
-        });
+                break;
+
+            case gRPC:
+                bargashtyDAO.fetchBargashtyGrpc(mPresenter.getAppContext(), "CustomersListActivity", String.valueOf(ccForoshandeh), new RetrofitResponse() {
+                    @Override
+                    public void onSuccess(ArrayList arrayListData)
+                    {
+                        bargashtyDAO.deleteByccMoshtary(listMoshtarianModel.getCcMoshtary());
+                        for ( int i=0 ; i < arrayListData.size() ; i++ )
+                        {
+                            Log.d("GetcustomerInfo" , "BargashtyModel:" + ((BargashtyModel)arrayListData.get(i)).toString());
+                        }
+                        if (bargashtyDAO.insertGroup(arrayListData))
+                        {
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
+                            getMoshtaryParent(listMoshtarianModel);
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(String type, String error) {
+                        PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(() -> {
+                            mPresenter.onFailedGetNewItem(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
+                        });
+                    }
+                });
+                break;
+        }
+
     }
 
 
