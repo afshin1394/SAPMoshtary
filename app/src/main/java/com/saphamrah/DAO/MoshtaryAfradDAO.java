@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 
 import androidx.annotation.NonNull;
@@ -171,6 +172,7 @@ public class MoshtaryAfradDAO
         else
         {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Log.d("getprogram afrad",ccMoshtarys);
             Call<GetAllvMoshtaryAfradResult> call = apiServiceGet.getAllvMoshtaryAfrad(ccMoshtarys);
             call.enqueue(new Callback<GetAllvMoshtaryAfradResult>() {
                 @Override

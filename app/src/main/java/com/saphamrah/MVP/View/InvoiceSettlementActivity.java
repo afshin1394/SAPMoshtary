@@ -1123,9 +1123,10 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
     }
 
     @Override
-    public void showDataOfCheckFromScanner(String checkHesabNumber, String checkCodeShobe, String sayyadId) {
+    public void showDataOfCheckFromScanner(String checkHesabNumber, String checkCodeShobe, String sayyadId, String checkNumber) {
         editTextCheckHesabNumber.setText(checkHesabNumber);
         editTextCheckCodeShobe.setText(checkCodeShobe);
+        editTextCheckNumber.setText(checkNumber);
         editTextCheckNumber.setFocusable(true);
         editTextCheckNumber.setFocusableInTouchMode(true);
         editTextCheckNumber.findFocus();

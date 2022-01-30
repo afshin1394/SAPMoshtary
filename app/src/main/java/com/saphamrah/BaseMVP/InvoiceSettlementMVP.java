@@ -34,7 +34,7 @@ public interface InvoiceSettlementMVP
         void showVosolResidInfo(int codeNoevosol);
         void showZeroRemainCostAlert();
         void onSuccessCheckRemainCost();
-		void showDataOfCheckFromScanner(String checkHesabNumber, String checkCodeShobe, String sayyadId);
+		void showDataOfCheckFromScanner(String checkHesabNumber, String checkCodeShobe, String sayyadId, String checkNumber);
         void onGetBank(BankModel bankModel);								
         void showToast(int resId, int messageType , int duration);
         void showAlert(int resId , int messageType);

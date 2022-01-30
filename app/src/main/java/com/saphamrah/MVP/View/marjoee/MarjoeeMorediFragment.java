@@ -68,7 +68,7 @@ public class MarjoeeMorediFragment extends Fragment implements MarjoeeMorediMVP.
         TextView lblActivityTitle = getActivity().findViewById(R.id.lblActivityTitle);
         searchView = getActivity().findViewById(R.id.searchView);
 
-        lblActivityTitle.setText("مرجوعی موردی");
+        lblActivityTitle.setText(getResources().getString(R.string.marjoeeMoredi));
         return inflater.inflate(R.layout.fragment_marjoee_foroshandeh, container, false);
     }
 

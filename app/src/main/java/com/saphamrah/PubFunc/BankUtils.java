@@ -166,6 +166,18 @@ public class BankUtils
         }
     }
 
+    public static String getNumber(String checkNumber)
+    {
+        if (checkNumber != null && checkNumber.trim().length() > 0)
+        {
+            return  checkNumber;
+        }
+        else
+        {
+            return "";
+        }
+    }
+
 
     private CheckInfo parseCheckInfo(String rawCheckInfo , HashMap<String,String> hashMapBanks)
     {

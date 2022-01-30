@@ -960,9 +960,12 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                         boolean insertResult = moshtaryDAO.insertGroup(arrayListData);
                         boolean updateOlaviatResult = moshtaryDAO.updateExtraOlaviatFromOlaviat();
                         boolean updateToorVisitResult = true;//moshtaryDAO.updateToorVisitMoshtary();
+                        Log.d("getProgram",deleteResult +","+ insertResult +","+ updateOlaviatResult +","+ updateToorVisitResult);
                         if (deleteResult && insertResult && updateOlaviatResult && updateToorVisitResult) {
                             for (int i = 0; i < arrayListData.size(); i++) {
                                 ccMoshtarys += ((MoshtaryModel) arrayListData.get(i)).getCcMoshtary() + ",";
+                                Log.d("getProgram",ccMoshtarys);
+
                             }
                             if (ccMoshtarys.length() != 0) {
                                 ccMoshtarys = ccMoshtarys.substring(0, ccMoshtarys.length() - 1);
@@ -1093,6 +1096,8 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
     private void getMoshtaryAfrad(final int getProgramType, final String ccMoshtarys) {
         final MoshtaryAfradDAO moshtaryAfradDAO = new MoshtaryAfradDAO(mPresenter.getAppContext());
+        Log.d("getprogram afrad",ccMoshtarys);
+
         moshtaryAfradDAO.fetchAllvMoshtaryAfrad(mPresenter.getAppContext(), activityNameForLog, ccMoshtarys, new RetrofitResponse() {
             @Override
             public void onSuccess(final ArrayList arrayListData) {

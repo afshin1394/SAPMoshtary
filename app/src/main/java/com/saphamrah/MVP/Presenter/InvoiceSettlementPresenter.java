@@ -297,13 +297,16 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
             String codeBank = "";
             String codeShobe = "";
             String sayyadId = "";
+            String checkNumber = "";
             try
             {
-                hesabNumber = BankUtils.getBankAccountNumber(dataOfCheck[1]);
-                codeBank = BankUtils.getBankCode(dataOfCheck[1]);
-                codeShobe = BankUtils.getBranchCode(dataOfCheck[2]);
-                sayyadId = dataOfCheck[3];
-                mView.get().showDataOfCheckFromScanner(hesabNumber, codeShobe, sayyadId);
+
+                hesabNumber = BankUtils.getBankAccountNumber(dataOfCheck[3]);
+                codeBank = BankUtils.getBankCode(dataOfCheck[3]);
+                codeShobe = BankUtils.getBranchCode(dataOfCheck[4]);
+                checkNumber = BankUtils.getNumber(dataOfCheck[5]);
+                sayyadId = dataOfCheck[6];
+                mView.get().showDataOfCheckFromScanner(hesabNumber, codeShobe, sayyadId , checkNumber);
                 mModel.getBank(codeBank);
             }
             catch (Exception e)
