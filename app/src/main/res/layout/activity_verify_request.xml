@@ -282,6 +282,115 @@
                         android:maxLines="1"
                         android:inputType="none"
                         android:editable="false"/>
+
+                    <com.github.clans.fab.FloatingActionMenu
+                        android:id="@+id/fabMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        fab:menu_animationDelayPerItem="50"
+                        fab:menu_backgroundColor="@android:color/transparent"
+                        fab:menu_buttonSpacing="0dp"
+                        fab:menu_colorNormal="@color/colorFabMenu"
+                        fab:menu_colorPressed="@color/colorFabMenuClick"
+                        fab:menu_colorRipple="#99FFFFFF"
+                        fab:menu_fab_size="normal"
+                        fab:menu_icon="@drawable/ic_menu"
+                        fab:menu_labels_colorNormal="@color/colorWhite"
+                        fab:menu_labels_colorPressed="@color/colorWhite"
+                        fab:menu_labels_colorRipple="@color/colorWhite"
+                        fab:menu_labels_customFont="@string/fontPath"
+                        fab:menu_labels_ellipsize="none"
+                        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+                        fab:menu_labels_margin="0dp"
+                        fab:menu_labels_maxLines="-1"
+                        fab:menu_labels_paddingBottom="4dp"
+                        fab:menu_labels_paddingLeft="8dp"
+                        fab:menu_labels_paddingRight="8dp"
+                        fab:menu_labels_paddingTop="4dp"
+                        fab:menu_labels_position="right"
+                        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+                        fab:menu_labels_singleLine="false"
+                        fab:menu_labels_textColor="@color/colorTextPrimary"
+                        fab:menu_labels_textSize="14sp"
+                        fab:menu_openDirection="up"
+                        fab:menu_shadowColor="#66000000"
+                        fab:menu_shadowRadius="4dp"
+                        fab:menu_shadowXOffset="1dp"
+                        fab:menu_shadowYOffset="3dp"
+                        fab:menu_showShadow="true">
+
+                        <com.github.clans.fab.FloatingActionButton
+                            android:id="@+id/fabJashnvareh"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/_20sdp"
+                            android:src="@drawable/ic_fab_jashnvareh"
+                            android:visibility="gone"
+                            fab:fab_colorNormal="@color/colorFabHelp"
+                            fab:fab_colorPressed="@color/colorFabHelpClick"
+                            fab:fab_label="@string/jashnvareh"
+                            fab:fab_size="normal"
+
+                            />
+
+                        <com.github.clans.fab.FloatingActionButton
+                            android:id="@+id/fabUpdateMoshtaryEtebar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:src="@drawable/ic_money_fab"
+                            fab:fab_colorNormal="@color/colorFabUpdateGallery"
+                            fab:fab_colorPressed="@color/colorFabSearchPrinter"
+                            fab:fab_label="@string/updateEtebarMoshtary"
+                            fab:fab_size="normal" />
+
+                        <com.github.clans.fab.FloatingActionButton
+                            android:id="@+id/fabHashiehSoud"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:src="@drawable/ic_hashiehsood"
+                            fab:fab_colorNormal="@color/colorFabAddColorfulIcon"
+                            fab:fab_colorPressed="@color/colorFabAddClick"
+                            fab:fab_label="@string/hashiehSoud"
+                            fab:fab_size="normal" />
+
+                        <com.github.clans.fab.FloatingActionButton
+                            android:id="@+id/fabAddMarjoee"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:src="@drawable/ic_marjoee"
+                            fab:fab_colorNormal="@color/colorFabAddColorfulIcon"
+                            fab:fab_colorPressed="@color/colorFabAddClick"
+                            fab:fab_label="@string/marjoee"
+                            fab:fab_size="normal" />
+
+                        <com.github.clans.fab.FloatingActionButton
+                            android:id="@+id/fabSelectBonus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:src="@drawable/ic_gift_goods"
+                            fab:fab_colorNormal="@color/colorFabAddColorfulIcon"
+                            fab:fab_colorPressed="@color/colorFabAddClick"
+                            fab:fab_label="@string/selectJayezeh"
+                            fab:fab_size="normal" />
+
+                        <com.github.clans.fab.FloatingActionButton
+                            android:id="@+id/fabShowCustomerInfo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:src="@drawable/ic_user_info"
+                            fab:fab_colorNormal="@color/colorBackSendDataSwipe"
+                            fab:fab_colorPressed="@color/colorBackSendDataSwipe"
+                            fab:fab_label="@string/customerInfo"
+                            fab:fab_size="normal" />
+
+                    </com.github.clans.fab.FloatingActionMenu>
                 </com.saphamrah.CustomView.CustomTextInputLayout>
             </LinearLayout>
 
@@ -513,117 +622,6 @@
 
         </LinearLayout>
     </ScrollView>
-
-
-    <com.github.clans.fab.FloatingActionMenu
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/fabMenu"
-        android:layout_alignParentLeft="true"
-        android:layout_above="@+id/layBottomBar"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        fab:menu_fab_size="normal"
-        fab:menu_showShadow="true"
-        fab:menu_shadowColor="#66000000"
-        fab:menu_shadowRadius="4dp"
-        fab:menu_shadowXOffset="1dp"
-        fab:menu_shadowYOffset="3dp"
-        fab:menu_colorNormal="@color/colorFabMenu"
-        fab:menu_colorPressed="@color/colorFabMenuClick"
-        fab:menu_colorRipple="#99FFFFFF"
-        fab:menu_animationDelayPerItem="50"
-        fab:menu_icon="@drawable/ic_menu"
-        fab:menu_buttonSpacing="0dp"
-        fab:menu_labels_margin="0dp"
-        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
-        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
-        fab:menu_labels_paddingTop="4dp"
-        fab:menu_labels_paddingRight="8dp"
-        fab:menu_labels_paddingBottom="4dp"
-        fab:menu_labels_paddingLeft="8dp"
-        fab:menu_labels_textColor="@color/colorTextPrimary"
-        fab:menu_labels_textSize="14sp"
-        fab:menu_labels_colorNormal="@color/colorWhite"
-        fab:menu_labels_colorPressed="@color/colorWhite"
-        fab:menu_labels_colorRipple="@color/colorWhite"
-        fab:menu_labels_singleLine="false"
-        fab:menu_labels_ellipsize="none"
-        fab:menu_labels_maxLines="-1"
-        fab:menu_labels_position="right"
-        fab:menu_openDirection="up"
-        fab:menu_labels_customFont="@string/fontPath"
-        fab:menu_backgroundColor="@android:color/transparent">
-        <com.github.clans.fab.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fabJashnvareh"
-            android:src="@drawable/ic_fab_jashnvareh"
-            fab:fab_size="normal"
-            android:visibility="gone"
-            fab:fab_label="@string/jashnvareh"
-            fab:fab_colorNormal="@color/colorFabHelp"
-            fab:fab_colorPressed="@color/colorFabHelpClick"
-            android:padding="@dimen/_20sdp"
-
-            />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fabUpdateMoshtaryEtebar"
-            android:src="@drawable/ic_money_fab"
-            fab:fab_size="normal"
-            fab:fab_label="@string/updateEtebarMoshtary"
-            fab:fab_colorNormal="@color/colorFabUpdateGallery"
-            fab:fab_colorPressed="@color/colorFabSearchPrinter"
-            android:layout_margin="15dp"/>
-
-        <com.github.clans.fab.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fabHashiehSoud"
-            android:src="@drawable/ic_hashiehsood"
-            fab:fab_size="normal"
-            fab:fab_label="@string/hashiehSoud"
-            fab:fab_colorNormal="@color/colorFabAddColorfulIcon"
-            fab:fab_colorPressed="@color/colorFabAddClick"
-            android:layout_margin="15dp"/>
-
-        <com.github.clans.fab.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fabAddMarjoee"
-            android:src="@drawable/ic_marjoee"
-            fab:fab_size="normal"
-            fab:fab_label="@string/marjoee"
-            fab:fab_colorNormal="@color/colorFabAddColorfulIcon"
-            fab:fab_colorPressed="@color/colorFabAddClick"
-            android:layout_margin="15dp"/>
-
-        <com.github.clans.fab.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fabSelectBonus"
-            android:src="@drawable/ic_gift_goods"
-            fab:fab_size="normal"
-            fab:fab_label="@string/selectJayezeh"
-            fab:fab_colorNormal="@color/colorFabAddColorfulIcon"
-            fab:fab_colorPressed="@color/colorFabAddClick"
-            android:layout_margin="15dp"/>
-
-        <com.github.clans.fab.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fabShowCustomerInfo"
-            android:src="@drawable/ic_user_info"
-            fab:fab_size="normal"
-            fab:fab_label="@string/customerInfo"
-            fab:fab_colorNormal="@color/colorBackSendDataSwipe"
-            fab:fab_colorPressed="@color/colorBackSendDataSwipe"
-            android:layout_margin="15dp"/>
-
-    </com.github.clans.fab.FloatingActionMenu>
 
 
     <LinearLayout

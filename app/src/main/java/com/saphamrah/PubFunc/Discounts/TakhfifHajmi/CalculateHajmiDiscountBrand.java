@@ -99,11 +99,11 @@ public class CalculateHajmiDiscountBrand extends DiscountCalculation
 
                     mablaghVahed = Math.round (sumMablaghKolBrandMohasebeh / sumTedadBrandMohasebeh);
 
-                    Log.d("takhfifBrand", "sumTedadBrandMohasebeh : " + sumTedadBrandMohasebeh);
-                    Log.d("takhfifBrand", "sumTedadBastehBrandMohasebeh : " + sumTedadBastehBrandMohasebeh);
-                    Log.d("takhfifBrand", "sumTedadKartonBrandMohasebeh : " + sumTedadKartonBrandMohasebeh);
-                    Log.d("takhfifBrand", "sumMablaghKolBrandMohasebeh : " + sumMablaghKolBrandMohasebeh);
-                    Log.d("takhfifBrand", "mablaghVahed : " + mablaghVahed);
+                    Log.d("takhfif", "takhfifBrand sumTedadBrandMohasebeh : " + sumTedadBrandMohasebeh);
+                    Log.d("takhfif", "takhfifBrand sumTedadBastehBrandMohasebeh : " + sumTedadBastehBrandMohasebeh);
+                    Log.d("takhfif", "takhfifBrand sumTedadKartonBrandMohasebeh : " + sumTedadKartonBrandMohasebeh);
+                    Log.d("takhfif", "takhfifBrand sumMablaghKolBrandMohasebeh : " + sumMablaghKolBrandMohasebeh);
+                    Log.d("takhfif", "takhfifBrand mablaghVahed : " + mablaghVahed);
 
                     zarib = calculateZarib(takhfifHajmiSatrModel.getBeEza(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(), sumTedadKartonBrand, sumTedadBastehBrand, sumTedadBrand, sumMablaghKolBrand,(sumVaznBrand/1000.0),tedadAghlam);
                     int tedad = calculateTedad(takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(), sumTedadKartonBrandMohasebeh, sumTedadBastehBrandMohasebeh, 1);
@@ -111,24 +111,54 @@ public class CalculateHajmiDiscountBrand extends DiscountCalculation
                     long mablaghTakhfif = calculateMablaghTakhfif(Mablagh, mablaghVahed, zarib, takhfifHajmiSatrModel.getBeEza(), takhfifHajmiSatrModel.getDarsadTakhfif(), takhfifHajmiTitrSatrModel.getNoeTedadRial());
                     if (mablaghTakhfif > 0)
                     {
+                        long sumMablaghTalkhfifSatr = 0;
                         insertFaktorTakhfif(context, darkhastFaktorModel.getCcDarkhastFaktor(), codeTakhfif, takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),
                                 takhfifHajmiTitrSatrModel.getSharhTakhfif(), takhfifHajmiSatrModel.getDarsadTakhfif(), mablaghTakhfif, takhfifHajmiTitrSatrModel.getForJayezeh());
                         long sumMablaghTakhfifSatr = 0;
                         String allMablaghTakhfifSatr = "-1";
                         ArrayList<DataTableModel> arrayListKalaBrandInDarkhast = darkhastFaktorSatrDAO.getBrandOfKalaInDarkhast(darkhastFaktorModel.getCcDarkhastFaktor());
+                        int j = 0;
                         for (DataTableModel kalaBrand : arrayListKalaBrandInDarkhast)
                         {
+                            j++;
                             if (kalaBrand.getFiled1() != null && kalaBrand.getFiled1().trim().equals(String.valueOf(ccBrandMohasebeh)))
                             {
                                 long mablaghTakhfifSatr = calculateMablaghTakhfifSatr(Integer.valueOf(kalaBrand.getFiled3()), mablaghVahed, takhfifHajmiSatrModel.getDarsadTakhfif());
-                                sumMablaghTakhfifSatr += Math.round(mablaghTakhfifSatr);
-                                allMablaghTakhfifSatr += "," + Math.round(mablaghTakhfifSatr);
-                                insertFaktorSatrTakhfif(context, Long.valueOf(kalaBrand.getFiled2()), codeTakhfif, takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),
-                                        takhfifHajmiTitrSatrModel.getSharhTakhfif(), takhfifHajmiSatrModel.getDarsadTakhfif(), mablaghTakhfifSatr,
-                                        takhfifHajmiTitrSatrModel.getForJayezeh(), takhfifHajmiTitrSatrModel.getOlaviat());
+                                if (mablaghTakhfifSatr > 0)
+                                {
+                                    Log.d("takhfif" , "takhfifHajmiBrand 1.5 sumMablaghTakhfifSatr : " + mablaghTakhfifSatr + " , " + Math.round(mablaghTakhfifSatr)+ " , mablaghTakhfif: " +mablaghTakhfif + " , sumMablaghTalkhfifSatr: "+sumMablaghTalkhfifSatr );
+                                    Log.d("takhfif" , "takhfifHajmiBrand j  : " + j + " , arrayListKalaBrandInDarkhast.Size : " + arrayListKalaBrandInDarkhast.size() );
+                                    if (j == arrayListKalaBrandInDarkhast.size() || mablaghTakhfif <= mablaghTakhfifSatr)
+                                    {
+                                        mablaghTakhfifSatr = mablaghTakhfif - sumMablaghTalkhfifSatr;
+                                    }
+                                    else
+                                    {
+                                        sumMablaghTalkhfifSatr += mablaghTakhfifSatr;
+                                    }
+                                    if (mablaghTakhfifSatr > 0)
+                                    {
+                                        Log.d("takhfif" , "takhfifHajmi 1.6 takhfifHajmiTitrSatrModel CcTakhfifHajmi: " + takhfifHajmiTitrSatrModel.getCcTakhfifHajmi() +" mablaghTakhfifSatr : " + mablaghTakhfifSatr + " , mablaghTakhfif: " + mablaghTakhfif + " , sumMablaghTalkhfifSatr: " + sumMablaghTalkhfifSatr);
+                                        insertFaktorSatrTakhfif(context, Long.valueOf(kalaBrand.getFiled2()), codeTakhfif, takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),
+                                                takhfifHajmiTitrSatrModel.getSharhTakhfif(), takhfifHajmiSatrModel.getDarsadTakhfif(), mablaghTakhfifSatr,
+                                                takhfifHajmiTitrSatrModel.getForJayezeh(), takhfifHajmiTitrSatrModel.getOlaviat());
+                                    }
+                                }
+
+
+
+
+
+
+                                Log.d("takhfif" , "takhfifHajmiBrand mablaghTakhfifSatr : " + mablaghTakhfifSatr + "kalaBrand,filed2:" + kalaBrand.getFiled2() +"mablaghVahed:" + mablaghVahed + "Tedad:" + kalaBrand.getFiled3() + "Darsad:" + takhfifHajmiSatrModel.getDarsadTakhfif());
+//                                sumMablaghTakhfifSatr += Math.round(mablaghTakhfifSatr);
+//                                allMablaghTakhfifSatr += "," + Math.round(mablaghTakhfifSatr);
+//                                insertFaktorSatrTakhfif(context, Long.valueOf(kalaBrand.getFiled2()), codeTakhfif, takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(),
+//                                        takhfifHajmiTitrSatrModel.getSharhTakhfif(), takhfifHajmiSatrModel.getDarsadTakhfif(), mablaghTakhfifSatr,
+//                                        takhfifHajmiTitrSatrModel.getForJayezeh(), takhfifHajmiTitrSatrModel.getOlaviat());
                             }
                         }
-                        updateMablaghTakhfifDarkhastFaktor(context, darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), Math.round(mablaghTakhfif), sumMablaghTakhfifSatr, allMablaghTakhfifSatr);
+//                        updateMablaghTakhfifDarkhastFaktor(context, darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), Math.round(mablaghTakhfif), sumMablaghTakhfifSatr, allMablaghTakhfifSatr);
                     }
                 }
             }

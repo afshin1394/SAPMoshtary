@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.saphamrah.Model.DarkhastFaktorTakhfifModel;
 import com.saphamrah.Model.LogPPCModel;
@@ -377,6 +378,7 @@ public class DarkhastFaktorTakhfifDAO
                     " and " + DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_ForJayezeh() + " = 1";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
+            Log.d("bouns","getccTakhfifOfJayezehByccDarkhastFaktor query:" + query);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)

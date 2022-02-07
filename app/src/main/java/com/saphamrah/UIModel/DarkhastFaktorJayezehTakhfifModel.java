@@ -8,6 +8,7 @@ public class DarkhastFaktorJayezehTakhfifModel
     private static final int NOE_JAYEZEH = 1;
     private static final int NOE_TAKHFIF = 2;
 
+
     public static int NoeJayezeh()
     {
         return NOE_JAYEZEH;

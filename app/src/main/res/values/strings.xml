@@ -166,6 +166,7 @@
     <string name="errorFindForoshandeh">خطا در یافتن فروشنده</string>
     <string name="errorSelectedPerson">خطا در انتخاب فرد موردنظر</string>
     <string name="errorSelectedGetProgramDate">لطفا تاریخ دریافت برنامه را به درستی انتخاب نمایید.</string>
+    <string name="errorCanGetProgram">در حال حاضر قادر به دریافت برنامه نیستید لطفا صبر کنید</string>
     <string name="getProgramDate">تاریخ دریافت برنامه</string>
     <string name="updateForoshandeh">بروز رسانی فروشنده</string>
     <string name="updateKalaModatVosol">بروز رسانی کالا و مدت وصول</string>

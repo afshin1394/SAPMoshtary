@@ -118,17 +118,39 @@ public class CalculateSenfiDiscountBrand extends DiscountCalculation
                         ArrayList<DataTableModel> arrayListKalaBrandInDarkhast = darkhastFaktorSatrDAO.getBrandOfKalaInDarkhast(darkhastFaktorModel.getCcDarkhastFaktor());
                         Log.d("takhfifSenfi", "Brand arrayListKalaBrandInDarkhast : " + arrayListKalaBrandInDarkhast.toString());
                         Log.d("takhfifSenfi", "Brand arrayListKalaBrandInDarkhast.size : " + arrayListKalaBrandInDarkhast.size());
-
+                        long sumMablaghTalkhfifSatr = 0;
+                        int j = 0;
                         for (DataTableModel kalaBrand : arrayListKalaBrandInDarkhast)
                         {
+                            j++;
                             if (kalaBrand.getFiled1() != null && kalaBrand.getFiled1().trim().equals(String.valueOf(ccBrandMohasebeh)))
                             {
                                 long mablaghTakhfifSatr = calculateMablaghTakhfifSatr(Integer.valueOf(kalaBrand.getFiled3()), mablaghVahed, takhfifSenfiSatrModel.getDarsadTakhfif());
-                                sumMablaghTakhfifSatr += Math.round(mablaghTakhfifSatr);
-                                allMablaghTakhfifSatr += "," + Math.round(mablaghTakhfifSatr);
-                                insertFaktorSatrTakhfif(context, Long.valueOf(kalaBrand.getFiled2()), codeTakhfif, takhfifSenfiTitrSatrModel.getCcTakhfifSenfi(),
-                                        takhfifSenfiTitrSatrModel.getSharhTakhfif(), takhfifSenfiSatrModel.getDarsadTakhfif(), mablaghTakhfifSatr,
-                                        takhfifSenfiTitrSatrModel.getForJayezeh(), takhfifSenfiTitrSatrModel.getOlaviat());
+                                if (mablaghTakhfifSatr > 0) {
+                                    Log.d("takhfif", "takhfifHajmiBrand 1.5 sumMablaghTakhfifSatr : " + mablaghTakhfifSatr + " , " + Math.round(mablaghTakhfifSatr) + " , mablaghTakhfif: " + mablaghTakhfif + " , sumMablaghTalkhfifSatr: " + sumMablaghTalkhfifSatr);
+                                    Log.d("takhfif", "takhfifHajmiBrand j  : " + j + " , arrayListKalaBrandInDarkhast.Size : " + arrayListKalaBrandInDarkhast.size());
+                                    if (j == arrayListKalaBrandInDarkhast.size() || mablaghTakhfif <= mablaghTakhfifSatr) {
+                                        mablaghTakhfifSatr = mablaghTakhfif - sumMablaghTalkhfifSatr;
+                                    } else {
+                                        sumMablaghTalkhfifSatr += mablaghTakhfifSatr;
+                                    }
+                                    if (mablaghTakhfifSatr > 0) {
+                                        Log.d("takhfif", "takhfifHajmi 1.6 takhfifHajmiTitrSatrModel CcTakhfifHajmi: " + takhfifSenfiTitrSatrModel.getCcTakhfifSenfi() + " mablaghTakhfifSatr : " + mablaghTakhfifSatr + " , mablaghTakhfif: " + mablaghTakhfif + " , sumMablaghTalkhfifSatr: " + sumMablaghTalkhfifSatr);
+                                        insertFaktorSatrTakhfif(context, Long.valueOf(kalaBrand.getFiled2()), codeTakhfif, takhfifSenfiTitrSatrModel.getCcTakhfifSenfi(),
+                                                takhfifSenfiTitrSatrModel.getSharhTakhfif(), takhfifSenfiSatrModel.getDarsadTakhfif(), mablaghTakhfifSatr,
+                                                takhfifSenfiTitrSatrModel.getForJayezeh(), takhfifSenfiTitrSatrModel.getOlaviat());
+                                    }
+
+
+                                }
+
+
+
+//                                sumMablaghTakhfifSatr += Math.round(mablaghTakhfifSatr);
+//                                allMablaghTakhfifSatr += "," + Math.round(mablaghTakhfifSatr);
+//                                insertFaktorSatrTakhfif(context, Long.valueOf(kalaBrand.getFiled2()), codeTakhfif, takhfifSenfiTitrSatrModel.getCcTakhfifSenfi(),
+//                                        takhfifSenfiTitrSatrModel.getSharhTakhfif(), takhfifSenfiSatrModel.getDarsadTakhfif(), mablaghTakhfifSatr,
+//                                        takhfifSenfiTitrSatrModel.getForJayezeh(), takhfifSenfiTitrSatrModel.getOlaviat());
                             }
                         }
                         updateMablaghTakhfifDarkhastFaktor(context, darkhastFaktorModel.getCcDarkhastFaktor(), takhfifSenfiTitrSatrModel.getCcTakhfifSenfi(), Math.round(mablaghTakhfif), sumMablaghTakhfifSatr, allMablaghTakhfifSatr);

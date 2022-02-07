@@ -83,6 +83,10 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
         {
             mView.get().showResourceError(false, R.string.error, R.string.errorSelectedGetProgramDate, Constants.FAILED_MESSAGE(), R.string.apply);
         }
+        else if (foroshandehMamorPakhshModel.getCanGetProgram() == 0)
+        {
+            mView.get().showResourceError(false, R.string.error, R.string.errorCanGetProgram, Constants.FAILED_MESSAGE(), R.string.apply);
+        }
         else
         {
             mModel.getProgram(Constants.GET_PROGRAM_FULL() , date , foroshandehMamorPakhshModel);

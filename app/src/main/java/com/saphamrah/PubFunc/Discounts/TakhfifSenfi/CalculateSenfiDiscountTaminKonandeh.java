@@ -123,11 +123,39 @@ public class CalculateSenfiDiscountTaminKonandeh extends DiscountCalculation
                             String allMablaghTakhfifSatr = "-1";
 
                             ArrayList<DataTableModel> arrayListKalaTaminKonandehInDarkhast = darkhastFaktorSatrDAO.getTaminKonandehOfKalaInDarkhast(darkhastFaktorModel.getCcDarkhastFaktor());
+                            int j = 0;
                             for (DataTableModel kalaTaminKonandeh : arrayListKalaTaminKonandehInDarkhast)
                             {
+                                j++;
                                 if (kalaTaminKonandeh.getFiled1() != null && kalaTaminKonandeh.getFiled1().trim().equals(String.valueOf(ccTaminKonandehMohasebeh)))
                                 {
                                     long mablaghTakhfifSatr = calculateMablaghTakhfifSatr(Integer.valueOf(kalaTaminKonandeh.getFiled3()), mablaghVahed, takhfifSenfiSatrModel.getDarsadTakhfif());
+                                    if (mablaghTakhfifSatr > 0)
+                                    {
+                                        Log.d("takhfif" , "takhfifHajmiBrand 1.5 sumMablaghTakhfifSatr : " + mablaghTakhfifSatr + " , " + Math.round(mablaghTakhfifSatr)+ " , mablaghTakhfif: " +mablaghTakhfif + " , sumMablaghTalkhfifSatr: "+sumMablaghTalkhfifSatr );
+                                        Log.d("takhfif" , "takhfifHajmiBrand j  : " + j + " , arrayListKalaBrandInDarkhast.Size : " + arrayListKalaTaminKonandehInDarkhast.size() );
+                                        if (j == arrayListKalaTaminKonandehInDarkhast.size() || mablaghTakhfif <= mablaghTakhfifSatr)
+                                        {
+                                            mablaghTakhfifSatr = mablaghTakhfif - sumMablaghTalkhfifSatr;
+                                        }
+                                        else
+                                        {
+                                            sumMablaghTalkhfifSatr += mablaghTakhfifSatr;
+                                        }
+                                        //sumMablaghTalkhfifSatr += mablaghTakhfifSatr;
+                                        if (mablaghTakhfifSatr > 0)
+                                        {
+                                            Log.d("takhfif" , "takhfifHajmi 1.6 takhfifHajmiTitrSatrModel CcTakhfifHajmi: " + takhfifSenfiTitrSatrModel.getCcTakhfifSenfi() +" mablaghTakhfifSatr : " + mablaghTakhfifSatr + " , mablaghTakhfif: " + mablaghTakhfif + " , sumMablaghTalkhfifSatr: " + sumMablaghTalkhfifSatr);
+                                            insertFaktorSatrTakhfif(context, Long.valueOf(kalaTaminKonandeh.getFiled2()), codeTakhfif, takhfifSenfiTitrSatrModel.getCcTakhfifSenfi(),
+                                                    takhfifSenfiTitrSatrModel.getSharhTakhfif(), takhfifSenfiSatrModel.getDarsadTakhfif(), mablaghTakhfifSatr,
+                                                    takhfifSenfiTitrSatrModel.getForJayezeh(), takhfifSenfiTitrSatrModel.getOlaviat());
+                                        }
+                                    }
+
+
+
+
+
                                     sumMablaghTalkhfifSatr += Math.round(mablaghTakhfifSatr);
                                     allMablaghTakhfifSatr += "," + Math.round(mablaghTakhfifSatr);
                                     insertFaktorSatrTakhfif(context, Long.valueOf(kalaTaminKonandeh.getFiled2()), codeTakhfif, takhfifSenfiTitrSatrModel.getCcTakhfifSenfi(),

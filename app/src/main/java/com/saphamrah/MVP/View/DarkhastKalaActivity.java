@@ -812,8 +812,8 @@ private FloatingActionButton fabShowMoshtaryGharardad;
                         adapterRequestKalaList.notifyDataSetChanged();
                     } else {
                         for (int i = 0; i < kalaMojodiZaribModels.size(); i++) {
-                            String nameKala = new LanguageUtil().convertFaNumberToEN(String.valueOf(kalaMojodiZaribModels.get(i).getCcGorohKala()));
-                            if (nameKala.contains(String.valueOf(kalaFilterUiModels.get(position).getCcGoroh()))) {
+                            int ccGorohKala = kalaMojodiZaribModels.get(i).getCcGorohKala();
+                            if (ccGorohKala == kalaFilterUiModels.get(position).getCcGoroh()) {
                                 arrayListKalaModel.add(kalaMojodiZaribModels.get(i));
                                 kalaMojodiZaribModelsFilter.add(kalaMojodiZaribModels.get(i));
                                 adapterRequestKalaListGrid.notifyDataSetChanged();
@@ -1127,8 +1127,8 @@ private FloatingActionButton fabShowMoshtaryGharardad;
                         adapterRequestKalaList.notifyDataSetChanged();
                     } else {
                         for (int i = 0; i < kalaMojodiZaribModels.size(); i++) {
-                            String nameKala = new LanguageUtil().convertFaNumberToEN(String.valueOf(kalaMojodiZaribModels.get(i).getCcGorohKala()));
-                            if (nameKala.contains(String.valueOf(kalaFilterUiModels.get(position).getCcGoroh()))) {
+                            int ccGorohKala = kalaMojodiZaribModels.get(i).getCcGorohKala();
+                            if (ccGorohKala==kalaFilterUiModels.get(position).getCcGoroh()) {
                                 arrayListKalaModel.add(kalaMojodiZaribModels.get(i));
                                 kalaMojodiZaribModelsFilter.add(kalaMojodiZaribModels.get(i));
                                 adapterRequestKalaListGrid.notifyDataSetChanged();

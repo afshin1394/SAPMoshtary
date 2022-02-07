@@ -53,8 +53,8 @@ public class JayezehEntekhabiMojodiDAO
                     " from Kala k left join (select KalaMojodi.* , sum(Tedad) sumTedad from KalaMojodi where IsAdamForosh = 0 \n" +
                     " group by ccKalaCode , ShomarehBach, GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh, TarikhTolid, TarikhEngheza) m \n" +
                     " on k.ccKalaCode = m.ccKalaCode and k.ccTaminKonandeh = m.ccTaminkonandeh and \n" +
-                    " k.ShomarehBach = m.ShomarehBach and k.MablaghMasrafKonandeh = m.GheymatMasrafKonandeh and k.MablaghForosh = m.GheymatForosh \n" +
-                    " k.TarikTolid = m.TarikhTolid and k.TarikhEngheza = m.TarikhEngheza  \n" +
+                    " k.ShomarehBach = m.ShomarehBach and k.MablaghMasrafKonandeh = m.GheymatMasrafKonandeh and k.MablaghForosh = m.GheymatForosh and\n" +
+                    " k.TarikhTolid = m.TarikhTolid and k.TarikhEngheza = m.TarikhEngheza  \n" +
                     " where k.TedadMojodyGhabelForosh > 0 and m.sumTedad > 0  \n" +
                     " order by codekala desc) km \n" +
                     " on j.ccKalaCode = km.ccKalaCode and km.sumTedad > 0 and j.ccTakhfifHajmi = " + ccTakhfifHajmi +

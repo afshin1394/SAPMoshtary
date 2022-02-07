@@ -3,6 +3,7 @@ package com.saphamrah.DAO;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.saphamrah.Model.DarkhastFaktorJayezehModel;
 import com.saphamrah.PubFunc.PubFunc;
@@ -65,6 +66,7 @@ public class DarkhastFaktorJayezehTakhfifDAO
                     " select 1 AS NoeJayezehTakhfif, ExtraProp_ccJayezehSatr, ccDarkhastFaktorJayezeh, ccDarkhastFaktor, ccJayezeh, Sharh, ExtraProp_CodeNoeJayezeh, -1, ccKala, Tedad \n" +
                     " from DarkhastFaktorJayezeh \n" +
                     " where ccDarkhastFaktor = " + ccDarkhastFaktor + " and ExtraProp_CodeNoeJayezeh = " + DarkhastFaktorJayezehModel.CodeNoeJayezehEntekhabi();
+            Log.d("bouns","getByccDarkhastFaktorccTakhfif query:" + query);
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
