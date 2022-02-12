@@ -728,7 +728,8 @@ public class DarkhastFaktorSatrDAO
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             String query = "SELECT B.ccGoroh, SUM(A.Tedad3)AS Tedad, SUM(A.Tedad3/ TedadDarKarton)AS TedadBox, "
-                    + "       SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage, SUM(Tedad3 * MablaghForosh) AS MablaghKol "
+                    + "       SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage, SUM(Tedad3 * MablaghForosh) AS MablaghKol ,"
+                    + "        COUNT(A.ccKalaCode) AS TedadAghlam "
                     + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
                     + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.TedadDarKarton, A.TedadDarBasteh "
                     + "          FROM Kala A LEFT OUTER JOIN "

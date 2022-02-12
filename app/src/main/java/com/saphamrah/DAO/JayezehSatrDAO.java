@@ -439,7 +439,7 @@ Call<GetAllvJayezehSatrResult> call = apiServiceGet.getAllvJayezehSatr();
      * @param noeTedadRial
      * @return
      */
-    public ArrayList<JayezehSatrModel> getForFaktor(int ccJayezeh, int noeFieldKala, int[] noeTedadRialArray, int[] codeNoeBasteBandiArray, int ccNoeField, double tedad, double tedadBasteh, double tedadKarton, double mablaghKol, int noeTedadRial)
+    public ArrayList<JayezehSatrModel> getForFaktor(int ccJayezeh, int noeFieldKala, int[] noeTedadRialArray, int[] codeNoeBasteBandiArray, int ccNoeField, double tedad, double tedadBasteh, double tedadKarton, double mablaghKol, int noeTedadRial, int tedadAghlam)
     {
         ArrayList<JayezehSatrModel> jayezehSatrs = new ArrayList<>();
         try
@@ -457,7 +457,13 @@ Call<GetAllvJayezehSatrResult> call = apiServiceGet.getAllvJayezehSatr();
             {
                 query += "   AND Az<= " + mablaghKol + " AND " + mablaghKol + "<= Ta";
             }
+            if (noeTedadRial == noeTedadRialArray[2])
+            {
+                query += "   AND Az<= " + tedadAghlam + " AND " + tedadAghlam + "<= Ta";
+            }
             query += " ORDER BY BeEza DESC ";
+            Log.d("jayezeh" , "getForFaktor : " + query);
+
             Cursor cursor = db.rawQuery(query, null);
             if (cursor != null)
             {

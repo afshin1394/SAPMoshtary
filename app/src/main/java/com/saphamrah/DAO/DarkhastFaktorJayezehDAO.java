@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.saphamrah.Model.DarkhastFaktorJayezehModel;
 import com.saphamrah.PubFunc.PubFunc;
@@ -142,6 +143,8 @@ public class DarkhastFaktorJayezehDAO
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             String query = "select dfj.* , k.MablaghMasrafKonandeh from DarkhastFaktorJayezeh dfj left join Kala k on k.ccKalaCode = dfj.ccKalaCode where ccDarkhastFaktor = " + ccDarkhastFaktor + " and ExtraProp_CodeNoeJayezeh = " + codeNoe + " group by ccDarkhastFaktorJayezeh";
+            Log.d("DarkhastFaktorJayezeh" , "Bonus getByccDarkhastFaktorAndCodeNoe:" + query);
+
             Cursor cursor = db.rawQuery(query, null);
             if (cursor != null)
             {

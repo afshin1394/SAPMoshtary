@@ -59,6 +59,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
 
     @Override
     public void getKalaForJayezeh(int ccJayezehTakhfif, int ccJayezehSatr, int noeJayezehTakhfif) {
+        KalaMojodiDAO kalaMojodiDAO = new KalaMojodiDAO(BaseApplication.getContext());
         ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach = new ArrayList<>();
         ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi = new ArrayList<>();
         Log.d("bonus", "noeJayezehTakhfif : " + noeJayezehTakhfif);
@@ -67,13 +68,21 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
             JayezehEntekhabiMojodiDAO jayezehEntekhabiMojodiDAO = new JayezehEntekhabiMojodiDAO(mPresenter.getAppContext());
             ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels = jayezehEntekhabiMojodiDAO.getByccTakhfifHajmi(ccJayezehTakhfif);
             Log.d("bouns", "jayezehEntekhabiMojodiModels Takhfif:" + jayezehEntekhabiMojodiModels);
+
+            /**
+             * get max mojodi and max shomarehbach
+             */
+            KalaMojodiModelsMaxShomarehBach = kalaMojodiDAO.getMaxShomarehBach(jayezehEntekhabiMojodiModels.get(0).getCcJayezeh(), jayezehEntekhabiMojodiModels.get(0).getCcJayezehSatr());
+            KalaMojodiModelsMaxMojodi = kalaMojodiDAO.getMaxMojodi(jayezehEntekhabiMojodiModels.get(0).getCcJayezeh(), jayezehEntekhabiMojodiModels.get(0).getCcJayezehSatr());
+            Log.d("bouns", "Jayezeh takhfif KalaMojodiModelsMaxShomarehBach:" + KalaMojodiModelsMaxShomarehBach.toString());
+            Log.d("bouns", "Jayezeh takhfif KalaMojodiModelsMaxMojodi:" + KalaMojodiModelsMaxMojodi.toString());
+
             mPresenter.onGetKalaForJayezeh(jayezehEntekhabiMojodiModels, KalaMojodiModelsMaxShomarehBach, KalaMojodiModelsMaxMojodi,noeJayezehTakhfif);
         } else if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeJayezeh()) {
             JayezehEntekhabiMojodiDAO jayezehEntekhabiMojodiDAO = new JayezehEntekhabiMojodiDAO(mPresenter.getAppContext());
             ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels = jayezehEntekhabiMojodiDAO.getByccJayezeh(ccJayezehTakhfif, ccJayezehSatr);
             Log.d("bouns", "jayezehEntekhabiMojodiModels Jayezeh:" + jayezehEntekhabiMojodiModels);
 
-            KalaMojodiDAO kalaMojodiDAO = new KalaMojodiDAO(BaseApplication.getContext());
 
             /**
              * get max mojodi and max shomarehbach
@@ -81,6 +90,8 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
             KalaMojodiModelsMaxShomarehBach = kalaMojodiDAO.getMaxShomarehBach(ccJayezehTakhfif, ccJayezehSatr);
             KalaMojodiModelsMaxMojodi = kalaMojodiDAO.getMaxMojodi(ccJayezehTakhfif, ccJayezehSatr);
 
+            Log.d("bouns", "Jayezeh KalaMojodiModelsMaxShomarehBach:" + KalaMojodiModelsMaxShomarehBach.toString());
+            Log.d("bouns", "Jayezeh KalaMojodiModelsMaxMojodi:" + KalaMojodiModelsMaxMojodi.toString());
 
             mPresenter.onGetKalaForJayezeh(jayezehEntekhabiMojodiModels, KalaMojodiModelsMaxShomarehBach, KalaMojodiModelsMaxMojodi,noeJayezehTakhfif);
 
