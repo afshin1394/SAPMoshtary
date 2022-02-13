@@ -771,6 +771,7 @@
     <string name="info">اطلاعات</string>
     <string name="invalid">نامعتبر</string>
     <string name="errorOperation">خطا در انجام عملیات</string>
+    <string name="errorOperationJayezehArzeshAfzodeh"> خطا در انجام عملیات جایزه ارزش افزوده</string>
     <string name="duplicatedPorseshname">پرسشنامه تکراری می باشد.</string>
     <string name="errorDeleteSenededItem">امکان حذف برای موارد ارسال شده وجود ندارد.</string>
     <string name="errorResend">امکان ارسال دوباره درخواست وجود ندارد.</string>

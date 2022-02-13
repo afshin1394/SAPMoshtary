@@ -3839,9 +3839,11 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 JayezehDAO jayezehDAO = new JayezehDAO(mPresenter.getAppContext());
                 JayezehSatrDAO jayezehSatrDAO = new JayezehSatrDAO(mPresenter.getAppContext());
                 JayezehModel jayezehModel = jayezehDAO.getArzeshAfzoodehJayezeh(moshtaryModel, darkhastFaktorModel.getCodeNoeHaml());
+                if(jayezehModel != null)
+                {
                 int ccJayezehSatr = jayezehSatrDAO.getccJayezehSatrForArzeshAfzoodeh(jayezehModel.getCcJayezeh(), sumMablaghBaArzeshAfzoodeh);
 
-                if (jayezehModel != null) {
+
                     DarkhastFaktorTakhfifModel model = new DarkhastFaktorTakhfifModel();
                     model.setCcDarkhastFaktor(ccDarkhastFaktor);
                     model.setCcTakhfif(jayezehModel.getCcJayezeh());
@@ -3856,7 +3858,9 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                         return 1;
                     else
                         return 0;
-                }else{
+                }
+                else
+                {
                     return 1;
                 }
                 }catch(Exception e){
@@ -3872,7 +3876,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                if (result == 1)
                    mPresenter.onGetRequestDetail(sumTedadAghlam, tedadAghlam, sumVazn, sumHajm, vaznFaktor, hajmFaktor, sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh,checkCanSelectBonus());
                else
-                   mPresenter.onErrorOperations(R.string.errorOperation);
+                   mPresenter.onErrorOperations(R.string.errorOperationJayezehArzeshAfzodeh);
 
         }
     }

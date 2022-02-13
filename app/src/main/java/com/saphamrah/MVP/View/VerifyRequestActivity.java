@@ -117,8 +117,6 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     private CustomLoadingDialog customLoadingDialog;
     private View alertView;
     private AlertDialog show;
-    private FloatingActionMenu fabMenu;
-
 
     //getModatRoozRaasgiri -> calculate and get Discounts -> calculate and get request details
 
@@ -166,7 +164,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         edttxtinputCustomerAddress = findViewById(R.id.txtTahvilAddress);
         edttxtinputTarikhPishbiniTahvil = findViewById(R.id.txtTarikhPishbiniTahvil);
         txtinputLayTarikhPishbiniTahvil = findViewById(R.id.inputLayTarikhPishbiniTahvil);
-        fabMenu = findViewById(R.id.fabMenu);
+        final FloatingActionMenu fabMenu = findViewById(R.id.fabMenu);
         fabJashnvareh = findViewById(R.id.fabJashnvareh);
         fabAddMarjoee = findViewById(R.id.fabAddMarjoee);
         fabHashiehSoud = findViewById(R.id.fabHashiehSoud);
@@ -461,18 +459,16 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         {
             lblBonusTitle.setVisibility(View.VISIBLE);
             recyclerViewJayezeh.setVisibility(View.VISIBLE);
-            checkShowForFabMenu();
             mPresenter.getBonusList();
         }
         if (canSelectBonus)
         {
-            fabSelectBonus.setVisibility(View.VISIBLE);
-            fabMenu.close(true);
-            checkShowForFabMenu();
-        }else{
-            fabSelectBonus.setVisibility(View.GONE);
-            checkShowForFabMenu();
+            if (fabSelectBonus.getVisibility() == View.GONE)
+                fabSelectBonus.setVisibility(View.VISIBLE);
         }
+//        else{
+//            fabSelectBonus.setVisibility(View.GONE);
+//        }
         //mPresenter.calculateDiscounts(ccChildParameterNoeVosol , noeVosol);
     }
 
@@ -604,7 +600,8 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         {
             if (darkhastFaktorJayezehModels.size() == 0)
             {
-                fabSelectBonus.setVisibility(View.VISIBLE);
+                if (fabSelectBonus.getVisibility() == View.GONE)
+                    fabSelectBonus.setVisibility(View.VISIBLE);
                 checkShowForFabMenu();
                 lblBonusTitle.setVisibility(View.GONE);
                 recyclerViewJayezeh.setVisibility(View.GONE);
@@ -613,12 +610,12 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
             {
                 lblBonusTitle.setVisibility(View.VISIBLE);
                 recyclerViewJayezeh.setVisibility(View.VISIBLE);
-                checkShowForFabMenu();
             }
 
             if (showAddBonusBtn)
             {
-                fabSelectBonus.setVisibility(View.VISIBLE);
+                if (fabSelectBonus.getVisibility() == View.GONE)
+                    fabSelectBonus.setVisibility(View.VISIBLE);
                 checkShowForFabMenu();
             }
             else
@@ -635,7 +632,8 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         }
         else
         {
-            fabSelectBonus.setVisibility(View.VISIBLE);
+            if (fabSelectBonus.getVisibility() == View.GONE)
+                fabSelectBonus.setVisibility(View.VISIBLE);
             checkShowForFabMenu();
             lblBonusTitle.setVisibility(View.GONE);
             recyclerViewJayezeh.setVisibility(View.GONE);
@@ -885,25 +883,22 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         recyclerViewTakhfif.setVisibility(View.GONE);
 
         fabSelectBonus.setVisibility(View.GONE);
+        checkShowForFabMenu();
         lblBonusTitle.setVisibility(View.GONE);
         recyclerViewJayezeh.setVisibility(View.GONE);
-        checkShowForFabMenu();
     }
 
 
     private void checkShowForFabMenu()
     {
-        if (fabAddMarjoee.getVisibility() == View.GONE && fabSelectBonus.getVisibility() == View.GONE)
+        /*if (fabAddMarjoee.getVisibility() == View.GONE && fabSelectBonus.getVisibility() == View.GONE)
         {
             fabMenu.setVisibility(View.GONE);
         }
         else
         {
             fabMenu.setVisibility(View.VISIBLE);
-        }
-
-
-        fabMenu.close(true);
+        }*/
     }
 
     public void startMVPOps()
