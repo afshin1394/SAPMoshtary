@@ -8,10 +8,13 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,11 +27,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sackcentury.shinebuttonlib.ShineButton;
+import com.saphamrah.CustomView.CustomTextInputLayout;
 import com.saphamrah.Model.GPSDataModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Test.LocationAdapter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class CustomAlertDialog
@@ -36,6 +41,8 @@ public class CustomAlertDialog
 
     private Activity mcontext;
     private final int SHINE_BUTTON_CLICK_DELAY = 500;
+
+    private AlertDialog editableTextShow;
 
 
     public CustomAlertDialog(Activity context)
@@ -832,6 +839,95 @@ public class CustomAlertDialog
         lblProgressPercentage.setTypeface(font);
         return myview;
     }
+
+
+
+    public void showEditableTextAlert(final Activity context, String title, String message , String btnCancelText , String btnOKText , final ICustomEditableAlert customEditableAlert)
+    {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mcontext);
+        View myview = context.getLayoutInflater().inflate(R.layout.alert_arzesh_afzoodeh , null);
+        CustomTextInputLayout customTextInputLayout = myview.findViewById(R.id.cusTextInputModified);
+        EditText modifiableEditText = myview.findViewById(R.id.edt_modifiable_value);
+        TextView titleTextView = myview.findViewById(R.id.txt_title);
+        Button btnCancel = myview.findViewById(R.id.btnCancel);
+        Button btnOK = myview.findViewById(R.id.btnApply);
+        Typeface font = Typeface.createFromAsset(mcontext.getAssets(), mcontext.getResources().getString(R.string.fontPath));
+        titleTextView.setTypeface(font);
+        modifiableEditText.setTypeface(font);
+        btnCancel.setTypeface(font);
+        btnOK.setTypeface(font);
+        titleTextView.setText(title);
+        modifiableEditText.setText(message);
+        btnCancel.setText(btnCancelText);
+        btnOK.setText(btnOKText);
+
+        builder.setCancelable(false);
+        builder.setView(myview);
+        builder.create();
+
+        modifiableEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length()>0) {
+                    String englishNumerals = new BigDecimal(charSequence.toString()).toString();
+                    customEditableAlert.onTextChange(customTextInputLayout,englishNumerals);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        if (!(context).isFinishing())
+        {
+             editableTextShow = builder.show();
+            try
+            {
+
+
+                if (editableTextShow.getWindow() != null)
+                {
+                    editableTextShow.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                }
+            }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), exception.toString(), "CustomAlertDialog", context.getClass().getSimpleName(), "showLogMessageAlert", "");
+            }
+            btnCancel.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    editableTextShow.dismiss();
+                    customEditableAlert.setOnCancelClick();
+                }
+            });
+
+            btnOK.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    customEditableAlert.setOnApplyClick(customTextInputLayout,modifiableEditText.getText());
+                }
+            });
+
+        }
+    }
+    public void  hideEditableTextAlert(){
+        editableTextShow.dismiss();
+    }
+
 
 
 }

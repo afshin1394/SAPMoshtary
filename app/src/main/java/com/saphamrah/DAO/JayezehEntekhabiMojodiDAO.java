@@ -81,7 +81,50 @@ public class JayezehEntekhabiMojodiDAO
         return jayezehEntekhabiMojodiModels;
     }
 
-
+    public ArrayList<JayezehEntekhabiMojodiModel> getByccJayezehForArzeshAfzodeh(int ccJayezeh, int ccJayezehSatr)
+    {
+        ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            /*String query = "select * , sum(m.Tedad) sumTedad from JayezehEntekhabi j inner join KalaMojodi m \n" +
+                    " on j.ccKalaCode = m.ccKalaCode and j.ccTakhfifHajmi = " + ccTakhfifHajmi +
+                    " group by  m.ccKalaCode, m.ShomarehBach, m.ccTaminKonandeh, m.GheymatForosh, m.GheymatMasrafKonandeh having sum(m.Tedad) > 0";*/
+            String query = "select j.*, km.ccKalaMojodi, km.ccForoshandeh, km.sumTedad AS sumTedad, km.ccDarkhastFaktor, km.TarikhDarkhast, km.ShomarehBach, \n" +
+                    " km.TarikhTolid, km.ZamaneSabt, km.TarikhEngheza, km.GheymatMasrafKonandeh, km.GheymatForosh, km.ccTaminKonandeh, km.Max_Mojody, km.Max_MojodyByShomarehBach \n" +
+                    " from JayezehEntekhabi j inner join \n" +
+                    " (select k.* , m.sumTedad, m.GheymatForosh, m.ZamaneSabt, m.ccKalaMojodi, m.ccForoshandeh, m.ccDarkhastFaktor, m.TarikhDarkhast, m.GheymatMasrafKonandeh, m.Max_Mojody, m.Max_MojodyByShomarehBach \n" +
+                    " from Kala k left join (select KalaMojodi.* , sum(Tedad) sumTedad from KalaMojodi where IsAdamForosh = 0 \n" +
+                    " group by ccKalaCode , ShomarehBach, GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh, TarikhTolid, TarikhEngheza) m \n" +
+                    " on k.ccKalaCode = m.ccKalaCode and k.ccTaminKonandeh = m.ccTaminkonandeh and \n" +
+                    " k.ShomarehBach = m.ShomarehBach and k.MablaghMasrafKonandeh = m.GheymatMasrafKonandeh and k.MablaghForosh = m.GheymatForosh and \n" +
+                    " k.TarikhTolid = m.TarikhTolid and k.TarikhEngheza = m.TarikhEngheza  \n" +
+                    " where k.TedadMojodyGhabelForosh > 0 and m.sumTedad > 0  \n" +
+                    " order by codekala desc) km \n" +
+                    " on j.ccKalaCode = km.ccKalaCode and km.sumTedad > 0 " +
+                    " WHERE j.ccJayezeh = " + ccJayezeh + " and j.ccJayezehSatr = " + ccJayezehSatr +
+                    " group by km.ccKalaCode, km.ShomarehBach, km.ccTaminKonandeh, km.GheymatForosh, km.GheymatMasrafKonandeh, km.TarikhTolid, km.TarikhEngheza";
+            Log.d("jayezeh" , "getByccJayezehForArzeshAfzodeh query : " + query);
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    jayezehEntekhabiMojodiModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , "JayezehEntekhabi , KalaMojodi") + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "JayezehEntekhabiMojodiDAO" , "" , "getByccTakhfifHajmi" , "");
+        }
+        return jayezehEntekhabiMojodiModels;
+    }
     public ArrayList<JayezehEntekhabiMojodiModel> getByccJayezeh(int ccJayezeh, int ccJayezehSatr)
     {
         ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels = new ArrayList<>();

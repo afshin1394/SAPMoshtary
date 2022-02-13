@@ -2,6 +2,7 @@ package com.saphamrah.MVP.Presenter;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.saphamrah.BaseMVP.SelectBonusMVP;
 import com.saphamrah.DAO.KalaMojodiDAO;
@@ -13,6 +14,7 @@ import com.saphamrah.UIModel.JayezehEntekhabiMojodiModel;
 import com.saphamrah.Utils.Constants;
 
 import java.lang.ref.WeakReference;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -93,6 +95,8 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
     @Override
     public void checkInsert(int noeJayezehTakhfif, ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel, int selectedccTakhfif, String mablaghTakhfif, String mablaghJayezeh, String mandeh, String maxTedadJayeze, ArrayList<KalaMojodiModel> kalaMojodiModelsMaxShomarehBach , ArrayList<KalaMojodiModel> kalaMojodiModelsMaxMojodi)
     {
+
+
         try
         {
             boolean hasError = false;
@@ -103,7 +107,7 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
             float fltMablaghJayezeh = 0.0F;
             float fltMablaghTakhfif = 0.0F;
             int TedadSefarshDarkhast=0;
-            if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeTakhfif())
+            if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeTakhfif() )
             {
                 try
                 {
@@ -161,7 +165,7 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
                 }
             }
 
-            if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeJayezeh())
+            if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeJayezeh() )
             {
                 if (sumSelectedCount > intMaxTedadJayezeh)
                 {
@@ -174,6 +178,8 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
                     hasError = true;
                 }
             }
+
+
 
             if (!hasError)
             {
@@ -189,6 +195,7 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
                     return;
                 }
 
+
                 Log.d("bonus" , "noeJayezehTakhfif : " + noeJayezehTakhfif);
                 if (intMaxTedadJayezeh < sumTedadJavayezEntekhabi)
                 {
@@ -200,7 +207,8 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
                     }
                     else
                     {
-                        if (fltMandeh > 0 && noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeTakhfif())
+
+                        if (fltMandeh > 0 &&  noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeTakhfif())
                         {
                             insertTakhfifNaghdi = true;
                         }
@@ -240,6 +248,32 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
     public void onDestroy(boolean isChangingConfig)
     {
 
+    }
+
+    @Override
+    public void checkInsertMandehArzeshAfzoodeh(int noeJayezehTakhfif, ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel, int selectedccTakhfif, String mablaghTakhfif, String mablaghJayezeh, String mandeh, String maxTedadJayeze, ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach , ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi) {
+       float fltMandeh = Float.parseFloat(mandeh.trim().replace(","  , ""));
+       float fltMablaghJayezeh = Float.parseFloat(mablaghJayezeh.trim().replace(","  , ""));
+       float fltMablaghTakhfif = Float.parseFloat(mablaghTakhfif.trim().replace(","  , ""));
+       int intMaxTedadJayezeh = Integer.parseInt(maxTedadJayeze.trim().replace(","  , ""));
+
+        mModel.insert(noeJayezehTakhfif,jayezehEntekhabiMojodiModels,darkhastFaktorJayezehTakhfifModel,selectedccTakhfif,fltMablaghTakhfif,fltMablaghJayezeh,fltMandeh, intMaxTedadJayezeh,true);
+
+
+    }
+
+    @Override
+    public void checkArzeshAfzoodeh(int noeJayezehTakhfif, ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel, int selectedccTakhfif, String mablaghTakhfif, String mablaghJayezeh, String mandeh, String maxTedadJayeze, ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach , ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi) {
+        if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh()){
+            long mablaghMandeh = Long.parseLong(mandeh.trim().replace(","  , ""));
+            if ( mablaghMandeh < 0 ){
+                mView.get().onErrorInsert(R.string.errorSelectedMablaghJayezehBigger , "");
+                return;
+            }
+            mView.get().showTaghirMandehDialog(noeJayezehTakhfif, jayezehEntekhabiMojodiModels, darkhastFaktorJayezehTakhfifModel, selectedccTakhfif, mablaghTakhfif,mablaghJayezeh,mablaghMandeh,maxTedadJayeze,KalaMojodiModelsMaxShomarehBach,KalaMojodiModelsMaxMojodi);
+        }else{
+            checkInsert(noeJayezehTakhfif, jayezehEntekhabiMojodiModels, darkhastFaktorJayezehTakhfifModel, selectedccTakhfif, mablaghTakhfif,mablaghJayezeh,mandeh,maxTedadJayeze,KalaMojodiModelsMaxShomarehBach,KalaMojodiModelsMaxMojodi);
+        }
     }
 
 
@@ -295,5 +329,22 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
     public void onFailedInsert()
     {
         mView.get().showToast(R.string.errorOperation, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+    }
+
+    @Override
+    public void onSuccess(int resId) {
+        mView.get().showToast(resId, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
+    }
+
+    @Override
+    public void onInsertJayezehNaghdyArzeshAfzoodeh(float fltMandeh) {
+        mView.get().closeArzeshAfzoodehDialog();
+        mView.get().onInsertJayezehNaghdyArzeshAfzoodeh(fltMandeh);
+
+    }
+
+    @Override
+    public void onSuccessUpdateLockArzeshAfzoodeh() {
+        mView.get().onSuccessInsert();
     }
 }

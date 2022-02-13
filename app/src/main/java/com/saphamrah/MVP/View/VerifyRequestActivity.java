@@ -63,6 +63,8 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     private StateMaintainer stateMaintainer = new StateMaintainer(this.getSupportFragmentManager() , TAG , VerifyRequestActivity.this);
     private VerifyRequestMVP.PresenterOps mPresenter;
 
+    public static boolean SuccessGetBonus;
+
     private CustomAlertDialog customAlertDialog;
     private ArrayList<MoshtaryAddressModel> moshtaryAddressModels;
     private ArrayList<String> moshtaryAddressTitles;
@@ -115,6 +117,8 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     private CustomLoadingDialog customLoadingDialog;
     private View alertView;
     private AlertDialog show;
+    private FloatingActionMenu fabMenu;
+
 
     //getModatRoozRaasgiri -> calculate and get Discounts -> calculate and get request details
 
@@ -123,7 +127,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_request);
-
+        SuccessGetBonus = false;
         Calligrapher calligrapher = new Calligrapher(this);
         calligrapher.setFont(this, getResources().getString(R.string.fontPath), true);
 
@@ -162,7 +166,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         edttxtinputCustomerAddress = findViewById(R.id.txtTahvilAddress);
         edttxtinputTarikhPishbiniTahvil = findViewById(R.id.txtTarikhPishbiniTahvil);
         txtinputLayTarikhPishbiniTahvil = findViewById(R.id.inputLayTarikhPishbiniTahvil);
-        final FloatingActionMenu fabMenu = findViewById(R.id.fabMenu);
+        fabMenu = findViewById(R.id.fabMenu);
         fabJashnvareh = findViewById(R.id.fabJashnvareh);
         fabAddMarjoee = findViewById(R.id.fabAddMarjoee);
         fabHashiehSoud = findViewById(R.id.fabHashiehSoud);
@@ -238,6 +242,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
             public void onClick(View v)
             {
                 openNoeVosolSpinner();
+
             }
         });
 
@@ -438,8 +443,9 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     }
 
     @Override
-    public void onGetRequestDetail(int sumTedadAghlam, int tedadAghlam, double sumVazn, double sumHajm, double vaznFaktor, double hajmFaktor, double sumMablaghKol, double sumMablaghBaArzeshAfzoodeh, double sumMablaghKhales, int sumTedadAghlamPishnehadiBiSetareh)
+    public void onGetRequestDetail(int sumTedadAghlam, int tedadAghlam, double sumVazn, double sumHajm, double vaznFaktor, double hajmFaktor, double sumMablaghKol, double sumMablaghBaArzeshAfzoodeh, double sumMablaghKhales, int sumTedadAghlamPishnehadiBiSetareh,boolean canSelectBonus)
     {
+
         editTextSumMablaghKol.setText(costFormatter.format(sumMablaghKol));
         editTextMablaghKhales.setText(costFormatter.format(sumMablaghKhales));
         editTextMablaghBaArzeshAfzoode.setText(costFormatter.format(sumMablaghBaArzeshAfzoodeh));
@@ -448,6 +454,25 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         editTextTedadPishnahadi.setText(String.valueOf(sumTedadAghlamPishnehadiBiSetareh));
         editTextTedadAghlam.setText(String.valueOf(tedadAghlam));
         editTextSumTedad.setText(String.valueOf(sumTedadAghlam));
+
+
+
+        if (haveBonus)
+        {
+            lblBonusTitle.setVisibility(View.VISIBLE);
+            recyclerViewJayezeh.setVisibility(View.VISIBLE);
+            checkShowForFabMenu();
+            mPresenter.getBonusList();
+        }
+        if (canSelectBonus)
+        {
+            fabSelectBonus.setVisibility(View.VISIBLE);
+            fabMenu.close(true);
+            checkShowForFabMenu();
+        }else{
+            fabSelectBonus.setVisibility(View.GONE);
+            checkShowForFabMenu();
+        }
         //mPresenter.calculateDiscounts(ccChildParameterNoeVosol , noeVosol);
     }
 
@@ -588,6 +613,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
             {
                 lblBonusTitle.setVisibility(View.VISIBLE);
                 recyclerViewJayezeh.setVisibility(View.VISIBLE);
+                checkShowForFabMenu();
             }
 
             if (showAddBonusBtn)
@@ -617,24 +643,12 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     }
 
     @Override
-    public void onSuccessCalculateDiscount(boolean haveBonus, boolean canSelectBonus)
+    public void onSuccessCalculateDiscount(boolean haveBonus)
     {
         //closeLoading();
-        Log.d("onSucCalDiscount" , "haveBonus : " + haveBonus + " , canSelectBonus : " + canSelectBonus);
         this.haveBonus = haveBonus;
         showToast(R.string.successfullyCalculateDiscount, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
-        if (haveBonus)
-        {
-            lblBonusTitle.setVisibility(View.VISIBLE);
-            recyclerViewJayezeh.setVisibility(View.VISIBLE);
-            mPresenter.getBonusList();
-        }
-        if (canSelectBonus)
-        {
-            fabSelectBonus.setVisibility(View.VISIBLE);
-            checkShowForFabMenu();
-            //onDeleteBonus(true);
-        }
+
         //closeLoading();
         /*if (fabAddMarjoee.getVisibility() == View.GONE && fabSelectBonus.getVisibility() == View.GONE)
         {
@@ -850,6 +864,9 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         }
         else if (requestCode == OPEN_BONUS)
         {
+            if (resultCode == RESULT_OK) {
+                SuccessGetBonus = true;
+            }
 			//showLoading();
             mPresenter.getBonusList();
             mPresenter.getDiscounts(ccDarkhastFaktor);
@@ -868,22 +885,25 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         recyclerViewTakhfif.setVisibility(View.GONE);
 
         fabSelectBonus.setVisibility(View.GONE);
-        checkShowForFabMenu();
         lblBonusTitle.setVisibility(View.GONE);
         recyclerViewJayezeh.setVisibility(View.GONE);
+        checkShowForFabMenu();
     }
 
 
     private void checkShowForFabMenu()
     {
-        /*if (fabAddMarjoee.getVisibility() == View.GONE && fabSelectBonus.getVisibility() == View.GONE)
+        if (fabAddMarjoee.getVisibility() == View.GONE && fabSelectBonus.getVisibility() == View.GONE)
         {
             fabMenu.setVisibility(View.GONE);
         }
         else
         {
             fabMenu.setVisibility(View.VISIBLE);
-        }*/
+        }
+
+
+        fabMenu.close(true);
     }
 
     public void startMVPOps()
@@ -983,6 +1003,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
                 alertDialog = customLoadingDialog.showLoadingDialog(VerifyRequestActivity.this);
                 //mPresenter.calculateDiscounts(ccChildParameterNoeVosol , noeVosol);
                 //mPresenter.getModatRoozRaasgiri(ccChildParameterNoeVosol);
+                SuccessGetBonus = false;
                 mPresenter.getModatRoozRaasgiri(noeVosol);
             }
 

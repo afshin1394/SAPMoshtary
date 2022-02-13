@@ -343,6 +343,7 @@
     <string name="errorSelectedBiggerMojodi">تعداد انتخاب شده برای کالای %1$s بیشتر از موجودی می باشد.</string>
     <string name="errorSelectedMablaghJayezehBigger">مبلغ جایزه انتخابی بیشتر از تخفیف می باشد.</string>
     <string name="errorNegativeRemain">مانده منفی می باشد.</string>
+    <string name="errorNegativeRemainDialog">مبلغ وارد شده نمی تواند بزرگتر از مبلغ مانده جایزه باشد.</string>
     <string name="tedadPishnahadi">تعداد پیشنهادی</string>
     <string name="mablaghArzeshAfzoode">مبلغ ارزش افزوده</string>
     <string name="faktorVazn">وزن فاکتور (کیلوگرم)</string>
@@ -1170,5 +1171,8 @@
     <string name="NotAllowedBecauseOfReturnedSeparation">شما به علت عودت تفکیک امروز خود قادر به ورود نیستید.</string>
     <string name="mandehdarZangirei">وصول فاکتور معوق</string>
     <string name="printandShare">چاپ فاکتور</string>
+    <string name="mablaghMandehJayezeh">مبلغ مانده جایزه</string>
+    <string name="txt_remaining_bonus">مبلغ مانده جایزه ارزش افزوده را در صورت دلخواه ویرایش کنید</string>
+    <string name="overMaxMandeh">مبلغ انتخابی بیشتر از کل مبلغ باقیمانده جایزه ارزش افزوده می باشد</string>
 
 </resources>

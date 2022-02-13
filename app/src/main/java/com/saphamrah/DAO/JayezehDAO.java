@@ -522,6 +522,53 @@ Call<GetAllvJayezehByccMarkazForoshResult> call = apiServiceGet.getJayezeh("1", 
         }
         return jayezehModels;
     }
+    public JayezehModel getArzeshAfzoodehJayezeh (MoshtaryModel moshtary, int codeNoeHaml)
+    {
+
+        ArrayList<JayezehModel> jayezehModels = new ArrayList<>();
+        final int NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY = 1;
+        final int NAME_NOE_FIELD_MOSHTARY_CC_GOROH = 2;
+
+        SelectFaktorShared selectFaktorShared = new SelectFaktorShared(context);
+        int ccMarkazSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getCcMarkazSazmanForosh(),0);
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String StrSQL="SELECT * FROM Jayezeh "
+                    +  " WHERE ccMarkazSazmanForosh = " + ccMarkazSazmanForosh + " AND (CodeNoe = 4 AND "
+                    +  " ((NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_MOSHTARY + " AND ccNoeFieldMoshtary= " + moshtary.getCcMoshtary() + ") "
+                    +  " OR (NameNoeFieldMoshtary= " + NAME_NOE_FIELD_MOSHTARY_CC_GOROH + "  AND ccNoeSenf IN (0," + moshtary.getCcNoeSenf() +"))"
+                    +  " AND CodeNoeHaml="+ codeNoeHaml + " AND Darajeh IN ( 0,"+ moshtary.getDarajeh() +")))";
+
+
+
+            Log.d("JayezehDAO","query: " + StrSQL);
+            Cursor cursor = db.rawQuery(StrSQL, null);
+
+
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    jayezehModels = cursorToModel(cursor);
+                    Log.d("JayezehDAO","getArzeshAfzoodehJayezeh:" + jayezehModels.toString());
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , JayezehModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "JayezehDAO" , "" , "getArzeshAfzoodehJayezeh" , "");
+        }
+           if (jayezehModels.size()>0)
+           return jayezehModels.get(0);
+           else
+               return null;
+    }
 
     public ArrayList<JayezehModel> getByMoshtary(MoshtaryModel moshtary, int codeNoeHaml)
     {

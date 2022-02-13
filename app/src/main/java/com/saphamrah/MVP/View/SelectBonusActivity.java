@@ -35,8 +35,10 @@ import com.saphamrah.UIModel.JayezehEntekhabiMojodiModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
 import com.saphamrah.Utils.CustomSpinnerResponse;
+import com.saphamrah.Utils.ICustomEditableAlert;
 import com.saphamrah.Utils.StateMaintainer;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -127,10 +129,12 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
             @Override
             public void onClick(View v)
             {
+                mPresenter.checkArzeshAfzoodeh(darkhastFaktorTakhfifModels.get(selectedIndexTakhfif).getNoeJayezehTakhfif(), jayezehEntekhabiMojodiModels, darkhastFaktorTakhfifModels.get(selectedIndexTakhfif), selectedccTakhfif, editTextTakhfifFaktor.getText().toString(), editTextMablaghJayezeh.getText().toString(), editTextMande.getText().toString(), editTextMaxTedadJayezeh.getText().toString(),
+                        KalaMojodiModelsMaxShomarehBach, KalaMojodiModelsMaxMojodi);
 
-                mPresenter.checkInsert(darkhastFaktorTakhfifModels.get(selectedIndexTakhfif).getNoeJayezehTakhfif() ,jayezehEntekhabiMojodiModels, darkhastFaktorTakhfifModels.get(selectedIndexTakhfif), selectedccTakhfif, editTextTakhfifFaktor.getText().toString(), editTextMablaghJayezeh.getText().toString(), editTextMande.getText().toString(), editTextMaxTedadJayezeh.getText().toString(),
-                        KalaMojodiModelsMaxShomarehBach  , KalaMojodiModelsMaxMojodi
-                );
+//                mPresenter.checkInsert(darkhastFaktorTakhfifModels.get(selectedIndexTakhfif).getNoeJayezehTakhfif() ,jayezehEntekhabiMojodiModels, darkhastFaktorTakhfifModels.get(selectedIndexTakhfif), selectedccTakhfif, editTextTakhfifFaktor.getText().toString(), editTextMablaghJayezeh.getText().toString(), editTextMande.getText().toString(), editTextMaxTedadJayezeh.getText().toString(),
+//                        KalaMojodiModelsMaxShomarehBach  , KalaMojodiModelsMaxMojodi
+//                );
             }
         });
 
@@ -174,6 +178,9 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
             else if (darkhastFaktorTakhfifModels.get(0).getNoeJayezehTakhfif() == DarkhastFaktorJayezehTakhfifModel.NoeTakhfif())
             {
                 showTakhfifData(0);
+            }else if (darkhastFaktorTakhfifModels.get(0).getNoeJayezehTakhfif() == DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh()){
+
+                showJayezehArzeshAfzodehData(0);
             }
         }
     }
@@ -204,6 +211,20 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
         mPresenter.getKalaForJayezeh(selectedccTakhfif, 0, darkhastFaktorTakhfifModels.get(selectedIndexTakhfif).getNoeJayezehTakhfif());
     }
 
+    private void showJayezehArzeshAfzodehData(int selectedIndex)
+    {
+        editTextSelectBonus.setText(darkhastFaktorTakhfifModels.get(selectedIndex).getSharhJayezehTakhfif());
+        editTextMaxTedadJayezeh.setText(String.valueOf(darkhastFaktorTakhfifModels.get(selectedIndex).getTedadJayezeh()));
+        editTextTakhfifFaktor.setText(String.valueOf(darkhastFaktorTakhfifModels.get(selectedIndex).getMablaghJayezehTakhfif()));
+        selectedccTakhfif = darkhastFaktorTakhfifModels.get(selectedIndex).getCcJayezehTakhfif();
+        editTextMaxTedadJayezeh.setVisibility(View.GONE);
+        editTextTakhfifFaktor.setVisibility(View.VISIBLE);
+        editTextMande.setVisibility(View.VISIBLE);
+        editTextMablaghJayezeh.setVisibility(View.VISIBLE);
+        selectedIndexTakhfif = selectedIndex;
+        mPresenter.getKalaForJayezeh(selectedccTakhfif, darkhastFaktorTakhfifModels.get(selectedIndex).getExtraProp_ccJayezehSatr(), darkhastFaktorTakhfifModels.get(selectedIndexTakhfif).getNoeJayezehTakhfif());
+    }
+
     @Override
     public void onEmptyGoodsHaveBonus()
     {
@@ -225,6 +246,9 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
                 else if (darkhastFaktorTakhfifModels.get(selectedIndex).getNoeJayezehTakhfif() == DarkhastFaktorJayezehTakhfifModel.NoeTakhfif())
                 {
                     showTakhfifData(selectedIndex);
+                }
+                else if (darkhastFaktorTakhfifModels.get(selectedIndex).getNoeJayezehTakhfif() == DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh()){
+                    showJayezehArzeshAfzodehData(selectedIndex);
                 }
             }
 
@@ -274,7 +298,8 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
                     exception.printStackTrace();
                 }
                 jayezehEntekhabiMojodiModel.setSelectedCount(intCount);
-                mPresenter.calculateMablaghJayezeh(jayezehEntekhabiMojodiModels , editTextTakhfifFaktor.getText().toString(),1);
+                int noeJayezehTakhfif = jayezehEntekhabiMojodiModel.getCodeNoe();
+                mPresenter.calculateMablaghJayezeh(jayezehEntekhabiMojodiModels , editTextTakhfifFaktor.getText().toString(),noeJayezehTakhfif);
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(SelectBonusActivity.this);
@@ -290,7 +315,7 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
         editTextMande.setText(formatter.format(mandeh));
         editTextMablaghJayezeh.setText(formatter.format(mablaghJayezeh));
 
-        if (mandeh < 0 && noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeTakhfif())
+        if (mandeh < 0 && (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeTakhfif() || noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh()))
         {
             customTextInputLayout.setError(getResources().getString(R.string.errorNegativeRemain));
         }
@@ -318,6 +343,7 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
     @Override
     public void onSuccessInsert()
     {
+
         showToast(R.string.successfullyDoneOps, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
         setResult(RESULT_OK);
         SelectBonusActivity.this.finish();
@@ -334,6 +360,54 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
     public void toastTest(int SelectedCount, int Max_MojodyByShomarehBach, int Max_Mojody, int TedadSefarshDarkhast) {
         customAlertDialog.showToast(SelectBonusActivity.this, "تعداد جایزه" + SelectedCount + " مکس موجودی بچ" +Max_MojodyByShomarehBach +  "مکس موجودی" +Max_Mojody + "تعداد سفارش درخواست" + TedadSefarshDarkhast, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
 
+    }
+
+    @Override
+    public void showTaghirMandehDialog(int noeJayezehTakhfif, ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel, int selectedccTakhfif, String mablaghTakhfif, String mablaghJayezeh, long mandeh, String maxTedadJayeze, ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach , ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi) {
+
+
+        customAlertDialog.showEditableTextAlert(SelectBonusActivity.this, getString(R.string.txt_remaining_bonus), String.valueOf(mandeh).trim().replace(","  , ""), getString(R.string.cancel), getString(R.string.confirm), new ICustomEditableAlert() {
+             @Override
+             public void setOnCancelClick() {
+
+             }
+
+             @Override
+             public void setOnApplyClick(CustomTextInputLayout customTextInputLayout,Object message) {
+
+
+
+                 String englishNumerals = new BigDecimal(String.valueOf(message)).toString();
+
+                 float modifiedMondeh = Float.parseFloat(englishNumerals.replace("," , ""));
+                 if (modifiedMondeh <= mandeh && modifiedMondeh > 0 ){
+                     mPresenter.checkInsertMandehArzeshAfzoodeh(noeJayezehTakhfif, jayezehEntekhabiMojodiModels, darkhastFaktorJayezehTakhfifModel, selectedccTakhfif, mablaghTakhfif,mablaghJayezeh,englishNumerals,maxTedadJayeze,KalaMojodiModelsMaxShomarehBach,KalaMojodiModelsMaxMojodi);
+                 }else{
+                     customTextInputLayout.setError(getResources().getString(R.string.errorNegativeRemainDialog));
+                 }
+
+
+             }
+
+             @Override
+             public void onTextChange(CustomTextInputLayout customTextInputLayout,String s) {
+                     if (Float.parseFloat(s) > mandeh) {
+                         customTextInputLayout.setError(getResources().getString(R.string.errorNegativeRemainDialog));
+                     }else{
+                         customTextInputLayout.setError(null);
+                     }
+                 }
+             });
+    }
+
+    @Override
+    public void closeArzeshAfzoodehDialog() {
+        customAlertDialog.hideEditableTextAlert();
+    }
+
+    @Override
+    public void onInsertJayezehNaghdyArzeshAfzoodeh(float fltMandeh) {
+        SelectBonusActivity.this.finish();
     }
 
     private void showAlertSelectKala(final ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels)

@@ -25,6 +25,7 @@ import com.saphamrah.UIModel.DarkhastFaktorJayezehTakhfifModel;
 import com.saphamrah.UIModel.JayezehEntekhabiMojodiModel;
 import com.saphamrah.Utils.Constants;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,6 +51,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
             DarkhastFaktorJayezehTakhfifDAO darkhastFaktorJayezehTakhfifDAO = new DarkhastFaktorJayezehTakhfifDAO(mPresenter.getAppContext());
             ArrayList<DarkhastFaktorJayezehTakhfifModel> darkhastFaktorJayezehTakhfifModels = darkhastFaktorJayezehTakhfifDAO.getByccDarkhastFaktorccTakhfif(ccDarkhastFaktor, ccTakhfifs);
             Log.d("bonus", "darkhastFaktorJayezehTakhfif size : " + darkhastFaktorJayezehTakhfifModels.size());
+
 
 
             mPresenter.onGetBonus(darkhastFaktorJayezehTakhfifModels);
@@ -95,6 +97,20 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
 
             mPresenter.onGetKalaForJayezeh(jayezehEntekhabiMojodiModels, KalaMojodiModelsMaxShomarehBach, KalaMojodiModelsMaxMojodi,noeJayezehTakhfif);
 
+        }else if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh()){
+            JayezehEntekhabiMojodiDAO jayezehEntekhabiMojodiDAO = new JayezehEntekhabiMojodiDAO(mPresenter.getAppContext());
+            ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels = jayezehEntekhabiMojodiDAO.getByccJayezehForArzeshAfzodeh(ccJayezehTakhfif, ccJayezehSatr);
+            Log.d("bouns", "jayezehEntekhabiMojodiModels Takhfif:" + jayezehEntekhabiMojodiModels);
+            mPresenter.onGetKalaForJayezeh(jayezehEntekhabiMojodiModels, KalaMojodiModelsMaxShomarehBach, KalaMojodiModelsMaxMojodi,noeJayezehTakhfif);
+
+            /**
+             * get max mojodi and max shomarehbach
+             */
+            KalaMojodiModelsMaxShomarehBach = kalaMojodiDAO.getMaxShomarehBach(ccJayezehTakhfif, ccJayezehSatr);
+            KalaMojodiModelsMaxMojodi = kalaMojodiDAO.getMaxMojodi(ccJayezehTakhfif, ccJayezehSatr);
+
+
+            mPresenter.onGetKalaForJayezeh(jayezehEntekhabiMojodiModels, KalaMojodiModelsMaxShomarehBach, KalaMojodiModelsMaxMojodi,noeJayezehTakhfif);
         }
 
         /*for (JayezehEntekhabiMojodiModel model : jayezehEntekhabiMojodiModels)
@@ -122,6 +138,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
 
     @Override
     public void insert(int noeJayezehTakhfif, ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel, int selectedccTakhfif, double mablaghTakhfif, double mablaghJayezeh, double mandeh, int maxTedadJayeze, boolean insertTakhfifNaghdi) {
+
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(), -1);
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
@@ -137,7 +154,14 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
             insertDarkhastFaktorTakhfifModel.setCcTakhfif(new TakhfifNaghdyDAO(mPresenter.getAppContext()).getccTakhfifNaghdiByccGorohMoshtary(ccGorohNoeMoshatry));
             insertDarkhastFaktorTakhfifModel.setCcDarkhastFaktor(ccDarkhastFaktor);
             insertDarkhastFaktorTakhfifModel.setMablaghTakhfif(Math.round(mandeh));
-            insertDarkhastFaktorTakhfifModel.setDarsadTakhfif((float) ((mandeh*100)/mablaghTakhfif));
+            Log.d("bonus", "Jayezeh mandeh : " + mandeh + " ,mablaghTakhfif:" +mablaghTakhfif);
+            if (mablaghTakhfif!=0) {
+                DecimalFormat dfSharp = new DecimalFormat("#.##");
+                insertDarkhastFaktorTakhfifModel.setDarsadTakhfif(Float.parseFloat( dfSharp.format(((mandeh * 100) / mablaghTakhfif))));
+            }
+            else
+                insertDarkhastFaktorTakhfifModel.setDarsadTakhfif(0f);
+
             insertDarkhastFaktorTakhfifModel.setCodeNoeTakhfif(Integer.parseInt(codeNoeTakhfif));
             insertDarkhastFaktorTakhfifModel.setSharhTakhfif(mPresenter.getAppContext().getResources().getString(R.string.takhfifNaghdiforJayezeh));
             insertDarkhastFaktorTakhfifModel.setExtraProp_ForJayezeh(0);
@@ -227,8 +251,14 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
                 } else {
                     mPresenter.onFailedInsert();
                 }
+            }else if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh()){
+                if (removeJayezeh(darkhastFaktorJayezehTakhfifModel.getCcDarkhastFaktor(), darkhastFaktorJayezehTakhfifModel.getCcJayezehTakhfif())) {
+                    mPresenter.onSuccessInsert();
+                } else {
+                    mPresenter.onFailedInsert();
+                }
             }
-        } else {
+        } else if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeJayezeh()){
             mPresenter.onFailedInsert();
         }
     }
@@ -285,6 +315,10 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
     public void onDestroy() {
 
     }
+
+
+
+
 
 
 }

@@ -79,7 +79,7 @@
     <dimen name="menuFontSizeHeader">12sp</dimen>
     <dimen name="menuPaddingTopProfile">20dp</dimen>
     <dimen name="menuPaddingBottomProfile">10dp</dimen>
-    <dimen name="fontSizeSelectBonus">10sp</dimen>
+    <dimen name="fontSizeSelectBonus">12sp</dimen>
     <dimen name="fontSizeBottomNavRequest">10sp</dimen>
     <dimen name="imagSizeBottomNavRequest">48dp</dimen>
     <dimen name="imageSizeRequestProcess">100dp</dimen>

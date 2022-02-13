@@ -7,7 +7,7 @@ public class DarkhastFaktorJayezehTakhfifModel
 
     private static final int NOE_JAYEZEH = 1;
     private static final int NOE_TAKHFIF = 2;
-
+    private static final int NOE_ARZESHAFZOODEH = 4;
 
     public static int NoeJayezeh()
     {
@@ -18,7 +18,9 @@ public class DarkhastFaktorJayezehTakhfifModel
         return NOE_TAKHFIF;
     }
 
-
+    public static int NoeArzeshAfzoodeh() {
+        return NOE_ARZESHAFZOODEH;
+    }
 
     private static final String COLUMN_NoeJayezehTakhfif = "NoeJayezehTakhfif";
     private static final String COLUMN_ccDarkhastFaktorJayezehTakhfif = "ccDarkhastFaktorJayezehTakhfif";

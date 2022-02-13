@@ -61,12 +61,17 @@ public class DarkhastFaktorJayezehTakhfifDAO
                     " ccTakhfif AS ccJayezehTakhfif, SharhTakhfif AS SharhJayezehTakhfif, CodeNoeTakhfif AS CodeNoeJayezehTakhfif, \n" +
                     " MablaghTakhfif AS MablaghJayezehTakhfif, '-1' AS ccKalaJayezeh, -1 AS TedadJayezeh \n" +
                     " from DarkhastFaktorTakhfif \n" +
-                    " where ccDarkhastFaktor = " + ccDarkhastFaktor + " and ccTakhfif in (" + ccTakhfifs + ")" +
-                    " union all \n" +
+                    " where ccDarkhastFaktor = " + ccDarkhastFaktor + " and CodeNoeTakhfif = 2 and ccTakhfif in (" + ccTakhfifs + ")" +
+                    " UNION ALL \n" +
                     " select 1 AS NoeJayezehTakhfif, ExtraProp_ccJayezehSatr, ccDarkhastFaktorJayezeh, ccDarkhastFaktor, ccJayezeh, Sharh, ExtraProp_CodeNoeJayezeh, -1, ccKala, Tedad \n" +
                     " from DarkhastFaktorJayezeh \n" +
-                    " where ccDarkhastFaktor = " + ccDarkhastFaktor + " and ExtraProp_CodeNoeJayezeh = " + DarkhastFaktorJayezehModel.CodeNoeJayezehEntekhabi();
-            Log.d("bouns","getByccDarkhastFaktorccTakhfif query:" + query);
+                    " where ccDarkhastFaktor = " + ccDarkhastFaktor + " and ExtraProp_CodeNoeJayezeh = " + DarkhastFaktorJayezehModel.CodeNoeJayezehEntekhabi()+
+                    " UNION ALL " +
+                    " select 4 AS NoeJayezehTakhfif, ExtraProp_ccJayezehTakhfif As ExtraProp_ccJayezehSatr, ccDarkhastFaktorTakhfif AS ccDarkhastFaktorJayezehTakhfif, ccDarkhastFaktor, \n" +
+                    " ccTakhfif AS ccJayezehTakhfif, SharhTakhfif AS SharhJayezehTakhfif, CodeNoeTakhfif AS CodeNoeJayezehTakhfif, \n" +
+                    " MablaghTakhfif AS MablaghJayezehTakhfif, '-1' AS ccKalaJayezeh, -1 AS TedadJayezeh \n" +
+                    " from DarkhastFaktorTakhfif \n" +
+                    " where ccDarkhastFaktor = " + ccDarkhastFaktor + " and CodeNoeTakhfif = 4 and  ccTakhfif in (" + ccTakhfifs + ")";
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {

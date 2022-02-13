@@ -335,10 +335,10 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
     }
 
     @Override
-    public void onGetRequestDetail(int sumTedadAghlam, int tedadAghlam, double sumVazn, double sumHajm, double vaznFaktor, double hajmFaktor, double sumMablaghKol, double sumMablaghBaArzeshAfzoodeh, double sumMablaghKhales, int sumTedadAghlamPishnehadiBiSetareh)
+    public void onGetRequestDetail(int sumTedadAghlam, int tedadAghlam, double sumVazn, double sumHajm, double vaznFaktor, double hajmFaktor, double sumMablaghKol, double sumMablaghBaArzeshAfzoodeh, double sumMablaghKhales, int sumTedadAghlamPishnehadiBiSetareh,boolean canSelectBonus)
     {
         closeLoading();
-        mView.get().onGetRequestDetail(sumTedadAghlam, tedadAghlam, sumVazn, sumHajm, vaznFaktor, hajmFaktor, sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh);
+        mView.get().onGetRequestDetail(sumTedadAghlam, tedadAghlam, sumVazn, sumHajm, vaznFaktor, hajmFaktor, sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh,canSelectBonus);
     }
 
     @Override
@@ -373,9 +373,9 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
     }
 
     @Override
-    public void onSuccessCalculateDiscount(boolean haveBonus, boolean canSelectBonus)
+    public void onSuccessCalculateDiscount(boolean haveBonus)
     {
-        mView.get().onSuccessCalculateDiscount(haveBonus, canSelectBonus);
+        mView.get().onSuccessCalculateDiscount(haveBonus);
     }
 
     @Override

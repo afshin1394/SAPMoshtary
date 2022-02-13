@@ -10,6 +10,7 @@ import com.saphamrah.Model.DarkhastFaktorTakhfifModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.UIModel.DarkhastFaktorJayezehTakhfifModel;
 import com.saphamrah.Utils.Constants;
 
 import java.util.ArrayList;
@@ -509,6 +510,26 @@ public class DarkhastFaktorTakhfifDAO
             return false;
         }
     }
+    public boolean deleteTakhfifByCodeNoe(long ccDarkhastFaktor,int codeNoe){
+        try
+        {
+            String query = "delete from " + DarkhastFaktorTakhfifModel.TableName() + " where ccDarkhastFaktor = " + ccDarkhastFaktor +
+                    " and CodeNoeTakhfif = " + codeNoe +" and ExtraProp_MustSendToSql = 0 ";
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , DarkhastFaktorTakhfifModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorTakhfifDAO" , "" , "deleteTakhfifByCodeNoe" , "");
+            return false;
+        }
+    }
 
     private static ContentValues modelToContentvalue(DarkhastFaktorTakhfifModel darkhastFaktorTakhfifModel)
     {
@@ -561,5 +582,23 @@ public class DarkhastFaktorTakhfifDAO
     }
 
 
-
+    public boolean updateCodeNoeArzeshAfzoodeh() {
+        try
+        {
+            String query = "update " + DarkhastFaktorTakhfifModel.TableName() + " set " + DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_MustSendToSql() + " = " + 1 +
+                    " where " + DarkhastFaktorTakhfifModel.COLUMN_CodeNoeTakhfif() + " = " + DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh();
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , DarkhastFaktorTakhfifModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorTakhfifDAO" , "" , "updateCodeNoeArzeshAfzoodeh" , "");
+            return false;
+        }
+    }
 }

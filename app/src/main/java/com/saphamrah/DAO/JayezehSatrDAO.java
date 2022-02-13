@@ -486,6 +486,40 @@ Call<GetAllvJayezehSatrResult> call = apiServiceGet.getAllvJayezehSatr();
         return jayezehSatrs;
     }
 
+    public int getccJayezehSatrForArzeshAfzoodeh(int ccJayezeh, double mablaghArzeshAfzoodeh){
+
+        ArrayList<JayezehSatrModel> jayezehSatrs = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query = "select * from jayezehsatr where  ccJayezeh = "+ccJayezeh+" AND Az<= " + mablaghArzeshAfzoodeh + " AND " + mablaghArzeshAfzoodeh  + "<= Ta";
+
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    jayezehSatrs = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , JayezehSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "JayezehSatrDAO" , "" , "getccJayezehSatrForArzeshAfzoodeh" , "");
+        }
+        Log.d("jayezeh" , "jayezehSatrs.size in dao : " + jayezehSatrs.size());
+        if (jayezehSatrs.size()>0)
+        return jayezehSatrs.get(0).getCcJayezehSatr();
+        else
+            return 0;
+
+    }
+
     public boolean deleteAll()
     {
         try

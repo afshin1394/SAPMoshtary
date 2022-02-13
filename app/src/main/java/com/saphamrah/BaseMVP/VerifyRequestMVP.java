@@ -24,7 +24,7 @@ public interface VerifyRequestMVP
         void onGetConfig(boolean showBtnMarjoee);
         void showTarikhPishbiniTahvil();
         void hideTarikhPishbiniTahvil();
-        void onGetRequestDetail(int sumTedadAghlam, int tedadAghlam, double sumVazn, double sumHajm, double vaznFaktor, double hajmFaktor, double sumMablaghKol, double sumMablaghBaArzeshAfzoodeh, double sumMablaghKhales, int sumTedadAghlamPishnehadiBiSetareh);
+        void onGetRequestDetail(int sumTedadAghlam, int tedadAghlam, double sumVazn, double sumHajm, double vaznFaktor, double hajmFaktor, double sumMablaghKol, double sumMablaghBaArzeshAfzoodeh, double sumMablaghKhales, int sumTedadAghlamPishnehadiBiSetareh,boolean canSelectBonus);
         void showModatRoozRaasgiri(int modatRoozRaasgiri, boolean isSelectedVosolVajhNagh, boolean isSelectedVosolResidNaghd);
         void onGetCustomerAddress(ArrayList<MoshtaryAddressModel> moshtaryAddressModels , ArrayList<String> moshtaryAddressTitles);
         void openBarkhordAvalieActivity();
@@ -37,7 +37,7 @@ public interface VerifyRequestMVP
         void onGetMarjoeeList(ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels);
         void onGetDiscounts(ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels, double sumMablaghTakhfif);
         void onGetBonus(ArrayList<DarkhastFaktorJayezehModel> darkhastFaktorJayezehModels , boolean showAddBonusBtn, boolean haveBonus);
-        void onSuccessCalculateDiscount(boolean haveBonus, boolean canSelectBonus);
+        void onSuccessCalculateDiscount(boolean haveBonus);
         void onFailedCalculateDiscount(int resId);
         void showCalculatedDateOfTarikhPishbiniTahvil(Map<String, Date> mapDates);
         void onDeleteBonus(boolean openSelectBonusActivity);
@@ -85,7 +85,7 @@ public interface VerifyRequestMVP
         Context getAppContext();
         void onConfigurationChanged(VerifyRequestMVP.RequiredViewOps view);
         void onGetConfig(boolean showBtnMarjoee);
-        void onGetRequestDetail(int sumTedadAghlam, int tedadAghlam, double sumVazn, double sumHajm, double vaznFaktor, double hajmFaktor, double sumMablaghKol, double sumMablaghBaArzeshAfzoodeh, double sumMablaghKhales, int sumTedadAghlamPishnehadiBiSetareh);
+        void onGetRequestDetail(int sumTedadAghlam, int tedadAghlam, double sumVazn, double sumHajm, double vaznFaktor, double hajmFaktor, double sumMablaghKol, double sumMablaghBaArzeshAfzoodeh, double sumMablaghKhales, int sumTedadAghlamPishnehadiBiSetareh,boolean canSelectBonus);
         void onGetModatRoozRaasgiri(int modatRoozRaasgiri, boolean isSelectedVosolVajhNagh, boolean isSelectedVosolResidNaghd);
         void onGetCustomerAddress(ArrayList<MoshtaryAddressModel> moshtaryAddressModels, boolean showTarikhPishbiniTahvil);
         void onGetInfo(long ccDarkhastFaktor , int modatVosol , ArrayList<ParameterChildModel> childParameterModelsVosols);
@@ -93,7 +93,7 @@ public interface VerifyRequestMVP
         void onGetMarjoeeList(ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels);
         void onGetBonus(ArrayList<DarkhastFaktorJayezehModel> darkhastFaktorJayezehModels , boolean showAddBonusBtn, boolean haveBonus);
         void onErrorCalculateDiscount(int resId);
-        void onSuccessCalculateDiscount(boolean haveBonus, boolean canSelectBonus);
+        void onSuccessCalculateDiscount(boolean haveBonus);
         void onGetDiscounts(ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels);
         void onGetTarikhPishbiniTahvilInfo(int maxTedadRooz, List<TaghvimTatilModel> taghvimTatilModels);
         void onDeleteBonus(boolean openSelectBonusActivity);

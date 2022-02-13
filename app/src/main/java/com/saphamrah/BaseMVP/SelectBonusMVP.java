@@ -26,6 +26,12 @@ public interface SelectBonusMVP
         void onSuccessInsert();
         void showToast(int resId, int messageType , int duration);
         void toastTest(int SelectedCount , int Max_MojodyByShomarehBach , int Max_Mojody , int TedadSefarshDarkhast);
+
+        void showTaghirMandehDialog(int noeJayezehTakhfif, ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel, int selectedccTakhfif, String mablaghTakhfif, String mablaghJayezeh, long mandeh, String maxTedadJayeze, ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach , ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi);
+
+        void closeArzeshAfzoodehDialog();
+
+        void onInsertJayezehNaghdyArzeshAfzoodeh(float fltMandeh);
     }
 
 
@@ -40,6 +46,9 @@ public interface SelectBonusMVP
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
 
+        void checkInsertMandehArzeshAfzoodeh(int noeJayezehTakhfif, ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel, int selectedccTakhfif, String mablaghTakhfif, String mablaghJayezeh, String mandeh, String maxTedadJayeze, ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach , ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi);
+
+        void checkArzeshAfzoodeh(int noeJayezehTakhfif, ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel, int selectedccTakhfif, String mablaghTakhfif, String mablaghJayezeh, String mandeh, String maxTedadJayeze, ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach , ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi);
     }
 
 
@@ -52,6 +61,12 @@ public interface SelectBonusMVP
         void onGetKalaForJayezeh(ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels , ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach , ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi, int noeJayezehTakhfif);
         void onSuccessInsert();
         void onFailedInsert();
+
+        void onSuccess(int resId);
+
+        void onInsertJayezehNaghdyArzeshAfzoodeh(float fltMandeh);
+
+        void onSuccessUpdateLockArzeshAfzoodeh();
     }
 
 
@@ -62,6 +77,7 @@ public interface SelectBonusMVP
         void insert(int noeJayezehTakhfif, ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel, int selectedccTakhfif, double mablaghTakhfif, double mablaghJayezeh, double mandeh, int maxTedadJayeze, boolean insertTakhfifNaghdi);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
+
 
     }
 
