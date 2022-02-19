@@ -24,6 +24,7 @@ public interface RequestCustomerListMVP
         void showMojoodiGiriActivity(int ccMoshtary,int ccSazmanForosh);
         void showDarkhastKalaActivity(int ccMoshtary,int ccSazmanForosh);
         void showAlertDuplicateRequestForCustomer(MoshtaryModel moshtaryModel,MoshtaryGharardadModel moshtaryGharardadModel);
+        void showAlertOneRequestForCustomer();
         void closeLoading();
         void showToast(int resId, int messageType , int duration);
         void showErrorAlert(int resId, int messageType, boolean closeActivity);
@@ -56,6 +57,7 @@ public interface RequestCustomerListMVP
         void onSetRequestInfoShared(int ccMoshtary,int ccSazmanForosh, boolean showBarkhordAvalie, boolean showMojodiGiri);
         void onFailedSetRequestInfoShared();
         void showAlertDuplicateRequestForCustomer(MoshtaryModel moshtaryModel,MoshtaryGharardadModel moshtaryGharardadModel);
+        void showAlertOneRequestForCustomer();
         void onErrorSelectCustomer(int resId);
         void onWarningSelectCustomer(int resId);
         void onSuccessUpdateMandeMojodi();

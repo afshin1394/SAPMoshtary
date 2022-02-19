@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE = 4 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest 8-Pegah-grpc 9-Badr
+    private static final int CURRENT_VERSION_TYPE = 2 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest 8-Pegah-grpc 9-Badr
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 
@@ -689,7 +689,17 @@ public class Constants
     public static final int CC_CHILD_Check_Mandeh_Faktor_Is_Zero_For_Naghd_Before_Send_Vosol = 187;
     public static final int CC_CHILD_Check_Send_Marjoee_Before_Send_Vosol = 188;
     public static final int CC_CHILD_Check_Modat_RassGiri_Before_Send_Vosol = 189;
-    public static final int CC_CHILD_Min_Ppi_Display_For_Animation = 190;
+    public static final int CC_CHILD_Interval_Clear_Cache = 190;
+    public static final int CC_CHILD_Sedaye_Moshtary_Enable = 191;
+    public static final int CC_CHILD_Require_Tarikh_Tavalod = 192;
+    public static final int CC_CHILD_Can_Edit_Darkhast_For_Movaze = 193;
+    public static final int CC_CHILD_Description_Darkhast_Enable = 194;
+    public static final int CC_CHILD_Can_Get_Image_Customer_Confirm_Request = 195;
+    public static final int CC_CHILD_Can_Multiple_Add_Request = 196;
+    public static final int CC_CHILD_Hashieh_Sood_Enable = 197;
+    public static final int CC_CHILD_Tedad_Pishnahdy_Tarikh_Tahvil = 198;
+    public static final int CC_CHILD_Check_Shahr_Markazi_Tarikh_Tahvil = 199;
+
 
 
     public static String NOE_SHAKHSIAT()
@@ -1140,10 +1150,55 @@ public class Constants
     {
         return CC_CHILD_Check_Modat_RassGiri_Before_Send_Vosol;
     }
-    public static int CC_CHILD_Min_Ppi_Display_For_Animation()
+    public static int CC_CHILD_Interval_Clear_Cache()
     {
-        return CC_CHILD_Min_Ppi_Display_For_Animation;
+        return CC_CHILD_Interval_Clear_Cache;
     }
+
+    public static int CC_CHILD_Sedaye_Moshtary_Enable()
+    {
+        return CC_CHILD_Sedaye_Moshtary_Enable;
+    }
+    public static int CC_CHILD_Require_Tarikh_Tavalod()
+    {
+        return CC_CHILD_Require_Tarikh_Tavalod;
+    }
+    public static int CC_CHILD_Can_Edit_Darkhast_For_Movaze()
+    {
+        return CC_CHILD_Can_Edit_Darkhast_For_Movaze;
+    }
+
+    public static int CC_CHILD_Description_Darkhast_Enable()
+    {
+        return CC_CHILD_Description_Darkhast_Enable;
+    }
+
+    public static int CC_CHILD_Can_Get_Image_Customer_Confirm_Request()
+    {
+        return CC_CHILD_Can_Get_Image_Customer_Confirm_Request;
+    }
+
+    public static int CC_CHILD_Can_Multiple_Add_Request()
+    {
+        return CC_CHILD_Can_Multiple_Add_Request;
+    }
+
+    public static int CC_CHILD_Hashieh_Sood_Enable()
+    {
+        return CC_CHILD_Hashieh_Sood_Enable;
+    }
+
+    public static int CC_CHILD_Tedad_Pishnahdy_Tarikh_Tahvil()
+    {
+        return CC_CHILD_Tedad_Pishnahdy_Tarikh_Tahvil;
+    }
+
+    public static int CC_CHILD_Check_Shahr_Markazi_Tarikh_Tahvil()
+    {
+        return CC_CHILD_Check_Shahr_Markazi_Tarikh_Tahvil;
+    }
+
+
 
     public static int CC_CHILD_CHECK_LOCATION_IN_POLYGON_FOR_NEW_CUSTOMER()
     {

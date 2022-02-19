@@ -3,7 +3,8 @@ package com.saphamrah.MVP.Presenter;
 import android.content.Context;
 
 import com.saphamrah.BaseMVP.MojodiGiriMVP;
-										
+
+import com.saphamrah.DAO.MojoodiGiriDAO;
 import com.saphamrah.MVP.Model.MojodiGiriModel;
 											 
 import com.saphamrah.Model.ElatAdamDarkhastModel;
@@ -11,6 +12,7 @@ import com.saphamrah.Model.KalaModel;
 											
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.UIModel.KalaMojodiGiriModel;
 import com.saphamrah.Utils.Constants;
 
@@ -56,10 +58,11 @@ public class MojodiGiriPresenter implements MojodiGiriMVP.PresenterOps , MojodiG
     @Override
     public void checkBottomBarClick(int position)
     {
+        PubFunc.RequestBottomBarConfig bottomBarConfig = new PubFunc().new RequestBottomBarConfig();
+        bottomBarConfig.getConfig(getAppContext());
+
         if (position == 0)
         {
-            PubFunc.RequestBottomBarConfig bottomBarConfig = new PubFunc().new RequestBottomBarConfig();
-            bottomBarConfig.getConfig(getAppContext());
             if (bottomBarConfig.getShowBarkhordAvalie())
             {
                 mView.get().openBarkhordAvalieActivity();
@@ -71,7 +74,16 @@ public class MojodiGiriPresenter implements MojodiGiriMVP.PresenterOps , MojodiG
         }
         else if (position == 2)
         {
-            mView.get().openDarkhastActivity();
+            SelectFaktorShared shared = new SelectFaktorShared(getAppContext());
+            MojoodiGiriDAO mojoodiGiriDAO = new MojoodiGiriDAO(getAppContext());
+            int ccMoshtary = shared.getInt(shared.getCcMoshtary() , -1);
+            int count = mojoodiGiriDAO.getCountMojodiGiriByMoshtaryForCheck(ccMoshtary, true);
+            boolean haveMojoodiGiri = count != 0;
+
+            if(bottomBarConfig.getForceMojoodiGiri() && !haveMojoodiGiri)
+                mView.get().showToast(R.string.forceMojodigiri, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+            else
+                mView.get().openDarkhastActivity();
         }
         else if (position == 3 || position == 4 || position == 5)
         {

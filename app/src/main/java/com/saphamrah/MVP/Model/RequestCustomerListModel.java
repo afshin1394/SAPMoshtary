@@ -259,7 +259,13 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
     {
         RptDarkhastFaktorVazeiatPPCDAO darkhastFaktorVazeiatPPCDAO = new RptDarkhastFaktorVazeiatPPCDAO(mPresenter.getAppContext());
         int countFaktorForMoshtary = darkhastFaktorVazeiatPPCDAO.getCountFaktorForMoshtary(moshtaryModel.getCcMoshtary());
-        if (countFaktorForMoshtary > 0)
+        int CanMultipleAddRequest = Integer.parseInt(new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Can_Multiple_Add_Request()));
+
+        if (countFaktorForMoshtary > 0 && CanMultipleAddRequest==0)
+        {
+            mPresenter.showAlertOneRequestForCustomer();
+        }
+        else if (countFaktorForMoshtary > 0 && CanMultipleAddRequest==1)
         {
             mPresenter.showAlertDuplicateRequestForCustomer(moshtaryModel,moshtaryGharardadModel);
         }

@@ -101,7 +101,10 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         ForoshandehMamorPakhshUtils foroshandehMamorPakhshUtils = new ForoshandehMamorPakhshUtils();
         int noeMasouliat = foroshandehMamorPakhshUtils.getNoeMasouliat(foroshandehMamorPakhshModel);
-        mPresenter.onGetNoeMasouliat(noeMasouliat);
+        int CanEditDarkhastForMovaze = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Can_Edit_Darkhast_For_Movaze()));
+
+
+        mPresenter.onGetNoeMasouliat(noeMasouliat, CanEditDarkhastForMovaze);
     }
 
     @Override

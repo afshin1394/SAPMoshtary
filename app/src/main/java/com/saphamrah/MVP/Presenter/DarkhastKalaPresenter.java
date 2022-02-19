@@ -410,11 +410,16 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
     }
 	
 	@Override
-    public void onGetNoeMasouliat(int noeMasouliat)
+    public void onGetNoeMasouliat(int noeMasouliat, int CanEditDarkhastForMovaze)
     {
         if (noeMasouliat != 1 && noeMasouliat != 2 && noeMasouliat != 3 && noeMasouliat!=6 && noeMasouliat!=8)
         {
             mView.get().hideNoRequestButton();
+        }
+
+        if (noeMasouliat != 1 && noeMasouliat != 2 && noeMasouliat != 3 && noeMasouliat!=6 && noeMasouliat!=8 && CanEditDarkhastForMovaze == 0)
+        {
+            mView.get().hideFabAddButton();
         }
     }
 

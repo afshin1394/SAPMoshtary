@@ -198,9 +198,23 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             int TedadPishnahady = darkhastfaktorDAO.getTedadFaktorTarikhPishbinyTahvil();
             Log.d("verifyRequest" , "addressModels : " + addressModels.toString());
             Log.d("verifyRequest" , "countMahale : " + countccMahaleh + " , tedadPishnahadi : " + TedadPishnahady);
-            if(countccMahaleh > 0 && TedadPishnahady < 2)//check shahr markazi & TedadPishnahdyTarikhTahvil
+            int maxTedadPishnahdyTarikhTahvil = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Tedad_Pishnahdy_Tarikh_Tahvil()));
+            int checkShahrMarkaziTarikhTahvil = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Check_Shahr_Markazi_Tarikh_Tahvil()));
+            Log.d("verifyRequest" , "maxTedadPishnahdyTarikhTahvil : " + maxTedadPishnahdyTarikhTahvil + " , checkShahrMarkaziTarikhTahvil : " + checkShahrMarkaziTarikhTahvil);
+
+            if(checkShahrMarkaziTarikhTahvil == 1)
             {
-                showTarikhPishbiniTahvil = true;
+                if(countccMahaleh > 0 && TedadPishnahady < maxTedadPishnahdyTarikhTahvil)//check shahr markazi & TedadPishnahdyTarikhTahvil
+                {
+                    showTarikhPishbiniTahvil = true;
+                }
+            }
+            else if(checkShahrMarkaziTarikhTahvil == 0)
+            {
+                if( TedadPishnahady < maxTedadPishnahdyTarikhTahvil)//check TedadPishnahdyTarikhTahvil
+                {
+                    showTarikhPishbiniTahvil = true;
+                }
             }
         }
         mPresenter.onGetCustomerAddress(addressModels, showTarikhPishbiniTahvil);
@@ -3630,7 +3644,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
                 long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor() , -1);
                 DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
-                if (!VerifyRequestActivity.SuccessGetBonus)
+                if (!VerifyRequestActivity.SuccessGetBonus && sumMablaghBaArzeshAfzoodeh>0)
                 {
                     if (darkhastFaktorTakhfifDAO.deleteTakhfifByCodeNoe(ccDarkhastFaktor, DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh())) {
                         AsyncTaskMohasebehJayezehArzeshAfzoodeh asyncTaskMohasebehJayezehArzeshAfzoodeh = new AsyncTaskMohasebehJayezehArzeshAfzoodeh(sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumTedadAghlam, tedadAghlam, sumHajm, sumVazn, vaznFaktor, hajmFaktor, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh);

@@ -22,6 +22,7 @@ public interface DarkhastKalaMVP
     {
         Context getAppContext();
         void hideNoRequestButton();
+        void hideFabAddButton();
         void prepareDataForCheckInsertFaktor();
         void openBarkhordAvalieActivity();
         void onGetRequestedGoods(ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorsatrModels);
@@ -79,7 +80,7 @@ public interface DarkhastKalaMVP
     {
         Context getAppContext();
         void onConfigurationChanged(DarkhastKalaMVP.RequiredViewOps view);
-		void onGetNoeMasouliat(int noeMasouliat);										 
+		void onGetNoeMasouliat(int noeMasouliat, int CanEditDarkhastForMovaze);
         void onGetRequestedGoods(ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorsatrModels);
         void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels, DarkhastKalaActivity.AddItemType type);
         void onGetElatAdamSefaresh(ArrayList<ElatAdamDarkhastModel> elatAdamDarkhastModels);

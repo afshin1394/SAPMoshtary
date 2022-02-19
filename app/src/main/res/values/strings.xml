@@ -518,6 +518,7 @@
     <string name="sabteBarkhord">ثبت برخورد</string>
     <string name="mojodiGiri">موجودی گیری</string>
     <string name="cantMultipleMojodigiri">امکان موجودی گیری ندارید و یا فقط یک بار می توانستید موجودی گیری نمایید.</string>
+    <string name="forceMojodigiri">لطفا ابتدا موجودگیری را ثبت نمایید.</string>
     <string name="errorMultipleMojodiGiri">فقط یکبار امکان موجودی گیری را دارید.</string>
     <string name="mojodi">موجودی</string>
     <string name="mojodiKol">موجودی کل</string>
@@ -550,6 +551,7 @@
     <string name="errorBiggerThanMaxMojodi">تعداد وارد شده برای کالاهای زیر بیشتر از موجودی می باشد.</string>
     <string name="errorZaribForosh">ضریب فروش رعایت نشده است.</string>
     <string name="warningDuplicateRequestForCustomer">برای این مشتری درخواست ثبت شده است. \n برای ثبت درخواست جدید مطمئن هستید؟</string>
+    <string name="warningOneRequestForCustomer">برای این مشتری درخواست ثبت شده است. \n امکان ثبت دوباره درخواست وجود ندارد.</string>
     <string name="errorcustomerHaveCheckBargashty">مشتری دارای چک برگشتی می باشد.</string>
     <string name="errorMaxCheckBargashtyCost">مبلغ چک برگشتی فروشنده بیش از حداکثر مبلغ چک برگشتی نوع مشتری است.</string>
     <string name="errorCheckBargashty">تعداد چک برگشتی فروشنده بیش از حداکثر مبلغ چک برگشتی نوع مشتری است.</string>

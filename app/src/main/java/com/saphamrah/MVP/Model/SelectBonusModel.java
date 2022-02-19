@@ -50,7 +50,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
             String ccTakhfifs = selectFaktorShared.getString(selectFaktorShared.getCcTakhfifJayezes(), "");
             DarkhastFaktorJayezehTakhfifDAO darkhastFaktorJayezehTakhfifDAO = new DarkhastFaktorJayezehTakhfifDAO(mPresenter.getAppContext());
             ArrayList<DarkhastFaktorJayezehTakhfifModel> darkhastFaktorJayezehTakhfifModels = darkhastFaktorJayezehTakhfifDAO.getByccDarkhastFaktorccTakhfif(ccDarkhastFaktor, ccTakhfifs);
-            Log.d("bonus", "darkhastFaktorJayezehTakhfif size : " + darkhastFaktorJayezehTakhfifModels.size());
+            Log.d("bonus", "Jayezeh darkhastFaktorJayezehTakhfif size : " + darkhastFaktorJayezehTakhfifModels.size());
 
 
 
@@ -64,12 +64,12 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
         KalaMojodiDAO kalaMojodiDAO = new KalaMojodiDAO(BaseApplication.getContext());
         ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach = new ArrayList<>();
         ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi = new ArrayList<>();
-        Log.d("bonus", "noeJayezehTakhfif : " + noeJayezehTakhfif);
-        Log.d("bonus", "ccJayezehTakhfif : " + ccJayezehTakhfif);
+        Log.d("bonus", "Jayezeh noeJayezehTakhfif : " + noeJayezehTakhfif);
+        Log.d("bonus", "Jayezeh ccJayezehTakhfif : " + ccJayezehTakhfif);
         if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeTakhfif()) {
             JayezehEntekhabiMojodiDAO jayezehEntekhabiMojodiDAO = new JayezehEntekhabiMojodiDAO(mPresenter.getAppContext());
             ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels = jayezehEntekhabiMojodiDAO.getByccTakhfifHajmi(ccJayezehTakhfif);
-            Log.d("bouns", "jayezehEntekhabiMojodiModels Takhfif:" + jayezehEntekhabiMojodiModels);
+            Log.d("bouns", "Jayezeh jayezehEntekhabiMojodiModels Takhfif:" + jayezehEntekhabiMojodiModels);
 
             /**
              * get max mojodi and max shomarehbach
@@ -83,7 +83,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
         } else if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeJayezeh()) {
             JayezehEntekhabiMojodiDAO jayezehEntekhabiMojodiDAO = new JayezehEntekhabiMojodiDAO(mPresenter.getAppContext());
             ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels = jayezehEntekhabiMojodiDAO.getByccJayezeh(ccJayezehTakhfif, ccJayezehSatr);
-            Log.d("bouns", "jayezehEntekhabiMojodiModels Jayezeh:" + jayezehEntekhabiMojodiModels);
+            Log.d("bouns", "Jayezeh jayezehEntekhabiMojodiModels Jayezeh:" + jayezehEntekhabiMojodiModels);
 
 
             /**
@@ -100,7 +100,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
         }else if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh()){
             JayezehEntekhabiMojodiDAO jayezehEntekhabiMojodiDAO = new JayezehEntekhabiMojodiDAO(mPresenter.getAppContext());
             ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels = jayezehEntekhabiMojodiDAO.getByccJayezehForArzeshAfzodeh(ccJayezehTakhfif, ccJayezehSatr);
-            Log.d("bouns", "jayezehEntekhabiMojodiModels Takhfif:" + jayezehEntekhabiMojodiModels);
+            Log.d("bouns", "Jayezeh jayezehEntekhabiMojodiModels Takhfif:" + jayezehEntekhabiMojodiModels);
             mPresenter.onGetKalaForJayezeh(jayezehEntekhabiMojodiModels, KalaMojodiModelsMaxShomarehBach, KalaMojodiModelsMaxMojodi,noeJayezehTakhfif);
 
             /**
@@ -143,9 +143,9 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(), -1);
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         int FinalCCAfrad = foroshandehMamorPakhshDAO.getIsSelect().getCcAfrad();
-        Log.d("bonus", "takhfifNaghdi : " + insertTakhfifNaghdi);
-        Log.d("bonus", "ccDarkhastFaktor : " + ccDarkhastFaktor);
-        Log.d("bonus", "FinalCCAfrad : " + FinalCCAfrad);
+        Log.d("bonus", "Jayezeh takhfifNaghdi : " + insertTakhfifNaghdi);
+        Log.d("bonus", "Jayezeh ccDarkhastFaktor : " + ccDarkhastFaktor);
+        Log.d("bonus", "Jayezeh FinalCCAfrad : " + FinalCCAfrad);
         if (insertTakhfifNaghdi) {
             int ccGorohNoeMoshatry = selectFaktorShared.getInt(selectFaktorShared.getCcGorohNoeMoshtary(), -1);
             String codeNoeTakhfif = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_CODE_TAKHFIF_NAGHDI());
@@ -267,7 +267,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
     private boolean removeTakhfif(SelectFaktorShared selectFaktorShared, int selectedccTakhfif) {
         try {
             String ccTakhfifs = selectFaktorShared.getString(selectFaktorShared.getCcTakhfifJayezes(), "");
-            Log.d("takhfif", "ccTakhfifs in insert bonus : " + ccTakhfifs);
+            Log.d("takhfif", "Jayezeh ccTakhfifs in insert bonus : " + ccTakhfifs);
             if (ccTakhfifs.replace(",", "").length() > 0) {
                 ArrayList<String> splittedccTakhfif = new ArrayList<>(Arrays.asList(ccTakhfifs.split(",")));
                 if (splittedccTakhfif.size() == 0) {

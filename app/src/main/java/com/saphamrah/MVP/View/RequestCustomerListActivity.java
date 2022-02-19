@@ -416,6 +416,12 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         });
     }
 
+
+    public void showAlertOneRequestForCustomer()
+    {
+        customAlertDialog.showMessageAlert(RequestCustomerListActivity.this, false, "", getResources().getString(R.string.warningOneRequestForCustomer), Constants.FAILED_MESSAGE(), getResources().getString(R.string.apply));
+    }
+
     @Override
     public void closeLoading()
     {

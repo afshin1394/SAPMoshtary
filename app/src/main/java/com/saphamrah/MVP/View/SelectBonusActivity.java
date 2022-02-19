@@ -380,7 +380,7 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
                  String englishNumerals = new BigDecimal(String.valueOf(message)).toString();
 
                  float modifiedMondeh = Float.parseFloat(englishNumerals.replace("," , ""));
-                 if (modifiedMondeh <= mandeh && modifiedMondeh > 0 ){
+                 if (modifiedMondeh <= mandeh && modifiedMondeh >= 0 ){
                      mPresenter.checkInsertMandehArzeshAfzoodeh(noeJayezehTakhfif, jayezehEntekhabiMojodiModels, darkhastFaktorJayezehTakhfifModel, selectedccTakhfif, mablaghTakhfif,mablaghJayezeh,englishNumerals,maxTedadJayeze,KalaMojodiModelsMaxShomarehBach,KalaMojodiModelsMaxMojodi);
                  }else{
                      customTextInputLayout.setError(getResources().getString(R.string.errorNegativeRemainDialog));

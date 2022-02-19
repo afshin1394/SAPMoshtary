@@ -33,6 +33,7 @@ import com.saphamrah.Adapter.TakhfifForoshAdapter;
 import com.saphamrah.BaseMVP.VerifyRequestMVP;
 import com.saphamrah.CustomView.BottomBar;
 import com.saphamrah.CustomView.CustomSpinner;
+import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.MVP.Presenter.VerifyRequestPresenter;
 import com.saphamrah.Model.DarkhastFaktorJayezehModel;
 import com.saphamrah.Model.DarkhastFaktorTakhfifModel;
@@ -276,6 +277,11 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
                 }
             }
         });
+
+
+        int HashiehSoodEnable = Integer.parseInt( new ParameterChildDAO(getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Hashieh_Sood_Enable()));
+        if(HashiehSoodEnable==0)
+            fabHashiehSoud.setVisibility(View.GONE);
 
         fabHashiehSoud.setOnClickListener(v->{
             mPresenter.getHashiehSoud(ccDarkhastFaktor,editTextMablaghKhales.getText().toString().replace("," , ""));

@@ -61,7 +61,7 @@ public class DarkhastFaktorJayezehTakhfifDAO
                     " ccTakhfif AS ccJayezehTakhfif, SharhTakhfif AS SharhJayezehTakhfif, CodeNoeTakhfif AS CodeNoeJayezehTakhfif, \n" +
                     " MablaghTakhfif AS MablaghJayezehTakhfif, '-1' AS ccKalaJayezeh, -1 AS TedadJayezeh \n" +
                     " from DarkhastFaktorTakhfif \n" +
-                    " where ccDarkhastFaktor = " + ccDarkhastFaktor + " and CodeNoeTakhfif = 2 and ccTakhfif in (" + ccTakhfifs + ")" +
+                    " where ccDarkhastFaktor = " + ccDarkhastFaktor + " and CodeNoeTakhfif = 5 and ccTakhfif in (" + ccTakhfifs + ")" +
                     " UNION ALL \n" +
                     " select 1 AS NoeJayezehTakhfif, ExtraProp_ccJayezehSatr, ccDarkhastFaktorJayezeh, ccDarkhastFaktor, ccJayezeh, Sharh, ExtraProp_CodeNoeJayezeh, -1, ccKala, Tedad \n" +
                     " from DarkhastFaktorJayezeh \n" +
@@ -72,6 +72,7 @@ public class DarkhastFaktorJayezehTakhfifDAO
                     " MablaghTakhfif AS MablaghJayezehTakhfif, '-1' AS ccKalaJayezeh, -1 AS TedadJayezeh \n" +
                     " from DarkhastFaktorTakhfif \n" +
                     " where ccDarkhastFaktor = " + ccDarkhastFaktor + " and CodeNoeTakhfif = 4 and  ccTakhfif in (" + ccTakhfifs + ")";
+            Log.d("bonus", "Jayezeh getByccDarkhastFaktorccTakhfif query : " + query);
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {

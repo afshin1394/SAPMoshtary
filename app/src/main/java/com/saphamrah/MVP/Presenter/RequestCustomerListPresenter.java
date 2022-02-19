@@ -229,6 +229,11 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
         mView.get().closeLoading();
         mView.get().showAlertDuplicateRequestForCustomer(moshtaryModel,moshtaryGharardadModel);
     }
+    public void showAlertOneRequestForCustomer()
+    {
+        mView.get().closeLoading();
+        mView.get().showAlertOneRequestForCustomer();
+    }
 
     @Override
     public void onErrorSelectCustomer(int resId)

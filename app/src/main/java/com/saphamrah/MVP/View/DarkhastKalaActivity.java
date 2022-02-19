@@ -58,6 +58,7 @@ import com.saphamrah.CustomView.CustomSpinner;
 import com.saphamrah.CustomView.CustomTextInputLayout;
 import com.saphamrah.CustomView.MyBounceInterpolator;
 import com.saphamrah.CustomView.SnapToBlock;
+import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.MVP.Presenter.DarkhastKalaPresenter;
 import com.saphamrah.Model.ElatAdamDarkhastModel;
 import com.saphamrah.Model.KalaModel;
@@ -120,6 +121,8 @@ private FloatingActionButton fabShowMoshtaryGharardad;
     private EditText edttxtCountAdad;
     private FloatingActionButton fabAdamSefaresh;
     private FloatingActionButton fabNazaratAndPishnahad;
+    FloatingActionButton fabAddCatalog;
+    FloatingActionButton fabAddList;
     //TODO
     private RequestedGridGoodAdapter adapterRequestKalaListGrid;
 
@@ -163,8 +166,8 @@ private FloatingActionButton fabShowMoshtaryGharardad;
 
 
         final FloatingActionMenu fabMenu = findViewById(R.id.fabMenu);
-        FloatingActionButton fabAddCatalog = findViewById(R.id.fabAddAsCatalog);
-        FloatingActionButton fabAddList = findViewById(R.id.fabAddAsList);
+        fabAddCatalog = findViewById(R.id.fabAddAsCatalog);
+        fabAddList = findViewById(R.id.fabAddAsList);
         FloatingActionButton fabSearch = findViewById(R.id.fabSearch);
         FloatingActionButton fabShowCustomerInfo = findViewById(R.id.fabShowCustomerInfo);
         fabShowMoshtaryGharardad = findViewById(R.id.fabShowMoshtaryGharardad);
@@ -274,6 +277,9 @@ private FloatingActionButton fabShowMoshtaryGharardad;
 //        mPresenter.getAllRequestedGoods();
 
 
+
+
+
         fabAddCatalog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -338,6 +344,11 @@ private FloatingActionButton fabShowMoshtaryGharardad;
 
             }
         });
+
+        int SedayeMoshtaryEnable = Integer.parseInt( new ParameterChildDAO(getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Sedaye_Moshtary_Enable()));
+        if(SedayeMoshtaryEnable==0)
+            fabNazaratAndPishnahad.setVisibility(View.GONE);
+
 
         fabNazaratAndPishnahad.setOnClickListener(v -> {
 
@@ -414,6 +425,10 @@ private FloatingActionButton fabShowMoshtaryGharardad;
     @Override
     public void hideNoRequestButton() {
         fabAdamSefaresh.setVisibility(View.GONE);
+    }
+    public void hideFabAddButton() {
+        fabAddCatalog.setVisibility(View.GONE);
+        fabAddList.setVisibility(View.GONE);
     }
 
     @Override
