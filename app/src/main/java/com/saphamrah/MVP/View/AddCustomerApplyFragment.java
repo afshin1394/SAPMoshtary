@@ -48,6 +48,7 @@ public class AddCustomerApplyFragment extends Fragment implements AddCustomerApp
     private Context context;
     private TextView lblPersonalInfo;
     private TextView lblNameFamily;
+    private TextView lblBirthDate;
     private TextView lblNationalCode;
     private TextView lblMobile;
     private TextView lblTabloName;
@@ -147,6 +148,7 @@ public class AddCustomerApplyFragment extends Fragment implements AddCustomerApp
     {
         lblPersonalInfo = (TextView)view.findViewById(R.id.lblPersonalInfo);
         lblNameFamily = (TextView)view.findViewById(R.id.lblNameFamily);
+        lblBirthDate = (TextView)view.findViewById(R.id.lblBirthDate);
         lblNationalCode = (TextView)view.findViewById(R.id.lblNationalCode);
         lblMobile = (TextView)view.findViewById(R.id.lblMobile);
         lblTabloName = (TextView)view.findViewById(R.id.lblTabloName);
@@ -179,6 +181,7 @@ public class AddCustomerApplyFragment extends Fragment implements AddCustomerApp
         Typeface font = Typeface.createFromAsset(context.getAssets() , context.getResources().getString(R.string.fontPath));
         lblPersonalInfo.setTypeface(font);
         lblNameFamily.setTypeface(font);
+        lblBirthDate.setTypeface(font);
         lblNationalCode.setTypeface(font);
         lblMobile.setTypeface(font);
         lblTabloName.setTypeface(font);
@@ -207,6 +210,7 @@ public class AddCustomerApplyFragment extends Fragment implements AddCustomerApp
     private void setValueOfViews()
     {
         lblNameFamily.setText(String.format("%1$s : %2$s %3$s" , getResources().getString(R.string.nameFamily) , addCustomerInfoModel.getFirstName() , addCustomerInfoModel.getLastName()));
+        lblBirthDate.setText(String.format("%1$s : %2$s " , getResources().getString(R.string.birthDate) , addCustomerInfoModel.getBirthDate()));
         lblNationalCode.setText(String.format("%1$s : %2$s" , getResources().getString(R.string.nationalCode) , addCustomerInfoModel.getNationalCode()));
         lblMobile.setText(String.format("%1$s : %2$s" , getResources().getString(R.string.mobile) , addCustomerInfoModel.getMobile()));
         lblTabloName.setText(String.format("%1$s : %2$s" , getResources().getString(R.string.tabloName) , addCustomerInfoModel.getTabloName()));

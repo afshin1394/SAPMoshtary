@@ -3,6 +3,7 @@ package com.saphamrah.MVP.Presenter;
 import android.content.Context;
 
 import com.saphamrah.BaseMVP.AddCustomerBaseInfoMVP;
+import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.MVP.Model.AddCustomerBaseInfoModel;
 import com.saphamrah.Model.AddCustomerInfoModel;
 import com.saphamrah.Model.GorohModel;
@@ -11,7 +12,9 @@ import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AddCustomerBaseInfoPresenter implements AddCustomerBaseInfoMVP.PresenterOps , AddCustomerBaseInfoMVP.RequiredPresenterOps
 {
@@ -112,6 +115,21 @@ public class AddCustomerBaseInfoPresenter implements AddCustomerBaseInfoMVP.Pres
                 validData = false;
                 mView.get().onErrorFirstName();
             }
+
+            int birthDateObligatory = Integer.parseInt( new ParameterChildDAO(getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Require_Tarikh_Tavalod()));
+            if (birthDateObligatory == 1)
+            {
+
+                if (addCustomerInfoModel.getBirthDate() != null && addCustomerInfoModel.getBirthDate().trim().equals(""))
+                {
+                    if (addCustomerInfoModel.getBirthDate() == null || addCustomerInfoModel.getBirthDate().trim().equals(""))
+                    {
+                        validData = false;
+                        mView.get().onErrorBirthDate();
+                    }
+                }
+            }
+
             if (addCustomerInfoModel.getNoeShakhsiatId() != null && addCustomerInfoModel.getNoeShakhsiatId().trim().equals("1")) // haghighi = 1
             {
                 if (addCustomerInfoModel.getLastName() == null || addCustomerInfoModel.getLastName().trim().equals(""))
@@ -231,15 +249,17 @@ public class AddCustomerBaseInfoPresenter implements AddCustomerBaseInfoMVP.Pres
     }
 
 	@Override
-    public void onGetConfig(boolean requireCodeMeli, boolean requireMobile, boolean requireMasahat)
+    public void onGetConfig(boolean requireCodeMeli, boolean requireMobile, boolean requireMasahat,boolean requireBirthDate)
     {
         mView.get().onGetConfig(requireCodeMeli, requireMobile, requireMasahat);
         int resIdHintCodeMeli = requireCodeMeli ? R.string.nationalCodeWithStar : R.string.nationalCode;
         int resIdHintMobile = requireMobile ? R.string.mobileWithStar : R.string.mobile;
         int resIdHintMasahat = requireMasahat ? R.string.masahateMaghazaehWithStar : R.string.masahateMaghazaeh;
+        int resIdHintBirthDate = requireBirthDate ? R.string.birthDateWithSlash : R.string.birthDate;
         mView.get().showCodeMeliHint(resIdHintCodeMeli);
         mView.get().showMobileHint(resIdHintMobile);
         mView.get().showMasahateMaghazeHint(resIdHintMasahat);
+        mView.get().showBirthDateHint(resIdHintBirthDate);
     }
 	
     @Override

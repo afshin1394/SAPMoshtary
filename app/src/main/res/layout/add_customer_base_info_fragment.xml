@@ -66,6 +66,29 @@
                     android:maxLength="50"
                     android:inputType="text"/>
             </com.saphamrah.CustomView.CustomTextInputLayout>
+            <com.saphamrah.CustomView.CustomTextInputLayout
+                android:id="@+id/txtinputBirthDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layoutDirection="rtl"
+                android:textDirection="rtl"
+                android:theme="@style/TextInputLayoutTheme">
+
+                <EditText
+                    android:id="@+id/txtBirthDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_calender_small"
+                    android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                    android:hint="@string/birthDate"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:maxLength="10"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textColorHint="@color/colorDivider"
+                    android:textSize="@dimen/FontSize16" />
+            </com.saphamrah.CustomView.CustomTextInputLayout>
 
             <com.saphamrah.CustomView.CustomTextInputLayout
                 android:id="@+id/txtinputTabloName"

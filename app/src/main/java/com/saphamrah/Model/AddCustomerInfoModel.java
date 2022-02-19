@@ -11,6 +11,7 @@ public class AddCustomerInfoModel implements Parcelable
     private int ccMoshtary;
     private String firstName;
     private String lastName;
+    private String birthDate;
     private String tabloName;
     private String nationalCode;
     private String mobile;
@@ -67,6 +68,14 @@ public class AddCustomerInfoModel implements Parcelable
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getTabloName() {
@@ -304,6 +313,7 @@ public class AddCustomerInfoModel implements Parcelable
         dest.writeInt(ccMoshtary);
         dest.writeString(firstName);
         dest.writeString(lastName);
+        dest.writeString(birthDate);
         dest.writeString(tabloName);
         dest.writeString(nationalCode);
         dest.writeString(mobile);

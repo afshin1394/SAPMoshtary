@@ -128,7 +128,7 @@ public class AddCustomerApplyModel implements AddCustomerApplyMVP.ModelOps
                                             if (result == 1)
                                             {
                                                 Log.d("insertCustomer", "before insertMoshtaryAfrad");
-                                                result = insertMoshtaryAfrad(newccMoshtary, addCustomerInfoModel.getFirstName(), addCustomerInfoModel.getLastName());
+                                                result = insertMoshtaryAfrad(newccMoshtary, addCustomerInfoModel.getFirstName(), addCustomerInfoModel.getLastName() , addCustomerInfoModel.getBirthDate());
                                                 if (result == 1)
                                                 {
                                                     addCustomerInfoModel.setCcMoshtary((int) newccMoshtary);
@@ -487,7 +487,7 @@ public class AddCustomerApplyModel implements AddCustomerApplyMVP.ModelOps
         }
     }
 
-    private int insertMoshtaryAfrad(long ccMoshtary, String firstName, String lastName)
+    private int insertMoshtaryAfrad(long ccMoshtary, String firstName, String lastName , String birthDate)
     {
         try
         {
@@ -501,6 +501,7 @@ public class AddCustomerApplyModel implements AddCustomerApplyMVP.ModelOps
             moshtaryAfradModel.setTarafHesab(true);
             moshtaryAfradModel.setFName(firstName);
             moshtaryAfradModel.setLName(lastName);
+            moshtaryAfradModel.setBirthDate(convertPersianToGregorian(birthDate));
 
             MoshtaryAfradDAO moshtaryAfradDAO = new MoshtaryAfradDAO(mPresenter.getAppContext());
             return moshtaryAfradDAO.insert(moshtaryAfradModel) ? 1 : -9;
@@ -509,6 +510,26 @@ public class AddCustomerApplyModel implements AddCustomerApplyMVP.ModelOps
             e.printStackTrace();
             setLogToDB(LogPPCModel.LOG_EXCEPTION, e.toString(), "AddCustomerApplyModel", "", "insertMoshtaryAfrad", "");
             return -9;
+        }
+    }
+
+    private String convertPersianToGregorian(String selectedDate) {
+        try {
+            String[] sepratedDate = selectedDate.split("/");
+            PubFunc.DateConverter dateConverter = new PubFunc().new DateConverter();
+            dateConverter.persianToGregorian(Integer.parseInt(sepratedDate[0]), Integer.parseInt(sepratedDate[1]), Integer.parseInt(sepratedDate[2]));
+            String year = String.valueOf(dateConverter.getYear());
+            String month = dateConverter.getMonth() > 9 ? String.valueOf(dateConverter.getMonth()) : "0" + dateConverter.getMonth();
+            String day = dateConverter.getDay() > 9 ? String.valueOf(dateConverter.getDay()) : "0" + dateConverter.getDay();
+            SimpleDateFormat format1=new SimpleDateFormat("yyyy/MM/dd");
+            String selectedDateGregorian = mPresenter.getAppContext().getResources().getString(R.string.dateWithSplashFormat, year, month, day);
+            Date date=format1.parse(selectedDateGregorian);
+            String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(date);
+
+            return currentDate;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

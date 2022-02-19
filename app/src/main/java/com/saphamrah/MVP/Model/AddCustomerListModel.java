@@ -47,7 +47,9 @@ import org.osmdroid.util.GeoPoint;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -466,6 +468,7 @@ public class AddCustomerListModel implements AddCustomerListMVP.ModelOps
         }
         else
         {
+            Log.d("jsonBirthDate", "prepareAllMoshtaryDataAsJson: "+jsonAllData);
             sendAllMoshtaryDataAsJson(jsonAllData , moshtaryModel.getCcMoshtary());
         }
     }

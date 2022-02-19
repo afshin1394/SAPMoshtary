@@ -37,7 +37,8 @@ public class AddCustomerBaseInfoModel implements AddCustomerBaseInfoMVP.ModelOps
         boolean requireCodeMeli = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_REQUIER_CODE_MELI).trim().equals("1");
         boolean requireMobile = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_REQUIER_MOBILE).trim().equals("1");
         boolean requireMasahat = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_REQUIER_MASAHAT).trim().equals("1");
-        mPresenter.onGetConfig(requireCodeMeli, requireMobile, requireMasahat);
+        boolean requireBirthDate = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_Require_Tarikh_Tavalod()).trim().equals("1");
+        mPresenter.onGetConfig(requireCodeMeli, requireMobile, requireMasahat, requireBirthDate);
     }
 	
     @Override

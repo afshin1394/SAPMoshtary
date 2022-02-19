@@ -17,8 +17,11 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
+import com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog;
 import com.mohamadamin.persianmaterialdatetimepicker.time.RadialPickerLayout;
 import com.mohamadamin.persianmaterialdatetimepicker.time.TimePickerDialog;
+import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
+import com.saphamrah.Adapter.GetProgramAdapter;
 import com.saphamrah.BaseMVP.AddCustomerBaseInfoMVP;
 import com.saphamrah.CustomView.CustomSpinner;
 import com.saphamrah.CustomView.CustomTextInputLayout;
@@ -32,7 +35,9 @@ import com.saphamrah.Utils.CustomAlertDialog;
 import com.saphamrah.Utils.CustomSpinnerResponse;
 import com.saphamrah.Utils.StateMaintainer;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomerBaseInfoMVP.RequiredViewOps
 {
@@ -44,6 +49,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
 
     private EditText edttxtinputFirstName;
     private EditText edttxtinputLastName;
+    private EditText edttxtinputBirthDate;
     private EditText edttxtinputTabloName;
     private EditText edttxtinputNationalCode;
     private EditText edttxtinputMobile;
@@ -59,6 +65,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
     private EditText edttxtCodeEghtesady;
     private CustomTextInputLayout txtinputFirstName;
     private CustomTextInputLayout txtinputLastName;
+    private CustomTextInputLayout txtinputBirthDate;
     private CustomTextInputLayout txtinputTabloName;
     private CustomTextInputLayout txtinputNationalCode;
     private CustomTextInputLayout txtinputMobile;
@@ -82,6 +89,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
     private String noeVosolId="";
     private String noeHamlId="";
     private String anbarId="";
+    private String selectedDate="";
 
     private boolean requireCodeMeli;
     private boolean requireMobile;
@@ -156,7 +164,25 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
 
         this.listener = (onVisiblePersonalInformationListener)context;
 
-		mPresenter.getConfig();  
+		mPresenter.getConfig();
+
+		edttxtinputBirthDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePickerAlert();
+            }
+        });
+        edttxtinputBirthDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus)
+            {
+                changeDrawableLeftTint(edttxtinputBirthDate , hasFocus);
+                if (hasFocus)
+                {
+                    showDatePickerAlert();
+                }
+            }
+        });
 		
         edttxtinputAnbar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -375,6 +401,11 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
     }
 
     @Override
+    public void showBirthDateHint(int resId) {
+        txtinputBirthDate.setHint(getString(resId));
+    }
+
+    @Override
     public void onGetAnbarItems(final ArrayList<Integer> itemIds, final ArrayList<String> itemTitles)
     {
         CustomSpinner customSpinner = new CustomSpinner();
@@ -555,6 +586,12 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
     }
 
     @Override
+    public void onErrorBirthDate()
+    {
+        txtinputBirthDate.setError(getResources().getString(R.string.errorBirthDate));
+    }
+
+    @Override
     public void onErrorTabloName()
     {
         txtinputTabloName.setError(getResources().getString(R.string.errorTabloName));
@@ -639,6 +676,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
     {
         txtinputFirstName = (CustomTextInputLayout) view.findViewById(R.id.txtinputFirstName);
         txtinputLastName = (CustomTextInputLayout) view.findViewById(R.id.txtinputLastName);
+        txtinputBirthDate = (CustomTextInputLayout)view.findViewById(R.id.txtinputBirthDate);
         txtinputTabloName = (CustomTextInputLayout) view.findViewById(R.id.txtinputTabloName);
         txtinputNationalCode = (CustomTextInputLayout) view.findViewById(R.id.txtinputNationalCode);
         txtinputMobile = (CustomTextInputLayout) view.findViewById(R.id.txtinputMobile);
@@ -658,6 +696,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
     {
         edttxtinputFirstName = (EditText)view.findViewById(R.id.txtFirstName);
         edttxtinputLastName = (EditText)view.findViewById(R.id.txtLastName);
+        edttxtinputBirthDate = (EditText)view.findViewById(R.id.txtBirthDate);
         edttxtinputTabloName = (EditText)view.findViewById(R.id.txtTabloName);
         edttxtinputNationalCode = (EditText)view.findViewById(R.id.txtNationalCode);
         edttxtinputMobile = (EditText)view.findViewById(R.id.txtMobile);
@@ -679,6 +718,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
 
         edttxtinputFirstName.setTypeface(font);
         edttxtinputLastName.setTypeface(font);
+        edttxtinputBirthDate.setTypeface(font);
         edttxtinputTabloName.setTypeface(font);
         edttxtinputNationalCode.setTypeface(font);
         edttxtinputMobile.setTypeface(font);
@@ -695,6 +735,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
 
         txtinputFirstName.setTypeface(font);
         txtinputLastName.setTypeface(font);
+        txtinputBirthDate.setTypeface(font);
         txtinputTabloName.setTypeface(font);
         txtinputNationalCode.setTypeface(font);
         txtinputMobile.setTypeface(font);
@@ -744,6 +785,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
     {
         txtinputFirstName.setError(null);
         txtinputLastName.setError(null);
+        txtinputBirthDate.setError(null);
         txtinputTabloName.setError(null);
         txtinputNationalCode.setError(null);
         txtinputMobile.setError(null);
@@ -757,6 +799,7 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
 
         addCustomerInfoModel.setFirstName(edttxtinputFirstName.getText().toString().trim());
         addCustomerInfoModel.setLastName(edttxtinputLastName.getText().toString().trim());
+        addCustomerInfoModel.setBirthDate(edttxtinputBirthDate.getText().toString().trim());
         addCustomerInfoModel.setTabloName(edttxtinputTabloName.getText().toString().trim());
         addCustomerInfoModel.setNationalCode(edttxtinputNationalCode.getText().toString().trim());
         addCustomerInfoModel.setMobile(edttxtinputMobile.getText().toString().trim());
@@ -869,6 +912,30 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
                 mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", AddCustomerBaseInfoFragment.class.getSimpleName(), "reinitialize", "");
             }
         }
+    }
+
+    public void showDatePickerAlert() {
+        PersianCalendar persianCalendar = new PersianCalendar();
+        persianCalendar.setPersianDate(1370,1,1);
+        DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+                        try {
+                            monthOfYear++;
+                            String month = monthOfYear < 10 ? "0" + monthOfYear : String.valueOf(monthOfYear);
+                            String day = dayOfMonth < 10 ? "0" + dayOfMonth : String.valueOf(dayOfMonth);
+                            selectedDate = getResources().getString(R.string.dateWithSplashFormat, String.valueOf(year), month, day);
+                            edttxtinputBirthDate.setText(selectedDate);
+
+
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
+                            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", GetProgramActivity.class.getSimpleName(), "showDatePickerAlert", "onDateSet");
+                        }
+                    }
+                }, persianCalendar.getPersianYear(), persianCalendar.getPersianMonth(), persianCalendar.getPersianDay());
+        datePickerDialog.show(getActivity().getFragmentManager(), "Datepickerdialog");
     }
 
 

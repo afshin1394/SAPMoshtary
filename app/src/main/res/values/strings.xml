@@ -247,12 +247,14 @@
     <string name="errorFirstName">لطفا نام را وارد نمایید.</string>
     <string name="lastNameWithStar">نام خانوادگی*</string>
     <string name="errorLastName">لطفا نام خانوادگی را وارد نمایید.</string>
+    <string name="errorBirthDate">لطفا تاریخ تولد را انتخاب کنید.</string>
     <string name="tabloNameWithStar">نام تابلو*</string>
     <string name="tabloName">نام تابلو</string>
     <string name="errorTabloName">لطفا نام تابلو را وارد نمایید.</string>
     <string name="nationalCode">کد ملی / شناسه ملی</string>
     <string name="nationalCodeWithStar">کد ملی / شناسه ملی*</string>
     <string name="natCode">کدملی</string>
+    <string name="birthDate">تاریخ تولد</string>
     <string name="nationalId">شناسه ملی</string>
     <string name="errorNationalCode">لطفا کد ملی / شناسه ملی را به درستی وارد نمایید.</string>
     <string name="errorNationalCardImage">لطفا تصویر کارت ملی را وارد نمایید.</string>
@@ -275,6 +277,7 @@
     <string name="errorRotbeh">لطفا رتبه مشتری را انتخاب نمایید.</string>
     <string name="masahateMaghazaeh">مساحت مغازه (مترمربع)</string>
     <string name="masahateMaghazaehWithStar">مساحت مغازه (مترمربع)*</string>
+    <string name="birthDateWithSlash">تاریخ تولد*</string>
     <string name="errorInputMasahateMaghaze">مساحت مغازه باید فقط شامل عدد و بزرگتر از صفر باشد.</string>
     <string name="noeShakhsiatWithStar">هویت*</string>
     <string name="noeShakhsiat">هویت</string>

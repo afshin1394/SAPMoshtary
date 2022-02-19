@@ -17,6 +17,7 @@ public interface AddCustomerBaseInfoMVP
         void showCodeMeliHint(int resId);
         void showMobileHint(int resId);
         void showMasahateMaghazeHint(int resId);
+        void showBirthDateHint(int resId);
         void onGetAnbarItems(ArrayList<Integer> itemIds , ArrayList<String> itemTitles);
         void onGetRotbeItems(ArrayList<Integer> itemsId , ArrayList<String> itemTitle);
         void onGetNoeShakhsiatItems(ArrayList<Integer> itemIds , ArrayList<String> itemTitles);
@@ -39,6 +40,9 @@ public interface AddCustomerBaseInfoMVP
         void onGetBaseInfoFromShared(AddCustomerInfoModel addCustomerInfoModel);
         void showResourceError(boolean closeActivity, int titleResId, int messageResId, int messageType, int buttonTextResId);
         void showToast(int resId, int messageType , int duration);
+
+        void onErrorBirthDate();
+
     }
 
 
@@ -63,7 +67,7 @@ public interface AddCustomerBaseInfoMVP
     interface RequiredPresenterOps
     {
         Context getAppContext();
-        void onGetConfig(boolean requireCodeMeli, boolean requireMobile, boolean requireMasahat);																						 
+        void onGetConfig(boolean requireCodeMeli, boolean requireMobile, boolean requireMasahat , boolean requireBirthDate);
         void onGetAnbarItems(ArrayList<Integer> itemIds , ArrayList<String> itemTitles);
         void onGetRotbeItems(ArrayList<Integer> itemsId , ArrayList<String> itemTitle);
         void onGetNoeShakhsiatItems(ArrayList<Integer> itemIds , ArrayList<String> itemTitles);

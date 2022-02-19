@@ -72,7 +72,8 @@ public class MoshtaryAfradDAO
             MoshtaryAfradModel.COLUMN_MojazEmza(),
             MoshtaryAfradModel.COLUMN_TarafHesab(),
             MoshtaryAfradModel.COLUMN_FName(),
-            MoshtaryAfradModel.COLUMN_LName()
+            MoshtaryAfradModel.COLUMN_LName(),
+            MoshtaryAfradModel.COLUMN_BirthDate()
         };
     }
 
@@ -462,6 +463,7 @@ public class MoshtaryAfradDAO
         contentValues.put(MoshtaryAfradModel.COLUMN_TarafHesab() , moshtaryAfradModel.getTarafHesab());
         contentValues.put(MoshtaryAfradModel.COLUMN_FName() , moshtaryAfradModel.getFName());
         contentValues.put(MoshtaryAfradModel.COLUMN_LName() , moshtaryAfradModel.getLName());
+        contentValues.put(MoshtaryAfradModel.COLUMN_BirthDate() , moshtaryAfradModel.getBirthDate());
 
         return contentValues;
     }
@@ -484,6 +486,7 @@ public class MoshtaryAfradDAO
             moshtaryAfradModel.setTarafHesab(cursor.getInt(cursor.getColumnIndex(MoshtaryAfradModel.COLUMN_TarafHesab())) > 0);
             moshtaryAfradModel.setFName(cursor.getString(cursor.getColumnIndex(MoshtaryAfradModel.COLUMN_FName())));
             moshtaryAfradModel.setLName(cursor.getString(cursor.getColumnIndex(MoshtaryAfradModel.COLUMN_LName())));
+            moshtaryAfradModel.setBirthDate(cursor.getString(cursor.getColumnIndex(MoshtaryAfradModel.COLUMN_BirthDate())));
 
             moshtaryAfradModels.add(moshtaryAfradModel);
             cursor.moveToNext();

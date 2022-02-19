@@ -21,6 +21,7 @@ public class MoshtaryAfradModel
     private static final String COLUMN_TarafHesab = "TarafHesab";
     private static final String COLUMN_FName = "FName";
     private static final String COLUMN_LName = "LName";
+    private static final String COLUMN_BirthDate = "BirthDate";
 
 
     public static String TableName() {
@@ -48,7 +49,10 @@ public class MoshtaryAfradModel
         return COLUMN_FName;
     }
     public static String COLUMN_LName() {
-        return COLUMN_LName;
+    return COLUMN_LName;
+}
+    public static String COLUMN_BirthDate() {
+        return COLUMN_BirthDate;
     }
 
 
@@ -69,6 +73,9 @@ public class MoshtaryAfradModel
     @SerializedName("LName")
     @Expose
     private String LName;
+    @SerializedName("BirthDate")
+    @Expose
+    private String BirthDate;
     @SerializedName("FullNameMoshtaryAfrad")
     @Expose
     private String FullNameMoshtaryAfrad;
@@ -156,6 +163,14 @@ public class MoshtaryAfradModel
 
     public String getLName(){
         return this.LName;
+    }
+
+    public String getBirthDate() {
+        return BirthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        BirthDate = birthDate;
     }
 
     public void setFullNameMoshtaryAfrad(String FullNameMoshtaryAfrad){
@@ -275,6 +290,7 @@ public class MoshtaryAfradModel
         jsonObject.addProperty(COLUMN_ccAfrad , ccAfrad);
         jsonObject.addProperty(COLUMN_FName , FName);
         jsonObject.addProperty(COLUMN_LName , LName);
+        jsonObject.addProperty(COLUMN_BirthDate , BirthDate);
         jsonObject.addProperty("CodeJensiat" , 1);
         jsonObject.addProperty("Email" , "");
         jsonObject.addProperty("Title" , "");
@@ -303,6 +319,7 @@ public class MoshtaryAfradModel
         {
             jsonObject.put("FName" , FName);
             jsonObject.put("LName" , LName);
+            jsonObject.put(COLUMN_BirthDate , BirthDate);
             jsonObject.put("CodeJensiat" , CodeJensiat);
             jsonObject.put("Mobile" , customerMobile);
         }
