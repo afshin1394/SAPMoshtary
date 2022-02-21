@@ -21,7 +21,7 @@ public class MoshtaryAfradModel
     private static final String COLUMN_TarafHesab = "TarafHesab";
     private static final String COLUMN_FName = "FName";
     private static final String COLUMN_LName = "LName";
-    private static final String COLUMN_BirthDate = "BirthDate";
+    private static final String COLUMN_ExtraProp_BirthDate = "ExtraProp_BirthDate";
 
 
     public static String TableName() {
@@ -51,8 +51,8 @@ public class MoshtaryAfradModel
     public static String COLUMN_LName() {
     return COLUMN_LName;
 }
-    public static String COLUMN_BirthDate() {
-        return COLUMN_BirthDate;
+    public static String COLUMN_ExtraProp_BirthDate() {
+        return COLUMN_ExtraProp_BirthDate;
     }
 
 
@@ -73,9 +73,9 @@ public class MoshtaryAfradModel
     @SerializedName("LName")
     @Expose
     private String LName;
-    @SerializedName("BirthDate")
+    @SerializedName("ExtraProp_BirthDate")
     @Expose
-    private String BirthDate;
+    private String ExtraProp_BirthDate;
     @SerializedName("FullNameMoshtaryAfrad")
     @Expose
     private String FullNameMoshtaryAfrad;
@@ -165,12 +165,12 @@ public class MoshtaryAfradModel
         return this.LName;
     }
 
-    public String getBirthDate() {
-        return BirthDate;
+    public String getExtraProp_BirthDate() {
+        return ExtraProp_BirthDate;
     }
 
-    public void setBirthDate(String birthDate) {
-        BirthDate = birthDate;
+    public void setExtraProp_BirthDate(String ExtraProp_birthDate) {
+        this.ExtraProp_BirthDate = ExtraProp_birthDate;
     }
 
     public void setFullNameMoshtaryAfrad(String FullNameMoshtaryAfrad){
@@ -290,7 +290,7 @@ public class MoshtaryAfradModel
         jsonObject.addProperty(COLUMN_ccAfrad , ccAfrad);
         jsonObject.addProperty(COLUMN_FName , FName);
         jsonObject.addProperty(COLUMN_LName , LName);
-        jsonObject.addProperty(COLUMN_BirthDate , BirthDate);
+        jsonObject.addProperty(COLUMN_ExtraProp_BirthDate , ExtraProp_BirthDate);
         jsonObject.addProperty("CodeJensiat" , 1);
         jsonObject.addProperty("Email" , "");
         jsonObject.addProperty("Title" , "");
@@ -317,9 +317,10 @@ public class MoshtaryAfradModel
         JSONObject jsonObject = new JSONObject();
         try
         {
+
             jsonObject.put("FName" , FName);
             jsonObject.put("LName" , LName);
-            jsonObject.put(COLUMN_BirthDate , BirthDate);
+            jsonObject.put("BirthDate" , ExtraProp_BirthDate==null?"":ExtraProp_BirthDate);
             jsonObject.put("CodeJensiat" , CodeJensiat);
             jsonObject.put("Mobile" , customerMobile);
         }

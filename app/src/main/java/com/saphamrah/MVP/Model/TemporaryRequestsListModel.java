@@ -1,5 +1,9 @@
 package com.saphamrah.MVP.Model;
 
+import static com.saphamrah.Utils.Constants.FOROSHANDEH_GARM;
+import static com.saphamrah.Utils.Constants.FOROSHANDEH_SARD;
+import static com.saphamrah.Utils.Constants.MAMOURPAKHSH_SARD;
+import static com.saphamrah.Utils.Constants.MAMOURPAKHSH_SMART;
 import static com.saphamrah.Utils.Constants.REST;
 import static com.saphamrah.Utils.Constants.gRPC;
 
@@ -79,6 +83,7 @@ import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.Repository.DarkhastFaktorEmzaMoshtaryRepository;
 import com.saphamrah.Shared.LastOlaviatMoshtaryShared;
 import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.Shared.ServerIPShared;
@@ -147,9 +152,12 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
 
     private TemporaryRequestsListMVP.RequiredPresenterOps mPresenter;
 
+    private CompositeDisposable compositeDisposable;
+
     public TemporaryRequestsListModel(TemporaryRequestsListMVP.RequiredPresenterOps mPresenter)
     {
         this.mPresenter = mPresenter;
+        compositeDisposable = new CompositeDisposable();
     }
 
     @Override
@@ -192,8 +200,13 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
 
         CustomerDarkhastFaktorDAO customerDarkhastFaktorDAO = new CustomerDarkhastFaktorDAO(mPresenter.getAppContext());
         ArrayList<CustomerDarkhastFaktorModel> customerDarkhastFaktorModels = customerDarkhastFaktorDAO.getAllDarkhastFaktor();
-
-        mPresenter.onGetTemporaryRequests(customerDarkhastFaktorModels , noeForoshandeh);
+        ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
+        int showReceiptImageIcon = Integer.parseInt(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_Can_Get_Image_Customer_Confirm_Request()));
+        int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+        if (noeMasouliat != MAMOURPAKHSH_SARD && noeMasouliat!= MAMOURPAKHSH_SMART){
+            showReceiptImageIcon = 0;
+        }
+        mPresenter.onGetTemporaryRequests(customerDarkhastFaktorModels , noeForoshandeh, showReceiptImageIcon == 1);
     }
 
 
@@ -395,9 +408,28 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
     @Override
     public void saveImageTempRequest(int position , CustomerDarkhastFaktorModel customerDarkhastFaktorModel)
     {
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
         DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor());
+
+        DarkhastFaktorEmzaMoshtaryDAO darkhastFaktorEmzaMoshtaryDAO = new DarkhastFaktorEmzaMoshtaryDAO(mPresenter.getAppContext());
+        ArrayList<DarkhastFaktorEmzaMoshtaryModel> darkhastFaktorEmzaMoshtaryModels = darkhastFaktorEmzaMoshtaryDAO.getByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor());
+
+        ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
+        boolean receiptImageObligation = Integer.parseInt(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_Require_Image_Customer_Confirm_Request())) == 1;
+        int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshDAO.getIsSelect());
+        if (noeMasouliat == MAMOURPAKHSH_SARD || noeMasouliat == MAMOURPAKHSH_SMART)
+        {
+            if (receiptImageObligation && darkhastFaktorEmzaMoshtaryModels.get(0).getHave_ReceiptImage()==0){
+                mPresenter.onErrorSaveImage();
+            }else{
+                mPresenter.onCheckSaveImage(customerDarkhastFaktorModel.getCcDarkhastFaktor(),darkhastFaktorModel.getCcDarkhastFaktorNoeForosh());
+            }
+
+        }
+        else
         mPresenter.onCheckSaveImage(customerDarkhastFaktorModel.getCcDarkhastFaktor(),darkhastFaktorModel.getCcDarkhastFaktorNoeForosh());
+
     }
 
     @Override
@@ -1133,6 +1165,40 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
     public void onDestroy()
     {
 
+    }
+
+    @Override
+    public void insertReceiptImage(byte[] imageBytes,int position ,CustomerDarkhastFaktorModel customerDarkhastFaktorModel) {
+        DarkhastFaktorEmzaMoshtaryRepository darkhastFaktorEmzaMoshtaryRepository = new DarkhastFaktorEmzaMoshtaryRepository(mPresenter.getAppContext());
+        darkhastFaktorEmzaMoshtaryRepository.updateReceiptImageByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor(),imageBytes)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onSubscribe(@androidx.annotation.NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@androidx.annotation.NonNull Boolean updated) {
+                      if (updated){
+
+                          mPresenter.onSuccessSaveReceiptImage(R.string.successfullyDoneOps,position);
+
+                      }else{
+                          onError(new Throwable());
+                      }
+                    }
+
+                    @Override
+                    public void onError(@androidx.annotation.NonNull Throwable e) {
+                        mPresenter.onError(R.string.errorUpdate);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
 
@@ -2021,6 +2087,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
 
                         String jsonFinal = jsonObjectFinal.toString();
                         jsonFinal = jsonFinal.replace("\\" , "");
+                        Log.d("jsonFinallll", "doInBackground: "+jsonFinal);
                         //TODO
                         boolean isValidTimeForSend = checkDateTimeForSend(childParameterModels);
                         if (!isValidTimeForSend)

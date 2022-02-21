@@ -17,7 +17,7 @@ public interface SplashMVP
     {
         Context getAppContext();
         void onErrorGPS();
-
+        void onCheckCountClearCache();
         void setLblVersionName(String versionName , String versionType);
         void goneLblVersionName();
         void onGetInvalidPackages(String[] packageNames);
@@ -49,6 +49,8 @@ public interface SplashMVP
     interface PresenterOps
     {
         void onConfigurationChanged(RequiredViewOps view);
+        void checkCountClearCache();
+        void clearData(String packageName);
         void checkIsRoot();
         void checkDeviceLanguage();
 
@@ -81,6 +83,7 @@ public interface SplashMVP
     interface RequiredPresenterOps
     {
         Context getAppContext();
+        void onCheckCountClearCache();
         void onGetIsRoot(boolean isRoot);
         void onGetDeviceLanguage(boolean isEnglish);
 
@@ -105,6 +108,7 @@ public interface SplashMVP
         // for is test == 0
         void onGetFakeLocation(boolean fakeLocation);
         void onGetInvalidPackages(String packageNames);
+        void showToast(int resId, String param , int messageType , int duration);
 
         void onGetLastLog(LogPPCModel logPPCModel);
         void onSendEmail(boolean result);
@@ -119,6 +123,8 @@ public interface SplashMVP
     }
     interface ModelOps
     {
+        void checkCountClearCache();
+        void successClearDate();
         void getIsRoot();
         void getDeviceLanguage();
         void getGPS();

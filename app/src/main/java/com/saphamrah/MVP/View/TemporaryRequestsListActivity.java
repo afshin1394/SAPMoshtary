@@ -8,9 +8,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,6 +27,7 @@ import com.saphamrah.Adapter.TemporaryRequestsAdapter;
 import com.saphamrah.BaseMVP.TemporaryRequestsListMVP;
 import com.saphamrah.MVP.Presenter.TemporaryRequestsListPresenter;
 import com.saphamrah.MVP.printNoe2.PrintNoe2Activity;
+import com.saphamrah.PubFunc.ImageUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.CustomerAdamDarkhastModel;
@@ -57,6 +62,10 @@ public class TemporaryRequestsListActivity extends AppCompatActivity implements 
     private ArrayList<CustomerDarkhastFaktorModel> customerDarkhastFaktorModels;
     private ArrayList<CustomerAdamDarkhastModel> customerAdamDarkhastModels;
     private final int OPEN_FAKTOR_DETAIL = 100;
+    private final int TAKE_IMAGE = 101;
+    private Uri imageUri;
+    private int receiptImagePosition = -1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -148,11 +157,11 @@ public class TemporaryRequestsListActivity extends AppCompatActivity implements 
     }
 
     @Override
-    public void onGetTemporaryRequests(ArrayList<CustomerDarkhastFaktorModel> models, int noeForoshandehMamorPakhsh)
+    public void onGetTemporaryRequests(ArrayList<CustomerDarkhastFaktorModel> models, int noeForoshandehMamorPakhsh,boolean showReceiptImage)
     {
         this.customerDarkhastFaktorModels.clear();
         this.customerDarkhastFaktorModels.addAll(models);
-        requestAdapter = new TemporaryRequestsAdapter(TemporaryRequestsListActivity.this, customerDarkhastFaktorModels, noeForoshandehMamorPakhsh, new TemporaryRequestsAdapter.OnItemClickListener() {
+        requestAdapter = new TemporaryRequestsAdapter(TemporaryRequestsListActivity.this, customerDarkhastFaktorModels, noeForoshandehMamorPakhsh,showReceiptImage, new TemporaryRequestsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int action, int position) {
                 mPresenter.checkSelectedActionOnTempRequest(action , position , customerDarkhastFaktorModels.get(position));
@@ -308,6 +317,29 @@ public class TemporaryRequestsListActivity extends AppCompatActivity implements 
     {
         customAlertDialog.showToast(TemporaryRequestsListActivity.this, getResources().getString(resId), messageType, duration);
     }
+    @Override
+    public void openCamera(int position, CustomerDarkhastFaktorModel customerDarkhastFaktorModel) {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "New Picture");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
+        imageUri = getContentResolver().insert(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        receiptImagePosition = position;
+
+        if (intent.resolveActivity(TemporaryRequestsListActivity.this.getPackageManager()) != null) {
+            startActivityForResult(intent, TAKE_IMAGE);
+        }
+    }
+
+    @Override
+    public void onSuccessSaveReceiptImage(int resId,int position) {
+        showToast(resId, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
+        customerDarkhastFaktorModels.get(position).setExtraProp_IsOld(1);
+        customerDarkhastFaktorModels.get(position).setHasReceiptImage(true);
+        requestAdapter.notifyItemChanged(position);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
@@ -351,7 +383,26 @@ public class TemporaryRequestsListActivity extends AppCompatActivity implements 
                 mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "TemporaryRequestsListActivity", "onActivityResult", "");
             }
         }
+        else if (requestCode == TAKE_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    Bitmap image = MediaStore.Images.Media.getBitmap(
+                            getContentResolver(), imageUri);
+                    imageUri = null;
+                    if (image != null && receiptImagePosition != -1) {
+                        byte[] imageBytes  = new ImageUtils().convertBitmapToByteArray(TemporaryRequestsListActivity.this,image,100, Bitmap.CompressFormat.JPEG);
+                        mPresenter.insertReceiptImage(imageBytes,receiptImagePosition,customerDarkhastFaktorModels.get(receiptImagePosition));
+                    } else {
+                        showToast(R.string.errorSelectImage, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                    }
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                    mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", TemporaryRequestsListActivity.this.getClass().getSimpleName(), "onActivityResult", "");
+                }
+            }
+        }
     }
+
 
     private void closeAlertDialog()
     {

@@ -94,6 +94,8 @@ public class DarkhastFaktorModel
     private static final String COLUMN_MoshtaryGharardadccSazmanForosh = "MoshtaryGharardadccSazmanForosh";
     private static final String COLUMN_ccMoshtaryGharardad = "ccMoshtaryGharardad";
     private static final String COLUMN_ccAnbar = "ccAnbar";
+    private static final String COLUMN_ExtraProp_Description = "ExtraProp_Description";
+
 
 
 
@@ -314,6 +316,10 @@ public class DarkhastFaktorModel
     public static String COLUMN_ccAnbar() {
         return COLUMN_ccAnbar;
     }
+    public static String COLUMN_ExtraProp_Description() {
+        return COLUMN_ExtraProp_Description;
+    }
+
 
 
     @SerializedName("ccDarkhastFaktor")
@@ -572,6 +578,7 @@ public class DarkhastFaktorModel
     private String ExtraProp_ShomarehDarkhast;
     private String CodeMoshtary;
     private int showFaktorMamorPakhsh;
+    private String ExtraProp_Description;
 
 
 
@@ -1026,6 +1033,7 @@ public class DarkhastFaktorModel
         IsTakhir = isTakhir;
     }
 
+
     /*public float getMablaghFaktorPishAzTakhfif() {
         return MablaghFaktorPishAzTakhfif;
     }
@@ -1203,6 +1211,14 @@ public class DarkhastFaktorModel
         this.ccAnbar = ccAnbar;
     }
 
+    public String getExtraProp_Description() {
+        return ExtraProp_Description;
+    }
+
+    public void setExtraProp_Description(String extraProp_Description) {
+        ExtraProp_Description = extraProp_Description;
+    }
+
     public String toJsonStringForVosol(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, int ccMarkazForosh, int ccGorohNoeMoshtary, int ccGorohNoeSenf, JSONArray jsonDarkhastFaktorSatrs, JSONArray darkhastFaktorTakhfifModels, float mablaghTakhfifFaktorSatr, JSONArray jsonEmza, JSONArray jsonMoshtaryPhotoPPCChidman, JSONArray jsonDariaftPardakht)
     {
         JSONObject jsonObject = new JSONObject();
@@ -1320,6 +1336,7 @@ public class DarkhastFaktorModel
             jsonObject.put("UniqID_Tablet" , UniqID_Tablet);
             jsonObject.put("Darajeh" , Darajeh);
 			jsonObject.put("ccDarkhastFaktorNoeForosh" , ccDarkhastFaktorNoeForosh);
+			jsonObject.put("Description" , customerDarkhastFaktorModel.getExtraProp_Description());
 			Log.d("DarkhastFaktorModel", "ccDarkhastFaktorNoeForosh : " + ccDarkhastFaktorNoeForosh + " ,TarikhPishBini: " + TarikhPishbinyTahvil);
         }
         catch (Exception e)
@@ -1376,6 +1393,8 @@ public class DarkhastFaktorModel
             jsonObject.put("UniqID_Tablet" , UniqID_Tablet);
             jsonObject.put("Darajeh" , Darajeh);
 			jsonObject.put("ccDarkhastFaktorNoeForosh" , ccDarkhastFaktorNoeForosh);
+            jsonObject.put("Description" , customerDarkhastFaktorModel.getExtraProp_Description());
+
 
             Log.d("DarkhastFaktorModel", "ccDarkhastFaktorNoeForosh - vosolsard : " + ccDarkhastFaktorNoeForosh + " ,TarikhPishBini: " + TarikhPishbinyTahvil);
         }
@@ -1485,6 +1504,7 @@ public class DarkhastFaktorModel
                 ", IsTakhir=" + IsTakhir +
                 ", ccMoshtaryGharardad=" + ccMoshtaryGharardad +
                 ", MoshtaryGharardadccSazmanForosh=" + MoshtaryGharardadccSazmanForosh+
+                ", ExtraProp_Description=" + ExtraProp_Description+
                 '}';
     }
 

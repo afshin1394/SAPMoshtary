@@ -46,8 +46,10 @@ public class DarkhastFaktorEmzaMoshtaryDAO
             DarkhastFaktorEmzaMoshtaryModel.COLUMN_ccDarkhastFaktor(),
             DarkhastFaktorEmzaMoshtaryModel.COLUMN_ccMoshtary(),
             DarkhastFaktorEmzaMoshtaryModel.COLUMN_EmzaImage(),
+            DarkhastFaktorEmzaMoshtaryModel.COLUMN_ReceiptImage(),
             DarkhastFaktorEmzaMoshtaryModel.COLUMN_DarkhastFaktorImage(),
-            DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_FaktorImage()
+            DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_FaktorImage(),
+            DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_ReceiptImage()
         };
     }
 
@@ -190,6 +192,30 @@ public class DarkhastFaktorEmzaMoshtaryDAO
     }
 
 
+    public boolean updateReceiptImageByccDarkhastFaktor(long ccDarkhastFaktor,byte[] image)
+    {
+
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(DarkhastFaktorEmzaMoshtaryModel.COLUMN_ReceiptImage(), image);
+            values.put(DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_ReceiptImage(), 1);
+            db.update(DarkhastFaktorEmzaMoshtaryModel.TableName(), values, DarkhastFaktorEmzaMoshtaryModel.COLUMN_ccDarkhastFaktor()+"= ?", new String[]{String.valueOf(ccDarkhastFaktor)});
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorEmzaMoshtaryModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorEmzaMoshtaryDAO" , "" , "updateReceiptImageByccDarkhastFaktor" , "");
+            return false;
+        }
+
+    }
+
+
     public boolean deleteAll()
     {
         try
@@ -296,8 +322,10 @@ public class DarkhastFaktorEmzaMoshtaryDAO
         contentValues.put(DarkhastFaktorEmzaMoshtaryModel.COLUMN_ccDarkhastFaktor() , darkhastFaktorEmzaMoshtaryModel.getCcDarkhastFaktor());
         contentValues.put(DarkhastFaktorEmzaMoshtaryModel.COLUMN_ccMoshtary() , darkhastFaktorEmzaMoshtaryModel.getCcMoshtary());
         contentValues.put(DarkhastFaktorEmzaMoshtaryModel.COLUMN_EmzaImage() , darkhastFaktorEmzaMoshtaryModel.getEmzaImage());
+        contentValues.put(DarkhastFaktorEmzaMoshtaryModel.COLUMN_ReceiptImage() , darkhastFaktorEmzaMoshtaryModel.getReceiptImage());
         contentValues.put(DarkhastFaktorEmzaMoshtaryModel.COLUMN_DarkhastFaktorImage() , darkhastFaktorEmzaMoshtaryModel.getDarkhastFaktorImage());
         contentValues.put(DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_FaktorImage() , darkhastFaktorEmzaMoshtaryModel.getHave_FaktorImage());
+        contentValues.put(DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_ReceiptImage() , darkhastFaktorEmzaMoshtaryModel.getHave_ReceiptImage());
 
         return contentValues;
     }
@@ -316,7 +344,9 @@ public class DarkhastFaktorEmzaMoshtaryDAO
             darkhastFaktorEmzaMoshtaryModel.setCcMoshtary(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_ccMoshtary())));
             darkhastFaktorEmzaMoshtaryModel.setEmzaImage(cursor.getBlob(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_EmzaImage())));
             darkhastFaktorEmzaMoshtaryModel.setDarkhastFaktorImage(cursor.getBlob(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_DarkhastFaktorImage())));
+            darkhastFaktorEmzaMoshtaryModel.setReceiptImage(cursor.getBlob(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_ReceiptImage())));
             darkhastFaktorEmzaMoshtaryModel.setHave_FaktorImage(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_FaktorImage())));
+            darkhastFaktorEmzaMoshtaryModel.setHave_ReceiptImage(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_ReceiptImage())));
 
             darkhastFaktorEmzaMoshtaryModels.add(darkhastFaktorEmzaMoshtaryModel);
             cursor.moveToNext();

@@ -1,10 +1,12 @@
 package com.saphamrah.MVP.Model;
 
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.VerifyCustomerRequestMVP;
 import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.DAO.DarkhastFaktorEmzaMoshtaryDAO;
 import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
+import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
 import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.PubFunc.PubFunc;
@@ -59,7 +61,7 @@ public class VerifyCustomerRequestModel implements VerifyCustomerRequestMVP.Mode
     }
 
     @Override
-    public void saveBitmap(int ccMoshtary, byte[] customerSignPic)
+    public void saveBitmap(String description ,int ccMoshtary, byte[] customerSignPic)
     {
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor() , -1);
@@ -73,12 +75,14 @@ public class VerifyCustomerRequestModel implements VerifyCustomerRequestMVP.Mode
             darkhastFaktorEmzaMoshtaryModel.setEmzaImage(customerSignPic);
             darkhastFaktorEmzaMoshtaryModel.setDarkhastFaktorImage(darkhastFaktorImage);
             darkhastFaktorEmzaMoshtaryModel.setHave_FaktorImage(0);
+            darkhastFaktorEmzaMoshtaryModel.setHave_ReceiptImage(0);
 
             darkhastFaktorEmzaMoshtaryDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
             if (darkhastFaktorEmzaMoshtaryDAO.insert(darkhastFaktorEmzaMoshtaryModel))
             {
                 DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
                 darkhastFaktorDAO.updateSaateKhorojAzMaghazehAndInsertInPPC(ccDarkhastFaktor , new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date()));
+                darkhastFaktorDAO.updateDescriptionFaktor(ccDarkhastFaktor , description);
                 mPresenter.onSuccessInsertCustomerSign();
             }
             else
@@ -111,6 +115,13 @@ public class VerifyCustomerRequestModel implements VerifyCustomerRequestMVP.Mode
     public void onDestroy()
     {
 
+    }
+
+    @Override
+    public void checkLayoutTozihat() {
+       ParameterChildDAO parameterChildDAO = new ParameterChildDAO(BaseApplication.getContext());
+       int visibility =  Integer.parseInt( parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_Description_Darkhast_Enable()));
+       mPresenter.onCheckLayoutTozihat(visibility);
     }
 
 }

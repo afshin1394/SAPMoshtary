@@ -501,7 +501,7 @@ public class AddCustomerApplyModel implements AddCustomerApplyMVP.ModelOps
             moshtaryAfradModel.setTarafHesab(true);
             moshtaryAfradModel.setFName(firstName);
             moshtaryAfradModel.setLName(lastName);
-            moshtaryAfradModel.setBirthDate(convertPersianToGregorian(birthDate));
+            moshtaryAfradModel.setExtraProp_BirthDate(convertPersianToGregorian(birthDate));
 
             MoshtaryAfradDAO moshtaryAfradDAO = new MoshtaryAfradDAO(mPresenter.getAppContext());
             return moshtaryAfradDAO.insert(moshtaryAfradModel) ? 1 : -9;

@@ -100,11 +100,11 @@ public class AddCustomerApplyPresenter implements AddCustomerApplyMVP.PresenterO
                 }
             }
 
-            if (addCustomerInfoModel.getMobile() == null || addCustomerInfoModel.getMobile().trim().equals("") || (addCustomerInfoModel.getMobile().trim().length() > 0 && (addCustomerInfoModel.getMobile().trim().length() != 11 || !addCustomerInfoModel.getMobile().trim().startsWith("09")) ) )
-            {
-                validData = false;
-                mView.get().onErrorMobile();
-            }
+//            if (addCustomerInfoModel.getMobile() == null || addCustomerInfoModel.getMobile().trim().equals("") || (addCustomerInfoModel.getMobile().trim().length() > 0 && (addCustomerInfoModel.getMobile().trim().length() != 11 || !addCustomerInfoModel.getMobile().trim().startsWith("09")) ) )
+//            {
+//                validData = false;
+//                mView.get().onErrorMobile();
+//            }
             if (addCustomerInfoModel.getNoeShakhsiatId() == null || addCustomerInfoModel.getNoeShakhsiatId().trim().equals("") || addCustomerInfoModel.getNoeShakhsiatTitle() == null || addCustomerInfoModel.getNoeShakhsiatTitle().trim().equals(""))
             {
                 validData = false;

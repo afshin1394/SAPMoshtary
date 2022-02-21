@@ -2137,6 +2137,23 @@ public class DarkhastFaktorDAO
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "updateSaateKhorojAzMaghazeh" , "");
         }
     }
+    public void updateDescriptionFaktor(long ccDarkhastFaktor , String description)
+    {
+        String query = "update " + DarkhastFaktorModel.TableName() + " set " + DarkhastFaktorModel.COLUMN_ExtraProp_Description() + " = '" + description + "' where " + DarkhastFaktorModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor;
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "updateSaateKhorojAzMaghazeh" , "");
+        }
+    }
 
     public void updateMablaghKol(long ccDarkhastFaktor , double mablaghKolFaktor)
     {

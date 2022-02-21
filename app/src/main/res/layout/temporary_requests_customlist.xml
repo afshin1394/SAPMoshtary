@@ -107,6 +107,22 @@
                             android:layout_gravity="center"
                             android:layoutDirection="rtl" />
                     </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/layReceipt"
+                        android:layout_gravity="center"
+                        android:background="@color/colorPrimary">
+                        <ImageView
+                            android:layout_width="@dimen/iconSize64"
+                            android:layout_height="@dimen/iconSize64"
+                            android:id="@+id/imgReceipt"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/ic_captureresiddarkhast"
+                            android:layout_gravity="center"
+                            android:layoutDirection="rtl" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <LinearLayout

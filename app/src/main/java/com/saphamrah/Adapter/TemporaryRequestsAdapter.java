@@ -28,13 +28,16 @@ public class TemporaryRequestsAdapter extends RecyclerSwipeAdapter<TemporaryRequ
     private Context context;
     private ArrayList<CustomerDarkhastFaktorModel> models;
     private int noeForoshandeh;
+    private boolean showReceiptImage;
 
-    public TemporaryRequestsAdapter(Context context, ArrayList<CustomerDarkhastFaktorModel> models, int noeForoshandeh , OnItemClickListener listener)
+    public TemporaryRequestsAdapter(Context context, ArrayList<CustomerDarkhastFaktorModel> models, int noeForoshandeh,boolean showReceiptImage, OnItemClickListener listener)
     {
         this.listener = listener;
         this.context = context;
         this.models = models;
         this.noeForoshandeh = noeForoshandeh;
+        this.showReceiptImage = showReceiptImage;
+
     }
 
     @NonNull
@@ -58,6 +61,8 @@ public class TemporaryRequestsAdapter extends RecyclerSwipeAdapter<TemporaryRequ
         holder.lblMablaghKhales.setText(formatter.format(models.get(position).getMablaghKhalesFaktor()));
 
         holder.imgSaveImage.setVisibility(View.VISIBLE);
+        holder.imgReceipt.setVisibility(View.VISIBLE);
+        holder.layReceipt.setVisibility(View.VISIBLE);
         holder.laySaveImage.setVisibility(View.VISIBLE);
 
         holder.imgDelete.setVisibility(View.VISIBLE);
@@ -122,6 +127,26 @@ public class TemporaryRequestsAdapter extends RecyclerSwipeAdapter<TemporaryRequ
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right , holder.itemView.findViewById(R.id.layRight));
         }
 
+        if (showReceiptImage){
+           if (models.get(position).hasReceiptImage())
+           {
+               holder.layReceipt.setVisibility(View.GONE);
+           }
+           else
+           {
+               holder.layReceipt.setVisibility(View.VISIBLE);
+           }
+        }
+
+        if (models.get(position).hasReceiptImage())
+        {
+            holder.layReceipt.setVisibility(View.GONE);
+        }else if (showReceiptImage){
+            holder.layReceipt.setVisibility(View.VISIBLE);
+        }else{
+            holder.layReceipt.setVisibility(View.GONE);
+        }
+
 
         holder.bind(position , listener);
     }
@@ -143,10 +168,12 @@ public class TemporaryRequestsAdapter extends RecyclerSwipeAdapter<TemporaryRequ
         private ImageView imgSend;
         private ImageView imgPrint;
         private ImageView imgSaveImage;
+        private ImageView imgReceipt;
         private RelativeLayout layDelete;
         private RelativeLayout laySend;
         private RelativeLayout layPrint;
         private RelativeLayout laySaveImage;
+        private RelativeLayout layReceipt;
 
 
         public ViewHolder(View view)
@@ -161,15 +188,21 @@ public class TemporaryRequestsAdapter extends RecyclerSwipeAdapter<TemporaryRequ
             imgDelete = view.findViewById(R.id.imgDelete);
             imgSend = view.findViewById(R.id.imgSend);
             imgPrint = view.findViewById(R.id.imgPrint);
+            imgReceipt = view.findViewById(R.id.imgReceipt);
+            layReceipt = view.findViewById(R.id.layReceipt);
             imgSaveImage = view.findViewById(R.id.imgSaveImage);
             layDelete = view.findViewById(R.id.layDelete);
             laySend = view.findViewById(R.id.laySend);
             layPrint = view.findViewById(R.id.layPrint);
             laySaveImage = view.findViewById(R.id.laySaveImage);
 
+
             lblRadif.setTypeface(font);
             lblCustomerNameFamily.setTypeface(font);
             lblMablaghKhales.setTypeface(font);
+
+            layReceipt.setVisibility(showReceiptImage?View.VISIBLE:View.GONE);
+
         }
 
         public void bind(final int position , final OnItemClickListener listener)
@@ -201,6 +234,14 @@ public class TemporaryRequestsAdapter extends RecyclerSwipeAdapter<TemporaryRequ
                 @Override
                 public void onClick(View v) {
                     listener.onItemClick(Constants.SAVE_IMAGE(), position);
+                    swipeLayout.close(true);
+                }
+            });
+
+            imgReceipt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClick(Constants.CAPTURE_RECEIPT(), position);
                     swipeLayout.close(true);
                 }
             });

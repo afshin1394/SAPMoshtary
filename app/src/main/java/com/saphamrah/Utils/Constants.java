@@ -378,6 +378,8 @@ public class Constants
     public static final int SAVE_SEND_LOCATION = 11;
     public static final int SHARE = 12;
     public static final int IMAGE = 13;
+    private static final int CAPTURE_RECEIPT = 14;
+
 
 
     public static int DELETE() {
@@ -391,6 +393,9 @@ public class Constants
     }
     public static int SAVE_IMAGE() {
         return SAVE_IMAGE;
+    }
+    public static int CAPTURE_RECEIPT() {
+        return CAPTURE_RECEIPT;
     }
     public static int SHOW_IMAGE() {
         return SHOW_IMAGE;
@@ -699,6 +704,8 @@ public class Constants
     public static final int CC_CHILD_Hashieh_Sood_Enable = 197;
     public static final int CC_CHILD_Tedad_Pishnahdy_Tarikh_Tahvil = 198;
     public static final int CC_CHILD_Check_Shahr_Markazi_Tarikh_Tahvil = 199;
+    public static final int CC_CHILD_Require_Image_Customer_Confirm_Request = 200;
+
 
 
 
@@ -1198,7 +1205,10 @@ public class Constants
         return CC_CHILD_Check_Shahr_Markazi_Tarikh_Tahvil;
     }
 
-
+    public static int CC_CHILD_Require_Image_Customer_Confirm_Request()
+    {
+        return CC_CHILD_Require_Image_Customer_Confirm_Request;
+    }
 
     public static int CC_CHILD_CHECK_LOCATION_IN_POLYGON_FOR_NEW_CUSTOMER()
     {

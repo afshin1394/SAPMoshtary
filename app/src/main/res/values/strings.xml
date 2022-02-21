@@ -667,6 +667,7 @@
     <string name="min">دقیقه</string>
     <string name="and">و</string>
     <string name="errorFaktorImage">ابتدا تصویر درخواست را ذخیره نمایید.</string>
+    <string name="errorFaktorImageResid">ابتدا تصویر رسید درخواست را ذخیره نمایید.</string>
     <string name="errorInputNumber">شماره را وارد نمایید.</string>
     <string name="errorBiggerDate">تاریخ نمی تواند از تاریخ روز بزرگتر باشد.</string>
     <string name="errorInvalidDate">تاریخ وارد شده مجاز نمی باشد.</string>
@@ -799,6 +800,7 @@
     <string name="successfullyClearedData">داده های برنامه با موفقیت حذف شد.</string>
     <string name="clearDataDesc">در صورت کند بودن اجرای برنامه، اطلاعات کش برنامه را حذف نمایید.</string>
     <string name="clearDataWarning">برای حذف اطلاعات مطمئن هستید؟ \n در صورت ادامه عملیات تمام اطلاعات موجود حذف خواهند شد. \n پس از انجام عملیات دوباره برنامه را اجرا نمایید.</string>
+    <string name="showclearDataDialog">فضای ذخیره سازی اطلاعات پر شده است. \n برای عملکرد بهتر برنامه ، اطلاعات اضافی شما پاک می شود. \n پس از انجام عملیات دوباره برنامه را اجرا نمایید.</string>
     <string name="radif">ردیف</string>
     <string name="sharhKala">شرح کالا</string>
     <string name="mablagh">مبلغ</string>
@@ -1180,5 +1182,6 @@
     <string name="mablaghMandehJayezeh">مبلغ مانده جایزه</string>
     <string name="txt_remaining_bonus">مبلغ مانده جایزه ارزش افزوده را در صورت دلخواه ویرایش کنید</string>
     <string name="overMaxMandeh">مبلغ انتخابی بیشتر از کل مبلغ باقیمانده جایزه ارزش افزوده می باشد</string>
+    <string name="tozihatFaktor">توضیحات فاکتور</string>
 
 </resources>

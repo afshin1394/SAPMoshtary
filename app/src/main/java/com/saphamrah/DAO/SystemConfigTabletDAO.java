@@ -45,7 +45,9 @@ public class SystemConfigTabletDAO
             SystemConfigTabletModel.COLUMN_NoeNaghshe(),
             SystemConfigTabletModel.COLUMN_GoodsShowNumberEachPage(),
             SystemConfigTabletModel.COLUMN_SortTreasuryList(),
-            SystemConfigTabletModel.COLUMN_GetProgramService()
+            SystemConfigTabletModel.COLUMN_GetProgramService(),
+            SystemConfigTabletModel.COLUMN_CountClearCache
+
 
                 /*SystemConfigTabletModel.COLUMN_UpdateJayezehTakhfif_Tablet(),
                 SystemConfigTabletModel.COLUMN_ccMarkaz_GetData(),
@@ -175,6 +177,34 @@ public class SystemConfigTabletDAO
         }
         return service;
     }
+
+    public int getCountClearCache()
+    {
+        int service = 0;
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(SystemConfigTabletModel.TableName(), allColumns(), SystemConfigTabletModel.COLUMN_CountClearCache, null, null, null, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    service = cursorToModel(cursor).get(0).getCountClearCache();
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , SystemConfigTabletModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "SystemConfigTabletDAO" , "" , "getProgramService" , "");
+        }
+        return service;
+    }
+
     public boolean deleteAll()
     {
         try
@@ -233,6 +263,26 @@ public class SystemConfigTabletDAO
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorUpdate , SystemConfigTabletModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "SystemConfigTabletDAO" , "" , "updatePrinterPaperSize" , "");
+            return false;
+        }
+    }
+    public boolean updateCountClearCache(int count)
+    {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(SystemConfigTabletModel.COLUMN_CountClearCache , count);
+            db.update(SystemConfigTabletModel.TableName(), values, null, null);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , SystemConfigTabletModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "SystemConfigTabletDAO" , "" , "updateCountClearCache" , "");
             return false;
         }
     }
@@ -375,6 +425,7 @@ public class SystemConfigTabletDAO
         contentValues.put(SystemConfigTabletModel.COLUMN_GoodsShowNumberEachPage(),systemConfigTabletModel.getGoodsShowNumberEachPage());
         contentValues.put(SystemConfigTabletModel.COLUMN_SortTreasuryList(),systemConfigTabletModel.getSortTreasuryList());
         contentValues.put(SystemConfigTabletModel.COLUMN_GetProgramService(),systemConfigTabletModel.getGetProgramService());
+        contentValues.put(SystemConfigTabletModel.COLUMN_CountClearCache,systemConfigTabletModel.getCountClearCache());
 
         /*contentValues.put(SystemConfigTabletModel.COLUMN_DateServer() , systemConfigTabletModel.getDateServer());
         contentValues.put(SystemConfigTabletModel.COLUMN_CrispID() , systemConfigTabletModel.getCrispID());*/
@@ -404,6 +455,7 @@ public class SystemConfigTabletDAO
             systemConfigTabletModel.setGoodsShowNumberEachPage(cursor.getInt(cursor.getColumnIndex(SystemConfigTabletModel.COLUMN_GoodsShowNumberEachPage())));
             systemConfigTabletModel.setSortTreasuryList(cursor.getInt(cursor.getColumnIndex(SystemConfigTabletModel.COLUMN_SortTreasuryList())));
             systemConfigTabletModel.setGetProgramService(cursor.getInt(cursor.getColumnIndex(SystemConfigTabletModel.COLUMN_GetProgramService())));
+            systemConfigTabletModel.setCountClearCache(cursor.getInt(cursor.getColumnIndex(SystemConfigTabletModel.COLUMN_CountClearCache)));
             /*systemConfigTabletModel.setDateServer(cursor.getString(cursor.getColumnIndex(SystemConfigTabletModel.COLUMN_DateServer())));
             systemConfigTabletModel.setCrispID(cursor.getString(cursor.getColumnIndex(SystemConfigTabletModel.COLUMN_CrispID())));*/
 

@@ -22,7 +22,9 @@ public class DarkhastFaktorEmzaMoshtaryRepository {
         darkhastFaktorEmzaMoshtaryDAO = new DarkhastFaktorEmzaMoshtaryDAO(context);
     }
 
-
+    private Callable<Boolean> updateReceiptImageByccDarkhastFaktorCallable(long ccDarkhastFaktor,byte[] receiptImage){
+        return () -> darkhastFaktorEmzaMoshtaryDAO.updateReceiptImageByccDarkhastFaktor(ccDarkhastFaktor,receiptImage);
+    }
 
 
     private Callable<Boolean> deleteAllCallable(){
@@ -43,6 +45,11 @@ public class DarkhastFaktorEmzaMoshtaryRepository {
 
     public Observable<Boolean> deleteAll(){
         return RxAsync.makeObservable(deleteAllCallable())
+                .subscribeOn(Schedulers.io());
+    }
+
+    public Observable<Boolean> updateReceiptImageByccDarkhastFaktor(long ccDarkhastFaktor,byte[] receiptImage){
+        return RxAsync.makeObservable(updateReceiptImageByccDarkhastFaktorCallable(ccDarkhastFaktor,receiptImage))
                 .subscribeOn(Schedulers.io());
     }
 

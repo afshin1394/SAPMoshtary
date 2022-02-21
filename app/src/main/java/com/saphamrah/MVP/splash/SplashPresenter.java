@@ -35,6 +35,34 @@ public class SplashPresenter implements SplashMVP.PresenterOps, SplashMVP.Requir
         this.mView = new WeakReference<>(view);
     }
 
+    @Override
+    public void checkCountClearCache() {
+        mModel.checkCountClearCache();
+    }
+
+    @Override
+    public void clearData(String packageName) {
+        if (packageName == null || packageName.trim().equals(""))
+        {
+            mView.get().showToast(R.string.errorGetPackageName,"", Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }
+        else
+        {
+            try
+            {
+                Runtime runtime = Runtime.getRuntime();
+                runtime.exec("pm clear " + packageName);
+                mModel.successClearDate();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                checkInsertLogToDB( e.toString(), "SettingPresenter", "", "clearData", "");
+            }
+
+        }
+    }
+
 
     /////////////////////////// PresenterOps ///////////////////////////
 
@@ -240,6 +268,11 @@ public class SplashPresenter implements SplashMVP.PresenterOps, SplashMVP.Requir
         {
             mView.get().onGetInvalidPackages(new String[]{});
         }
+    }
+
+    @Override
+    public void showToast(int resId, String param, int messageType, int duration) {
+        mView.get().showToast(resId,param,messageType,duration);
     }
 
     @Override
@@ -650,6 +683,11 @@ public class SplashPresenter implements SplashMVP.PresenterOps, SplashMVP.Requir
         {
             return null;
         }
+    }
+
+    @Override
+    public void onCheckCountClearCache() {
+        mView.get().onCheckCountClearCache();
     }
 
     @Override

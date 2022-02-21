@@ -19,6 +19,7 @@ import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.LogPPCDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.DAO.ServerIPDAO;
+import com.saphamrah.DAO.SystemConfigTabletDAO;
 import com.saphamrah.DAO.VersionDAO;
 import com.saphamrah.Model.EmailLogPPCModel;
 import com.saphamrah.Model.ForoshandehAmoozeshiModel;
@@ -45,12 +46,8 @@ import com.saphamrah.Shared.RoutingServerShared;
 import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Shared.UserTypeShared;
 import com.saphamrah.Utils.Constants;
-import com.saphamrah.WebService.APIServiceGet;
-import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.RxService.APIServiceRxjava;
 import com.saphamrah.WebService.RxService.Response.DataResponse.CodeMelyResponse;
-import com.saphamrah.WebService.ServiceResponse.GetForoshandehAmoozeshiResult;
-import com.saphamrah.WebService.ServiceResponse.GetForoshandehMamorPakhshResult;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
 import com.saphamrah.WebService.ServiceResponse.GetVersionResult;
 import com.stericson.RootTools.RootTools;
@@ -60,9 +57,6 @@ import java.util.List;
 import java.util.Locale;
 
 import io.reactivex.disposables.Disposable;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices {
 
@@ -75,6 +69,34 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
     }
     ServerIPShared serverIPShared = new ServerIPShared(BaseApplication.getContext());
     ServerIPDAO serverIPDAO = new ServerIPDAO(BaseApplication.getContext());
+    SystemConfigTabletDAO systemConfigTabletDAO = new SystemConfigTabletDAO(BaseApplication.getContext());
+    ParameterChildDAO parameterChildDAO = new ParameterChildDAO(BaseApplication.getContext());
+
+    /**
+     * check count clear cache
+     */
+    @Override
+    public void checkCountClearCache(){
+
+        int countParameter = Integer.parseInt(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_Interval_Clear_Cache));
+        int systemConfigCount = systemConfigTabletDAO.getCountClearCache();
+        Log.d("splashModel","systemConfigCount:" + systemConfigCount + " <=" + " countParameter:" +countParameter);
+        if (systemConfigCount <= countParameter){
+            systemConfigCount ++;
+            systemConfigTabletDAO.updateCountClearCache(systemConfigCount);
+            getIsRoot();
+        } else {
+            mPresenter.onCheckCountClearCache();
+        }
+
+    }
+
+    @Override
+    public void successClearDate() {
+        systemConfigTabletDAO.updateCountClearCache(1);
+        mPresenter.showToast(R.string.successfullyClearedData,"", Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
+    }
+
 
     /**
      * check root device

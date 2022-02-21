@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -38,7 +39,8 @@ public class VerifyCustomerRequestActivity extends AppCompatActivity implements 
     private DrawingView drawingView;
     private CustomAlertDialog customAlertDialog;
     private int ccMoshtary;
-
+    private LinearLayout layNazar;
+    private EditText txtDesc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,6 +55,8 @@ public class VerifyCustomerRequestActivity extends AppCompatActivity implements 
         FloatingActionButton fabSave = findViewById(R.id.fabSave);
         FloatingActionButton fabClearScreen = findViewById(R.id.fabCls);
         FloatingActionButton fabShowInvoice = findViewById(R.id.fabShowInvoice);
+        txtDesc = findViewById(R.id.txtDesc);
+        layNazar = findViewById(R.id.layNazar);
         new BottomBar(VerifyCustomerRequestActivity.this, 5, new BottomBar.OnItemClickListener() {
             @Override
             public void onClick(int position) {
@@ -68,7 +72,7 @@ public class VerifyCustomerRequestActivity extends AppCompatActivity implements 
         ccMoshtary = getIntent.getIntExtra("ccMoshtary" , -1);
 
         mPresenter.getAgreementContent(ccMoshtary);
-
+        mPresenter.checkLayoutTozihat();
 
         fabClearScreen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,6 +166,15 @@ public class VerifyCustomerRequestActivity extends AppCompatActivity implements 
         customAlertDialog.showToast(VerifyCustomerRequestActivity.this, getResources().getString(resId), messageType, duration);
     }
 
+    @Override
+    public void onCheckLayoutTozihat(int visibility) {
+        if (visibility == 1){
+            layNazar.setVisibility(View.VISIBLE);
+        } else {
+            layNazar.setVisibility(View.GONE);
+        }
+    }
+
     private void initialSignLayout()
     {
         Paint mPaint = new Paint();
@@ -188,7 +201,8 @@ public class VerifyCustomerRequestActivity extends AppCompatActivity implements 
         }
         else
         {
-            mPresenter.checkSaveBitmap(ccMoshtary, new PubFunc().new ImageUtils().convertBitmapToByteArray(VerifyCustomerRequestActivity.this, bitmap, 100));
+            String description = txtDesc.getText().toString();
+            mPresenter.checkSaveBitmap(description,ccMoshtary, new PubFunc().new ImageUtils().convertBitmapToByteArray(VerifyCustomerRequestActivity.this, bitmap, 100));
         }
         bitmap.recycle();
         emptyBitmap.recycle();

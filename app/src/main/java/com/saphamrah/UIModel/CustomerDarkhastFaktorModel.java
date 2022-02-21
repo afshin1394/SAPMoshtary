@@ -1,12 +1,15 @@
 package com.saphamrah.UIModel;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 /**
  * save data of darkhastFaktor table and moshtary table
  */
-public class CustomerDarkhastFaktorModel
+public class CustomerDarkhastFaktorModel implements Parcelable
 {
 
     private long ccDarkhastFaktor;
@@ -27,7 +30,47 @@ public class CustomerDarkhastFaktorModel
     private boolean haveFaktorImage;
     private int ccMoshtaryGharardad;
     private int moshtaryGharardadccSazmanForosh;
+    private boolean hasReceiptImage;
+    private String extraProp_Description;
 
+    public CustomerDarkhastFaktorModel() {
+    }
+
+
+    protected CustomerDarkhastFaktorModel(Parcel in) {
+        ccDarkhastFaktor = in.readLong();
+        TarikhFaktor = in.readString();
+        ShomarehDarkhast = in.readInt();
+        ShomarehFaktor = in.readInt();
+        ccForoshandeh = in.readInt();
+        ccMoshtary = in.readInt();
+        TarikhErsal = in.readString();
+        MablaghKhalesFaktor = in.readDouble();
+        CodeVazeiat = in.readInt();
+        ExtraProp_IsOld = in.readInt();
+        ExtraProp_IsSend = in.readInt();
+        UniqID_Tablet = in.readString();
+        fullNameMoshtary = in.readString();
+        codeMoshtary = in.readString();
+        haveEmzaImage = in.readByte() != 0;
+        haveFaktorImage = in.readByte() != 0;
+        ccMoshtaryGharardad = in.readInt();
+        moshtaryGharardadccSazmanForosh = in.readInt();
+        hasReceiptImage = in.readByte() != 0;
+        extraProp_Description = in.readString();
+    }
+
+    public static final Creator<CustomerDarkhastFaktorModel> CREATOR = new Creator<CustomerDarkhastFaktorModel>() {
+        @Override
+        public CustomerDarkhastFaktorModel createFromParcel(Parcel in) {
+            return new CustomerDarkhastFaktorModel(in);
+        }
+
+        @Override
+        public CustomerDarkhastFaktorModel[] newArray(int size) {
+            return new CustomerDarkhastFaktorModel[size];
+        }
+    };
 
     public long getCcDarkhastFaktor() {
         return ccDarkhastFaktor;
@@ -173,6 +216,23 @@ public class CustomerDarkhastFaktorModel
         this.moshtaryGharardadccSazmanForosh = moshtaryGharardadccSazmanForosh;
     }
 
+    public boolean hasReceiptImage() {
+        return hasReceiptImage;
+    }
+
+    public void setHasReceiptImage(boolean hasReceiptImage) {
+        this.hasReceiptImage = hasReceiptImage;
+    }
+
+    public String getExtraProp_Description() {
+        return extraProp_Description;
+    }
+
+    public void setExtraProp_Description(String extraProp_Description) {
+        this.extraProp_Description = extraProp_Description;
+    }
+
+
     @NonNull
     @Override
     public String toString() {
@@ -195,7 +255,41 @@ public class CustomerDarkhastFaktorModel
                 ", haveFaktorImage=" + haveFaktorImage +
                 ", ccMoshtaryGharardad=" + ccMoshtaryGharardad +
                 ", ccMohtaryGharardadSazmanForosh=" + moshtaryGharardadccSazmanForosh +
+                ", ExtraProp_Description=" + extraProp_Description +
 
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
+        parcel.writeLong(ccDarkhastFaktor);
+        parcel.writeString(TarikhFaktor);
+        parcel.writeInt(ShomarehDarkhast);
+        parcel.writeInt(ShomarehFaktor);
+        parcel.writeInt(ccForoshandeh);
+        parcel.writeInt(ccMoshtary);
+        parcel.writeString(TarikhErsal);
+        parcel.writeDouble(MablaghKhalesFaktor);
+        parcel.writeInt(CodeVazeiat);
+        parcel.writeInt(ExtraProp_IsOld);
+        parcel.writeInt(ExtraProp_IsSend);
+        parcel.writeString(UniqID_Tablet);
+        parcel.writeString(fullNameMoshtary);
+        parcel.writeString(codeMoshtary);
+        parcel.writeByte((byte) (haveEmzaImage ? 1 : 0));
+        parcel.writeByte((byte) (haveFaktorImage ? 1 : 0));
+        parcel.writeInt(ccMoshtaryGharardad);
+        parcel.writeInt(moshtaryGharardadccSazmanForosh);
+        parcel.writeByte((byte) (hasReceiptImage ? 1 : 0));
+        parcel.writeString(extraProp_Description);
+
+    }
+
+
 }

@@ -15,7 +15,7 @@ public interface TemporaryRequestsListMVP
     interface RequiredViewOps
     {
         Context getAppContext();
-        void onGetTemporaryRequests(ArrayList<CustomerDarkhastFaktorModel> models , int noeForoshandehMamorPakhsh);
+        void onGetTemporaryRequests(ArrayList<CustomerDarkhastFaktorModel> models , int noeForoshandehMamorPakhsh,boolean showReceiptImage);
         void onGetTemporaryNoRequests(ArrayList<CustomerAdamDarkhastModel> models);
         void showDeleteAlert(int position , CustomerDarkhastFaktorModel customerDarkhastFaktorModel);
         void showSendAlert(int position , CustomerDarkhastFaktorModel customerDarkhastFaktorModel);
@@ -28,6 +28,10 @@ public interface TemporaryRequestsListMVP
         void onSuccessSendRequest(int position , long ccDarkhastFaktorNew);
         void onErrorSendRequest(int errorId,String message);
         void showToast(int resId, int messageType , int duration);
+
+        void openCamera(int position, CustomerDarkhastFaktorModel customerDarkhastFaktorModel);
+
+        void onSuccessSaveReceiptImage(int resId,int position);
     }
 
 
@@ -51,13 +55,15 @@ public interface TemporaryRequestsListMVP
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
         void unBindDisposable();
+
+        void insertReceiptImage(byte[] imageBytes,int position, CustomerDarkhastFaktorModel customerDarkhastFaktorModel);
     }
 
 
     interface RequiredPresenterOps
     {
         Context getAppContext();
-        void onGetTemporaryRequests(ArrayList<CustomerDarkhastFaktorModel> models , int noeForoshandehMamorPakhsh);
+        void onGetTemporaryRequests(ArrayList<CustomerDarkhastFaktorModel> models , int noeForoshandehMamorPakhsh,boolean showReceiptImage);
         void onGetTemporaryNoRequests(ArrayList<CustomerAdamDarkhastModel> models);
         void onConfigurationChanged(TemporaryRequestsListMVP.RequiredViewOps view);
         void onSuccessDeleteTempRequest(int position);
@@ -72,6 +78,11 @@ public interface TemporaryRequestsListMVP
         void onSuccessSendNoRequest(int position);
         void onSuccessSendRequest(int position , long ccDarkhastFaktorNew);
         void bindDisposable(Disposable disposable);
+
+
+        void onSuccessSaveReceiptImage(int resId,int position);
+
+        void onErrorSaveImage();
     }
 
 
@@ -88,6 +99,8 @@ public interface TemporaryRequestsListMVP
         void sendTempNoRequest(int position , CustomerAdamDarkhastModel customerAdamDarkhastModel);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
+
+        void insertReceiptImage(byte[] imageBytes,int position ,CustomerDarkhastFaktorModel customerDarkhastFaktorModel);
     }
 
 }

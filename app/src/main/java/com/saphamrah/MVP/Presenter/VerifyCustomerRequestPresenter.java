@@ -69,11 +69,11 @@ public class VerifyCustomerRequestPresenter implements VerifyCustomerRequestMVP.
     }
 
     @Override
-    public void checkSaveBitmap(int ccMoshtary , byte[] customerSignPic)
+    public void checkSaveBitmap(String description,int ccMoshtary , byte[] customerSignPic)
     {
         if (ccMoshtary > 0)
         {
-            mModel.saveBitmap(ccMoshtary , customerSignPic);
+            mModel.saveBitmap(description,ccMoshtary , customerSignPic);
         }
         else
         {
@@ -102,6 +102,11 @@ public class VerifyCustomerRequestPresenter implements VerifyCustomerRequestMVP.
     public void onDestroy(boolean isChangingConfig)
     {
 
+    }
+
+    @Override
+    public void checkLayoutTozihat() {
+        mModel.checkLayoutTozihat();
     }
 
 
@@ -143,6 +148,11 @@ public class VerifyCustomerRequestPresenter implements VerifyCustomerRequestMVP.
         {
             mView.get().showToast(R.string.errorFindccDarkhastFaktor, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
         }
+    }
+
+    @Override
+    public void onCheckLayoutTozihat(int visibility) {
+        mView.get().onCheckLayoutTozihat(visibility);
     }
 
 

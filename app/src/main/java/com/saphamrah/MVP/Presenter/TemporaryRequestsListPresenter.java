@@ -78,6 +78,10 @@ public class TemporaryRequestsListPresenter implements TemporaryRequestsListMVP.
         {
             mModel.saveImageTempRequest(position , customerDarkhastFaktorModel);
         }
+        else if (action == Constants.CAPTURE_RECEIPT())
+        {
+            mView.get().openCamera(position , customerDarkhastFaktorModel);
+        }
     }
 
     @Override
@@ -156,6 +160,11 @@ public class TemporaryRequestsListPresenter implements TemporaryRequestsListMVP.
         }
     }
 
+    @Override
+    public void insertReceiptImage(byte[] imageBytes,int position, CustomerDarkhastFaktorModel customerDarkhastFaktorModel) {
+        mModel.insertReceiptImage(imageBytes,position,customerDarkhastFaktorModel);
+    }
+
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
 
@@ -167,11 +176,11 @@ public class TemporaryRequestsListPresenter implements TemporaryRequestsListMVP.
 
 
     @Override
-    public void onGetTemporaryRequests(ArrayList<CustomerDarkhastFaktorModel> models , int noeForoshandehMamorPakhsh)
+    public void onGetTemporaryRequests(ArrayList<CustomerDarkhastFaktorModel> models , int noeForoshandehMamorPakhsh,boolean showReceiptImage)
     {
         if (models.size() > 0)
         {
-            mView.get().onGetTemporaryRequests(models , noeForoshandehMamorPakhsh);
+            mView.get().onGetTemporaryRequests(models , noeForoshandehMamorPakhsh,showReceiptImage);
         }
         else
         {
@@ -262,4 +271,15 @@ public class TemporaryRequestsListPresenter implements TemporaryRequestsListMVP.
     public void bindDisposable(Disposable disposable) {
         compositeDisposable.add(disposable);
     }
+
+    @Override
+    public void onSuccessSaveReceiptImage(int resId,int position) {
+        mView.get().onSuccessSaveReceiptImage(resId,position);
+    }
+
+    @Override
+    public void onErrorSaveImage() {
+        mView.get().onErrorSendRequest(R.string.errorFaktorImageResid,"");
+    }
+
 }

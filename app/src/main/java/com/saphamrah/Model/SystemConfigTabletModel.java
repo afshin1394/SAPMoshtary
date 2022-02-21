@@ -18,6 +18,7 @@ public class SystemConfigTabletModel
     private static final String COLUMN_GoodsNumberEachPage="GoodsShowNumberEachPage";
     private static final String COLUMN_SortTreasuryList="SortTreasuryList";
     private static final String COLUMN_GetProgramService="GetProgramService";
+    public static final String COLUMN_CountClearCache="CountClearCache";
     /*private static final String COLUMN_DateServer = "DateServer";
     private static final String COLUMN_CrispID = "CrispID";*/
 
@@ -198,6 +199,16 @@ public class SystemConfigTabletModel
         this.getProgramService = getProgramService;
     }
 
+    private int countClearCache;
+
+    public int getCountClearCache() {
+        return countClearCache;
+    }
+
+    public void setCountClearCache(int countClearCache) {
+        this.countClearCache = countClearCache;
+    }
+
     @Override
     public String toString() {
         return "SystemConfigTabletModel{" +
@@ -214,6 +225,7 @@ public class SystemConfigTabletModel
                 ", NoeNaghshe=" + NoeNaghshe +
                 ", GoodsShowNumberEachPage=" + GoodsShowNumberEachPage +
                 ", SortTreasuryList=" + sortTreasuryList +
+                ", GountClearCache=" + countClearCache +
                 '}';
     }
 }

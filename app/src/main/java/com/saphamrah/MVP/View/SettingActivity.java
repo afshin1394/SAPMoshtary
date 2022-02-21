@@ -221,7 +221,9 @@ public class SettingActivity extends AppCompatActivity implements SettingMVP.Req
                     @Override
                     public void setOnCancelClick() {}
                     @Override
-                    public void setOnApplyClick() { mPresenter.clearData(getPackageName()); }
+                    public void setOnApplyClick() {
+                        mPresenter.clearData(getPackageName());
+                    }
                 });
             }
         });

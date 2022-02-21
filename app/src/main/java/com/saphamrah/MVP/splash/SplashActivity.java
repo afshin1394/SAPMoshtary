@@ -36,6 +36,7 @@ import com.google.android.gms.tasks.Task;
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.CustomView.CustomSpinner;
 import com.saphamrah.MVP.View.MainActivity;
+import com.saphamrah.MVP.View.SettingActivity;
 import com.saphamrah.MVP.View.TreasuryListOfflineActivity;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.AsyncDownloadFile;
@@ -62,73 +63,76 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
      ***** Road map For Splash ***** */
 
      /** @see #checkPermission()
-      * 1 - check all permission --> when check all permission is ok we can continue
+      *  check all permission --> when check all permission is ok we can continue
       */
 
+    /**
+     * @see SplashModel#checkCountClearCache()
+     * check count clear cache
+     */
+
     /** @see SplashModel#getIsRoot()
-     * 2 - check root device
+     *  check root device
      */
 
     /** @see SplashModel#getDeviceLanguage()
-     * 3 - check device language
+     *  check device language
      */
 
     /** @see SplashModel#getGPS()
-     * 4 - check gps device
+     *  check gps device
      */
 
     /** @see SplashModel#getInternetType()
-     * 5 - check internet device
+     *  check internet device
      */
 
     /** @see SplashModel#getWifiStatus()
-     * 6 - check wifi device
+     *  check wifi device
      */
 
     /** @see SplashModel#getGooglePlayServices()
-     * 7 - check google play service device
+     *  check google play service device
      */
 
-
-
     /** @see SplashModel#getServerIP(boolean)
-     * 8 - get all IP for show dialog select server
+     *  get all IP for show dialog select server
      */
 
     /** @see SplashModel#getServerTime()
-     * 9 - check server time
+     *  check server time
      */
 
     /** @see SplashModel#checkAuthentication()
-     * 10 - check code unique (Authentication)
+     *  check code unique (Authentication)
      */
 
     /** @see SplashModel#getForoshandehAmoozeshi(ServerIpModel)
-     * 11 - check foroshandeh amoozeshi
+     *  check foroshandeh amoozeshi
      */
 
     /** @see SplashModel#getForoshandehMamorPakhsh()
-     * 12 - check foroshandeh mamorPakhsh
+     *  check foroshandeh mamorPakhsh
      */
 
     /** @see SplashModel#getUserType()
-     * 13 - check user type
+     *  check user type
      */
 
     /** @see SplashModel#getIMEI()
-     * 14 - get IMEI
+     *  get IMEI
      */
 
     /** @see SplashModel#getAvailableEmail()
-     * 15 - check Available Email
+     *  check Available Email
      */
 
     /** @see SplashModel#getAppVersionName()
-     * 16 - check app version name
+     *  check app version name
      */
 
     /** @see SplashModel#getServerVersion() ()
-     * 17 - check server version
+     *  check server version
      */
 
     // if is test == 0 (Asli)
@@ -210,7 +214,7 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
         if (!hasPermissions(SplashActivity.this, permissions)) {
             ActivityCompat.requestPermissions(this, permissions, ALL_PERMISSIONS);
         } else {
-            mPresenter.checkIsRoot();
+            mPresenter.checkCountClearCache();
         }
     }
     public boolean hasPermissions(Context context, String[] permissions) {
@@ -244,6 +248,21 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
     @Override
     public void onErrorGPS() {
         turnOnGPS();
+    }
+
+    @Override
+    public void onCheckCountClearCache() {
+        customAlertDialog.showMessageAlert(SplashActivity.this, "", getString(R.string.showclearDataDialog), Constants.INFO_MESSAGE(), getString(R.string.apply), new CustomAlertDialogResponse() {
+            @Override
+            public void setOnCancelClick() {
+
+            }
+
+            @Override
+            public void setOnApplyClick() {
+                mPresenter.clearData(getPackageName());
+            }
+        });
     }
 
     /**
