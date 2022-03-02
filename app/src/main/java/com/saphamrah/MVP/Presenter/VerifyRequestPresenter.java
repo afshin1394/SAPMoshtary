@@ -385,6 +385,7 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
         for (DarkhastFaktorTakhfifModel model : darkhastFaktorTakhfifModels)
         {
             sumMablaghTakhfif += model.getMablaghTakhfif();
+            Log.d("verifyRequest","jayezeh sumMablaghTakhfif : " + sumMablaghTakhfif);
         }
         mView.get().onGetDiscounts(darkhastFaktorTakhfifModels, sumMablaghTakhfif);
     }

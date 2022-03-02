@@ -665,7 +665,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
     public void getDiscounts(long ccDarkhastFaktor)
     {
         DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
-        ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels = darkhastFaktorTakhfifDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        //todo jayezeh
+        ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels = darkhastFaktorTakhfifDAO.getByccDarkhastFaktorWithoutArzeshAfzodeh(ccDarkhastFaktor);
         mPresenter.onGetDiscounts(darkhastFaktorTakhfifModels);
     }
 
@@ -3039,7 +3040,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                         ArrayList<JayezehSatrModel> jayezehSatrs = jayezehSatrDAO.getForFaktor(jayezeh.getCcJayezeh(), DiscountCalculation.NAME_NOE_FIELD_KALA,
 								new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial() , discountCalculation.getTedadRialAghlam()},
                                 new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()},
-								darkhastFaktorSatr.getCcKalaCode(), tedad, tedadBasteh, tedadKarton, mablaghKala, jayezeh.getNoeTedadRial(),0);
+								String.valueOf(darkhastFaktorSatr.getCcKalaCode()), tedad, tedadBasteh, tedadKarton, mablaghKala, jayezeh.getNoeTedadRial(),0);
                         Log.d("jayezeh" , "jayezehSatrs.size : " + jayezehSatrs.size());
                         for (JayezehSatrModel jayezehSatr : jayezehSatrs)
                         {
@@ -3178,7 +3179,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                         ArrayList<JayezehSatrModel> jayezehSatrs = jayezehSatrDAO.getForFaktor(jayezeh.getCcJayezeh(), 
 								DiscountCalculation.NAME_NOE_FIELD_GOROH_KALA, new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial(),discountCalculation.getTedadRialAghlam()},
 								new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()},
-								Integer.parseInt(gorohKala.getFiled1()), sumTedadGorohKala, sumTedadKartonGorohKala, sumTedadBastehGorohKala, sumMablaghKolGorohKala, jayezeh.getNoeTedadRial(),tedadAghlam);
+								gorohKala.getFiled1(), sumTedadGorohKala, sumTedadKartonGorohKala, sumTedadBastehGorohKala, sumMablaghKolGorohKala, jayezeh.getNoeTedadRial(),tedadAghlam);
 
                         Log.d("jayezeh" , "jayezehSatrs.size for goroh Kala : " + jayezehSatrs.size());
                         for (JayezehSatrModel jayezehSatr: jayezehSatrs)
@@ -3267,6 +3268,258 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                         }
                     }
                 }
+
+                //---------------------------------------- Brand.. -----------------------------------------
+                double sumTedadBrand= 0;
+                double sumTedadBastehBrand= 0;
+                double sumTedadKartonBrand= 0;
+                double sumMablaghKolBrand= 0;
+                int tedadAghlamBrand =0 ;
+
+                for (JayezehModel jayezeh: jayezehs)
+                {
+                    sumTedadBrand = 0;
+                    sumTedadBastehBrand = 0;
+                    sumTedadKartonBrand = 0;
+                    sumMablaghKolBrand = 0;
+                    tedadAghlam = 0;
+
+                    ArrayList<DataTableModel> brands = darkhastFaktorSatrDAO.getTedadBeTafkikBrandAndJayezeh(darkhastFaktor.getCcDarkhastFaktor(), jayezeh.getCcJayezeh());
+
+                    for (DataTableModel brand : brands)
+                    {
+                        sumTedadBrand= Double.parseDouble(brand.getFiled2());
+                        sumTedadBastehBrand = Double.parseDouble(brand.getFiled3());
+                        sumTedadKartonBrand = Double.parseDouble(brand.getFiled4());
+                        sumMablaghKolBrand = Double.parseDouble(brand.getFiled5());
+                        tedadAghlamBrand  = Integer.parseInt(brand.getFiled6());
+
+                        //Satrhaye Jayezeh..
+
+                        Log.d("jayezeh" , "sumTedadbrand : " + sumTedadBrand);
+                        Log.d("jayezeh" , "sumTedadBastehbrand : " + sumTedadBastehBrand);
+                        Log.d("jayezeh" , "sumTedadKartonbrand : " + sumTedadKartonBrand);
+                        Log.d("jayezeh" , "sumMablaghKolbrand : " + sumMablaghKolBrand);
+                        Log.d("jayezeh" , "tedadAghlam : " + tedadAghlam);
+
+                        ArrayList<JayezehSatrModel> jayezehSatrs = jayezehSatrDAO.getForFaktor(jayezeh.getCcJayezeh(),
+                                DiscountCalculation.NAME_NOE_FIELD_BRAND, new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial(),discountCalculation.getTedadRialAghlam()},
+                                new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()},
+                                brand.getFiled1(), sumTedadBrand, sumTedadKartonBrand, sumTedadBastehBrand, sumMablaghKolBrand, jayezeh.getNoeTedadRial(),tedadAghlam);
+
+                        Log.d("jayezeh" , "jayezehSatrs.size for Brand : " + jayezehSatrs.size());
+                        for (JayezehSatrModel jayezehSatr: jayezehSatrs)
+                        {
+                            Log.d("jayezeh" , "Brand jayezehSatr : " + jayezehSatr.toString());
+                            int zarib= 0;
+                            if (jayezehSatr.getBeEza() == 0)
+                            {
+                                zarib= 1;
+                            }
+                            else
+                            {
+                                //Tedad..
+                                if (jayezeh.getNoeTedadRial()== discountCalculation.getTedadRialTedad())
+                                {
+                                    if (jayezehSatr.getCodeNoeBastehBandyBeEza()==  discountCalculation.getBasteBandiAdad())
+                                    {
+                                        zarib = (int)(sumTedadBrand/ jayezehSatr.getBeEza());
+                                    }
+                                    else if (jayezehSatr.getCodeNoeBastehBandyBeEza()== discountCalculation.getBasteBandiBaste())
+                                    {
+                                        zarib= (int)(sumTedadBastehBrand/ jayezehSatr.getBeEza());
+                                    }
+                                    else if (jayezehSatr.getCodeNoeBastehBandyBeEza()== discountCalculation.getBasteBandiCarton())
+                                    {
+                                        zarib = (int)(sumTedadKartonBrand/ jayezehSatr.getBeEza());
+                                    }
+                                }//if
+                                //Rial..
+                                else if (jayezeh.getNoeTedadRial()== discountCalculation.getTedadRialRial())
+                                {
+                                    zarib = (int)(sumMablaghKolBrand/ jayezehSatr.getBeEza());
+                                }
+                            }
+                            Log.d("jayezeh" , "Brand zarib : " + zarib);
+                            tedadJayezeh= 0;
+                            if (zarib != 0)
+                            {
+                                if (jayezehSatr.getTedadJayezeh() != 0)
+                                {
+                                    Log.d("jayezeh" , "ccKalaCode of jayezeh Satr : " + jayezehSatr.getCcKalaCode());
+                                    Log.d("jayezeh" , "getCcNoeField of jayezeh Satr : " + jayezehSatr.getCcNoeField());
+                                    KalaModel kalaModel = kalaDAO.getccKalaByKalaGoroh(jayezehSatr.getCcNoeField());
+                                    Log.d("jayezeh" , "kalaModel : " + kalaModel.toString());
+                                    if (jayezehSatr.getCodeNoeBastehBandy() == discountCalculation.getBasteBandiCarton())
+                                    {
+                                        tedadJayezeh= zarib * jayezehSatr.getTedadJayezeh() ;//* kalaModel.getTedadDarKarton();
+                                    }
+                                    else if (jayezehSatr.getCodeNoeBastehBandy() == discountCalculation.getBasteBandiBaste())
+                                    {
+                                        tedadJayezeh= zarib * jayezehSatr.getTedadJayezeh() ;//* kalaModel.getTedadDarBasteh();
+                                    }
+                                    else if (jayezehSatr.getCodeNoeBastehBandy() == discountCalculation.getBasteBandiAdad())
+                                    {
+                                        tedadJayezeh= zarib * jayezehSatr.getTedadJayezeh();
+                                    }
+                                    else
+                                    {
+                                        tedadJayezeh= zarib * jayezehSatr.getTedadJayezeh();
+                                    }
+                                }
+                                else
+                                {
+                                    //Find MablaghForosh..
+                                    double mablghForoshKala= 0;
+                                    for (KalaModel kala: kalaDAO.getKalasByccKalaCode(jayezehSatr.getCcKalaCodeJayezeh()))
+                                    {
+                                        if (kala.getCcKalaCode()== jayezehSatr.getCcKalaCodeJayezeh())
+                                        {
+                                            mablghForoshKala= kala.getLastMablaghForosh();
+                                            break;
+                                        }
+                                    }
+                                    if (jayezehSatr.getNoeRialJayezeh() == noeRialJayezehAdady)
+                                    {
+                                        tedadJayezeh= (int)(zarib * jayezehSatr.getRialJayezeh() / mablghForoshKala);
+                                    }
+                                }
+                            }
+
+                            Log.d("jayezeh" , "brand tedad Jayezeh : " + tedadJayezeh);
+                            if (tedadJayezeh != 0)
+                            {
+                                checkForInsertJayezeh(darkhastFaktor.getCcDarkhastFaktor(), jayezeh.getCcJayezeh(), jayezehSatr.getCcJayezehSatr(), jayezeh.getSharhJayezeh(), jayezehSatr.getCcKalaJayezeh(), jayezehSatr.getCcKalaCodeJayezeh(), tedadJayezeh, jayezeh.getIsJayezehEntekhabi());
+                            }
+                        }
+                    }
+                }
+
+                //---------------------------------------- TaminKonandeh.. -----------------------------------------
+                double sumTedadTaminKonandeh= 0;
+                double sumTedadBastehTaminKonandeh= 0;
+                double sumTedadKartonTaminKonandeh= 0;
+                double sumMablaghKolTaminKonandeh= 0;
+                int tedadAghlamTaminKonandeh =0 ;
+
+                for (JayezehModel jayezeh: jayezehs)
+                {
+                    sumTedadTaminKonandeh = 0;
+                    sumTedadBastehTaminKonandeh = 0;
+                    sumTedadKartonTaminKonandeh = 0;
+                    sumMablaghKolTaminKonandeh = 0;
+                    tedadAghlam = 0;
+
+                    ArrayList<DataTableModel> taminKonandehs = darkhastFaktorSatrDAO.getTedadBeTafkikTaminKonandehAndJayezeh(darkhastFaktor.getCcDarkhastFaktor(), jayezeh.getCcJayezeh());
+
+                    for (DataTableModel taminKonandeh : taminKonandehs)
+                    {
+                        sumTedadTaminKonandeh= Double.parseDouble(taminKonandeh.getFiled2());
+                        sumTedadBastehTaminKonandeh = Double.parseDouble(taminKonandeh.getFiled3());
+                        sumTedadKartonTaminKonandeh = Double.parseDouble(taminKonandeh.getFiled4());
+                        sumMablaghKolTaminKonandeh = Double.parseDouble(taminKonandeh.getFiled5());
+                        tedadAghlamTaminKonandeh  = Integer.parseInt(taminKonandeh.getFiled6());
+
+                        //Satrhaye Jayezeh..
+
+                        Log.d("jayezeh" , "sumTedadTaminKonandeh : " + sumTedadTaminKonandeh);
+                        Log.d("jayezeh" , "sumTedadBastehTaminKonandeh : " + sumTedadBastehTaminKonandeh);
+                        Log.d("jayezeh" , "sumTedadKartonTaminKonandeh : " + sumTedadKartonTaminKonandeh);
+                        Log.d("jayezeh" , "sumMablaghKolTaminKonandeh : " + sumMablaghKolTaminKonandeh);
+                        Log.d("jayezeh" , "tedadAghlamTaminKonandeh : " + tedadAghlam);
+
+                        ArrayList<JayezehSatrModel> jayezehSatrs = jayezehSatrDAO.getForFaktor(jayezeh.getCcJayezeh(),
+                                DiscountCalculation.NAME_NOE_FIELD_TAMIN_KONANDE, new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial(),discountCalculation.getTedadRialAghlam()},
+                                new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()},
+                                taminKonandeh.getFiled1(), sumTedadTaminKonandeh, sumTedadKartonTaminKonandeh, sumTedadBastehTaminKonandeh, sumMablaghKolTaminKonandeh, jayezeh.getNoeTedadRial(),tedadAghlam);
+
+                        Log.d("jayezeh" , "jayezehSatrs.size for TaminKonandeh : " + jayezehSatrs.size());
+                        for (JayezehSatrModel jayezehSatr: jayezehSatrs)
+                        {
+                            Log.d("jayezeh" , "TaminKonandeh jayezehSatr : " + jayezehSatr.toString());
+                            int zarib= 0;
+                            if (jayezehSatr.getBeEza() == 0)
+                            {
+                                zarib= 1;
+                            }
+                            else
+                            {
+                                //Tedad..
+                                if (jayezeh.getNoeTedadRial()== discountCalculation.getTedadRialTedad())
+                                {
+                                    if (jayezehSatr.getCodeNoeBastehBandyBeEza()==  discountCalculation.getBasteBandiAdad())
+                                    {
+                                        zarib = (int)(sumTedadTaminKonandeh/ jayezehSatr.getBeEza());
+                                    }
+                                    else if (jayezehSatr.getCodeNoeBastehBandyBeEza()== discountCalculation.getBasteBandiBaste())
+                                    {
+                                        zarib= (int)(sumTedadBastehTaminKonandeh/ jayezehSatr.getBeEza());
+                                    }
+                                    else if (jayezehSatr.getCodeNoeBastehBandyBeEza()== discountCalculation.getBasteBandiCarton())
+                                    {
+                                        zarib = (int)(sumTedadKartonTaminKonandeh/ jayezehSatr.getBeEza());
+                                    }
+                                }//if
+                                //Rial..
+                                else if (jayezeh.getNoeTedadRial()== discountCalculation.getTedadRialRial())
+                                {
+                                    zarib = (int)(sumMablaghKolTaminKonandeh/ jayezehSatr.getBeEza());
+                                }
+                            }
+                            Log.d("jayezeh" , "TaminKonandeh zarib : " + zarib);
+                            tedadJayezeh= 0;
+                            if (zarib != 0)
+                            {
+                                if (jayezehSatr.getTedadJayezeh() != 0)
+                                {
+                                    Log.d("jayezeh" , "ccKalaCode of jayezeh Satr : " + jayezehSatr.getCcKalaCode());
+                                    Log.d("jayezeh" , "getCcNoeField of jayezeh Satr : " + jayezehSatr.getCcNoeField());
+                                    KalaModel kalaModel = kalaDAO.getccKalaByKalaGoroh(jayezehSatr.getCcNoeField());
+                                    Log.d("jayezeh" , "kalaModel : " + kalaModel.toString());
+                                    if (jayezehSatr.getCodeNoeBastehBandy() == discountCalculation.getBasteBandiCarton())
+                                    {
+                                        tedadJayezeh= zarib * jayezehSatr.getTedadJayezeh() ;//* kalaModel.getTedadDarKarton();
+                                    }
+                                    else if (jayezehSatr.getCodeNoeBastehBandy() == discountCalculation.getBasteBandiBaste())
+                                    {
+                                        tedadJayezeh= zarib * jayezehSatr.getTedadJayezeh() ;//* kalaModel.getTedadDarBasteh();
+                                    }
+                                    else if (jayezehSatr.getCodeNoeBastehBandy() == discountCalculation.getBasteBandiAdad())
+                                    {
+                                        tedadJayezeh= zarib * jayezehSatr.getTedadJayezeh();
+                                    }
+                                    else
+                                    {
+                                        tedadJayezeh= zarib * jayezehSatr.getTedadJayezeh();
+                                    }
+                                }
+                                else
+                                {
+                                    //Find MablaghForosh..
+                                    double mablghForoshKala= 0;
+                                    for (KalaModel kala: kalaDAO.getKalasByccKalaCode(jayezehSatr.getCcKalaCodeJayezeh()))
+                                    {
+                                        if (kala.getCcKalaCode()== jayezehSatr.getCcKalaCodeJayezeh())
+                                        {
+                                            mablghForoshKala= kala.getLastMablaghForosh();
+                                            break;
+                                        }
+                                    }
+                                    if (jayezehSatr.getNoeRialJayezeh() == noeRialJayezehAdady)
+                                    {
+                                        tedadJayezeh= (int)(zarib * jayezehSatr.getRialJayezeh() / mablghForoshKala);
+                                    }
+                                }
+                            }
+
+                            Log.d("jayezeh" , "TaminKonandeh tedad Jayezeh : " + tedadJayezeh);
+                            if (tedadJayezeh != 0)
+                            {
+                                checkForInsertJayezeh(darkhastFaktor.getCcDarkhastFaktor(), jayezeh.getCcJayezeh(), jayezehSatr.getCcJayezehSatr(), jayezeh.getSharhJayezeh(), jayezehSatr.getCcKalaJayezeh(), jayezehSatr.getCcKalaCodeJayezeh(), tedadJayezeh, jayezeh.getIsJayezehEntekhabi());
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -3305,6 +3558,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                     //codeNoeJayezeh for auto == 1 else 2
                     if (insertJayezeh(ccDarkhastFaktor, ccJayezeh, ccJayezehSatr, DarkhastFaktorJayezehModel.CodeNoeJayezehAuto(), sharhJayezeh, ccKalaJayezeh, ccKalaCodeJayezeh, tedadJayezeh))
                     {
+                        Log.d("jayezeh" , "ccKalaJayezeh : " + ccKalaJayezeh + " tedadJayezeh :" + tedadJayezeh);
                         if (!checkKalaForInsertKalaMojodi(ccKalaJayezeh , tedadJayezeh))
                         {
                             publishProgress(-2);
@@ -3334,21 +3588,21 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             KalaMojodiDAO kalaMojodiDAO = new KalaMojodiDAO(mPresenter.getAppContext());
             ArrayList<KalaMojodiModel> kalaMojodiModels = kalaMojodiDAO.getForAutoBonus(ccKalaJayezeh);
             int insertedKala = 0;
-            Log.d("bonus" , "kalaMojodiModels.size : " + kalaMojodiModels.size() + " , ccKalaJayezeh : " +ccKalaJayezeh);
+            Log.d("Jayezeh" , "kalaMojodiModels.size : " + kalaMojodiModels.size() + " , ccKalaJayezeh : " +ccKalaJayezeh);
             for (KalaMojodiModel kala : kalaMojodiModels)
             {
                 if (insertedKala < tedadJayezeh)
                 {
                     int countNew = (kala.getTedad() >= tedadJayezeh) ? tedadJayezeh : kala.getTedad();
-                    Log.d("bonus" , "count new : " + countNew + " , kala.getTedad() : " + kala.getTedad() + " , tedadJayezeh : " + tedadJayezeh + " , FinalccAfrad : " + kala.getCcAfrad());
-                    Log.d("bonus" , "kala model " + kala.toString());
+                    Log.d("Jayezeh" , "count new : " + countNew + " , kala.getTedad() : " + kala.getTedad() + " , tedadJayezeh : " + tedadJayezeh + " , FinalccAfrad : " + kala.getCcAfrad());
+                    Log.d("Jayezeh" , "kala model " + kala.toString());
                     if (insertKalaMojodi(kalaMojodiDAO, kala.getCcTaminKonandeh(), countNew, kala.getShomarehBach(), kala.getTarikhTolid(), kala.getGheymatMasrafKonandeh(), kala.getGheymatForosh(), kala.getCcKalaCode(), kala.getCcForoshandeh(), kala.getCcAfrad(), kala.getTarikhEngheza()))
                     {
                         insertedKala += countNew;
                     }
                 }
             }
-            Log.d("bonus" , "insertedKala : " + insertedKala + " , tedadJayezeh : " + tedadJayezeh);
+            Log.d("Jayezeh" , "insertedKala : " + insertedKala + " , tedadJayezeh : " + tedadJayezeh);
             return insertedKala == tedadJayezeh;
         }
 
