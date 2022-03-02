@@ -745,4 +745,10 @@ public class SplashActivity extends AppCompatActivity implements SplashMVP.Requi
         return SplashActivity.this;
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestroy(false);
+    }
 }

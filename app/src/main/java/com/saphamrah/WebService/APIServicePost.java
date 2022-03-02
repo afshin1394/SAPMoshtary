@@ -28,6 +28,7 @@ import com.saphamrah.WebService.ServiceResponse.MarjoeeKardexResult;
 import com.saphamrah.WebService.ServiceResponse.MoshtaryChidmanResult;
 import com.saphamrah.WebService.ServiceResponse.UpdateDarkhastFaktorWithJSONResult;
 import com.saphamrah.WebService.ServiceResponse.UpdateNotificationMessageBoxResult;
+import com.saphamrah.WebService.ServiceResponse.UpdateResidImageDarkhastResult;
 import com.saphamrah.WebService.ServiceResponse.UpdateStatusMessageBoxResult;
 import com.saphamrah.WebService.ServiceResponse.VarizBeBankResult;
 import com.saphamrah.WebService.ServiceResponse.SuggestResult;

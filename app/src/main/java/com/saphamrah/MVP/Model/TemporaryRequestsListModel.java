@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Message;
+import android.util.Base64;
 import android.util.Log;
 
 import com.saphamrah.Application.BaseApplication;
@@ -122,6 +123,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1169,6 +1171,42 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
 
     @Override
     public void insertReceiptImage(byte[] imageBytes,int position ,CustomerDarkhastFaktorModel customerDarkhastFaktorModel) {
+
+      ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+      DarkhastFaktorEmzaMoshtaryRepository darkhastFaktorEmzaMoshtaryRepository = new DarkhastFaktorEmzaMoshtaryRepository(mPresenter.getAppContext());
+      darkhastFaktorEmzaMoshtaryRepository.sendReceiptImageRx(serverIpModel,mPresenter.getAppContext(),"TemporaryRequestListActivity",imageBytes,customerDarkhastFaktorModel.getCcDarkhastFaktor())
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe(new Observer<Boolean>() {
+                  @Override
+                  public void onSubscribe(@androidx.annotation.NonNull Disposable d) {
+                      compositeDisposable.add(d);
+                  }
+
+                  @Override
+                  public void onNext(@androidx.annotation.NonNull Boolean sent) {
+                      Log.i("sendReceiptImageRx", "onNext: "+sent);
+                      if (sent){
+                          insertReceiptImageIntoLocalDB(position,imageBytes,customerDarkhastFaktorModel);
+                      }else{
+                          onError(new Throwable());
+                      }
+                  }
+
+                  @Override
+                  public void onError(@androidx.annotation.NonNull Throwable e) {
+
+                      mPresenter.onError(R.string.errorUpdateReceiptImage);
+                  }
+
+                  @Override
+                  public void onComplete() {
+
+                  }
+              });
+
+    }
+
+    private void insertReceiptImageIntoLocalDB(int position,byte[] imageBytes, CustomerDarkhastFaktorModel customerDarkhastFaktorModel) {
         DarkhastFaktorEmzaMoshtaryRepository darkhastFaktorEmzaMoshtaryRepository = new DarkhastFaktorEmzaMoshtaryRepository(mPresenter.getAppContext());
         darkhastFaktorEmzaMoshtaryRepository.updateReceiptImageByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor(),imageBytes)
                 .observeOn(AndroidSchedulers.mainThread())

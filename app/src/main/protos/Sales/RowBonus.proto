@@ -23,7 +23,7 @@ message RowBonusReply{
   int32 	BonusRowID = 1;
   int32	BonusID = 2;
   int32	FieldTypeName = 3;
-  int32	FieldTypeID = 4;
+  string 	FieldTypeID = 4;
   float	From = 5;
   float	To = 6;
   int32	EncapsulationCodeType = 7;

@@ -10,9 +10,13 @@ import com.saphamrah.WebService.RxService.Response.DataResponse.KalaPhotoRespons
 import com.saphamrah.WebService.ServiceResponse.*;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.Response;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface APIServiceRxjava {
@@ -586,6 +590,14 @@ public interface APIServiceRxjava {
     @GET("API/apisales/GetDarkhastFaktorKalaPishnahadi")
     Observable<Response<DarkhastFaktorKalaPishnahadiResult>>getDarkhastFaktorKalaPishnahadiResult(@Query("ccForoshandeh") String ccForoshandeh , @Query("ccmoshtarys") String ccmoshtarys);
 
+
+
+/***********************************************************************POST_REQUEST****************************************************************************/
+
+
+     @FormUrlEncoded
+     @POST("Api/ApiSales/UpdateResidImageDarkhastJSON")
+     Observable<Response<UpdateResidImageDarkhastResult>> updateResidImageDarkhastJSON(@Field("") String jsonData);
 
 
 

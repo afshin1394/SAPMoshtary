@@ -40,32 +40,45 @@ import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.NetworkUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.Repository.ForoshandehMamorPakhshRepository;
 import com.saphamrah.Shared.EmailLogPPCShared;
 import com.saphamrah.Shared.GetProgramShared;
 import com.saphamrah.Shared.RoutingServerShared;
 import com.saphamrah.Shared.ServerIPShared;
 import com.saphamrah.Shared.UserTypeShared;
+import com.saphamrah.Utils.CollectionUtils;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.WebService.APIServiceGet;
+import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.RxService.APIServiceRxjava;
 import com.saphamrah.WebService.RxService.Response.DataResponse.CodeMelyResponse;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
 import com.saphamrah.WebService.ServiceResponse.GetVersionResult;
 import com.stericson.RootTools.RootTools;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices {
 
     private SplashMVP.RequiredPresenterOps mPresenter;
-
+    private CompositeDisposable compositeDisposable;
 
     public SplashModel(SplashMVP.RequiredPresenterOps presenterOps)
     {
         mPresenter = presenterOps;
+        compositeDisposable = new CompositeDisposable();
     }
     ServerIPShared serverIPShared = new ServerIPShared(BaseApplication.getContext());
     ServerIPDAO serverIPDAO = new ServerIPDAO(BaseApplication.getContext());
@@ -905,99 +918,161 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
      * get server version app
      */
     @Override
-    public void getServerVersion() {
+//    public void getServerVersion() {
+//
+//        VersionDAO versionDAO = new VersionDAO(mPresenter.getAppContext());
+//        Log.d("splashModel", "getServerVersion");
+//        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
+//        //TODO must be modified
+//        //serverIpModel.setPort("8040");
+//        final ArrayList<ParameterChildModel> childParameterModelsDownloadUrls = new ParameterChildDAO(mPresenter.getAppContext()).getAllByccParameter(String.valueOf(Constants.CC_DOWNLOAD_URL()));
+//
+//        if (serverIpModel.getServerIp().equals("") || serverIpModel.getPort().equals("")) {
+//            mPresenter.notFoundServerIP();
+//        } else {
+//
+//            switch (serverIpModel.getWebServiceType()) {
+//                case REST:
+//
+//                    versionDAO.fetchVersionInfo(SplashActivity.class.getSimpleName(), serverIpModel, new RetrofitResponse() {
+//                        @Override
+//                        public void onSuccess(ArrayList arrayListData) {
+//                            try {
+//                                GetVersionResult result  = ((GetVersionResult) arrayListData.get(0));
+//
+//                                ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
+//                                ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
+//                                int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+//                                RoutingServerShared routingServerShared = new RoutingServerShared(mPresenter.getAppContext());
+//                                if (arrayListData.get(0) != null && result.getURLOSRM() != null) {
+//                                    routingServerShared.putString(RoutingServerShared.IP, result.getURLOSRM());
+//                                } else {
+//                                    routingServerShared.putString(RoutingServerShared.IP, "http://91.92.125.244:8002/");
+//                                }
+//                                mPresenter.onGetServerVersion(result, foroshandehMamorPakhshModel, noeMasouliat, childParameterModelsDownloadUrls);
+//                            } catch (Exception exception) {
+//                                mPresenter.onNetworkError(false);
+//                                setLogToDB(exception.toString(), SplashModel.class.getSimpleName(), "", "getServerVersion", "onResponse");
+//                                exception.printStackTrace();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onFailed(String type, String error) {
+//                            Log.d("fail",error);
+//                            setLogToDB(error, SplashModel.class.getSimpleName(), "", "getServerVersion", "onFailure");
+//                            mPresenter.onNetworkError(false);
+//                        }
+//                    });
+//
+//
+//
+//
+//                    break;
+//
+//                case gRPC:
+//                  versionDAO.fetchVersionInfoGrpc(SplashActivity.class.getSimpleName(), serverIpModel, new RetrofitResponse() {
+//                      @Override
+//                      public void onSuccess(ArrayList arrayListData) {
+//                          try {
+//
+//                              GetVersionResult result = new GetVersionResult(arrayListData.get(0).toString());
+//                              ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
+//                              ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
+//                              int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+//                              RoutingServerShared routingServerShared = new RoutingServerShared(mPresenter.getAppContext());
+//                              if (arrayListData.get(0) != null && result.getURLOSRM() != null) {
+//                                  routingServerShared.putString(RoutingServerShared.IP, result.getURLOSRM());
+//                              } else {
+//                                  routingServerShared.putString(RoutingServerShared.IP, "http://91.92.125.244:8002/");
+//                              }
+//                              mPresenter.onGetServerVersion(result, foroshandehMamorPakhshModel, noeMasouliat, childParameterModelsDownloadUrls);
+//                          }catch (Exception exception){
+//                              mPresenter.onNetworkError(false);
+//                              setLogToDB(exception.toString(), SplashModel.class.getSimpleName(), "", "getServerVersion", "onResponse");
+//                              exception.printStackTrace();
+//                          }
+//
+//                      }
+//
+//                      @Override
+//                      public void onFailed(String type, String error) {
+//                          Log.d("fail",error);
+//                          setLogToDB(error, SplashModel.class.getSimpleName(), "", "getServerVersion", "onFailure");
+//                          mPresenter.onNetworkError(false);
+//                      }
+//                  });
+//
+//
+//                    break;
+//            }
+//
+//
+//        }
+//
+//    }
 
-        VersionDAO versionDAO = new VersionDAO(mPresenter.getAppContext());
-        Log.d("splashModel", "getServerVersion");
+
+
+    public void getServerVersion() {
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
-        //TODO must be modified
-        //serverIpModel.setPort("8040");
+
         final ArrayList<ParameterChildModel> childParameterModelsDownloadUrls = new ParameterChildDAO(mPresenter.getAppContext()).getAllByccParameter(String.valueOf(Constants.CC_DOWNLOAD_URL()));
 
         if (serverIpModel.getServerIp().equals("") || serverIpModel.getPort().equals("")) {
             mPresenter.notFoundServerIP();
         } else {
-
-            switch (serverIpModel.getWebServiceType()) {
-                case REST:
-
-                    versionDAO.fetchVersionInfo(SplashActivity.class.getSimpleName(), serverIpModel, new RetrofitResponse() {
-                        @Override
-                        public void onSuccess(ArrayList arrayListData) {
-                            try {
-                                GetVersionResult result  = ((GetVersionResult) arrayListData.get(0));
-
-                                ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-                                ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
-                                int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
-                                RoutingServerShared routingServerShared = new RoutingServerShared(mPresenter.getAppContext());
-                                if (arrayListData.get(0) != null && result.getURLOSRM() != null) {
-                                    routingServerShared.putString(RoutingServerShared.IP, result.getURLOSRM());
-                                } else {
-                                    routingServerShared.putString(RoutingServerShared.IP, "http://91.92.125.244:8002/");
-                                }
-                                mPresenter.onGetServerVersion(result, foroshandehMamorPakhshModel, noeMasouliat, childParameterModelsDownloadUrls);
-                            } catch (Exception exception) {
-                                mPresenter.onNetworkError(false);
-                                setLogToDB(exception.toString(), SplashModel.class.getSimpleName(), "", "getServerVersion", "onResponse");
-                                exception.printStackTrace();
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);//ApiClient.getClient(serverIP, port).create(APIServiceGet.class);
+            Call<GetVersionResult> call = apiServiceGet.getVersionInfo();
+            call.enqueue(new Callback<GetVersionResult>() {
+                @Override
+                public void onResponse(Call<GetVersionResult> call, Response<GetVersionResult> response) {
+                    if (response.raw().body() != null) {
+                        Log.d("intercept", "in on response SplashModel.getServerVersion and response : " + response.raw().body().contentLength());
+                        long contentLength = response.raw().body().contentLength();
+                        PubFunc.Logger logger = new PubFunc().new Logger();
+                        logger.insertLogToDB(mPresenter.getAppContext(), Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, SplashModel.class.getSimpleName(), "", "getServerVersion", "onResponse");
+                    }
+                    try {
+                        if (response.isSuccessful()) {
+                            GetVersionResult result = response.body();
+                            ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
+                            ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
+                            int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+                            RoutingServerShared routingServerShared = new RoutingServerShared(mPresenter.getAppContext());
+                            if (result != null && result.getURLOSRM() != null) {
+                                routingServerShared.putString(RoutingServerShared.IP, result.getURLOSRM());
                             }
-                        }
+                            else
+                            {
+                                routingServerShared.putString(RoutingServerShared.IP, "http://91.92.125.244:8002/");
+                            }
 
-                        @Override
-                        public void onFailed(String type, String error) {
-                            Log.d("fail",error);
-                            setLogToDB(error, SplashModel.class.getSimpleName(), "", "getServerVersion", "onFailure");
+                            getServerVersionNew(result,foroshandehMamorPakhshModel);
+//                            mPresenter.onGetServerVersion(result, foroshandehMamorPakhshModel, noeMasouliat, childParameterModelsDownloadUrls);
+                        } else {
                             mPresenter.onNetworkError(false);
                         }
-                    });
+                    } catch (Exception exception) {
+                        setLogToDB(exception.toString(), SplashModel.class.getSimpleName(), "", "getServerVersion", "onResponse");
+                        exception.printStackTrace();
+                        mPresenter.onNetworkError(false);
+                    }
+                }
 
 
-
-
-                    break;
-
-                case gRPC:
-                  versionDAO.fetchVersionInfoGrpc(SplashActivity.class.getSimpleName(), serverIpModel, new RetrofitResponse() {
-                      @Override
-                      public void onSuccess(ArrayList arrayListData) {
-                          try {
-
-                              GetVersionResult result = new GetVersionResult(arrayListData.get(0).toString());
-                              ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-                              ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
-                              int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
-                              RoutingServerShared routingServerShared = new RoutingServerShared(mPresenter.getAppContext());
-                              if (arrayListData.get(0) != null && result.getURLOSRM() != null) {
-                                  routingServerShared.putString(RoutingServerShared.IP, result.getURLOSRM());
-                              } else {
-                                  routingServerShared.putString(RoutingServerShared.IP, "http://91.92.125.244:8002/");
-                              }
-                              mPresenter.onGetServerVersion(result, foroshandehMamorPakhshModel, noeMasouliat, childParameterModelsDownloadUrls);
-                          }catch (Exception exception){
-                              mPresenter.onNetworkError(false);
-                              setLogToDB(exception.toString(), SplashModel.class.getSimpleName(), "", "getServerVersion", "onResponse");
-                              exception.printStackTrace();
-                          }
-
-                      }
-
-                      @Override
-                      public void onFailed(String type, String error) {
-                          Log.d("fail",error);
-                          setLogToDB(error, SplashModel.class.getSimpleName(), "", "getServerVersion", "onFailure");
-                          mPresenter.onNetworkError(false);
-                      }
-                  });
-
-
-                    break;
-            }
-
-
+                @Override
+                public void onFailure(Call<GetVersionResult> call, Throwable t) {
+                    Log.d("fail", t.getMessage());
+                    setLogToDB(t.getMessage(), SplashModel.class.getSimpleName(), "", "getServerVersion", "onFailure");
+                    mPresenter.onNetworkError(false);
+                }
+            });
         }
 
     }
+
+
 
     /**
      * send log with email
@@ -1039,10 +1114,110 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
 
     @Override
     public void onDestroy() {
+        if (compositeDisposable != null) {
+            if (!compositeDisposable.isDisposed()) {
+                compositeDisposable.clear();
+            }
+            compositeDisposable = null;
+        }
+
+    }
+    //TODO canEnterProgram
+    @Override
+    public void checkCanEnterProgram() {
+        ForoshandehMamorPakhshRepository foroshandehMamorPakhshRepository=new ForoshandehMamorPakhshRepository(mPresenter.getAppContext());
+        Disposable disposable= foroshandehMamorPakhshRepository.getIsSelect()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(foroshandehMamorPakhshModel -> {
+                     mPresenter.onCheckCanEnterProgram(foroshandehMamorPakhshModel.getCanGetProgram());
+                });
+        compositeDisposable.add(disposable);
 
     }
 
+    //TODO version
+    @Override
+    public void getServerVersionNew(GetVersionResult result, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel) {
+        PubFunc.DeviceInfo deviceInfo = new PubFunc().new DeviceInfo();
+        String InstalledAppVersion = deviceInfo.getCurrentVersion(mPresenter.getAppContext());
+
+        int currentVersion = normalizedVersion(InstalledAppVersion);
+        int ForoshandehMamorPakhshServerVersion = normalizedVersion(foroshandehMamorPakhshModel.getVersion());
+
+        SimpleDateFormat sdfDateTime = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
+        SimpleDateFormat sdfSlashDateTime = new SimpleDateFormat(Constants.DATE_SHORT_FORMAT_WITH_SLASH());
 
 
+        long diffDay = 0;
+        Date today=null;
+        Date dateNewVersion=null;
+        String[] sepratedDate = result.getDateNewVersion().split("/");
+        PubFunc.DateConverter dateConverter = new PubFunc().new DateConverter();
+        dateConverter.persianToGregorian(Integer.parseInt(sepratedDate[0]), Integer.parseInt(sepratedDate[1]), Integer.parseInt(sepratedDate[2]));
+        String year = String.valueOf(dateConverter.getYear());
+        String month = dateConverter.getMonth() > 9 ? String.valueOf(dateConverter.getMonth()) : "0" + dateConverter.getMonth();
+        String day = dateConverter.getDay() > 9 ? String.valueOf(dateConverter.getDay()) : "0" + dateConverter.getDay();
+        String dateNewVersionGregorian = mPresenter.getAppContext().getResources().getString(R.string.dateWithSplashFormat, year, month, day);
+
+        try {
+            today = sdfDateTime.parse(sdfDateTime.format(new Date()));
+            dateNewVersion = sdfSlashDateTime.parse(dateNewVersionGregorian);
+            diffDay = (today.getTime() - dateNewVersion.getTime()) / (24 * 60 * 60 * 1000);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("SplahModel","today:" + today.toString() + " dateNewVersion:" + dateNewVersion.toString() + " diffDay:" + diffDay);
+        Log.d("SplahModel","currentVersion:" + currentVersion + " ServerVersion:" + ForoshandehMamorPakhshServerVersion);
+//        if (currentVersion>ForoshandehMamorPakhshServerVersion)
+//        {
+//            mPresenter.onNeedForceUpdateAzmayeshi(result.getURLAzmayeshVersion());
+//        }
+//        else if (currentVersion<ForoshandehMamorPakhshServerVersion && diffDay<=0)
+//        {
+//            mPresenter.onNeedForceUpdate(result.getURL());
+//        }
+//        else if (currentVersion<ForoshandehMamorPakhshServerVersion)
+//        {
+//            mPresenter.onNeedForceUpdate(result.getURL());
+//        }
+//        else
+//        {
+            mPresenter.onAppropriateVersion();
+//        }
+
+    }
+//TODO version
+    private int normalizedVersion(String version)
+    {
+        try
+        {
+            CollectionUtils collectionUtils = new CollectionUtils();
+
+            String[] versionElements = version.split("\\.");
+            ArrayList<String> versionArrayElements = collectionUtils.convertArrayToList(versionElements);
+            String finalVersionName = versionElements[0];
+            for (int i=1;i<versionArrayElements.size();i++){
+                char[] element =versionElements[i].toCharArray();
+                if(element.length == 1) {
+                    String versionElement = "0" + versionElements[i];
+                    finalVersionName+=versionElement;
+                }else{
+                    finalVersionName+=versionElements[i];
+                }
+            }
+
+
+            Log.i("finalVersionNamee", "currentVersion: "+finalVersionName);
+
+            return Integer.parseInt(finalVersionName);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            setLogToDB(e.toString(), "SplahModel" , "" , "currentVersion" , "");
+            return -1;
+        }
+    }
 }
 

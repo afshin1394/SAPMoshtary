@@ -120,6 +120,12 @@ public interface SplashMVP
         void startLoading();
         void finishLoading();
 
+        //TODO version
+        void onNeedForceUpdateAzmayeshi(String urlAzmayeshVersion);
+        void onNeedForceUpdate(String url);
+        void onAppropriateVersion();
+
+        void onCheckCanEnterProgram(Integer canGetProgram);
     }
     interface ModelOps
     {
@@ -152,6 +158,10 @@ public interface SplashMVP
         void sendEmail(String message, String logClass, String logActivity,String logFunctionParent, String logFunctionChild);
         void setLogToDB(String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
+
+        //TODO
+        void checkCanEnterProgram();
+        void getServerVersionNew(GetVersionResult result, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel);
     }
 
 

@@ -536,7 +536,8 @@ public class SplashPresenter implements SplashMVP.PresenterOps, SplashMVP.Requir
                 }
             }
         }
-
+        //todo version
+                    mView.get().onSuccessServerVersion();
 
         if (!isTestUser)
         {
@@ -670,6 +671,8 @@ public class SplashPresenter implements SplashMVP.PresenterOps, SplashMVP.Requir
         if (!isChangingConfig)
         {
             mModel.onDestroy();
+        }else{
+            mView = null;
         }
     }
 
@@ -733,6 +736,39 @@ public class SplashPresenter implements SplashMVP.PresenterOps, SplashMVP.Requir
     @Override
     public void finishLoading() {
         mView.get().stopLoadingDialog();
+    }
+
+
+
+    //TODO version
+    @Override
+    public void onNeedForceUpdateAzmayeshi(String urlAzmayeshVersion) {
+      mView.get().forceUpdateTest(urlAzmayeshVersion);
+    }
+    //TODO version
+    @Override
+    public void onNeedForceUpdate(String url) {
+        mView.get().forceUpdate(url);
+    }
+    //TODO version
+    @Override
+    public void onAppropriateVersion() {
+        mModel.checkCanEnterProgram();
+    }
+
+    @Override
+    public void onCheckCanEnterProgram(Integer canGetProgram) {
+        //canGetProgram = 1;
+        switch (canGetProgram){
+            case 1:
+                mView.get().onSuccessServerVersion();
+                break;
+
+
+            case 0:
+                mView.get().showResourceError(true, R.string.cantEnterTitle , R.string.cantEnterProgram , Constants.INFO_MESSAGE() , R.string.apply);
+                break;
+        }
     }
 
 

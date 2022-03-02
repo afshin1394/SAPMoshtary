@@ -132,15 +132,11 @@ public class DarkhastFaktorEmzaMoshtaryModel
     {
         JSONObject jsonObject = new JSONObject();
         String encodedImage = Base64.encodeToString(DarkhastFaktorImage, Base64.NO_WRAP);
-        String receiptImage="";
-        if(ReceiptImage!=null)
-            receiptImage = Base64.encodeToString(ReceiptImage, Base64.NO_WRAP);
         try
         {
             jsonObject.put("ccDarkhastFaktor" , ccDarkhastFaktor);
             jsonObject.put("ccMoshtary" , ccMoshtary);
             jsonObject.put("Image" , encodedImage);
-            jsonObject.put("receiptImage" , receiptImage);
             jsonObject.put("Noe" , 1);
         }
         catch (Exception exception)

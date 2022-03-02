@@ -32,6 +32,7 @@ public class DarkhastFaktorJayezehModel
     private static final String COLUMN_ExtraProp_ccJayezehTakhfif = "ExtraProp_ccJayezehTakhfif";
     private static final String COLUMN_ExtraProp_CodeNoeJayezeh = "ExtraProp_CodeNoeJayezeh";
     private static final String COLUMN_ExtraProp_ccJayezehSatr = "ExtraProp_ccJayezehSatr";
+    private static final String COLUMN_ExtraProp_NameKala = "ExtraProp_NameKala";
 
 
     public static String TableName() {
@@ -70,6 +71,9 @@ public class DarkhastFaktorJayezehModel
     public static String COLUMN_ExtraProp_ccJayezehSatr() {
         return COLUMN_ExtraProp_ccJayezehSatr;
     }
+    public static String COLUMN_ExtraProp_NameKala() {
+        return COLUMN_ExtraProp_NameKala;
+    }
 
 
 
@@ -85,6 +89,7 @@ public class DarkhastFaktorJayezehModel
     private int ExtraProp_ccJayezehTakhfif;
     private int ExtraProp_CodeNoeJayezeh;
     private int ExtraProp_ccJayezehSatr;
+    private String ExtraProp_NameKala;
 
     // this field used for print
     private float mablaghMasrafKonandeh;
@@ -183,6 +188,16 @@ public class DarkhastFaktorJayezehModel
         ExtraProp_ccJayezehSatr = extraProp_ccJayezehSatr;
     }
 
+    public String getExtraProp_NameKala()
+    {
+        return ExtraProp_NameKala;
+    }
+
+    public void setExtraProp_NameKala(String extraProp_NameKala)
+    {
+        ExtraProp_NameKala = extraProp_NameKala;
+    }
+
     public float getMablaghMasrafKonandeh()
     {
         return mablaghMasrafKonandeh;
@@ -223,6 +238,7 @@ public class DarkhastFaktorJayezehModel
                 ", ExtraProp_ccJayezehTakhfif=" + ExtraProp_ccJayezehTakhfif +
                 ", ExtraProp_CodeNoeJayezeh=" + ExtraProp_CodeNoeJayezeh +
                 ", ExtraProp_ccJayezehSatr=" + ExtraProp_ccJayezehSatr +
+                ", ExtraProp_NameKala=" + ExtraProp_NameKala +
                 '}';
     }
 }

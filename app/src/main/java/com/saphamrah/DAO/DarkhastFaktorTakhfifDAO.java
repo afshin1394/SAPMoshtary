@@ -231,7 +231,13 @@ public class DarkhastFaktorTakhfifDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(DarkhastFaktorTakhfifModel.TableName(), allColumns(), DarkhastFaktorTakhfifModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " and " + DarkhastFaktorTakhfifModel.COLUMN_CodeNoeTakhfif() + " = " + codeNoeTakhfif , null, null, null, null);
+            String query = "SELECT * FROM DarkhastFaktorTakhfif WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeTakhfif = " + codeNoeTakhfif  +
+                    " AND ExtraProp_ccJayezehTakhfif NOT IN ( " +
+                    "    SELECT DISTINCT ccJayezeh FROM jayezeh WHERE CodeNoe=4 )";
+            //Cursor cursor = db.query(DarkhastFaktorTakhfifModel.TableName(), allColumns(), DarkhastFaktorTakhfifModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " and " + DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_ForJayezeh() + " = 0 ", null, null, null, null);
+            Log.d("DarkhastFaktorTakhfif","jayezeh getByccDarkhastFaktorAndNoeTakhfifWithoutArzeshAfzodeh query: "+ query);
+            Cursor cursor = db.rawQuery(query , null);
+
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)

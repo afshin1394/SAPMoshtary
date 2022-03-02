@@ -172,11 +172,12 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
                     mView.get().onErrorInsert(R.string.errorSelectedCountJayezehBigger , "");
                     hasError = true;
                 }
-                else if (sumSelectedCount < intMaxTedadJayezeh)
-                {
-                    mView.get().onErrorInsert(R.string.errorSelectedCountLessThanMaxJayezeh , "");
-                    hasError = true;
-                }
+                // todo jayezeh
+//                else if (sumSelectedCount < intMaxTedadJayezeh)
+//                {
+//                    mView.get().onErrorInsert(R.string.errorSelectedCountLessThanMaxJayezeh , "");
+//                    hasError = true;
+//                }
             }
 
 

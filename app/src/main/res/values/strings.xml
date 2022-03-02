@@ -1183,5 +1183,7 @@
     <string name="txt_remaining_bonus">مبلغ مانده جایزه ارزش افزوده را در صورت دلخواه ویرایش کنید</string>
     <string name="overMaxMandeh">مبلغ انتخابی بیشتر از کل مبلغ باقیمانده جایزه ارزش افزوده می باشد</string>
     <string name="tozihatFaktor">توضیحات فاکتور</string>
-
+    <string name="cantEnterTitle">اخطار</string>
+    <string name="cantEnterProgram">امکان ورود در حال حاضر برای شما وجود ندارد. \n لطفا چند لحظه دیگر بررسی نمایید.</string>
+    <string name="errorUpdateReceiptImage">خطا در بروز رسانی عکس رسید</string>
 </resources>

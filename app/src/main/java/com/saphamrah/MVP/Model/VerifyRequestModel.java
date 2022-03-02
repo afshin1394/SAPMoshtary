@@ -666,7 +666,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
     {
         DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
         //todo jayezeh
-        ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels = darkhastFaktorTakhfifDAO.getByccDarkhastFaktorWithoutArzeshAfzodeh(ccDarkhastFaktor);
+        ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels = darkhastFaktorTakhfifDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
         mPresenter.onGetDiscounts(darkhastFaktorTakhfifModels);
     }
 
@@ -3816,7 +3816,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
                         DarkhastFaktorSatrTakhfifDAO darkhastFaktorSatrTakhfifDAO = new DarkhastFaktorSatrTakhfifDAO(mPresenter.getAppContext());
                         ArrayList<DarkhastFaktorSatrTakhfifModel> darkhastFaktorSatrTakhfifs = darkhastFaktorSatrTakhfifDAO.getByccDarkhastFaktorSatr(model.getCcDarkhastFaktorSatr());
-                        ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifs = darkhastFaktorTakhfifDAO.getByccDarkhastFaktorAndNoeTakhfif(ccDarkhastFaktor , codeTakhfifNaghdi);
+                        //Todo jayezeh
+                        ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifs = darkhastFaktorTakhfifDAO.getByccDarkhastFaktorAndNoeTakhfifWithoutArzeshAfzodeh(ccDarkhastFaktor , codeTakhfifNaghdi);
 
                         //sumMablagh = model.getTedad3() * model.getMablaghForosh();
                         sumHajm += (model.getTedad3() * (kala.getTol() * kala.getArz() * kala.getErtefa())) / kala.getTedadDarKarton();

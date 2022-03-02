@@ -1,15 +1,26 @@
 package com.saphamrah.Repository;
 
 import android.content.Context;
+import android.util.Base64;
 
 import com.saphamrah.DAO.DarkhastFaktorEmzaMoshtaryDAO;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
+import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.Network.RxNetwork.RxHttpRequest;
+import com.saphamrah.PubFunc.PubFunc;
+import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.RxUtils.RxAsync;
+import com.saphamrah.Utils.RxUtils.RxHttpErrorHandler;
+import com.saphamrah.WebService.RxService.APIServiceRxjava;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
 public class DarkhastFaktorEmzaMoshtaryRepository {
@@ -61,5 +72,34 @@ public class DarkhastFaktorEmzaMoshtaryRepository {
     public Observable<Boolean> insertGroup(ArrayList< DarkhastFaktorEmzaMoshtaryModel> darkhastFaktorEmzaMoshtaryModels){
         return RxAsync.makeObservable(insertGroupCallable(darkhastFaktorEmzaMoshtaryModels))
                 .subscribeOn(Schedulers.io());
+    }
+
+
+    public Observable<Boolean> sendReceiptImageRx(ServerIpModel serverIpModel, Context context,String activityNameForLog,byte[] imageBytes,long ccDarkhastFaktor) {
+        APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            JSONObject jsonObjectFinal = new JSONObject();
+            jsonObject.put("ccDarkhastFaktor", ccDarkhastFaktor);
+            jsonObject.put("receiptImage", Base64.encodeToString(imageBytes, Base64.NO_WRAP));
+            jsonObjectFinal.put("receiptImageDarkhast",jsonObject);
+            return apiServiceRxjava.updateResidImageDarkhastJSON(jsonObjectFinal.toString())
+                    .compose(RxHttpErrorHandler.parseHttpErrors(this.getClass().getSimpleName(),activityNameForLog,"fetchApiServiceRx","sendReceiptImageRx"))
+                    .map(updateResidImageDarkhastResultResponse -> {
+                        if (updateResidImageDarkhastResultResponse.body()!=null) {
+                            return updateResidImageDarkhastResultResponse.body().getSuccess();
+                        }
+                        else
+                            return false;
+                    }).subscribeOn(Schedulers.io());
+
+        }catch (Exception e){
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.getMessage(), "", "PrintActivity", "fetchApiServiceRx", "sendReceiptImageRx");
+            return Observable.just(true);
+        }
+
+
+
     }
 }
