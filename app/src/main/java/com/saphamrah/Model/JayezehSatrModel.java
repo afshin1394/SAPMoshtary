@@ -157,11 +157,11 @@ public class JayezehSatrModel
     }
 
 
-    private int ccNoeField;
-    public void setCcNoeField(int ccNoeField){
+    private String ccNoeField;
+    public void setCcNoeField(String ccNoeField){
         this.ccNoeField = ccNoeField;
     }
-    public int getCcNoeField(){
+    public String getCcNoeField(){
         return this.ccNoeField;
     }
 
