@@ -155,6 +155,8 @@ public class KalaMojodiDAO
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             //select sum(Tedad) from KalaMojodi where ccKalaCode =
             String query = "select sum(" + KalaMojodiModel.COLUMN_Tedad() + ") from " + KalaMojodiModel.TableName() + " where " + KalaMojodiModel.COLUMN_ccKalaCode() + " = " + ccKalaCode;
+            Log.d("KalaMojodiDAO" , "jayezeh getCountByccKalaCode Query : " + query);
+
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
@@ -193,6 +195,7 @@ public class KalaMojodiDAO
 //                           " ) ";
 
             String query = " SELECT SUM(DISTINCT Max_Mojody) FROM KalaMojodi WHERE ccKalaCode = " + ccKalaCode ;
+            Log.d("KalaMojodiDAO" , "jayezeh getMaxMojodyByccKalaCode Query : " + query);
 
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
@@ -384,7 +387,7 @@ public class KalaMojodiDAO
         try
         {
             String query = "select ccKalaMojodi,ccKalaCode,ccForoshandeh,sum(Tedad) As Tedad,ccDarkhastFaktor,TarikhDarkhast,ShomarehBach,TarikhTolid,TarikhEngheza, " +
-                    " GheymatMasrafKonandeh,GheymatForosh,ccTaminKonandeh,ForJayezeh,ZamaneSabt, IsAdamForosh, Max_Mojody, Max_MojodyByShomarehBach \n" +
+                    " GheymatMasrafKonandeh,GheymatForosh,ccTaminKonandeh,ForJayezeh,ZamaneSabt, IsAdamForosh, Max_Mojody, Max_MojodyByShomarehBach, ccAfrad \n" +
                     " from KalaMojodi where ccKalaCode = " + ccKalaCode +
                     " group by ccKalaCode,ShomarehBach,GheymatMasrafKonandeh,GheymatForosh,ccTaminKonandeh,TarikhTolid,TarikhEngheza having sum(Tedad) > 0";
             Log.d("bonus" , "kalaMojodiModels Query : " + query);

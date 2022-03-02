@@ -50,7 +50,8 @@ public class DarkhastFaktorJayezehDAO
             DarkhastFaktorJayezehModel.COLUMN_ExtraProp_IsJayezehEntekhabi(),
             DarkhastFaktorJayezehModel.COLUMN_ExtraProp_ccJayezehTakhfif(),
             DarkhastFaktorJayezehModel.COLUMN_ExtraProp_CodeNoeJayezeh(),
-            DarkhastFaktorJayezehModel.COLUMN_ExtraProp_ccJayezehSatr()
+            DarkhastFaktorJayezehModel.COLUMN_ExtraProp_ccJayezehSatr(),
+            DarkhastFaktorJayezehModel.COLUMN_ExtraProp_NameKala()
         };
     }
 
@@ -350,6 +351,7 @@ public class DarkhastFaktorJayezehDAO
         contentValues.put(DarkhastFaktorJayezehModel.COLUMN_ExtraProp_ccJayezehTakhfif() , darkhastFaktorJayezehModel.getExtraProp_ccJayezehTakhfif());
         contentValues.put(DarkhastFaktorJayezehModel.COLUMN_ExtraProp_ccJayezehSatr() , darkhastFaktorJayezehModel.getExtraProp_ccJayezehSatr());
         contentValues.put(DarkhastFaktorJayezehModel.COLUMN_ExtraProp_CodeNoeJayezeh() , darkhastFaktorJayezehModel.getExtraProp_CodeNoeJayezeh());
+        contentValues.put(DarkhastFaktorJayezehModel.COLUMN_ExtraProp_NameKala() , darkhastFaktorJayezehModel.getExtraProp_NameKala());
 
         return contentValues;
     }
@@ -375,6 +377,7 @@ public class DarkhastFaktorJayezehDAO
             darkhastFaktorJayezehModel.setExtraProp_ccJayezehTakhfif(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorJayezehModel.COLUMN_ExtraProp_ccJayezehTakhfif())));
             darkhastFaktorJayezehModel.setExtraProp_ccJayezehSatr(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorJayezehModel.COLUMN_ExtraProp_ccJayezehSatr())));
             darkhastFaktorJayezehModel.setExtraProp_CodeNoeJayezeh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorJayezehModel.COLUMN_ExtraProp_CodeNoeJayezeh())));
+            darkhastFaktorJayezehModel.setExtraProp_NameKala(cursor.getString(cursor.getColumnIndex(DarkhastFaktorJayezehModel.COLUMN_ExtraProp_NameKala())));
 
             darkhastFaktorJayezehModels.add(darkhastFaktorJayezehModel);
             cursor.moveToNext();
@@ -403,6 +406,7 @@ public class DarkhastFaktorJayezehDAO
             darkhastFaktorJayezehModel.setExtraProp_ccJayezehTakhfif(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorJayezehModel.COLUMN_ExtraProp_ccJayezehTakhfif())));
             darkhastFaktorJayezehModel.setExtraProp_ccJayezehSatr(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorJayezehModel.COLUMN_ExtraProp_ccJayezehSatr())));
             darkhastFaktorJayezehModel.setExtraProp_CodeNoeJayezeh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorJayezehModel.COLUMN_ExtraProp_CodeNoeJayezeh())));
+            darkhastFaktorJayezehModel.setExtraProp_NameKala(cursor.getString(cursor.getColumnIndex(DarkhastFaktorJayezehModel.COLUMN_ExtraProp_NameKala())));
             darkhastFaktorJayezehModel.setMablaghMasrafKonandeh(cursor.getFloat(cursor.getColumnIndex("MablaghMasrafKonandeh")));
 
             darkhastFaktorJayezehModels.add(darkhastFaktorJayezehModel);

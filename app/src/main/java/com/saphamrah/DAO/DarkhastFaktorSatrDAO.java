@@ -720,32 +720,22 @@ public class DarkhastFaktorSatrDAO
         return darkhastFaktorSatrModels;
     }
 
-    public ArrayList<DataTableModel> getTedadBeTafkikGorohKalaAndJayezeh(long ccDarkhastFaktor, int ccJayezeh)
+    public ArrayList<DataTableModel> getCcNoeFiledForJayezeh(int ccJayezeh)
     {
-        ArrayList<DataTableModel> gorohs = new ArrayList<>();
+        ArrayList<DataTableModel> ccNoeFiled = null;
+        String query = " SELECT  DISTINCT ccNoeField, '''' || ccnoefield || '''' strCcNoeFiled  FROM JayezehSatr WHERE ccJayezeh="  + ccJayezeh;
+        Log.d("DarkhastFaktorSatrDAO", "jayezeh getCcNoeFiledForJayezeh query : " + query);
 
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query = "SELECT B.ccGoroh, SUM(A.Tedad3)AS Tedad, SUM(A.Tedad3/ TedadDarKarton)AS TedadBox, "
-                    + "       SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage, SUM(Tedad3 * MablaghForosh) AS MablaghKol ,"
-                    + "        COUNT(A.ccKalaCode) AS TedadAghlam "
-                    + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
-                    + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.TedadDarKarton, A.TedadDarBasteh "
-                    + "          FROM Kala A LEFT OUTER JOIN "
-                    + "               (SELECT ccKalaCode, ccGoroh FROM KalaGoroh WHERE ccGoroh IN "
-                    + "                       (SELECT ccNoeField FROM JayezehSatr WHERE ccJayezeh= ?)"
-                    + "               )G ON A.ccKalaCode= G.ccKalaCode "
-                    + "       )B ON A.ccKalaCode= B.ccKalaCode"
-                    + " WHERE ccDarkhastFaktor= ?"
-                    + " GROUP BY B.ccGoroh";
-            Cursor cursor = db.rawQuery(query , new String[]{String.valueOf(ccJayezeh), String.valueOf(ccDarkhastFaktor)});
-
+            Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)
                 {
-                    gorohs = new PubFunc().new DAOUtil().cursorToDataTable(context , cursor);
+                    cursor.moveToFirst();
+                    ccNoeFiled = new PubFunc().new DAOUtil().cursorToDataTable(context , cursor);
                 }
                 cursor.close();
             }
@@ -756,11 +746,151 @@ public class DarkhastFaktorSatrDAO
             exception.printStackTrace();
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "getTedadBeTafkikGorohKalaAndJayezeh" , "");
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "getCountByccDarkhastFaktor" , "");
         }
+        return ccNoeFiled;
+    }
+
+    public ArrayList<DataTableModel> getTedadBeTafkikGorohKalaAndJayezeh(long ccDarkhastFaktor, int ccJayezeh)
+    {
+        ArrayList<DataTableModel> ccNoeFileds = getCcNoeFiledForJayezeh(ccJayezeh);
+        ArrayList<DataTableModel> gorohs = new ArrayList<>();
+        for(DataTableModel ccNoeFiled : ccNoeFileds) {
+            try {
+
+
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+                //String query = "SELECT B.ccGoroh, " +
+//                    " SUM(A.Tedad3)AS Tedad, SUM(A.Tedad3/ TedadDarKarton)AS TedadBox, "
+//                    + "       SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage, SUM(Tedad3 * MablaghForosh) AS MablaghKol ,"
+//                    + "        COUNT(A.ccKalaCode) AS TedadAghlam "
+//                    + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
+//                    + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.TedadDarKarton, A.TedadDarBasteh "
+//                    + "          FROM Kala A LEFT OUTER JOIN "
+//                    + "               (SELECT ccKalaCode, ccGoroh FROM KalaGoroh WHERE ccGoroh IN "
+//                    + "                       (" + ccNoeFild + ")"
+//                    + "               )G ON A.ccKalaCode= G.ccKalaCode "
+//                    + "       )B ON A.ccKalaCode= B.ccKalaCode"
+//                    + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor
+//                    + " GROUP BY B.ccGoroh";
+
+
+                String query = " SELECT B.ccNoeField ccNoe, " +
+                        " SUM(A.Tedad3)AS Tedad, SUM(A.Tedad3/ TedadDarKarton)AS TedadBox, " +
+                        " SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage, SUM(Tedad3 * MablaghForosh) AS MablaghKol ,        COUNT(A.ccKalaCode) AS TedadAghlam " +
+                        " FROM DarkhastFaktorSatr A " +
+                        " JOIN   (SELECT DISTINCT J.ccNoeField, K.ccKalaCode, G.ccGoroh, K.TedadDarKarton, K.TedadDarBasteh " +
+                        " FROM Kala K " +
+                        " JOIN (SELECT DISTINCT ccNoeField FROM JayezehSatr WHERE ccNoeField in ( " + ccNoeFiled.getFiled2() + " )) J " +
+                        " JOIN KalaGoroh G ON K.ccKalaCode= G.ccKalaCode AND ccGoroh IN (" + ccNoeFiled.getFiled1() + ") " +
+                        " ) B ON A.ccKalaCode= B.ccKalaCode " +
+                        " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor +
+                        " GROUP BY B.ccNoeField ";
+
+
+                Log.d("DarkhastFaktorSatrDAO", "jayezeh getTedadBeTafkikGorohKalaAndJayezeh query : " + query);
+                Cursor cursor = db.rawQuery(query, null);
+
+                if (cursor != null) {
+                    if (cursor.getCount() > 0) {
+                        gorohs.addAll( new PubFunc().new DAOUtil().cursorToDataTable(context, cursor));
+                    }
+                    cursor.close();
+                }
+                db.close();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                String message = context.getResources().getString(R.string.errorSelectAll, DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
+                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO", "", "getTedadBeTafkikGorohKalaAndJayezeh", "");
+            }
+        }
+        Log.d("DarkhastFaktorSatrDAO", "jayezeh getTedadBeTafkikGorohKalaAndJayezeh gorohs" + gorohs.toString() + "ccJayezeh" + ccJayezeh);
         return gorohs;
     }
 
+    public ArrayList<DataTableModel> getTedadBeTafkikBrandAndJayezeh(long ccDarkhastFaktor, int ccJayezeh)
+    {
+        ArrayList<DataTableModel> brands = new ArrayList<>();
+
+        try {
+
+
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+            String query = "SELECT B.ccBrand, " +
+                " SUM(A.Tedad3)AS Tedad, SUM(A.Tedad3/ TedadDarKarton)AS TedadBox, "
+                + "       SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage, SUM(Tedad3 * MablaghForosh) AS MablaghKol ,"
+                + "        COUNT(B.ccBrand) AS TedadAghlam "
+                + "  FROM DarkhastFaktorSatr A  JOIN (SELECT DISTINCT ccKalaCode, ccBrand, TedadDarKarton, TedadDarBasteh, VaznKhales FROM Kala)B ON A.ccKalaCode= B.ccKalaCode "
+                + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor
+                + " GROUP BY B.ccBrand";
+
+
+
+
+
+            Log.d("DarkhastFaktorSatrDAO", "jayezeh getTedadBeTafkikBrandAndJayezeh query : " + query);
+            Cursor cursor = db.rawQuery(query, null);
+
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    brands = new PubFunc().new DAOUtil().cursorToDataTable(context , cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll, DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO", "", "getTedadBeTafkikGorohKalaAndJayezeh", "");
+        }
+        Log.d("DarkhastFaktorSatrDAO", "jayezeh getTedadBeTafkikBrandAndJayezeh gorohs" + brands.toString() + "ccJayezeh" + ccJayezeh);
+        return brands;
+    }
+
+    public ArrayList<DataTableModel> getTedadBeTafkikTaminKonandehAndJayezeh(long ccDarkhastFaktor, int ccJayezeh)
+    {
+        ArrayList<DataTableModel> brands = new ArrayList<>();
+
+        try {
+
+
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+            String query = "SELECT B.ccTaminKonandeh, " +
+                    " SUM(A.Tedad3)AS Tedad, SUM(A.Tedad3/ TedadDarKarton)AS TedadBox, "
+                    + "       SUM(A.Tedad3/ TedadDarBasteh)AS TedadPackage, SUM(Tedad3 * MablaghForosh) AS MablaghKol ,"
+                    + "        COUNT(B.ccTaminKonandeh) AS TedadAghlam "
+                    + "  FROM DarkhastFaktorSatr A  JOIN (SELECT DISTINCT ccKalaCode, ccTaminkonandeh, TedadDarKarton, TedadDarBasteh, VaznKhales FROM Kala)B ON A.ccKalaCode= B.ccKalaCode "
+                    + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor
+                    + " GROUP BY B.ccTaminKonandeh";
+
+
+
+
+
+            Log.d("DarkhastFaktorSatrDAO", "jayezeh getTedadBeTafkikBrandAndJayezeh query : " + query);
+            Cursor cursor = db.rawQuery(query, null);
+
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    brands = new PubFunc().new DAOUtil().cursorToDataTable(context , cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll, DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO", "", "getTedadBeTafkikGorohKalaAndJayezeh", "");
+        }
+        Log.d("DarkhastFaktorSatrDAO", "jayezeh getTedadBeTafkikBrandAndJayezeh gorohs" + brands.toString() + "ccJayezeh" + ccJayezeh);
+        return brands;
+    }
 
     public List<DataTableModel> getTedadAghlamBeTafkikGorohKalaAndTakhfifHajmiAndNoeMoshtary(long ccDarkhastFaktor, int ccTakhfifHajmi, int HadeaghalTedadKarton)
     {

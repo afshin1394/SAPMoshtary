@@ -662,13 +662,13 @@ public class KalaDAO
     }
 
 
-    public KalaModel getccKalaByKalaGoroh(int ccGoroh)
+    public KalaModel getccKalaByKalaGoroh(String ccGoroh)
     {
         KalaModel kalaModel = new KalaModel();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         try
         {
-            String query = "select * from Kala where ccKalaCode in (select ccKalaCode from KalaGoroh where ccGoroh = " + ccGoroh + ")";
+            String query = "select * from Kala where ccKalaCode in (select ccKalaCode from KalaGoroh where ccGoroh in (" + ccGoroh + "))";
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {

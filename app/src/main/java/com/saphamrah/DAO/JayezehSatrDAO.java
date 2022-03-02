@@ -439,13 +439,13 @@ Call<GetAllvJayezehSatrResult> call = apiServiceGet.getAllvJayezehSatr();
      * @param noeTedadRial
      * @return
      */
-    public ArrayList<JayezehSatrModel> getForFaktor(int ccJayezeh, int noeFieldKala, int[] noeTedadRialArray, int[] codeNoeBasteBandiArray, int ccNoeField, double tedad, double tedadBasteh, double tedadKarton, double mablaghKol, int noeTedadRial, int tedadAghlam)
+    public ArrayList<JayezehSatrModel> getForFaktor(int ccJayezeh, int noeFieldKala, int[] noeTedadRialArray, int[] codeNoeBasteBandiArray, String ccNoeField, double tedad, double tedadBasteh, double tedadKarton, double mablaghKol, int noeTedadRial, int tedadAghlam)
     {
         ArrayList<JayezehSatrModel> jayezehSatrs = new ArrayList<>();
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query = "SELECT * FROM JayezehSatr WHERE ccJayezeh= " + ccJayezeh + "   AND NameNoeField= " + noeFieldKala + "   AND ccNoeField = " + ccNoeField;
+            String query = "SELECT * FROM JayezehSatr WHERE ccJayezeh= " + ccJayezeh + "   AND NameNoeField= " + noeFieldKala + "   AND ccNoeField in ('" + ccNoeField + "') ";
             if (noeTedadRial == noeTedadRialArray[0])
             {
                 query += "   AND (  (CodeNoeBastehBandy= " + codeNoeBasteBandiArray[0] + " AND Az<= " + tedadKarton + " AND " + tedadKarton + "<= Ta)"
@@ -582,7 +582,7 @@ Call<GetAllvJayezehSatrResult> call = apiServiceGet.getAllvJayezehSatr();
             jayezehSatrModel.setCcJayezehSatr(cursor.getInt(cursor.getColumnIndex(JayezehSatrModel.COLUMN_ccJayezehSatr())));
             jayezehSatrModel.setCcJayezeh(cursor.getInt(cursor.getColumnIndex(JayezehSatrModel.COLUMN_ccJayezeh())));
             jayezehSatrModel.setNameNoeField(cursor.getInt(cursor.getColumnIndex(JayezehSatrModel.COLUMN_NameNoeField())));
-            jayezehSatrModel.setCcNoeField(cursor.getInt(cursor.getColumnIndex(JayezehSatrModel.COLUMN_ccNoeField())));
+            jayezehSatrModel.setCcNoeField(cursor.getString(cursor.getColumnIndex(JayezehSatrModel.COLUMN_ccNoeField())));
             jayezehSatrModel.setAz(cursor.getDouble(cursor.getColumnIndex(JayezehSatrModel.COLUMN_Az())));
             jayezehSatrModel.setTa(cursor.getDouble(cursor.getColumnIndex(JayezehSatrModel.COLUMN_Ta())));
             jayezehSatrModel.setCodeNoeBastehBandy(cursor.getInt(cursor.getColumnIndex(JayezehSatrModel.COLUMN_CodeNoeBastehBandy())));

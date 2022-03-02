@@ -145,6 +145,39 @@ public class DarkhastFaktorTakhfifDAO
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.query(DarkhastFaktorTakhfifModel.TableName(), allColumns(), DarkhastFaktorTakhfifModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " and " + DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_ForJayezeh() + " = 0 ", null, null, null, null);
+
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    darkhastFaktorTakhfifModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorTakhfifModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrTakhfifDAO" , "" , "getByccDarkhastFaktor" , "");
+        }
+        return darkhastFaktorTakhfifModels;
+    }
+
+    public ArrayList<DarkhastFaktorTakhfifModel> getByccDarkhastFaktorWithoutArzeshAfzodeh(long ccDarkhastFaktor)
+    {
+        ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query = "SELECT * FROM DarkhastFaktorTakhfif WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeTakhfif <> 4 " +
+            " AND ExtraProp_ccJayezehTakhfif NOT IN ( " +
+            "    SELECT DISTINCT ccJayezeh FROM jayezeh WHERE CodeNoe=4 )";
+            //Cursor cursor = db.query(DarkhastFaktorTakhfifModel.TableName(), allColumns(), DarkhastFaktorTakhfifModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " and " + DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_ForJayezeh() + " = 0 ", null, null, null, null);
+            Log.d("DarkhastFaktorTakhfif","jayezeh getByccDarkhastFaktorWithoutArzeshAfzodeh query: "+ query);
+            Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)
@@ -166,6 +199,33 @@ public class DarkhastFaktorTakhfifDAO
     }
 
     public ArrayList<DarkhastFaktorTakhfifModel> getByccDarkhastFaktorAndNoeTakhfif(long ccDarkhastFaktor , int codeNoeTakhfif)
+    {
+        ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(DarkhastFaktorTakhfifModel.TableName(), allColumns(), DarkhastFaktorTakhfifModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " and " + DarkhastFaktorTakhfifModel.COLUMN_CodeNoeTakhfif() + " = " + codeNoeTakhfif , null, null, null, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    darkhastFaktorTakhfifModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorTakhfifModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrTakhfifDAO" , "" , "getByccDarkhastFaktor" , "");
+        }
+        return darkhastFaktorTakhfifModels;
+    }
+
+    public ArrayList<DarkhastFaktorTakhfifModel> getByccDarkhastFaktorAndNoeTakhfifWithoutArzeshAfzodeh(long ccDarkhastFaktor , int codeNoeTakhfif)
     {
         ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels = new ArrayList<>();
         try
