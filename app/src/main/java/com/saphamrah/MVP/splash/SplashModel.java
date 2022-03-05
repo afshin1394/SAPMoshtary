@@ -1169,6 +1169,8 @@ public class SplashModel implements SplashMVP.ModelOps, AsyncTaskFindWebServices
 
         Log.d("SplahModel","today:" + today.toString() + " dateNewVersion:" + dateNewVersion.toString() + " diffDay:" + diffDay);
         Log.d("SplahModel","currentVersion:" + currentVersion + " ServerVersion:" + ForoshandehMamorPakhshServerVersion);
+//todo version
+
 //        if (currentVersion>ForoshandehMamorPakhshServerVersion)
 //        {
 //            mPresenter.onNeedForceUpdateAzmayeshi(result.getURLAzmayeshVersion());

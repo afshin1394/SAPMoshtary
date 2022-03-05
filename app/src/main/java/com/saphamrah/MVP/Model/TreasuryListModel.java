@@ -24,6 +24,7 @@ import com.saphamrah.DAO.DarkhastFaktorMoshtaryForoshandeDAO;
 import com.saphamrah.DAO.DarkhastFaktorRoozSortDAO;
 import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
 import com.saphamrah.DAO.ElamMarjoeeForoshandehDAO;
+import com.saphamrah.DAO.ElamMarjoeePPCDAO;
 import com.saphamrah.DAO.ForoshandehAmoozeshiDeviceNumberDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.GPSDataPpcDAO;
@@ -58,6 +59,7 @@ import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
 import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.DarkhastFaktorRoozSortModel;
 import com.saphamrah.Model.ElamMarjoeeForoshandehModel;
+import com.saphamrah.Model.ElamMarjoeePPCModel;
 import com.saphamrah.Model.ForoshandehAmoozeshiModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.GPSDataModel;
@@ -235,6 +237,8 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         int noeMasouliat = getNoeMasouliatForoshandeh();
         ArrayList<GPSDataModel> gpsDataModels = gpsDataPpcDAO.getAll();
         ArrayList<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModels = elamMarjoeeForoshandehDAO.getAll();
+        ElamMarjoeePPCDAO elamMarjoeePPCDAO = new ElamMarjoeePPCDAO(mPresenter.getAppContext());
+        ArrayList<ElamMarjoeePPCModel> elamMarjoeePPCModels = elamMarjoeePPCDAO.getAll();
         if (faktorRooz == 0)
         {
             if (sortType == Constants.SORT_TREASURY_BY_CUSTOMER_CODE)
@@ -250,11 +254,13 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                         }
                     }
                     // set have marjoee
-                    for (int j = 0; j < elamMarjoeeForoshandehModels.size(); j++) {
-                        if (darkhastFaktorMoshtaryForoshandeModels.get(i).getCcDarkhastFaktor() == Long.parseLong(elamMarjoeeForoshandehModels.get(j).getCcDarkhastFaktor())){
-                            darkhastFaktorMoshtaryForoshandeModels.get(i).setExtraProp_HaveMarjoee(1);
-                        }
-                    }
+//                    for (int j = 0; j < elamMarjoeeForoshandehModels.size(); j++) {
+//                        if (darkhastFaktorMoshtaryForoshandeModels.get(i).getCcDarkhastFaktor() == Long.parseLong(elamMarjoeeForoshandehModels.get(j).getCcDarkhastFaktor())){
+//                            darkhastFaktorMoshtaryForoshandeModels.get(i).setExtraProp_HaveMarjoee(1);
+//                        }
+//                    }
+                    setHaveMarjoee(darkhastFaktorMoshtaryForoshandeModels.get(i),elamMarjoeeForoshandehModels,elamMarjoeePPCModels);
+
                 }
                 updateAllMablaghMandeh(darkhastFaktorMoshtaryForoshandeModels);
             }
@@ -275,11 +281,13 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                             }
                         }
                        // set have marjoee
-                        for (int j = 0; j < elamMarjoeeForoshandehModels.size(); j++) {
-                            if (darkhastFaktorMoshtaryForoshandeModels.get(i).getCcDarkhastFaktor() == Long.parseLong(elamMarjoeeForoshandehModels.get(j).getCcDarkhastFaktor())){
-                                darkhastFaktorMoshtaryForoshandeModels.get(i).setExtraProp_HaveMarjoee(1);
-                            }
-                        }
+//                        for (int j = 0; j < elamMarjoeeForoshandehModels.size(); j++) {
+//                            if (darkhastFaktorMoshtaryForoshandeModels.get(i).getCcDarkhastFaktor() == Long.parseLong(elamMarjoeeForoshandehModels.get(j).getCcDarkhastFaktor())){
+//                                darkhastFaktorMoshtaryForoshandeModels.get(i).setExtraProp_HaveMarjoee(1);
+//                            }
+//                        }
+                        setHaveMarjoee(darkhastFaktorMoshtaryForoshandeModels.get(i),elamMarjoeeForoshandehModels,elamMarjoeePPCModels);
+
                     }
                 } else {
                     darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getAll(faktorRooz);
@@ -294,11 +302,13 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                             }
                         }
                         // set have marjoee
-                        for (int j = 0; j < elamMarjoeeForoshandehModels.size(); j++) {
-                            if (darkhastFaktorMoshtaryForoshandeModels.get(i).getCcDarkhastFaktor() == Long.parseLong(elamMarjoeeForoshandehModels.get(j).getCcDarkhastFaktor())){
-                                darkhastFaktorMoshtaryForoshandeModels.get(i).setExtraProp_HaveMarjoee(1);
-                            }
-                        }
+//                        for (int j = 0; j < elamMarjoeeForoshandehModels.size(); j++) {
+//                            if (darkhastFaktorMoshtaryForoshandeModels.get(i).getCcDarkhastFaktor() == Long.parseLong(elamMarjoeeForoshandehModels.get(j).getCcDarkhastFaktor())){
+//                                darkhastFaktorMoshtaryForoshandeModels.get(i).setExtraProp_HaveMarjoee(1);
+//                            }
+//                        }
+                        setHaveMarjoee(darkhastFaktorMoshtaryForoshandeModels.get(i),elamMarjoeeForoshandehModels,elamMarjoeePPCModels);
+
                     }
                 }
 
@@ -309,14 +319,35 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getAll(faktorRooz);
             for (int i = 0; i < darkhastFaktorMoshtaryForoshandeModels.size(); i++) {
                 // set have marjoee
-                for (int j = 0; j < elamMarjoeeForoshandehModels.size(); j++) {
-                    if (darkhastFaktorMoshtaryForoshandeModels.get(i).getCcDarkhastFaktor() == Long.parseLong(elamMarjoeeForoshandehModels.get(j).getCcDarkhastFaktor())){
-                        darkhastFaktorMoshtaryForoshandeModels.get(i).setExtraProp_HaveMarjoee(1);
-                    }
-                }
+//                for (int j = 0; j < elamMarjoeeForoshandehModels.size(); j++) {
+//                    if (darkhastFaktorMoshtaryForoshandeModels.get(i).getCcDarkhastFaktor() == Long.parseLong(elamMarjoeeForoshandehModels.get(j).getCcDarkhastFaktor())){
+//                        darkhastFaktorMoshtaryForoshandeModels.get(i).setExtraProp_HaveMarjoee(1);
+//                    }
+//                }
+                setHaveMarjoee(darkhastFaktorMoshtaryForoshandeModels.get(i),elamMarjoeeForoshandehModels,elamMarjoeePPCModels);
+
             }
         }
         mPresenter.onGetFaktorRooz(darkhastFaktorMoshtaryForoshandeModels , faktorRooz , noeMasouliat,sortType);
+    }
+
+    private void setHaveMarjoee(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel,
+                                ArrayList<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModels,
+                                ArrayList<ElamMarjoeePPCModel> elamMarjoeePPCModels){
+
+        if (darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktorNoeForosh() == Constants.ccNoeFaktor){
+            for (int j = 0; j < elamMarjoeeForoshandehModels.size(); j++) {
+                if (darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor() == Long.parseLong(elamMarjoeeForoshandehModels.get(j).getCcDarkhastFaktor())) {
+                    darkhastFaktorMoshtaryForoshandeModel.setExtraProp_HaveMarjoee(1);
+                }
+            }
+        } else if (darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale){
+            for (int j = 0; j < elamMarjoeePPCModels.size(); j++) {
+                if (darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor() == elamMarjoeePPCModels.get(j).getCcDarkhastFaktor()) {
+                    darkhastFaktorMoshtaryForoshandeModel.setExtraProp_HaveMarjoee(1);
+                }
+            }
+        }
     }
 
     private void updateAllMablaghMandeh(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels) {
