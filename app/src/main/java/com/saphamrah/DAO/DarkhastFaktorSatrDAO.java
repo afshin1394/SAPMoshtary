@@ -786,6 +786,7 @@ public class DarkhastFaktorSatrDAO
                         " JOIN KalaGoroh G ON K.ccKalaCode= G.ccKalaCode AND ccGoroh IN (" + ccNoeFiled.getFiled1() + ") " +
                         " ) B ON A.ccKalaCode= B.ccKalaCode " +
                         " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor +
+                        " And A.CodeNoeKala=1 " +
                         " GROUP BY B.ccNoeField ";
 
 
@@ -825,6 +826,7 @@ public class DarkhastFaktorSatrDAO
                 + "        COUNT(B.ccBrand) AS TedadAghlam "
                 + "  FROM DarkhastFaktorSatr A  JOIN (SELECT DISTINCT ccKalaCode, ccBrand, TedadDarKarton, TedadDarBasteh, VaznKhales FROM Kala)B ON A.ccKalaCode= B.ccKalaCode "
                 + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor
+                + " And A.CodeNoeKala=1 "
                 + " GROUP BY B.ccBrand";
 
 
@@ -866,6 +868,7 @@ public class DarkhastFaktorSatrDAO
                     + "        COUNT(B.ccTaminKonandeh) AS TedadAghlam "
                     + "  FROM DarkhastFaktorSatr A  JOIN (SELECT DISTINCT ccKalaCode, ccTaminkonandeh, TedadDarKarton, TedadDarBasteh, VaznKhales FROM Kala)B ON A.ccKalaCode= B.ccKalaCode "
                     + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor
+                    + " And A.CodeNoeKala=1 "
                     + " GROUP BY B.ccTaminKonandeh";
 
 

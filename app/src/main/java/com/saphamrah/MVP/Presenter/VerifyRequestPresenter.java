@@ -252,6 +252,8 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
         }
     }
 
+
+
     @Override
     public void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild)
     {

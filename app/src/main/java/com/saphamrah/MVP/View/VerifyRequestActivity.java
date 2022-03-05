@@ -460,22 +460,21 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         editTextSumTedad.setText(String.valueOf(sumTedadAghlam));
 
 
-
+        Log.d("VerifyRequestActivity", "jayezeh haveBonus:" + haveBonus);
         if (haveBonus)
         {
             lblBonusTitle.setVisibility(View.VISIBLE);
             recyclerViewJayezeh.setVisibility(View.VISIBLE);
             mPresenter.getBonusList();
         }
-        if (canSelectBonus)
+        else
         {
             if (fabSelectBonus.getVisibility() == View.GONE)
                 fabSelectBonus.setVisibility(View.VISIBLE);
+            checkShowForFabMenu();
+            lblBonusTitle.setVisibility(View.GONE);
+            recyclerViewJayezeh.setVisibility(View.GONE);
         }
-//        else{
-//            fabSelectBonus.setVisibility(View.GONE);
-//        }
-        //mPresenter.calculateDiscounts(ccChildParameterNoeVosol , noeVosol);
     }
 
 
@@ -573,7 +572,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     @Override
     public void onGetDiscounts(ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels, double sumMablaghTakhfif)
     {
-        Log.d("takhfif" , "darkhastFaktorTakhfifModels size : " + darkhastFaktorTakhfifModels.size());
+        Log.d("takhfif" , "darkhastFaktorTakhfifModels size : " + darkhastFaktorTakhfifModels.size() + " , " + darkhastFaktorTakhfifModels.toString());
 
         editTextsumTakhfif.setText(costFormatter.format(sumMablaghTakhfif));
         if (darkhastFaktorTakhfifModels.size() > 0)
@@ -598,12 +597,14 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     @Override
     public void onGetBonus(ArrayList<DarkhastFaktorJayezehModel> darkhastFaktorJayezehModels , boolean showAddBonusBtn, boolean haveBonus)
     {
-        Log.d("bonus" , "have bonus : " + haveBonus);
-        Log.d("bonus" , "showAddBonusBtn : " + showAddBonusBtn);
-        Log.d("bonus" , "darkhastFaktorJayezehModels.size : " + darkhastFaktorJayezehModels.size());
+        Log.d("jayezeh" , "haveBonus : " + haveBonus);
+        Log.d("jayezeh" , "showAddBonusBtn : " + showAddBonusBtn);
+        Log.d("jayezeh" , "darkhastFaktorJayezehModels.size : " + darkhastFaktorJayezehModels.size());
         this.haveBonus = haveBonus;
         if (haveBonus)
         {
+            Log.d("jayezeh" , "haveBonus in if" );
+
             if (darkhastFaktorJayezehModels.size() == 0)
             {
                 if (fabSelectBonus.getVisibility() == View.GONE)
@@ -638,6 +639,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         }
         else
         {
+            Log.d("jayezeh" , "haveBonus in else" );
             if (fabSelectBonus.getVisibility() == View.GONE)
                 fabSelectBonus.setVisibility(View.VISIBLE);
             checkShowForFabMenu();
@@ -873,6 +875,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
             }
 			//showLoading();
             mPresenter.getBonusList();
+            //todo Jayezeh
             mPresenter.getDiscounts(ccDarkhastFaktor);
         }
     }

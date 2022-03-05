@@ -564,22 +564,34 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         if (ccDarkhastFaktor != -1)
         {
             DarkhastFaktorJayezehDAO darkhastFaktorJayezehDAO = new DarkhastFaktorJayezehDAO(mPresenter.getAppContext());
+//            ArrayList<DarkhastFaktorJayezehModel> darkhastFaktorJayezehModels = darkhastFaktorJayezehDAO.getByccDarkhastFaktorAndCodeNoe(ccDarkhastFaktor, DarkhastFaktorJayezehModel.CodeNoeJayezehAuto());
+            //todo Jayezeh
             ArrayList<DarkhastFaktorJayezehModel> darkhastFaktorJayezehModels = darkhastFaktorJayezehDAO.getByccDarkhastFaktorAndCodeNoe(ccDarkhastFaktor, DarkhastFaktorJayezehModel.CodeNoeJayezehAuto());
+            ArrayList<DarkhastFaktorJayezehModel> darkhastFaktorJayezehModelsForHaveBonus = darkhastFaktorJayezehDAO.getByccDarkhastFaktorAndCodeNoeForHaveBonus(ccDarkhastFaktor, DarkhastFaktorJayezehModel.CodeNoeJayezehAuto());
+
 
             int countJayezehInDarkhastFaktorJayzeh = darkhastFaktorJayezehDAO.getCountByccDarkhastFaktorAndCodeNoe(ccDarkhastFaktor , DarkhastFaktorJayezehModel.CodeNoeJayezehEntekhabi());
             int countccTakhfifJayezeh = selectFaktorShared.getString(selectFaktorShared.getCcTakhfifJayezes() , "").replace("," , "").length();
             boolean showAddBonusBtn = false;
             boolean haveBonus = false;
-            Log.d("verifyRequest" , "Bonus countJayezehInDarkhastFaktorJayzeh:" + countJayezehInDarkhastFaktorJayzeh + " countccTakhfifJayezeh: " + countccTakhfifJayezeh);
+            Log.d("verifyRequest" , "jayezeh haveBonus countJayezehInDarkhastFaktorJayzeh:" + countJayezehInDarkhastFaktorJayzeh + " countccTakhfifJayezeh: " + countccTakhfifJayezeh);
+            Log.d("verifyRequest" , "jayezeh haveBonus countdarkhastFaktorJayezehModels:" + darkhastFaktorJayezehModels.size() );
+            Log.d("verifyRequest" , "jayezeh haveBonus ccTakhfifJayezeh:" + selectFaktorShared.getString(selectFaktorShared.getCcTakhfifJayezes() , "").replace("," , "") );
 
             if (countJayezehInDarkhastFaktorJayzeh > 0 || countccTakhfifJayezeh > 0)
             {
                 showAddBonusBtn = true;
             }
-            if (darkhastFaktorJayezehModels.size() > 0)
+            //if (darkhastFaktorJayezehModels.size() > 0)
+            if (darkhastFaktorJayezehModelsForHaveBonus.size() > 0)
             {
+                Log.d("jayezeh" , "checkForInsertJayezeh haveBonus true " + darkhastFaktorJayezehModelsForHaveBonus.size());
+
                 haveBonus = true;
             }
+            Log.d("jayezeh" , "checkForInsertJayezeh haveBonus true " + "haveBonus:" + haveBonus + "- showAddBonusBtn:" +  showAddBonusBtn);
+
+            //Todo jayezeh
             mPresenter.onGetBonus(darkhastFaktorJayezehModels , showAddBonusBtn, haveBonus);
         }
 
@@ -666,8 +678,13 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
     {
         DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
         //todo jayezeh
-        ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels = darkhastFaktorTakhfifDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels = darkhastFaktorTakhfifDAO.getByccDarkhastFaktorWithoutArzeshAfzodeh(ccDarkhastFaktor);
         mPresenter.onGetDiscounts(darkhastFaktorTakhfifModels);
+    }
+
+    @Override
+    public void getDiscountArzeshAfzodeh(long sumMablaghKol, double sumMablaghBaArzeshAfzoodeh, int sumTedadAghlam, int tedadAghlam, double sumHajm, double sumVazn, double vaznFaktor, double hajmFaktor, double sumMablaghKhales, int sumTedadAghlamPishnehadiBiSetareh) {
+
     }
 
     @Override
@@ -838,6 +855,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
     @Override
     public void checkData(int clickedBottomBarposition ,double mablaghKol, float sumTakhfifat, double mablaghFaktor , long sumMablaghBaArzeshAfzoode , int ccAddress , int modatVosol , int codeNoeVosol, String nameNoeVosol , int modatRoozRaasGiri , double vaznFaktor , double hajmFaktor, Date tarikhPishbiniTahvil, int tedadAghlam)
     {
+
         boolean hasError = false;
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(), -1);
@@ -1736,6 +1754,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         @Override
         protected Integer doInBackground(Void... arrayLists)
         {
+            Log.d("jayezeh", "deleteTakhfifJayezeForDarkhastFaktor");
             deleteTakhfifJayezeForDarkhastFaktor(ccDarkhastFaktor);
 
             ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
@@ -1812,27 +1831,28 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                         mohasebeTakhfifHajmi(darkhastFaktorModel, parameterChildModels);
                     }
                 }
-                DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
-                ArrayList<Integer> ccTakhfifs = darkhastFaktorTakhfifDAO.getccTakhfifOfJayezehByccDarkhastFaktor(ccDarkhastFaktor);
-                String strccTakhfifs = "";
-                Log.d("ccTakhfif" , "size : " + ccTakhfifs.size() + ccTakhfifs.toString());
-                if (ccTakhfifs.size() > 0)
-                {
-                    canSelectBonus = true;
-                    for (int i : ccTakhfifs)
-                    {
-                        Log.d("ccTakhfif" , "ccTakhfif : " + i);
-                        strccTakhfifs += i + ",";
-                    }
-                    Log.d("ccTakhfif" , "strccTakhfifs for : " + strccTakhfifs);
-                    if (strccTakhfifs.length() > 0 && strccTakhfifs.endsWith(","))
-                    {
-                        strccTakhfifs = strccTakhfifs.substring(0 , strccTakhfifs.length()-1);
-                    }
-                    Log.d("ccTakhfif" , "strccTakhfifs if : " + strccTakhfifs);
-                }
-                Log.d("ccTakhfif" , "strccTakhfifs : " + strccTakhfifs);
-                selectFaktorShared.putString(selectFaktorShared.getCcTakhfifJayezes() , strccTakhfifs);
+                //todo jayezeh
+//                DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
+//                ArrayList<Integer> ccTakhfifs = darkhastFaktorTakhfifDAO.getccTakhfifOfJayezehByccDarkhastFaktor(ccDarkhastFaktor);
+//                String strccTakhfifs = "";
+//                Log.d("ccTakhfif" , "size : " + ccTakhfifs.size() + ccTakhfifs.toString());
+//                if (ccTakhfifs.size() > 0)
+//                {
+//                    canSelectBonus = true;
+//                    for (int i : ccTakhfifs)
+//                    {
+//                        Log.d("ccTakhfif" , "ccTakhfif : " + i);
+//                        strccTakhfifs += i + ",";
+//                    }
+//                    Log.d("ccTakhfif" , "strccTakhfifs for : " + strccTakhfifs);
+//                    if (strccTakhfifs.length() > 0 && strccTakhfifs.endsWith(","))
+//                    {
+//                        strccTakhfifs = strccTakhfifs.substring(0 , strccTakhfifs.length()-1);
+//                    }
+//                    Log.d("ccTakhfif" , "strccTakhfifs if : " + strccTakhfifs);
+//                }
+//                Log.d("ccTakhfif" , "strccTakhfifs : " + strccTakhfifs);
+//                selectFaktorShared.putString(selectFaktorShared.getCcTakhfifJayezes() , strccTakhfifs);
                 Log.d("ccTakhfif" , "resultOfProccess : " + resultOfProccess);
 				//resultOfProccess=1;
                 return resultOfProccess;
@@ -2629,6 +2649,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
                 if(TedadJayzehPromotion > 0 )
                 {
+                    Log.d("Jayezeh" , "insertJayezeh poromotion");
                     insertJayezeh(ccDarkhastFaktor, jayezehEntekhabiModel.getCcJayezeh(), 0, DarkhastFaktorJayezehModel.CodeNoeJayezehAuto(), mPresenter.getAppContext().getResources().getString(R.string.jayezePromotion) + NameKala, jayezehEntekhabiModel.getCcKala(), jayezehEntekhabiModel.getCcKalaCode(), TedadJayzehPromotion);
                 }
             }
@@ -3136,6 +3157,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                             Log.d("jayezeh" , "tedadJayezeh final : " + tedadJayezeh);
                             if (tedadJayezeh!= 0)
                             {
+                                Log.d("jayezeh" , "checkForInsertJayezeh Kala");
                                 checkForInsertJayezeh(darkhastFaktor.getCcDarkhastFaktor(), jayezeh.getCcJayezeh(), jayezehSatr.getCcJayezehSatr(), jayezeh.getSharhJayezeh(), jayezehSatr.getCcKalaCodeJayezeh(), jayezehSatr.getCcKalaCodeJayezeh(), tedadJayezeh, jayezeh.getIsJayezehEntekhabi());
                             }
 
@@ -3163,8 +3185,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                     for (DataTableModel gorohKala : gorohKalas)
                     {
                         sumTedadGorohKala= Double.parseDouble(gorohKala.getFiled2());
-                        sumTedadBastehGorohKala = Double.parseDouble(gorohKala.getFiled3());
-                        sumTedadKartonGorohKala = Double.parseDouble(gorohKala.getFiled4());
+                        sumTedadBastehGorohKala = Double.parseDouble(gorohKala.getFiled4());
+                        sumTedadKartonGorohKala = Double.parseDouble(gorohKala.getFiled3());
                         sumMablaghKolGorohKala = Double.parseDouble(gorohKala.getFiled5());
                         tedadAghlam  = Integer.parseInt(gorohKala.getFiled6());
 
@@ -3179,7 +3201,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                         ArrayList<JayezehSatrModel> jayezehSatrs = jayezehSatrDAO.getForFaktor(jayezeh.getCcJayezeh(), 
 								DiscountCalculation.NAME_NOE_FIELD_GOROH_KALA, new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial(),discountCalculation.getTedadRialAghlam()},
 								new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()},
-								gorohKala.getFiled1(), sumTedadGorohKala, sumTedadKartonGorohKala, sumTedadBastehGorohKala, sumMablaghKolGorohKala, jayezeh.getNoeTedadRial(),tedadAghlam);
+								gorohKala.getFiled1(), sumTedadGorohKala, sumTedadBastehGorohKala, sumTedadKartonGorohKala,  sumMablaghKolGorohKala, jayezeh.getNoeTedadRial(),tedadAghlam);
 
                         Log.d("jayezeh" , "jayezehSatrs.size for goroh Kala : " + jayezehSatrs.size());
                         for (JayezehSatrModel jayezehSatr: jayezehSatrs)
@@ -3263,6 +3285,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                             Log.d("jayezeh" , "goroh kala tedad Jayezeh : " + tedadJayezeh);
                             if (tedadJayezeh != 0)
                             {
+                                Log.d("jayezeh" , "checkForInsertJayezeh Goroh Kala");
                                 checkForInsertJayezeh(darkhastFaktor.getCcDarkhastFaktor(), jayezeh.getCcJayezeh(), jayezehSatr.getCcJayezehSatr(), jayezeh.getSharhJayezeh(), jayezehSatr.getCcKalaJayezeh(), jayezehSatr.getCcKalaCodeJayezeh(), tedadJayezeh, jayezeh.getIsJayezehEntekhabi());
                             }
                         }
@@ -3300,12 +3323,12 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                         Log.d("jayezeh" , "sumTedadBastehbrand : " + sumTedadBastehBrand);
                         Log.d("jayezeh" , "sumTedadKartonbrand : " + sumTedadKartonBrand);
                         Log.d("jayezeh" , "sumMablaghKolbrand : " + sumMablaghKolBrand);
-                        Log.d("jayezeh" , "tedadAghlam : " + tedadAghlam);
+                        Log.d("jayezeh" , "tedadAghlam : " + tedadAghlamBrand);
 
                         ArrayList<JayezehSatrModel> jayezehSatrs = jayezehSatrDAO.getForFaktor(jayezeh.getCcJayezeh(),
                                 DiscountCalculation.NAME_NOE_FIELD_BRAND, new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial(),discountCalculation.getTedadRialAghlam()},
                                 new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()},
-                                brand.getFiled1(), sumTedadBrand, sumTedadKartonBrand, sumTedadBastehBrand, sumMablaghKolBrand, jayezeh.getNoeTedadRial(),tedadAghlam);
+                                brand.getFiled1(), sumTedadBrand, sumTedadKartonBrand, sumTedadBastehBrand, sumMablaghKolBrand, jayezeh.getNoeTedadRial(),tedadAghlamBrand);
 
                         Log.d("jayezeh" , "jayezehSatrs.size for Brand : " + jayezehSatrs.size());
                         for (JayezehSatrModel jayezehSatr: jayezehSatrs)
@@ -3389,6 +3412,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                             Log.d("jayezeh" , "brand tedad Jayezeh : " + tedadJayezeh);
                             if (tedadJayezeh != 0)
                             {
+                                Log.d("jayezeh" , "checkForInsertJayezeh Brand");
                                 checkForInsertJayezeh(darkhastFaktor.getCcDarkhastFaktor(), jayezeh.getCcJayezeh(), jayezehSatr.getCcJayezehSatr(), jayezeh.getSharhJayezeh(), jayezehSatr.getCcKalaJayezeh(), jayezehSatr.getCcKalaCodeJayezeh(), tedadJayezeh, jayezeh.getIsJayezehEntekhabi());
                             }
                         }
@@ -3426,12 +3450,12 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                         Log.d("jayezeh" , "sumTedadBastehTaminKonandeh : " + sumTedadBastehTaminKonandeh);
                         Log.d("jayezeh" , "sumTedadKartonTaminKonandeh : " + sumTedadKartonTaminKonandeh);
                         Log.d("jayezeh" , "sumMablaghKolTaminKonandeh : " + sumMablaghKolTaminKonandeh);
-                        Log.d("jayezeh" , "tedadAghlamTaminKonandeh : " + tedadAghlam);
+                        Log.d("jayezeh" , "tedadAghlamTaminKonandeh : " + tedadAghlamTaminKonandeh);
 
                         ArrayList<JayezehSatrModel> jayezehSatrs = jayezehSatrDAO.getForFaktor(jayezeh.getCcJayezeh(),
                                 DiscountCalculation.NAME_NOE_FIELD_TAMIN_KONANDE, new int[]{discountCalculation.getTedadRialTedad(), discountCalculation.getTedadRialRial(),discountCalculation.getTedadRialAghlam()},
                                 new int[]{discountCalculation.getBasteBandiCarton(), discountCalculation.getBasteBandiBaste(), discountCalculation.getBasteBandiAdad()},
-                                taminKonandeh.getFiled1(), sumTedadTaminKonandeh, sumTedadKartonTaminKonandeh, sumTedadBastehTaminKonandeh, sumMablaghKolTaminKonandeh, jayezeh.getNoeTedadRial(),tedadAghlam);
+                                taminKonandeh.getFiled1(), sumTedadTaminKonandeh, sumTedadKartonTaminKonandeh, sumTedadBastehTaminKonandeh, sumMablaghKolTaminKonandeh, jayezeh.getNoeTedadRial(),tedadAghlamTaminKonandeh);
 
                         Log.d("jayezeh" , "jayezehSatrs.size for TaminKonandeh : " + jayezehSatrs.size());
                         for (JayezehSatrModel jayezehSatr: jayezehSatrs)
@@ -3515,6 +3539,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                             Log.d("jayezeh" , "TaminKonandeh tedad Jayezeh : " + tedadJayezeh);
                             if (tedadJayezeh != 0)
                             {
+                                Log.d("jayezeh" , "checkForInsertJayezeh TaminKonandeh");
                                 checkForInsertJayezeh(darkhastFaktor.getCcDarkhastFaktor(), jayezeh.getCcJayezeh(), jayezehSatr.getCcJayezehSatr(), jayezeh.getSharhJayezeh(), jayezehSatr.getCcKalaJayezeh(), jayezehSatr.getCcKalaCodeJayezeh(), tedadJayezeh, jayezeh.getIsJayezehEntekhabi());
                             }
                         }
@@ -3537,14 +3562,16 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             Log.d("jayezeh" , "ccKalaCodeJayezeh : " + ccKalaCodeJayezeh);
             Log.d("jayezeh" , "tedadJayezeh : " + tedadJayezeh);
             Log.d("jayezeh" , "isJayezehEntekhabi : " + isJayezehEntekhabi);
+            Log.d("jayezeh" , "checkForInsertJayezeh haveBonus true");
             haveBonus = true;
             if (isJayezehEntekhabi == 0)
             {
                 // todo auto
+                KalaDAO kalaDAO = new KalaDAO(mPresenter.getAppContext());
                 KalaMojodiDAO kalaMojodiDAO = new KalaMojodiDAO(mPresenter.getAppContext());
                 int countKalaMojodi = kalaMojodiDAO.getCountByccKalaCode(ccKalaCodeJayezeh);
                 int countMaxMojody = kalaMojodiDAO.getMaxMojodyByccKalaCode(ccKalaCodeJayezeh);
-
+                String NameKala = kalaDAO.getByccKalaCode(ccKalaCodeJayezeh).getNameKala();
                 Log.d("jayezeh" , "countKalaMojodi : " + countKalaMojodi +  " countMaxMojody:"+ countMaxMojody  + " tedadJayezeh: " + tedadJayezeh);
                 if (countKalaMojodi <= 0)
                 {
@@ -3556,7 +3583,9 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                     Log.d("jayezeh" , "ccDarkhastFaktor : " + ccDarkhastFaktor);
 																		
                     //codeNoeJayezeh for auto == 1 else 2
-                    if (insertJayezeh(ccDarkhastFaktor, ccJayezeh, ccJayezehSatr, DarkhastFaktorJayezehModel.CodeNoeJayezehAuto(), sharhJayezeh, ccKalaJayezeh, ccKalaCodeJayezeh, tedadJayezeh))
+                    Log.d("Jayezeh" , "insertJayezeh auto");
+                   //todo jayazeh namekala
+                    if (insertJayezeh(ccDarkhastFaktor, ccJayezeh, ccJayezehSatr, DarkhastFaktorJayezehModel.CodeNoeJayezehAuto(), NameKala, ccKalaJayezeh, ccKalaCodeJayezeh, tedadJayezeh))
                     {
                         Log.d("jayezeh" , "ccKalaJayezeh : " + ccKalaJayezeh + " tedadJayezeh :" + tedadJayezeh);
                         if (!checkKalaForInsertKalaMojodi(ccKalaJayezeh , tedadJayezeh))
@@ -3578,6 +3607,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             else
             {
                 canSelectBonus = true;
+                Log.d("Jayezeh" , "insertJayezeh entekhabi");
+                //Todo Jayezeh
                 insertJayezeh(ccDarkhastFaktor, ccJayezeh, ccJayezehSatr, DarkhastFaktorJayezehModel.CodeNoeJayezehEntekhabi(), sharhJayezeh, ccKalaJayezeh, ccKalaCodeJayezeh, tedadJayezeh);
             }
         }
@@ -3817,7 +3848,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                         DarkhastFaktorSatrTakhfifDAO darkhastFaktorSatrTakhfifDAO = new DarkhastFaktorSatrTakhfifDAO(mPresenter.getAppContext());
                         ArrayList<DarkhastFaktorSatrTakhfifModel> darkhastFaktorSatrTakhfifs = darkhastFaktorSatrTakhfifDAO.getByccDarkhastFaktorSatr(model.getCcDarkhastFaktorSatr());
                         //Todo jayezeh
-                        ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifs = darkhastFaktorTakhfifDAO.getByccDarkhastFaktorAndNoeTakhfifWithoutArzeshAfzodeh(ccDarkhastFaktor , codeTakhfifNaghdi);
+                        ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifs = darkhastFaktorTakhfifDAO.getByccDarkhastFaktorAndNoeTakhfif(ccDarkhastFaktor , codeTakhfifNaghdi);
 
                         //sumMablagh = model.getTedad3() * model.getMablaghForosh();
                         sumHajm += (model.getTedad3() * (kala.getTol() * kala.getArz() * kala.getErtefa())) / kala.getTedadDarKarton();
@@ -3899,6 +3930,8 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
                 long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor() , -1);
                 DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
+                DarkhastFaktorJayezehDAO darkhastFaktorJayezehDAO = new DarkhastFaktorJayezehDAO(mPresenter.getAppContext());
+                Log.d("VerifyRequest","jayezeh sumMablaghBaArzeshAfzoodeh:"+sumMablaghBaArzeshAfzoodeh +" VerifyRequestActivity.SuccessGetBonus: "+ VerifyRequestActivity.SuccessGetBonus);
                 if (!VerifyRequestActivity.SuccessGetBonus && sumMablaghBaArzeshAfzoodeh>0)
                 {
                     if (darkhastFaktorTakhfifDAO.deleteTakhfifByCodeNoe(ccDarkhastFaktor, DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh())) {
@@ -3909,11 +3942,21 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                         mPresenter.onErrorOperations(R.string.errorOperation);
 
                 }else{
+//todo jayazeh
+                    int sizeDFJ =  darkhastFaktorJayezehDAO.getCountByccDarkhastFaktorForJayezehArzesh(ccDarkhastFaktor);
+                    int sizeDFT =  darkhastFaktorTakhfifDAO.getCountJayezehByccDarkhastFaktorForJayezehArzesh(ccDarkhastFaktor);
+                    Log.d("VerifyRequest","jayezeh sizeDFT:"+sizeDFT +" sizeDFJ: "+ sizeDFJ);
 
-                    if (darkhastFaktorTakhfifDAO.deleteTakhfifByCodeNoe(ccDarkhastFaktor,DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh()))
-                        mPresenter.onGetRequestDetail(sumTedadAghlam, tedadAghlam, sumVazn, sumHajm, vaznFaktor, hajmFaktor, sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh,checkCanSelectBonus());
+                    if( sizeDFJ>0 || sizeDFT>0)
+                    {
+                        if (darkhastFaktorTakhfifDAO.deleteTakhfifByCodeNoe(ccDarkhastFaktor,DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh()))
+                            mPresenter.onGetRequestDetail(sumTedadAghlam, tedadAghlam, sumVazn, sumHajm, vaznFaktor, hajmFaktor, sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh,checkCanSelectBonus());
+                        else
+                            mPresenter.onErrorOperations(R.string.errorOperation);
+                    }
                     else
-                        mPresenter.onErrorOperations(R.string.errorOperation);
+                        mPresenter.onGetRequestDetail(sumTedadAghlam, tedadAghlam, sumVazn, sumHajm, vaznFaktor, hajmFaktor, sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh,checkCanSelectBonus());
+
                 }
             }
             else if (num == -1)
@@ -4108,6 +4151,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 JayezehDAO jayezehDAO = new JayezehDAO(mPresenter.getAppContext());
                 JayezehSatrDAO jayezehSatrDAO = new JayezehSatrDAO(mPresenter.getAppContext());
                 JayezehModel jayezehModel = jayezehDAO.getArzeshAfzoodehJayezeh(moshtaryModel, darkhastFaktorModel.getCodeNoeHaml());
+                Log.d("","jayezehModel size" + jayezehModel.toString());
                 if(jayezehModel != null)
                 {
                 int ccJayezehSatr = jayezehSatrDAO.getccJayezehSatrForArzeshAfzoodeh(jayezehModel.getCcJayezeh(), sumMablaghBaArzeshAfzoodeh);
@@ -4158,20 +4202,20 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
              DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
              ArrayList<Integer> ccTakhfifs = darkhastFaktorTakhfifDAO.getccTakhfifOfJayezehByccDarkhastFaktor(ccDarkhastFaktor);
              String strccTakhfifs = "";
-             Log.d("ccTakhfif", "size : " + ccTakhfifs.size() + ccTakhfifs.toString());
+             Log.d("ccTakhfif", "jayezeh size : " + ccTakhfifs.size() + ccTakhfifs.toString());
              if (ccTakhfifs.size() > 0) {
                  canSelectBonus = true;
                  for (int i : ccTakhfifs) {
-                     Log.d("ccTakhfif", "ccTakhfif : " + i);
+                     Log.d("ccTakhfif", "jayezeh ccTakhfif : " + i);
                      strccTakhfifs += i + ",";
                  }
-                 Log.d("ccTakhfif", "strccTakhfifs for : " + strccTakhfifs);
+                 Log.d("ccTakhfif", "jayezeh  strccTakhfifs for : " + strccTakhfifs);
                  if (strccTakhfifs.length() > 0 && strccTakhfifs.endsWith(",")) {
                      strccTakhfifs = strccTakhfifs.substring(0, strccTakhfifs.length() - 1);
                  }
-                 Log.d("ccTakhfif", "strccTakhfifs if : " + strccTakhfifs);
+                 Log.d("ccTakhfif", "jayezeh strccTakhfifs if : " + strccTakhfifs);
              }
-             Log.d("ccTakhfif", "strccTakhfifs : " + strccTakhfifs);
+             Log.d("ccTakhfif", "jayezeh strccTakhfifs : " + strccTakhfifs);
              selectFaktorShared.putString(selectFaktorShared.getCcTakhfifJayezes(), strccTakhfifs);
          }
          return canSelectBonus;

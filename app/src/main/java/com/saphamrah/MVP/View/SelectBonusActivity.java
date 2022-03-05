@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -65,8 +66,14 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
     private EditText editTextMablaghJayezeh;
     private EditText editTextMande;
     private EditText editTextMaxTedadJayezeh;
+
     private RecyclerView recyclerView;
     private CustomTextInputLayout customTextInputLayout;
+    private CustomTextInputLayout txtinputMaxTedadJayezeh;
+    private CustomTextInputLayout txtinputMablaghJayezeh;
+    private CustomTextInputLayout txtinputMande;
+    private CustomTextInputLayout txtinputTakhfifFaktor;
+
    private ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach = new ArrayList<>();
    private ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi = new ArrayList<>();
     @Override
@@ -95,6 +102,11 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
         editTextMande = findViewById(R.id.txtMandeh);
         editTextMaxTedadJayezeh = findViewById(R.id.txtMaxTedadJayezeh);
         customTextInputLayout = findViewById(R.id.txtinputMandeh);
+        txtinputMaxTedadJayezeh = findViewById(R.id.txtinputMaxTedadJayezeh);
+        txtinputMablaghJayezeh = findViewById(R.id.txtinputMablaghJayezeh);
+        txtinputMande = findViewById(R.id.txtinputMandeh);
+        txtinputTakhfifFaktor = findViewById(R.id.txtinputTakhfifFaktor);
+
         recyclerView = findViewById(R.id.recyclerView);
         Button btnCancel = findViewById(R.id.btnCancel);
         Button btnApply = findViewById(R.id.btnApply);
@@ -171,6 +183,7 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
         }
         if (darkhastFaktorTakhfifModels.size() > 0)
         {
+            Log.d("SelectBonusAct","jayezeh NoeJayezehTakhfif" + darkhastFaktorTakhfifModels.get(0).getNoeJayezehTakhfif());
             if (darkhastFaktorTakhfifModels.get(0).getNoeJayezehTakhfif() == DarkhastFaktorJayezehTakhfifModel.NoeJayezeh())
             {
                 showJayezehData(0);
@@ -193,6 +206,11 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
         editTextTakhfifFaktor.setVisibility(View.GONE);
         editTextMande.setVisibility(View.GONE);
         editTextMablaghJayezeh.setVisibility(View.GONE);
+        txtinputTakhfifFaktor.setVisibility(View.GONE);
+        txtinputMande.setVisibility(View.GONE);
+        txtinputMablaghJayezeh.setVisibility(View.GONE);
+        editTextMaxTedadJayezeh.setVisibility(View.VISIBLE);
+        txtinputMaxTedadJayezeh.setVisibility(View.VISIBLE);
         selectedIndexTakhfif = selectedIndex;
         mPresenter.getKalaForJayezeh(selectedccTakhfif, darkhastFaktorTakhfifModels.get(selectedIndex).getExtraProp_ccJayezehSatr(), darkhastFaktorTakhfifModels.get(selectedIndexTakhfif).getNoeJayezehTakhfif());
     }
@@ -202,11 +220,16 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
     {
         editTextSelectBonus.setText(darkhastFaktorTakhfifModels.get(selectedIndex).getSharhJayezehTakhfif());
         editTextMaxTedadJayezeh.setText(String.valueOf(darkhastFaktorTakhfifModels.get(selectedIndex).getTedadJayezeh()));
-        editTextTakhfifFaktor.setText(String.valueOf(darkhastFaktorTakhfifModels.get(selectedIndex).getMablaghJayezehTakhfif()));
+        editTextTakhfifFaktor.setText(String.valueOf((long)darkhastFaktorTakhfifModels.get(selectedIndex).getMablaghJayezehTakhfif()));
         selectedccTakhfif = darkhastFaktorTakhfifModels.get(selectedIndex).getCcJayezehTakhfif();
         editTextTakhfifFaktor.setVisibility(View.VISIBLE);
         editTextMande.setVisibility(View.VISIBLE);
         editTextMablaghJayezeh.setVisibility(View.VISIBLE);
+        txtinputTakhfifFaktor.setVisibility(View.VISIBLE);
+        txtinputMande.setVisibility(View.VISIBLE);
+        txtinputMablaghJayezeh.setVisibility(View.VISIBLE);
+        editTextMaxTedadJayezeh.setVisibility(View.GONE);
+        txtinputMaxTedadJayezeh.setVisibility(View.GONE);
         selectedIndexTakhfif = selectedIndex;
         mPresenter.getKalaForJayezeh(selectedccTakhfif, 0, darkhastFaktorTakhfifModels.get(selectedIndexTakhfif).getNoeJayezehTakhfif());
     }
@@ -215,12 +238,16 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
     {
         editTextSelectBonus.setText(darkhastFaktorTakhfifModels.get(selectedIndex).getSharhJayezehTakhfif());
         editTextMaxTedadJayezeh.setText(String.valueOf(darkhastFaktorTakhfifModels.get(selectedIndex).getTedadJayezeh()));
-        editTextTakhfifFaktor.setText(String.valueOf(darkhastFaktorTakhfifModels.get(selectedIndex).getMablaghJayezehTakhfif()));
+        editTextTakhfifFaktor.setText(String.valueOf((long)darkhastFaktorTakhfifModels.get(selectedIndex).getMablaghJayezehTakhfif()));
         selectedccTakhfif = darkhastFaktorTakhfifModels.get(selectedIndex).getCcJayezehTakhfif();
         editTextMaxTedadJayezeh.setVisibility(View.GONE);
+        txtinputMaxTedadJayezeh.setVisibility(View.GONE);
         editTextTakhfifFaktor.setVisibility(View.VISIBLE);
         editTextMande.setVisibility(View.VISIBLE);
         editTextMablaghJayezeh.setVisibility(View.VISIBLE);
+        txtinputTakhfifFaktor.setVisibility(View.VISIBLE);
+        txtinputMande.setVisibility(View.VISIBLE);
+        txtinputMablaghJayezeh.setVisibility(View.VISIBLE);
         selectedIndexTakhfif = selectedIndex;
         mPresenter.getKalaForJayezeh(selectedccTakhfif, darkhastFaktorTakhfifModels.get(selectedIndex).getExtraProp_ccJayezehSatr(), darkhastFaktorTakhfifModels.get(selectedIndexTakhfif).getNoeJayezehTakhfif());
     }
@@ -288,6 +315,9 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
             @Override
             public void onRemoveFocus(JayezehEntekhabiMojodiModel jayezehEntekhabiMojodiModel, int position , String count)
             {
+                if(count.equals(""))
+                    count="0";
+
                 int intCount = 0;
                 try
                 {

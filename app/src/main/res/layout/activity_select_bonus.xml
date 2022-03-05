@@ -97,6 +97,7 @@
                 android:layout_marginLeft="10dp"
                 android:layoutDirection="rtl"
                 android:textDirection="rtl"
+                android:id="@+id/txtinputTakhfifFaktor"
                 android:theme="@style/TextInputLayoutTheme">
                 <EditText
                     android:layout_width="match_parent"
@@ -125,6 +126,7 @@
                 android:layout_marginLeft="10dp"
                 android:layoutDirection="rtl"
                 android:textDirection="rtl"
+                android:id="@+id/txtinputMablaghJayezeh"
                 android:theme="@style/TextInputLayoutTheme">
                 <EditText
                     android:layout_width="match_parent"
@@ -181,6 +183,7 @@
                 android:layout_marginLeft="10dp"
                 android:layoutDirection="rtl"
                 android:textDirection="rtl"
+                android:id="@+id/txtinputMaxTedadJayezeh"
                 android:theme="@style/TextInputLayoutTheme">
                 <EditText
                     android:layout_width="match_parent"

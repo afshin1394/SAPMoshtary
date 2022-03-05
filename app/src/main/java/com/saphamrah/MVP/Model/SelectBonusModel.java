@@ -44,10 +44,13 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
     public void getBonus() {
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(), -1);
+
         if (ccDarkhastFaktor == -1) {
             mPresenter.onError(R.string.errorFindccDarkhastFaktor);
         } else {
             String ccTakhfifs = selectFaktorShared.getString(selectFaktorShared.getCcTakhfifJayezes(), "");
+            Log.d("bonus", "Jayezeh getBonus ccDarkhastFaktor : " + ccDarkhastFaktor + " ccTakhfifs:" +ccTakhfifs);
+
             DarkhastFaktorJayezehTakhfifDAO darkhastFaktorJayezehTakhfifDAO = new DarkhastFaktorJayezehTakhfifDAO(mPresenter.getAppContext());
             ArrayList<DarkhastFaktorJayezehTakhfifModel> darkhastFaktorJayezehTakhfifModels = darkhastFaktorJayezehTakhfifDAO.getByccDarkhastFaktorccTakhfif(ccDarkhastFaktor, ccTakhfifs);
             Log.d("bonus", "Jayezeh darkhastFaktorJayezehTakhfif size : " + darkhastFaktorJayezehTakhfifModels.size());
@@ -176,7 +179,11 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
         int count = 0;
         int insertedCount = 0;
         for (JayezehEntekhabiMojodiModel model : jayezehEntekhabiMojodiModels) {
+            Log.d("bonus", "jayezeh model: " + model);
+
             if (model.getSelectedCount() > 0) {
+                Log.d("bonus", "jayezeh select count >0 ");
+
                 count++;
                 DarkhastFaktorJayezehModel darkhastFaktorJayezehModel = new DarkhastFaktorJayezehModel();
                 darkhastFaktorJayezehModel.setCcKalaCode(model.getCcKalaCode());
@@ -235,6 +242,21 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
                         }
                     }
                 }
+            }
+            else if (model.getSelectedCount() == 0 ){
+                Log.d("bonus", "jayezeh select count ==0 ");
+
+                DarkhastFaktorJayezehModel darkhastFaktorJayezehModel = new DarkhastFaktorJayezehModel();
+                darkhastFaktorJayezehModel.setCcKalaCode(model.getCcKalaCode());
+                darkhastFaktorJayezehModel.setCcKala(model.getCcKala());
+                darkhastFaktorJayezehModel.setCcJayezeh(0);
+                darkhastFaktorJayezehModel.setCcDarkhastFaktor(ccDarkhastFaktor);
+                darkhastFaktorJayezehModel.setTedad(0);
+                darkhastFaktorJayezehModel.setSharh(model.getNameKala());
+                darkhastFaktorJayezehModel.setExtraProp_IsJayezehEntekhabi(1);
+                darkhastFaktorJayezehModel.setExtraProp_CodeNoeJayezeh(DarkhastFaktorJayezehModel.CodeNoeJayezehAuto());
+                darkhastFaktorJayezehModel.setExtraProp_ccJayezehTakhfif(selectedccTakhfif);
+                darkhastFaktorJayezehDAO.insert(darkhastFaktorJayezehModel);
             }
         }
 

@@ -143,8 +143,9 @@ public class DarkhastFaktorJayezehDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query = "select dfj.* , k.MablaghMasrafKonandeh from DarkhastFaktorJayezeh dfj left join Kala k on k.ccKalaCode = dfj.ccKalaCode where ccDarkhastFaktor = " + ccDarkhastFaktor + " and ExtraProp_CodeNoeJayezeh = " + codeNoe + " group by ccDarkhastFaktorJayezeh";
-            Log.d("DarkhastFaktorJayezeh" , "Bonus getByccDarkhastFaktorAndCodeNoe:" + query);
+            //String query = "select dfj.* , k.MablaghMasrafKonandeh from DarkhastFaktorJayezeh dfj left join Kala k on k.ccKalaCode = dfj.ccKalaCode where ccDarkhastFaktor = " + ccDarkhastFaktor + " and ExtraProp_CodeNoeJayezeh = " + codeNoe + " AND Tedad>0 group by ccDarkhastFaktorJayezeh";
+            String query = "select dfj.* , k.MablaghMasrafKonandeh from DarkhastFaktorJayezeh dfj left join Kala k on k.ccKalaCode = dfj.ccKalaCode where ccDarkhastFaktor = " + ccDarkhastFaktor + " and ExtraProp_CodeNoeJayezeh = " + codeNoe + " AND Tedad>0 group by ccDarkhastFaktorJayezeh";
+            Log.d("DarkhastFaktorJayezeh" , "Jayezeh haveBonus getByccDarkhastFaktorAndCodeNoe:" + query);
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor != null)
@@ -167,6 +168,36 @@ public class DarkhastFaktorJayezehDAO
         return darkhastFaktorJayezehModels;
     }
 
+    public ArrayList<DarkhastFaktorJayezehModel> getByccDarkhastFaktorAndCodeNoeForHaveBonus(long ccDarkhastFaktor , int codeNoe)
+    {
+        ArrayList<DarkhastFaktorJayezehModel> darkhastFaktorJayezehModels = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            //String query = "select dfj.* , k.MablaghMasrafKonandeh from DarkhastFaktorJayezeh dfj left join Kala k on k.ccKalaCode = dfj.ccKalaCode where ccDarkhastFaktor = " + ccDarkhastFaktor + " and ExtraProp_CodeNoeJayezeh = " + codeNoe + " AND Tedad>0 group by ccDarkhastFaktorJayezeh";
+            String query = "select dfj.* , k.MablaghMasrafKonandeh from DarkhastFaktorJayezeh dfj left join Kala k on k.ccKalaCode = dfj.ccKalaCode where ccDarkhastFaktor = " + ccDarkhastFaktor + " and ExtraProp_CodeNoeJayezeh = " + codeNoe + " AND Tedad>=0 group by ccDarkhastFaktorJayezeh";
+            Log.d("DarkhastFaktorJayezeh" , "Jayezeh haveBonus getByccDarkhastFaktorAndCodeNoe:" + query);
+
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    darkhastFaktorJayezehModels = cursorToModelPrint(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorJayezehModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorJayezehDAO" , "" , "getByccDarkhastFaktorAndCodeNoe" , "");
+        }
+        return darkhastFaktorJayezehModels;
+    }
 
     public int getCountByccDarkhastFaktorAndCodeNoe(long ccDarkhastFaktor , int codeNoe)
     {
@@ -175,6 +206,40 @@ public class DarkhastFaktorJayezehDAO
         {
             //select count(ccDarkhastFaktorJayezeh) from DarkhastFaktorJayezeh where ccDarkhastFaktor =  and ExtraProp_CodeNoeJayezeh = 1
             String query = "select count(" + DarkhastFaktorJayezehModel.COLUMN_ccDarkhastFaktorJayezeh() + ") from " + DarkhastFaktorJayezehModel.TableName() + " where " + DarkhastFaktorJayezehModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " and " + DarkhastFaktorJayezehModel.COLUMN_ExtraProp_CodeNoeJayezeh() + " = " + codeNoe;
+            Log.d("DarkhastFaktorJayezeh" , "Jayezeh getCountByccDarkhastFaktorAndCodeNoe  query:" + query);
+
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    count = cursor.getInt(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorJayezehModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorJayezehDAO" , "" , "getCountByccDarkhastFaktorAndCodeNoe" , "");
+        }
+        return count;
+    }
+
+    public int getCountByccDarkhastFaktorForJayezehArzesh(long ccDarkhastFaktor)
+    {
+        int count = 0;
+        try
+        {
+            //select count(ccDarkhastFaktorJayezeh) from DarkhastFaktorJayezeh where ccDarkhastFaktor =  and ExtraProp_CodeNoeJayezeh = 1
+            String query = " SELECT count(ccDarkhastFaktor) from DarkhastFaktorJayezeh where ccDarkhastFaktor = " + ccDarkhastFaktor + "  and ExtraProp_ccJayezehTakhfif in ( " +
+                    " SELECT DISTINCT ccJayezeh FROM Jayezeh WHERE CodeNoe=4)";
+
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)

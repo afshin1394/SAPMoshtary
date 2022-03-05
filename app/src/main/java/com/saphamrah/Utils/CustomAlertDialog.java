@@ -649,7 +649,7 @@ public class CustomAlertDialog
         }
 
         Toast toast = new Toast(activity);
-        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 170);
+        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 70);
         toast.setDuration(duration);
         toast.setView(view);
         toast.show();

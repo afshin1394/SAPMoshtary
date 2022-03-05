@@ -63,8 +63,8 @@ public class CalculateHajmiDiscountBrand extends DiscountCalculation
             {
                 ccBrand = Integer.valueOf(brand.getFiled1());
                 sumTedadBrand = Long.valueOf(brand.getFiled2());
-                sumTedadBastehBrand = Long.valueOf(brand.getFiled3());
-                sumTedadKartonBrand = Long.valueOf(brand.getFiled4());
+                sumTedadBastehBrand = Long.valueOf(brand.getFiled4());
+                sumTedadKartonBrand = Long.valueOf(brand.getFiled3());
                 sumMablaghKolBrand = Math.round(Double.valueOf(brand.getFiled5()));
                 sumVaznBrand = Math.round(Double.valueOf(brand.getFiled6()));
                 tedadAghlam = Integer.valueOf(brand.getFiled7());
@@ -93,8 +93,8 @@ public class CalculateHajmiDiscountBrand extends DiscountCalculation
                     ArrayList<DataTableModel> brandMohasebeh = darkhastFaktorSatrDAO.getTedadBeTafkikBrandMohasebeh(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getOlaviat(), ccBrandMohasebeh,takhfifHajmiTitrSatrModel.getNoeGheymat());
 
                     sumTedadBrandMohasebeh = Long.valueOf(brandMohasebeh.get(0).getFiled2());
-                    sumTedadBastehBrandMohasebeh = Long.valueOf(brandMohasebeh.get(0).getFiled3());
-                    sumTedadKartonBrandMohasebeh = Long.valueOf(brandMohasebeh.get(0).getFiled4());
+                    sumTedadBastehBrandMohasebeh = Long.valueOf(brandMohasebeh.get(0).getFiled4());
+                    sumTedadKartonBrandMohasebeh = Long.valueOf(brandMohasebeh.get(0).getFiled3());
                     sumMablaghKolBrandMohasebeh = Math.round(Double.valueOf(brandMohasebeh.get(0).getFiled5()));
 
                     mablaghVahed = Math.round (sumMablaghKolBrandMohasebeh / sumTedadBrandMohasebeh);

@@ -143,6 +143,7 @@ public class DarkhastFaktorTakhfifDAO
         ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels = new ArrayList<>();
         try
         {
+            Log.d("jayezeh","getByccDarkhastFaktor ccDarkhastFaktor = "  +ccDarkhastFaktor);
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.query(DarkhastFaktorTakhfifModel.TableName(), allColumns(), DarkhastFaktorTakhfifModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " and " + DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_ForJayezeh() + " = 0 ", null, null, null, null);
 
@@ -173,8 +174,9 @@ public class DarkhastFaktorTakhfifDAO
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             String query = "SELECT * FROM DarkhastFaktorTakhfif WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeTakhfif <> 4 " +
-            " AND ExtraProp_ccJayezehTakhfif NOT IN ( " +
-            "    SELECT DISTINCT ccJayezeh FROM jayezeh WHERE CodeNoe=4 )";
+            " AND (MablaghTakhfif<>0 ) AND ExtraProp_ForJayezeh = 0 " ;
+             //"AND ExtraProp_ccJayezehTakhfif IN ( " +
+            //"    SELECT DISTINCT ccJayezeh FROM jayezeh WHERE CodeNoe=4 ))";
             //Cursor cursor = db.query(DarkhastFaktorTakhfifModel.TableName(), allColumns(), DarkhastFaktorTakhfifModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " and " + DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_ForJayezeh() + " = 0 ", null, null, null, null);
             Log.d("DarkhastFaktorTakhfif","jayezeh getByccDarkhastFaktorWithoutArzeshAfzodeh query: "+ query);
             Cursor cursor = db.rawQuery(query , null);
@@ -435,14 +437,49 @@ public class DarkhastFaktorTakhfifDAO
         return countJayezeh;
     }
 
+    public int getCountJayezehByccDarkhastFaktorForJayezehArzesh(long ccDarkhastFaktor)
+    {
+        int countJayezeh = 0;
+        try
+        {
+            String query = " SELECT count(ccDarkhastFaktor) from DarkhastFaktorTakhfif where ccDarkhastFaktor = " + ccDarkhastFaktor + " and ExtraProp_ForJayezeh = 0 and ExtraProp_MustSendToSql = 1  and ExtraProp_ccJayezehTakhfif in ( " +
+                           " SELECT DISTINCT ccJayezeh FROM Jayezeh WHERE CodeNoe=4)";
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Log.d("bouns","jayezeh getCountJayezehByccDarkhastFaktorAndCodeNoe query:" + query);
+
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    countJayezeh = cursor.getInt(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorTakhfifModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrTakhfifDAO" , "" , "getCountJayezehByccDarkhastFaktor" , "");
+        }
+        return countJayezeh;
+    }
+
     public ArrayList<Integer> getccTakhfifOfJayezehByccDarkhastFaktor(long ccDarkhastFaktor)
     {
         ArrayList<Integer> ccTakhfifs = new ArrayList<>();
         try
         {
-            String query = "select " + DarkhastFaktorTakhfifModel.COLUMN_ccTakhfif() + " from " + DarkhastFaktorTakhfifModel.TableName() +
-                    " where " + DarkhastFaktorTakhfifModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor +
-                    " and " + DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_ForJayezeh() + " = 1";
+//            String query = "select " + DarkhastFaktorTakhfifModel.COLUMN_ccTakhfif() + " from " + DarkhastFaktorTakhfifModel.TableName() +
+//                    " where " + DarkhastFaktorTakhfifModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor +
+//                    " and " + DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_ForJayezeh() + " = 1";
+            String query = " select ccTakhfif from DarkhastFaktorTakhfif DFT where ccDarkhastFaktor = " + ccDarkhastFaktor + " and ExtraProp_ForJayezeh = 1 " +
+                           "and (ccTakhfif not in (select ExtraProp_ccJayezehTakhfif from darkhastfaktortakhfif where ExtraProp_ccJayezehTakhfif = DFT.ccTakhfif) " +
+                           "or ccTakhfif not in (select ExtraProp_ccJayezehTakhfif from darkhastfaktorjayezeh where ExtraProp_ccJayezehTakhfif = DFT.ccTakhfif)) ";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
             Log.d("bouns","getccTakhfifOfJayezehByccDarkhastFaktor query:" + query);
@@ -518,6 +555,8 @@ public class DarkhastFaktorTakhfifDAO
     {
         try
         {
+            Log.d("DarkhastFaktorTakhfif","jayezeh deleteAll: ");
+
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             db.delete(DarkhastFaktorTakhfifModel.TableName(), null, null);
             db.close();
@@ -537,6 +576,8 @@ public class DarkhastFaktorTakhfifDAO
     {
         try
         {
+            Log.d("DarkhastFaktorTakhfif","jayezeh deleteByccDarkhastFaktor: ");
+
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             db.delete(DarkhastFaktorTakhfifModel.TableName(), DarkhastFaktorTakhfifModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor, null);
             db.close();
@@ -557,6 +598,8 @@ public class DarkhastFaktorTakhfifDAO
     {
         try
         {
+            Log.d("DarkhastFaktorTakhfif","jayezeh deleteTakhfifNaghdiByccDarkhastFaktor: ");
+
             String query = "delete from " + DarkhastFaktorTakhfifModel.TableName() + " where ccDarkhastFaktor = " + ccDarkhastFaktor +
                     " and CodeNoeTakhfif = " + codeNoeTakhfifNaghdi + " and SharhTakhfif = '"  + sharhTakhfif + "'";
             SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -579,6 +622,7 @@ public class DarkhastFaktorTakhfifDAO
     public boolean deleteTakhfifByCodeNoe(long ccDarkhastFaktor,int codeNoe){
         try
         {
+            Log.d("DarkhastFaktorTakhfif","jayezeh deleteTakhfifByCodeNoe: ");
             String query = "delete from " + DarkhastFaktorTakhfifModel.TableName() + " where ccDarkhastFaktor = " + ccDarkhastFaktor +
                     " and CodeNoeTakhfif = " + codeNoe +" and ExtraProp_MustSendToSql = 0 ";
             SQLiteDatabase db = dbHelper.getWritableDatabase();

@@ -72,6 +72,7 @@ public interface VerifyRequestMVP
         void checkUpdateDarkhastFaktor(String modatVosol, int modatRoozRaasGiri, String sumMablaghKol, String sumMablaghKhales, String mablaghArzeshAfzoode, String sumTakhfifat, int codeNoeVosol, String nameNoeVosol, int ccAddress);
         void deleteBonus(long ccDarkhastFaktor , boolean openSelectBonusActivity);
         void checkData(int clickedBottomBarposition ,String mablaghKol, String sumTakhfifat, String mablaghFaktor , String sumMablaghBaArzeshAfzoode , int ccAddress , int modatVosol , int codeNoeVosol, String nameNoeVosol , int modatRoozRaasGiri , String vaznFaktor , String hajmFaktor, Date tarikhPishbiniTahvil, String TedadAghlam);
+
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
         void getHashiehSoud(long ccDarkhastFaktor,String mablaghBaArzeshAfzoodeh);
@@ -113,6 +114,8 @@ public interface VerifyRequestMVP
         void onJashnvarehAvailable();
 
         void onFailGetJashnvareh();
+
+
     }
 
 
@@ -127,6 +130,7 @@ public interface VerifyRequestMVP
         void getBonusList();
         void calculateDiscounts(int ccChildParameterNoeVosol , int valueNoeVosol);
         void getDiscounts(long ccDarkhastFaktor);
+        void getDiscountArzeshAfzodeh(long sumMablaghKol, double sumMablaghBaArzeshAfzoodeh, int sumTedadAghlam, int tedadAghlam, double sumHajm, double sumVazn, double vaznFaktor, double hajmFaktor, double sumMablaghKhales, int sumTedadAghlamPishnehadiBiSetareh);
         void getTarikhPishbiniTahvilInfo();
         void updateDarkhastFaktor(String modatVosol, int modatRoozRaasGiri , double sumMablaghKol , double sumMablaghKhales , float mablaghArzeshAfzoode , float sumTakhfifat , int codeNoeVosol , String nameNoeVosol , int ccAddress);
         void deleteBonus(long ccDarkhastFaktor , boolean openSelectBonusActivity);

@@ -52,7 +52,8 @@ public class FaktorDetailsModel implements FaktorDetailsMVP.ModelOps
         mPresenter.onGetKala(kalaDarkhastFaktorModels);
 
         DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
-        ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifs = darkhastFaktorTakhfifDAO.getByccDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor());
+        //todo jayezeh
+        ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifs = darkhastFaktorTakhfifDAO.getByccDarkhastFaktorWithoutArzeshAfzodeh(darkhastFaktorModel.getCcDarkhastFaktor());
         mPresenter.onGetTakhfif(darkhastFaktorTakhfifs);
 
 
