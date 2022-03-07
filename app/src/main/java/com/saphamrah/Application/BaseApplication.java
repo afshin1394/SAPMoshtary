@@ -70,7 +70,9 @@ public class BaseApplication extends ExceptionHandlerApplication {
     public static Context getCurrentActivity() {
         return currentActivity;
     }
-
+    public static Activity getActivity() {
+        return currentActivity;
+    }
     public static void setCurrentActivity(Activity activity) {
         currentActivity = activity;
     }

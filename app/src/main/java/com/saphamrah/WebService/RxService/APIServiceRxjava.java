@@ -174,7 +174,9 @@ public interface APIServiceRxjava {
 
     @GET("Api/ApiSales/GetAllrpt_AmarForosh")
     Observable<Response<GetAllrptAmarForoshResult>>getAllrptAmarForosh(@Query("ccForoshandeh") String ccForoshandeh , @Query("TaTarikh") String TaTarikh);
-
+    //F
+    @GET("Api/ApiGlobal/GetImageJSON")
+    Observable<Response<GetPrintFaktorSingleResult>> getPrintFaktorImage(@Query("ccDarkhastFaktor") String ccDarkhastFaktor,@Query("ccDarkhastHavaleh") String ccDarkhastHavaleh);
 
     //I
     @GET("Api/ApiGlobal/GetImageString")
@@ -590,14 +592,6 @@ public interface APIServiceRxjava {
     @GET("API/apisales/GetDarkhastFaktorKalaPishnahadi")
     Observable<Response<DarkhastFaktorKalaPishnahadiResult>>getDarkhastFaktorKalaPishnahadiResult(@Query("ccForoshandeh") String ccForoshandeh , @Query("ccmoshtarys") String ccmoshtarys);
 
-
-
-/***********************************************************************POST_REQUEST****************************************************************************/
-
-
-     @FormUrlEncoded
-     @POST("Api/ApiSales/UpdateResidImageDarkhastJSON")
-     Observable<Response<UpdateResidImageDarkhastResult>> updateResidImageDarkhastJSON(@Field("") String jsonData);
 
 
 

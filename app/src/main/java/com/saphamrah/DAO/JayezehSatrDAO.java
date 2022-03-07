@@ -493,6 +493,7 @@ Call<GetAllvJayezehSatrResult> call = apiServiceGet.getAllvJayezehSatr();
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             String query = "select * from jayezehsatr where  ccJayezeh = "+ccJayezeh+" AND Az<= " + mablaghArzeshAfzoodeh + " AND " + mablaghArzeshAfzoodeh  + "<= Ta";
+            Log.d("jayezeh" , "getccJayezehSatrForArzeshAfzoodeh query: " + query);
 
             Cursor cursor = db.rawQuery(query, null);
             if (cursor != null)
@@ -512,7 +513,7 @@ Call<GetAllvJayezehSatrResult> call = apiServiceGet.getAllvJayezehSatr();
             String message = context.getResources().getString(R.string.errorSelectAll , JayezehSatrModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "JayezehSatrDAO" , "" , "getccJayezehSatrForArzeshAfzoodeh" , "");
         }
-        Log.d("jayezeh" , "jayezehSatrs.size in dao : " + jayezehSatrs.size());
+        Log.d("jayezeh" , "getccJayezehSatrForArzeshAfzoodeh jayezehSatrs.size in dao : " + jayezehSatrs.size());
         if (jayezehSatrs.size()>0)
         return jayezehSatrs.get(0).getCcJayezehSatr();
         else

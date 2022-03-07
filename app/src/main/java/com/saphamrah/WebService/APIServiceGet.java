@@ -104,6 +104,10 @@ public interface APIServiceGet
 
 
     //F
+    @GET("Api/ApiSales/GetImageJSON")
+    Call<GetPrintFaktorSingleResult> getPrintFaktorImage(@Query("ccDarkhastFaktor") String ccDarkhastFaktor,@Query("ccDarkhastHavaleh") String ccDarkhastHavaleh);
+
+
     @GET("Api/ApiSales/GetForoshandehAmoozeshi_DeviceNumber")
     Call<GetForoshandehAmoozeshiResult> getForoshandehAmoozeshi(@Query("DeviceSerialNumber") String DeviceSerialNumber);
 
@@ -244,7 +248,7 @@ public interface APIServiceGet
     @GET("Api/ApiTablet/GetParameterChild")
     Call<GetParameterChildResult> getParameterChild(@Query("Noe_Titr_Satr") String noeTitrSatr , @Query("ccMarkazSazmanForosh") String ccMarkazSazmanForosh, @Query("ccMarkazAnbar") String ccMarkazAnbar, @Query("DateProgram") String DateProgram);
 
-    @GET("Api/apisales/GetPrintFaktor")
+    @GET("Api/apisales/GetPrintAndShareFaktor")
     Call<GetPrintFaktorResult> getPrintFaktor(@Query("ccAfrad") int ccAfrad);
 
     //R

@@ -6,8 +6,10 @@ import android.graphics.BitmapFactory;
 
 import com.saphamrah.Utils.Constants;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 public class ImageUtils
@@ -81,6 +83,27 @@ public class ImageUtils
          return file;
     }
 
+
+    public static File saveImageInFile(byte[] image,String uniqueID , String fileNameToSave) {
+        ImageUtils imageUtils = new ImageUtils();
+        String fileName = "Print-" + uniqueID + ".jpg";
+        File file = null;
+
+        try{
+            file = new File(fileNameToSave);
+            file.createNewFile();
+
+            //write the bytes in file
+            FileOutputStream fos =new  FileOutputStream(file);
+            fos.write(image);
+            fos.flush();
+            fos.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return file;
+    }
 
 
 

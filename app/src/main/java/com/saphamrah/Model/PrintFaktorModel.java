@@ -9,7 +9,9 @@ import com.google.gson.annotations.SerializedName;
 import org.json.JSONObject;
 
 public class PrintFaktorModel {
-
+    @SerializedName("ccDarkhastFaktor")
+    @Expose
+    private long ccDarkhastFaktor;
     @SerializedName("CodeMoshtary")
     @Expose
     private String CodeMoshtary;
@@ -36,6 +38,13 @@ public class PrintFaktorModel {
     private int ccDarkhastFaktorNoeForosh;
 
 
+    public long getCcDarkhastFaktor() {
+        return ccDarkhastFaktor;
+    }
+
+    public void setCcDarkhastFaktor(long ccDarkhastFaktor) {
+        this.ccDarkhastFaktor = ccDarkhastFaktor;
+    }
 
     public String getCodeMoshtary() {
         return CodeMoshtary;
@@ -105,8 +114,13 @@ public class PrintFaktorModel {
         return "PrintFaktor";
     }
 
+
+
     public String getCOLUMN_CodeMoshtary() {
         return "CodeMoshtary";
+    }
+    public String getCOLUMN_ccDarkhastFaktor() {
+        return "ccDarkhastFaktor";
     }
 
     public String getCOLUMN_NameMoshtary() {

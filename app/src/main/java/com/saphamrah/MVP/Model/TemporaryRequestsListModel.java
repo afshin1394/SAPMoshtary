@@ -413,16 +413,18 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
         DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor());
+        DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel = new DarkhastFaktorEmzaMoshtaryDAO(mPresenter.getAppContext()).getByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor()).get(0);
 
         DarkhastFaktorEmzaMoshtaryDAO darkhastFaktorEmzaMoshtaryDAO = new DarkhastFaktorEmzaMoshtaryDAO(mPresenter.getAppContext());
         ArrayList<DarkhastFaktorEmzaMoshtaryModel> darkhastFaktorEmzaMoshtaryModels = darkhastFaktorEmzaMoshtaryDAO.getByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor());
+        boolean hasReceiptImage = darkhastFaktorEmzaMoshtaryModel.getHave_ReceiptImage() == 1;
 
         ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
         boolean receiptImageObligation = Integer.parseInt(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_Require_Image_Customer_Confirm_Request())) == 1;
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshDAO.getIsSelect());
         if (noeMasouliat == MAMOURPAKHSH_SARD || noeMasouliat == MAMOURPAKHSH_SMART)
         {
-            if (receiptImageObligation && darkhastFaktorEmzaMoshtaryModels.get(0).getHave_ReceiptImage()==0){
+            if (receiptImageObligation && !hasReceiptImage){
                 mPresenter.onErrorSaveImage();
             }else{
                 mPresenter.onCheckSaveImage(customerDarkhastFaktorModel.getCcDarkhastFaktor(),darkhastFaktorModel.getCcDarkhastFaktorNoeForosh());
@@ -1171,42 +1173,6 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
 
     @Override
     public void insertReceiptImage(byte[] imageBytes,int position ,CustomerDarkhastFaktorModel customerDarkhastFaktorModel) {
-
-      ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
-      DarkhastFaktorEmzaMoshtaryRepository darkhastFaktorEmzaMoshtaryRepository = new DarkhastFaktorEmzaMoshtaryRepository(mPresenter.getAppContext());
-      darkhastFaktorEmzaMoshtaryRepository.sendReceiptImageRx(serverIpModel,mPresenter.getAppContext(),"TemporaryRequestListActivity",imageBytes,customerDarkhastFaktorModel.getCcDarkhastFaktor())
-              .observeOn(AndroidSchedulers.mainThread())
-              .subscribe(new Observer<Boolean>() {
-                  @Override
-                  public void onSubscribe(@androidx.annotation.NonNull Disposable d) {
-                      compositeDisposable.add(d);
-                  }
-
-                  @Override
-                  public void onNext(@androidx.annotation.NonNull Boolean sent) {
-                      Log.i("sendReceiptImageRx", "onNext: "+sent);
-                      if (sent){
-                          insertReceiptImageIntoLocalDB(position,imageBytes,customerDarkhastFaktorModel);
-                      }else{
-                          onError(new Throwable());
-                      }
-                  }
-
-                  @Override
-                  public void onError(@androidx.annotation.NonNull Throwable e) {
-
-                      mPresenter.onError(R.string.errorUpdateReceiptImage);
-                  }
-
-                  @Override
-                  public void onComplete() {
-
-                  }
-              });
-
-    }
-
-    private void insertReceiptImageIntoLocalDB(int position,byte[] imageBytes, CustomerDarkhastFaktorModel customerDarkhastFaktorModel) {
         DarkhastFaktorEmzaMoshtaryRepository darkhastFaktorEmzaMoshtaryRepository = new DarkhastFaktorEmzaMoshtaryRepository(mPresenter.getAppContext());
         darkhastFaktorEmzaMoshtaryRepository.updateReceiptImageByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor(),imageBytes)
                 .observeOn(AndroidSchedulers.mainThread())

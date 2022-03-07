@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
+import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.MarjoeeKamelImageModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -141,12 +142,31 @@ public class DarkhastFaktorEmzaMoshtaryDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(DarkhastFaktorEmzaMoshtaryModel.TableName(), allColumns(), DarkhastFaktorEmzaMoshtaryModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor, null, null, null, null);
+            String query = " select dfe.*,df.UniqID_Tablet  from DarkhastFaktor_EmzaMoshtary dfe " +
+                    "left join DarkhastFaktor df on dfe.ccDarkhastFaktor = df.ccDarkhastFaktor " +
+                    " where dfe.ccDarkhastFaktor ="+ccDarkhastFaktor;
+            Cursor cursor = db.rawQuery(query,null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)
                 {
-                    darkhastFaktorEmzaMoshtaryModels = cursorToModel(cursor);
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast())
+                    {
+                        DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel = new DarkhastFaktorEmzaMoshtaryModel();
+
+                        darkhastFaktorEmzaMoshtaryModel.setCcDarkhastFaktor(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_ccDarkhastFaktor())));
+                        darkhastFaktorEmzaMoshtaryModel.setCcMoshtary(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_ccMoshtary())));
+                        darkhastFaktorEmzaMoshtaryModel.setEmzaImage(cursor.getBlob(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_EmzaImage())));
+                        darkhastFaktorEmzaMoshtaryModel.setDarkhastFaktorImage(cursor.getBlob(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_DarkhastFaktorImage())));
+                        darkhastFaktorEmzaMoshtaryModel.setReceiptImage(cursor.getBlob(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_ReceiptImage())));
+                        darkhastFaktorEmzaMoshtaryModel.setHave_FaktorImage(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_FaktorImage())));
+                        darkhastFaktorEmzaMoshtaryModel.setHave_ReceiptImage(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_ReceiptImage())));
+                        darkhastFaktorEmzaMoshtaryModel.setExtraProp_UniqueID(cursor.getString(cursor.getColumnIndex("UniqID_Tablet")));
+                        darkhastFaktorEmzaMoshtaryModels.add(darkhastFaktorEmzaMoshtaryModel);
+                        cursor.moveToNext();
+                    }
+
                 }
                 cursor.close();
             }

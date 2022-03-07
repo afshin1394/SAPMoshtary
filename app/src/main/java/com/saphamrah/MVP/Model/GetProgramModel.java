@@ -2552,9 +2552,8 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                             counter = ++itemCounter;
                         }
                         if (deleteResult && insertResult) {
-                            for (Object model : arrayListData) {
-                                ccJayezehs += "," + ((JayezehModel) model).getCcJayezeh();
-                            }
+                            ccJayezehs = jayezehDAO.getDistinctccJayezeh();
+                            Log.d("GetProgram","ccJayezehs:" + ccJayezehs);
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), counter);
                             getJayezehSatr(getProgramType, ccJayezehs);
                         } else {

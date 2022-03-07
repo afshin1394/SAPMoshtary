@@ -807,7 +807,11 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(MoshtaryModel.TableName(), allColumns(),  "ccMoshtary= ?", new String[]{String.valueOf(ccMoshtary)}, null, null,  null);
+            String query = "SELECT * FROM Moshtary WHERE ccMoshtary=" + ccMoshtary;
+            //Cursor cursor = db.query(MoshtaryModel.TableName(), allColumns(),  "ccMoshtary= ?", new String[]{String.valueOf(ccMoshtary)}, null, null,  null);
+            Log.d("MoshtaryDAO","getByccMoshtary ccMoshtary= " + ccMoshtary);
+            Log.d("MoshtaryDAO","getByccMoshtary query= " + query);
+            Cursor cursor = db.rawQuery(query, null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)

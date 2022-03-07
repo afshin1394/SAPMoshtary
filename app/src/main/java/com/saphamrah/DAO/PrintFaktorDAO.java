@@ -13,7 +13,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.saphamrah.Application.BaseApplication;
+import com.saphamrah.Model.AdamDarkhastModel;
 import com.saphamrah.Model.DarkhastFaktorRoozSortModel;
+import com.saphamrah.Model.PorseshnamehModel;
 import com.saphamrah.Model.PrintFaktorModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.TizerModel;
@@ -26,6 +28,7 @@ import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetPrintFaktorResult;
+import com.saphamrah.WebService.ServiceResponse.GetPrintFaktorSingleResult;
 import com.saphamrah.WebService.ServiceResponse.GetTizeriResult;
 import com.saphamrah.protos.InvoicePrintGrpc;
 import com.saphamrah.protos.InvoicePrintReply;
@@ -80,6 +83,7 @@ public class PrintFaktorDAO
     {
         return new String[]
                 {
+                        modelGetTABLE_NAME.getCOLUMN_ccDarkhastFaktor(),
                         modelGetTABLE_NAME.getCOLUMN_CodeMoshtary(),
                         modelGetTABLE_NAME.getCOLUMN_MablaghFaktor(),
                         modelGetTABLE_NAME.getCOLUMN_NameMoshtary(),
@@ -313,7 +317,26 @@ public class PrintFaktorDAO
         }
     }
 
-
+    public boolean updateImage(String image,String uniqueId)
+    {
+        try
+        {
+            Log.i("uniqueeeee", "updateImage: "+uniqueId);
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues contentValues = imageToContentvalue(image);
+            db.update(modelGetTABLE_NAME.getTABLE_NAME(), contentValues, modelGetTABLE_NAME.getCOLUMN_UniqID_Tablet() + " = ?", new String[]{String.valueOf(uniqueId)});
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = BaseApplication.getContext().getResources().getString(R.string.errorDeleteAll , modelGetTABLE_NAME.getTABLE_NAME()) + "\n" + exception.toString();
+            logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), message, "PrintFaktorDAO" , "" , "updateImage" , "");
+            return false;
+        }
+    }
     // get all data as db
     public ArrayList<PrintFaktorModel> getAll()
     {
@@ -347,7 +370,7 @@ public class PrintFaktorDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query =  "SELECT Radif,CodeMoshtary,NameMoshtary,ShomarehFaktor,MablaghFaktor,UniqID_Tablet,ccDarkhastFaktorNoeForosh,'' AS FaktorImage \n" +
+            String query =  "SELECT Radif,ccDarkhastFaktor,CodeMoshtary,NameMoshtary,ShomarehFaktor,MablaghFaktor,UniqID_Tablet,ccDarkhastFaktorNoeForosh,'' AS FaktorImage \n" +
                             "FROM PrintFaktor";
             Cursor cursor = db.rawQuery(query , null);
 
@@ -372,6 +395,8 @@ public class PrintFaktorDAO
     }
 
 
+
+
     public PrintFaktorModel getImageWithUniqID(String UniqID_Tablet)
     {
         PrintFaktorModel printFaktorModel = new PrintFaktorModel();
@@ -387,6 +412,8 @@ public class PrintFaktorDAO
             {
                 if (cursor.getCount() > 0)
                 {
+
+                    cursor.moveToFirst();
                     printFaktorModel = cursorToModel(cursor).get(0);
                 }
                 cursor.close();
@@ -422,17 +449,66 @@ public class PrintFaktorDAO
         }
     }
 
+
+    public boolean checkPrintFaktorExist(String uniqueId) {
+        String printFaktor = "";
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query =  " SELECT FaktorImage \n" +
+                    " FROM PrintFaktor \n" +
+                    " WHERE (UniqID_Tablet = '" + uniqueId + "')";
+            Cursor cursor = db.rawQuery(query , null);
+
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    printFaktor = cursor.getString(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = BaseApplication.getContext().getResources().getString(R.string.errorSelectAll , modelGetTABLE_NAME.getTABLE_NAME()) + "\n" + exception.toString();
+            logger.insertLogToDB(BaseApplication.getContext(), Constants.LOG_EXCEPTION(), message, "PrintFaktorDAO" , "" , "checkPrintFaktorExist" , "");
+        }
+        if (printFaktor==null)
+        return false;
+        else
+            return true;
+    }
+
+
+    private static ContentValues imageToContentvalue(String image)
+    {
+        ContentValues contentValues = new ContentValues();
+        PrintFaktorModel printFaktorModel = new PrintFaktorModel();
+
+        contentValues.put(printFaktorModel.getCOLUMN_FaktorImage() ,image);
+
+
+
+        return contentValues;
+    }
+
     private static ContentValues modelToContentvalue(PrintFaktorModel model)
     {
         ContentValues contentValues = new ContentValues();
         PrintFaktorModel printFaktorModel = new PrintFaktorModel();
+        contentValues.put(printFaktorModel.getCOLUMN_ccDarkhastFaktor() , model.getCcDarkhastFaktor());
         contentValues.put(printFaktorModel.getCOLUMN_CodeMoshtary() , model.getCodeMoshtary());
         contentValues.put(printFaktorModel.getCOLUMN_MablaghFaktor() , model.getMablaghFaktor());
         contentValues.put(printFaktorModel.getCOLUMN_NameMoshtary() , model.getNameMoshtary());
         contentValues.put(printFaktorModel.getCOLUMN_ShomarehFaktor() , model.getShomarehFaktor());
         contentValues.put(printFaktorModel.getCOLUMN_Radif() , model.getRadif());
         contentValues.put(printFaktorModel.getCOLUMN_UniqID_Tablet() , model.getUniqID_Tablet());
-        contentValues.put(printFaktorModel.getCOLUMN_FaktorImage() , model.getFaktorImage());
+//        contentValues.put(printFaktorModel.getCOLUMN_FaktorImage() , model.getFaktorImage());
         contentValues.put(printFaktorModel.getCOLUMN_ccDarkhastFaktorNoeForosh() , model.getCcDarkhastFaktorNoeForosh());
 
 
@@ -451,6 +527,7 @@ public class PrintFaktorDAO
         while (!cursor.isAfterLast())
         {
             PrintFaktorModel model = new PrintFaktorModel();
+            model.setCcDarkhastFaktor(cursor.getLong(cursor.getColumnIndex(model.getCOLUMN_ccDarkhastFaktor())));
             model.setCodeMoshtary(cursor.getString(cursor.getColumnIndex(model.getCOLUMN_CodeMoshtary())));
             model.setMablaghFaktor(cursor.getDouble(cursor.getColumnIndex(model.getCOLUMN_MablaghFaktor())));
             model.setNameMoshtary(cursor.getString(cursor.getColumnIndex(model.getCOLUMN_NameMoshtary())));
@@ -467,5 +544,100 @@ public class PrintFaktorDAO
     }
 
 
+    public void fetchPrintFaktorSingle(Context context, String ccDarkhastFaktor, String ccDarkhastHavaleh, RetrofitResponse retrofitResponse) {
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+        {
+            String message = "can't find server";
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, PrintFaktorDAO.class.getSimpleName(), "PrintFaktorActivity", "fetchPrintFaktorSingle", "");
+            retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR() , message);
 
+        }
+        else
+        {
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<GetPrintFaktorSingleResult> call = apiServiceGet.getPrintFaktorImage(ccDarkhastFaktor,ccDarkhastHavaleh);
+            call.enqueue(new Callback<GetPrintFaktorSingleResult>()
+            {
+                @Override
+                public void onResponse(Call<GetPrintFaktorSingleResult> call, Response<GetPrintFaktorSingleResult> response)
+                {
+                    try
+                    {
+                        if (response.raw().body() != null)
+                        {
+                            long contentLength = response.raw().body().contentLength();
+                            PubFunc.Logger logger = new PubFunc().new Logger();
+                            logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, PrintFaktorDAO.class.getSimpleName(), "", "fetchPrintFaktor", "onResponse");
+                        }
+                    }
+                    catch (Exception e){e.printStackTrace();}
+                    try
+                    {
+                        if (response.isSuccessful())
+                        {
+                            GetPrintFaktorSingleResult result = response.body();
+                            if (result != null)
+                            {
+                                if (result.getSuccess())
+                                {
+                                    retrofitResponse.onSuccess(result.getData());
+                                }
+                                else
+                                {
+                                    PubFunc.Logger logger = new PubFunc().new Logger();
+                                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), PrintFaktorDAO.class.getSimpleName(), "PrintFaktorActivity", "fetchPrintFaktor", "onResponse");
+                                    retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
+                                }
+                            }
+                            else
+                            {
+                                String endpoint = "";
+                                try
+                                {
+                                    endpoint = call.request().url().toString();
+                                }catch (Exception e){e.printStackTrace();}
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s",context.getResources().getString(R.string.resultIsNull) , endpoint), PrintFaktorDAO.class.getSimpleName(), "fetchPrintFaktorSingle", "fetchPrintFaktor", "onResponse");
+                                retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
+                            }
+                        }
+                        else
+                        {
+                            String endpoint = "";
+                            try
+                            {
+                                endpoint = call.request().url().toString();
+                            }catch (Exception e){e.printStackTrace();}
+                            String message = String.format("error body : %1$s , code : %2$s * %3$s" , response.message() , response.code(), endpoint);
+                            PubFunc.Logger logger = new PubFunc().new Logger();
+                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, PrintFaktorDAO.class.getSimpleName(), "fetchPrintFaktorSingle", "fetchPrintFaktor", "onResponse");
+                            retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), message);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        exception.printStackTrace();
+                        PubFunc.Logger logger = new PubFunc().new Logger();
+                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), PrintFaktorDAO.class.getSimpleName(), "fetchPrintFaktorSingle", "fetchPrintFaktor", "onResponse");
+                        retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION() , exception.toString());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<GetPrintFaktorSingleResult> call, Throwable t)
+                {
+                    String endpoint = "";
+                    try
+                    {
+                        endpoint = call.request().url().toString();
+                    }catch (Exception e){e.printStackTrace();}
+                    PubFunc.Logger logger = new PubFunc().new Logger();
+                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", t.getMessage(), endpoint), PrintFaktorDAO.class.getSimpleName(), "fetchPrintFaktorSingle", "fetchPrintFaktor", "onFailure");
+                    retrofitResponse.onFailed(Constants.RETROFIT_THROWABLE() , t.getMessage());
+                }
+            });
+        }
+    }
 }

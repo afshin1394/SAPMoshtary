@@ -3935,6 +3935,9 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 if (!VerifyRequestActivity.SuccessGetBonus && sumMablaghBaArzeshAfzoodeh>0)
                 {
                     if (darkhastFaktorTakhfifDAO.deleteTakhfifByCodeNoe(ccDarkhastFaktor, DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh())) {
+                        Log.d("VerifyRequest", "AsyncTaskMohasebehJayezehArzeshAfzoodeh sumMablaghKol:"+ sumMablaghKol + " sumMablaghBaArzeshAfzoodeh:" + sumMablaghBaArzeshAfzoodeh +" sumTedadAghlam:" + sumTedadAghlam + " tedadAghlam:" + tedadAghlam + " sumHajm:"+ sumHajm + " sumVazn:" + sumVazn + " vaznFaktor:" + vaznFaktor);
+                        Log.d("VerifyRequest", "AsyncTaskMohasebehJayezehArzeshAfzoodeh hajmFaktor:"+ hajmFaktor + " sumMablaghKhales:" + sumMablaghKhales +" sumTedadAghlamPishnehadiBiSetareh:" + sumTedadAghlamPishnehadiBiSetareh );
+
                         AsyncTaskMohasebehJayezehArzeshAfzoodeh asyncTaskMohasebehJayezehArzeshAfzoodeh = new AsyncTaskMohasebehJayezehArzeshAfzoodeh(sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumTedadAghlam, tedadAghlam, sumHajm, sumVazn, vaznFaktor, hajmFaktor, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh);
                         asyncTaskMohasebehJayezehArzeshAfzoodeh.execute();
                     }
@@ -3949,13 +3952,17 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
                     if( sizeDFJ>0 || sizeDFT>0)
                     {
-                        if (darkhastFaktorTakhfifDAO.deleteTakhfifByCodeNoe(ccDarkhastFaktor,DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh()))
-                            mPresenter.onGetRequestDetail(sumTedadAghlam, tedadAghlam, sumVazn, sumHajm, vaznFaktor, hajmFaktor, sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh,checkCanSelectBonus());
+                        if (darkhastFaktorTakhfifDAO.deleteTakhfifByCodeNoe(ccDarkhastFaktor,DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh())) {
+                            Log.d("jayezeh","GetRequestDetail ArzeshAfzodeh if sizeDFJ:" + sizeDFJ + ", sizeDFT:"+ sizeDFT);
+                            mPresenter.onGetRequestDetail(sumTedadAghlam, tedadAghlam, sumVazn, sumHajm, vaznFaktor, hajmFaktor, sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh, checkCanSelectBonus());
+                        }
                         else
                             mPresenter.onErrorOperations(R.string.errorOperation);
                     }
-                    else
-                        mPresenter.onGetRequestDetail(sumTedadAghlam, tedadAghlam, sumVazn, sumHajm, vaznFaktor, hajmFaktor, sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh,checkCanSelectBonus());
+                    else {
+                        Log.d("jayezeh","GetRequestDetail ArzeshAfzodeh else sizeDFJ:" + sizeDFJ + ", sizeDFT:"+ sizeDFT);
+                        mPresenter.onGetRequestDetail(sumTedadAghlam, tedadAghlam, sumVazn, sumHajm, vaznFaktor, hajmFaktor, sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh, checkCanSelectBonus());
+                    }
 
                 }
             }
@@ -4142,43 +4149,58 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
                 SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
                 long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(), -1);
+                Log.d("JayezehArzeshAfzoodeh","ccDarkhastFaktor:" + ccDarkhastFaktor);
+
                 DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
                 DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
-                MoshtaryModel moshtary = moshtaryDAO.getByccMoshtary(darkhastFaktorModel.getCcMoshtary());
+                Log.d("JayezehArzeshAfzoodeh","darkhastFaktorModel:" + darkhastFaktorModel.toString());
 
-                MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
-                MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(moshtary.getCcMoshtary());
+                MoshtaryModel moshtary = moshtaryDAO.getByccMoshtary(darkhastFaktorModel.getCcMoshtary());
+                Log.d("JayezehArzeshAfzoodeh","moshtary:" + moshtary.toString());
+
+                //MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
+                //MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(moshtary.getCcMoshtary());
                 JayezehDAO jayezehDAO = new JayezehDAO(mPresenter.getAppContext());
                 JayezehSatrDAO jayezehSatrDAO = new JayezehSatrDAO(mPresenter.getAppContext());
-                JayezehModel jayezehModel = jayezehDAO.getArzeshAfzoodehJayezeh(moshtaryModel, darkhastFaktorModel.getCodeNoeHaml());
-                Log.d("","jayezehModel size" + jayezehModel.toString());
+                JayezehModel jayezehModel = jayezehDAO.getArzeshAfzoodehJayezeh(moshtary, darkhastFaktorModel.getCodeNoeHaml());
+
                 if(jayezehModel != null)
                 {
-                int ccJayezehSatr = jayezehSatrDAO.getccJayezehSatrForArzeshAfzoodeh(jayezehModel.getCcJayezeh(), sumMablaghBaArzeshAfzoodeh);
+                    Log.d("JayezehArzeshAfzoodeh","jayezehModel :" + jayezehModel.toString());
+                    int ccJayezehSatr = 0;
+                    ccJayezehSatr = jayezehSatrDAO.getccJayezehSatrForArzeshAfzoodeh(jayezehModel.getCcJayezeh(), sumMablaghBaArzeshAfzoodeh);
+                        Log.d("JayezehArzeshAfzoodeh","ccJayezehSatr :" + ccJayezehSatr);
 
-
-                    DarkhastFaktorTakhfifModel model = new DarkhastFaktorTakhfifModel();
-                    model.setCcDarkhastFaktor(ccDarkhastFaktor);
-                    model.setCcTakhfif(jayezehModel.getCcJayezeh());
-                    model.setExtraProp_ccJayezehTakhfif(ccJayezehSatr);
-                    model.setSharhTakhfif(jayezehModel.getSharhJayezeh());
-                    model.setCodeNoeTakhfif(jayezehModel.getCodeNoe());
-                    model.setMablaghTakhfif((long) sumMablaghBaArzeshAfzoodeh);
-                    model.setExtraProp_ForJayezeh(1);
-                    model.setExtraProp_IsTakhfifMazad(0);
-                    DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
-                    if (darkhastFaktorTakhfifDAO.insert(model))
+                    if(ccJayezehSatr>0){
+                        DarkhastFaktorTakhfifModel model = new DarkhastFaktorTakhfifModel();
+                        model.setCcDarkhastFaktor(ccDarkhastFaktor);
+                        model.setCcTakhfif(jayezehModel.getCcJayezeh());
+                        model.setExtraProp_ccJayezehTakhfif(ccJayezehSatr);
+                        model.setSharhTakhfif(jayezehModel.getSharhJayezeh());
+                        model.setCodeNoeTakhfif(jayezehModel.getCodeNoe());
+                        model.setMablaghTakhfif((long) sumMablaghBaArzeshAfzoodeh);
+                        model.setExtraProp_ForJayezeh(1);
+                        model.setExtraProp_IsTakhfifMazad(0);
+                        DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
+                        Log.d("JayezehArzeshAfzoodeh","sumMablaghBaArzeshAfzoodeh:" + sumMablaghBaArzeshAfzoodeh );
+                        if (darkhastFaktorTakhfifDAO.insert(model))
+                            return 1;
+                        else
+                            return 0;
+                    }
+                    else{
                         return 1;
-                    else
-                        return 0;
+                    }
                 }
                 else
                 {
                     return 1;
                 }
-                }catch(Exception e){
-                    return 0;
-                }
+            }catch(Exception e){
+                e.printStackTrace();
+                setLogToDB(Constants.LOG_EXCEPTION(), e.toString(), "VerifyRequestModel", "", "AsyncTaskMohasebehJayezehArzeshAfzoodeh", "");
+                return 0;
+            }
 
 
         }
@@ -4186,9 +4208,11 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         @Override
         protected void onPostExecute(Integer result)
         {
-               if (result == 1)
-                   mPresenter.onGetRequestDetail(sumTedadAghlam, tedadAghlam, sumVazn, sumHajm, vaznFaktor, hajmFaktor, sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh,checkCanSelectBonus());
-               else
+               if (result == 1) {
+                   Log.d("JayezehArzeshAfzoodeh","onGetRequestDetail"  );
+                   mPresenter.onGetRequestDetail(sumTedadAghlam, tedadAghlam, sumVazn, sumHajm, vaznFaktor, hajmFaktor, sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh, checkCanSelectBonus());
+               }
+                   else
                    mPresenter.onErrorOperations(R.string.errorOperationJayezehArzeshAfzodeh);
 
         }

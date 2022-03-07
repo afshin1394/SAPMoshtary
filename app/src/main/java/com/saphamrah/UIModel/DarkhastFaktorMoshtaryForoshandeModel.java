@@ -7,6 +7,7 @@ public class DarkhastFaktorMoshtaryForoshandeModel
 {
 
     private static final String COLUMN_ccDarkhastFaktor = "ccDarkhastFaktor";
+    private static final String COLUMN_UniqID_Tablet = "UniqID_Tablet";
     private static final String COLUMN_ccDarkhastFaktorNoeForosh = "ccDarkhastFaktorNoeForosh";
     private static final String COLUMN_TarikhFaktor = "TarikhFaktor";
     private static final String COLUMN_TarikhErsal = "TarikhErsal";
@@ -40,6 +41,7 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     private static final String COLUMN_ccMoshtaryGharardad = "ccMoshtaryGharardad";
     private static final String COLUMN_MoshtaryGharardadccSazmanForosh = "MoshtaryGharardadccSazmanForosh";
     private static final String COLUMN_NameSazmanForosh = "NameSazmanForosh";
+    private static final String COLUMN_TarikhMoarefiMoshtary = "TarikhMoarefiMoshtary";
 
 
     public static String COLUMN_ccDarkhastFaktor() {
@@ -47,6 +49,9 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     }
     public static String COLUMN_ccDarkhastFaktorNoeForosh() {
         return COLUMN_ccDarkhastFaktorNoeForosh;
+    }
+    public static String COLUMN_UniqID_Tablet() {
+        return COLUMN_UniqID_Tablet;
     }
     public static String COLUMN_TarikhFaktor() {
         return COLUMN_TarikhFaktor;
@@ -144,8 +149,12 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     public static String COLUMN_NameSazmanForosh() {
         return COLUMN_NameSazmanForosh;
     }
+    public static String COLUMN_TarikhMoarefiMoshtary() {
+        return COLUMN_TarikhMoarefiMoshtary;
+    }
 
     private long ccDarkhastFaktor;
+    private String uniqueID_tablet;
     private int ccForoshandeh;
     private int ccMoshtary;
     private int ccUser;
@@ -181,6 +190,7 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     private int MoshtaryGharardadccSazmanForosh;
     private int ExtraProp_SendLocation = 0;
     private String NameSazmanForosh = "";
+    private String TarikhMoarefiMoshtary;
 
     /**
      * this is just for show details vosol
@@ -202,6 +212,15 @@ public class DarkhastFaktorMoshtaryForoshandeModel
 
     public void setCcDarkhastFaktor(long ccDarkhastFaktor) {
         this.ccDarkhastFaktor = ccDarkhastFaktor;
+    }
+
+
+    public String getUniqueID_tablet() {
+        return uniqueID_tablet;
+    }
+
+    public void setUniqueID_tablet(String uniqueID_tablet) {
+        this.uniqueID_tablet = uniqueID_tablet;
     }
 
     public int getCcForoshandeh() {
@@ -524,6 +543,14 @@ public class DarkhastFaktorMoshtaryForoshandeModel
         NameSazmanForosh = nameSazmanForosh;
     }
 
+    public String getTarikhMoarefiMoshtary() {
+        return TarikhMoarefiMoshtary;
+    }
+
+    public void setTarikhMoarefiMoshtary(String tarikhMoarefiMoshtary) {
+        TarikhMoarefiMoshtary = tarikhMoarefiMoshtary;
+    }
+
     @NonNull
     @Override
     public String toString()
@@ -561,6 +588,7 @@ public class DarkhastFaktorMoshtaryForoshandeModel
                 ", ccMoshtaryGharardad=" + ccMoshtaryGharardad +
                 ", MoshtaryGharardadccSazmanForosh=" + MoshtaryGharardadccSazmanForosh +
                 ", NameSazmanForosh=" + NameSazmanForosh +
+                ", TarikhMoarefiMoshtary=" + TarikhMoarefiMoshtary +
                 '}';
     }
 }

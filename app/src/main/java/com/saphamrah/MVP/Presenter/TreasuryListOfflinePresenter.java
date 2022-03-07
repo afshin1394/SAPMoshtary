@@ -1,14 +1,23 @@
 package com.saphamrah.MVP.Presenter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 
 import com.saphamrah.BaseMVP.TreasuryListOfflineMVP;
 import com.saphamrah.MVP.Model.TreasuryListOfflineModel;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
+import com.saphamrah.PubFunc.FileUtils;
+import com.saphamrah.PubFunc.ImageUtils;
+import com.saphamrah.PubFunc.PrinterUtils;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.DarkhastFaktorMoshtaryForoshandeModel;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.Printer;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
@@ -56,9 +65,9 @@ public class TreasuryListOfflinePresenter implements TreasuryListOfflineMVP.Pres
     }
 
     @Override
-    public void getFaktorImage(long ccDarkhastFaktor)
+    public void getFaktorImage(long ccDarkhastFaktor,int action)
     {
-        mModel.getFaktorImage(ccDarkhastFaktor);
+        mModel.getFaktorImage(ccDarkhastFaktor,action);
     }
 
 
@@ -78,7 +87,15 @@ public class TreasuryListOfflinePresenter implements TreasuryListOfflineMVP.Pres
     }
 
 
+
+
+
     /////////////////////////// RequiredPresenterOps ///////////////////////////
+
+    @Override
+    public Activity getActivity() {
+        return mView.get().getActivity();
+    }
 
     @Override
     public Context getAppContext()
@@ -122,15 +139,54 @@ public class TreasuryListOfflinePresenter implements TreasuryListOfflineMVP.Pres
     }
 
     @Override
-    public void onGetFaktorImage(DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel)
+    public void onGetFaktorImage(DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel,int action)
     {
-        if (darkhastFaktorEmzaMoshtaryModel != null && darkhastFaktorEmzaMoshtaryModel.getDarkhastFaktorImage() != null && darkhastFaktorEmzaMoshtaryModel.getDarkhastFaktorImage().length > 0)
-        {
-            mView.get().onGetFaktorImage(darkhastFaktorEmzaMoshtaryModel.getDarkhastFaktorImage());
+
+        if (darkhastFaktorEmzaMoshtaryModel != null && darkhastFaktorEmzaMoshtaryModel.getDarkhastFaktorImage() != null && darkhastFaktorEmzaMoshtaryModel.getDarkhastFaktorImage().length > 0) {
+            if (action == Constants.PRINT()) {
+                try {
+                    print(darkhastFaktorEmzaMoshtaryModel);
+                } catch (Exception e) {
+                    e.getMessage();
+                    mView.get().showToast(R.string.errorHaveNotImageForPrint, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                }
+            } else if (action == Constants.SHOW_IMAGE()) {
+                mView.get().onGetFaktorImage(darkhastFaktorEmzaMoshtaryModel.getDarkhastFaktorImage());
+            }
         }
         else
         {
             mView.get().showToast(R.string.notFoundAnyFaktorImage, Constants.INFO_MESSAGE(), Constants.DURATION_LONG());
+        }
+    }
+
+    public void print(DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel) {
+        File dir = new File(android.os.Environment.getExternalStoragePublicDirectory("/SapHamrah/").getAbsolutePath() +"/Print" );
+
+        String fileName = "Print-" + darkhastFaktorEmzaMoshtaryModel.getExtraProp_UniqueID() + ".jpg";
+        File file = ImageUtils.saveImageInFile(darkhastFaktorEmzaMoshtaryModel.getDarkhastFaktorImage(),String.valueOf( darkhastFaktorEmzaMoshtaryModel.getExtraProp_UniqueID()),dir + "/" + fileName);
+        if (file.exists()){
+            try {
+                Bitmap tmp = BitmapFactory.decodeFile(dir + "/" + fileName);
+                FileUtils.Resize(getAppContext(),dir,tmp,String.valueOf( darkhastFaktorEmzaMoshtaryModel.getExtraProp_UniqueID()));
+            } catch (Exception e) {
+                e.getMessage();
+                mView.get().showToast(R.string.errorHaveNotImageForPrint, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+            }
+            Printer printer = PrinterUtils.setPrinter(getActivity());
+
+            if (printer!=null) {
+                mView.get().showToast(printer.getPrinterStateMessage(),Constants.INFO_MESSAGE(),Constants.DURATION_LONG());
+                String PathFaktorImage = Environment.getExternalStoragePublicDirectory("/SapHamrah/") + "/Print/Print-" + darkhastFaktorEmzaMoshtaryModel.getExtraProp_UniqueID() + ".jpg";
+                if (printer.checkIsAvailable()){
+                    printer.print(PathFaktorImage);
+                }else{
+                    mView.get().showToast(R.string.PrinterNotAvailable, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                }
+
+            }else{
+                mView.get().showToast(R.string.PrinterNotAvailable, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+            }
         }
     }
 

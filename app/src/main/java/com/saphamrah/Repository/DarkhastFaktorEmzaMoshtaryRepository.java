@@ -73,33 +73,4 @@ public class DarkhastFaktorEmzaMoshtaryRepository {
         return RxAsync.makeObservable(insertGroupCallable(darkhastFaktorEmzaMoshtaryModels))
                 .subscribeOn(Schedulers.io());
     }
-
-
-    public Observable<Boolean> sendReceiptImageRx(ServerIpModel serverIpModel, Context context,String activityNameForLog,byte[] imageBytes,long ccDarkhastFaktor) {
-        APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
-        JSONObject jsonObject = new JSONObject();
-        try {
-            JSONObject jsonObjectFinal = new JSONObject();
-            jsonObject.put("ccDarkhastFaktor", ccDarkhastFaktor);
-            jsonObject.put("receiptImage", Base64.encodeToString(imageBytes, Base64.NO_WRAP));
-            jsonObjectFinal.put("receiptImageDarkhast",jsonObject);
-            return apiServiceRxjava.updateResidImageDarkhastJSON(jsonObjectFinal.toString())
-                    .compose(RxHttpErrorHandler.parseHttpErrors(this.getClass().getSimpleName(),activityNameForLog,"fetchApiServiceRx","sendReceiptImageRx"))
-                    .map(updateResidImageDarkhastResultResponse -> {
-                        if (updateResidImageDarkhastResultResponse.body()!=null) {
-                            return updateResidImageDarkhastResultResponse.body().getSuccess();
-                        }
-                        else
-                            return false;
-                    }).subscribeOn(Schedulers.io());
-
-        }catch (Exception e){
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), e.getMessage(), "", "PrintActivity", "fetchApiServiceRx", "sendReceiptImageRx");
-            return Observable.just(true);
-        }
-
-
-
-    }
 }

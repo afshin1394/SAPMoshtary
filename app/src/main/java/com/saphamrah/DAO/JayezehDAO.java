@@ -542,7 +542,7 @@ Call<GetAllvJayezehByccMarkazForoshResult> call = apiServiceGet.getJayezeh("1", 
 
 
 
-            Log.d("JayezehDAO","query: " + StrSQL);
+            Log.d("JayezehDAO","getArzeshAfzoodehJayezeh query: " + StrSQL);
             Cursor cursor = db.rawQuery(StrSQL, null);
 
 
@@ -805,6 +805,43 @@ Call<GetAllvJayezehByccMarkazForoshResult> call = apiServiceGet.getJayezeh("1", 
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "JayezehDAO" , "" , "getByMoshtary" , "");
         }
         return jayezehByccKalaCodeModels;
+    }
+
+    public String getDistinctccJayezeh()
+    {
+        String ccJayezehs ="-1,";
+
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query = "SELECT GROUP_CONCAT(DISTINCT ccJayezeh) FROM Jayezeh";
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast())
+                    {
+                        if (cursor.getString(0)!=null) {
+                            ccJayezehs += cursor.getString(0);
+                        }
+                        cursor.moveToNext();
+                    }
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , JayezehModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "JayezehDAO" , "" , "getByMoshtary" , "");
+        }
+
+        return ccJayezehs;
     }
 
     public boolean deleteAll()

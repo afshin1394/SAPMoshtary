@@ -23,7 +23,6 @@ public class DarkhastFaktorEmzaMoshtaryModel
     private static final String COLUMN_Have_ReceiptImage = "Have_ReceiptImage";
     private static final String COLUMN_Have_FaktorImage = "Have_FaktorImage";
 
-
     public static String TableName() {
         return TABLE_NAME;
     }
@@ -51,6 +50,7 @@ public class DarkhastFaktorEmzaMoshtaryModel
 
 
 
+
     private long ccDarkhastFaktor;
     private int ccMoshtary;
     private byte[] EmzaImage;
@@ -58,6 +58,7 @@ public class DarkhastFaktorEmzaMoshtaryModel
     private byte[] ReceiptImage;
     private int Have_FaktorImage;
     private int Have_ReceiptImage;
+    private String ExtraProp_UniqueID;
 
 
     public long getCcDarkhastFaktor() {
@@ -111,6 +112,14 @@ public class DarkhastFaktorEmzaMoshtaryModel
         Have_ReceiptImage = have_ReceiptImage;
     }
 
+    public String getExtraProp_UniqueID() {
+        return ExtraProp_UniqueID;
+    }
+
+    public void setExtraProp_UniqueID(String extraProp_UniqueID) {
+        ExtraProp_UniqueID = extraProp_UniqueID;
+    }
+
     public String toJsonString()
     {
         String darkhastFaktorImage = Base64.encodeToString(DarkhastFaktorImage , Base64.DEFAULT);
@@ -132,11 +141,15 @@ public class DarkhastFaktorEmzaMoshtaryModel
     {
         JSONObject jsonObject = new JSONObject();
         String encodedImage = Base64.encodeToString(DarkhastFaktorImage, Base64.NO_WRAP);
+        String receiptImage="";
+        if(ReceiptImage!=null)
+            receiptImage = Base64.encodeToString(ReceiptImage, Base64.NO_WRAP);
         try
         {
             jsonObject.put("ccDarkhastFaktor" , ccDarkhastFaktor);
             jsonObject.put("ccMoshtary" , ccMoshtary);
             jsonObject.put("Image" , encodedImage);
+            jsonObject.put("receiptImage" , receiptImage);
             jsonObject.put("Noe" , 1);
         }
         catch (Exception exception)

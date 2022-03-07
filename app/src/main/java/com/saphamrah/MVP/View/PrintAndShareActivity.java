@@ -17,6 +17,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -33,7 +34,9 @@ import com.saphamrah.MVP.Presenter.PrintAndSharePresenter;
 import com.saphamrah.Adapter.PrintAndShareAdapter;
 import com.saphamrah.Model.PrintFaktorModel;
 import com.saphamrah.Model.SystemConfigTabletModel;
+import com.saphamrah.PubFunc.FileUtils;
 import com.saphamrah.PubFunc.ImageUtils;
+import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Service.BluetoothPrintService;
 import com.saphamrah.Utils.BixolonPrinter;
@@ -44,9 +47,15 @@ import com.saphamrah.Utils.CustomLoadingDialog;
 import com.saphamrah.Utils.Printer;
 import com.saphamrah.Utils.UrovoPrinter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -54,7 +63,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PrintAndShareActivity extends AppCompatActivity implements PrintAndShareMVP.RequiredViewOps {
-    private final File dir = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/SapHamrah/Print");
+    private final File dir = new File(android.os.Environment.getExternalStoragePublicDirectory("/SapHamrah/").getAbsolutePath() +"/Print" );
 
     private AlertDialog alertDialogLoading;
     private CustomLoadingDialog customLoadingDialog;
@@ -101,14 +110,12 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
         customAlertDialog = new CustomAlertDialog(PrintAndShareActivity.this);
 
         File tempdir = dir;
-        if (!tempdir.exists())
-        {
+        if (!tempdir.exists()) {
             tempdir.mkdirs();
         }
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter == null)
-        {
+        if (mBluetoothAdapter == null) {
             Toast.makeText(this, R.string.hasnt, Toast.LENGTH_LONG).show();
             finish();
             return;
@@ -125,47 +132,52 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
         adapter = new PrintAndShareAdapter(BaseApplication.getContext(), printFaktorModels, (action, position) -> {
             String fileName = "Print-" + printFaktorModels.get(position).getUniqID_Tablet() + ".jpg";
 
-            mPresenter.getImagePrintFaktor(printFaktorModels.get(position).getUniqID_Tablet());
 
-            boolean isFileExists = checkFileExists(printFaktorModel, fileName);
+            boolean  isFileExists = checkFileExists( fileName);
+
+
             if (action == Constants.PRINT()) {
-                if (isFileExists){
+                if (isFileExists) {
                     try {
-                        Resize(fileName);
-                    } catch (Exception e){
+                        Bitmap tmp = BitmapFactory.decodeFile(dir + "/" + fileName);
+                        Resize(tmp,printFaktorModels.get(position).getUniqID_Tablet());
+                    } catch (Exception e) {
                         e.getMessage();
                         showToast(R.string.errorHaveNotImageForPrint, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
                     }
-                    boolean check = setPrinter(position);
+                    boolean check = setPrinter();
                     if (check) {
-                        String PathFaktorImage = Environment.getExternalStorageDirectory() + "/SapHamrah/Print/Print-" + printFaktorModels.get(position).getUniqID_Tablet() + ".jpg";
-                        printer.print(PathFaktorImage);
+                        String PathFaktorImage = Environment.getExternalStoragePublicDirectory("/SapHamrah/") + "/Print/Print-" + printFaktorModels.get(position).getUniqID_Tablet() + ".jpg";
+                        if (printer.checkIsAvailable()){
+                            printer.print(PathFaktorImage);
+                        }else{
+                            showToast(R.string.PrinterNotAvailable, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                        }
+                    }else{
+                        showToast(R.string.PrinterNotAvailable, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
                     }
                 } else {
-                    showToast(R.string.errorHaveNotImageForPrint, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                    mPresenter.getFaktorImage(action, printFaktorModels.get(position));
                 }
 
             } else if (action == Constants.SHARE) {
                 if (isFileExists) {
                     openShare(fileName);
                 } else {
-                    showToast(R.string.errorHaveNotImageForPrint, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                    mPresenter.getFaktorImage(action, printFaktorModels.get(position));
                 }
 
-            } else if (action == Constants.IMAGE){
-                byte[] image = Base64.decode(printFaktorModel.getFaktorImage(), Base64.NO_WRAP);
+            } else if (action == Constants.IMAGE) {
+                if (isFileExists) {
 
-                customAlertDialog.showImage(PrintAndShareActivity.this,image , false, new CustomAlertDialogResponse() {
-                    @Override
-                    public void setOnCancelClick() {
+                    Bitmap bitmap = BitmapFactory.decodeFile(dir + "/" + fileName);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 
-                    }
-
-                    @Override
-                    public void setOnApplyClick() {
-
-                    }
-                });
+                    onGetPrintfaktor(printFaktorModels.get(position).getUniqID_Tablet(), action, stream.toByteArray() );
+                } else {
+                    mPresenter.getFaktorImage(action, printFaktorModels.get(position));
+                }
             }
 
         });
@@ -176,21 +188,12 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
         recyclerView.setAdapter(adapter);
     }
 
-    private boolean checkFileExists(PrintFaktorModel model , String fileName){
+
+    private boolean checkFileExists( String fileName) {
         boolean fileExists = false;
         File file = new File(dir, fileName);
         if (file.exists()) {
             fileExists = true;
-        }
-        else if (model.getCcDarkhastFaktorNoeForosh() == Constants.ccNoeFaktor) {
-            ImageUtils imageUtils = new ImageUtils();
-            byte[] image = Base64.decode(model.getFaktorImage(), Base64.NO_WRAP);
-            imageUtils.bitmapToFile(image, dir + "/" + fileName, dir.toString());
-
-//            file = new File(dir, fileName);
-
-            fileExists = file.exists();
-
         }
 
 
@@ -199,29 +202,28 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
 
     /**
      * open activity for share faktor
-     *
      */
-    private void openShare(String fileName) {
+    private void openShare(String uniqueID) {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
+        String fileName = "Print-" + uniqueID + ".jpg";
 
+        File imageFile = new File(dir + "/" + fileName);
+        Uri outputFileUri = Uri.fromFile(imageFile);
 
-            File file = new File(dir, fileName);
-            Uri outputFileUri = Uri.fromFile(file);
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.setType("image/jpg");
-            intent.putExtra(Intent.EXTRA_STREAM, outputFileUri);
-            startActivity(Intent.createChooser(intent, " اشتراک گذاری فاکتور... "));
-        }
-
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setType("image/jpg");
+        intent.putExtra(Intent.EXTRA_STREAM, outputFileUri);
+        startActivity(Intent.createChooser(intent, " اشتراک گذاری فاکتور... "));
+    }
 
 
     /**
      * setup printer for print
      */
-    private boolean setPrinter(int position) {
+    private boolean setPrinter() {
 
         ArrayList<SystemConfigTabletModel> systemConfigTabletModels = systemconfig_tabletDAO.getAll();
         if (systemConfigTabletModels.size() > 0) {
@@ -245,57 +247,56 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
     /**
      * resize pic before print
      */
-    public void Resize(String fileName)
-    {
+    public void Resize( Bitmap tmp,String uniqueID) {
         float Zarib = 0;
         int ResizeWidth = 0, ResizeHeight = 0;
         int quality = 100;
 
-            //-----------------resize-------------------------
-            Bitmap tmp = BitmapFactory.decodeFile(dir + "/" + fileName);
-            int printerSize = systemconfig_tabletDAO.getAll().get(0).getSizePrint();
-            if (printerSize == 384) {
-                Zarib = (float) 384 / (tmp.getWidth());
-                ResizeWidth = (int) (tmp.getWidth() * Zarib);
-                ResizeHeight = (int) (tmp.getHeight() * Zarib);
-            } else if (printerSize == 576) {
-                Zarib = (float) 576 / (tmp.getWidth());
-                ResizeWidth = (int) (tmp.getWidth() * Zarib);
-                ResizeHeight = (int) (tmp.getHeight() * Zarib);
-            } else if (printerSize == 832) {
-                Zarib = (float) 832 / (tmp.getWidth());
-                ResizeWidth = (int) (tmp.getWidth() * Zarib);
-                ResizeHeight = (int) (tmp.getHeight() * Zarib);
-            }
+        //-----------------resize-------------------------
 
-            Bitmap bitmap = Bitmap.createBitmap(ResizeWidth, ResizeHeight, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bitmap);
+        int printerSize = systemconfig_tabletDAO.getAll().get(0).getSizePrint();
+        if (printerSize == 384) {
+            Zarib = (float) 384 / (tmp.getWidth());
+            ResizeWidth = (int) (tmp.getWidth() * Zarib);
+            ResizeHeight = (int) (tmp.getHeight() * Zarib);
+        } else if (printerSize == 576) {
+            Zarib = (float) 576 / (tmp.getWidth());
+            ResizeWidth = (int) (tmp.getWidth() * Zarib);
+            ResizeHeight = (int) (tmp.getHeight() * Zarib);
+        } else if (printerSize == 832) {
+            Zarib = (float) 832 / (tmp.getWidth());
+            ResizeWidth = (int) (tmp.getWidth() * Zarib);
+            ResizeHeight = (int) (tmp.getHeight() * Zarib);
+        }
 
-
-            Bitmap scaled = Bitmap.createScaledBitmap(tmp, ResizeWidth, ResizeHeight, true);
-            int leftOffset = 0;//(bitmap.getWidth() - scaled.getWidth()) / 2;
-            int topOffset = 0;
-            canvas.drawBitmap(scaled, leftOffset, topOffset, null);
-
-            File imageFile = new File(dir + "/" + fileName);
+        Bitmap bitmap = Bitmap.createBitmap(ResizeWidth, ResizeHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
 
 
-            FileOutputStream outStream;
+        Bitmap scaled = Bitmap.createScaledBitmap(tmp, ResizeWidth, ResizeHeight, true);
+        int leftOffset = 0;//(bitmap.getWidth() - scaled.getWidth()) / 2;
+        int topOffset = 0;
+        canvas.drawBitmap(scaled, leftOffset, topOffset, null);
 
+        String fileName = "Print-" + uniqueID + ".jpg";
+
+
+        FileOutputStream outStream;
+        File imageFile = new File(dir + "/" + fileName);
+
+        try {
+            outStream = new FileOutputStream(imageFile);
             try {
-                outStream = new FileOutputStream(imageFile);
-
-                try {
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outStream);
-                    outStream.flush();
-                    outStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            } catch (Exception e) {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outStream);
+                outStream.flush();
+                outStream.close();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -318,7 +319,7 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
 
     @Override
     public void onGetImagePrintFaktor(PrintFaktorModel model) {
-        printFaktorModel=model;
+        printFaktorModel = model;
     }
 
     @Override
@@ -332,8 +333,74 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
         }
     }
 
+    @Override
+    public void onGetPrintfaktor(String uniqueID, int action, byte[] image) {
+        saveImageInFile(image,uniqueID);
+        if (action == Constants.PRINT()){
+            startPrintProcess(uniqueID, image);
+
+        }else if (action == Constants.SHARE){
+            openShare(uniqueID);
+
+        }else if (action == Constants.IMAGE){
+            showImageDialog(image,uniqueID);
+
+        }
+
+
+    }
+
+    private void saveImageInFile(byte[] image, String uniqueID) {
+        ImageUtils imageUtils = new ImageUtils();
+        String fileName = "Print-" + uniqueID + ".jpg";
+        imageUtils.bitmapToFile(image, dir + "/" + fileName, dir.toString());
+    }
+
+    private void startPrintProcess(String uniqueID, byte[] image) {
+        try {
+            Bitmap tmp = BitmapFactory.decodeByteArray(image ,0, image.length);
+            Resize(tmp,uniqueID);
+        } catch (Exception e) {
+            e.getMessage();
+            showToast(R.string.errorHaveNotImageForPrint, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }
+        boolean check = setPrinter();
+        if (check) {
+            String PathFaktorImage = Environment.getExternalStoragePublicDirectory("/SapHamrah/") + "/Print/Print-" + uniqueID + ".jpg";
+
+            if (printer.checkIsAvailable()) {
+                printer.print(PathFaktorImage);
+            }else{
+                showToast(R.string.PrinterNotAvailable, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+            }
+        }
+    }
+
+    private void showImageDialog(byte[] image,String uniqueID) {
+
+
+            customAlertDialog.showImage(PrintAndShareActivity.this, image, false, new CustomAlertDialogResponse() {
+                @Override
+                public void setOnCancelClick() {
+
+                }
+
+                @Override
+                public void setOnApplyClick() {
+
+                }
+            });
+
+    }
+
+    @Override
+    public void showLoading() {
+        alertDialogLoading = customLoadingDialog.showLoadingDialog(PrintAndShareActivity.this);
+    }
+
     /**
      * activityResult for result print
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -363,31 +430,22 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
     /**
      * ***********    Lifecycle    **************
      */
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
         Log.e("onStart", "++ ON START ++");
 
-        if (Build.VERSION.SDK_INT >= 23)
-        {
-            if (checkSelfPermission(Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED)
-            {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH}, 100);
-            }
-            else
-            {
-                if (!mBluetoothAdapter.isEnabled())
-                {
+            } else {
+                if (!mBluetoothAdapter.isEnabled()) {
                     Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 
                 }
             }
-        }
-        else
-        {
-            if (!mBluetoothAdapter.isEnabled())
-            {
+        } else {
+            if (!mBluetoothAdapter.isEnabled()) {
                 Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
             }
@@ -396,21 +454,17 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
 
     }
 
-    public synchronized void onResume()
-    {
+    public synchronized void onResume() {
         super.onResume();
         Log.e("onResume", "+ ON RESUME +");
-        if (mPrintService != null)
-        {
-            if (mPrintService.getState() == BluetoothPrintService.STATE_NONE)
-            {
+        if (mPrintService != null) {
+            if (mPrintService.getState() == BluetoothPrintService.STATE_NONE) {
                 mPrintService.start();
             }
         }
     }
 
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         if (mPrintService != null)
             mPrintService.stop();
@@ -419,8 +473,7 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
 
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         super.onBackPressed();
         finish();
     }

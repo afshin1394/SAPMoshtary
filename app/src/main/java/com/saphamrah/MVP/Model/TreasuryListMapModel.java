@@ -1506,21 +1506,17 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
         final int finalCCForoshandeh = Integer.valueOf(ccForoshandeh);
         final int finalCCAfrad = Integer.valueOf(ccAfrad);
 
-        final Handler handler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg)
+        final Handler handler = new Handler(msg -> {
+            if (msg.arg1 == 1)
             {
-                if (msg.arg1 == 1)
-                {
-                    setRequestInfoShared(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary(), darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor(), darkhastFaktorMoshtaryForoshandeModel.getCcForoshandeh(), darkhastFaktorMoshtaryForoshandeModel.getCcMarkazForosh(), darkhastFaktorMoshtaryForoshandeModel.getCcSazmanForosh(), darkhastFaktorMoshtaryForoshandeModel.getCcMarkazSazmanForosh(), moshtaryForoshandehFlag , isMojazForResid , isEtebarCheckBargashty , ccChildParameterNoeVosol, googleLocationProvider, (long)darkhastFaktorMoshtaryForoshandeModel.getMablaghKhalesFaktor());
-                    mPresenter.onSuccessUpdateMandeMojodiMashin();
-                }
-                else if (msg.arg1 == -1)
-                {
-                    mPresenter.onFailedUpdateMandeMojodiMashin();
-                }
-                return false;
+                setRequestInfoShared(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary(), darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor(), darkhastFaktorMoshtaryForoshandeModel.getCcForoshandeh(), darkhastFaktorMoshtaryForoshandeModel.getCcMarkazForosh(), darkhastFaktorMoshtaryForoshandeModel.getCcSazmanForosh(), darkhastFaktorMoshtaryForoshandeModel.getCcMarkazSazmanForosh(), moshtaryForoshandehFlag , isMojazForResid , isEtebarCheckBargashty , ccChildParameterNoeVosol, googleLocationProvider, (long)darkhastFaktorMoshtaryForoshandeModel.getMablaghKhalesFaktor());
+                mPresenter.onSuccessUpdateMandeMojodiMashin();
             }
+            else if (msg.arg1 == -1)
+            {
+                mPresenter.onFailedUpdateMandeMojodiMashin();
+            }
+            return false;
         });
 
 

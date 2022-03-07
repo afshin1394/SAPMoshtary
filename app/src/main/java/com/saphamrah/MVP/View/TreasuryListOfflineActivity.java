@@ -1,5 +1,6 @@
 package com.saphamrah.MVP.View;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -100,6 +101,10 @@ public class TreasuryListOfflineActivity extends AppCompatActivity implements Tr
         return TreasuryListOfflineActivity.this;
     }
 
+    @Override
+    public Activity getActivity() {
+        return TreasuryListOfflineActivity.this;
+    }
 
 
     @Override
@@ -120,11 +125,15 @@ public class TreasuryListOfflineActivity extends AppCompatActivity implements Tr
                 }
                 else if (operation == Constants.SHOW_IMAGE())
                 {
-                    mPresenter.getFaktorImage(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
+                    mPresenter.getFaktorImage(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor(), Constants.SHOW_IMAGE());
                 }
                 else if (operation == Constants.SHOW_FAKTOR_DETAIL())
                 {
                     openFaktorDetailActivity(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
+                }
+                else if (operation == Constants.PRINT())
+                {
+                    mPresenter.getFaktorImage(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor(), Constants.PRINT());
                 }
 //                else if (operation == Constants.SEND())
 //                {
@@ -209,6 +218,8 @@ public class TreasuryListOfflineActivity extends AppCompatActivity implements Tr
         customAlertDialog.showMessageAlert(TreasuryListOfflineActivity.this, false, "", getResources().getString(resId), messageType, getResources().getString(R.string.apply));
     }
 
+
+
     @Override
     public void showAlertMessage(int resId, String parameter, int messageType)
     {
@@ -221,7 +232,10 @@ public class TreasuryListOfflineActivity extends AppCompatActivity implements Tr
         customAlertDialog.showToast(TreasuryListOfflineActivity.this, getResources().getString(resId), messageType, duration);
     }
 
-
+    @Override
+    public void showToast(String message, int messageType, int duration) {
+        customAlertDialog.showToast(TreasuryListOfflineActivity.this, message, messageType, duration);
+    }
 
 
     @Override

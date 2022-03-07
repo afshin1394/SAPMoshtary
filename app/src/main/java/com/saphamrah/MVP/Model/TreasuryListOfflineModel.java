@@ -182,17 +182,17 @@ public class TreasuryListOfflineModel implements TreasuryListOfflineMVP.ModelOps
     }
 
     @Override
-    public void getFaktorImage(long ccDarkhastFaktor)
+    public void getFaktorImage(long ccDarkhastFaktor,int action)
     {
         DarkhastFaktorEmzaMoshtaryDAO darkhastFaktorEmzaMoshtaryDAO = new DarkhastFaktorEmzaMoshtaryDAO(mPresenter.getAppContext());
         ArrayList<DarkhastFaktorEmzaMoshtaryModel> darkhastFaktorEmzaMoshtaryModels = darkhastFaktorEmzaMoshtaryDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
         if (darkhastFaktorEmzaMoshtaryModels.size() > 0)
         {
-            mPresenter.onGetFaktorImage(darkhastFaktorEmzaMoshtaryModels.get(0));
+            mPresenter.onGetFaktorImage(darkhastFaktorEmzaMoshtaryModels.get(0),action);
         }
         else
         {
-            mPresenter.onGetFaktorImage(null);
+            mPresenter.onGetFaktorImage(null,action);
         }
     }
 

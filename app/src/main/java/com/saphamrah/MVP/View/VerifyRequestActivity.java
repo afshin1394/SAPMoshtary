@@ -461,20 +461,21 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
 
 
         Log.d("VerifyRequestActivity", "jayezeh haveBonus:" + haveBonus);
-        if (haveBonus)
-        {
-            lblBonusTitle.setVisibility(View.VISIBLE);
-            recyclerViewJayezeh.setVisibility(View.VISIBLE);
-            mPresenter.getBonusList();
-        }
-        else
-        {
-            if (fabSelectBonus.getVisibility() == View.GONE)
-                fabSelectBonus.setVisibility(View.VISIBLE);
-            checkShowForFabMenu();
-            lblBonusTitle.setVisibility(View.GONE);
-            recyclerViewJayezeh.setVisibility(View.GONE);
-        }
+        mPresenter.getBonusList();
+//        if (haveBonus)
+//        {
+//            lblBonusTitle.setVisibility(View.VISIBLE);
+//            recyclerViewJayezeh.setVisibility(View.VISIBLE);
+//            mPresenter.getBonusList();
+//        }
+//        else //if (showAddBonusBtn) //todo jayezeh
+//        {
+//            //if (fabSelectBonus.getVisibility() == View.GONE)
+//              //  fabSelectBonus.setVisibility(View.VISIBLE);
+//            checkShowForFabMenu();
+//            lblBonusTitle.setVisibility(View.GONE);
+//            recyclerViewJayezeh.setVisibility(View.GONE);
+//        }
     }
 
 

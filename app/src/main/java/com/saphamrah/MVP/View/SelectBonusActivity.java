@@ -393,7 +393,7 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
     }
 
     @Override
-    public void showTaghirMandehDialog(int noeJayezehTakhfif, ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel, int selectedccTakhfif, String mablaghTakhfif, String mablaghJayezeh, long mandeh, String maxTedadJayeze, ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach , ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi) {
+    public void showTaghirMandehDialog(int noeJayezehTakhfif, ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel, int selectedccTakhfif, String mablaghTakhfif, String mablaghJayezeh, String mandeh, String maxTedadJayeze, ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach , ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi) {
 
 
         customAlertDialog.showEditableTextAlert(SelectBonusActivity.this, getString(R.string.txt_remaining_bonus), String.valueOf(mandeh).trim().replace(","  , ""), getString(R.string.cancel), getString(R.string.confirm), new ICustomEditableAlert() {
@@ -407,21 +407,24 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
 
 
 
-                 String englishNumerals = new BigDecimal(String.valueOf(message)).toString();
+                 String modifiedDialogMondeh = new BigDecimal(String.valueOf(message)).toString();
 
-                 float modifiedMondeh = Float.parseFloat(englishNumerals.replace("," , ""));
-                 if (modifiedMondeh <= mandeh && modifiedMondeh >= 0 ){
-                     mPresenter.checkInsertMandehArzeshAfzoodeh(noeJayezehTakhfif, jayezehEntekhabiMojodiModels, darkhastFaktorJayezehTakhfifModel, selectedccTakhfif, mablaghTakhfif,mablaghJayezeh,englishNumerals,maxTedadJayeze,KalaMojodiModelsMaxShomarehBach,KalaMojodiModelsMaxMojodi);
-                 }else{
-                     customTextInputLayout.setError(getResources().getString(R.string.errorNegativeRemainDialog));
-                 }
+                 //float modifiedMondeh = Float.parseFloat(englishNumerals.replace("," , ""));
+                 //if (modifiedMondeh <= mandeh && modifiedMondeh >= 0 ){
+                  //todo jayezeh
+                     //   mPresenter.checkInsertMandehArzeshAfzoodeh(noeJayezehTakhfif, jayezehEntekhabiMojodiModels, darkhastFaktorJayezehTakhfifModel, selectedccTakhfif, mablaghTakhfif,mablaghJayezeh,englishNumerals,maxTedadJayeze,KalaMojodiModelsMaxShomarehBach,KalaMojodiModelsMaxMojodi);
+                     mPresenter.checkInsert(noeJayezehTakhfif, jayezehEntekhabiMojodiModels, darkhastFaktorJayezehTakhfifModel, selectedccTakhfif, mablaghTakhfif,mablaghJayezeh,mandeh,maxTedadJayeze,KalaMojodiModelsMaxShomarehBach,KalaMojodiModelsMaxMojodi,modifiedDialogMondeh);
+                 //}else{
+                 //    customTextInputLayout.setError(getResources().getString(R.string.errorNegativeRemainDialog));
+                 //}
 
 
              }
 
              @Override
              public void onTextChange(CustomTextInputLayout customTextInputLayout,String s) {
-                     if (Float.parseFloat(s) > mandeh) {
+                 float fltMandeh = Float.parseFloat(mandeh.replace("," , ""));
+                 if (Float.parseFloat(s) > fltMandeh) {
                          customTextInputLayout.setError(getResources().getString(R.string.errorNegativeRemainDialog));
                      }else{
                          customTextInputLayout.setError(null);
@@ -429,16 +432,16 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
                  }
              });
     }
-
-    @Override
-    public void closeArzeshAfzoodehDialog() {
-        customAlertDialog.hideEditableTextAlert();
-    }
-
-    @Override
-    public void onInsertJayezehNaghdyArzeshAfzoodeh(float fltMandeh) {
-        SelectBonusActivity.this.finish();
-    }
+//todo jayezeh
+//    @Override
+//    public void closeArzeshAfzoodehDialog() {
+//        customAlertDialog.hideEditableTextAlert();
+//    }
+//
+//    @Override
+//    public void onInsertJayezehNaghdyArzeshAfzoodeh(float fltMandeh) {
+//        SelectBonusActivity.this.finish();
+//    }
 
     private void showAlertSelectKala(final ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels)
     {

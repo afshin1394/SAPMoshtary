@@ -478,8 +478,8 @@ public class DarkhastFaktorTakhfifDAO
 //                    " where " + DarkhastFaktorTakhfifModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor +
 //                    " and " + DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_ForJayezeh() + " = 1";
             String query = " select ccTakhfif from DarkhastFaktorTakhfif DFT where ccDarkhastFaktor = " + ccDarkhastFaktor + " and ExtraProp_ForJayezeh = 1 " +
-                           "and (ccTakhfif not in (select ExtraProp_ccJayezehTakhfif from darkhastfaktortakhfif where ExtraProp_ccJayezehTakhfif = DFT.ccTakhfif) " +
-                           "or ccTakhfif not in (select ExtraProp_ccJayezehTakhfif from darkhastfaktorjayezeh where ExtraProp_ccJayezehTakhfif = DFT.ccTakhfif)) ";
+                           "and (ccTakhfif not in (select ExtraProp_ccJayezehTakhfif from darkhastfaktortakhfif where ccDarkhastFaktor = " + ccDarkhastFaktor + " AND ExtraProp_ccJayezehTakhfif = DFT.ccTakhfif) " +
+                           "or ccTakhfif not in (select ExtraProp_ccJayezehTakhfif from darkhastfaktorjayezeh where ccDarkhastFaktor = " + ccDarkhastFaktor + " AND ExtraProp_ccJayezehTakhfif = DFT.ccTakhfif)) ";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
             Log.d("bouns","getccTakhfifOfJayezehByccDarkhastFaktor query:" + query);

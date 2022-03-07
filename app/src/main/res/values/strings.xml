@@ -113,6 +113,7 @@
     <string name="invalidPrinterType">چاپگر انتخاب شده نامعتبر می باشد.</string>
     <string name="printType">نوع چاپ فاکتور</string>
     <string name="invalidPrintType">نوع چاپ فاکتور انتخاب شده نامعتبر می باشد.</string>
+    <string name="PrinterNotAvailable">پرینتر موجود نیست</string>
     <string name="copied">کپی شد</string>
     <string name="copy">کپی</string>
     <string name="home">خانه</string>
@@ -534,6 +535,7 @@
     <string name="tarikhEngheza">تاریخ انقضا</string>
     <string name="tarikhFaktor">تاریخ فاکتور</string>
     <string name="tarikhErsal">تاریخ ارسال</string>
+    <string name="tarikhMoarefiMoshtary">تاریخ معرفی مشتری</string>
     <string name="tarikhPishbiniTahvil">تاریخ پیش بینی تحویل</string>
     <string name="errorGetMaxRoozTahvil">خطا در دریافت اطلاعات حداکثر روز تحویل</string>
     <string name="darEkhtiarPakhsh">در اختیار پخش</string>
@@ -777,7 +779,7 @@
     <string name="info">اطلاعات</string>
     <string name="invalid">نامعتبر</string>
     <string name="errorOperation">خطا در انجام عملیات</string>
-    <string name="errorOperationJayezehArzeshAfzodeh"> خطا در انجام عملیات جایزه ارزش افزوده</string>
+    <string name="errorOperationJayezehArzeshAfzodeh">خطا در انجام عملیات جایزه ارزش افزوده</string>
     <string name="duplicatedPorseshname">پرسشنامه تکراری می باشد.</string>
     <string name="errorDeleteSenededItem">امکان حذف برای موارد ارسال شده وجود ندارد.</string>
     <string name="errorResend">امکان ارسال دوباره درخواست وجود ندارد.</string>
@@ -1186,4 +1188,9 @@
     <string name="cantEnterTitle">اخطار</string>
     <string name="cantEnterProgram">امکان ورود در حال حاضر برای شما وجود ندارد. \n لطفا چند لحظه دیگر بررسی نمایید.</string>
     <string name="errorUpdateReceiptImage">خطا در بروز رسانی عکس رسید</string>
+    <string name="errorGetImageWithUniqID" >خطا در یافتن پرینت فاکتور</string>
+    <string name="errorGetPrintFaktorFromServer" >خطا در دریافت تصویر فاکتور</string>
+    <string name="errorupdateImage" >خطا در بروز رسانی عکس فاکتور</string>
+    <string name="errorCheckPrintFaktorExist" >خطا در بررسی وجود عکس فاکتور</string>
+    <string name="FaktorImageNotAvailable">تصویر فاکتور موجود نیست</string>
 </resources>

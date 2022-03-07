@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.saphamrah.Application.BaseApplication;
+import com.saphamrah.MVP.View.TreasuryListOfflineActivity;
 import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
@@ -45,12 +46,16 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
     private PubFunc.DateUtils dateUtils = new PubFunc().new DateUtils();
     private SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_MILISECONDS());
     private DecimalFormat formatter = new DecimalFormat("#,###,###");
+    private boolean isOffline = false;
     public TreasuryAdapter(Context context, ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, boolean faktorRooz, int noeMasouliat, OnItemClickListener listener) {
         this.listener = listener;
         this.context = context;
         this.models = darkhastFaktorMoshtaryForoshandeModels;
         this.faktorRooz = faktorRooz;
         this.noeMasouliat = noeMasouliat;
+        if (context.getClass().equals(TreasuryListOfflineActivity.class)){
+            isOffline = true;
+        }
     }
 
     @NonNull
@@ -87,6 +92,14 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             Date date = sdf.parse(models.get(position).getTarikhErsal());
             String tarikhErsal = (String) DateFormat.format(Constants.DATE_SHORT_FORMAT_WITH_SLASH() , date);
             holder.lblTarikhErsal.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.tarikhErsal), dateUtils.gregorianWithSlashToPersianSlash(tarikhErsal)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Date date = sdf.parse(models.get(position).getTarikhMoarefiMoshtary());
+            String tarikhMoarefiMoshtary = (String) DateFormat.format(Constants.DATE_SHORT_FORMAT_WITH_SLASH() , date);
+            holder.lblTarikhMoarefiMoshtary.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.tarikhMoarefiMoshtary), dateUtils.gregorianWithSlashToPersianSlash(tarikhMoarefiMoshtary)));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -294,6 +307,7 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         private TextView lblMablaghMandehFaktor;
         private TextView lblShomarehDarkhast;
         private TextView lblTarikhErsal;
+        private TextView lblTarikhMoarefiMoshtary;
         private TextView lblNameNoeVosol;
         private TextView lblHaveMarjoee;
         private TextView lblMoshtaryGharardad;
@@ -304,6 +318,7 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         private RelativeLayout layEditVosol;
         private RelativeLayout layEditDarkhast;
         private RelativeLayout layMarjoee;
+        private RelativeLayout layPrint;
         private ConstraintLayout lay_for_color;
         private RelativeLayout laySaveAndSend;
         private LinearLayout lay_expand_btn;
@@ -327,6 +342,7 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             lblMablaghMandehFaktor = view.findViewById(R.id.lblMablaghMandehFaktor);
             lblShomarehDarkhast = view.findViewById(R.id.lblShomarehDarkhast);
             lblTarikhErsal = view.findViewById(R.id.lblTarikhErsal);
+            lblTarikhMoarefiMoshtary = view.findViewById(R.id.lblTarikhMoarefiMoshtary);
             lblNameNoeVosol = view.findViewById(R.id.lblNameNoeVosol);
             lblHaveMarjoee = view.findViewById(R.id.lblHaveMarjoee);
             layShowLocation = view.findViewById(R.id.layShowLocation);
@@ -336,6 +352,7 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             layEditVosol = view.findViewById(R.id.layEdit);
             layEditDarkhast = view.findViewById(R.id.layEditDarkhast);
             layMarjoee = view.findViewById(R.id.layMarjoee);
+            layPrint = view.findViewById(R.id.layPrint);
             lblMoshtaryGharardad = view.findViewById(R.id.lblMoshtaryGharardad);
             lay_for_color = view.findViewById(R.id.lay_for_color);
             laySaveAndSend = view.findViewById(R.id.laySaveAndSendLocation);
@@ -353,10 +370,11 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             lblShomarehDarkhast.setTypeface(font);
             lblNameNoeVosol.setTypeface(font);
             lblTarikhErsal.setTypeface(font);
+            lblTarikhMoarefiMoshtary.setTypeface(font);
             lblHaveMarjoee.setTypeface(font);
             lblMoshtaryGharardad.setTypeface(font);
 
-
+            layPrint.setVisibility(isOffline?View.VISIBLE:View.GONE);
 
 
         }
@@ -399,6 +417,13 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
                 Log.d("Treasury", Constants.MARJOEE + "  " + position);
                 swipeLayout.close(true);
             });
+
+            layPrint.setOnClickListener(v -> {
+                listener.onItemClick(Constants.PRINT(), position);
+                Log.d("Treasury", Constants.PRINT() + "  " + position);
+                swipeLayout.close(true);
+            });
+
 
             laySaveAndSend.setOnClickListener(new View.OnClickListener() {
                 @Override
