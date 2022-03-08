@@ -271,7 +271,7 @@ public interface APIServiceRxjava {
     Observable<Response<GetAllvJayezehSatrResult>>getAllvJayezehSatr();
 
 
-    @GET("Api/ApiSales/GetJayezehSatr")
+    @GET("Api/ApiSales/Get_JayezehSatr")
     Observable<Response<GetAllvJayezehSatrResult>>getJayezehSatr(@Query("Noe_Titr_Satr") String noeTiteSatr, @Query("ccMarkazSazmanForosh") String ccMarkazSazmanForosh, @Query("ccJayezehs") String ccJayezehs);
 
     @GET("Api/ApiSales/GetAllvJayezehEntekhabi")
