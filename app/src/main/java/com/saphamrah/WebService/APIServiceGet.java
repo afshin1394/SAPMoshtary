@@ -215,7 +215,7 @@ public interface APIServiceGet
     Call<GetAllvJayezehSatrResult> getAllvJayezehSatr();
 
 
-    @GET("Api/ApiSales/GetJayezehSatr")
+    @GET("Api/ApiSales/Get_JayezehSatr")
     Call<GetAllvJayezehSatrResult> getJayezehSatr(@Query("Noe_Titr_Satr") String noeTiteSatr, @Query("ccMarkazSazmanForosh") String ccMarkazSazmanForosh, @Query("ccJayezehs") String ccJayezehs);
 
     @GET("Api/ApiSales/GetAllvJayezehEntekhabi")
