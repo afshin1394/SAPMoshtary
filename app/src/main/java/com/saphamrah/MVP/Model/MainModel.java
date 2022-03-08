@@ -31,10 +31,12 @@ import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.Repository.ForoshandehMamorPakhshRepository;
 import com.saphamrah.Shared.AddCustomerShared;
 import com.saphamrah.Shared.GetProgramShared;
 import com.saphamrah.Shared.LocalConfigShared;
 import com.saphamrah.Shared.ServerIPShared;
+import com.saphamrah.Utils.CollectionUtils;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServiceGet;
 import com.saphamrah.WebService.APIServicePost;
@@ -46,12 +48,15 @@ import com.saphamrah.WebService.ServiceResponse.UpdateNotificationMessageBoxResu
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -234,7 +239,9 @@ public class MainModel implements MainMVP.ModelOps
                             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
                             ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
                             int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
-                            mPresenter.onGetServerVersion(result , foroshandehMamorPakhshModel , noeMasouliat , childParameterModelsDownloadUrls);
+//                            mPresenter.onGetServerVersion(result , foroshandehMamorPakhshModel , noeMasouliat , childParameterModelsDownloadUrls);
+                            //TODO version
+                            getServerVersionNew(result,foroshandehMamorPakhshModel);
                         }
                         else
                         {
@@ -259,6 +266,56 @@ public class MainModel implements MainMVP.ModelOps
             });
         }
     }
+  //TODO version
+  public void getServerVersionNew(GetVersionResult result, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel) {
+      PubFunc.DeviceInfo deviceInfo = new PubFunc().new DeviceInfo();
+      String InstalledAppVersion = deviceInfo.getCurrentVersion(mPresenter.getAppContext());
+
+      int currentVersion = normalizedVersion(InstalledAppVersion);
+      int ForoshandehMamorPakhshServerVersion = normalizedVersion(foroshandehMamorPakhshModel.getVersion());
+
+      SimpleDateFormat sdfDateTime = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
+      SimpleDateFormat sdfSlashDateTime = new SimpleDateFormat(Constants.DATE_SHORT_FORMAT_WITH_SLASH());
+
+
+      long diffDay = 0;
+      Date today=null;
+      Date dateNewVersion=null;
+      String[] sepratedDate = result.getDateNewVersion().split("/");
+      PubFunc.DateConverter dateConverter = new PubFunc().new DateConverter();
+      dateConverter.persianToGregorian(Integer.parseInt(sepratedDate[0]), Integer.parseInt(sepratedDate[1]), Integer.parseInt(sepratedDate[2]));
+      String year = String.valueOf(dateConverter.getYear());
+      String month = dateConverter.getMonth() > 9 ? String.valueOf(dateConverter.getMonth()) : "0" + dateConverter.getMonth();
+      String day = dateConverter.getDay() > 9 ? String.valueOf(dateConverter.getDay()) : "0" + dateConverter.getDay();
+      String dateNewVersionGregorian = mPresenter.getAppContext().getResources().getString(R.string.dateWithSplashFormat, year, month, day);
+
+      try {
+          today = sdfDateTime.parse(sdfDateTime.format(new Date()));
+          dateNewVersion = sdfSlashDateTime.parse(dateNewVersionGregorian);
+          diffDay = (today.getTime() - dateNewVersion.getTime()) / (24 * 60 * 60 * 1000);
+      } catch (ParseException e) {
+          e.printStackTrace();
+      }
+
+      Log.d("SplahModel","today:" + today.toString() + " dateNewVersion:" + dateNewVersion.toString() + " diffDay:" + diffDay);
+      Log.d("SplahModel","currentVersion:" + currentVersion + " ServerVersion:" + ForoshandehMamorPakhshServerVersion);
+//todo version
+
+      if (currentVersion>ForoshandehMamorPakhshServerVersion)
+      {
+          mPresenter.onNeedForceUpdateAzmayeshi(result.getURLAzmayeshVersion());
+      }
+      else if (currentVersion<ForoshandehMamorPakhshServerVersion && diffDay<=0)
+      {
+          mPresenter.onNeedForceUpdate(result.getURL());
+      }
+      else if (currentVersion<ForoshandehMamorPakhshServerVersion)
+      {
+          mPresenter.onNeedForceUpdate(result.getURL());
+      }
+
+  }
+
 
     /**
      * check version of gallery from local with Server
@@ -851,4 +908,36 @@ public class MainModel implements MainMVP.ModelOps
     }
 
 
+
+    private int normalizedVersion(String version)
+    {
+        try
+        {
+            CollectionUtils collectionUtils = new CollectionUtils();
+
+            String[] versionElements = version.split("\\.");
+            ArrayList<String> versionArrayElements = collectionUtils.convertArrayToList(versionElements);
+            String finalVersionName = versionElements[0];
+            for (int i=1;i<versionArrayElements.size();i++){
+                char[] element =versionElements[i].toCharArray();
+                if(element.length == 1) {
+                    String versionElement = "0" + versionElements[i];
+                    finalVersionName+=versionElement;
+                }else{
+                    finalVersionName+=versionElements[i];
+                }
+            }
+
+
+            Log.i("finalVersionNamee", "currentVersion: "+finalVersionName);
+
+            return Integer.parseInt(finalVersionName);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            setLogToDB(Constants.LOG_EXCEPTION(), e.toString(), "MainModel", "", "normalizedVersion", "");
+            return -1;
+        }
+    }
 }

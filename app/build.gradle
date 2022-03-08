@@ -8,7 +8,7 @@ android {
         applicationId "com.saphamrah"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 101
+        versionCode 102
         versionName "2.2.7.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true

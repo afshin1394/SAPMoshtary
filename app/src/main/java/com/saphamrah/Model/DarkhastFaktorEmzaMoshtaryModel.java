@@ -23,6 +23,7 @@ public class DarkhastFaktorEmzaMoshtaryModel
     private static final String COLUMN_Have_ReceiptImage = "Have_ReceiptImage";
     private static final String COLUMN_Have_FaktorImage = "Have_FaktorImage";
 
+
     public static String TableName() {
         return TABLE_NAME;
     }
@@ -47,7 +48,6 @@ public class DarkhastFaktorEmzaMoshtaryModel
     public static String COLUMN_Have_FaktorImage() {
         return COLUMN_Have_FaktorImage;
     }
-
 
 
 
@@ -141,15 +141,13 @@ public class DarkhastFaktorEmzaMoshtaryModel
     {
         JSONObject jsonObject = new JSONObject();
         String encodedImage = Base64.encodeToString(DarkhastFaktorImage, Base64.NO_WRAP);
-        String receiptImage="";
-        if(ReceiptImage!=null)
-            receiptImage = Base64.encodeToString(ReceiptImage, Base64.NO_WRAP);
+//        String receiptImage = Base64.encodeToString(ReceiptImage, Base64.NO_WRAP);
         try
         {
             jsonObject.put("ccDarkhastFaktor" , ccDarkhastFaktor);
             jsonObject.put("ccMoshtary" , ccMoshtary);
             jsonObject.put("Image" , encodedImage);
-            jsonObject.put("receiptImage" , receiptImage);
+//            jsonObject.put("receiptImage" , receiptImage);
             jsonObject.put("Noe" , 1);
         }
         catch (Exception exception)

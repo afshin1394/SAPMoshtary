@@ -95,6 +95,11 @@ public interface MainMVP
         void onFailed(int resId , int messageType , int duration);
         void onNetworkError(boolean closeActivity);
         void notFoundServerIP();
+
+        void onNeedForceUpdateAzmayeshi(String urlAzmayeshVersion);
+
+        void onNeedForceUpdate(String url);
+
     }
 
 
@@ -117,6 +122,7 @@ public interface MainMVP
         void saveProfileImage(String profileImageCurrentPath);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
+
     }
 
 

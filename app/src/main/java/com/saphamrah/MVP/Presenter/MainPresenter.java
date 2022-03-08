@@ -73,6 +73,19 @@ public class MainPresenter implements MainMVP.PresenterOps , MainMVP.RequiredPre
     }
 
     @Override
+    public void onNeedForceUpdateAzmayeshi(String urlAzmayeshVersion) {
+        mView.get().forceUpdateTest(urlAzmayeshVersion);
+    }
+
+    @Override
+    public void onNeedForceUpdate(String url) {
+        mView.get().forceUpdate(url);
+    }
+
+
+
+
+    @Override
     public void checkShowMessageBox()
     {
         mModel.checkEnableMessage();

@@ -641,7 +641,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         else
         {
             Log.d("jayezeh" , "haveBonus in else" );
-            if (fabSelectBonus.getVisibility() == View.GONE)
+            if (showAddBonusBtn && fabSelectBonus.getVisibility() == View.GONE)
                 fabSelectBonus.setVisibility(View.VISIBLE);
             checkShowForFabMenu();
             lblBonusTitle.setVisibility(View.GONE);
