@@ -50,7 +50,8 @@ public class DarkhastFaktorEmzaMoshtaryDAO
             DarkhastFaktorEmzaMoshtaryModel.COLUMN_ReceiptImage(),
             DarkhastFaktorEmzaMoshtaryModel.COLUMN_DarkhastFaktorImage(),
             DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_FaktorImage(),
-            DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_ReceiptImage()
+            DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_ReceiptImage(),
+            DarkhastFaktorEmzaMoshtaryModel.COLUMN_ExtraProp_IsSend_ReceiptImage()
         };
     }
 
@@ -132,6 +133,40 @@ public class DarkhastFaktorEmzaMoshtaryDAO
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorEmzaMoshtaryModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorEmzaMoshtaryDAO" , "" , "getAll" , "");
+        }
+        return darkhastFaktorEmzaMoshtaryModels;
+    }
+    public ArrayList<DarkhastFaktorEmzaMoshtaryModel> getNotSendReceiptImage()
+    {
+        ArrayList<DarkhastFaktorEmzaMoshtaryModel> darkhastFaktorEmzaMoshtaryModels = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query = "select * from DarkhastFaktor_EmzaMoshtary where ExtraProp_IsSend_ReceiptImage = 0 and Have_ReceiptImage = 1";
+
+            Cursor cursor = db.rawQuery(query,null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast())
+                    {
+                        darkhastFaktorEmzaMoshtaryModels = cursorToModel(cursor);
+                        cursor.moveToNext();
+                    }
+
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorEmzaMoshtaryModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorEmzaMoshtaryDAO" , "" , "getNotSendReceiptImage" , "");
         }
         return darkhastFaktorEmzaMoshtaryModels;
     }
@@ -335,6 +370,26 @@ public class DarkhastFaktorEmzaMoshtaryDAO
         }
     }
 
+    public boolean updateIsSendReceiptImage(long ccDarkhastFaktor) {
+        try
+        {
+            String query = "update " + DarkhastFaktorEmzaMoshtaryModel.TableName() + " set " + DarkhastFaktorEmzaMoshtaryModel.COLUMN_ExtraProp_IsSend_ReceiptImage() + " = " + 1 +
+                    " where " + DarkhastFaktorEmzaMoshtaryModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor;
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , DarkhastFaktorEmzaMoshtaryModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorEmzaMoshtaryDAO" , "" , "updateSendedccDarkhastFaktor" , "");
+            return false;
+        }
+    }
+
     private static ContentValues modelToContentvalue(DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel)
     {
         ContentValues contentValues = new ContentValues();
@@ -367,6 +422,7 @@ public class DarkhastFaktorEmzaMoshtaryDAO
             darkhastFaktorEmzaMoshtaryModel.setReceiptImage(cursor.getBlob(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_ReceiptImage())));
             darkhastFaktorEmzaMoshtaryModel.setHave_FaktorImage(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_FaktorImage())));
             darkhastFaktorEmzaMoshtaryModel.setHave_ReceiptImage(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_Have_ReceiptImage())));
+            darkhastFaktorEmzaMoshtaryModel.setExtraProp_IsSend_ReceiptImage(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorEmzaMoshtaryModel.COLUMN_ExtraProp_IsSend_ReceiptImage())));
 
             darkhastFaktorEmzaMoshtaryModels.add(darkhastFaktorEmzaMoshtaryModel);
             cursor.moveToNext();

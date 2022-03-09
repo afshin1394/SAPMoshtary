@@ -594,6 +594,14 @@ public interface APIServiceRxjava {
 
 
 
+/***********************************************************************POST_REQUEST****************************************************************************/
+
+     //TODO
+     @FormUrlEncoded
+     @POST("Api/ApiSales/UpdateResidImageDarkhastJSON")
+     Observable<Response<UpdateResidImageDarkhastResult>> updateResidImageDarkhastJSON(@Field("") String jsonData);
+
+
 
 
 

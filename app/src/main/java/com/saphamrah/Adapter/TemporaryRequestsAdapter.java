@@ -2,6 +2,7 @@ package com.saphamrah.Adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,12 +69,24 @@ public class TemporaryRequestsAdapter extends RecyclerSwipeAdapter<TemporaryRequ
         holder.imgDelete.setVisibility(View.VISIBLE);
         holder.layDelete.setVisibility(View.VISIBLE);
 
+
         holder.imgPrint.setVisibility(View.GONE);
         holder.layPrint.setVisibility(View.GONE);
 
+        if(noeForoshandeh == 4 || noeForoshandeh == 5)
+        {
+            holder.imgReceipt.setVisibility(View.VISIBLE);
+            holder.layReceipt.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            holder.imgReceipt.setVisibility(View.GONE);
+            holder.layReceipt.setVisibility(View.GONE);
+        }
+
         holder.imgSend.setVisibility(View.VISIBLE);
         holder.laySend.setVisibility(View.VISIBLE);
-
+        Log.i("TemporaryAdapter", "onBindViewHolder: "+models.get(position).getExtraProp_IsOld());
         if (models.get(position).getExtraProp_IsOld() == 1)
         {
             if (noeForoshandeh == 1 || noeForoshandeh == 3)
@@ -107,6 +120,8 @@ public class TemporaryRequestsAdapter extends RecyclerSwipeAdapter<TemporaryRequ
         }
         else
         {
+            Log.i("TemporaryAdapter", "emzaImage: "+models.get(position).getHaveEmzaImage() + "FaktorImage:"+models.get(position).getHaveFaktorImage());
+
             if (!models.get(position).getHaveEmzaImage() || !models.get(position).getHaveFaktorImage())
             {
                 holder.imgSend.setVisibility(View.GONE);
@@ -126,6 +141,7 @@ public class TemporaryRequestsAdapter extends RecyclerSwipeAdapter<TemporaryRequ
         {
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right , holder.itemView.findViewById(R.id.layRight));
         }
+        Log.i("TemporaryAdapter", "showReceipt: "+showReceiptImage + "hasReceiptImage:"+models.get(position).hasReceiptImage());
 
         if (showReceiptImage){
            if (models.get(position).hasReceiptImage())
@@ -137,15 +153,15 @@ public class TemporaryRequestsAdapter extends RecyclerSwipeAdapter<TemporaryRequ
                holder.layReceipt.setVisibility(View.VISIBLE);
            }
         }
-
-        if (models.get(position).hasReceiptImage())
-        {
-            holder.layReceipt.setVisibility(View.GONE);
-        }else if (showReceiptImage){
-            holder.layReceipt.setVisibility(View.VISIBLE);
-        }else{
-            holder.layReceipt.setVisibility(View.GONE);
-        }
+//
+//        if (models.get(position).hasReceiptImage())
+//        {
+//            holder.layReceipt.setVisibility(View.GONE);
+//        }else if (showReceiptImage){
+//            holder.layReceipt.setVisibility(View.VISIBLE);
+//        }else{
+//            holder.layReceipt.setVisibility(View.GONE);
+//        }
 
 
         holder.bind(position , listener);

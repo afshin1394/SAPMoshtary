@@ -110,6 +110,7 @@ import com.saphamrah.WebService.ServiceResponse.CreateGpsDataPPCResult;
 import com.saphamrah.WebService.ServiceResponse.CreateKalaMojodyWithJSONResult;
 import com.saphamrah.WebService.ServiceResponse.CreateLogPPCResult;
 import com.saphamrah.WebService.ServiceResponse.CreateMojoodiGiriResult;
+import com.saphamrah.WebService.ServiceResponse.GetImageJsonResult;
 import com.saphamrah.WebService.ServiceResponse.SuggestResult;
 import com.saphamrah.WebService.ServiceResponse.UpdateDarkhastFaktorWithJSONResult;
 import com.saphamrah.protos.InvoiceInsertControlGrpc;
@@ -657,6 +658,52 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         {
             sendSuggest(apiServicePost ,suggestModels,suggestDAO);
         }
+
+        DarkhastFaktorEmzaMoshtaryDAO darkhastFaktorEmzaMoshtaryDAO = new DarkhastFaktorEmzaMoshtaryDAO(mPresenter.getAppContext());
+        ArrayList<DarkhastFaktorEmzaMoshtaryModel> darkhastFaktorEmzaMoshtaryModels = darkhastFaktorEmzaMoshtaryDAO.getNotSendReceiptImage();
+        if (darkhastFaktorEmzaMoshtaryModels.size() > 0)
+        {
+            sendReceiptImage(darkhastFaktorEmzaMoshtaryModels,darkhastFaktorEmzaMoshtaryDAO);
+        }
+    }
+
+    private void sendReceiptImage( ArrayList<DarkhastFaktorEmzaMoshtaryModel> darkhastFaktorEmzaMoshtaryModels, DarkhastFaktorEmzaMoshtaryDAO darkhastFaktorEmzaMoshtaryDAO) {
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+
+        DarkhastFaktorEmzaMoshtaryRepository darkhastFaktorEmzaMoshtaryRepository = new DarkhastFaktorEmzaMoshtaryRepository(mPresenter.getAppContext());
+
+        for (DarkhastFaktorEmzaMoshtaryModel model : darkhastFaktorEmzaMoshtaryModels) {
+            darkhastFaktorEmzaMoshtaryRepository.sendReceiptImageRx(serverIpModel, mPresenter.getAppContext(), "TemporaryRequestListActivity", model.getReceiptImage(), model.getCcDarkhastFaktor())
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe(new Observer<String>() {
+                  @Override
+                  public void onSubscribe(@androidx.annotation.NonNull Disposable d) {
+                      compositeDisposable.add(d);
+                  }
+
+                  @Override
+                  public void onNext(@androidx.annotation.NonNull String ccDarkhastFaktor) {
+                      Log.i("sendReceiptImageRx", "onNext: "+ccDarkhastFaktor);
+                      if (!ccDarkhastFaktor.equals("")){
+                          darkhastFaktorEmzaMoshtaryRepository.updateIsSendReceiptImage(Long.parseLong(ccDarkhastFaktor));
+                      }else{
+                          onError(new Throwable());
+                      }
+
+                  }
+
+                  @Override
+                  public void onError(@androidx.annotation.NonNull Throwable e) {
+
+                      mPresenter.onError(R.string.errorUpdateReceiptImage);
+                  }
+
+                  @Override
+                  public void onComplete() {
+
+                  }
+              });
+        }
     }
 
     private void sendBarkhordsToServer(APIServicePost apiServicePost , ArrayList<BarkhordForoshandehBaMoshtaryModel> barkhords)
@@ -1184,13 +1231,11 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
 
                     @Override
                     public void onNext(@androidx.annotation.NonNull Boolean updated) {
-                      if (updated){
-
-                          mPresenter.onSuccessSaveReceiptImage(R.string.successfullyDoneOps,position);
-
-                      }else{
-                          onError(new Throwable());
-                      }
+                        if (updated){
+                            mPresenter.onSuccessSaveReceiptImage(R.string.successfullyDoneOps,position);
+                        }else{
+                            onError(new Throwable());
+                        }
                     }
 
                     @Override
@@ -2058,7 +2103,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                         jsonObjectFinal.put("ControlData_ErsaliTablet" , new JSONArray().put(jsonObject));
 
                         String strJsonFinal = jsonObjectFinal.toString().replace("\\" , "");
-
+                        Log.i("JsonFinalll", "doInBackground: "+strJsonFinal);
                         sendDarkhastHavaleDataToServer(customerDarkhastFaktorModel.getCcMoshtary(), customerDarkhastFaktorModel.getCcDarkhastFaktor(), strJsonFinal, position, foroshandehMamorPakhshModel);
                     }
                     catch (Exception exception)

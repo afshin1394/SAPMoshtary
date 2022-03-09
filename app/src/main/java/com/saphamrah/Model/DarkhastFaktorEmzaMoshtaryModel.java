@@ -22,7 +22,7 @@ public class DarkhastFaktorEmzaMoshtaryModel
     private static final String COLUMN_ReceiptImage = "ReceiptImage";
     private static final String COLUMN_Have_ReceiptImage = "Have_ReceiptImage";
     private static final String COLUMN_Have_FaktorImage = "Have_FaktorImage";
-
+    private static final String ExtraProp_IsSend_ReceiptImage = "ExtraProp_IsSend_ReceiptImage";
 
     public static String TableName() {
         return TABLE_NAME;
@@ -48,6 +48,10 @@ public class DarkhastFaktorEmzaMoshtaryModel
     public static String COLUMN_Have_FaktorImage() {
         return COLUMN_Have_FaktorImage;
     }
+    public static String COLUMN_ExtraProp_IsSend_ReceiptImage() {
+        return ExtraProp_IsSend_ReceiptImage;
+    }
+
 
 
 
@@ -59,6 +63,7 @@ public class DarkhastFaktorEmzaMoshtaryModel
     private int Have_FaktorImage;
     private int Have_ReceiptImage;
     private String ExtraProp_UniqueID;
+    private int extraProp_IsSend_ReceiptImage;
 
 
     public long getCcDarkhastFaktor() {
@@ -120,6 +125,14 @@ public class DarkhastFaktorEmzaMoshtaryModel
         ExtraProp_UniqueID = extraProp_UniqueID;
     }
 
+    public int getExtraProp_IsSend_ReceiptImage() {
+        return extraProp_IsSend_ReceiptImage;
+    }
+
+    public void setExtraProp_IsSend_ReceiptImage(int extraProp_IsSend_ReceiptImage) {
+        this.extraProp_IsSend_ReceiptImage = extraProp_IsSend_ReceiptImage;
+    }
+
     public String toJsonString()
     {
         String darkhastFaktorImage = Base64.encodeToString(DarkhastFaktorImage , Base64.DEFAULT);
@@ -135,19 +148,37 @@ public class DarkhastFaktorEmzaMoshtaryModel
         jsonObject.addProperty(COLUMN_Have_ReceiptImage() , Have_ReceiptImage);
         return jsonObject.toString();
     }
+    public JSONObject toJsonObjectReceiptImage()
+    {
+        JSONObject jsonObject = new JSONObject();
+        String encodedImage = Base64.encodeToString(DarkhastFaktorImage, Base64.NO_WRAP);
+        String receiptImage="";
+        if(ReceiptImage!=null)
+            receiptImage = Base64.encodeToString(ReceiptImage, Base64.NO_WRAP);
+        try
+        {
+            jsonObject.put("ccDarkhastFaktor" , ccDarkhastFaktor);
+            jsonObject.put("receiptImage" , receiptImage);
+
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+        return jsonObject;
+    }
 
 
     public JSONObject toJsonObject()
     {
         JSONObject jsonObject = new JSONObject();
         String encodedImage = Base64.encodeToString(DarkhastFaktorImage, Base64.NO_WRAP);
-//        String receiptImage = Base64.encodeToString(ReceiptImage, Base64.NO_WRAP);
+
         try
         {
             jsonObject.put("ccDarkhastFaktor" , ccDarkhastFaktor);
             jsonObject.put("ccMoshtary" , ccMoshtary);
             jsonObject.put("Image" , encodedImage);
-//            jsonObject.put("receiptImage" , receiptImage);
             jsonObject.put("Noe" , 1);
         }
         catch (Exception exception)
@@ -158,16 +189,18 @@ public class DarkhastFaktorEmzaMoshtaryModel
     }
 
 
-    @NonNull
     @Override
     public String toString() {
         return "DarkhastFaktorEmzaMoshtaryModel{" +
                 "ccDarkhastFaktor=" + ccDarkhastFaktor +
                 ", ccMoshtary=" + ccMoshtary +
                 ", EmzaImage=" + Arrays.toString(EmzaImage) +
-                ", ReceiptImage=" + Arrays.toString(ReceiptImage) +
                 ", DarkhastFaktorImage=" + Arrays.toString(DarkhastFaktorImage) +
+                ", ReceiptImage=" + Arrays.toString(ReceiptImage) +
                 ", Have_FaktorImage=" + Have_FaktorImage +
+                ", Have_ReceiptImage=" + Have_ReceiptImage +
+                ", ExtraProp_UniqueID='" + ExtraProp_UniqueID + '\'' +
+                ", extraProp_IsSend_ReceiptImage=" + extraProp_IsSend_ReceiptImage +
                 '}';
     }
 }

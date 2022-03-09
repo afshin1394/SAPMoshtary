@@ -16,6 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.saphamrah.Application.BaseApplication;
+import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
+import com.saphamrah.DAO.ParameterChildDAO;
+import com.saphamrah.Model.ForoshandehMamorPakhshModel;
+import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.SelectFaktorShared;
@@ -69,6 +73,13 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
             holder.lblCodeNameKala.setText(String.format("%1$s - %2$s", kalaDarkhastFaktorSatrModels.get(position).getCodeKala(), kalaDarkhastFaktorSatrModels.get(position).getNameKala()));
         }
 
+        ForoshandehMamorPakhshDAO foroshandehmamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehmamorPakhshDAO.getIsSelect();
+        int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
+        int CanEditDarkhastForMovaze = Integer.parseInt(new ParameterChildDAO(BaseApplication.getContext()).getValueByccChildParameter(Constants.CC_CHILD_Can_Edit_Darkhast_For_Movaze()));
+
+
+
 
         //set kala status asasi
         if (kalaDarkhastFaktorSatrModels.get(position).getKalaAsasi())
@@ -93,6 +104,19 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
         {
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right , null);
             holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left , null);
+        }
+
+        if(noeMasouliat ==4 || noeMasouliat ==5){
+            if(CanEditDarkhastForMovaze==1){
+                holder.layDelete.setVisibility(View.VISIBLE);
+                holder.imgDelete.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right , null);
+                holder.layDelete.setVisibility(View.GONE);
+                holder.imgDelete.setVisibility(View.GONE);
+            }
         }
         holder.bind(kalaDarkhastFaktorSatrModels.get(position), position, listener);
     }

@@ -1282,15 +1282,23 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                                     ccMoshtaryPakhsh += "," + darkhastFaktorModel.getCcMoshtary();
                                     ccSazmanForoshPakhsh += "," + darkhastFaktorModel.getCcSazmanForosh();
                                     ccMarkazForoshPakhsh += "," + darkhastFaktorModel.getCcMarkazForosh();
-                                    if (!ccMarkazSazmanForoshPakhsh.contains(String.valueOf(darkhastFaktorModel.getCcMarkazSazmanForosh()))) {
+                                    Log.d("getProgram", "darkhastFaktorModel.getCcSazmanForosh : " + darkhastFaktorModel.getCcSazmanForosh());
+                                    Log.d("getProgram", "darkhastFaktorModel.getCcMarkazForosh : " + darkhastFaktorModel.getCcMarkazForosh());
+                                    Log.d("getProgram", "darkhastFaktorModel.getCcMarkazSazmanForosh : " + darkhastFaktorModel.getCcMarkazSazmanForosh());
+                                    Log.d("getProgram", "ccMarkazSazmanForoshPakhsh before : " + ccMarkazSazmanForoshPakhsh);
+
+                                    //todo getprogram
+                                    //if (!ccMarkazSazmanForoshPakhsh.contains(String.valueOf(darkhastFaktorModel.getCcMarkazSazmanForosh()))) {
                                         ccMarkazSazmanForoshPakhsh += "," + darkhastFaktorModel.getCcMarkazSazmanForosh();
-                                    }
+                                    //}
                                 }
                             }
+
                             Log.d("getProgram", "ccDarkhastFaktors : -1 + " + ccDarkhastFaktors);
                             Log.d("getProgram", "ccMoshtaryPakhsh : " + ccMoshtaryPakhsh);
                             Log.d("getProgram", "ccSazmanForoshPakhsh : " + ccSazmanForoshPakhsh);
                             Log.d("getProgram", "ccMarkazForoshPakhsh : " + ccMarkazForoshPakhsh);
+                            Log.d("getProgram", "ccMarkazSazmanForoshPakhsh : " + ccMarkazSazmanForoshPakhsh);
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                             getDarkhastFaktorSatr(getProgramType, ccDarkhastFaktors);
                         } else {

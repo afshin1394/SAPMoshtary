@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.saphamrah.BaseMVP.SelectBonusMVP;
 import com.saphamrah.DAO.KalaMojodiDAO;
+import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.MVP.Model.SelectBonusModel;
 import com.saphamrah.Model.KalaMojodiModel;
 import com.saphamrah.R;
@@ -110,6 +111,7 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
             int TedadSefarshDarkhast=0;
             //todo jayezeh
             //if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeTakhfif() )
+            int canDecreaseBonusSelect = Integer.parseInt(new ParameterChildDAO(getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Can_Decrease_Bonus_Select()));
             if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeTakhfif() || noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh() )
             {
                 try
@@ -177,11 +179,12 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
                     hasError = true;
                 }
                 // todo jayezeh
-//                else if (sumSelectedCount < intMaxTedadJayezeh)
-//                {
-//                    mView.get().onErrorInsert(R.string.errorSelectedCountLessThanMaxJayezeh , "");
-//                    hasError = true;
-//                }
+
+                else if (sumSelectedCount < intMaxTedadJayezeh &&  canDecreaseBonusSelect==0)
+                {
+                    mView.get().onErrorInsert(R.string.errorSelectedCountLessThanMaxJayezeh , "");
+                    hasError = true;
+                }
             }
 
 

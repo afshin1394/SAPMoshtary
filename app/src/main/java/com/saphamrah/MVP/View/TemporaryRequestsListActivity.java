@@ -336,7 +336,7 @@ public class TemporaryRequestsListActivity extends AppCompatActivity implements 
     @Override
     public void onSuccessSaveReceiptImage(int resId,int position) {
         showToast(resId, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
-        customerDarkhastFaktorModels.get(position).setExtraProp_IsOld(1);
+//        customerDarkhastFaktorModels.get(position).setExtraProp_IsOld(1);
         customerDarkhastFaktorModels.get(position).setHasReceiptImage(true);
         requestAdapter.notifyItemChanged(position);
     }

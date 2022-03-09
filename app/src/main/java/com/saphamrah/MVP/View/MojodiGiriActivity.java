@@ -694,11 +694,13 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
                         adapter.clearSelecedItem();
                         for (int i=0 ; i<kalaModels.size()  ; i++)
                         {
-                            if (kalaModels.get(i).getNameKala().contains(searchWord))
+                            String nameKala = new PubFunc().new LanguageUtil().convertFaNumberToEN(kalaModels.get(i).getNameKala());
+                            if (nameKala.contains(searchWord))
                             {
                                 arrayListKalaModel.add(kalaModels.get(i));
-                                adapter.notifyDataSetChanged();
+
                             }
+                            adapter.notifyDataSetChanged();
                         }
                     }
                     else //if (s.length() == 0)
