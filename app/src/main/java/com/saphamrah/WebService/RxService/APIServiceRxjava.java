@@ -281,6 +281,10 @@ public interface APIServiceRxjava {
     Observable<Response<GetAllvJayezehEntekhabiResult>>getAllvJayezehEntekhabiForPakhsh(@Query("ccMarkazForoshs") String ccMarkazForosh);
 
 
+    // U
+    @GET("Api/ApiSales/GetElatAdamTahvilDarkhast")
+    Observable<Response<ElatAdamTahvilDarkhastResult>> getElatTahvilDarkhast();
+
     //V
     @GET("Version/Version.txt")
     Observable<Response<GetVersionResult>>getVersionInfo();

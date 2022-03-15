@@ -23,6 +23,7 @@ import com.saphamrah.WebService.ServiceResponse.CreateMoshtaryWithMadarekResult;
 import com.saphamrah.WebService.ServiceResponse.CreateShomarehHesabResult;
 import com.saphamrah.WebService.ServiceResponse.CreateVisitMoshtaryResult;
 import com.saphamrah.WebService.ServiceResponse.GetTafkikJozePakhshResult;
+import com.saphamrah.WebService.ServiceResponse.GetUpdateElatAdamTahvilDarkhastResult;
 import com.saphamrah.WebService.ServiceResponse.GetUpdateMoshtaryResult;
 import com.saphamrah.WebService.ServiceResponse.MarjoeeKardexResult;
 import com.saphamrah.WebService.ServiceResponse.MoshtaryChidmanResult;
@@ -171,6 +172,11 @@ public interface APIServicePost
     @FormUrlEncoded
     @POST("Api/ApiSales/UpdateMoshtaryJSON")
     Call<GetUpdateMoshtaryResult> getUpdateMoshtaryResult(@Field("") String data);
+
+    @FormUrlEncoded
+    @POST("Api/ApiSales/UpdateDarkhastHavalehcodeNoeVorodJSON")
+    Call<GetUpdateElatAdamTahvilDarkhastResult> getUpdateElatAdamTahvilDarkhastResult(@Field("") String jsonStringData);
+
     // v
 
     @FormUrlEncoded

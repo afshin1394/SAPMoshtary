@@ -25,6 +25,7 @@ import com.saphamrah.DAO.DarkhastFaktorRoozSortDAO;
 import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
 import com.saphamrah.DAO.ElamMarjoeeForoshandehDAO;
 import com.saphamrah.DAO.ElamMarjoeePPCDAO;
+import com.saphamrah.DAO.ElatAdamTahvilDarkhastDAO;
 import com.saphamrah.DAO.ForoshandehAmoozeshiDeviceNumberDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.GPSDataPpcDAO;
@@ -60,6 +61,7 @@ import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.DarkhastFaktorRoozSortModel;
 import com.saphamrah.Model.ElamMarjoeeForoshandehModel;
 import com.saphamrah.Model.ElamMarjoeePPCModel;
+import com.saphamrah.Model.ElatAdamTahvilDarkhastModel;
 import com.saphamrah.Model.ForoshandehAmoozeshiModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.GPSDataModel;
@@ -113,6 +115,7 @@ import com.saphamrah.WebService.ServiceResponse.CreateDariaftPardakhtPPCJSONResu
 import com.saphamrah.WebService.ServiceResponse.CreateGpsDataPPCResult;
 import com.saphamrah.WebService.ServiceResponse.CreateLogPPCResult;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
+import com.saphamrah.WebService.ServiceResponse.GetUpdateElatAdamTahvilDarkhastResult;
 import com.saphamrah.WebService.ServiceResponse.MarjoeeKardexResult;
 import com.saphamrah.WebService.ServiceResponse.SuggestResult;
 
@@ -2573,6 +2576,87 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
         }).start();
 
+    }
+
+    @Override
+    public void getElatAdamTahvilDarkhast(long ccDarkhastFaktor,int position) {
+        DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        ElatAdamTahvilDarkhastDAO elatAdamTahvilDarkhastDAO = new ElatAdamTahvilDarkhastDAO(BaseApplication.getContext());
+        ArrayList<ElatAdamTahvilDarkhastModel> models = elatAdamTahvilDarkhastDAO.getAll();
+        mPresenter.onGetElatAdamTahvilDarkhast(models, darkhastFaktorModel, position);
+    }
+
+    @Override
+    public void sendElatAdamTahvilDarkhast(ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel, DarkhastFaktorModel darkhastFaktorModel,int position) {
+        JSONObject jsonObject = elatAdamTahvilDarkhastModel.toJsonArrayForSend(elatAdamTahvilDarkhastModel, darkhastFaktorModel);
+        if (jsonObject.length() > 0) {
+
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+            String serverIP = serverIpModel.getServerIp();
+            String serverPort = serverIpModel.getPort();
+            if (serverIP.trim().equals("") || serverPort.trim().equals("")) {
+                mPresenter.onError(R.string.errorFindServerIP);
+            } else {
+                final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+                sendElatAdamTahvilDarkhastToServer(apiServicePost, jsonObject, elatAdamTahvilDarkhastModel, darkhastFaktorModel,position);
+            }
+        } else {
+            mPresenter.onError(R.string.errorSendDataElatAdamTahvil);
+
+        }
+    }
+
+    private void sendElatAdamTahvilDarkhastToServer(APIServicePost apiServicePost, JSONObject jsonObject, ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel, DarkhastFaktorModel darkhastFaktorModel,int position) {
+        Log.d("TreasuryList","sendElatAdamTahvilDarkhastToServer JSON:"+jsonObject.toString());
+        Call<GetUpdateElatAdamTahvilDarkhastResult> call = apiServicePost.getUpdateElatAdamTahvilDarkhastResult(jsonObject.toString());
+        call.enqueue(new Callback<GetUpdateElatAdamTahvilDarkhastResult>() {
+            @Override
+            public void onResponse(Call<GetUpdateElatAdamTahvilDarkhastResult> call, Response<GetUpdateElatAdamTahvilDarkhastResult> response) {
+                try {
+                    if (response.isSuccessful() && response.body() != null) {
+                        GetUpdateElatAdamTahvilDarkhastResult result = response.body();
+                        if (result.getSuccess()) {
+                            updateCodeNoeVorodElatAdamTahvil(elatAdamTahvilDarkhastModel, darkhastFaktorModel,position);
+                        } else {
+                            setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "", "sendElatAdamTahvilDarkhastToServer", "onResponse");
+                            mPresenter.onError(R.string.errorSendElatAdamTahvilDarkhastِ);
+                        }
+                    } else {
+                        String errorMessage = "response not successful " + response.message();//+ "\n" + "can't send this log : " + logMessage;
+                        if (response.errorBody() != null) {
+                            errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string();//+ "\n" + "can't send this log : " + logMessage;
+                        }
+                        setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "", "sendElatAdamTahvilDarkhastToServer", "onResponse");
+                        mPresenter.onError(R.string.errorSendElatAdamTahvilDarkhastِ);
+                    }
+                } catch (Exception exception) {
+
+                    exception.printStackTrace();
+                    setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "", "sendElatAdamTahvilDarkhastToServer", "onResponse");
+                    mPresenter.onError(R.string.errorSendElatAdamTahvilDarkhastِ);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetUpdateElatAdamTahvilDarkhastResult> call, Throwable t) {
+                mPresenter.closeLoading();
+                Log.d("noTemp", "in onFailure");
+                setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "", "sendElatAdamTahvilDarkhastToServer", "onFailure");
+                mPresenter.onError(R.string.errorSendElatAdamTahvilFailure);
+            }
+        });
+    }
+
+    private void updateCodeNoeVorodElatAdamTahvil(ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel, DarkhastFaktorModel darkhastFaktorModel,int position) {
+        DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
+        boolean update = darkhastFaktorDAO.updateExtraPropCodeNoeVorod(darkhastFaktorModel.getCcDarkhastFaktor(), elatAdamTahvilDarkhastModel.getCodeNoeVorod());
+        if (update) {
+            darkhastFaktorDAO.updateExtraPropIsSend(darkhastFaktorModel.getCcDarkhastFaktor() , 1);
+            mPresenter.onSuccessSend(position);
+        } else {
+            mPresenter.onError(R.string.errorSaveElatAdamTahvilDarkhastِ);
+        }
     }
 
     private void sendGPSDataToServer(APIServicePost apiServicePost, ArrayList<GPSDataModel> gpsDataModels, int position) {

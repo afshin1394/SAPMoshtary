@@ -153,15 +153,11 @@ public class TemporaryRequestsAdapter extends RecyclerSwipeAdapter<TemporaryRequ
                holder.layReceipt.setVisibility(View.VISIBLE);
            }
         }
-//
-//        if (models.get(position).hasReceiptImage())
-//        {
-//            holder.layReceipt.setVisibility(View.GONE);
-//        }else if (showReceiptImage){
-//            holder.layReceipt.setVisibility(View.VISIBLE);
-//        }else{
-//            holder.layReceipt.setVisibility(View.GONE);
-//        }
+        else
+        {
+            holder.layReceipt.setVisibility(View.GONE);
+        }
+
 
 
         holder.bind(position , listener);

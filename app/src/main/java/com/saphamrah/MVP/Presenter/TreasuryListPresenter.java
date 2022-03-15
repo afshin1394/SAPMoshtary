@@ -6,6 +6,8 @@ import com.saphamrah.BaseMVP.TreasuryListMVP;
 import com.saphamrah.MVP.Model.TreasuryListModel;
 import com.saphamrah.Model.AllMoshtaryForoshandehModel;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
+import com.saphamrah.Model.DarkhastFaktorModel;
+import com.saphamrah.Model.ElatAdamTahvilDarkhastModel;
 import com.saphamrah.R;
 import com.saphamrah.UIModel.DarkhastFaktorMoshtaryForoshandeModel;
 import com.saphamrah.Utils.Constants;
@@ -128,6 +130,18 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
             }
         }
         mView.get().onGetSearchResult(searchResultModel);
+    }
+
+    @Override
+    public void getElatAdamTahvilDarkhast(long ccDarkhastFaktor,int position) {
+        mModel.getElatAdamTahvilDarkhast(ccDarkhastFaktor,position);
+    }
+
+
+
+    @Override
+    public void sendElatAdamTahvilDarkhast(ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel, DarkhastFaktorModel darkhastFaktorModel,int position) {
+        mModel.sendElatAdamTahvilDarkhast(elatAdamTahvilDarkhastModel,darkhastFaktorModel,position);
     }
 
 
@@ -313,6 +327,15 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
         mView.get().closeLoading();
     }
 
+    @Override
+    public void onGetElatAdamTahvilDarkhast(ArrayList<ElatAdamTahvilDarkhastModel> models,  DarkhastFaktorModel darkhastFaktorModel,int position) {
+        ArrayList<String> elatAdamTahvilDarkhastTitles = new ArrayList<>();
+        for (ElatAdamTahvilDarkhastModel model : models)
+        {
+            elatAdamTahvilDarkhastTitles.add(model.getNameNoeVorod());
+        }
+        mView.get().onGetElatAdamTahvilDarkhast(models,elatAdamTahvilDarkhastTitles,darkhastFaktorModel,position);
+    }
 
 
     @Override

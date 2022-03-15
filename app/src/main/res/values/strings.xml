@@ -1193,4 +1193,8 @@
     <string name="errorupdateImage" >خطا در بروز رسانی عکس فاکتور</string>
     <string name="errorCheckPrintFaktorExist" >خطا در بررسی وجود عکس فاکتور</string>
     <string name="FaktorImageNotAvailable">تصویر فاکتور موجود نیست</string>
+    <string name="errorSendDataElatAdamTahvil">"خطا در ثبت اطلاعات عدم تحویل فاکتور موقع ارسال به سرور"</string>
+    <string name="errorSendElatAdamTahvilFailure">"خطا از سمت سرور "</string>
+    <string name="errorSendElatAdamTahvilDarkhastِ">"خطا در ارسال اطلاعات به سمت سرور "</string>
+    <string name="errorSaveElatAdamTahvilDarkhastِ">خطا در ثبت عدم تحویل فاکتور</string>
 </resources>

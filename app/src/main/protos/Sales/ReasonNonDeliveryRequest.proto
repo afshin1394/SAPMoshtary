@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option csharp_namespace = "Saapp.AndroidAPI.Endpoints.GRPC.Sales.ReasonNonDeliveryRequest.Protos";
+option java_multiple_files = true;
+option objc_class_prefix = "HLW";
+option java_package = "com.saphamrah.protos";
+option java_outer_classname = "ReasonNonDeliveryRequestProto";
+
+package Sales;
+
+service ReasonNonDeliveryRequest{
+	rpc GetReasonNonDeliveryRequest(ReasonNonDeliveryRequestRequest) returns(ReasonNonDeliveryRequestReplyList);
+}
+
+message ReasonNonDeliveryRequestRequest{
+    
+}
+
+message ReasonNonDeliveryRequestReply{
+ int32	ReasonNonDeliveryRequestID = 1;
+ int32	EntryTypeCode = 2;
+ string	EntryTypeName = 3;
+ 
+}
+
+message ReasonNonDeliveryRequestReplyList{
+	repeated ReasonNonDeliveryRequestReply ReasonNonDeliveryRequests = 1;
+}

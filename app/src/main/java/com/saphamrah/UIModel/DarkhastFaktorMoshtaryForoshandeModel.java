@@ -42,6 +42,7 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     private static final String COLUMN_MoshtaryGharardadccSazmanForosh = "MoshtaryGharardadccSazmanForosh";
     private static final String COLUMN_NameSazmanForosh = "NameSazmanForosh";
     private static final String COLUMN_TarikhMoarefiMoshtary = "TarikhMoarefiMoshtary";
+    private static final String COLUMN_ExtraProp_CodeNoeVorod = "ExtraProp_CodeNoeVorod";
 
 
     public static String COLUMN_ccDarkhastFaktor() {
@@ -152,6 +153,9 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     public static String COLUMN_TarikhMoarefiMoshtary() {
         return COLUMN_TarikhMoarefiMoshtary;
     }
+    public static String COLUMN_ExtraProp_CodeNoeVorod() {
+        return COLUMN_ExtraProp_CodeNoeVorod;
+    }
 
     private long ccDarkhastFaktor;
     private String uniqueID_tablet;
@@ -191,7 +195,7 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     private int ExtraProp_SendLocation = 0;
     private String NameSazmanForosh = "";
     private String TarikhMoarefiMoshtary;
-
+    private int ExtraProp_CodeNoeVorod ;
     /**
      * this is just for show details vosol
      * 0 == gone
@@ -550,6 +554,13 @@ public class DarkhastFaktorMoshtaryForoshandeModel
     public void setTarikhMoarefiMoshtary(String tarikhMoarefiMoshtary) {
         TarikhMoarefiMoshtary = tarikhMoarefiMoshtary;
     }
+    public int getExtraProp_CodeNoeVorod() {
+        return ExtraProp_CodeNoeVorod;
+    }
+
+    public void setExtraProp_CodeNoeVorod(int extraProp_CodeNoeVorod) {
+        ExtraProp_CodeNoeVorod = extraProp_CodeNoeVorod;
+    }
 
     @NonNull
     @Override
@@ -589,6 +600,7 @@ public class DarkhastFaktorMoshtaryForoshandeModel
                 ", MoshtaryGharardadccSazmanForosh=" + MoshtaryGharardadccSazmanForosh +
                 ", NameSazmanForosh=" + NameSazmanForosh +
                 ", TarikhMoarefiMoshtary=" + TarikhMoarefiMoshtary +
+                ", ExtraProp_CodeNoeVorod=" + ExtraProp_CodeNoeVorod +
                 '}';
     }
 }

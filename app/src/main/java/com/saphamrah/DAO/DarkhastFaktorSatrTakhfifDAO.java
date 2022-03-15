@@ -14,6 +14,8 @@ import com.saphamrah.Utils.Constants;
 import com.saphamrah.WebService.APIServiceGet;
 
 import com.saphamrah.WebService.ApiClientGlobal;
+import com.saphamrah.WebService.ServiceResponse.DarkhastFaktorJayezehResult;
+import com.saphamrah.WebService.ServiceResponse.DarkhastFaktorSatrTakhfifResult;
 import com.saphamrah.WebService.ServiceResponse.GetAllDarkhastFaktorSatrTakhfifByCcForoshandehAndDateResult;
 
 import java.util.ArrayList;
@@ -58,6 +60,90 @@ public class DarkhastFaktorSatrTakhfifDAO
             DarkhastFaktorSatrTakhfifModel.COLUMN_ExtraProp_ForJayezeh(),
             DarkhastFaktorSatrTakhfifModel.COLUMN_ExtraProp_Olaviat()
         };
+    }
+
+    public void fetchDarkhastFaktorSatrTakhfif( Context context,  String activityNameForLog, String ccDarkhastHavalehs,RetrofitResponse retrofitResponse)
+    {
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(context);
+        if (serverIpModel.getServerIp().trim().equals("") || serverIpModel.getPort().trim().equals(""))
+        {
+            String message = "can't find server";
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, DarkhastFaktorJayezehDAO.class.getSimpleName(), activityNameForLog, "fetchDarkhastFaktorSatrTakhfif", "");
+            retrofitResponse.onFailed(Constants.RETROFIT_HTTP_ERROR() , message);
+        }
+        else
+        {
+            APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
+            Call<DarkhastFaktorSatrTakhfifResult> call = apiServiceGet.getDarkhastFaktorSatrTakhfif(ccDarkhastHavalehs);
+            call.enqueue(new Callback<DarkhastFaktorSatrTakhfifResult>() {
+                @Override
+                public void onResponse(Call<DarkhastFaktorSatrTakhfifResult> call, Response<DarkhastFaktorSatrTakhfifResult> response)
+                {
+                    try
+                    {
+                        if (response.raw().body() != null)
+                        {
+                            long contentLength = response.raw().body().contentLength();
+                            PubFunc.Logger logger = new PubFunc().new Logger();
+                            logger.insertLogToDB(context, Constants.LOG_RESPONSE_CONTENT_LENGTH(), "content-length(byte) = " + contentLength, DarkhastFaktorJayezehDAO.class.getSimpleName(), "", "fetchDarkhastFaktorSatrTakhfif", "onResponse");
+                        }
+                    }
+                    catch (Exception e){e.printStackTrace();}
+                    try
+                    {
+                        if (response.isSuccessful())
+                        {
+                            DarkhastFaktorSatrTakhfifResult result = response.body();
+                            if (result != null)
+                            {
+                                if (result.getSuccess())
+                                {
+                                    retrofitResponse.onSuccess(result.getData());
+                                }
+                                else
+                                {
+                                    PubFunc.Logger logger = new PubFunc().new Logger();
+                                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), result.getMessage(), DarkhastFaktorSatrTakhfifDAO.class.getSimpleName(), activityNameForLog, "fetchDarkhastFaktorSatrTakhfif", "onResponse");
+                                    retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), result.getMessage());
+                                }
+                            }
+                            else
+                            {
+                                String endpoint = getEndpoint(call);
+                                PubFunc.Logger logger = new PubFunc().new Logger();
+                                logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s",context.getResources().getString(R.string.resultIsNull), endpoint), DarkhastFaktorSatrTakhfifDAO.class.getSimpleName(), activityNameForLog, "fetchDarkhastFaktorSatrTakhfif", "onResponse");
+                                retrofitResponse.onFailed(Constants.RETROFIT_RESULT_IS_NULL(), context.getResources().getString(R.string.resultIsNull));
+                            }
+                        }
+                        else
+                        {
+                            String endpoint = getEndpoint(call);
+                            String message = String.format("error body : %1$s , code : %2$s * %3$s" , response.message() , response.code(), endpoint);
+                            PubFunc.Logger logger = new PubFunc().new Logger();
+                            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, DarkhastFaktorSatrTakhfifDAO.class.getSimpleName(), activityNameForLog, "fetchDarkhastFaktorSatrTakhfif", "onResponse");
+                            retrofitResponse.onFailed(Constants.RETROFIT_NOT_SUCCESS_MESSAGE(), message);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        exception.printStackTrace();
+                        PubFunc.Logger logger = new PubFunc().new Logger();
+                        logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), exception.toString(), DarkhastFaktorSatrTakhfifDAO.class.getSimpleName(), activityNameForLog, "fetchDarkhastFaktorSatrTakhfif", "onResponse");
+                        retrofitResponse.onFailed(Constants.RETROFIT_EXCEPTION() , exception.toString());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DarkhastFaktorSatrTakhfifResult> call, Throwable t)
+                {
+                    PubFunc.Logger logger = new PubFunc().new Logger();
+                    String endpoint = getEndpoint(call);
+                    logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), String.format("%1$s * %2$s", t.getMessage(), endpoint), DarkhastFaktorSatrTakhfifDAO.class.getSimpleName(), activityNameForLog, "fetchDarkhastFaktorSatrTakhfif", "onFailure");
+                    retrofitResponse.onFailed(Constants.RETROFIT_THROWABLE() , t.getMessage());
+                }
+            });
+        }
     }
 
     public void fetchAllDarkhastFaktorSatrTakhfifByCcForoshandehAndDate(final Context context, final String activityNameForLog, final String ccforoshandeh, final String fromDate, final String endDate, final RetrofitResponse retrofitResponse)

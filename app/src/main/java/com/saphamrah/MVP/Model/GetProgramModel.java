@@ -244,10 +244,13 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
         if (noeMasouliat != 7) {
             getProgramItemCount = mPresenter.getAppContext().getResources().getStringArray(R.array.getProgramItems).length;
+            Log.d("getProgram", "noe masouliat <> 7 getProgramItemCount : " + getProgramItemCount);
             deleteLogPPC(getProgramType, String.valueOf(ccForoshandeh));
         } else // if (noeMasouliat == 7) Amargar
         {
             getProgramItemCount = mPresenter.getAppContext().getResources().getStringArray(R.array.getProgramAmargarItems).length;
+            Log.d("getProgram", "noe masouliat = 7 getProgramItemCount : " + getProgramItemCount);
+
             deletePorseshnameh();
         }
     }
@@ -525,6 +528,8 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getBank(final int getProgramType) {
+        Log.d("getProgram", "1-getBank / " + itemCounter);
+
         final BankDAO bankDAO = new BankDAO(mPresenter.getAppContext());
         bankDAO.fetchBank(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse() {
             @Override
@@ -536,6 +541,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                         boolean insertResult = bankDAO.insertGroup(arrayListData);
                         if (deleteResult && insertResult) {
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), itemCounter);
+                            Log.d("getProgram", "if getBank / " + itemCounter);
                             getBrand(getProgramType);
                         } else {
                             sendThreadMessage(Constants.BULK_INSERT_FAILED(), itemCounter);
@@ -553,6 +559,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getBrand(final int getProgramType) {
+        Log.d("getProgram", "2-getBrand");
         final BrandDAO brandDAO = new BrandDAO(mPresenter.getAppContext());
         brandDAO.fetchBrand(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse() {
             @Override
@@ -582,6 +589,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getElatAdamDarkhast(final int getProgramType) {
+        Log.d("getProgram", "3-getElatAdamDarkhast");
         final ElatAdamDarkhastDAO elatAdamDarkhastDAO = new ElatAdamDarkhastDAO(mPresenter.getAppContext());
         elatAdamDarkhastDAO.fetchElatAdamDarkhast(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse() {
             @Override
@@ -611,6 +619,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getElatMarjoeeKala(final int getProgramType) {
+        Log.d("getProgram", "4-getElatMarjoeeKala");
         final ElatMarjoeeKalaDAO marjoeeKalaDAO = new ElatMarjoeeKalaDAO(mPresenter.getAppContext());
         marjoeeKalaDAO.fetchElatMarjoeeKala(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse() {
             @Override
@@ -639,6 +648,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getGoroh(final int getProgramType) {
+        Log.d("getProgram", "5-getGoroh");
         final GorohDAO gorohDAO = new GorohDAO(mPresenter.getAppContext());
         gorohDAO.fetchAllGoroh(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse() {
             @Override
@@ -674,6 +684,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getGPSData(final int getProgramType, String ccForoshandeh, String ccMamorPakhsh) {
+        Log.d("getProgram", "6-getGPSData");
         GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
         gpsDataPpcDAO.deleteSendedRecords();
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
@@ -681,6 +692,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getMahal(final int getProgramType, String ccMarkazSazmanForosh) {
+        Log.d("getProgram", "7-getMahal");
         final MahalDAO mahalDAO = new MahalDAO(mPresenter.getAppContext());
         mahalDAO.fetchAllMahalByccMarkazForosh(mPresenter.getAppContext(), activityNameForLog, ccMarkazSazmanForosh, new RetrofitResponse() {
             @Override
@@ -711,6 +723,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getMarkazPakhsh(final int getProgramType, String ccMarkazForosh, final String ccMarkazAnbar) {
+        Log.d("getProgram", "8-getMarkazPakhsh");
         final MarkazDAO markazDAO = new MarkazDAO(mPresenter.getAppContext());
         markazDAO.fetchAllMarkaz(mPresenter.getAppContext(), activityNameForLog, ccMarkazForosh, new RetrofitResponse() {
             @Override
@@ -739,6 +752,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getMarkazAnbar(final int getProgramType, String ccMarkazAnbar) {
+        Log.d("getProgram", "8-getMarkazAnbar");
         final MarkazDAO markazDAO = new MarkazDAO(mPresenter.getAppContext());
         markazDAO.fetchAllMarkaz(mPresenter.getAppContext(), activityNameForLog, ccMarkazAnbar, new RetrofitResponse() {
             @Override
@@ -768,6 +782,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getMarkazShomareHesab(final int getProgramType, final String ccMarkazAnbar) {
+        Log.d("getProgram", "9-getMarkazShomareHesab");
         final MarkazShomarehHesabDAO markazShomarehHesabDAO = new MarkazShomarehHesabDAO(mPresenter.getAppContext());
         markazShomarehHesabDAO.fetchMarkazShomareHesab(mPresenter.getAppContext(), activityNameForLog, ccMarkazAnbar, new RetrofitResponse() {
             @Override
@@ -796,6 +811,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getPOSInfo(final int getProgramType, String ccPosShomarehHesab) {
+        Log.d("getProgram", "10-getPOSInfo");
         final PosShomarehHesabDAO posShomarehHesabDAO = new PosShomarehHesabDAO(mPresenter.getAppContext());
         posShomarehHesabDAO.fetchPosShomareHesab(mPresenter.getAppContext(), activityNameForLog, ccPosShomarehHesab, String.valueOf(ccMarkazAnbar), new RetrofitResponse() {
             @Override
@@ -825,6 +841,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getMasir(final int getProgramType, final String ccForoshandeh, String ccMarkazForosh, String azTarikh, String taTarikh, String codeNoe) {
+        Log.d("getProgram", "11-getMasir");
         final MasirDAO masirDAO = new MasirDAO(mPresenter.getAppContext());
         masirDAO.fetchAllMasir(mPresenter.getAppContext(), activityNameForLog, ccForoshandeh, ccMarkazForosh,
                 azTarikh, taTarikh, codeNoe, new RetrofitResponse() {
@@ -865,6 +882,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getForoshandehPolygon(final int getProgramType, String ccForoshandeh) {
+        Log.d("getProgram", "12-getForoshandehPolygon");
         final PolygonForoshSatrDAO polygonForoshSatrDAO = new PolygonForoshSatrDAO(mPresenter.getAppContext());
         polygonForoshSatrDAO.fetchAllvPolygonForoshSatrByForoshandeh(mPresenter.getAppContext(), activityNameForLog, ccForoshandeh, new RetrofitResponse() {
             @Override
@@ -894,6 +912,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getMasirVaznHajmMashin(final int getProgramType, final String ccMasirs) {
+        Log.d("getProgram", "13-getMasirVaznHajmMashin");
         final MasirVaznHajmMashinDAO masirVaznHajmMashinDAO = new MasirVaznHajmMashinDAO(mPresenter.getAppContext());
         masirVaznHajmMashinDAO.fetchMasirVaznHajmMashin(mPresenter.getAppContext(), activityNameForLog, ccMasirs, new RetrofitResponse() {
             @Override
@@ -925,12 +944,14 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     int globalCounter = 0;
 
     private void getFoshandehMoshtary(final int getProgramType, String ccMasirs) {
+        Log.d("getProgram", "14-getFoshandehMoshtary");
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         deleteMojodiGiri(getProgramType);
     }
 
 
     private void deleteMojodiGiri(final int getProgramType) {
+        Log.d("getProgram", "15-deleteMojodiGiri");
         final MojoodiGiriDAO mojoodiGiriDAO = new MojoodiGiriDAO(mPresenter.getAppContext());
         Thread thread = new Thread() {
             @Override
@@ -949,6 +970,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getMoshtary(final int getProgramType, String ccForoshandeh, String ccMasir, String codeMoshtary) {
+        Log.d("getProgram", "16-getMoshtary");
         final MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
         moshtaryDAO.fetchAllMoshtaryByccMasir(mPresenter.getAppContext(), activityNameForLog, ccForoshandeh, ccMasir, codeMoshtary, new RetrofitResponse() {
             @Override
@@ -989,55 +1011,21 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getMoshtaryParent(final int getProgramType, String ccMoshtarys) {
-
-
-//        final MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
-//        moshtaryDAO.fetchMoshtaryParent(mPresenter.getAppContext(), activityNameForLog, ccMoshtarys, new RetrofitResponse()
-//        {
-//            @Override
-//            public void onSuccess(final ArrayList arrayListData)
-//            {
+        Log.d("getProgram", "17-getMoshtaryParent");
         Thread thread = new Thread() {
             @Override
             public void run() {
                 sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                 deleteMoshtaryAmargarImage(getProgramType);
 
-//                        int successfulUpdateCounter = 0;
-//                        for (int i = 0 ; i < arrayListData.size() ; i++)
-//                        {
-//                            boolean updateResult = moshtaryDAO.updateccMoshtaryParentInMoshtary(arrayListData);
-//                            if (updateResult)
-//                            {
-//                                successfulUpdateCounter++;
-//                            }
-//                        }
-
-//                        boolean result = true;//moshtaryDAO.updateccMoshtaryParentInMoshtary(arrayListData);
-//                        if (result)
-//                        {
-//                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-//                            deleteMoshtaryAmargarImage(getProgramType);
-//                        }
-//                        else
-//                        {
-//                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
-//                        }
-
             }
         };
         thread.start();
-//            }
-//            @Override
-//            public void onFailed(String type, String error)
-//            {
-//                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
-//            }
-//        });
     }
 
 
     private void deleteMoshtaryAmargarImage(final int getProgramType) {
+        Log.d("getProgram", "18-deleteMoshtaryAmargarImage");
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -1059,6 +1047,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getMoshtaryAddress(final int getProgramType, final String ccMoshtarys, String ccMarkazSazmanForosh) {
+        Log.d("getProgram", "19-getMoshtaryAddress");
         final MoshtaryAddressDAO moshtaryAddressDAO = new MoshtaryAddressDAO(mPresenter.getAppContext());
         moshtaryAddressDAO.fetchAllvMoshtaryAddressByNoeMasouliat(mPresenter.getAppContext(), activityNameForLog, String.valueOf(ccForoshandeh), ccMasirs, "-1", new RetrofitResponse() {
             @Override
@@ -1095,6 +1084,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getMoshtaryAfrad(final int getProgramType, final String ccMoshtarys) {
+        Log.d("getProgram", "20-getMoshtaryAfrad");
         final MoshtaryAfradDAO moshtaryAfradDAO = new MoshtaryAfradDAO(mPresenter.getAppContext());
         Log.d("getprogram afrad",ccMoshtarys);
 
@@ -1126,6 +1116,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getMoshtaryEtebarSazmanForosh(final int getProgramType, final String ccMoshtarys, String ccSazmanForosh) {
+        Log.d("getProgram", "21-getMoshtaryEtebarSazmanForosh");
         final MoshtaryEtebarSazmanForoshDAO moshtaryEtebarSazmanForoshDAO = new MoshtaryEtebarSazmanForoshDAO(mPresenter.getAppContext());
         moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForosh(mPresenter.getAppContext(), activityNameForLog, ccMoshtarys, ccSazmanForosh, new RetrofitResponse() {
             @Override
@@ -1155,6 +1146,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getMoshtaryGoroh(final int getProgramType, final String ccMoshtarys) {
+        Log.d("getProgram", "22-getMoshtaryGoroh");
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         if (getProgramType == Constants.GET_PROGRAM_UPDATE_MOSHTARY()) {
             getBargashty(getProgramType);
@@ -1165,6 +1157,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getMoshtaryPolygon(final int getProgramType, String ccMasirs, final String ccMoshtarys) {
+        Log.d("getProgram", "23-getMoshtaryPolygon");
         final MoshtaryPolygonDAO moshtaryPolygonDAO = new MoshtaryPolygonDAO(mPresenter.getAppContext());
         moshtaryPolygonDAO.fetchMoshtaryPolygon(mPresenter.getAppContext(), activityNameForLog, ccMasirs, ccMoshtarys, new RetrofitResponse() {
             @Override
@@ -1194,6 +1187,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getMoshtaryShomareHesab(final int getProgramType, String ccMoshtarys) {
+        Log.d("getProgram", "24-getMoshtaryShomareHesab");
         final MoshtaryShomarehHesabDAO moshtaryShomarehHesabDAO = new MoshtaryShomarehHesabDAO(mPresenter.getAppContext());
         moshtaryShomarehHesabDAO.fetchAllvMoshtaryShomarehHesab(mPresenter.getAppContext(), activityNameForLog, ccMoshtarys, new RetrofitResponse() {
             @Override
@@ -1223,6 +1217,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void deleteMoshtaryTaghirat(final int getProgramType) {
+        Log.d("getProgram", "25-deleteMoshtaryTaghirat");
         final MoshtaryTaghiratDAO moshtaryTaghiratDAO = new MoshtaryTaghiratDAO(mPresenter.getAppContext());
         Thread thread = new Thread() {
             @Override
@@ -1243,6 +1238,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     //TODO get MoshtaryBrand
 
     private void getDarkhastFaktor(final int getProgramType, String ccAfrad, String ccMoshtarys) {
+        Log.d("getProgram", "26-getDarkhastFaktor");
         Log.d("getProgram", "ccMoshtarys: " + ccMoshtarys);
         final DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
         darkhastFaktorDAO.fetchDarkhastFaktor(mPresenter.getAppContext(), activityNameForLog, ccAfrad, ccMoshtarys, new RetrofitResponse() {
@@ -1282,15 +1278,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                                     ccMoshtaryPakhsh += "," + darkhastFaktorModel.getCcMoshtary();
                                     ccSazmanForoshPakhsh += "," + darkhastFaktorModel.getCcSazmanForosh();
                                     ccMarkazForoshPakhsh += "," + darkhastFaktorModel.getCcMarkazForosh();
-                                    Log.d("getProgram", "darkhastFaktorModel.getCcSazmanForosh : " + darkhastFaktorModel.getCcSazmanForosh());
-                                    Log.d("getProgram", "darkhastFaktorModel.getCcMarkazForosh : " + darkhastFaktorModel.getCcMarkazForosh());
-                                    Log.d("getProgram", "darkhastFaktorModel.getCcMarkazSazmanForosh : " + darkhastFaktorModel.getCcMarkazSazmanForosh());
-                                    Log.d("getProgram", "ccMarkazSazmanForoshPakhsh before : " + ccMarkazSazmanForoshPakhsh);
-
-                                    //todo getprogram
-                                    //if (!ccMarkazSazmanForoshPakhsh.contains(String.valueOf(darkhastFaktorModel.getCcMarkazSazmanForosh()))) {
-                                        ccMarkazSazmanForoshPakhsh += "," + darkhastFaktorModel.getCcMarkazSazmanForosh();
-                                    //}
+                                    ccMarkazSazmanForoshPakhsh += "," + darkhastFaktorModel.getCcMarkazSazmanForosh();
                                 }
                             }
 
@@ -1358,6 +1346,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getDarkhastFaktorSatr(final int getProgramType, String ccDarkhastFaktors) {
+        Log.d("getProgram", "27-getDarkhastFaktorSatr");
         Log.d("getProgram", "ccDarkhastFaktors : " + ccDarkhastFaktors);
         final DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
@@ -1437,6 +1426,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getForoshandehs(final int getProgramType, String ccForoshandehString) {
+        Log.d("getProgram", "28-getForoshandehs");
         final ForoshandehDAO foroshandehDAO = new ForoshandehDAO(mPresenter.getAppContext());
         Log.d("getProgram", "ccForoshandehs : " + foroshandehMamorPakhshModel.getCcForoshandehs());
         if (new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel) != 4) {
@@ -1504,7 +1494,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getdarkhastFaktorKalaPishnahadi(int getProgramType, String ccForoshandeh, String ccMoshtarys) {
-
+        Log.d("getProgram", "29-getdarkhastFaktorKalaPishnahadi");
         if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 8) {
 
 
@@ -1549,6 +1539,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getListKalaForMarjoee(final int getProgramType) {
+        Log.d("getProgram", "30-getListKalaForMarjoee");
         //String ccForoshandeh = String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh());
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
         String ccForoshandehs = darkhastFaktorDAO.getAllccForoshandeh();
@@ -1597,6 +1588,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getBargashty(final int getProgramType) {
+        Log.d("getProgram", "31-getBargashty");
         final BargashtyDAO bargashtyDAO = new BargashtyDAO(mPresenter.getAppContext());
         if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 8) {
             bargashtyDAO.fetchBargashty(mPresenter.getAppContext(), activityNameForLog, String.valueOf(ccForoshandeh), new RetrofitResponse() {
@@ -1666,6 +1658,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getMoshtaryPakhsh(final int getProgramType) {
+        Log.d("getProgram", "32-getMoshtaryPakhsh");
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
         final Map<Integer, String> map = darkhastFaktorDAO.getccMoshtaryPakhshForForoshandeh(Constants.CODE_VAZEIAT_FAKTOR_TASVIEH);
         final MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
@@ -1719,6 +1712,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getMoshtaryMorajeShodehRooz(final int getProgramType, String ccForoshandeh, String ccMasir) {
+        Log.d("getProgram", "33-getMoshtaryMorajeShodehRooz");
         String ccForoshande = String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh());
         final MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(mPresenter.getAppContext());
         moshtaryMorajehShodehRoozDAO.fetchMoshtaryMorajehShodehRooz(mPresenter.getAppContext(), activityNameForLog, ccForoshande, ccMasir, new RetrofitResponse() {
@@ -1754,6 +1748,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getMoshtaryAddressPakhsh(final int getProgramType, final String ccMoshtaryPakhsh) {
+        Log.d("getProgram", "34-getMoshtaryAddressPakhsh");
         final MoshtaryAddressDAO moshtaryAddressDAO = new MoshtaryAddressDAO(mPresenter.getAppContext());
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
         final ArrayList<DarkhastFaktorModel> darkhastFaktorModels = darkhastFaktorDAO.getAllByNotCodeVazeiat(Constants.CODE_VAZEIAT_FAKTOR_TASVIEH);
@@ -1795,6 +1790,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getMoshtaryAfradPakhsh(final int getProgramType, final String ccMoshtaryPakhsh) {
+        Log.d("getProgram", "35-getMoshtaryAfradPakhsh");
         Log.d("MoshtaryPakhsh", "ccMoshtaryPakhsh : " + ccMoshtaryPakhsh);
         final MoshtaryAfradDAO moshtaryAfradDAO = new MoshtaryAfradDAO(mPresenter.getAppContext());
         moshtaryAfradDAO.fetchAllvMoshtaryAfrad(mPresenter.getAppContext(), activityNameForLog, ccMoshtaryPakhsh, new RetrofitResponse() {
@@ -1833,12 +1829,14 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getMoshtaryGorohPakhsh(final int getProgramType, final String ccMoshtaryPakhsh) {
+        Log.d("getProgram", "36-getMoshtaryGorohPakhsh");
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         getMoshtaryShomareHesabPakhsh(getProgramType, ccMoshtaryPakhsh);
     }
 
 
     private void getMoshtaryShomareHesabPakhsh(final int getProgramType, final String ccMoshtaryPakhsh) {
+        Log.d("getProgram", "37-getMoshtaryShomareHesabPakhsh");
         final MoshtaryShomarehHesabDAO moshtaryShomarehHesabDAO = new MoshtaryShomarehHesabDAO(mPresenter.getAppContext());
         moshtaryShomarehHesabDAO.fetchAllvMoshtaryShomarehHesab(mPresenter.getAppContext(), activityNameForLog, ccMoshtaryPakhsh, new RetrofitResponse() {
             @Override
@@ -1867,6 +1865,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getMoshtaryEtebarPakhsh(final int getProgramType, String ccMoshtaryPakhsh, String ccSazmanForosh) {
+        Log.d("getProgram", "38-getMoshtaryEtebarPakhsh");
         final MoshtaryEtebarSazmanForoshDAO moshtaryEtebarSazmanForoshDAO = new MoshtaryEtebarSazmanForoshDAO(mPresenter.getAppContext());
         moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForoshForPakhsh(mPresenter.getAppContext(), activityNameForLog, ccMoshtaryPakhsh, ccSazmanForoshPakhsh, new RetrofitResponse() {
             @Override
@@ -1895,6 +1894,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getDariaftPardakht(final int getProgramType) {
+        Log.d("getProgram", "39-getDariaftPardakht");
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
         final DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(mPresenter.getAppContext());
         dariaftPardakhtPPCDAO.deleteAll();
@@ -1945,8 +1945,11 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getDariaftPardakhtDarkhastFaktor(final int getProgramType, final ArrayList<DarkhastFaktorModel> darkhastFaktorModels) {
+        Log.d("getProgram", "40-getDariaftPardakhtDarkhastFaktor");
         final DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(mPresenter.getAppContext());
         globalCounter = 0;
+        MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
+        ccGorohs = moshtaryDAO.getAllccNoeSenf();
         dariaftPardakhtDarkhastFaktorPPCDAO.deleteAll();
         if (darkhastFaktorModels.size() > 0) {
             for (int i = 0; i < darkhastFaktorModels.size(); i++) {
@@ -1961,8 +1964,8 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                                     globalCounter++;
                                     if (globalCounter == darkhastFaktorModels.size()) {
                                         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
-                                        getDarkhastFaktorSatrTakhfif(getProgramType, ccMoshtarys);
-                                    }
+
+                                        getModatVosol(getProgramType, String.valueOf(ccMarkazSazmanForoshSakhtarForosh), ccGorohs);                                    }
                                 } else {
                                     sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
                                 }
@@ -1977,55 +1980,22 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                     }
                 });
             }
-        } else {
-            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
-            getDarkhastFaktorSatrTakhfif(getProgramType, ccMoshtarys);
         }
-
+        else {
+            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+            getModatVosol(getProgramType, String.valueOf(ccMarkazSazmanForoshSakhtarForosh), ccGorohs);
+        }
     }
 
 
-    private void getDarkhastFaktorSatrTakhfif(final int getProgramType, String ccMoshtarys) {
-        /*String fromDate = new SimpleDateFormat(Constants.DATE_SHORT_FORMAT_WITH_SLASH()).format(calendar.getTimeInMillis());
-        String endDate = new PubFunc().new DateUtils().persianWithSlashToGregorianSlash(date);*/
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                DarkhastFaktorSatrTakhfifDAO darkhastFaktorSatrTakhfifDAO = new DarkhastFaktorSatrTakhfifDAO(mPresenter.getAppContext());
-                boolean deleteResult = darkhastFaktorSatrTakhfifDAO.deleteAll();
-                if (deleteResult) {
-                    sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
-                    getDarkhastFaktorTakhfif(getProgramType);
-                } else {
-                    sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
-                }
-            }
-        };
-        thread.start();
-    }
 
-    private void getDarkhastFaktorTakhfif(final int getProgramType) {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
-                DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
-                boolean deleteResult = darkhastFaktorTakhfifDAO.deleteAll();
-                if (deleteResult) {
-                    sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
 
-                    ccGorohs = moshtaryDAO.getAllccNoeSenf();
-                    Log.d("GetProgram", "ccGorohs getdarkhastFaktorTakhfif : " + ccGorohs);
-                    getModatVosol(getProgramType, String.valueOf(ccMarkazSazmanForoshSakhtarForosh), ccGorohs);
-                } else {
-                    sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
-                }
-            }
-        };
-        thread.start();
-    }
+
+
+
 
     private void getModatVosol(final int getProgramType, String ccMarkazSazmanForoshSakhtarForosh, final String ccGorohs) {
+        Log.d("getProgram", "41-getModatVosol");
         Log.d("GetProgram", "ccGorohs before modat vosol : " + ccGorohs);
         final ModatVosolDAO modatVosolDAO = new ModatVosolDAO(mPresenter.getAppContext());
         if (noeMasouliat == 4 || noeMasouliat == 5) {
@@ -2098,6 +2068,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getModatVosolGoroh(final int getProgramType, String ccGorohs) {
+        Log.d("getProgram", "42-getModatVosolGoroh");
         final ModatVosolGorohDAO modatVosolGorohDAO = new ModatVosolGorohDAO(mPresenter.getAppContext());
         modatVosolGorohDAO.fetchAllModatVosolGoroh(mPresenter.getAppContext(), activityNameForLog, ccGorohs, new RetrofitResponse() {
             @Override
@@ -2127,6 +2098,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getModatVosolMarkaz(final int getProgramType, String ccMarkazSazmanForoshSakhtarForosh) {
+        Log.d("getProgram", "43-getModatVosolMarkaz");
         final ModatVosolMarkazDAO modatVosolMarkazDAO = new ModatVosolMarkazDAO(mPresenter.getAppContext());
         modatVosolMarkazDAO.fetchAllModatVosolMarkaz(mPresenter.getAppContext(), activityNameForLog, ccMarkazSazmanForoshSakhtarForosh, new RetrofitResponse() {
             @Override
@@ -2156,6 +2128,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getAnbarakInfo(final int getProgramType, final String ccAfrad, final String ccMarkazSazmanForoshSakhtarForosh) {
+        Log.d("getProgram", "44-getAnbarakInfo");
         final AnbarakAfradDAO anbarakAfradDAO = new AnbarakAfradDAO(mPresenter.getAppContext());
         anbarakAfradDAO.fetchAnbarakAfrad(mPresenter.getAppContext(), activityNameForLog, ccAfrad, new RetrofitResponse() {
             @Override
@@ -2191,6 +2164,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getEtebar(final int getProgramType) {
+        Log.d("getProgram", "45-getEtebar");
         final ForoshandehEtebarDAO etebarDAO = new ForoshandehEtebarDAO(mPresenter.getAppContext());
 
         ForoshandehDAO foroshandehDAO = new ForoshandehDAO(mPresenter.getAppContext());
@@ -2279,11 +2253,13 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getEtebarForoshandeh(final int getProgramType) {
+        Log.d("getProgram", "46-getEtebarForoshandeh");
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         getKala(getProgramType, String.valueOf(ccAfrad), String.valueOf(ccMarkazSazmanForoshSakhtarForosh));
     }
 
     private void getKala(final int getProgramType, String ccAfrad, String ccMarkazSazmanForoshSakhtarForosh) {
+        Log.d("getProgram", "47-getKala");
         final KalaDAO kalaDAO = new KalaDAO(mPresenter.getAppContext());
         kalaDAO.fetchMojodyAnbar(mPresenter.getAppContext(), activityNameForLog, ccAfrad, ccMarkazSazmanForoshSakhtarForosh, new RetrofitResponse() {
             @Override
@@ -2322,6 +2298,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getKalaolaviat(final int getProgramType, final String anbarakAfrad) {
+        Log.d("getProgram", "48-getKalaolaviat");
         final KalaOlaviatDAO kalaOlaviatDAO = new KalaOlaviatDAO(mPresenter.getAppContext());
         kalaOlaviatDAO.fetchKalaOlaviat(mPresenter.getAppContext(), activityNameForLog, anbarakAfrad, new RetrofitResponse() {
             @Override
@@ -2350,6 +2327,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getAnbarakMojodi(final int getProgramType, String anbarakAfrad, String ccForoshandeh, String ccMamorPakhsh) {
+        Log.d("getProgram", "49-getAnbarakMojodi");
         final MandehMojodyMashinDAO mandehMojodyMashinDAO = new MandehMojodyMashinDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
@@ -2357,53 +2335,14 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
         ccForoshandeh = String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh());
         String ccSazmanForosh = String.valueOf(foroshandehMamorPakhshModel.getCcSazmanForosh());
         String ccKalaCode = "-1";
-//        if (noeMasouliat == 1 || noeMasouliat == 6 || noeMasouliat == 8)//1-Foroshandeh-Sard
-//        {
-//            anbarakAfrad = "0";
-//            ccMamorPakhsh = "0";
-//        } else if (noeMasouliat == 2 || noeMasouliat == 3)//2-Foroshandeh-Garm //3-Foroshandeh-Smart
-//        {
-//            ccMamorPakhsh = "0";
-//        } else if (noeMasouliat == 4 || noeMasouliat == 5)//4-MamorPakhsh-Sard // 5-MamorPakhsh-Smart
-//        {
-//            ccForoshandeh = "0";
-//        } else //6-SarparastForoshandeh 7-Amargar
-//        {
-//            ccForoshandeh = "0";
-//            ccMamorPakhsh = "0";
-//        }
-//
-//        Log.d("GetProgram", "Online: " + anbarakAfrad + " - " + ccForoshandeh + " - " + ccMamorPakhsh + " - " + ccKalaCode + " - " + ccSazmanForosh);
-//        mandehMojodyMashinDAO.fetchMandehMojodyMashin(mPresenter.getAppContext(), activityNameForLog, anbarakAfrad, ccForoshandeh, ccMamorPakhsh, new RetrofitResponse() {
-//            @Override
-//            public void onSuccess(final ArrayList arrayListData) {
-//                Thread thread = new Thread() {
-//                    @Override
-//                    public void run() {
-//                        boolean deleteResult = mandehMojodyMashinDAO.deleteAll();
-//                        boolean insertResult = mandehMojodyMashinDAO.insertGroup(arrayListData);
-//                        if (deleteResult && insertResult) {
-//                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
-//                            getKalaMojodi(getProgramType);
-//                        } else {
-//                            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
-//                        }
-//                    }
-//                };
-//                thread.start();
-//            }
-//
-//            @Override
-//            public void onFailed(String type, String error) {
-//                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
-//            }
-//        });
+
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         getKalaMojodi(getProgramType);
     }
 
 
     private void getKalaMojodi(final int getProgramType) {
+        Log.d("getProgram", "50-getKalaMojodi");
         final MandehMojodyMashinDAO mandehMojodyMashinDAO = new MandehMojodyMashinDAO(mPresenter.getAppContext());
         final KalaMojodiDAO kalamojodiDAO = new KalaMojodiDAO(mPresenter.getAppContext());
         Thread thread = new Thread() {
@@ -2455,6 +2394,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getKalaGoroh(final int getProgramType) {
+        Log.d("getProgram", "51-getKalaGoroh");
         final KalaGorohDAO kalaGorohDAO = new KalaGorohDAO(mPresenter.getAppContext());
         kalaGorohDAO.fetchAllvKalaGoroh(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse() {
             @Override
@@ -2484,6 +2424,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getZaribForoshKala(final int getProgramType, String ccGorohs) {
+        Log.d("getProgram", "52-getZaribForoshKala");
         final KalaZaribForoshDAO kalaZaribForoshDAO = new KalaZaribForoshDAO(mPresenter.getAppContext());
         final ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         int ccForoshandeh = foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh();
@@ -2537,6 +2478,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getJayezeh(final int getProgramType) {
+        Log.d("getProgram", "53-getJayezeh");
         final JayezehDAO jayezehDAO = new JayezehDAO(mPresenter.getAppContext());
         String ccMarkazSazmanForosh = "-1";
         if (noeMasouliat != 4) {
@@ -2584,6 +2526,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getJayezehSatr(final int getProgramType, String ccJayezehs) {
+        Log.d("getProgram", "54-getJayezehSatr");
         final JayezehSatrDAO jayezehSatrDAO = new JayezehSatrDAO(mPresenter.getAppContext());
         String ccMarkazSazmanForosh = "-1";
         if (noeMasouliat != 4) {
@@ -2619,6 +2562,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getJayezehEntekhabi(final int getProgramType) {
+        Log.d("getProgram", "55-getJayezehEntekhabi");
         final JayezehEntekhabiDAO jayezehEntekhabiDAO = new JayezehEntekhabiDAO(mPresenter.getAppContext());
         if (noeMasouliat != 4) {
             jayezehEntekhabiDAO.fetchJayezehEntekhabi(mPresenter.getAppContext(), activityNameForLog, String.valueOf(ccMarkazSazmanForosh), new RetrofitResponse() {
@@ -2701,6 +2645,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getNoeHesab(final int getProgramType) {
+        Log.d("getProgram", "56-getNoeHesab");
         final NoeHesabDAO noeHesabDAO = new NoeHesabDAO(mPresenter.getAppContext());
         noeHesabDAO.fetchNoeHesab(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse() {
             @Override
@@ -2729,6 +2674,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getNoeMalekiatMoshtary(final int getProgramType) {
+        Log.d("getProgram", "57-getNoeMalekiatMoshtary");
         final NoeMalekiatMoshtaryDAO noeMalekiatMoshtaryDAO = new NoeMalekiatMoshtaryDAO(mPresenter.getAppContext());
         noeMalekiatMoshtaryDAO.fetchNoeMalekiatMoshtary(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse() {
             @Override
@@ -2758,6 +2704,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getTedadFaktorMoshtary(final int getProgramType, String ccMoshtarys) {
+        Log.d("getProgram", "58-getTedadFaktorMoshtary");
         final TedadFaktorMoshtaryDAO tedadFaktorMoshtaryDAO = new TedadFaktorMoshtaryDAO(mPresenter.getAppContext());
         tedadFaktorMoshtaryDAO.fetchTedadFaktorMoshtary(mPresenter.getAppContext(), activityNameForLog, ccMoshtarys, new RetrofitResponse() {
             @Override
@@ -2789,6 +2736,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
     //new
     private void getTakhfifHajmi(final int getProgramType) {
+        Log.d("getProgram", "59-getTakhfifHajmi");
         final TakhfifHajmiDAO takhfifHajmiDAO = new TakhfifHajmiDAO(mPresenter.getAppContext());
         String ccMarkazSazmanForosh = "-1";
         if (noeMasouliat != 4) {
@@ -2826,6 +2774,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
     //new
     private void getTakhfifHajmiSatr(final int getProgramType) {
+        Log.d("getProgram", "60-getTakhfifHajmiSatr");
         TakhfifHajmiDAO takhfifHajmiDAO = new TakhfifHajmiDAO(mPresenter.getAppContext());
         ccTakhfifHajmis = takhfifHajmiDAO.getCcTakhfifHajmiForGetProgram();
         final TakhfifHajmiSatrDAO takhfifHajmiSatrDAO = new TakhfifHajmiSatrDAO(mPresenter.getAppContext());
@@ -2856,44 +2805,11 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
 
-    /*private void getTakhfifHajmiSatr(final int getProgramType)
-    {
-        final TakhfifHajmiSatrDAO takhfifHajmiSatrDAO = new TakhfifHajmiSatrDAO(mPresenter.getAppContext());
-        takhfifHajmiSatrDAO.fetchTakhfifHajmiSatr(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        boolean deleteResult = takhfifHajmiSatrDAO.deleteAll();
-                        boolean insertResult = takhfifHajmiSatrDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult)
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            getTakhfifNaghdi(getProgramType , String.valueOf(ccMarkazSazmanForosh));
-                        }
-                        else
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
-                        }
-                    }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
-            }
-        });
-    }*/
+
 
 
     private void getTakhfifNaghdi(final int getProgramType) {
+        Log.d("getProgram", "61-getTakhfifNaghdi");
         final TakhfifNaghdyDAO takhfifNaghdyDAO = new TakhfifNaghdyDAO(mPresenter.getAppContext());
         String ccMarkazSazmanForosh = "-1";
         if (noeMasouliat != 4) {
@@ -2929,6 +2845,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getTakhfifSenfi(final int getProgramType) {
+        Log.d("getProgram", "62-getTakhfifSenfi");
         final TakhfifSenfiDAO takhfifSenfiDAO = new TakhfifSenfiDAO(mPresenter.getAppContext());
         String ccMarkazSazmanForosh = "-1";
         if (noeMasouliat != 4) {
@@ -2964,6 +2881,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getTakhfifSenfiSatr(final int getProgramType) {
+        Log.d("getProgram", "63-getTakhfifSenfiSatr");
         final TakhfifSenfiSatrDAO takhfifSenfiSatrDAO = new TakhfifSenfiSatrDAO(mPresenter.getAppContext());
         takhfifSenfiSatrDAO.fetchTakhfifSenfiSatr(mPresenter.getAppContext(), activityNameForLog, String.valueOf(ccMarkazSazmanForosh), ccTakhfifSenfis, new RetrofitResponse() {
             @Override
@@ -3002,17 +2920,18 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     private void updateJayezehTakhfifVersion() {
         try {
             int serverVersion = Integer.parseInt(new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_UPDATE_JAYEZEH_TAKHFIF));
-            Log.d("GetProgram", "updateJayezehTakhfifVersion : " + serverVersion);
+            Log.d("getProgram", "updateJayezehTakhfifVersion : " + serverVersion);
             LocalConfigShared localConfigShared = new LocalConfigShared(mPresenter.getAppContext());
             localConfigShared.remove(LocalConfigShared.JAYEZEH_TAKHFIF_VERSION);
             localConfigShared.putInt(LocalConfigShared.JAYEZEH_TAKHFIF_VERSION, serverVersion);
-            Log.d("GetProgram", "updateJayezehTakhfifVersion : " + serverVersion);
+            Log.d("getProgram", "updateJayezehTakhfifVersion : " + serverVersion);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void getTaghvimTatil(final int getProgramType, String ccMarkazAnbar) {
+        Log.d("getProgram", "64-getTaghvimTatil");
         final TaghvimTatilDAO taghvimTatilDAO = new TaghvimTatilDAO(mPresenter.getAppContext());
         taghvimTatilDAO.fetchTaghvimTatil(mPresenter.getAppContext(), activityNameForLog, ccMarkazAnbar, new RetrofitResponse() {
             @Override
@@ -3042,44 +2961,15 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getCodeNoeVosol(final int getProgramType) {
+        Log.d("getProgram", "65-getCodeNoeVosol");
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         deleteKardex(getProgramType);
-//        final CodeNoeVosolDAO codeNoeVosolDAO = new CodeNoeVosolDAO(mPresenter.getAppContext());
-//        codeNoeVosolDAO.fetchCodeNoeVosol(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse()
-//        {
-//            @Override
-//            public void onSuccess(final ArrayList arrayListData)
-//            {
-//                Thread thread = new Thread()
-//                {
-//                    @Override
-//                    public void run()
-//                    {
-//                        boolean deleteResult = codeNoeVosolDAO.deleteAll();
-//                        boolean insertResult = codeNoeVosolDAO.insertGroup(arrayListData);
-//                        if (deleteResult && insertResult)
-//                        {
-//                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-//                            deleteKardex(getProgramType);
-//                        }
-//                        else
-//                        {
-//                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
-//                        }
-//                    }
-//                };
-//                thread.start();
-//            }
-//            @Override
-//            public void onFailed(String type, String error)
-//            {
-//                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
-//            }
-//        });
+
     }
 
 
     private void deleteKardex(final int getProgramType) {
+        Log.d("getProgram", "66-deleteKardex");
         final KardexDAO kardexDAO = new KardexDAO(mPresenter.getAppContext());
         Thread thread = new Thread() {
             @Override
@@ -3098,6 +2988,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void deleteKardexSatr(final int getProgramType) {
+        Log.d("getProgram", "67-deleteKardexSatr");
         final KardexSatrDAO kardexSatrDAO = new KardexSatrDAO(mPresenter.getAppContext());
         Thread thread = new Thread() {
             @Override
@@ -3116,6 +3007,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void deleteMarjoeeKamelImage(final int getProgramType) {
+        Log.d("getProgram", "68-deleteMarjoeeKamelImage");
         final MarjoeeKamelImageDAO marjoeeKamelImageDAO = new MarjoeeKamelImageDAO(mPresenter.getAppContext());
         final MarjoeeKamelImageTmpDAO marjoeeKamelImageTmpDAO = new MarjoeeKamelImageTmpDAO(mPresenter.getAppContext());
         Thread thread = new Thread() {
@@ -3135,45 +3027,15 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getRptMojodyAnbar(final int getProgramType, String ccAnbarakAfrad) {
+        Log.d("getProgram", "69-getRptMojodyAnbar");
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         getRptFaktorVazeiat(getProgramType, String.valueOf(ccForoshandeh), String.valueOf(ccMamorPakhsh));
 
-        /*final RptMojodiAnbarDAO rptMojodiAnbarDAO = new RptMojodiAnbarDAO(mPresenter.getAppContext());
-        rptMojodiAnbarDAO.fetchRptMojodyAnbarak(mPresenter.getAppContext(), activityNameForLog, ccAnbarakAfrad, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        boolean deleteResult = rptMojodiAnbarDAO.deleteAll();
-                        boolean insertResult = rptMojodiAnbarDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult)
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            getRptFaktorVazeiat(getProgramType, String.valueOf(ccForoshandeh), String.valueOf(ccMamorPakhsh));
-                        }
-                        else
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
-                        }
-                    }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
-            }
-        });*/
     }
 
 
     private void getRptFaktorVazeiat(final int getProgramType, String ccForoshandeh, String ccMamorPakhsh) {
+        Log.d("getProgram", "70-getRptFaktorVazeiat");
         if (noeMasouliat == 4 || noeMasouliat == 5) {
             ccForoshandeh = "0";
         } else {
@@ -3208,129 +3070,31 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getRptKalaInfo(final int getProgramType) {
+        Log.d("getProgram", "71-getRptKalaInfo");
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         if (getProgramType == Constants.GET_PROGRAM_FULL()) {
             getRptFaktorTozieNashode(getProgramType, String.valueOf(ccForoshandeh));
         }
 
-        /*final RptKalaInfoDAO rptKalaInfoDAO = new RptKalaInfoDAO(mPresenter.getAppContext());
-        rptKalaInfoDAO.fetchRptKalaInfo(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        boolean deleteResult = rptKalaInfoDAO.deleteAll();
-                        boolean insertResult = rptKalaInfoDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult)
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            if (getProgramType == Constants.GET_PROGRAM_FULL())
-                            {
-                                getRptFaktorTozieNashode(getProgramType , String.valueOf(ccForoshandeh));
-                            }
-                        }
-                        else
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
-                        }
-                    }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
-            }
-        });*/
     }
 
     private void getRptFaktorTozieNashode(final int getProgramType, final String ccForoshandeh) {
+        Log.d("getProgram", "72-getRptFaktorTozieNashode");
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         getRptForoshandehVisit(getProgramType, ccForoshandeh);
 
-        /*final RptFaktorTozieNashodehDAO rptFaktorTozieNashodehDAO = new RptFaktorTozieNashodehDAO(mPresenter.getAppContext());
-        rptFaktorTozieNashodehDAO.fetchAllrptFaktorTozieNashodeh(mPresenter.getAppContext(), activityNameForLog, ccForoshandeh, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        boolean deleteResult = rptFaktorTozieNashodehDAO.deleteAll();
-                        boolean insertResult = rptFaktorTozieNashodehDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult)
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            getRptForoshandehVisit(getProgramType , ccForoshandeh);
-                        }
-                        else
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
-                        }
-                    }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
-            }
-        });*/
     }
 
 
     private void getRptForoshandehVisit(final int getProgramType, String ccForoshandeh) {
+        Log.d("getProgram", "73-getRptForoshandehVisit");
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         getRptVersionInfo(getProgramType);
-
-        /*final RptVisitForoshandehForoshandehDAO rptVisitForoshandehForoshandehDAO = new RptVisitForoshandehForoshandehDAO(mPresenter.getAppContext());
-        final RptVisitForoshandehMoshtaryDAO rptVisitForoshandehMoshtaryDAO = new RptVisitForoshandehMoshtaryDAO(mPresenter.getAppContext());
-        rptVisitForoshandehMoshtaryDAO.fetchAllrptVisitForoshandehMoshtary(mPresenter.getAppContext(), activityNameForLog, ccForoshandeh, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        boolean deleteForoshandehResult = rptVisitForoshandehForoshandehDAO.deleteAll();
-                        boolean deleteResult = rptVisitForoshandehMoshtaryDAO.deleteAll();
-                        boolean insertResult = rptVisitForoshandehMoshtaryDAO.insertGroup(arrayListData);
-                        if (deleteForoshandehResult && deleteResult && insertResult)
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            getRptVersionInfo(getProgramType , "1");
-                        }
-                        else
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
-                        }
-                    }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
-            }
-        });*/
     }
 
 
     private void getRptVersionInfo(final int getProgramType) {
+        Log.d("getProgram", "74-getRptVersionInfo");
         String version = new DeviceInfo().getCurrentVersion(mPresenter.getAppContext());
         final TaghiratVersionPPCDAO taghiratVersionPPCDAO = new TaghiratVersionPPCDAO(mPresenter.getAppContext());
         taghiratVersionPPCDAO.fetchTaghiratVersionPPC(mPresenter.getAppContext(), activityNameForLog, "1", version, new RetrofitResponse() {
@@ -3361,44 +3125,15 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getTizerTablighat(final int getProgramType) {
+        Log.d("getProgram", "75-getTizerTablighat");
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         getMoshtaryChidman(getProgramType, ccMasirs);
-     /*   final TizerTablighatPegahDAO tizerTablighatPegahDAO = new TizerTablighatPegahDAO(mPresenter.getAppContext());
-        tizerTablighatPegahDAO.fetchTizerTablighat(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        boolean deleteResult = tizerTablighatPegahDAO.deleteAll();
-                        boolean insertResult = tizerTablighatPegahDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult)
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            getMoshtaryChidman(getProgramType , ccMasirs);
-                        }
-                        else
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
-                        }
-                    }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
-            }
-        }); */
+
     }
 
 
     private void getMoshtaryChidman(final int getProgramType, String ccMasirs) {
+        Log.d("getProgram", "76-getMoshtaryChidman");
         final MoshtaryChidmanDAO moshtaryChidmanDAO = new MoshtaryChidmanDAO(mPresenter.getAppContext());
         moshtaryChidmanDAO.fetchMoshtaryChidman(mPresenter.getAppContext(), activityNameForLog, ccMasirs, new RetrofitResponse() {
             @Override
@@ -3432,12 +3167,14 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getSystemConfigTablet(final int getProgramType) {
+        Log.d("getProgram", "77-getSystemConfigTablet");
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         getAllMoshtaryForoshandeh(getProgramType, String.valueOf(ccForoshandeh));
     }
 
 
     private void getAllMoshtaryForoshandeh(final int getProgramType, final String ccForoshandeh) {
+        Log.d("getProgram", "78-getAllMoshtaryForoshandeh");
         final AllMoshtaryForoshandehDAO allMoshtaryForoshandehDAO = new AllMoshtaryForoshandehDAO(mPresenter.getAppContext());
         allMoshtaryForoshandehDAO.fetchAllMoshtaryforoshandeh(mPresenter.getAppContext(), activityNameForLog, ccForoshandeh, new RetrofitResponse() {
             @Override
@@ -3467,6 +3204,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getRptForosh(final int getProgramType, String ccForoshandeh, String currentDate) {
+        Log.d("getProgram", "79-getRptForosh");
         final RptForoshDAO rptForoshDAO = new RptForoshDAO(mPresenter.getAppContext());
         rptForoshDAO.fetchAllrptAmarForosh(mPresenter.getAppContext(), activityNameForLog, ccForoshandeh, currentDate, new RetrofitResponse() {
             @Override
@@ -3496,6 +3234,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getRptMandehDar(final int getProgramType, final String ccAfrad) {
+        Log.d("getProgram", "80-getRptMandehDar");
         final RptMandehdarDAO mandehdarDAO = new RptMandehdarDAO(mPresenter.getAppContext());
         mandehdarDAO.fetchAllMandehdar(mPresenter.getAppContext(), activityNameForLog, ccAfrad, new RetrofitResponse() {
             @Override
@@ -3526,6 +3265,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getRptAsnad(final int getProgramType) {
+        Log.d("getProgram", "81-getRptAsnad");
         String ccForoshandehAsnad;
         if (noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_SARD || noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_GARM || noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_SMART) {
             ccForoshandehAsnad = String.valueOf(ccForoshandeh);
@@ -3562,6 +3302,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getRptHadaf(final int getProgramType) {
+        Log.d("getProgram", "82-getRptHadaf");
         if (noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_SARD || noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_GARM || noeMasouliat == ForoshandehMamorPakhshUtils.FOROSHANDEH_SMART) {
             final RptHadafForoshDAO rptHadafForoshDAO = new RptHadafForoshDAO(mPresenter.getAppContext());
             rptHadafForoshDAO.fetchAllrpHadafeForosh(mPresenter.getAppContext(), activityNameForLog, String.valueOf(ccForoshandeh), new RetrofitResponse() {
@@ -3598,89 +3339,20 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getRptListVosol(final int getProgramType, String ccAfrad) {
+        Log.d("getProgram", "83-getRptListVosol");
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         getRptKharidKala(getProgramType, "2", "");
 
-        /*final RptListVosolDAO rptListVosolDAO = new RptListVosolDAO(mPresenter.getAppContext());
-        rptListVosolDAO.fetchRPTListVosol(mPresenter.getAppContext(), activityNameForLog, ccAfrad, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        boolean deleteResult = rptListVosolDAO.deleteAll();
-                        boolean insertResult = rptListVosolDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult)
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            getRptKharidKala(getProgramType , "2" , "");
-                        }
-                        else
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
-                        }
-                    }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
-            }
-        });*/
+
     }
 
 
     private void getRptKharidKala(final int getProgramType, String level, String ccKalaGoroh) {
+        Log.d("getProgram", "84-getRptKharidKala");
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         deleteRptMarjoee(getProgramType);
 
-        /*final RptKharidKalaDAO rptKharidKalaDAO = new RptKharidKalaDAO(mPresenter.getAppContext());
-        String foroshandeh = "";
-        if(noeMasouliat == 5)
-        {
-            foroshandeh = ccForoshandehString;
-        }
-        else
-        {
-            foroshandeh = String.valueOf(ccForoshandeh);
-        }
-        rptKharidKalaDAO.fetchKharidKalaByccForoshandeh(mPresenter.getAppContext(), activityNameForLog, level, foroshandeh, ccKalaGoroh, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        boolean deleteResult = rptKharidKalaDAO.deleteAll();
-                        boolean insertResult = rptKharidKalaDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult)
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            deleteRptMarjoee(getProgramType);
-                        }
-                        else
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
-                        }
-                    }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
-            }
-        });*/
+
     }
 
 
@@ -3691,46 +3363,16 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getRptMasir(final int getProgramType, final String ccForoshandeh) {
+        Log.d("getProgram", "85-getRptMasir");
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         getElamMarjoee(getProgramType);
 
-        /*final RptMasirDAO rptMasirDAO = new RptMasirDAO(mPresenter.getAppContext());
-        rptMasirDAO.fetchRPTMasirForoshandeh(mPresenter.getAppContext(), activityNameForLog, ccForoshandeh, new RetrofitResponse()
-        {
-            @Override
-            public void onSuccess(final ArrayList arrayListData)
-            {
-                Thread thread = new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        boolean deleteResult = rptMasirDAO.deleteAll();
-                        boolean insertResult = rptMasirDAO.insertGroup(arrayListData);
-                        if (deleteResult && insertResult)
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            //sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
-                            getMoshtaryEtebarPishfarz(getProgramType);
-                        }
-                        else
-                        {
-                            sendThreadMessage(Constants.BULK_INSERT_FAILED() , ++itemCounter);
-                        }
-                    }
-                };
-                thread.start();
-            }
-            @Override
-            public void onFailed(String type, String error)
-            {
-                mPresenter.onFailedGetProgram(++itemCounter , String.format(" type : %1$s \n error : %2$s", type , error));
-            }
-        });*/
+
     }
 
 
     private void getElamMarjoee(final int getProgramType) {
+        Log.d("getProgram", "86-getElamMarjoee");
         final ElamMarjoeePPCDAO elamMarjoeePPCDAO = new ElamMarjoeePPCDAO(mPresenter.getAppContext());
         if (noeMasouliat == 4 || noeMasouliat == 5) {
             Log.d("getprogram", "fetch elam marjoee" + ccDarkhastFaktorPakhsh);
@@ -3774,6 +3416,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getElamMarjoeeSatr(final int getProgramType) {
+        Log.d("getProgram", "87-getElamMarjoeeSatr");
         final ElamMarjoeeSatrPPCDAO elamMarjoeeSatrPPCDAO = new ElamMarjoeeSatrPPCDAO(mPresenter.getAppContext());
         if (noeMasouliat == 4 || noeMasouliat == 5) {
             Log.d("getprogram", "fetch elam marjoee satr");
@@ -3817,6 +3460,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void deleteElamMarjoeeTedad(final int getProgramType) {
+        Log.d("getProgram", "88-deleteElamMarjoeeTedad");
         final ElamMarjoeeSatrPPCTedadDAO elamMarjoeeSatrPPCTedadDAO = new ElamMarjoeeSatrPPCTedadDAO(mPresenter.getAppContext());
         Thread thread = new Thread() {
             @Override
@@ -3834,6 +3478,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getMoshtaryEtebarPishfarz(final int getProgramType, final String ccForoshandeh) {
+        Log.d("getProgram", "89-getMoshtaryEtebarPishfarz");
         final MoshtaryEtebarPishFarzDAO moshtaryEtebarPishFarzDAO = new MoshtaryEtebarPishFarzDAO(mPresenter.getAppContext());
         moshtaryEtebarPishFarzDAO.fetchMoshtaryEtebarPishFarz(mPresenter.getAppContext(), activityNameForLog, ccForoshandeh, new RetrofitResponse() {
             @Override
@@ -3864,6 +3509,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getNoeFaaliatForMoarefiMoshtaryJadid(final int getProgramType, final String ccForoshandeh) {
+        Log.d("getProgram", "90-getNoeFaaliatForMoarefiMoshtaryJadid");
         final NoeFaaliatForMoarefiMoshtaryJadidDAO noeFaaliatForMoarefiMoshtaryJadidDAO = new NoeFaaliatForMoarefiMoshtaryJadidDAO(mPresenter.getAppContext());
         noeFaaliatForMoarefiMoshtaryJadidDAO.fetchNoeFaaliatForMoarefiMoshtaryJadid(mPresenter.getAppContext(), activityNameForLog, ccForoshandeh, new RetrofitResponse() {
             @Override
@@ -3892,6 +3538,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getMoshtaryJadidDarkhast(final int getProgramType) {
+        Log.d("getProgram", "91-getMoshtaryJadidDarkhast");
         final MoshtaryJadidDarkhastDAO moshtaryJadidDarkhastDAO = new MoshtaryJadidDarkhastDAO(mPresenter.getAppContext());
         moshtaryJadidDarkhastDAO.fetchMoshtaryJadidDarkhast(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse() {
             @Override
@@ -3926,6 +3573,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getTafkikJozePakhsh(final int getProgramType) {
+        Log.d("getProgram", "92-getTafkikJozePakhsh");
         if (noeMasouliat == 4 && !ccDarkhastFaktors.trim().equals("-1")) {
             final TafkikJozeDAO tafkikJozeDAO = new TafkikJozeDAO(mPresenter.getAppContext());
 
@@ -3954,6 +3602,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getGorohKalaNoeSenf(final int getProgramType) {
+        Log.d("getProgram", "93-getGorohKalaNoeSenf");
         final GorohKalaNoeSenfDAO gorohKalaNoeSenfDAO = new GorohKalaNoeSenfDAO(mPresenter.getAppContext());
         gorohKalaNoeSenfDAO.fetchAllGorohKalaNoeSenf(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse() {
             @Override
@@ -3976,6 +3625,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getMoshtaryBrand(final int getProgramType) {
+        Log.d("getProgram", "94-getMoshtaryBrand");
         String allccMoshtary = ccMoshtarys;
         if (noeMasouliat == 4 || noeMasouliat == 5) {
             allccMoshtary = ccMoshtaryPakhsh;
@@ -4002,6 +3652,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getMarjoeeMamorPakhsh(int getProgramType) {
+        Log.d("getProgram", "95-getMarjoeeMamorPakhsh");
         Log.i("itemCounter", "getMarjoeeMamorPakhsh : " + itemCounter);
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
         //String ccMoshtary = darkhastFaktorDAO.getCcdarkhastFaktorsForZanjirei();
@@ -4041,6 +3692,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getAllMarkazShahrMarkazi(final int getProgramType) {
+        Log.d("getProgram", "96-getAllMarkazShahrMarkazi");
         final MarkazShahrMarkaziDAO markazShahrMarkaziDAO = new MarkazShahrMarkaziDAO(mPresenter.getAppContext());
         markazShahrMarkaziDAO.fetchMarkazShahrMarkazi(mPresenter.getAppContext(), activityNameForLog, new RetrofitResponse() {
             @Override
@@ -4064,6 +3716,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getAllNoeMoshtaryRialKharid(final int getProgramType, String ccMarkazSazmanForoshSakhtarForoshs) {
+        Log.d("getProgram", "97-getAllNoeMoshtaryRialKharid");
         final NoeMoshtaryRialKharidDAO noeMoshtaryRialKharidDAO = new NoeMoshtaryRialKharidDAO(mPresenter.getAppContext());
         /*sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL() , ++itemCounter);
         getParameter(getProgramType);*/
@@ -4088,6 +3741,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getAllcodePosti(final int getProgramType, int ccMarkazForosh) {
+        Log.d("getProgram", "98-getAllcodePosti");
         final MahalCodePostiDAO mahalCodePostiDAO = new MahalCodePostiDAO(mPresenter.getAppContext());
         mahalCodePostiDAO.fetchMahalCodePosti(mPresenter.getAppContext(), activityNameForLog, ccMarkazForosh, new RetrofitResponse() {
             @Override
@@ -4116,6 +3770,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getConfigNoeVosolMojazeFaktor(int getProgramType) {
+        Log.d("getProgram", "99-getConfigNoeVosolMojazeFaktor");
         Log.i("itemCounter", "getConfigNoeVosolMojazeFaktor :" + itemCounter);
         ConfigNoeVosolMojazeFaktorDAO configNoeVosolMojazeFaktorDAO = new ConfigNoeVosolMojazeFaktorDAO(BaseApplication.getContext());
         configNoeVosolMojazeFaktorDAO.fetchConfigNoeVosolMojazeFaktor(BaseApplication.getContext(), activityNameForLog, new RetrofitResponse() {
@@ -4150,6 +3805,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getConfigNoeVosolMojazeMoshtary(int getProgramType) {
+        Log.d("getProgram", "100-getConfigNoeVosolMojazeMoshtary");
         Log.i("itemCounter", "getConfigNoeVosolMojazeMoshtary :" + itemCounter);
         MoshtaryDAO moshtaryDAO = new MoshtaryDAO(BaseApplication.getContext());
         String moshtarys = "-1,347,348,349,350,351,352,353," + moshtaryDAO.getAllccNoeSenf();
@@ -4183,6 +3839,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getDariaftPardakhtBargashty(final int getProgramType, String ccDarkhastFaktors) {
+        Log.d("getProgram", "101-getDariaftPardakhtBargashty");
         final DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(mPresenter.getAppContext());
 
         dariaftPardakhtDarkhastFaktorPPCDAO.fetchDariaftPardakhtDarkhastFaktorPPC(mPresenter.getAppContext(), activityNameForLog, "3", ccDarkhastFaktors, new RetrofitResponse() {
@@ -4215,6 +3872,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getSupportCrisp(final int getProgramType, int ccSazmanForosh) {
+        Log.d("getProgram", "102-getSupportCrisp");
         final SupportCrispDAO supportCrispDAO = new SupportCrispDAO(mPresenter.getAppContext());
         supportCrispDAO.fetchSupportCrisp(mPresenter.getAppContext(), activityNameForLog, ccSazmanForosh, new RetrofitResponse() {
             @Override
@@ -4245,6 +3903,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getNoeVosolMoshtary(final int getProgramType, int ccMarkazSazmanForosh) {
+        Log.d("getProgram", "103-getNoeVosolMoshtary");
         String ccMarkazSazmanForoshSend = "";
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
         if (noeMasouliat == 4 || noeMasouliat == 5) {
@@ -4306,7 +3965,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
      * @throws
      */
     public void getAllMoshtaryGharardad_pakhsh(int getProgramType, JSONArray jsonArray) {
-
+        Log.d("getProgram", "104-getAllMoshtaryGharardad_pakhsh");
             try {
 
                 MoshtaryGharardadDAO moshtaryGharardadDAO = new MoshtaryGharardadDAO(mPresenter.getAppContext());
@@ -4380,7 +4039,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
     /**
      * overload getAllMoshtaryGharardad
-     * {@link #getAllMoshtaryGharardad(int, JSONArray)}
+     * {@link #getAllMoshtaryGharardad(int, String)}
      * get All contractions which a seller can sell to them weather a cold seller, a warm seller and a smart seller or a distributer
      * {@link #getKalaMosavabBySazmanGharardad(int, int)
      *
@@ -4389,7 +4048,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
     public void getAllMoshtaryGharardad(final int getProgramType, String ccForoshandeh) {
 
-
+        Log.d("getProgram", "104-getAllMoshtaryGharardad");
         MoshtaryGharardadDAO moshtaryGharardadDAO = new MoshtaryGharardadDAO(mPresenter.getAppContext());
 
         moshtaryGharardadDAO.fetchMoshtaryGharardadASync(mPresenter.getAppContext(), activityNameForLog, ccForoshandeh, new RetrofitResponse() {
@@ -4467,6 +4126,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     public final String __GET_ALL_KALA_MOSAVAB__ = "GET_ALL_KALA_MOSAVAB";
 
     private void getAllKalaMosavab(int getProgramType, ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels) {
+        Log.d("getProgram", "105-getAllKalaMosavab");
         ArrayList<MoshtaryGharardadKalaModel> moshtaryGharardadArrayLists = new ArrayList<>();
         for (MoshtaryGharardadModel moshtaryGharardadModel : moshtaryGharardadModels) {
             ArrayList<MoshtaryGharardadKalaModel> moshtaryGharardadKalaModels;
@@ -4552,6 +4212,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getMarjoeePakhsh(final int getProgramType, String ccDarkhastFaktors) {
+        Log.d("getProgram", "106-getMarjoeePakhsh");
         Log.d("getProgram", "ccDarkhastFaktors:" + ccDarkhastFaktors);
         ElamMarjoeeForoshandehDAO elamMarjoeeForoshandehDAO = new ElamMarjoeeForoshandehDAO(mPresenter.getAppContext());
         elamMarjoeeForoshandehDAO.fetchElamMarjoeeForoshandeh(mPresenter.getAppContext(), activityNameForLog, ccDarkhastFaktors, new RetrofitResponse() {
@@ -4582,6 +4243,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getKalaOlaviatGheymat(int getProgramType, String ccAnbarak, int ccForoshandeh, int ccMamorPakhsh, String ccKalaCode) {
+        Log.d("getProgram", "107-getKalaOlaviatGheymat");
         Log.d("getProgram", "ccDarkhastFaktors:" + ccDarkhastFaktors);
         KalaOlaviatGheymatDAO kalaOlaviatGheymatDAO = new KalaOlaviatGheymatDAO(mPresenter.getAppContext());
         kalaOlaviatGheymatDAO.fetchKalaOlaviat(mPresenter.getAppContext(), activityNameForLog, ccAnbarak, ccForoshandeh, ccMamorPakhsh, ccKalaCode, new RetrofitResponse() {
@@ -4612,6 +4274,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private  void getNoePishnahad( int getProgramType){
+        Log.d("getProgram", "108-getNoePishnahad");
         SuggestDAO suggestDAO = new SuggestDAO(BaseApplication.getContext());
         NoePishnahadDAO noePishnahadDAO = new NoePishnahadDAO(BaseApplication.getContext());
 
@@ -4658,6 +4321,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private  void getJashnvareh( int getProgramType, int ccForoshandeh, String ccMoshtarys){
+        Log.d("getProgram", "109-getJashnvareh");
         SuggestDAO suggestDAO = new SuggestDAO(BaseApplication.getContext());
         RptJashnvarehDAO rptJashnvarehDAO = new RptJashnvarehDAO(BaseApplication.getContext());
 
@@ -4675,7 +4339,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                         suggestDAO.deleteIsSend();
                         if (deleteResult && insertResult) {
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
-                            getParameter(getProgramType);
+                            getElatTahvilDarkhast(getProgramType);
                         } else {
                             sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
                         }
@@ -4691,7 +4355,181 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
         });
     }
 
+    private  void getElatTahvilDarkhast( int getProgramType){
+        Log.d("getProgram", "110-getElatTahvilDarkhast");
+        ElatAdamTahvilDarkhastDAO elatAdamTahvilDarkhastDAO = new ElatAdamTahvilDarkhastDAO(BaseApplication.getContext());
+        elatAdamTahvilDarkhastDAO.fetchElatAdamTahvilDarkhast(BaseApplication.getContext(), "GetProgramActivity", new RetrofitResponse() {
+            @Override
+            public void onSuccess(ArrayList arrayListData) {
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        boolean deleteResult = elatAdamTahvilDarkhastDAO.deleteAll();
+                        boolean insertResult = elatAdamTahvilDarkhastDAO.insertGroup(arrayListData);
+                        if (deleteResult && insertResult) {
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                            //getParameter(getProgramType);
+                            if (noeMasouliat == 4 || noeMasouliat == 5)
+                            {
+                                ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
+                                boolean canEditDarkhastForMovaze = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_Can_Edit_Darkhast_For_Movaze()).trim().equals("0");
+                                if (canEditDarkhastForMovaze)
+                                    getDarkhastFaktorTakhfif(getProgramType);
+                                else {
+                                    clearDarkhastFaktorjayezehTakhfif(getProgramType);
+                                }
+                            }
+                            else {
+                                clearDarkhastFaktorjayezehTakhfif(getProgramType);
+                            }
+                        } else {
+                            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+                        }
+                    }
+                };
+                thread.start();
+            }
+
+            @Override
+            public void onFailed(String type, String error) {
+                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
+
+            }
+        });
+    }
+
+
+
+    private void getDarkhastFaktorTakhfif(final int getProgramType) {
+        Log.d("getProgram", "111-getDarkhastFaktorTakhfif");
+        DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
+        String ccDarkhastFaktorHavalehs = darkhastFaktorDAO.getccDarkhastFaktorsByNoeFaktorHavaleRooz(Constants.ccNoeHavale);
+        DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
+        darkhastFaktorTakhfifDAO.fetchDarkhastFaktorTakhfif(mPresenter.getAppContext(),activityNameForLog,ccDarkhastFaktorHavalehs ,new RetrofitResponse() {
+            @Override
+            public void onSuccess(ArrayList arrayListData) {
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
+                        boolean deleteResult = darkhastFaktorTakhfifDAO.deleteAll();
+                        boolean insertGroup  = darkhastFaktorTakhfifDAO.insertGroup(arrayListData);
+                        if (deleteResult && insertGroup) {
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                            getDarkhastFaktorSatrTakhfif(getProgramType,ccDarkhastFaktorHavalehs);
+                        } else {
+                            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+                        }
+                    }
+                };
+                thread.start();
+            }
+
+            @Override
+            public void onFailed(String type, String error) {
+                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
+
+            }
+        });
+
+
+
+    }
+
+    private void getDarkhastFaktorSatrTakhfif(final int getProgramType,String ccDarkhastHavaleh) {
+        Log.d("getProgram", "112-getDarkhastFaktorSatrTakhfif");
+        DarkhastFaktorSatrTakhfifDAO darkhastFaktorSatrTakhfifDAO = new DarkhastFaktorSatrTakhfifDAO(mPresenter.getAppContext());
+        darkhastFaktorSatrTakhfifDAO.fetchDarkhastFaktorSatrTakhfif(mPresenter.getAppContext(), activityNameForLog, ccDarkhastHavaleh, new RetrofitResponse() {
+            @Override
+            public void onSuccess(ArrayList arrayListData) {
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        DarkhastFaktorSatrTakhfifDAO darkhastFaktorSatrTakhfifDAO = new DarkhastFaktorSatrTakhfifDAO(mPresenter.getAppContext());
+                        boolean deleteResult = darkhastFaktorSatrTakhfifDAO.deleteAll();
+                        boolean insertGroup = darkhastFaktorSatrTakhfifDAO.insertGroup(arrayListData);
+                        if (deleteResult && insertGroup) {
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                            getDarkhastFaktorJayezeh(getProgramType,ccDarkhastHavaleh);
+                        } else {
+                            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+                        }
+                    }
+                };
+                thread.start();
+            }
+
+            @Override
+            public void onFailed(String type, String error) {
+                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
+
+            }
+        });
+
+    }
+
+    private void getDarkhastFaktorJayezeh(int getProgramType, String ccDarkhastFaktorHavalehs) {
+        Log.d("getProgram", "113-getDarkhastFaktorJayezeh");
+        DarkhastFaktorJayezehDAO darkhastFaktorJayezehDAO = new DarkhastFaktorJayezehDAO(mPresenter.getAppContext());
+        darkhastFaktorJayezehDAO.fetchDarkhastFaktorJayezeh(mPresenter.getAppContext(),activityNameForLog,ccDarkhastFaktorHavalehs ,new RetrofitResponse() {
+            @Override
+            public void onSuccess(ArrayList arrayListData) {
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        boolean deleteResult = darkhastFaktorJayezehDAO.deleteAll();
+                        boolean insertGroup  = darkhastFaktorJayezehDAO.insertGroup(arrayListData);
+                        if (deleteResult && insertGroup) {
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                            getParameter(getProgramType);
+                        } else {
+                            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+                        }
+                    }
+                };
+                thread.start();
+            }
+
+            @Override
+            public void onFailed(String type, String error) {
+                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
+
+            }
+        });
+    }
+
+    private void clearDarkhastFaktorjayezehTakhfif(int getProgramType) {
+        Log.d("getProgram", "111-112-113-clearDarkhastFaktorjayezehTakhfif");
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
+                boolean deleteDarkhastFaktorTakhfif = darkhastFaktorTakhfifDAO.deleteAll();
+                if (deleteDarkhastFaktorTakhfif ) {
+                    sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                    DarkhastFaktorSatrTakhfifDAO darkhastFaktorSatrTakhfifDAO = new DarkhastFaktorSatrTakhfifDAO(mPresenter.getAppContext());
+                    boolean deleteDarkhastFaktorSatrTakhfif = darkhastFaktorSatrTakhfifDAO.deleteAll();
+                    if(deleteDarkhastFaktorSatrTakhfif) {
+                        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                        DarkhastFaktorJayezehDAO darkhastFaktorJayezehDAO = new DarkhastFaktorJayezehDAO(mPresenter.getAppContext());
+                        boolean deleteAll = darkhastFaktorJayezehDAO.deleteAll();
+                        if (deleteAll) {
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                            getParameter(getProgramType);
+                        } else {
+                            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+
+                        }
+                    }
+                } else {
+                    sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+                }
+            }
+        };
+        thread.start();
+    }
     private void getParameter(final int getProgramType) {
+        Log.d("getProgram", "114-getParameter");
         GetProgramShared getProgramShared = new GetProgramShared(mPresenter.getAppContext());
         final String lastDateTimeGetConfig = getProgramShared.getString(getProgramShared.GREGORIAN_DATE_TIME_OF_GET_CONFIG(), "20190101 00:00:00");
 
@@ -4711,6 +4549,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                             boolean deleteResult = parameterDAO.deleteAll();
                             boolean insertResult = parameterDAO.insertGroup(arrayListData);
                             if (deleteResult && insertResult) {
+                                sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                                 getParameterChild(getProgramType, lastDateTimeGetConfig, String.valueOf(ccMarkazSazmanForosh));
                             } else {
                                 sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
@@ -4732,6 +4571,8 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     }
 
     private void getParameterChild(final int getProgramType, String lastDateTimeGetConfig, String ccMarkazSazmanForosh) {
+        Log.d("getProgram", "115-getParameterChild");
+
         final ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
         if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3 || noeMasouliat == 6 || noeMasouliat == 8) {
             ccMarkazAnbar = -1;
@@ -4769,6 +4610,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
     private void getBarkhordForoshandehBaMoshtary(final int getProgramType, String ccForoshandeh) {
+        Log.d("getProgram", "116-getBarkhordForoshandehBaMoshtary");
         String tedadMah = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_MAX_ROOZ_PISHBINI_TAHVIL);
         tedadMah = (tedadMah == null || tedadMah.trim().equals("")) ? "1" : tedadMah;
         final BarkhordForoshandehBaMoshtaryDAO barkhordForoshandehBaMoshtaryDAO = new BarkhordForoshandehBaMoshtaryDAO(mPresenter.getAppContext());
@@ -4786,6 +4628,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                         boolean insertResult = barkhordForoshandehBaMoshtaryDAO.insertGroup(arrayListData);
                         if (deleteResult && insertResult) {
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                            Log.d("getProgram", "getBarkhordForoshandehBaMoshtary getProgramType:" + getProgramType + "/" +  Constants.GET_PROGRAM_FULL());
                             if (getProgramType == Constants.GET_PROGRAM_FULL()) {
                                 saveLastGetProgramDate();
                                 updateJayezehTakhfifVersion();
@@ -4829,7 +4672,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
         GetProgramShared getProgramShared = new GetProgramShared(mPresenter.getAppContext());
         String currentDate = new SimpleDateFormat(Constants.DATE_TIME_WITH_SPACE()).format(new Date());
         getProgramShared.putString(getProgramShared.GREGORIAN_DATE_TIME_OF_GET_CONFIG(), currentDate);
-        Log.d("GetProgram", "currentDate : " + currentDate);
+        Log.d("getProgram", "currentDate : " + currentDate);
     }
 
 

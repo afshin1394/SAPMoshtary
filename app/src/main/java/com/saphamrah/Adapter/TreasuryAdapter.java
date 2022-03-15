@@ -84,9 +84,11 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         holder.lblNameNoeVosol.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.noeVosol), models.get(position).getNameNoeVosolAzMoshtary()));
         if (models.get(position).getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale) {
             holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.shomareDarkhast), models.get(position).getShomarehDarkhast(),context.getResources().getString(R.string.havaleh)));
+            holder.layElatAdamTahvil.setVisibility(View.VISIBLE);
         }
         else {
             holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.shomareFaktor), models.get(position).getShomarehFaktor(),context.getResources().getString(R.string.faktor)));
+            holder.layElatAdamTahvil.setVisibility(View.GONE);
         }
         try {
             Date date = sdf.parse(models.get(position).getTarikhErsal());
@@ -160,6 +162,14 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             //}
             holder.laySendVosol.setVisibility(View.VISIBLE);
         }
+        if (models.get(position).getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale){
+            countSwipeLayout ++;
+        }
+
+
+        if (models.get(position).getExtraProp_CodeNoeVorod() != 0){
+            countSwipeLayout = 0;
+        }
 
         /**
          * set width for SwipeLayout
@@ -173,6 +183,9 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             }
             else if (countSwipeLayout == 1) {
                 holder.layLeft.getLayoutParams().width = (int) BaseApplication.getContext().getResources().getDimension(R.dimen.treasury_swipeLayout_width_one);
+            }
+            else if (countSwipeLayout == 0){
+                holder.layLeft.getLayoutParams().width = 0;
             }
         }
 
@@ -326,6 +339,8 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         private ConstraintLayout lay_second_treasuryList;
         private ImageView imgHaveMarjoee;
         private LinearLayout layLeft;
+        private RelativeLayout layElatAdamTahvil;
+        private ImageView imgElatAdamTahvil;
 
 
         public ViewHolder(View view) {
@@ -361,6 +376,8 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
             lay_second_treasuryList = view.findViewById(R.id.lay_second_treasuryList);
             imgHaveMarjoee = view.findViewById(R.id.imgHaveMarjoee);
             layLeft = view.findViewById(R.id.layLeft);
+            layElatAdamTahvil = view.findViewById(R.id.layElatAdamTahvil);
+            imgElatAdamTahvil = view.findViewById(R.id.imgElatAdamTahvil);
 
             lblRadif.setTypeface(font);
             lblCodeNameCustomer.setTypeface(font);
@@ -431,6 +448,10 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
                     listener.onItemClick(Constants.SAVE_SEND_LOCATION, position);
                     swipeLayout.close(true);
                 }
+            });
+            layElatAdamTahvil.setOnClickListener(v->{
+                listener.onItemClick(Constants.ELAT_ADAM_TAHVIL,position);
+                swipeLayout.close(true);
             });
 
         }

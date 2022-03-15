@@ -44,7 +44,7 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
 //                    " where ForTasviehVosol = 1 AND FaktorRooz = " + faktorRooz + " order by df.TarikhFaktor DESC";
 //
             String query = "select df.ccDarkhastFaktor, df.UniqID_Tablet , df.ccDarkhastFaktorNoeForosh, df.ccMarkazForosh, df.ccSazmanForosh, df.ccMarkazSazmanForosh, df.TarikhFaktor , df.TarikhErsal, df.ShomarehDarkhast, df.ShomarehFaktor, df.ccForoshandeh, df.FaktorRooz, 1 AS CountDarkhastFaktor, \n" +
-                    " df.ccMoshtary, df.ccUser, df.NameNoeVosolAzMoshtary, \n" +
+                    " df.ccMoshtary, df.ccUser, df.NameNoeVosolAzMoshtary, df.ExtraProp_CodeNoeVorod, \n" +
                     " df.MablaghKhalesFaktor, df.MablaghMandeh , df.CodeVazeiat, df.Latitude, df.Longitude, \n" +
                     " df.ExtraProp_IsSend, df.CodeNoeVosolAzMoshtary,df.ExtraProp_IsMarjoeeKamel,df.ExtraProp_Resid, df.ExtraProp_ShowFaktorMamorPakhsh , df.ExtraProp_MablaghDariaftPardakht, \n" +
                     " df.ccMoshtaryGharardad, df.MoshtaryGharardadccSazmanForosh, \n" +
@@ -76,7 +76,7 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
         ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels = new ArrayList<>();
         try {
             String query = "select df.ccDarkhastFaktor, df.ccDarkhastFaktorNoeForosh, df.ccMarkazForosh, df.ccSazmanForosh, df.ccMarkazSazmanForosh, df.TarikhFaktor , df.TarikhErsal, df.ShomarehDarkhast, df.ShomarehFaktor, df.ccForoshandeh, df.FaktorRooz, 1 AS CountDarkhastFaktor, \n" +
-                    " df.ccMoshtary, df.ccUser, df.NameNoeVosolAzMoshtary, \n" +
+                    " df.ccMoshtary, df.ccUser, df.NameNoeVosolAzMoshtary, df.ExtraProp_CodeNoeVorod, \n" +
                     " df.MablaghKhalesFaktor, df.MablaghMandeh , df.CodeVazeiat, df.Latitude, df.Longitude, \n" +
                     " df.ExtraProp_IsSend, df.CodeNoeVosolAzMoshtary,df.ExtraProp_IsMarjoeeKamel,df.ExtraProp_Resid, df.ExtraProp_ShowFaktorMamorPakhsh , df.ExtraProp_MablaghDariaftPardakht, \n" +
                     " df.ccMoshtaryGharardad, df.MoshtaryGharardadccSazmanForosh, \n" +
@@ -258,6 +258,7 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
                 darkhastFaktorMoshtaryForoshandeModel.setMoshtaryGharardadccSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_MoshtaryGharardadccSazmanForosh())));
                 darkhastFaktorMoshtaryForoshandeModel.setNameSazmanForosh(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_NameSazmanForosh())));
                 darkhastFaktorMoshtaryForoshandeModel.setTarikhMoarefiMoshtary(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_TarikhMoarefiMoshtary())));
+                darkhastFaktorMoshtaryForoshandeModel.setExtraProp_CodeNoeVorod(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_CodeNoeVorod())));
                 darkhastFaktorMoshtaryForoshandeModels.add(darkhastFaktorMoshtaryForoshandeModel);
                 cursor.moveToNext();
             }

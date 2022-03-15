@@ -3,6 +3,8 @@ package com.saphamrah.BaseMVP;
 import android.content.Context;
 
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
+import com.saphamrah.Model.DarkhastFaktorModel;
+import com.saphamrah.Model.ElatAdamTahvilDarkhastModel;
 import com.saphamrah.UIModel.DarkhastFaktorMoshtaryForoshandeModel;
 
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public interface TreasuryListMVP
 
         void openInvoiceSettlementActivity(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
         void onGetSearchResult(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels);
+        void onGetElatAdamTahvilDarkhast(ArrayList<ElatAdamTahvilDarkhastModel> models, ArrayList<String> elatAdamTahvilDarkhastTitles, DarkhastFaktorModel darkhastFaktorModel,int position);
     }
 
 
@@ -55,7 +58,8 @@ public interface TreasuryListMVP
 
         void checkIsLocationSendToServer(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
         void searchCustomer(String searchWord , ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels);
-
+        void getElatAdamTahvilDarkhast(long ccDarkhastFaktor,int position);
+        void sendElatAdamTahvilDarkhast(ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel , DarkhastFaktorModel darkhastFaktorModel,int position);
     }
 
 
@@ -84,6 +88,7 @@ public interface TreasuryListMVP
         void onSuccessLocation(int resId,int position);
         void openInvoiceSettlement(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel,boolean openInvoiceSettlement);
         void closeLoading();
+        void onGetElatAdamTahvilDarkhast(ArrayList<ElatAdamTahvilDarkhastModel> models, DarkhastFaktorModel darkhastFaktorModel,int position);
     }
 
 
@@ -101,6 +106,9 @@ public interface TreasuryListMVP
         void checkMohtaryKharejAzMahal(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel,int position);
         void updateGpsData();
         void checkIsLocationSendToServer(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
+        void getElatAdamTahvilDarkhast(long ccDarkhastFaktor,int position);
+        void sendElatAdamTahvilDarkhast(ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel , DarkhastFaktorModel darkhastFaktorModel,int position);
+
     }
 
 

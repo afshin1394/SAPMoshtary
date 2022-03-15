@@ -293,12 +293,15 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
     @Override
     public void onSuccessfullyGetNewProgramItem(int getProgramItemCount , int itemIndex)
     {
+        Log.d("getProgram", "getProgramItemCount :" + getProgramItemCount + ", itemIndex:" + itemIndex);
         if (itemIndex != getProgramItemCount - 1)
         {
+            Log.d("getProgram", " if getProgramItemCount-1 :" + (getProgramItemCount - 1) + ", itemIndex:" + itemIndex);
             mView.get().updateStatusOfSuccessfulItem(itemIndex);
         }
         else
         {
+            Log.d("getProgram", " else getProgramItemCount-1 :" + (getProgramItemCount - 1) + ", itemIndex:" + itemIndex);
             mView.get().showCompletedGetProgramSuccessfully();
             mModel.setProgramDateToShared();
         }

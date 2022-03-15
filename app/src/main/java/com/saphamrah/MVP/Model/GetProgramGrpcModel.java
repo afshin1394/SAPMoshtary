@@ -187,6 +187,7 @@ public class GetProgramGrpcModel implements GetProgramMVP.ModelOps {
 
         if (noeMasouliat != 7) {
             getProgramItemCount = mPresenter.getAppContext().getResources().getStringArray(R.array.getProgramItems).length;
+            Log.d("getProgram", "getProgramItemCount:" + getProgramItemCount);
             deleteLogPPC(getProgramType, String.valueOf(ccForoshandeh));
         } else // if (noeMasouliat == 7) Amargar
         {

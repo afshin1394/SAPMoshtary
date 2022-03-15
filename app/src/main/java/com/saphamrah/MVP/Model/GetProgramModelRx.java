@@ -221,6 +221,7 @@ import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.DarkhastFaktorSatrModel;
 import com.saphamrah.Model.ElamMarjoeeForoshandehModel;
 import com.saphamrah.Model.ElatAdamDarkhastModel;
+import com.saphamrah.Model.ElatAdamTahvilDarkhastModel;
 import com.saphamrah.Model.ElatMarjoeeKalaModel;
 import com.saphamrah.Model.ForoshandehEtebarModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
@@ -291,9 +292,7 @@ import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.Logger;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
-import com.saphamrah.Repository.ElamMarjoeeForoshandehRepository;
-import com.saphamrah.Repository.KalaOlaviatGheymatRepository;
-import com.saphamrah.Repository.NoePishnahadRepository;
+import com.saphamrah.Repository.*;
 import com.saphamrah.Shared.GetProgramShared;
 import com.saphamrah.Shared.LastOlaviatMoshtaryShared;
 import com.saphamrah.Shared.LocalConfigShared;
@@ -303,104 +302,10 @@ import com.saphamrah.Utils.CollectionUtils;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.Utils.RxUtils.RxHttpErrorHandler;
-import com.saphamrah.Repository.AdamDarkhastRepository;
-import com.saphamrah.Repository.AllMoshtaryForoshandehRepository;
-import com.saphamrah.Repository.AnbarakAfradRepository;
-import com.saphamrah.Repository.BankRepository;
-import com.saphamrah.Repository.BargashtyRepository;
-import com.saphamrah.Repository.BarkhordForoshandehBaMoshtaryRepository;
-import com.saphamrah.Repository.BrandRepository;
-import com.saphamrah.Repository.ConfigNoeVosolMojazeFaktorRepository;
-import com.saphamrah.Repository.ConfigNoeVosolMojazeMoshtaryRepository;
-import com.saphamrah.Repository.DariaftPardakhtDarkhastFaktorPPCRepository;
-import com.saphamrah.Repository.DariaftPardakhtPPCRepository;
-import com.saphamrah.Repository.DarkhastFaktorEmzaMoshtaryRepository;
-import com.saphamrah.Repository.DarkhastFaktorKalaPishnahadiRepository;
-import com.saphamrah.Repository.DarkhastFaktorRepository;
-import com.saphamrah.Repository.DarkhastFaktorRoozSortRepository;
-import com.saphamrah.Repository.DarkhastFaktorSatrRepository;
-import com.saphamrah.Repository.DarkhastFaktorSatrTakhfifRepository;
-import com.saphamrah.Repository.DarkhastFaktorTakhfifRepository;
-import com.saphamrah.Repository.ElamMarjoeePPCRepository;
-import com.saphamrah.Repository.ElamMarjoeeSatrPPCRepository;
-import com.saphamrah.Repository.ElamMarjoeeSatrPPCTedadRepository;
-import com.saphamrah.Repository.ElatAdamDarkhastRepository;
-import com.saphamrah.Repository.ElatMarjoeeKalaRepository;
-import com.saphamrah.Repository.EtebarRepository;
-import com.saphamrah.Repository.ForoshandehEtebarRepository;
-import com.saphamrah.Repository.ForoshandehMamorPakhshRepository;
-import com.saphamrah.Repository.ForoshandehRepository;
-import com.saphamrah.Repository.GPSDataMashinRepository;
-import com.saphamrah.Repository.GPSDataPpcRepository;
-import com.saphamrah.Repository.GorohKalaNoeSenfRepository;
-import com.saphamrah.Repository.GorohRepository;
-import com.saphamrah.Repository.JayezehEntekhabiRepository;
-import com.saphamrah.Repository.JayezehRepository;
-import com.saphamrah.Repository.JayezehSatrRepository;
-import com.saphamrah.Repository.KalaGorohRepository;
-import com.saphamrah.Repository.KalaMojodiRepository;
-import com.saphamrah.Repository.KalaOlaviatRepository;
-import com.saphamrah.Repository.KalaRepository;
-import com.saphamrah.Repository.KalaZaribForoshRepository;
-import com.saphamrah.Repository.KardexRepository;
-import com.saphamrah.Repository.KardexSatrRepository;
-import com.saphamrah.Repository.ListKalaForMarjoeeRepository;
-import com.saphamrah.Repository.LogPPCRepository;
-import com.saphamrah.Repository.MahalCodePostiRepository;
-import com.saphamrah.Repository.MahalRepository;
-import com.saphamrah.Repository.MandehMojodyMashinRepository;
-import com.saphamrah.Repository.MarjoeeKamelImageRepository;
-import com.saphamrah.Repository.MarjoeeMamorPakhshRepository;
-import com.saphamrah.Repository.MarkazRepository;
-import com.saphamrah.Repository.MarkazShahrMarkaziRepository;
-import com.saphamrah.Repository.MarkazShomarehHesabRepository;
-import com.saphamrah.Repository.MasirRepository;
-import com.saphamrah.Repository.MasirVaznHajmMashinRepository;
-import com.saphamrah.Repository.ModatVosolGorohRepository;
-import com.saphamrah.Repository.ModatVosolMarkazRepository;
-import com.saphamrah.Repository.ModatVosolRepository;
-import com.saphamrah.Repository.MojoodiGiriRepository;
-import com.saphamrah.Repository.MoshtaryAddressRepository;
-import com.saphamrah.Repository.MoshtaryAfradRepository;
-import com.saphamrah.Repository.MoshtaryBrandRepository;
-import com.saphamrah.Repository.MoshtaryChidmanRepository;
-import com.saphamrah.Repository.MoshtaryEtebarPishFarzRepository;
-import com.saphamrah.Repository.MoshtaryEtebarSazmanForoshRepository;
-import com.saphamrah.Repository.MoshtaryGharardadKalaRepository;
-import com.saphamrah.Repository.MoshtaryGharardadRepository;
-import com.saphamrah.Repository.MoshtaryJadidDarkhastRepository;
-import com.saphamrah.Repository.MoshtaryMorajehShodehRoozRepository;
-import com.saphamrah.Repository.MoshtaryPolygonRepository;
-import com.saphamrah.Repository.MoshtaryRepository;
-import com.saphamrah.Repository.MoshtaryShomarehHesabRepository;
-import com.saphamrah.Repository.MoshtaryTaghiratRepository;
-import com.saphamrah.Repository.NoeFaaliatForMoarefiMoshtaryJadidRepository;
-import com.saphamrah.Repository.NoeHesabRepository;
-import com.saphamrah.Repository.NoeMalekiatMoshtaryRepository;
-import com.saphamrah.Repository.NoeMoshtaryRialKharidRepository;
-import com.saphamrah.Repository.NoeVosolMoshtaryRepository;
-import com.saphamrah.Repository.ParameterChildRepository;
-import com.saphamrah.Repository.ParameterRepository;
-import com.saphamrah.Repository.PolygonForoshSatrRepository;
-import com.saphamrah.Repository.PosShomarehHesabRepository;
-import com.saphamrah.Repository.RptDarkhastFaktorVazeiatPPCRepository;
-import com.saphamrah.Repository.RptForoshRepository;
-import com.saphamrah.Repository.RptHadafForoshRepository;
-import com.saphamrah.Repository.RptMandehdarRepository;
-import com.saphamrah.Repository.RptSanadRepository;
-import com.saphamrah.Repository.SupportCrispRepository;
-import com.saphamrah.Repository.TafkikJozeRepository;
-import com.saphamrah.Repository.TaghiratVersionPPCRepository;
-import com.saphamrah.Repository.TaghvimTatilRepository;
-import com.saphamrah.Repository.TakhfifHajmiRepository;
-import com.saphamrah.Repository.TakhfifHajmiSatrRepository;
-import com.saphamrah.Repository.TakhfifNaghdyRepository;
-import com.saphamrah.Repository.TakhfifSenfiRepository;
-import com.saphamrah.Repository.TakhfifSenfiSatrRepository;
-import com.saphamrah.Repository.TedadFaktorMoshtaryRepository;
 import com.saphamrah.WebService.RxService.APIServiceRxjava;
 import com.saphamrah.WebService.RxService.Response.DataResponse.GetMandehMojodyMashinResponse;
 import com.saphamrah.WebService.ServiceResponse.DarkhastFaktorKalaPishnahadiResult;
+import com.saphamrah.WebService.ServiceResponse.ElatAdamTahvilDarkhastResult;
 import com.saphamrah.WebService.ServiceResponse.GetAllGorohResult;
 import com.saphamrah.WebService.ServiceResponse.GetAllMoshtaryByccMasirResult;
 import com.saphamrah.WebService.ServiceResponse.GetAllMoshtaryGharardadKalaResult;
@@ -9789,6 +9694,8 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
     }
 
+
+
     private void getAllMoshtaryGharardadKala(int getProgramType, ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels) {
         ArrayList<MoshtaryGharardadKalaModel> moshtaryGharardadKalaModels = new ArrayList<>();
         final int[] webCounter = {itemCounter};
@@ -9841,6 +9748,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                                         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                                         Log.i("RxJavaRequest", +itemCounter + "updateMoshtaryGharardadKalaTable:" + insertGroup);
                                         if (getProgramType != Constants.GET_PROGRAM_UPDATE_GHARARDAD_KALAMOSAVABEH())
+//                                            getElatTahvilDarkhast(getProgramType);
                                             getNoePishnahad(getProgramType);
 
                                     } else {
@@ -9859,6 +9767,73 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                     }
                 });
         compositeDisposable.add(deleteAllDisposable);
+    }
+
+    /**
+     * overload getElatTahvilDarkhast
+     * {@link #getElatTahvilDarkhast(int)}
+     *
+     * @param getProgramType
+     * @throws JSONException
+     */
+    private void getElatTahvilDarkhast(int getProgramType) {
+        apiServiceRxjava.getElatTahvilDarkhast()
+                .compose(RxHttpErrorHandler.parseHttpErrors(CLASS_NAME, ACTIVITY_NAME, "getAllMoshtaryGharardadAndGharardadKala", ""))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Response<ElatAdamTahvilDarkhastResult>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(Response<ElatAdamTahvilDarkhastResult> elatAdamTahvilDarkhastResultResponse) {
+                        updateElatTahvilDarkhast(getProgramType , elatAdamTahvilDarkhastResultResponse.body().getData());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", e.getMessage(), e.getCause().getMessage()));
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    private void updateElatTahvilDarkhast(int getProgramType, ArrayList<ElatAdamTahvilDarkhastModel> elatAdamTahvilDarkhastModels){
+        ElatAdamTahvilDarkhastRepository elatAdamTahvilDarkhastRepository = new ElatAdamTahvilDarkhastRepository(BaseApplication.getContext());
+        Disposable deletAllDisposable = elatAdamTahvilDarkhastRepository.deleteAll()
+                .distinct()
+                .subscribeOn(Schedulers.io())
+                .subscribe(deleteAll -> {
+                    if (deleteAll){
+                        Disposable insertAllDisposable = elatAdamTahvilDarkhastRepository.insertAll(elatAdamTahvilDarkhastModels)
+                                .subscribe(inserAll -> {
+                                    if (inserAll){
+                                        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                                        getNoePishnahad(getProgramType);
+                                    } else {
+                                        Log.i("RxJavaRequest", +itemCounter + "  updateElatTahvilDarkhast:error");
+                                        throwException("updateElatTahvilDarkhast");
+                                    }
+                                }, throwable -> {
+                                    Log.i("RxJavaRequest", +itemCounter + "  updateElatTahvilDarkhast:" + throwable.getMessage());
+                                    throwException("updateElatTahvilDarkhast");
+
+                                });
+                        compositeDisposable.add(insertAllDisposable);
+                    }
+                    else {
+                        Log.i("RxJavaRequest", +itemCounter + "  updateElatTahvilDarkhast:error");
+                        throwException("updateElatTahvilDarkhast");
+                    }
+                });
+        compositeDisposable.add(deletAllDisposable);
+
     }
 
 
@@ -9924,15 +9899,6 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         compositeDisposable.add(deleteAllDisposable);
     }
 
-
-//    private void updateKalaOlaviatGheymat(int getProgramType, ArrayList<SuggestModel> suggestModels){
-//        NoePishnahadRepository noePishnahadRepository = new NoePishnahadRepository(mPresenter.getAppContext());
-//        Disposable deleteAllDisposable = noePishnahadRepository.deleteAll()
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(deleteAll -> {
-//                    Disposable insertGroupDisposable = noePishnahadRepository.insertGroup()
-//                });
-//    }
 
 
     private void getMarjoeeForoshandehParameterAndParameterChild(int getProgramType) {

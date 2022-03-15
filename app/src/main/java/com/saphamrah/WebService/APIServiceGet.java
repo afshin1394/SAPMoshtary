@@ -85,7 +85,12 @@ public interface APIServiceGet
     @GET("Api/ApiSales/GetAllDarkhastFaktorSatrTakhfifByCcForoshandehAndDate")
     Call<GetAllDarkhastFaktorSatrTakhfifByCcForoshandehAndDateResult> getAllDarkhastFaktorSatrTakhfifByCcForoshandehAndDate(@Query("ccForoshande") String ccForoshande, @Query("fromDate") String fromDate, @Query("toDate") String endDate);
 
-
+    @GET("Api/ApiSales/GetDarkhastFaktorTakhfif")
+    Call<DarkhastFaktorTakhfifResult> getDarkhastFaktorTakhfif(@Query("ccDarkhastHavales") String ccDarkhastHavalehs);
+    @GET("Api/ApiSales/GetDarkhastFaktorSatrTakhfif")
+    Call<DarkhastFaktorSatrTakhfifResult> getDarkhastFaktorSatrTakhfif(@Query("ccDarkhastHavales") String ccDarkhastHavalehs);
+    @GET("Api/ApiSales/GetDarkhastFaktorJayezeh")
+    Call<DarkhastFaktorJayezehResult> getDarkhastFaktorjayezeh(@Query("ccDarkhastHavales") String ccDarkhastHavalehs);
     //E
     @GET("Api/ApiSales/GetAllvElatAdamDarkhast")
     Call<GetAllvElatAdamDarkhastResult> getElatAdamDarkhast();
@@ -541,5 +546,9 @@ public interface APIServiceGet
     /// V
     @GET("Api/apiTreasury/GetVosolNaghdRooz")
     Call<GetVarizBeBankResult> getVosolNaghdRooz(@Query("ccAfrad") int ccAfrad);
+
+    // U
+    @GET("Api/ApiSales/GetElatAdamTahvilDarkhast")
+    Call<ElatAdamTahvilDarkhastResult> getElatTahvilDarkhast();
 
 }

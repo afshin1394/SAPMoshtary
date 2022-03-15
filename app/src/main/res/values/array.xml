@@ -69,7 +69,6 @@
         <item>{\"name\":\"اعتبار مشتری - پخش\" , \"function\":\"getMoshtaryEtebarPakhsh\"}</item>
         <item>{\"name\":\"دریافت پرداخت\" , \"function\":\"getDariaftPardakht\"}</item>
         <item>{\"name\":\"دریافت پرداخت - درخواست فاکتور\" , \"function\":\"getDariaftPardakhtDarkhastFaktor\"}</item>
-        <item>{\"name\":\"دریافت تخفیفات اقلام فاکتور\" , \"function\":\"getDarkhastFaktorSatrTakhfif\"}</item>
         <item>{\"name\":\"مدت وصول\" , \"function\":\"getModatVosol\"}</item>
         <item>{\"name\":\"گروه مدت وصول\" , \"function\":\"getModatVosolGoroh\"}</item>
         <item>{\"name\":\"مدت وصول مرکز\" , \"function\":\"getModatVosolMarkaz\"}</item>
@@ -136,6 +135,10 @@
         <item>{\"name\":\"قرارداد مشتری\" , \"functdion\":\"getAllMoshtaryGharardad\"}</item>
         <item>{\"name\":\"کالا مصوبه قرارداد\" , \"functdion\":\"getAllKalaMosavab\"}</item>
         <item>{\"name\":\"مرجوعی پخش \" , \"function\":\"getMarjoeePakhsh\"}</item>
+        <item>{\"name\":\"علت عدم تحویل درخواست\" , \"functdion\":\"getElatTahvilDarkhast\"}</item>
+        <item>{\"name\":\"اقلام تخفیف درخواست \" , \"function\":\"getDarkhastFaktorTakhfif\"}</item>
+        <item>{\"name\":\"ریز اقلام تخفیف درخواست \" , \"function\":\"getDarkhastFaktorSatrTakhfif\"}</item>
+        <item>{\"name\":\"اقلام جایزه درخواست  \" , \"function\":\"getDarkhastFaktorJayezeh\"}</item>
         <item>{\"name\":\"دریافت تنظیمات\" , \"functdion\":\"getParameter\"}</item>
         <item>{\"name\":\"برخورد فروشنده با مشتری\" , \"function\":\"getBarkhordForoshandehBaMoshtary\"}</item>
     </string-array>
@@ -147,12 +150,11 @@
         <item>{\"name\":\"برند\" , \"function\":\"getBrand\"}</item>
         <item>{\"name\":\"علت عدم درخواست\" , \"function\":\"getElatAdamDarkhast\"}</item>
         <item>{\"name\":\"علت مرجوعی کالا\" , \"function\":\"getElatMarjoeeKala\"}</item>
-        <item>{\"name\":\"کالای مرجوعی\" , \"function\":\"getListKalaForMarjoee\"}</item>
         <item>{\"name\":\"گروه\" , \"function\":\"getGoroh\"}</item>
         <item>{\"name\":\"اطلاعات GPS\" , \"function\":\"getGPSData\"}</item>
         <item>{\"name\":\"مناطق جغرافیایی\" , \"function\":\"getMahal\"}</item>
         <item>{\"name\":\"مرکز پخش\" , \"function\":\"getMarkazPakhsh,getMarkazAnbar\"}</item>
-        <item>{\"name\":\"شماره حساب مرکز پخش\" , \"function\":\"getMarkazPakhshShomareHesab\"}</item>
+        <item>{\"name\":\"شماره حساب مرکز پخش\" , \"function\":\"getMarkazShomareHesab\"}</item>
         <item>{\"name\":\"اطلاعات POS\" , \"function\":\"getPOSInfo\"}</item>
         <item>{\"name\":\"اطلاعات مسیر\" , \"function\":\"getMasir\"}</item>
         <item>{\"name\":\" محدوده فروشنده\" , \"function\":\"getForoshandehPolygon\"}</item>
@@ -173,6 +175,7 @@
         <item>{\"name\":\"درخواست فاکتور سطر\" , \"function\":\"getDarkhastFaktorSatr\"}</item>
         <item>{\"name\":\"فروشنده ها - پخش\" , \"function\":\"getForoshandehs\"}</item>
         <item>{\"name\":\"کالای پیشنهادی \" , \"function\":\"getdarkhastFaktorKalaPishnahadi\"}</item>
+        <item>{\"name\":\"کالای مرجوعی\" , \"function\":\"getListKalaForMarjoee\"}</item>
         <item>{\"name\":\"گزارش برگشتی\" , \"function\":\"getBargashty\"}</item>
         <item>{\"name\":\"مشتری - پخش\" , \"function\":\"getMoshtaryPakhsh\"}</item>
         <item>{\"name\":\"مشتری مراجعه شده\" , \"function\":\"getMoshtaryMorajeShodehRooz\"}</item>
@@ -183,8 +186,6 @@
         <item>{\"name\":\"اعتبار مشتری - پخش\" , \"function\":\"getMoshtaryEtebarPakhsh\"}</item>
         <item>{\"name\":\"دریافت پرداخت\" , \"function\":\"getDariaftPardakht\"}</item>
         <item>{\"name\":\"دریافت پرداخت - درخواست فاکتور\" , \"function\":\"getDariaftPardakhtDarkhastFaktor\"}</item>
-        <item>{\"name\":\"دریافت تخفیفات اقلام فاکتور\" , \"function\":\"getDarkhastFaktorSatrTakhfif\"}</item>
-        <item>{\"name\":\"دریافت تخفیفات فاکتور\" , \"function\":\"getDarkhastFaktorTakhfif\"}</item>
         <item>{\"name\":\"مدت وصول\" , \"function\":\"getModatVosol\"}</item>
         <item>{\"name\":\"گروه مدت وصول\" , \"function\":\"getModatVosolGoroh\"}</item>
         <item>{\"name\":\"مدت وصول مرکز\" , \"function\":\"getModatVosolMarkaz\"}</item>
@@ -199,7 +200,7 @@
         <item>{\"name\":\"ضریب فروش کالا\" , \"function\":\"getZaribForoshKala\"}</item>
         <item>{\"name\":\"جوایز\" , \"function\":\"getJayezeh\"}</item>
         <item>{\"name\":\"اقلام جوایز\" , \"function\":\"getJayezehSatr\"}</item>
-        <item>{\"name\":\"اقلام جوایز - جایزه انتخابی\" , \"function\":\"getJayezehSatr\"}</item>
+        <item>{\"name\":\"اقلام جوایز - جایزه انتخابی\" , \"function\":\"getJayezehEntekhabi\"}</item>
         <item>{\"name\":\"نوع حساب\" , \"function\":\"getNoeHesab\"}</item>
         <item>{\"name\":\"نوع مالکیت مشتری\" , \"function\":\"getNoeMalekiatMoshtary\"}</item>
         <item>{\"name\":\"تعداد فاکتور مشتری\" , \"function\":\"getTedadFaktorMoshtary\"}</item>
@@ -243,8 +244,8 @@
         <item>{\"name\":\"شهر\" , \"functdion\":\"getAllMarkazShahrMarkazi\"}</item>
         <item>{\"name\":\"حداقل ریال خرید\" , \"functdion\":\"getAllNoeMoshtaryRialKharid\"}</item>
         <item>{\"name\":\"کدپستی\" , \"functdion\":\"getAllcodePosti\"}</item>
-        <item>{\"name\":\"اطلاعات مجاز فاکتور\" , \"functdion\":\"ConfigNoeVosolMojazeFaktor\"}</item>
-        <item>{\"name\":\"اطلاعات مجاز مشتری\" , \"functdion\":\"ConfigNoeVosolMojazeMoshtary\"}</item>
+        <item>{\"name\":\"اطلاعات مجاز فاکتور\" , \"functdion\":\"getConfigNoeVosolMojazeFaktor\"}</item>
+        <item>{\"name\":\"اطلاعات مجاز مشتری\" , \"functdion\":\"getConfigNoeVosolMojazeMoshtary\"}</item>
         <item>{\"name\":\"گزارش برگشتی ارسال شده\" , \"function\":\"getDariaftPardakhtBargashty\"}</item>
         <item>{\"name\":\"پشتیبانی آنلاین\" , \"functdion\":\"getSupportCrisp\"}</item>
         <item>{\"name\":\"نوع وصول\" , \"functdion\":\"getNoeVosolMoshtary\"}</item>
@@ -252,9 +253,14 @@
         <item>{\"name\":\"کالا مصوبه قرارداد\" , \"functdion\":\"getAllKalaMosavab\"}</item>
         <item>{\"name\":\"مرجوعی پخش \" , \"function\":\"getMarjoeePakhsh\"}</item>
         <item>{\"name\":\"اولویت قیمت کالا\" , \"function\":\"getKalaOlaviatGheymat\"}</item>
-        <item>{\"name\":\"جشنواره\" , \"functdion\":\"getJashnvareh\"}</item>
         <item>{\"name\":\"پیشنهاد\" , \"functdion\":\"getNoePishnahad\"}</item>
-        <item>{\"name\":\"دریافت تنظیمات\" , \"functdion\":\"getParameter\"}</item>
+        <item>{\"name\":\"جشنواره\" , \"functdion\":\"getJashnvareh\"}</item>
+        <item>{\"name\":\"علت عدم تحویل درخواست\" , \"functdion\":\"getElatTahvilDarkhast\"}</item>
+        <item>{\"name\":\"اقلام تخفیف درخواست \" , \"function\":\"getDarkhastFaktorTakhfif\"}</item>
+        <item>{\"name\":\"ریز اقلام تخفیف درخواست \" , \"function\":\"getDarkhastFaktorSatrTakhfif\"}</item>
+        <item>{\"name\":\"اقلام جایزه درخواست  \" , \"function\":\"getDarkhastFaktorJayezeh\"}</item>
+        <item>{\"name\":\"تنظیمات\" , \"functdion\":\"getParameter\"}</item>
+<!--        <item>{\"name\":\"اقلام تنظیمات\" , \"functdion\":\"getParameterChild\"}</item>-->
         <item>{\"name\":\"برخورد فروشنده با مشتری\" , \"function\":\"getBarkhordForoshandehBaMoshtary\"}</item>
 
     </string-array>

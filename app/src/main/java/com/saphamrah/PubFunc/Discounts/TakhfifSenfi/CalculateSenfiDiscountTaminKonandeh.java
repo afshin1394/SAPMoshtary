@@ -158,9 +158,9 @@ public class CalculateSenfiDiscountTaminKonandeh extends DiscountCalculation
 
                                     sumMablaghTalkhfifSatr += Math.round(mablaghTakhfifSatr);
                                     allMablaghTakhfifSatr += "," + Math.round(mablaghTakhfifSatr);
-                                    insertFaktorSatrTakhfif(context, Long.valueOf(kalaTaminKonandeh.getFiled2()), codeTakhfif, takhfifSenfiTitrSatrModel.getCcTakhfifSenfi(),
-                                            takhfifSenfiTitrSatrModel.getSharhTakhfif(), takhfifSenfiSatrModel.getDarsadTakhfif(), mablaghTakhfifSatr,
-                                            takhfifSenfiTitrSatrModel.getForJayezeh(), takhfifSenfiTitrSatrModel.getOlaviat());
+//                                    insertFaktorSatrTakhfif(context, Long.valueOf(kalaTaminKonandeh.getFiled2()), codeTakhfif, takhfifSenfiTitrSatrModel.getCcTakhfifSenfi(),
+//                                            takhfifSenfiTitrSatrModel.getSharhTakhfif(), takhfifSenfiSatrModel.getDarsadTakhfif(), mablaghTakhfifSatr,
+//                                            takhfifSenfiTitrSatrModel.getForJayezeh(), takhfifSenfiTitrSatrModel.getOlaviat());
                                 }
                             }
                             updateMablaghTakhfifDarkhastFaktor(context, darkhastFaktorModel.getCcDarkhastFaktor(), takhfifSenfiTitrSatrModel.getCcTakhfifSenfi(), Math.round(mablaghTakhfif), sumMablaghTalkhfifSatr, allMablaghTakhfifSatr);

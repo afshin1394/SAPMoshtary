@@ -10,10 +10,10 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_network"
+        android:layout_marginLeft="-400dp"
         android:alpha="0.05"
         android:scaleType="fitXY"
-        android:layout_marginLeft="-400dp"/>
+        android:src="@drawable/ic_network" />
 
     <ImageView
         android:id="@+id/Img_central_logo"

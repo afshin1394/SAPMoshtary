@@ -722,7 +722,7 @@ public class DarkhastFaktorSatrDAO
 
     public ArrayList<DataTableModel> getCcNoeFiledForJayezeh(int ccJayezeh)
     {
-        ArrayList<DataTableModel> ccNoeFiled = null;
+        ArrayList<DataTableModel> ccNoeFiled = new ArrayList<>();
         String query = " SELECT  DISTINCT ccNoeField, '''' || ccnoefield || '''' strCcNoeFiled  FROM JayezehSatr WHERE ccJayezeh="  + ccJayezeh;
         Log.d("DarkhastFaktorSatrDAO", "jayezeh getCcNoeFiledForJayezeh query : " + query);
 

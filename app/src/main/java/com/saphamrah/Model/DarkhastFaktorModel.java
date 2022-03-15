@@ -94,7 +94,8 @@ public class DarkhastFaktorModel
     private static final String COLUMN_MoshtaryGharardadccSazmanForosh = "MoshtaryGharardadccSazmanForosh";
     private static final String COLUMN_ccMoshtaryGharardad = "ccMoshtaryGharardad";
     private static final String COLUMN_ccAnbar = "ccAnbar";
-    private static final String COLUMN_ExtraProp_Description = "ExtraProp_Description";
+    public static final String COLUMN_ExtraProp_Description = "ExtraProp_Description";
+    public static final String COLUMN_ExtraProp_CodeNoeVorod = "ExtraProp_CodeNoeVorod";
 
 
 
@@ -579,6 +580,7 @@ public class DarkhastFaktorModel
     private String CodeMoshtary;
     private int showFaktorMamorPakhsh;
     private String ExtraProp_Description;
+    private int ExtraProp_CodeNoeVorod;
 
 
 
@@ -1217,6 +1219,14 @@ public class DarkhastFaktorModel
 
     public void setExtraProp_Description(String extraProp_Description) {
         ExtraProp_Description = extraProp_Description;
+    }
+
+    public int getExtraProp_CodeNoeVorod() {
+        return ExtraProp_CodeNoeVorod;
+    }
+
+    public void setExtraProp_CodeNoeVorod(int extraProp_CodeNoeVorod) {
+        ExtraProp_CodeNoeVorod = extraProp_CodeNoeVorod;
     }
 
     public String toJsonStringForVosol(ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, int ccMarkazForosh, int ccGorohNoeMoshtary, int ccGorohNoeSenf, JSONArray jsonDarkhastFaktorSatrs, JSONArray darkhastFaktorTakhfifModels, float mablaghTakhfifFaktorSatr, JSONArray jsonEmza, JSONArray jsonMoshtaryPhotoPPCChidman, JSONArray jsonDariaftPardakht)

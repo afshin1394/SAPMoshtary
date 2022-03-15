@@ -2118,6 +2118,44 @@ public class DarkhastFaktorDAO
             return false;
         }
     }
+    public boolean updateExtraPropCodeNoeVorod(long ccDarkhastFaktor , int value)
+    {
+        String query = "update " + DarkhastFaktorModel.TableName() + " set " + DarkhastFaktorModel.COLUMN_ExtraProp_CodeNoeVorod + " = " + value + " where " + DarkhastFaktorModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor;
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "updateExtraPropCodeNoeVorod" , "");
+            return false;
+        }
+    }
+    public boolean updateExtraPropIsSend(long ccDarkhastFaktor , int value)
+    {
+        String query = "update " + DarkhastFaktorModel.TableName() + " set " + DarkhastFaktorModel.COLUMN_ExtraProp_IsSend() + " = " + value + " where " + DarkhastFaktorModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor;
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "updateExtraPropCodeNoeVorod" , "");
+            return false;
+        }
+    }
 
     public void updateSaateKhorojAzMaghazehAndInsertInPPC(long ccDarkhastFaktor , String currentDate)
     {

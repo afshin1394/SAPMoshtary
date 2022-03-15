@@ -27,8 +27,11 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.saphamrah.Adapter.TreasuryAdapter;
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.TreasuryListMVP;
+import com.saphamrah.CustomView.CustomSpinner;
 import com.saphamrah.MVP.Presenter.TreasuryListPresenter;
 import com.saphamrah.MVP.View.marjoee.DarkhastFaktorMarjoeeActivity;
+import com.saphamrah.Model.DarkhastFaktorModel;
+import com.saphamrah.Model.ElatAdamTahvilDarkhastModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.SelectVosolShared;
@@ -37,6 +40,7 @@ import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
 import com.saphamrah.Utils.CustomAlertDialogResponse;
 import com.saphamrah.Utils.CustomLoadingDialog;
+import com.saphamrah.Utils.CustomSpinnerResponse;
 import com.saphamrah.Utils.StateMaintainer;
 
 import java.util.ArrayList;
@@ -309,7 +313,8 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
                 } else if (operation == Constants.SAVE_SEND_LOCATION) {
                     showLoading();
                     mPresenter.checkMoshtaryKharejAzMahal(darkhastFaktorMoshtaryForoshandeModels.get(position),position);
-
+                } else if (operation == Constants.ELAT_ADAM_TAHVIL){
+                    mPresenter.getElatAdamTahvilDarkhast(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor() , position);
                 }
             }
         });
@@ -679,6 +684,23 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
             recylerFaktorMandeDar();
         }
 
+    }
+
+    @Override
+    public void onGetElatAdamTahvilDarkhast(ArrayList<ElatAdamTahvilDarkhastModel> models, ArrayList<String> elatAdamTahvilDarkhastTitles, DarkhastFaktorModel darkhastFaktorModel,int position) {
+        CustomSpinner customSpinner = new CustomSpinner();
+        customSpinner.showSpinner(TreasuryListActivity.this, elatAdamTahvilDarkhastTitles, new CustomSpinnerResponse() {
+            @Override
+            public void onApplySingleSelection(int selectedIndex) {
+                showLoading();
+                mPresenter.sendElatAdamTahvilDarkhast(models.get(selectedIndex) , darkhastFaktorModel,position);
+            }
+
+            @Override
+            public void onApplyMultiSelection(ArrayList<Integer> selectedIndexes) {
+
+            }
+        });
     }
 
 
