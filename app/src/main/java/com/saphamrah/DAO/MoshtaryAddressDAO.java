@@ -86,6 +86,7 @@ public class MoshtaryAddressDAO
             MoshtaryAddressModel.COLUMN_ExtraProp_IsSendToSql(),
             MoshtaryAddressModel.COLUMN_Longitude_x(),
             MoshtaryAddressModel.COLUMN_Latitude_y(),
+            MoshtaryAddressModel.COLUMN_ExtraProp_HasLocation()
         };
     }
 

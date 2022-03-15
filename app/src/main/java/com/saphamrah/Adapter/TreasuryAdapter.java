@@ -84,7 +84,10 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         holder.lblNameNoeVosol.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.noeVosol), models.get(position).getNameNoeVosolAzMoshtary()));
         if (models.get(position).getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale) {
             holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.shomareDarkhast), models.get(position).getShomarehDarkhast(),context.getResources().getString(R.string.havaleh)));
-            holder.layElatAdamTahvil.setVisibility(View.VISIBLE);
+            if(models.get(position).getExtraProp_IsSend()==0)
+                holder.layElatAdamTahvil.setVisibility(View.VISIBLE);
+            else
+                holder.layElatAdamTahvil.setVisibility(View.GONE);
         }
         else {
             holder.lblShomarehDarkhast.setText(String.format("%1$s : %2$s %3$s", context.getResources().getString(R.string.shomareFaktor), models.get(position).getShomarehFaktor(),context.getResources().getString(R.string.faktor)));
