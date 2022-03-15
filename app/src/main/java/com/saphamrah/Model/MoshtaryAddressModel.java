@@ -37,6 +37,7 @@ public class MoshtaryAddressModel implements Parcelable
     private static final String COLUMN_ExtraProp_IsSendToSql = "ExtraProp_IsSendToSql";
     private static final String COLUMN_Longitude_x = "Longitude_x";
     private static final String COLUMN_Latitude_y = "Latitude_y";
+    private static final String COLUMN_ExtraProp_HasLocation = "ExtraProp_HasLocation";
 
 
     public static String TableName() {
@@ -104,6 +105,9 @@ public class MoshtaryAddressModel implements Parcelable
     }
     public static String COLUMN_Latitude_y() {
         return COLUMN_Latitude_y;
+    }
+    public static String COLUMN_ExtraProp_HasLocation() {
+        return COLUMN_ExtraProp_HasLocation;
     }
 
 
@@ -179,6 +183,7 @@ public class MoshtaryAddressModel implements Parcelable
 
     private int ExtraProp_InsertInPPC;
     private int ExtraProp_IsSendToSql;
+    private int ExtraProp_HasLocation;
 
 
 
@@ -450,6 +455,13 @@ public class MoshtaryAddressModel implements Parcelable
         ExtraProp_IsSendToSql = extraProp_IsSendToSql;
     }
 
+    public int isExtraProp_HasLocation() {
+        return ExtraProp_HasLocation;
+    }
+
+    public void setExtraProp_HasLocation(int  extraProp_HasLocation) {
+        ExtraProp_HasLocation = extraProp_HasLocation;
+    }
 
     @Override
     public int describeContents() {
@@ -493,6 +505,7 @@ public class MoshtaryAddressModel implements Parcelable
         dest.writeInt(shahrId);
         dest.writeString(mantagheName);
         dest.writeInt(mantagheId);
+        dest.writeInt(ExtraProp_HasLocation);
     }
 
 
@@ -533,6 +546,7 @@ public class MoshtaryAddressModel implements Parcelable
         ccMarkazSazmanForosh = in.readInt();
         ExtraProp_InsertInPPC = in.readInt();
         ExtraProp_IsSendToSql = in.readInt();
+        ExtraProp_HasLocation = in.readInt();
         ostanName = in.readString();
         ostanId = in.readInt();
         shahrestanName = in.readString();
@@ -643,6 +657,7 @@ public class MoshtaryAddressModel implements Parcelable
                 ", ccMarkazSazmanForosh=" + ccMarkazSazmanForosh +
                 ", ExtraProp_InsertInPPC=" + ExtraProp_InsertInPPC +
                 ", ExtraProp_IsSendToSql=" + ExtraProp_IsSendToSql +
+                ", ExtraProp_HasLocation=" + ExtraProp_HasLocation +
                 '}';
     }
 }

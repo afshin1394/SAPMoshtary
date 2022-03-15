@@ -1,9 +1,15 @@
 package com.saphamrah.PubFunc;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.provider.MediaStore;
+import android.util.Log;
 
+import com.saphamrah.Application.BaseApplication;
+import com.saphamrah.MVP.View.TemporaryRequestsListActivity;
 import com.saphamrah.Utils.Constants;
 
 import java.io.ByteArrayInputStream;
@@ -103,6 +109,24 @@ public class ImageUtils
         }
 
         return file;
+    }
+
+    public  byte[] getImageBaseOnCamera(Context context,Bitmap data){
+        int file_size = data.getByteCount()/1024;
+        Log.i("length", "getImageBaseOnCamera: "+file_size);
+        if (file_size > 20000) {
+            return convertBitmapToByteArray(context,data,20, Bitmap.CompressFormat.JPEG);
+
+        }else if (file_size < 20000   && file_size > 10000){
+            return convertBitmapToByteArray(context,data,50, Bitmap.CompressFormat.JPEG);
+
+        }else if ( file_size <= 10000 && file_size >= 5000){
+            return convertBitmapToByteArray(context,data,70, Bitmap.CompressFormat.JPEG);
+
+        }else{
+            return convertBitmapToByteArray(context,data,100, Bitmap.CompressFormat.JPEG);
+        }
+
     }
 
 

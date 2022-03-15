@@ -12,6 +12,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.RequestCustomerListMVP;
 import com.saphamrah.DAO.AdamDarkhastDAO;
@@ -85,6 +89,9 @@ import com.saphamrah.Utils.RxUtils.RxHttpErrorHandler;
 import com.saphamrah.WebService.RxService.APIServiceRxjava;
 import com.saphamrah.WebService.RxService.Response.DataResponse.GetMandehMojodyMashinResponse;
 import com.saphamrah.WebService.ServiceResponse.GetMojodyAnbarResult;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
@@ -240,8 +247,16 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 {
                     customerAddressModels = customerAddressDAO.getByMasirWithoutMoshtaryJadid();
                 }
-                for (int i=0 ; i<customerAddressModels.size() ; i++)
-                {
+                for (int i = 0; i < customerAddressModels.size(); i++) {
+                    //TODO
+                    MoshtaryAddressModel moshtaryAddressModel = customerAddressModels.get(i).getMoshtaryAddressModels().get(0);
+                    Log.i("moshtaryAddressModel", "run: latitude:"+moshtaryAddressModel.getLatitude_y() + "longitude:"+moshtaryAddressModel.getLongitude_x());
+                    if (moshtaryAddressModel.getLatitude_y() == 0d || moshtaryAddressModel.getLongitude_x() == 0d) {
+                        moshtaryAddressModel.setExtraProp_HasLocation(0);
+                    } else {
+                        moshtaryAddressModel.setExtraProp_HasLocation(1);
+                    }
+
                     moshtaryModels.add(customerAddressModels.get(i).getMoshtaryModel());
                     moshtaryAddressModels.add(customerAddressModels.get(i).getMoshtaryAddressModels().get(0));
                     arrayListNoeMorajeh.add(customerAddressModels.get(i).getMoshtaryMorajehShodehRoozModel().getNoeMorajeh());
@@ -661,7 +676,79 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
     }
 
-    private void updateOlaviat(){
+    @Override
+    public void sendCustomerLocation(int position, JSONObject jsonObject) {
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(jsonObject);
+        JSONObject jsonObjectFinal = new JSONObject();
+        try {
+            jsonObjectFinal.put("CustomerLocation",jsonArray);
+
+        }catch (Exception e){
+
+        }
+        Log.i("sendCustomerLocation", "jsonObjectFinal: "+jsonObjectFinal.toString());
+        MoshtaryAddressDAO moshtaryAddressDAO = new MoshtaryAddressDAO(mPresenter.getAppContext());
+
+        ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+        APIServiceRxjava apiServiceRxjava = new RxHttpRequest().getApiRx(serverIpModel);
+        apiServiceRxjava.sendCustomerLocation(jsonObjectFinal.toString())
+                .compose(RxHttpErrorHandler.parseHttpErrors(this.getClass().getSimpleName(), "RequestCustomerListActivity", "sendCustomerLocation", ""))
+                .map(sendCustomerLocationResultResponse -> {
+                    if (sendCustomerLocationResultResponse.isSuccessful())
+                        if (sendCustomerLocationResultResponse.body() != null)
+                            if (sendCustomerLocationResultResponse.body().getSuccess())
+                                return true;
+
+                    return false;
+                })
+                .map(send -> {
+                    if (send) {
+
+                        int ccMoshtary = Integer.parseInt(jsonObject.get("ccMoshtary").toString());
+                        double latitude_y = Double.parseDouble(jsonObject.get("latitude_y").toString());
+                        double longitude_x =  Double.parseDouble(jsonObject.get("longitude_x").toString());
+                        Log.i("sendCustomerLocation", " ccMoshtary "+ccMoshtary + "latitude_y"+latitude_y+"longitude_x"+longitude_x);
+                        return moshtaryAddressDAO.updateMoshtaryAddress(ccMoshtary, longitude_x, latitude_y);
+                    } else {
+                        return false;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Boolean updated) {
+                        if (updated) {
+                            mPresenter.onSuccessUpdateCustomerAddress(position);
+                        } else {
+                            onError(new Throwable());
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        mPresenter.onFailedUpdateCustomerAddress();
+                        setLogToDB(LogPPCModel.LOG_EXCEPTION, String.format(" type : %1$s \n error : %2$s", e.getCause(), e.getMessage()), CLASS_NAME, "", "sendCustomerLocation", "");
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+
+
+    }
+
+    private void updateOlaviat() {
         MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(BaseApplication.getContext());
         OlaviatMorajehModel olaviatMorajehModel = moshtaryMorajehShodehRoozDAO.getOlaviatMorajeh();
 

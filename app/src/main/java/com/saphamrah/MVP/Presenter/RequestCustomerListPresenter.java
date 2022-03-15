@@ -2,15 +2,22 @@ package com.saphamrah.MVP.Presenter;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.google.gson.JsonObject;
 import com.saphamrah.BaseMVP.RequestCustomerListMVP;
 import com.saphamrah.MVP.Model.RequestCustomerListModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.Model.MoshtaryGharardadModel;
 import com.saphamrah.Model.MoshtaryModel;
+import com.saphamrah.Model.ServerIpModel;
+import com.saphamrah.Network.RxNetwork.RxHttpRequest;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.WebService.RxService.APIServiceRxjava;
+
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -49,6 +56,19 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
 
         mView.get().closeLoading();
         mView.get().showErrorAlert(R.string.errorOperationUpdateMoshtaryMorajehShodehRooz , Constants.FAILED_MESSAGE(), false);
+    }
+
+    @Override
+    public void onSuccessUpdateCustomerAddress(int position) {
+        mView.get().onSuccessUpdateCustomerAddress(position);
+        mView.get().closeLoading();
+        mView.get().showToast(R.string.SuccessUpdateCustomerLocation , Constants.SUCCESS_MESSAGE(), Toast.LENGTH_LONG);
+    }
+
+    @Override
+    public void onFailedUpdateCustomerAddress() {
+        mView.get().closeLoading();
+        mView.get().showErrorAlert(R.string.errorUpdateCustomerLocation , Constants.FAILED_MESSAGE(), false);
     }
 
     @Override
@@ -163,6 +183,32 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
     @Override
     public void updateMoshtaryMorajehShodehRooz() {
         mModel.updateMoshtaryMorajehShodehRooz();
+    }
+
+    @Override
+    public void sendCustomerLocation(int position,MoshtaryAddressModel moshtaryAddressModel) {
+
+
+        PubFunc.LocationProvider locationProvider = new PubFunc().new LocationProvider();
+        double latitude = locationProvider.getLatitude();
+        double longitude = locationProvider.getLongitude();
+
+        JSONObject jsonObject = new JSONObject();
+
+
+try {
+        jsonObject.put("ccMoshtary",moshtaryAddressModel.getCcMoshtary());
+        jsonObject.put("latitude_y",latitude);
+        jsonObject.put("longitude_x",longitude);
+        jsonObject.put("ccAddress",moshtaryAddressModel.getCcAddress());
+}catch (Exception e){
+
+}
+
+        Log.i("sendCustomerLocation", "sendCustomerLocation: "+jsonObject);
+        mModel.sendCustomerLocation(position,jsonObject);
+
+
     }
 
 

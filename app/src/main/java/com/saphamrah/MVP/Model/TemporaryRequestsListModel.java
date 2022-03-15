@@ -505,7 +505,8 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         final AdamDarkhastDAO adamDarkhastDAO = new AdamDarkhastDAO(mPresenter.getAppContext());
         final AdamDarkhastModel adamDarkhastModel = adamDarkhastDAO.getByccAdamDarkhast(customerAdamDarkhastModel.getCcAdamDarkhast()).get(0);
         String jsonString = adamDarkhastModel.toJsonString(0 , foroshandehMamorPakhshModel.getCcMarkazForosh());
-        saveToFile("noRequest.txt" , jsonString);
+        Log.i("AdamDarkhast", "sendTempNoRequest: "+jsonString);
+//        saveToFile("noRequest.txt" , jsonString);
 //        ServerIPShared serverIPShared = new ServerIPShared(mPresenter.getAppContext());
 //        String serverIP = serverIPShared.getString(serverIPShared.IP_GET_REQUEST()
 // , "");

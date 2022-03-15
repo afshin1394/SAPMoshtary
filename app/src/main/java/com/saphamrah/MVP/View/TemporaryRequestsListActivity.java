@@ -38,6 +38,7 @@ import com.saphamrah.Utils.CustomAlertDialogResponse;
 import com.saphamrah.Utils.CustomLoadingDialog;
 import com.saphamrah.Utils.StateMaintainer;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import me.anwarshahriar.calligrapher.Calligrapher;
@@ -390,7 +391,9 @@ public class TemporaryRequestsListActivity extends AppCompatActivity implements 
                             getContentResolver(), imageUri);
                     imageUri = null;
                     if (image != null && receiptImagePosition != -1) {
-                        byte[] imageBytes  = new ImageUtils().convertBitmapToByteArray(TemporaryRequestsListActivity.this,image,100, Bitmap.CompressFormat.JPEG);
+                        byte[] imageBytes  = new ImageUtils().getImageBaseOnCamera(TemporaryRequestsListActivity.this,image);
+                        String fileName = "Receipt-" + "test" + ".jpg";
+                        new ImageUtils().bitmapToFile(imageBytes,fileName,android.os.Environment.getExternalStoragePublicDirectory("/SapHamrah/").getAbsolutePath() +"/Print" );
                         mPresenter.insertReceiptImage(imageBytes,receiptImagePosition,customerDarkhastFaktorModels.get(receiptImagePosition));
                     } else {
                         showToast(R.string.errorSelectImage, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());

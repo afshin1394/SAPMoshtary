@@ -2,10 +2,13 @@ package com.saphamrah.BaseMVP;
 
 import android.content.Context;
 
+import com.google.gson.JsonObject;
 import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.Model.MoshtaryGharardadModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.MoshtaryMorajehShodehRoozModel;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -28,6 +31,8 @@ public interface RequestCustomerListMVP
         void closeLoading();
         void showToast(int resId, int messageType , int duration);
         void showErrorAlert(int resId, int messageType, boolean closeActivity);
+
+        void onSuccessUpdateCustomerAddress(int position);
     }
 
 
@@ -45,6 +50,7 @@ public interface RequestCustomerListMVP
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
         void updateMoshtaryMorajehShodehRooz();
+        void sendCustomerLocation(int position,MoshtaryAddressModel ccMoshtary);
     }
 
 
@@ -70,6 +76,8 @@ public interface RequestCustomerListMVP
         void onConfigurationChanged(RequestCustomerListMVP.RequiredViewOps view);
         void onUpdateMoshtaryMorajehShodehRooz();
         void onFailUpdateMoshtaryMorajehShodehRooz();
+        void onSuccessUpdateCustomerAddress(int position);
+        void onFailedUpdateCustomerAddress();
     }
 
 
@@ -84,6 +92,8 @@ public interface RequestCustomerListMVP
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
         void updateMoshtaryMorajehShodehRooz();
+
+        void sendCustomerLocation(int position, JSONObject jsonObjectFinal);
     }
 
 }

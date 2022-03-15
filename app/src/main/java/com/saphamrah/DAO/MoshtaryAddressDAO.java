@@ -695,6 +695,28 @@ Call<GetAllvMoshtaryAddressResult> call = apiServiceGet.getAllvMoshtaryAddressFo
         }
         return moshtaryAddressModel;
     }
+    public boolean updateMoshtaryAddress(int ccMoshtary, double longitude_x, double latitude_y) {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MoshtaryAddressModel.COLUMN_Latitude_y() , latitude_y);
+            contentValues.put(MoshtaryAddressModel.COLUMN_Longitude_x() , longitude_x);
+            contentValues.put(MoshtaryAddressModel.COLUMN_ExtraProp_HasLocation() , 1);
+
+            db.update(MoshtaryAddressModel.TableName() , contentValues , MoshtaryAddressModel.COLUMN_ccMoshtary() + " = "+ccMoshtary + " AND "+MoshtaryAddressModel.COLUMN_ccNoeAddress() +" in (1,2)"   , null);
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , MoshtaryAddressModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "MoshtaryAddressDAO" , "" , "updateMoshtaryAddress" , "");
+            return false;
+        }
+    }
+
 
     public boolean updateTelephonePostalCode(int ccAddress , int ccMoshtary , String telephone , String postalCode)
     {
@@ -846,6 +868,7 @@ Call<GetAllvMoshtaryAddressResult> call = apiServiceGet.getAllvMoshtaryAddressFo
         contentValues.put(MoshtaryAddressModel.COLUMN_ExtraProp_IsSendToSql() , moshtaryAddressModel.getExtraProp_IsSendToSql());
         contentValues.put(MoshtaryAddressModel.COLUMN_Longitude_x() , moshtaryAddressModel.getLongitude_x());
         contentValues.put(MoshtaryAddressModel.COLUMN_Latitude_y() , moshtaryAddressModel.getLatitude_y());
+        contentValues.put(MoshtaryAddressModel.COLUMN_ExtraProp_HasLocation() , moshtaryAddressModel.isExtraProp_HasLocation());
 
         return contentValues;
     }
@@ -881,6 +904,7 @@ Call<GetAllvMoshtaryAddressResult> call = apiServiceGet.getAllvMoshtaryAddressFo
             moshtaryAddressModel.setExtraProp_IsSendToSql(cursor.getInt(cursor.getColumnIndex(MoshtaryAddressModel.COLUMN_ExtraProp_IsSendToSql())));
             moshtaryAddressModel.setLongitude_x(cursor.getDouble(cursor.getColumnIndex(MoshtaryAddressModel.COLUMN_Longitude_x())));
             moshtaryAddressModel.setLatitude_y(cursor.getDouble(cursor.getColumnIndex(MoshtaryAddressModel.COLUMN_Latitude_y())));
+            moshtaryAddressModel.setExtraProp_HasLocation(cursor.getInt(cursor.getColumnIndex(MoshtaryAddressModel.COLUMN_ExtraProp_HasLocation())));
 
             moshtaryAddressModels.add(moshtaryAddressModel);
             cursor.moveToNext();

@@ -606,6 +606,11 @@ public interface APIServiceRxjava {
      Observable<Response<UpdateResidImageDarkhastResult>> updateResidImageDarkhastJSON(@Field("") String jsonData);
 
 
+    //TODO
+    @FormUrlEncoded
+    @POST("Api/ApiSales/UpdateLocationMoshtaryJSON")
+    Observable<Response<SendCustomerLocationResult>> sendCustomerLocation(@Field("") String jsonData);
+
 
 
 

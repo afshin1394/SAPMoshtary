@@ -1062,6 +1062,8 @@
     <string name="errorOperationCheckBarghashti">"خطا در ارسال اطلاعات "</string>
     <string name="errorOperationCheckBarghashtiResponse">"خطا در دریافت اطلاعات از سرور "</string>
     <string name="errorOperationUpdateMoshtaryMorajehShodehRooz">خطا در دریافت مشتری مراجعه شده در روز</string>
+    <string name="SuccessUpdateCustomerLocation">بروز رسانی موقعیت مشتری با موفقیت انجام شد</string>
+    <string name="errorUpdateCustomerLocation">خطا در بروز رسانی موقعیت مشتری</string>
     <string name="installedApplications">لیست اپ های نصب شده</string>
     <string name="successMarjoee">مرجوعی با موفقیت ثبت گردید</string>
     <string name="gheymatMasrafKonandeRial">قیمت مصرف کننده(ریال)</string>

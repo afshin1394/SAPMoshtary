@@ -326,7 +326,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
             public void onItemClick(int operation, int position) {
                 Log.i("RequestCustomerListAdapter", "checkDuplicateRequestForCustomer: "+moshtaryGharardadModels.get(position).getCcSazmanForosh());
 
-                onListItemClickListener(operation , moshtaryModels.get(position) , moshtaryAddressModels.get(position),moshtaryGharardadModels.get(position));
+                onListItemClickListener(position,operation , moshtaryModels.get(position) , moshtaryAddressModels.get(position),moshtaryGharardadModels.get(position));
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(RequestCustomerListActivity.this);
@@ -349,7 +349,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         adapter = new RequestCustomerListAdapter(RequestCustomerListActivity.this, moshtaryModels, moshtaryAddressModels, arrayListNoeMorajeh,moshtaryGharardadModels, canUpdateCustomer, new RequestCustomerListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int operation, int position) {
-                onListItemClickListener(operation , moshtaryModelsSearch.get(position) , moshtaryAddressModelsSearch.get(position),moshtaryGharardadModelsSearch.get(position));
+                onListItemClickListener(position,operation , moshtaryModelsSearch.get(position) , moshtaryAddressModelsSearch.get(position),moshtaryGharardadModelsSearch.get(position));
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(RequestCustomerListActivity.this);
@@ -438,7 +438,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         }
     }
 
-    private void onListItemClickListener(int operation , MoshtaryModel moshtaryModel , MoshtaryAddressModel moshtaryAddressModel, MoshtaryGharardadModel moshtaryGharardadModel)
+    private void onListItemClickListener(int position,int operation , MoshtaryModel moshtaryModel , MoshtaryAddressModel moshtaryAddressModel, MoshtaryGharardadModel moshtaryGharardadModel)
     {
         if (operation == Constants.REQUEST_CUSTOMER_SHOW_LOCATION())
         {
@@ -450,7 +450,9 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         }
         else if (operation == Constants.REQUEST_CUSTOMER_CHANGE_LOCATION())
         {
+            alertDialog = customLoadingDialog.showLoadingDialog(RequestCustomerListActivity.this);
             Log.i("onListItemClic ", "2");
+            mPresenter.sendCustomerLocation(position,moshtaryAddressModel);
         }
         else if (operation == Constants.REQUEST_CUSTOMER_SHOW_CUSTOMER_INFO())
         {
@@ -490,6 +492,12 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
     public void showErrorAlert(int resId, int messageType, boolean closeActivity)
     {
         customAlertDialog.showMessageAlert(RequestCustomerListActivity.this, closeActivity, getResources().getString(R.string.error), getResources().getString(resId), messageType, getResources().getString(R.string.apply));
+    }
+
+    @Override
+    public void onSuccessUpdateCustomerAddress(int position) {
+        moshtaryAddressModels.get(position).setExtraProp_HasLocation(1);
+        adapter.notifyItemChanged(position);
     }
 
     public void startMVPOps()

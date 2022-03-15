@@ -170,7 +170,9 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
             lblCustomerAddress.setText(address);
             lblRadif.setText(String.valueOf(position + 1));
 
-
+            //TODO
+            layChangeLocation.setVisibility(moshtaryAddressModel.isExtraProp_HasLocation()==0?View.VISIBLE:View.GONE);
+            Log.i("VisibilityGetttt", "bindGheireZangireii: "+layChangeLocation.getVisibility());
 
             if (arrayListNoeMorajeh.get(position) != 0) {
                 if (arrayListNoeMorajeh.get(position) == 1) {
@@ -309,7 +311,8 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
             lblCustomerAddress.setText(address);
             lblRadif.setText(String.valueOf(position + 1));
 
-
+            //TODO
+            layChangeLocation.setVisibility(moshtaryAddressModel.isExtraProp_HasLocation()==1?View.VISIBLE:View.GONE);
 
 
 
