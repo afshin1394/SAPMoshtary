@@ -13,6 +13,7 @@ import com.saphamrah.Model.MasirModel;
 import com.saphamrah.Model.PolygonForoshSatrModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
+import com.saphamrah.PubFunc.DateUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
@@ -629,10 +630,13 @@ public class MasirDAO
         ContentValues values = new ContentValues();
         try
         {
+            DateUtils dateUtils = new DateUtils();
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             //change format from yyyy/mm/dd to yyyy-mm-ddT00:00:00, because only this format of string can convert to Date class
-            tarikhMasir = tarikhMasir + "T00:00:00"; //convert from date to dateTime
-            Date date = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).parse(tarikhMasir.replace("/" , "-"));
+            //tarikhMasir = tarikhMasir + "T00:00:00"; //convert from date to dateTime
+            //Date date = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).parse(tarikhMasir.replace("/" , "-"));
+            tarikhMasir = dateUtils.persianToGregorianWhithTime(tarikhMasir);
+            Date date = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).parse(tarikhMasir);
 
             values.put(MasirModel.COLUMN_ExtraProp_TarikhMasir(),  new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(date));
             db.update(MasirModel.TableName(), values, null, null);

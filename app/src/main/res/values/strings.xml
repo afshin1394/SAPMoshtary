@@ -153,7 +153,7 @@
     <string name="getProgramWarning">آیـا اطلاعـات دریـافت شـوند؟ \nدر صـورت ادامـه عملیـات تمـام اطلاعـات موجود حـذف خـواهنـد شــد.</string>
     <string name="getProgramError">دریافت اطلاعات %1$s \n با خطا مواجه شد.</string>
     <string name="getProgramCompleted">دریافت برنامه\nبا موفقیت انجام شد.</string>
-    <string name="needGetProgram">دریافت برنامه شما مربوط به روزهای قبل می باشد. \n لطفا ابتدا دریافت برنامه کنید.</string>
+    <string name="needGetProgram">دریافت برنامه شما مربوط به روز جاری نمی باشد. \n لطفا ابتدا دریافت برنامه کنید.</string>
     <string name="date">تاریخ</string>
     <string name="markazSazmanForoshTitleWithDash">سازمان فروش - مرکز فروش</string>
     <string name="sazmanForosh">سازمان فروش</string>

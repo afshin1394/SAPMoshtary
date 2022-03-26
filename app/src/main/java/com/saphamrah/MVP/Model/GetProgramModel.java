@@ -852,6 +852,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                             public void run() {
                                 boolean deleteResult = masirDAO.deleteAll();
                                 boolean insertResult = masirDAO.insertGroup(arrayListData);
+                                Log.d("getProgram","TarikhMasir date:" + date);
                                 boolean updateTarikhMasirResult = masirDAO.updateTarikhMasir(date);
                                 ArrayList<MasirModel> masirModels = arrayListData;
                                 for (MasirModel masir : masirModels) {

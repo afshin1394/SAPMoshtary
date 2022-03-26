@@ -71,6 +71,7 @@ import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.Network.RxNetwork.RxHttpRequest;
 import com.saphamrah.Network.RxNetwork.RxResponseHandler;
+import com.saphamrah.PubFunc.DateUtils;
 import com.saphamrah.PubFunc.FakeLocation;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
@@ -1483,10 +1484,16 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
         private boolean checkTarikhMasir()
         {
+            DateUtils dateUtils = new DateUtils();
             MasirDAO masirDAO = new MasirDAO(weakReferenceContext.get());
             String tarikhMasir = masirDAO.getAll().get(0).getTarikhMasir();
             GetProgramShared shared = new GetProgramShared(weakReferenceContext.get());
-            String lastGetProgramDate = shared.getString(shared.PERSIAN_DATE_OF_GET_PROGRAM() , "");
+//            String lastGetProgramDate = shared.getString(shared.PERSIAN_DATE_OF_GET_PROGRAM() , "");
+
+            String lastGetProgramDate = shared.getString(shared.GREGORIAN_DATE_TIME_OF_GET_CONFIG() , "");
+
+
+
             Log.d("date","lastGetProgramDate:"+lastGetProgramDate + " ,tarikhMasir:" + tarikhMasir);
             if (lastGetProgramDate.equals(""))
             {
@@ -1497,7 +1504,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 try
                 {
                     SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
-                    SimpleDateFormat sdfGetProgram = new SimpleDateFormat(Constants.DATE_SHORT_FORMAT_WITH_SLASH()); //this object used for parse getProgramDate because format of this date is different
+                    SimpleDateFormat sdfGetProgram = new SimpleDateFormat(Constants.DATE_SHORT_FORMAT()); //this object used for parse getProgramDate because format of this date is different
                     Date getProgramDate = sdfGetProgram.parse(lastGetProgramDate);
                     Date dateMasir = sdf.parse(tarikhMasir);
 
@@ -1507,6 +1514,8 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     long diff = dateMasir.getTime() - getProgramDate.getTime();
                     diff = diff < 0 ? (diff*-1) : diff;
                     long days = diff / 1000 * 60 * 60 * 24;
+                    Log.d("date" , "days : " + days);
+
                     if (days == 0)
                     {
                         return true;
