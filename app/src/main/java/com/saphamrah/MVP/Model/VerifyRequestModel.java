@@ -669,6 +669,18 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         kalaMojodiDAO.deleteJayzeheByccDarkhastFaktor(ccDarkhastFaktor);
     }
 
+    @Override
+    public void deleteTakhfifNaghdyForDarkhastFaktor(long ccDarkhastFaktor)
+    {
+        //delete from DarkhastFaktorTakhfif and DarkhastFaktorSatrTakhfif and DarkhastFaktorJayezeh
+        DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
+
+
+        darkhastFaktorTakhfifDAO.deleteTakhfifNaghdyByccDarkhastFaktor(ccDarkhastFaktor);
+
+
+    }
+
 
     @Override
     public void getDiscounts(long ccDarkhastFaktor)
@@ -1752,13 +1764,13 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         protected Integer doInBackground(Void... arrayLists)
         {
             int canEditDarkhastForMovaze = Integer.parseInt(new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Can_Edit_Darkhast_For_Movaze()));
-
+            String ccChildParametersOfTakhfif = "";
             if(canEditDarkhastForMovaze==1) {
-                Log.d("jayezeh", "deleteTakhfifJayezeForDarkhastFaktor");
+                Log.d("jayezeh", "deleteTakhfifJayezeForDarkhastFaktor canEditDarkhastForMovaze=1");
                 deleteTakhfifJayezeForDarkhastFaktor(ccDarkhastFaktor);
 
                 ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
-                String ccChildParametersOfTakhfif = "";
+                ccChildParametersOfTakhfif = "";
                 Log.d("vosol", "ccChildParameterNoeVosol Takhfif: " + ccChildParameterNoeVosol);
 
                 if (valueNoeVosol == Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD()))) {
@@ -1774,18 +1786,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 } else if (valueNoeVosol == Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_Resid_Naghd()))) {
                     ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
                 }
-//            if (ccChildParameterNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD())
-//            {
-//                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
-//            }
-//            else if (ccChildParameterNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_CHECK())
-//            {
-//                ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_CHECK());
-//            }
-//            else if (ccChildParameterNoeVosol == Constants.CODE_NOE_VOSOL_MOSHTARY_RESID())
-//            {
-//                ccChildParametersOfTakhfif= childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_RESID());
-////            }
+
                 Log.d("darkhastfaktor", "ccChildParametersOfTakhfif:" + ccChildParametersOfTakhfif);
                 String[] seperatedccChildParameterOfTakhfif = ccChildParametersOfTakhfif.split(",");
                 Log.d("darkhastfaktor", "seperatedccChildParameterOfTakhfif : " + seperatedccChildParameterOfTakhfif.toString());
@@ -1834,16 +1835,57 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 //                Log.d("ccTakhfif" , "strccTakhfifs : " + strccTakhfifs);
 //                selectFaktorShared.putString(selectFaktorShared.getCcTakhfifJayezes() , strccTakhfifs);
                     Log.d("ccTakhfif", "resultOfProccess : " + resultOfProccess);
-                    //resultOfProccess=1;
+
                     return resultOfProccess;
-                    //mPresenter.onSuccessCalculateDiscount(haveBonus);
-                    //onCalculateDiscountResponse.onSuccessCalculate(haveBonus , ccDarkhastFaktor);
-                    //return resultOfProccess;
-                    //getDiscounts(ccDarkhastFaktor);
+
                 }
             }
-            else
-                return 1; //canEditDarkhastForMovaze!=1
+            else {
+                Log.d("darkhastfaktor jayezeh", "deleteTakhfifNaghdyForDarkhastFaktor canEditDarkhastForMovaze=0");
+                deleteTakhfifNaghdyForDarkhastFaktor(ccDarkhastFaktor);
+
+                ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
+                ccChildParametersOfTakhfif = "";
+                Log.d("darkhastfaktor vosol", "ccChildParameterNoeVosol Takhfif: " + ccChildParameterNoeVosol);
+
+                if (valueNoeVosol == Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD()))) {
+                    ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
+                } else if (valueNoeVosol == Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh()))) {
+                    ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
+                } else if (valueNoeVosol == Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh()))) {
+                    ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
+                } else if (valueNoeVosol == Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_CHECK()))) {
+                    ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_CHECK());
+                } else if (valueNoeVosol == Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_RESID()))) {
+                    ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_RESID());
+                } else if (valueNoeVosol == Integer.parseInt(childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_Resid_Naghd()))) {
+                    ccChildParametersOfTakhfif = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_TAKHFIF_FOR_VOSOL_NAGHD());
+                }
+
+                Log.d("darkhastfaktor", "ccChildParametersOfTakhfif:" + ccChildParametersOfTakhfif);
+                String[] seperatedccChildParameterOfTakhfif = ccChildParametersOfTakhfif.split(",");
+                Log.d("darkhastfaktor", "seperatedccChildParameterOfTakhfif : " + seperatedccChildParameterOfTakhfif.toString());
+                if (seperatedccChildParameterOfTakhfif.length > 0) {
+                    DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
+                    DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+                    Log.d("darkhastFaktor", "calculateDiscounts : " + darkhastFaktorModel.toString());
+                    ArrayList<ParameterChildModel> parameterChildModels = new ParameterChildDAO(mPresenter.getAppContext()).getAllByccParameter(Constants.CC_NOE_BASTE_BANDI() + "," + Constants.CC_NOE_TEDAD_RIAL());
+                    Log.d("darkhastfaktor", "parameterChildModels : " + parameterChildModels.toString());
+                    for (String ccChilParameter : seperatedccChildParameterOfTakhfif) {
+                        Log.d("darkhastfaktor", "ccChilParameter : " + ccChilParameter);
+
+                        if (Integer.parseInt(ccChilParameter) == Constants.CC_CHILD_CODE_TAKHFIF_NAGHDI()) {
+                            Log.d("darkhastfaktor takhfif", "takhfif naghdi");
+                            mohasebeTakhfifNaghdi(darkhastFaktorModel);
+                        }
+                    }
+                    Log.d("darkhastfaktor", "resultOfProccess : " + resultOfProccess);
+
+                    return resultOfProccess;
+                }
+
+                //return 1; //canEditDarkhastForMovaze!=1
+            }
         return 0;
 
         }

@@ -700,6 +700,29 @@ public class DarkhastFaktorTakhfifDAO
         }
     }
 
+    public boolean deleteTakhfifNaghdyByccDarkhastFaktor(long ccDarkhastFaktor)
+    {
+        try
+        {
+            Log.d("DarkhastFaktorTakhfif","jayezeh deleteByccDarkhastFaktor: ");
+
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            //db.delete(DarkhastFaktorTakhfifModel.TableName(), DarkhastFaktorTakhfifModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor, null);
+            String query = "delete from " + DarkhastFaktorTakhfifModel.TableName() + " where ccDarkhastFaktor = " + ccDarkhastFaktor +
+                    " and ccTakhfif > 0 ";
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , DarkhastFaktorTakhfifModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorTakhfifDAO" , "" , "deleteAll" , "");
+            return false;
+        }
+    }
 
     public boolean deleteTakhfifNaghdiByccDarkhastFaktor(long ccDarkhastFaktor , String codeNoeTakhfifNaghdi , String sharhTakhfif)
     {

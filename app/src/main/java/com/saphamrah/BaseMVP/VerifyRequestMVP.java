@@ -135,6 +135,7 @@ public interface VerifyRequestMVP
         void updateDarkhastFaktor(String modatVosol, int modatRoozRaasGiri , double sumMablaghKol , double sumMablaghKhales , float mablaghArzeshAfzoode , float sumTakhfifat , int codeNoeVosol , String nameNoeVosol , int ccAddress);
         void deleteBonus(long ccDarkhastFaktor , boolean openSelectBonusActivity);
         void deleteTakhfifJayezeForDarkhastFaktor(long ccDarkhastFaktor);
+        void deleteTakhfifNaghdyForDarkhastFaktor(long ccDarkhastFaktor);
         void updateExtraPropMablaghNahaeeFaktor(long ccDarkhastFaktor, int ccMoshtary, float sumMablaghKhales);
         void checkData(int clickedBottomBarposition ,double mablaghKol, float sumTakhfifat, double mablaghFaktor , long sumMablaghBaArzeshAfzoode , int ccAddress , int modatVosol , int codeNoeVosol, String nameNoeVosol , int modatRoozRaasGiri , double vaznFaktor , double hajmFaktor, Date tarikhPishbiniTahvil, int tedadAghlam);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);

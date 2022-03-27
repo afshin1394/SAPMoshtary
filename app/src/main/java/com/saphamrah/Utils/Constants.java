@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE = 2 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest 8-Pegah-grpc 9-Badr
+    private static final int CURRENT_VERSION_TYPE = 9 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest 8-Pegah-grpc 9-Badr
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 
@@ -705,7 +705,7 @@ public class Constants
     public static final int CC_CHILD_Tedad_Pishnahdy_Tarikh_Tahvil = 198;
     public static final int CC_CHILD_Check_Shahr_Markazi_Tarikh_Tahvil = 199;
     public static final int CC_CHILD_Require_Image_Customer_Confirm_Request = 200;
-    public static final int CC_CHILD_Can_Decrease_Bonus_Select = 200;
+    public static final int CC_CHILD_Can_Decrease_Bonus_Select = 201;
 
 
 
