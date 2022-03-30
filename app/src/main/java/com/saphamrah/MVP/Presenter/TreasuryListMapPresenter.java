@@ -6,6 +6,8 @@ import android.util.Log;
 import com.saphamrah.BaseMVP.TreasuryListMapMVP;
 import com.saphamrah.MVP.Model.TreasuryListMapModel;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
+import com.saphamrah.Model.DarkhastFaktorModel;
+import com.saphamrah.Model.ElatAdamTahvilDarkhastModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.R;
@@ -188,6 +190,17 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
         }
     }
 
+    @Override
+    public void getElatAdamTahvilDarkhast(long ccDarkhastFaktor, int position) {
+        mModel.getElatAdamTahvilDarkhast(ccDarkhastFaktor,position);
+    }
+
+    @Override
+    public void sendElatAdamTahvilDarkhast(ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel, DarkhastFaktorModel darkhastFaktorModel, int position) {
+        mModel.sendElatAdamTahvilDarkhast(elatAdamTahvilDarkhastModel,darkhastFaktorModel,position);
+
+    }
+
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
 
@@ -267,11 +280,11 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
     }
 
     @Override
-    public void onGetCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, MoshtaryAddressModel moshtaryAddressModel , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo)
+    public void onGetCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, MoshtaryAddressModel moshtaryAddressModel , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo,boolean isSend,boolean isHavaleh,ArrayList<Integer> codeNoeVorods)
     {
         if (darkhastFaktorMoshtaryForoshandeModels.size() > 0)
         {
-            mView.get().showCustomerFaktors(darkhastFaktorMoshtaryForoshandeModels, moshtaryAddressModel , customerPriority , customerInfo);
+            mView.get().showCustomerFaktors(darkhastFaktorMoshtaryForoshandeModels, moshtaryAddressModel , customerPriority , customerInfo,isSend,isHavaleh,codeNoeVorods);
         }
         else
         {
@@ -437,6 +450,28 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
             mView.get().onOpenInvoiceSettlement(darkhastFaktorMoshtaryForoshandeModel);
         else
             mView.get().showAlertDialog(R.string.errorMamorPakhshLocationsNotSent, false,Constants.FAILED_MESSAGE());
+    }
+
+    @Override
+    public void onGetElatAdamTahvilDarkhast(ArrayList<ElatAdamTahvilDarkhastModel> models, DarkhastFaktorModel darkhastFaktorModel, int position) {
+        ArrayList<String> elatAdamTahvilDarkhastTitles = new ArrayList<>();
+        for (ElatAdamTahvilDarkhastModel model : models)
+        {
+            elatAdamTahvilDarkhastTitles.add(model.getNameNoeVorod());
+        }
+        mView.get().onGetElatAdamTahvilDarkhast(models,elatAdamTahvilDarkhastTitles,darkhastFaktorModel,position);
+    }
+
+    @Override
+    public void onSuccessSend(int position) {
+        mView.get().closeLoading();
+        mView.get().showAlertMessage(R.string.successSendData , Constants.SUCCESS_MESSAGE());
+        mView.get().onSuccessSend(position);
+    }
+
+    @Override
+    public void closeLoading() {
+        mView.get().closeLoading();
     }
 
 

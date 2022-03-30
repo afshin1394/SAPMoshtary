@@ -255,6 +255,8 @@
         <item>{\"name\":\"اولویت قیمت کالا\" , \"function\":\"getKalaOlaviatGheymat\"}</item>
         <item>{\"name\":\"پیشنهاد\" , \"functdion\":\"getNoePishnahad\"}</item>
         <item>{\"name\":\"جشنواره\" , \"functdion\":\"getJashnvareh\"}</item>
+        <item>{\"name\":\"کالا قیمت فروش  \" , \"function\":\"getKalaGheymatForosh\"}</item>
+        <item>{\"name\":\"تنظیمات مالی\" , \"functdion\":\"getConfigMali\"}</item>
         <item>{\"name\":\"علت عدم تحویل درخواست\" , \"functdion\":\"getElatTahvilDarkhast\"}</item>
         <item>{\"name\":\"اقلام تخفیف درخواست \" , \"function\":\"getDarkhastFaktorTakhfif\"}</item>
         <item>{\"name\":\"ریز اقلام تخفیف درخواست \" , \"function\":\"getDarkhastFaktorSatrTakhfif\"}</item>

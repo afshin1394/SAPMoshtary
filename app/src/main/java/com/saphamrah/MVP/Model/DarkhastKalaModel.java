@@ -133,7 +133,10 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
             {
                 int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
                 boolean insertDarkhastFaktorForMamorPakhsh = shared.getBoolean(shared.getInsertDarkhastFaktorSatrForMamorPakhsh() , false);
-                if ( (noeMasouliat == 4 || noeMasouliat == 5) && !insertDarkhastFaktorForMamorPakhsh)
+                int canEditDarkhastForMovaze = Integer.parseInt(new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Can_Edit_Darkhast_For_Movaze()));
+                Log.d("Check darkhastkala","noeMasouliat:"+  noeMasouliat + " canEditDarkhastForMovaze:"+canEditDarkhastForMovaze  + " insertDarkhastFaktorForMamorPakhsh:" + insertDarkhastFaktorForMamorPakhsh);
+
+                if ( (noeMasouliat == 4 || noeMasouliat == 5) && !insertDarkhastFaktorForMamorPakhsh && canEditDarkhastForMovaze==1)
                 {
                     calculateGoodsListWithMojodiOnline(ccDarkhastFaktor , shared.getInt(shared.getCcMoshtary() , 0));
                     shared.putBoolean(shared.getInsertDarkhastFaktorSatrForMamorPakhsh() , true);
@@ -217,15 +220,19 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
 
             String daraje = String.valueOf(moshtaryModel.getDarajeh());
             int noeMoshtary = moshtaryModel.getCcNoeMoshtary();
+            int noeSenf = moshtaryModel.getCcNoeSenf();
+            int ccMarkazForosh = selectFaktorShared.getInt(selectFaktorShared.getCcMarkazForosh(),-1);
+            int ccSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getCcSazmanForosh(),-1);
 
             KalaMojodiZaribForoshDAO kalaMojodiZaribForoshDAO = new KalaMojodiZaribForoshDAO(mPresenter.getAppContext());
             for (String ccKalaCode : hashMapSelectedGoods.keySet())
             {
                 int tedadDarkhasti = hashMapSelectedGoods.get(ccKalaCode);
                 Log.d("DarkhastKalaModel", "ccKalaCode:"+ ccKalaCode+",ccDarkhastFaktor:"+ccDarkhastFaktor+", moshtaryGharardadccSazmanForosh:"+moshtaryGharardadccSazmanForosh +"," + ccMoshtaryGharardad);
+                Log.d("DarkhastKalaModel","darkhastFaktorSatrDAO.delete    calculateGoodsListWithMojodiOnline");
                 darkhastFaktorSatrDAO.deleteByccKalaCodeAndccDarkhastFaktor(ccDarkhastFaktor , ccKalaCode);
 
-                ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = kalaMojodiZaribForoshDAO.getByMoshtaryAndccKalaCode(daraje, noeMoshtary, ccKalaCode, moshtaryGharardadccSazmanForosh,ccMoshtaryGharardad);
+                ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = kalaMojodiZaribForoshDAO.getByMoshtaryAndccKalaCode(daraje, noeMoshtary,noeSenf,ccMarkazForosh,ccSazmanForosh, ccKalaCode, moshtaryGharardadccSazmanForosh,ccMoshtaryGharardad);
                 Log.d("DarkhastKalaModel","kalaMojodiZaribModels:" + kalaMojodiZaribModels.toString());
 
                 int sumSelectedNew = 0;
@@ -350,8 +357,11 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
 
         String daraje = String.valueOf("0," + moshtaryModel.getDarajeh());
         int noeMoshtary = moshtaryModel.getCcNoeMoshtary();
+        int noeSenf = moshtaryModel.getCcNoeSenf();
+        int ccMarkazForosh = selectFaktorShared.getInt(selectFaktorShared.getCcMarkazForosh(),-1);
+        int ccSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getCcSazmanForosh(),-1);
         //TODO
-        final ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = kalaMojodiZaribForoshDAO.getAllByMoshtary(daraje, noeMoshtary, moshtaryGharardadccSazmanForosh, ccMoshtaryGharardad,type);
+        final ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = kalaMojodiZaribForoshDAO.getAllByMoshtary(daraje, noeMoshtary, noeSenf, ccMarkazForosh,ccSazmanForosh, moshtaryGharardadccSazmanForosh, ccMoshtaryGharardad,type);
 
 
         Log.d("DarkhastKalaModel", "end of get goods and size : " + kalaMojodiZaribModels.size() + "kalaMojodiZaribModels:" + kalaMojodiZaribModels.toString());
@@ -717,6 +727,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
         {
             Log.d("DarkhastKalaModel","kalaMojodiZaribModel1-2:" +kalaMojodiZaribModel);
             Log.d("DarkhastKalaModel","tedad:" + tedad);
+            Log.d("DarkhastKalaModel","darkhastFaktorSatrDAO.delete    insertNewFaktorSatr");
             darkhastFaktorSatrDAO.delete(ccDarkhastFaktor, kalaMojodiZaribModel.getCcTaminKonandeh(), kalaMojodiZaribModel.getCcKalaCode(), kalaMojodiZaribModel.getCcKalaCode(), kalaMojodiZaribModel.getShomarehBach(), kalaMojodiZaribModel.getTarikhTolid(), kalaMojodiZaribModel.getTarikhEngheza(), kalaMojodiZaribModel.getGheymatForoshAsli(), kalaMojodiZaribModel.getGheymatMasrafKonandehAsli());
             if (insertNewKalaMojodi(kalaMojodiZaribModel.getCcKalaCode(), ccDarkhastFaktor, kalaMojodiZaribModel.getTarikhTolid(),kalaMojodiZaribModel.getTarikhEngheza(), kalaMojodiZaribModel.getShomarehBach(), kalaMojodiZaribModel.getCcTaminKonandeh(), tedad , kalaMojodiZaribModel.getGheymatForoshAsli(), kalaMojodiZaribModel.getGheymatMasrafKonandehAsli()))
             {
@@ -758,6 +769,8 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
     public void removeKala(KalaDarkhastFaktorSatrModel kalaDarkhastFaktorSatrModel, int position, int ccMoshtary) {
         Log.d("DarkhastKalaModel", "removeKala kalaDarkhastFaktorSatrModel:" + kalaDarkhastFaktorSatrModel.toString());
         DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
+        Log.d("DarkhastKalaModel","darkhastFaktorSatrDAO.delete    removeKala");
+
         if (darkhastFaktorSatrDAO.delete(kalaDarkhastFaktorSatrModel.getCcDarkhastFaktor(), kalaDarkhastFaktorSatrModel.getCcTaminKonandeh(), kalaDarkhastFaktorSatrModel.getCcKala(), kalaDarkhastFaktorSatrModel.getCcKalaCode(), kalaDarkhastFaktorSatrModel.getShomarehBach(), kalaDarkhastFaktorSatrModel.getTarikhTolid(), kalaDarkhastFaktorSatrModel.getTarikhEngheza(), kalaDarkhastFaktorSatrModel.getGheymatForoshAsli(), kalaDarkhastFaktorSatrModel.getGheymatMasrafKonandehAsli())) {
             if (insertNewKalaMojodi(kalaDarkhastFaktorSatrModel.getCcKalaCode(), kalaDarkhastFaktorSatrModel.getCcDarkhastFaktor(), kalaDarkhastFaktorSatrModel.getTarikhTolid(),kalaDarkhastFaktorSatrModel.getTarikhEngheza(), kalaDarkhastFaktorSatrModel.getShomarehBach(), kalaDarkhastFaktorSatrModel.getCcTaminKonandeh(), kalaDarkhastFaktorSatrModel.getTedad3(), ((int) kalaDarkhastFaktorSatrModel.getGheymatForoshAsli()), ((int) kalaDarkhastFaktorSatrModel.getGheymatMasrafKonandehAsli()))) {
                 getAllKalaWithMojodiZarib(ccMoshtary, true, true, false, DarkhastKalaActivity.AddItemType.NONE);

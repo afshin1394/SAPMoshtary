@@ -2,6 +2,7 @@ package com.saphamrah.WebService.RxService;
 
 import com.saphamrah.Model.GPSDataModel;
 import com.saphamrah.WebService.RxService.Response.DataResponse.CodeMelyResponse;
+import com.saphamrah.WebService.RxService.Response.DataResponse.ConfigMaliResponse;
 import com.saphamrah.WebService.RxService.Response.DataResponse.GetAllrptHadafeForoshResponse;
 import com.saphamrah.WebService.RxService.Response.DataResponse.GetAllrptKalaInfoResponse;
 import com.saphamrah.WebService.RxService.Response.DataResponse.GetMandehMojodyMashinResponse;
@@ -107,6 +108,11 @@ public interface APIServiceRxjava {
 
     @GET("Api/ApiTablet/CheckAfrad")
     Observable<Response<CodeMelyResponse>>checkAfrad(@Query("CodeMely") String CodeMely);
+
+
+    @GET("Api/ApiTreasury/GetConfigMali")
+    Observable<Response<ConfigMaliResponse>> getConfigMali(@Query("ccMarkazForosh") String ccMarkazForosh, @Query("ccSazmanForosh") String ccSazmanForosh);
+
 
 
 

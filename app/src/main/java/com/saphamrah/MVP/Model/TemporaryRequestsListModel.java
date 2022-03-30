@@ -1903,8 +1903,12 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                     sumTedadJayeze += model.getTedad3();
                 }
                 Log.d("send" , "darkhastFaktorSatrs size : " + darkhastFaktorSatrs.toString());
+                Log.d("send" , "model.getCcDarkhastFaktorSatr() : " + model.getCcDarkhastFaktorSatr());
+
                 jsonArrayDarkhastFaktorSatr.put(model.toJsonObject(mPresenter.getAppContext()));
                 ArrayList<DarkhastFaktorSatrTakhfifModel> darkhastFaktorSatrTakhfifModels = darkhastFaktorSatrTakhfifDAO.getByccDarkhastFaktorSatr(model.getCcDarkhastFaktorSatr());
+                Log.d("send" , "darkhastFaktorSatrTakhfifModels : " + darkhastFaktorSatrTakhfifModels);
+
                 for (DarkhastFaktorSatrTakhfifModel takhfifSatr : darkhastFaktorSatrTakhfifModels)
                 {
                     jsonArrayTakhfifSatr.put(takhfifSatr.toJsonObject());

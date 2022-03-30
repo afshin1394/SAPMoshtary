@@ -62,6 +62,8 @@
     <color name="colorBackShowCustomerLocationSwipe">#fcc46c</color>
     <color name="colorBackUpdateEtebar">#2979FF</color>
     <color name="colorBackRoute">#009688</color>
+    <color name="colorNotDelivered">#8E345B</color>
+
 
 
 

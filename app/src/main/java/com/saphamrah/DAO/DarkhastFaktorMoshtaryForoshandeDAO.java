@@ -111,7 +111,7 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
     public ArrayList<DarkhastFaktorMoshtaryForoshandeModel> getDistinctCustomers(int faktorRooz) {
         ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels = new ArrayList<>();
         try {
-            String query = "select df.ccMoshtary, df.ccMarkazForosh, df.ccSazmanForosh, df.ccMarkazSazmanForosh, df.ccDarkhastFaktorNoeForosh, m.CodeMoshtary, m.NameMoshtary, f.FullNameForoshandeh, df.ccUser, df.Latitude, df.Longitude, \n" +
+            String query = "select df.ccMoshtary, df.ccMarkazForosh, df.ccSazmanForosh, df.ccMarkazSazmanForosh, df.ccDarkhastFaktorNoeForosh, m.CodeMoshtary, m.NameMoshtary, f.FullNameForoshandeh, df.ccUser, df.Latitude, df.Longitude,df.ExtraProp_IsSend, \n" +
                     " f.ccAfradForoshandeh, count(df.ccDarkhastFaktor) AS CountDarkhastFaktor \n" +
                     " from DarkhastFaktor df left join Moshtary m on df.ccMoshtary = m.ccMoshtary \n" +
                     " left join Foroshandeh f on df.ccForoshandeh = f.ccForoshandeh \n" +
@@ -139,7 +139,7 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
     public ArrayList<DarkhastFaktorMoshtaryForoshandeModel> getCustomerDarkhastFaktor(int ccMoshtary, int faktorRooz) {
         ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels = new ArrayList<>();
         try {
-            String query = "select df.ccDarkhastFaktor, df.ccMarkazForosh, df.ccSazmanForosh, df.ccMarkazSazmanForosh, df.ccDarkhastFaktorNoeForosh, df.TarikhFaktor, df.ShomarehDarkhast, df.ShomarehFaktor, df.ccForoshandeh, df.FaktorRooz, \n" +
+            String query = "select df.ccDarkhastFaktor,df.UniqID_Tablet , df.ccMarkazForosh, df.ccSazmanForosh, df.ccMarkazSazmanForosh, df.ccDarkhastFaktorNoeForosh, df.TarikhFaktor, df.ShomarehDarkhast, df.ShomarehFaktor, df.ccForoshandeh, df.FaktorRooz, \n" +
                     " df.ccMoshtary, df.ccUser, df.NameNoeVosolAzMoshtary, \n" +
                     " df.MablaghKhalesFaktor, df.MablaghMandeh , df.CodeVazeiat, df.Latitude, df.Longitude, \n" +
                     " df.ExtraProp_IsSend, df.CodeNoeVosolAzMoshtary, df.ExtraProp_ShowFaktorMamorPakhsh,df.ccMoshtaryGharardad, \n" +
@@ -330,7 +330,7 @@ public class DarkhastFaktorMoshtaryForoshandeDAO {
             darkhastFaktorMoshtaryForoshandeModel.setCcMarkazSazmanForosh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ccMarkazSazmanForosh())));
             darkhastFaktorMoshtaryForoshandeModel.setFullNameMoshtary(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_NameMoshtary())));
             darkhastFaktorMoshtaryForoshandeModel.setCodeMoshtary(cursor.getString(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_CodeMoshtary())));
-
+            darkhastFaktorMoshtaryForoshandeModel.setExtraProp_IsSent(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorMoshtaryForoshandeModel.COLUMN_ExtraProp_IsSend())));
             darkhastFaktorMoshtaryForoshandeModels.add(darkhastFaktorMoshtaryForoshandeModel);
             cursor.moveToNext();
         }

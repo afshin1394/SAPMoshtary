@@ -31,9 +31,11 @@ import com.saphamrah.Adapter.TreasuryMapFaktorAdapter;
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.TreasuryListMapMVP;
 import com.saphamrah.BuildConfig;
+import com.saphamrah.CustomView.CustomSpinner;
 import com.saphamrah.MVP.Presenter.TreasuryListMapPresenter;
 import com.saphamrah.MVP.View.marjoee.DarkhastFaktorMarjoeeActivity;
 import com.saphamrah.Model.DarkhastFaktorModel;
+import com.saphamrah.Model.ElatAdamTahvilDarkhastModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -43,6 +45,7 @@ import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
 import com.saphamrah.Utils.CustomAlertDialogResponse;
 import com.saphamrah.Utils.CustomLoadingDialog;
+import com.saphamrah.Utils.CustomSpinnerResponse;
 import com.saphamrah.Utils.StateMaintainer;
 import com.saphamrah.Valhalla.SourcesToTargetsFailedResult;
 import com.saphamrah.WebService.APIServiceValhalla;
@@ -326,6 +329,46 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
     }
 
     @Override
+    public void onGetElatAdamTahvilDarkhast(ArrayList<ElatAdamTahvilDarkhastModel> models, ArrayList<String> elatAdamTahvilDarkhastTitles, DarkhastFaktorModel darkhastFaktorModel, int position) {
+        CustomSpinner customSpinner = new CustomSpinner();
+        customSpinner.showSpinner(TreasuryListMapActivity.this, elatAdamTahvilDarkhastTitles, new CustomSpinnerResponse() {
+            @Override
+            public void onApplySingleSelection(int selectedIndex) {
+                showLoadingDialog();
+                mPresenter.sendElatAdamTahvilDarkhast(models.get(selectedIndex) , darkhastFaktorModel,position);
+            }
+
+            @Override
+            public void onApplyMultiSelection(ArrayList<Integer> selectedIndexes) {
+
+            }
+        });
+    }
+
+    @Override
+    public void closeLoading() {
+        if (customLoadingDialog != null) {
+            try {
+                alertDialog.dismiss();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void showAlertMessage(int successSendData, int success_message) {
+        customAlertDialog.showMessageAlert(TreasuryListMapActivity.this, false, "", getResources().getString(successSendData), success_message, getResources().getString(R.string.apply));
+    }
+
+    @Override
+    public void onSuccessSend(int position) {
+
+        mPresenter.getSortList();
+
+    }
+
+    @Override
     public Context getAppContext() {
         return TreasuryListMapActivity.this;
     }
@@ -521,9 +564,9 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
     }
 
     @Override
-    public void showCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, MoshtaryAddressModel moshtaryAddressModel , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo)
+    public void showCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, MoshtaryAddressModel moshtaryAddressModel , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo,boolean isSend,boolean isHavaleh,ArrayList<Integer> codeNoeVorods)
     {
-        showBottomSheet(darkhastFaktorMoshtaryForoshandeModels, customerInfo, moshtaryAddressModel, true, customerPriority);
+        showBottomSheet(darkhastFaktorMoshtaryForoshandeModels, customerInfo, moshtaryAddressModel, true, customerPriority,isSend,isHavaleh,codeNoeVorods);
     }
 
     @Override
@@ -596,7 +639,7 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         }
     }
 
-    public void showBottomSheet(final ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, final DarkhastFaktorMoshtaryForoshandeModel customerInfo, MoshtaryAddressModel moshtaryAddressModel, boolean showEditButton, String priority)
+    public void showBottomSheet(final ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, final DarkhastFaktorMoshtaryForoshandeModel customerInfo, MoshtaryAddressModel moshtaryAddressModel, boolean showEditButton, String priority,boolean isSend,boolean isHavaleh,ArrayList<Integer> codeNoeVorods)
     {
         if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
         {
@@ -616,6 +659,7 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         ImageView imgNextFaktor = findViewById(R.id.imgNextFaktor);
         ImageView imgSendLocation = findViewById(R.id.imgSendLocation);
         ImageView imgMarjoee = findViewById(R.id.imgMarjoee);
+        ImageView imgElatAdamTahvil = findViewById(R.id.imgElatAdamTahvil);
         TreasuryMapFaktorAdapter adapter = new TreasuryMapFaktorAdapter(TreasuryListMapActivity.this, darkhastFaktorMoshtaryForoshandeModels);
         recyclerView.setOnFlingListener(null);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(TreasuryListMapActivity.this , LinearLayoutManager.HORIZONTAL , false);
@@ -658,6 +702,12 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
         {
             imgEditDarkhast.setVisibility(View.GONE);
             imgMarjoee.setVisibility(View.VISIBLE);
+        }
+
+        if (isSend){
+            imgElatAdamTahvil.setVisibility(View.GONE);
+        }else{
+            imgElatAdamTahvil.setVisibility(View.VISIBLE);
         }
 
         imgRoute.setOnClickListener(new View.OnClickListener()
@@ -794,18 +844,77 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
                 mPresenter.checkMoshtaryKharejAzMahal(noeMasouliat,darkhastFaktorMoshtaryForoshandeModels.get(position));
             }
         });
+        imgElatAdamTahvil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                mPresenter.getElatAdamTahvilDarkhast(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor() , position);
+            }
+        });
+
 
         /**
          * check for marjoee
          */
         int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition() + 1;
-        if ((darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale) && ((noeMasouliat == 4 && darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && darkhastFaktorMoshtaryForoshandeModels.get(position).getExtraProp_IsSend() == 0 && darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat() < 6))) {
+        Log.i("codeVaziat", "showBottomSheet: "+darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat());
+        if (darkhastFaktorMoshtaryForoshandeModels.get(position).getFaktorRooz() == 1 && isSend){
+            imgSendTreasury.setVisibility(View.GONE);
+        } else {
+            imgSendTreasury.setVisibility(View.VISIBLE);
+        }
+        if (((darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktorNoeForosh() == Constants.ccNoeHavale) && ((noeMasouliat == 4 && darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat() == 99) || (noeMasouliat == 5 && darkhastFaktorMoshtaryForoshandeModels.get(position).getExtraProp_IsSend() == 0 && darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat() < 6))) && codeNoeVorods.contains(darkhastFaktorMoshtaryForoshandeModels.get(position).getExtraProp_CodeNoeVorod())) {
             imgEditDarkhast.setVisibility(View.VISIBLE);
             imgMarjoee.setVisibility(View.GONE);
         } else {
             imgMarjoee.setVisibility(View.VISIBLE);
             imgEditDarkhast.setVisibility(View.GONE);
         }
+        Log.i("positionvsa", "showBottomSheet: Havaleh"+isHavaleh + "isSend"+isSend);
+        if (isHavaleh){
+            imgClearingTreasury.setVisibility(View.GONE);
+            imgSendTreasury.setVisibility(View.GONE);
+            imgMarjoee.setVisibility(View.GONE);
+            imgSendLocation.setVisibility(View.GONE);
+
+
+            if (isSend){
+                imgEditDarkhast.setVisibility(View.GONE);
+                imgElatAdamTahvil.setVisibility(View.GONE);
+            }else{
+                imgEditDarkhast.setVisibility(View.VISIBLE);
+                imgElatAdamTahvil.setVisibility(View.VISIBLE);
+            }
+
+        }else{
+            imgEditDarkhast.setVisibility(View.GONE);
+            imgMarjoee.setVisibility(View.VISIBLE);
+            imgSendLocation.setVisibility(View.VISIBLE);
+            imgClearingTreasury.setVisibility(View.VISIBLE);
+            imgSendTreasury.setVisibility(View.VISIBLE);
+        }
+
+
+
+
+
+
+
+        /*
+         ****** check show location ******
+         */
+
+
+        /*
+         ****** check show faktor mamorPakhsh ******
+         */
+        if (darkhastFaktorMoshtaryForoshandeModels.get(position).getExtraProp_ShowFaktorMamorPakhsh() == 0 && isHavaleh) {
+            imgShowFaktorDetail.setVisibility(View.VISIBLE);
+        } else {
+            imgShowFaktorDetail.setVisibility(View.GONE);
+        }
+
 
 
     }

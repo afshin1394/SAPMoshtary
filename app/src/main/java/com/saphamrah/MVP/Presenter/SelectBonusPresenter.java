@@ -170,6 +170,7 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
                     break;
                 }
             }
+            Log.d("bonus" , "sumSelectedCount : " + sumSelectedCount + " intMaxTedadJayezeh:" + intMaxTedadJayezeh + " canDecreaseBonusSelect:" + canDecreaseBonusSelect);
 
             if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeJayezeh() )
             {
@@ -179,7 +180,6 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
                     hasError = true;
                 }
                 // todo jayezeh
-
                 else if (sumSelectedCount < intMaxTedadJayezeh &&  canDecreaseBonusSelect==0)
                 {
                     mView.get().onErrorInsert(R.string.errorSelectedCountLessThanMaxJayezeh , "");
@@ -211,7 +211,7 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
 
 
                 Log.d("bonus" , "noeJayezehTakhfif : " + noeJayezehTakhfif);
-                if (intMaxTedadJayezeh < sumTedadJavayezEntekhabi)
+                if (intMaxTedadJayezeh < sumTedadJavayezEntekhabi &&  canDecreaseBonusSelect==0)
                 {
                     Log.d("bonus" , "in if : " + " , intMaxTedadJayezeh : " + intMaxTedadJayezeh + " , sumTedadJavayezEntekhabi : " + sumTedadJavayezEntekhabi);
 

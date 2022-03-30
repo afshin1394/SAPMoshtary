@@ -456,12 +456,14 @@ public class DarkhastFaktorJayezehDAO
         return count;
     }
 
-    public boolean deleteByccDarkhastFaktorAndccJayeze(long ccDarkhastFaktor , int ccJayeze)
+    public boolean deleteByccDarkhastFaktorAndccJayeze(long ccDarkhastFaktor , int ccJayeze, int ccJayezehSatr)
     {
         try
         {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            db.delete(DarkhastFaktorJayezehModel.TableName(), DarkhastFaktorJayezehModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " and " + DarkhastFaktorJayezehModel.COLUMN_ccJayezeh() + " = " + ccJayeze, null);
+            db.delete(DarkhastFaktorJayezehModel.TableName(), DarkhastFaktorJayezehModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor
+                    + " and " + DarkhastFaktorJayezehModel.COLUMN_ccJayezeh() + " = " + ccJayeze
+                    + " and " + DarkhastFaktorJayezehModel.COLUMN_ExtraProp_ccJayezehSatr() + " = " + ccJayezehSatr, null);
             db.close();
             return true;
         }

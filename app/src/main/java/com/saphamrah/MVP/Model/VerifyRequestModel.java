@@ -1,6 +1,8 @@
 package com.saphamrah.MVP.Model;
 
 
+import static com.saphamrah.Utils.Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD;
+import static com.saphamrah.Utils.Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_1_Setareh;
 import static com.saphamrah.Utils.Constants.REST;
 import static com.saphamrah.Utils.Constants.gRPC;
 
@@ -1873,10 +1875,13 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                     Log.d("darkhastfaktor", "parameterChildModels : " + parameterChildModels.toString());
                     for (String ccChilParameter : seperatedccChildParameterOfTakhfif) {
                         Log.d("darkhastfaktor", "ccChilParameter : " + ccChilParameter);
+                        Log.d("darkhastfaktor", "CodeNoeVosolAzMoshtary : " + darkhastFaktorModel.getCodeNoeVosolAzMoshtary() + ", " + Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD());
 
-                        if (Integer.parseInt(ccChilParameter) == Constants.CC_CHILD_CODE_TAKHFIF_NAGHDI()) {
-                            Log.d("darkhastfaktor takhfif", "takhfif naghdi");
-                            mohasebeTakhfifNaghdi(darkhastFaktorModel);
+                        if(darkhastFaktorModel.getCodeNoeVosolAzMoshtary() != Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD()){// || darkhastFaktorModel.getCodeNoeVosolAzMoshtary() != Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD_2_Setareh() || darkhastFaktorModel.getCodeNoeVosolAzMoshtary() != Constants.CODE_NOE_VOSOL_MOSHTARY_Resid_Naghd()){
+                            if (Integer.parseInt(ccChilParameter) == Constants.CC_CHILD_CODE_TAKHFIF_NAGHDI()) {
+                                Log.d("darkhastfaktor takhfif", "takhfif naghdi");
+                                mohasebeTakhfifNaghdi(darkhastFaktorModel);
+                            }
                         }
                     }
                     Log.d("darkhastfaktor", "resultOfProccess : " + resultOfProccess);
@@ -3613,7 +3618,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                     if (insertJayezeh(ccDarkhastFaktor, ccJayezeh, ccJayezehSatr, DarkhastFaktorJayezehModel.CodeNoeJayezehAuto(), NameKala, ccKalaJayezeh, ccKalaCodeJayezeh, tedadJayezeh))
                     {
                         Log.d("jayezeh" , "ccKalaJayezeh : " + ccKalaJayezeh + " tedadJayezeh :" + tedadJayezeh);
-                        if (!checkKalaForInsertKalaMojodi(ccKalaJayezeh , tedadJayezeh))
+                        if (!checkKalaForInsertKalaMojodi(ccKalaCodeJayezeh , tedadJayezeh))
                         {
                             publishProgress(-2);
                         }
@@ -3623,7 +3628,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 {
                     //diff == count takhfif naghdi
                     int diff = tedadJayezeh - countMaxMojody;
-                    if (checkKalaForInsertKalaMojodi(ccKalaJayezeh , countKalaMojodi))
+                    if (checkKalaForInsertKalaMojodi(ccKalaCodeJayezeh , countKalaMojodi))
                     {
                         insertTakhfifNaghdi(ccJayezeh, sharhJayezeh, ccKalaJayezeh, tedadJayezeh, diff);
                     }

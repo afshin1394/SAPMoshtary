@@ -62,6 +62,10 @@ public interface APIServiceGet
                                                         @Query("ccMoshtary") String ccMoshtary,
                                                         @Query("ccForoshandeh") String ccForoshandeh);
 
+    @GET("Api/ApiTreasury/GetConfigMali")
+    Call<ConfigMaliResult> getConfigMali(@Query("ccMarkazForosh") String ccMarkazForosh, @Query("ccSazmanForosh") String ccSazmanForosh);
+
+
 
     @GET("Api/apitreasury/GetConfigNoeVosolMojazefaktor")
     Call<GetConfigNoeVosolMojazefaktorResult> getConfigNoeVosolMojazefaktor();
@@ -175,6 +179,9 @@ public interface APIServiceGet
     Call<NoeVosolMoshtaryResult> getNoeVosolMoshtary(@Query("ccMarkazSazmanForosh") String ccMarkazSazmanForosh , @Query("ccNoeMoshtarys") String ccNoeMoshtarys);
 
     //K
+    @GET("Api/ApiSales/GetKalaGheymatForosh")
+    Call<KalaGheymatForoshResult> getKalaGheymatForosh(@Query("ccMarkazForosh") String ccMarkazForosh , @Query("ccSazmanForosh") String ccSazmanForosh);
+
     @GET("Api/ApiTablet/GetKalaOlaviat")
     Call<GetKalaOlaviatResult> getKalaOlaviat(@Query("ccanbarak") String ccAnbarak);
 

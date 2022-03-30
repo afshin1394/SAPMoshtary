@@ -23,6 +23,7 @@ import com.saphamrah.DAO.DarkhastFaktorEmzaMoshtaryDAO;
 import com.saphamrah.DAO.DarkhastFaktorMoshtaryForoshandeDAO;
 import com.saphamrah.DAO.DarkhastFaktorRoozSortDAO;
 import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
+import com.saphamrah.DAO.ElatAdamTahvilDarkhastDAO;
 import com.saphamrah.DAO.ForoshandehAmoozeshiDeviceNumberDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.GPSDataPpcDAO;
@@ -52,6 +53,7 @@ import com.saphamrah.Model.DariaftPardakhtPPCModel;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
 import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.DarkhastFaktorRoozSortModel;
+import com.saphamrah.Model.ElatAdamTahvilDarkhastModel;
 import com.saphamrah.Model.ForoshandehAmoozeshiModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.GPSDataModel;
@@ -102,6 +104,7 @@ import com.saphamrah.WebService.RxService.Response.DataResponse.GetMandehMojodyM
 import com.saphamrah.WebService.ServiceResponse.CreateDariaftPardakhtPPCJSONResult;
 import com.saphamrah.WebService.ServiceResponse.CreateGpsDataPPCResult;
 import com.saphamrah.WebService.ServiceResponse.GetLoginInfoCallback;
+import com.saphamrah.WebService.ServiceResponse.GetUpdateElatAdamTahvilDarkhastResult;
 import com.saphamrah.WebService.ServiceResponse.SuggestResult;
 
 import org.json.JSONArray;
@@ -317,13 +320,21 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
     public void getCustomerFaktors(DarkhastFaktorMoshtaryForoshandeModel customerInfo, MoshtaryAddressModel moshtaryAddressModel, String customerPriority)
     {
         DarkhastFaktorMoshtaryForoshandeDAO darkhastFaktorMoshtaryForoshandeDAO = new DarkhastFaktorMoshtaryForoshandeDAO(mPresenter.getAppContext());
+        ElatAdamTahvilDarkhastDAO elatAdamTahvilDarkhastDAO = new ElatAdamTahvilDarkhastDAO(mPresenter.getAppContext());
+        ArrayList<ElatAdamTahvilDarkhastModel> elatAdamTahvilDarkhastModels = elatAdamTahvilDarkhastDAO.getAll();
+        ArrayList<Integer> codeNoeVorods = new ArrayList<>();
+        for (ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel : elatAdamTahvilDarkhastModels) {
+            codeNoeVorods.add(elatAdamTahvilDarkhastModel.getCodeNoeVorod());
+        }
         ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels = darkhastFaktorMoshtaryForoshandeDAO.getCustomerDarkhastFaktor(customerInfo.getCcMoshtary() , 0);
         int noeMasouliat = getNoeMasouliatWithReturnData();
+        boolean isSend = darkhastFaktorMoshtaryForoshandeModels.get(0).getExtraProp_IsSend() == 1;
+        boolean isHavaleh =  darkhastFaktorMoshtaryForoshandeModels.get(0).getCcDarkhastFaktorNoeForosh() == 2;
         for (DarkhastFaktorMoshtaryForoshandeModel model : darkhastFaktorMoshtaryForoshandeModels)
         {
             model.setCanEditDarkhast(canEditDarkhast(noeMasouliat, model));
         }
-        mPresenter.onGetCustomerFaktors(darkhastFaktorMoshtaryForoshandeModels, moshtaryAddressModel , customerPriority , customerInfo);
+        mPresenter.onGetCustomerFaktors(darkhastFaktorMoshtaryForoshandeModels, moshtaryAddressModel,customerPriority,customerInfo,isSend,isHavaleh,codeNoeVorods);
     }
 
     @Override
@@ -1506,21 +1517,24 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
         final int finalCCForoshandeh = Integer.valueOf(ccForoshandeh);
         final int finalCCAfrad = Integer.valueOf(ccAfrad);
 
-        final Handler handler = new Handler(msg -> {
-            if (msg.arg1 == 1)
+        final Handler handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg)
             {
-                setRequestInfoShared(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary(), darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor(), darkhastFaktorMoshtaryForoshandeModel.getCcForoshandeh(), darkhastFaktorMoshtaryForoshandeModel.getCcMarkazForosh(), darkhastFaktorMoshtaryForoshandeModel.getCcSazmanForosh(), darkhastFaktorMoshtaryForoshandeModel.getCcMarkazSazmanForosh(), moshtaryForoshandehFlag , isMojazForResid , isEtebarCheckBargashty , ccChildParameterNoeVosol, googleLocationProvider, (long)darkhastFaktorMoshtaryForoshandeModel.getMablaghKhalesFaktor());
-                mPresenter.onSuccessUpdateMandeMojodiMashin();
+                if (msg.arg1 == 1)
+                {
+                    setRequestInfoShared(darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary(), darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor(), darkhastFaktorMoshtaryForoshandeModel.getCcForoshandeh(), darkhastFaktorMoshtaryForoshandeModel.getCcMarkazForosh(), darkhastFaktorMoshtaryForoshandeModel.getCcSazmanForosh(), darkhastFaktorMoshtaryForoshandeModel.getCcMarkazSazmanForosh(), moshtaryForoshandehFlag , isMojazForResid , isEtebarCheckBargashty , ccChildParameterNoeVosol, googleLocationProvider, (long)darkhastFaktorMoshtaryForoshandeModel.getMablaghKhalesFaktor(), darkhastFaktorMoshtaryForoshandeModel.getMoshtaryGharardadccSazmanForosh(), darkhastFaktorMoshtaryForoshandeModel.getCcMoshtaryGharardad());
+                    mPresenter.onSuccessUpdateMandeMojodiMashin();
+                }
+                else if (msg.arg1 == -1)
+                {
+                    mPresenter.onFailedUpdateMandeMojodiMashin();
+                }
+                return false;
             }
-            else if (msg.arg1 == -1)
-            {
-                mPresenter.onFailedUpdateMandeMojodiMashin();
-            }
-            return false;
         });
 
 
-        final MandehMojodyMashinDAO mandehMojodyMashinDAO = new MandehMojodyMashinDAO(mPresenter.getAppContext());
         String ccAnbarakAfrad = String.valueOf(new AnbarakAfradDAO(mPresenter.getAppContext()).getAll().get(0).getCcAnbarak());
 
         if(noeMasouliat == 1 || noeMasouliat == 6 || noeMasouliat ==8)//1-Foroshandeh-Sard
@@ -1548,12 +1562,8 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
         String ccKalaCode="-1";
         String finalCcForoshandeh = ccForoshandeh;
 
-
-
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
-
-        switch (serverIpModel.getWebServiceType())
-        {
+        switch (serverIpModel.getWebServiceType()){
             case REST:
                 APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
                 apiServiceRxjava.getMandehMojodyMashin(ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh, ccKalaCode, ccSazmanForosh)
@@ -1569,18 +1579,19 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
                             @Override
                             public void onNext(Response<GetMandehMojodyMashinResponse> getMandehMojodyMashinResponseResponse) {
                                 if (getMandehMojodyMashinResponseResponse.body()!=null)
-                                updateMandehMojodiMashinTable(getMandehMojodyMashinResponseResponse.body().getMandehMojodyMashinModels(), finalCcForoshandeh, ccAfrad,handler);
+                                    updateMandehMojodiMashinTable(getMandehMojodyMashinResponseResponse.body().getMandehMojodyMashinModels(), finalCcForoshandeh, ccAfrad,handler);
                                 else
                                     onError(new Throwable(mPresenter.getAppContext().getString(R.string.resultIsNull)));
-
                             }
 
                             @Override
                             public void onError(Throwable e) {
                                 Log.i("MandehMojodiOnline", "onError: ");
+
                                 Message message = new Message();
                                 message.arg1 = -1;
                                 handler.sendMessage(message);
+
                             }
 
                             @Override
@@ -1591,8 +1602,8 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
                         });
                 break;
 
-            case gRPC:
-                new MandehMojodyMashinDAO(mPresenter.getAppContext()).fetchMandehMojodyMashinGrpc(mPresenter.getAppContext(), TreasuryListMapActivity.class.getSimpleName(), ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh,ccKalaCode,ccSazmanForosh, new RetrofitResponse() {
+            case Constants.gRPC:
+                new MandehMojodyMashinDAO(mPresenter.getAppContext()).fetchMandehMojodyMashinGrpc(mPresenter.getAppContext(), TreasuryListMapActivity.class.getSimpleName(), ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh , ccKalaCode,ccSazmanForosh, new RetrofitResponse() {
                     @Override
                     public void onSuccess(ArrayList arrayListData) {
                         updateMandehMojodiMashinTable(arrayListData, finalCcForoshandeh, ccAfrad,handler);
@@ -1604,61 +1615,62 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
                         Message message = new Message();
                         message.arg1 = -1;
                         handler.sendMessage(message);
+
                     }
                 });
-                break;
 
+                break;
         }
+
 
 
     }
 
     private void updateMandehMojodiMashinTable(ArrayList<MandehMojodyMashinModel> models,String ccForoshandeh,String ccAfrad,Handler handler) {
-        if (models != null) {
-            MandehMojodyMashinRepository mandehMojodyMashinRepository = new MandehMojodyMashinRepository(mPresenter.getAppContext());
-            Disposable disposable = mandehMojodyMashinRepository.deleteAll()
-                    .subscribe(deleteAll -> {
-                        if (deleteAll) {
 
-                            Disposable insertGroup = mandehMojodyMashinRepository.insertGroup(models)
-                                    .subscribe(insertGroup1 -> {
-                                        if (insertGroup1) {
-                                            updateKalaMojodiTable(models, Integer.parseInt(ccForoshandeh), Integer.parseInt(ccAfrad),handler);
-                                        } else {
-                                            Message message = new Message();
-                                            message.arg1 = -1;
-                                            handler.sendMessage(message);
-                                        }
-                                    }, throwable -> {
+        MandehMojodyMashinRepository mandehMojodyMashinRepository = new MandehMojodyMashinRepository(mPresenter.getAppContext());
+        Disposable disposable = mandehMojodyMashinRepository.deleteAll()
+                .subscribe(deleteAll -> {
+                    if (deleteAll) {
+
+                        Disposable insertGroup = mandehMojodyMashinRepository.insertGroup(models)
+                                .subscribe(insertGroup1 -> {
+                                            if (insertGroup1) {
+                                                updateKalaMojodiTable(models, Integer.parseInt(ccForoshandeh), Integer.parseInt(ccAfrad),handler);
+                                            } else {
                                                 Message message = new Message();
                                                 message.arg1 = -1;
                                                 handler.sendMessage(message);
                                             }
+                                        }, throwable -> {
+                                            Message message = new Message();
+                                            message.arg1 = -1;
+                                            handler.sendMessage(message);
+                                        }
 
-                                    );
-                            compositeDisposable.add(insertGroup);
-                        }
-                    }, throwable -> {
+                                );
+                        compositeDisposable.add(insertGroup);
+                    }else{
                         Message message = new Message();
                         message.arg1 = -1;
                         handler.sendMessage(message);
+                    }
+                }, throwable -> {
+                    Message message = new Message();
+                    message.arg1 = -1;
+                    handler.sendMessage(message);
 
-                    });
-            compositeDisposable.add(disposable);
+                });
+        compositeDisposable.add(disposable);
 
 
-        }else{
-            Message message = new Message();
-            message.arg1 = -1;
-            handler.sendMessage(message);
-        }
+
     }
 
     private void updateKalaMojodiTable(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels,int ccForoshandeh,int ccAfrad,Handler handler) {
-        @SuppressLint("SimpleDateFormat") String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
+        String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
         ArrayList<KalaMojodiModel> kalaMojodiModels = new ArrayList<>();
         Observable.fromIterable(mandehMojodyMashinModels)
-                .subscribeOn(Schedulers.io())
                 .map(mandehMojodyMashinModel -> {
 
                             KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
@@ -1670,6 +1682,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
                             kalaMojodiModel.setTarikhDarkhast(currentDate);
                             kalaMojodiModel.setShomarehBach(mandehMojodyMashinModel.getShomarehBach());
                             kalaMojodiModel.setTarikhTolid(mandehMojodyMashinModel.getTarikhTolid());
+                            kalaMojodiModel.setTarikhEngheza(mandehMojodyMashinModel.getTarikhEngheza());
                             kalaMojodiModel.setGheymatMasrafKonandeh(mandehMojodyMashinModel.getGheymatMasrafKonandeh());
                             kalaMojodiModel.setGheymatForosh(mandehMojodyMashinModel.getGheymatForosh());
                             kalaMojodiModel.setCcTaminKonandeh(mandehMojodyMashinModel.getCcTaminKonandeh());
@@ -1682,7 +1695,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
                         }
 
 
-                ).subscribeOn(Schedulers.io())
+                )
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<KalaMojodiModel>() {
                     @Override
@@ -1706,12 +1719,12 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
 
                     @Override
                     public void onComplete() {
-                        KalaMojodiRepository kalaMojodiRepository = new KalaMojodiRepository(mPresenter.getAppContext());
-                        Disposable delete = kalaMojodiRepository
-                                .deleteAll()
+                        KalaMojodiRepository kalaMojodiRepository=new KalaMojodiRepository(mPresenter.getAppContext());
+                        Disposable deleteAllDisposable = kalaMojodiRepository.deleteAll()
+                                .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(deleteAll -> {
                                     if (deleteAll){
-                                        Disposable insertGroup = new KalaMojodiRepository(mPresenter.getAppContext())
+                                        Disposable insertGroup = kalaMojodiRepository
                                                 .insertGroup(kalaMojodiModels)
                                                 .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribe(inserted -> {
@@ -1734,14 +1747,8 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
                                         message.arg1 = -1;
                                         handler.sendMessage(message);
                                     }
-
-                                }, throwable -> {
-                                    Message message = new Message();
-                                    message.arg1 = -1;
-                                    handler.sendMessage(message);
                                 });
-                        compositeDisposable.add(delete);
-
+                        compositeDisposable.add(deleteAllDisposable);
                     }
                 });
 
@@ -2085,7 +2092,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
 //        }
 //    }
 
-    private void setRequestInfoShared(int ccMoshtary , long ccDarkhastFaktor , int ccForoshandeh, int ccMarkazForosh , int ccSazmanForosh ,int ccMarkazSazmanForosh , boolean moshtaryForoshandehFlag , boolean isMojazForResid , boolean isEtebarCheckBargashty , int ccChildParameterNoeVosol, PubFunc.LocationProvider googleLocationProvider, long MablaghKhalesHavaleh)
+    private void setRequestInfoShared(int ccMoshtary , long ccDarkhastFaktor , int ccForoshandeh, int ccMarkazForosh , int ccSazmanForosh ,int ccMarkazSazmanForosh , boolean moshtaryForoshandehFlag , boolean isMojazForResid , boolean isEtebarCheckBargashty , int ccChildParameterNoeVosol, PubFunc.LocationProvider googleLocationProvider, long MablaghKhalesHavaleh, int MoshtaryGharardadccSazmanForosh, int ccMoshtaryGharardad)
     {
         try
         {
@@ -2095,6 +2102,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
             ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
+
 
             shared.removeAll();
             shared.setDefaultRequestInfo();
@@ -2142,6 +2150,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             //------------------------------------- MoshtaryGoroh..-------------------------------------
             shared.putInt(shared.getCcGorohNoeMoshtary(), moshtary.getCcNoeMoshtary());
             shared.putInt(shared.getCcGorohNoeSenf(), moshtary.getCcNoeSenf());
+
 
             NoeMoshtaryRialKharidDAO moshtaryRialKharidDAO = new NoeMoshtaryRialKharidDAO(mPresenter.getAppContext());
 
@@ -2415,6 +2424,10 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             shared.putBoolean(shared.getVerifiedMarjoee() , false);
             shared.putString(shared.getCcKalaCodesOfKalaAsasi(), "");
 
+            //------------------Zanjirei--------------------
+            shared.putInt(shared.getMoshtaryGharardadccSazmanForosh(), MoshtaryGharardadccSazmanForosh);
+            shared.putInt(shared.getCcMoshtaryGharardad(), ccMoshtaryGharardad);
+            Log.i("onSuccessSet", "setRequestInfoShared: ccDarkhastFaktor"+ccDarkhastFaktor  + "ccMoshtary"+ccMoshtary);
             mPresenter.onSuccessSetDarkhastFaktorShared(ccDarkhastFaktor , ccMoshtary);
         }
         catch (Exception exception)
@@ -2770,6 +2783,87 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
             }
             handler.sendMessage(message);
         }).start();
+    }
+
+    @Override
+    public void getElatAdamTahvilDarkhast(long ccDarkhastFaktor, int position) {
+        DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        ElatAdamTahvilDarkhastDAO elatAdamTahvilDarkhastDAO = new ElatAdamTahvilDarkhastDAO(BaseApplication.getContext());
+        ArrayList<ElatAdamTahvilDarkhastModel> models = elatAdamTahvilDarkhastDAO.getAll();
+        mPresenter.onGetElatAdamTahvilDarkhast(models, darkhastFaktorModel, position);
+    }
+
+    @Override
+    public void sendElatAdamTahvilDarkhast(ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel, DarkhastFaktorModel darkhastFaktorModel, int position) {
+        JSONObject jsonObject = elatAdamTahvilDarkhastModel.toJsonArrayForSend(elatAdamTahvilDarkhastModel, darkhastFaktorModel);
+        if (jsonObject.length() > 0) {
+
+            ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().postServerFromShared(mPresenter.getAppContext());
+            String serverIP = serverIpModel.getServerIp();
+            String serverPort = serverIpModel.getPort();
+            if (serverIP.trim().equals("") || serverPort.trim().equals("")) {
+                mPresenter.onError(R.string.errorFindServerIP);
+            } else {
+                final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
+                sendElatAdamTahvilDarkhastToServer(apiServicePost, jsonObject, elatAdamTahvilDarkhastModel, darkhastFaktorModel,position);
+            }
+        } else {
+            mPresenter.onError(R.string.errorSendDataElatAdamTahvil);
+
+        }
+    }
+
+
+    private void sendElatAdamTahvilDarkhastToServer(APIServicePost apiServicePost, JSONObject jsonObject, ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel, DarkhastFaktorModel darkhastFaktorModel,int position) {
+        Log.d("TreasuryList","sendElatAdamTahvilDarkhastToServer JSON:"+jsonObject.toString());
+        Call<GetUpdateElatAdamTahvilDarkhastResult> call = apiServicePost.getUpdateElatAdamTahvilDarkhastResult(jsonObject.toString());
+        call.enqueue(new Callback<GetUpdateElatAdamTahvilDarkhastResult>() {
+            @Override
+            public void onResponse(Call<GetUpdateElatAdamTahvilDarkhastResult> call, Response<GetUpdateElatAdamTahvilDarkhastResult> response) {
+                try {
+                    if (response.isSuccessful() && response.body() != null) {
+                        GetUpdateElatAdamTahvilDarkhastResult result = response.body();
+                        if (result.getSuccess()) {
+                            updateCodeNoeVorodElatAdamTahvil(elatAdamTahvilDarkhastModel, darkhastFaktorModel,position);
+                        } else {
+                            setLogToDB(Constants.LOG_EXCEPTION(), result.getMessage(), "TemporaryRequestsListModel", "", "sendElatAdamTahvilDarkhastToServer", "onResponse");
+                            mPresenter.onError(R.string.errorSendElatAdamTahvilDarkhastِ);
+                        }
+                    } else {
+                        String errorMessage = "response not successful " + response.message();//+ "\n" + "can't send this log : " + logMessage;
+                        if (response.errorBody() != null) {
+                            errorMessage = "errorCode : " + response.code() + " , " + response.errorBody().string();//+ "\n" + "can't send this log : " + logMessage;
+                        }
+                        setLogToDB(Constants.LOG_EXCEPTION(), errorMessage, "TemporaryRequestsListModel", "", "sendElatAdamTahvilDarkhastToServer", "onResponse");
+                        mPresenter.onError(R.string.errorSendElatAdamTahvilDarkhastِ);
+                    }
+                } catch (Exception exception) {
+
+                    exception.printStackTrace();
+                    setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "TemporaryRequestsListModel", "", "sendElatAdamTahvilDarkhastToServer", "onResponse");
+                    mPresenter.onError(R.string.errorSendElatAdamTahvilDarkhastِ);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetUpdateElatAdamTahvilDarkhastResult> call, Throwable t) {
+                mPresenter.closeLoading();
+                Log.d("noTemp", "in onFailure");
+                setLogToDB(Constants.LOG_EXCEPTION(), t.getMessage(), "TemporaryRequestsListModel", "", "sendElatAdamTahvilDarkhastToServer", "onFailure");
+                mPresenter.onError(R.string.errorSendElatAdamTahvilFailure);
+            }
+        });
+    }
+    private void updateCodeNoeVorodElatAdamTahvil(ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel, DarkhastFaktorModel darkhastFaktorModel,int position) {
+        DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
+        boolean update = darkhastFaktorDAO.updateExtraPropCodeNoeVorod(darkhastFaktorModel.getCcDarkhastFaktor(), elatAdamTahvilDarkhastModel.getCodeNoeVorod());
+        if (update) {
+            darkhastFaktorDAO.updateExtraPropIsSend(darkhastFaktorModel.getCcDarkhastFaktor() , 1);
+            mPresenter.onSuccessSend(position);
+        } else {
+            mPresenter.onError(R.string.errorSaveElatAdamTahvilDarkhastِ);
+        }
     }
 
     private void sendGps(int noeMasouliat, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel) {

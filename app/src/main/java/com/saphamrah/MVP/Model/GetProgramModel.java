@@ -4340,13 +4340,86 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                         suggestDAO.deleteIsSend();
                         if (deleteResult && insertResult) {
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
-                            getElatTahvilDarkhast(getProgramType);
+//                            getElatTahvilDarkhast(getProgramType);
+                            getKalaGheymatForosh(getProgramType);
                         } else {
                             sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
                         }
                     }
                 };
                 thread.start();
+            }
+
+            @Override
+            public void onFailed(String type, String error) {
+                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
+            }
+        });
+    }
+
+    private  void getKalaGheymatForosh( int getProgramType){
+        String ccMarkazForosh = "";
+        String ccSazmanForosh = "";
+
+        if (noeMasouliat == 4 || noeMasouliat == 5) {
+            ccMarkazForosh = ccMarkazForoshPakhsh;
+            ccSazmanForosh = ccSazmanForoshPakhsh;
+        } else {
+            ccMarkazForosh = foroshandehMamorPakhshModel.getCcMarkazForosh().toString();
+            ccSazmanForosh = foroshandehMamorPakhshModel.getCcSazmanForosh().toString();
+        }
+        Log.d("getProgram", "109-getKalaGheymatForosh");
+        KalaGheymatForoshDAO kalaGheymatForoshDAO = new KalaGheymatForoshDAO(mPresenter.getAppContext());
+        kalaGheymatForoshDAO.fetchNoeKalaGheymatForosh(mPresenter.getAppContext(), ccMarkazForosh, ccSazmanForosh, "GetProgramActivity", new RetrofitResponse() {
+            @Override
+            public void onSuccess(ArrayList arrayListData) {
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        boolean deleteResult = kalaGheymatForoshDAO.deleteAll();
+                        boolean insertResult = kalaGheymatForoshDAO.insertGroup(arrayListData);
+                        if (deleteResult && insertResult) {
+                            sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                            getConfigMali(getProgramType);
+                        } else {
+                            sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+                        }
+                    }
+                };
+                thread.start();
+            }
+
+            @Override
+            public void onFailed(String type, String error) {
+                mPresenter.onFailedGetProgram(++itemCounter, String.format(" type : %1$s \n error : %2$s", type, error));
+            }
+        });
+    }
+
+    private void getConfigMali(final int getProgramType) {
+
+        String ccMarkazForosh = "";
+        String ccSazmanForosh = "";
+
+        if (noeMasouliat == 4 || noeMasouliat == 5) {
+            ccMarkazForosh = ccMarkazForoshPakhsh;
+            ccSazmanForosh = ccSazmanForoshPakhsh;
+        } else {
+            ccMarkazForosh = foroshandehMamorPakhshModel.getCcMarkazForosh().toString();
+            ccSazmanForosh = foroshandehMamorPakhshModel.getCcSazmanForosh().toString();
+        }
+        ConfigMaliDAO configMaliDAO = new ConfigMaliDAO(mPresenter.getAppContext());
+        configMaliDAO.fetchConfigMali(mPresenter.getAppContext(), activityNameForLog, ccMarkazForosh, ccSazmanForosh, new RetrofitResponse() {
+            @Override
+            public void onSuccess(ArrayList arrayListData) {
+                boolean deleteAll = configMaliDAO.deleteAll();
+                boolean insertGroup = configMaliDAO.insertGroup(arrayListData);
+                if (deleteAll && insertGroup) {
+                    sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                    getElatTahvilDarkhast(getProgramType);
+                } else {
+                    sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+                }
             }
 
             @Override

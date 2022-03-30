@@ -3,6 +3,8 @@ package com.saphamrah.BaseMVP;
 import android.content.Context;
 
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
+import com.saphamrah.Model.DarkhastFaktorModel;
+import com.saphamrah.Model.ElatAdamTahvilDarkhastModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.UIModel.DarkhastFaktorMoshtaryForoshandeModel;
 
@@ -26,7 +28,7 @@ public interface TreasuryListMapMVP
         void onGetTodayTreasuryList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels , ArrayList<MoshtaryAddressModel> moshtaryAddressModelsNew);
         void onGetAllEditedTodayTreasuryList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, ArrayList<MoshtaryAddressModel> moshtaryAddressModelArrayList);
         void onGetEditedTodayTreasuryList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, ArrayList<MoshtaryAddressModel> moshtaryAddressModelArrayList);
-        void showCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, MoshtaryAddressModel moshtaryAddressModel , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo);
+        void showCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, MoshtaryAddressModel moshtaryAddressModel , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo,boolean isSend,boolean isHavaleh,ArrayList<Integer> codeNoeVorods);
         void onGetFaktorImage(byte[] faktorImage);
         void openDarkhastKalaActivity(long ccDarkhastFaktor , int ccMoshtary);
         void onSuccessRouting(String customerName, ArrayList<GeoPoint> pointsOfPolyline, String routingResponse);
@@ -39,8 +41,14 @@ public interface TreasuryListMapMVP
         void onGetSortList(int sortList);
         void onErrorSendRasGiri(String error);
         void showLoadingDialog();
-
         void onOpenInvoiceSettlement(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
+        void onGetElatAdamTahvilDarkhast(ArrayList<ElatAdamTahvilDarkhastModel> models, ArrayList<String> elatAdamTahvilDarkhastTitles, DarkhastFaktorModel darkhastFaktorModel, int position);
+
+        void closeLoading();
+
+        void showAlertMessage(int successSendData, int success_message);
+
+        void onSuccessSend(int position);
     }
 
 
@@ -64,6 +72,10 @@ public interface TreasuryListMapMVP
         void checkMoshtaryKharejAzMahal(int noeMasouliat, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
 
         void checkClearingTreasury(int noeMasouliat, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
+
+        void getElatAdamTahvilDarkhast(long ccDarkhastFaktor, int position);
+
+        void sendElatAdamTahvilDarkhast(ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel, DarkhastFaktorModel darkhastFaktorModel, int position);
     }
 
 
@@ -75,7 +87,7 @@ public interface TreasuryListMapMVP
         void onErrorUseFakeLocation();
         void onCheckServerTime(boolean isValidDateTime, String message);
         void onGetCustomersList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> arrayListCanEditCustomerDarkhast, ArrayList<DarkhastFaktorMoshtaryForoshandeModel> arrayListAllDarkhastEdited, int sortType, double currentLatitude, double currentLongitude , ArrayList<MoshtaryAddressModel> moshtaryAddressModels);
-        void onGetCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, MoshtaryAddressModel moshtaryAddressModel , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo);
+        void onGetCustomerFaktors(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels, MoshtaryAddressModel moshtaryAddressModel , String customerPriority , DarkhastFaktorMoshtaryForoshandeModel customerInfo,boolean isSend,boolean isHavaleh,ArrayList<Integer> codeNoeVorods);
         void onGetTodayTreasuryList(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> canEditDarkhastFaktorMoshtaryForoshandeModels, ArrayList<DarkhastFaktorMoshtaryForoshandeModel> cantEditDarkhastFaktorMoshtaryForoshandeModels, double currentLocationLat, double currentLocationLog, int sortType, ArrayList<MoshtaryAddressModel> moshtaryAddressModels);
         void onErrorGetCustomerLocation(int resId , String parameter);
         void onGetFaktorImage(DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel);
@@ -94,6 +106,12 @@ public interface TreasuryListMapMVP
         void onSuccess(int successSendData);
 
         void onOpenInvoiceSettlement(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel, boolean b);
+
+        void onGetElatAdamTahvilDarkhast(ArrayList<ElatAdamTahvilDarkhastModel> models, DarkhastFaktorModel darkhastFaktorModel, int position);
+
+        void onSuccessSend(int position);
+
+        void closeLoading();
     }
 
 
@@ -117,6 +135,10 @@ public interface TreasuryListMapMVP
         void checkMoshtaryKharejAzMahal(int noeMasouliat, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
 
         void checkIsLocationSendToServer(int noeMasouliat, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
+
+        void getElatAdamTahvilDarkhast(long ccDarkhastFaktor, int position);
+
+        void sendElatAdamTahvilDarkhast(ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel, DarkhastFaktorModel darkhastFaktorModel, int position);
     }
 
 }

@@ -208,6 +208,15 @@
                         android:src="@drawable/ic_send"
                         android:padding="5dp"
                         android:background="@color/colorBackSendDataSwipe"/>
+                    <ImageView
+                        android:id="@+id/imgElatAdamTahvil"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_odatdarkhast"
+                        android:background="@color/colorNotDelivered"
+                        />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

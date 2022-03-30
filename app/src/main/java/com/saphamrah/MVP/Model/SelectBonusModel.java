@@ -268,13 +268,13 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
                     mPresenter.onFailedInsert();
                 }
             } else if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeJayezeh()) {
-                if (removeJayezeh(darkhastFaktorJayezehTakhfifModel.getCcDarkhastFaktor(), darkhastFaktorJayezehTakhfifModel.getCcJayezehTakhfif())) {
+                if (removeJayezeh(darkhastFaktorJayezehTakhfifModel.getCcDarkhastFaktor(), darkhastFaktorJayezehTakhfifModel.getCcJayezehTakhfif(), darkhastFaktorJayezehTakhfifModel.getExtraProp_ccJayezehSatr())){
                     mPresenter.onSuccessInsert();
                 } else {
                     mPresenter.onFailedInsert();
                 }
             }else if (noeJayezehTakhfif == DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh()){
-                if (removeJayezeh(darkhastFaktorJayezehTakhfifModel.getCcDarkhastFaktor(), darkhastFaktorJayezehTakhfifModel.getCcJayezehTakhfif())) {
+                if (removeJayezeh(darkhastFaktorJayezehTakhfifModel.getCcDarkhastFaktor(), darkhastFaktorJayezehTakhfifModel.getCcJayezehTakhfif(), darkhastFaktorJayezehTakhfifModel.getExtraProp_ccJayezehSatr())) {
                     mPresenter.onSuccessInsert();
                 } else {
                     mPresenter.onFailedInsert();
@@ -284,6 +284,8 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
             mPresenter.onFailedInsert();
         }
     }
+
+
 
 
     private boolean removeTakhfif(SelectFaktorShared selectFaktorShared, int selectedccTakhfif) {
@@ -322,9 +324,9 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
     }
 
 
-    private boolean removeJayezeh(long ccDarkhastFaktor, int ccJayezeh) {
+    private boolean removeJayezeh(long ccDarkhastFaktor, int ccJayezeh, int ccJayezehSatr) {
         DarkhastFaktorJayezehDAO darkhastFaktorJayezehDAO = new DarkhastFaktorJayezehDAO(mPresenter.getAppContext());
-        return darkhastFaktorJayezehDAO.deleteByccDarkhastFaktorAndccJayeze(ccDarkhastFaktor, ccJayezeh);
+        return darkhastFaktorJayezehDAO.deleteByccDarkhastFaktorAndccJayeze(ccDarkhastFaktor, ccJayezeh, ccJayezehSatr);
     }
 
     @Override

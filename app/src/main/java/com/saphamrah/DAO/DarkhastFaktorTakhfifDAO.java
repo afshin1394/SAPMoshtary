@@ -61,7 +61,9 @@ public class DarkhastFaktorTakhfifDAO
             DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_ForJayezeh(),
             DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_IsTakhfifMazad(),
             DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_MustSendToSql(),
-            DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_ccJayezehTakhfif()
+            DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_ccJayezehTakhfif(),
+            DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_IsOld()
+
         };
     }
 
@@ -171,6 +173,7 @@ public class DarkhastFaktorTakhfifDAO
             db.beginTransaction();
             for (DarkhastFaktorTakhfifModel darkhastFaktorTakhfifModel : darkhastFaktorTakhfifModels)
             {
+                darkhastFaktorTakhfifModel.setExtraProp_IsOld(1);
                 ContentValues contentValues = modelToContentvalue(darkhastFaktorTakhfifModel);
                 db.insertOrThrow(DarkhastFaktorTakhfifModel.TableName() , null , contentValues);
             }
@@ -709,7 +712,7 @@ public class DarkhastFaktorTakhfifDAO
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             //db.delete(DarkhastFaktorTakhfifModel.TableName(), DarkhastFaktorTakhfifModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor, null);
             String query = "delete from " + DarkhastFaktorTakhfifModel.TableName() + " where ccDarkhastFaktor = " + ccDarkhastFaktor +
-                    " and ccTakhfif > 0 ";
+                    " and ExtraProp_IsOld = 0 and CodeNoeTakhfif = 2 ";
             db.execSQL(query);
             db.close();
             return true;
@@ -789,6 +792,7 @@ public class DarkhastFaktorTakhfifDAO
         contentValues.put(DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_IsTakhfifMazad() , darkhastFaktorTakhfifModel.getExtraProp_IsTakhfifMazad());
         contentValues.put(DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_MustSendToSql() , darkhastFaktorTakhfifModel.getExtraProp_MustSendToSql());
         contentValues.put(DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_ccJayezehTakhfif() , darkhastFaktorTakhfifModel.getExtraProp_ccJayezehTakhfif());
+        contentValues.put(DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_IsOld() , darkhastFaktorTakhfifModel.getExtraProp_IsOld());
 
         return contentValues;
     }
@@ -814,6 +818,7 @@ public class DarkhastFaktorTakhfifDAO
             darkhastFaktorTakhfifModel.setExtraProp_IsTakhfifMazad(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_IsTakhfifMazad())));
             darkhastFaktorTakhfifModel.setExtraProp_MustSendToSql(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_MustSendToSql())));
             darkhastFaktorTakhfifModel.setExtraProp_ccJayezehTakhfif(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_ccJayezehTakhfif())));
+            darkhastFaktorTakhfifModel.setExtraProp_IsOld(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorTakhfifModel.COLUMN_ExtraProp_IsOld())));
 
             darkhastFaktorTakhfifModels.add(darkhastFaktorTakhfifModel);
             cursor.moveToNext();

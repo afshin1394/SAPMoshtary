@@ -20,6 +20,7 @@ public class DarkhastFaktorTakhfifModel
     private static final String COLUMN_ExtraProp_IsTakhfifMazad = "ExtraProp_IsTakhfifMazad";
     private static final String COLUMN_ExtraProp_MustSendToSql = "ExtraProp_MustSendToSql";
     private static final String COLUMN_ExtraProp_ccJayezehTakhfif = "ExtraProp_ccJayezehTakhfif";
+    private static final String COLUMN_ExtraProp_IsOld = "ExtraProp_IsOld";
 
 
     public static String TableName() {
@@ -57,6 +58,9 @@ public class DarkhastFaktorTakhfifModel
     }
     public static String COLUMN_ExtraProp_ccJayezehTakhfif() {
         return COLUMN_ExtraProp_ccJayezehTakhfif;
+    }
+    public static String COLUMN_ExtraProp_IsOld() {
+        return COLUMN_ExtraProp_IsOld;
     }
 
 
@@ -160,6 +164,15 @@ public class DarkhastFaktorTakhfifModel
     }
 
 
+    private int ExtraProp_IsOld;
+    public int getExtraProp_IsOld() {
+        return ExtraProp_IsOld;
+    }
+    public void setExtraProp_IsOld(int extraProp_IsOld) {
+        ExtraProp_IsOld = extraProp_IsOld;
+    }
+
+
     public JSONObject toJsonObject()
     {
         JSONObject jsonObject = new JSONObject();
@@ -198,6 +211,7 @@ public class DarkhastFaktorTakhfifModel
                 ", ExtraProp_IsTakhfifMazad=" + ExtraProp_IsTakhfifMazad +
                 ", ExtraProp_MustSendToSql=" + ExtraProp_MustSendToSql +
                 ", ExtraProp_ccJayezehTakhfif=" + ExtraProp_ccJayezehTakhfif +
+                ", ExtraProp_IsOld=" + ExtraProp_IsOld +
                 '}';
     }
 }

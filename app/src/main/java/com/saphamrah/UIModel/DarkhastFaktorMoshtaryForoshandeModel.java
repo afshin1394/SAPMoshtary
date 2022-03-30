@@ -210,6 +210,17 @@ public class DarkhastFaktorMoshtaryForoshandeModel
      */
     private int ExtraProp_HaveMarjoee = 0;
 
+
+    private int ExtraProp_IsSent;
+
+    public int getExtraProp_IsSent() {
+        return ExtraProp_IsSent;
+    }
+
+    public void setExtraProp_IsSent(int extraProp_IsSent) {
+        ExtraProp_IsSent = extraProp_IsSent;
+    }
+
     public long getCcDarkhastFaktor() {
         return ccDarkhastFaktor;
     }
