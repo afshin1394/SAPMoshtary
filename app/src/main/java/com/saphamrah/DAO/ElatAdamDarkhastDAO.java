@@ -397,6 +397,47 @@ public class ElatAdamDarkhastDAO
         return elatAdamDarkhastModels;
     }
 
+    public ArrayList<ElatAdamDarkhastModel> getElatAdamMoshtary(int vazeiatMoshtary , int ccNoeMoshtary)
+    {
+        ArrayList<ElatAdamDarkhastModel> elatAdamDarkhastModels = new ArrayList<>();
+        String query = "";
+        if (vazeiatMoshtary == 1)
+        {
+            query = "SELECT * FROM ElatAdamDarkhast WHERE MoshtaryFaal = 1 AND CodeNoe IN(2) AND \n" +
+                    " ccNoeMoshtary = " + ccNoeMoshtary +
+                    " order by CodeSort\n";
+        }
+        else
+        {
+            query = "SELECT * FROM ElatAdamDarkhast WHERE MoshtaryGheyreFaal = 1 AND CodeNoe IN(2) AND " +
+                    " ccNoeMoshtary = " + ccNoeMoshtary +
+                    " order by CodeSort";
+        }
+
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    elatAdamDarkhastModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , ElatAdamDarkhastModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "ElatAdamDarkhastDAO" , "" , "getElatAdamSefaresh" , "");
+        }
+        return elatAdamDarkhastModels;
+    }
+
     public boolean deleteAll()
     {
         try
