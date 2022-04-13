@@ -918,7 +918,7 @@ public class CustomAlertDialog
                 @Override
                 public void onClick(View v)
                 {
-                    customEditableAlert.setOnApplyClick(customTextInputLayout,modifiableEditText.getText());
+                    customEditableAlert.setOnApplyClick(customTextInputLayout,modifiableEditText.getText(),btnOK);
                 }
             });
 
