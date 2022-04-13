@@ -76,6 +76,8 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
 
    private ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach = new ArrayList<>();
    private ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi = new ArrayList<>();
+   private Button buttonTaghirMandeh;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -377,6 +379,8 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
         showToast(R.string.successfullyDoneOps, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
         setResult(RESULT_OK);
         SelectBonusActivity.this.finish();
+        if (buttonTaghirMandeh!=null)
+            buttonTaghirMandeh.setClickable(true);
     }
 
     @Override
@@ -403,20 +407,12 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
              }
 
              @Override
-             public void setOnApplyClick(CustomTextInputLayout customTextInputLayout,Object message) {
-
-
+             public void setOnApplyClick(CustomTextInputLayout customTextInputLayout,Object message,Button btnOk) {
 
                  String modifiedDialogMondeh = new BigDecimal(String.valueOf(message)).toString();
-
-                 //float modifiedMondeh = Float.parseFloat(englishNumerals.replace("," , ""));
-                 //if (modifiedMondeh <= mandeh && modifiedMondeh >= 0 ){
-                  //todo jayezeh
-                     //   mPresenter.checkInsertMandehArzeshAfzoodeh(noeJayezehTakhfif, jayezehEntekhabiMojodiModels, darkhastFaktorJayezehTakhfifModel, selectedccTakhfif, mablaghTakhfif,mablaghJayezeh,englishNumerals,maxTedadJayeze,KalaMojodiModelsMaxShomarehBach,KalaMojodiModelsMaxMojodi);
-                     mPresenter.checkInsert(noeJayezehTakhfif, jayezehEntekhabiMojodiModels, darkhastFaktorJayezehTakhfifModel, selectedccTakhfif, mablaghTakhfif,mablaghJayezeh,mandeh,maxTedadJayeze,KalaMojodiModelsMaxShomarehBach,KalaMojodiModelsMaxMojodi,modifiedDialogMondeh);
-                 //}else{
-                 //    customTextInputLayout.setError(getResources().getString(R.string.errorNegativeRemainDialog));
-                 //}
+                 mPresenter.checkInsert(noeJayezehTakhfif, jayezehEntekhabiMojodiModels, darkhastFaktorJayezehTakhfifModel, selectedccTakhfif, mablaghTakhfif,mablaghJayezeh,mandeh,maxTedadJayeze,KalaMojodiModelsMaxShomarehBach,KalaMojodiModelsMaxMojodi,modifiedDialogMondeh);
+                 buttonTaghirMandeh = btnOk;
+                 buttonTaghirMandeh.setClickable(false);
 
 
              }
@@ -431,6 +427,11 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
                      }
                  }
              });
+    }
+    @Override
+    public void onFailedInsert() {
+        if (buttonTaghirMandeh!=null)
+        buttonTaghirMandeh.setClickable(true);
     }
 //todo jayezeh
 //    @Override

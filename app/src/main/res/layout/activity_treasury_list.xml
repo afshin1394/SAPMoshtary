@@ -67,16 +67,15 @@
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewRooz"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recyclerViewRooz"
-        android:scrollbars="vertical"
-        android:layoutDirection="rtl"
         android:layout_below="@+id/layTitle"
         android:layout_marginBottom="10dp"
+        android:clipToPadding="false"
+        android:layoutDirection="rtl"
         android:paddingBottom="75dp"
-        android:clipToPadding="false">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:scrollbars="vertical"></androidx.recyclerview.widget.RecyclerView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

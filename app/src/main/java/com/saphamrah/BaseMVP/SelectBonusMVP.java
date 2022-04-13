@@ -28,6 +28,7 @@ public interface SelectBonusMVP
         void toastTest(int SelectedCount , int Max_MojodyByShomarehBach , int Max_Mojody , int TedadSefarshDarkhast);
 
         void showTaghirMandehDialog(int noeJayezehTakhfif, ArrayList<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel, int selectedccTakhfif, String mablaghTakhfif, String mablaghJayezeh, String mandeh, String maxTedadJayeze, ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach , ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi);
+        void onFailedInsert();
 
 //        void closeArzeshAfzoodehDialog();
 //

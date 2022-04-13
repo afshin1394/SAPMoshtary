@@ -48,6 +48,50 @@ public class KalaDarkhastFaktorSatrDAO
                     " from DarkhastFaktorSatr fs inner join Kala k on k.ccKalaCode = fs.ccKalaCode and k.ShomarehBach = fs.ShomarehBach \n" +
                     " and k.gheymatForoshAsli = fs.gheymatForoshAsli and k.GheymatMasrafKonandehAsli = fs.GheymatMasrafKonandehAsli\n" +
                     " and k.ccTaminKonandeh = fs.ccTaminKonandeh and k.TarikhTolid = fs.TarikhTolid and k.TarikhEngheza = fs.TarikhEngheza where fs.CodeNoeKala != 2 And ccDarkhastFaktor = " + ccDarkhastFaktor;
+
+//            String query = "select fs.*, k.CodeKala, k.BarCode, k.Adad, k.TedadDarKarton, k.TedadDarBasteh, k.ccGorohKala, k.NameKala, k.Tol, k.Arz, k.Ertefa, \n" +
+//                    " k.NameVahedShomaresh, k.NameBrand, k.NameVahedSize, k.NameVahedVazn, k.VaznKarton, k.VaznKhales \n" +
+//                    " from DarkhastFaktorSatr fs inner join Kala k on k.ccKalaCode = fs.ccKalaCode  where fs.CodeNoeKala != 2 And ccDarkhastFaktor = " + ccDarkhastFaktor;
+            Log.d("KalaDarkhastFaktorSatr", " getByccDarkhast query:" + query);
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    kalaDarkhastFaktorSatrModels = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , "DarkhastFaktorSatr , Kala") + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaDarkhastFaktorDAO" , "" , "getByccDarkhast" , "");
+        }
+        return kalaDarkhastFaktorSatrModels;
+    }
+
+    public ArrayList<KalaDarkhastFaktorSatrModel> getByccDarkhastWithccKalaCode(long ccDarkhastFaktor)
+    {
+        ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels = new ArrayList<>();
+        try
+        {
+//            String query = "select fs.*, k.CodeKala, k.BarCode, k.Adad, k.TedadDarKarton, k.TedadDarBasteh, k.ccGorohKala, k.NameKala, k.Tol, k.Arz, k.Ertefa, \n" +
+//                    " k.NameVahedShomaresh, k.NameBrand, k.NameVahedSize, k.NameVahedVazn, k.VaznKarton, k.VaznKhales \n" +
+//                    " from DarkhastFaktorSatr fs inner join Kala k on k.ccKalaCode = fs.ccKalaCode AND k.MablaghForosh = fs.MablaghForosh AND k.MablaghMasrafKonandeh = fs.GheymatMasrafKonandeh  " +
+//                    "where fs.CodeNoeKala != 2 And ccDarkhastFaktor = " + ccDarkhastFaktor;
+
+            String query = "select fs.*, k.CodeKala, k.BarCode, k.Adad, k.TedadDarKarton, k.TedadDarBasteh, k.ccGorohKala, k.NameKala, k.Tol, k.Arz, k.Ertefa, \n" +
+                    " k.NameVahedShomaresh, k.NameBrand, k.NameVahedSize, k.NameVahedVazn, k.VaznKarton, k.VaznKhales \n" +
+                    " from DarkhastFaktorSatr fs " +
+                    "inner join (Select Distinct ccKalaCode,CodeKala, BarCode, Adad, TedadDarKarton, TedadDarBasteh, ccGorohKala, NameKala, Tol, Arz, Ertefa, \n" +
+                    "                            NameVahedShomaresh, NameBrand, NameVahedSize, NameVahedVazn, VaznKarton, VaznKhales, GheymatForoshAsli, GheymatMasrafKonandehAsli  from Kala) k on k.ccKalaCode = fs.ccKalaCode AND k.GheymatForoshAsli = fs.GheymatForoshAsli AND k.GheymatMasrafKonandehAsli = fs.GheymatMasrafKonandehAsli  " +
+                    "where fs.CodeNoeKala != 2 And ccDarkhastFaktor = " + ccDarkhastFaktor;
+            Log.d("KalaDarkhastFaktorSatr", " getByccDarkhast query:" + query);
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)

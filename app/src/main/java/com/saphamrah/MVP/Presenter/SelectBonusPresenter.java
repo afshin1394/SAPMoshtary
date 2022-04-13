@@ -354,6 +354,7 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
     @Override
     public void onFailedInsert()
     {
+        mView.get().onFailedInsert();
         mView.get().showToast(R.string.errorOperation, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
     }
 

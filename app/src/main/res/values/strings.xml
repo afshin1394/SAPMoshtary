@@ -719,6 +719,7 @@
     <string name="errorMoghayeratNameSahebHesab">به علت مغایرت در ثبت نام صاحب حساب چک، ارسال فاکتور انجام نگردید. \n لطفا درخواست را حذف نموده و دوباره ثبت نمایید.</string>
     <string name="errorMablaghVosolManfi">به علت منفی بودن مبلغ وصول، ارسال فاکتور انجام نگردید. \n لطفا درخواست را حذف نموده و دوباره ثبت نمایید.</string>
     <string name="errorTarikhFaktorVosol">به علت مغایرت در تاریخ فاکتور و وصول، ارسال فاکتور انجام نگردید. \n لطفا درخواست را حذف نموده و دوباره ثبت نمایید.</string>
+    <string name="errorTakhfifTekrari">به علت مغایرت در تخفیف تکراری، ارسال فاکتور انجام نگردید. \n لطفا درخواست را حذف نموده و دوباره ثبت نمایید.</string>
     <string name="errorNotFoundAddress">به علت نداشتن آدرس، ارسال فاکتور انجام نگردید. لطفا درخواست را حذف و پس از افزودن آدرس دوباره ثبت نمایید.</string>
     <string name="errorCalculateDiscount">خطا در انجام محاسبات \n لطفا درخواست مشتری را ابتدا حذف و دوباره درخواست را ثبت نمایید.</string>
     <string name="successfullyCalculateDiscount">محاسبه تخفیف با موفقیت انجام شد.</string>

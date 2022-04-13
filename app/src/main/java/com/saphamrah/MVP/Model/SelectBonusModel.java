@@ -237,6 +237,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
                         darkhastFaktorSatrModel.setExtraProp_IsOld(false);
                         darkhastFaktorSatrModel.setGheymatMasrafKonandeh(model.getGheymatMasrafKonandeh());
                         darkhastFaktorSatrModel.setGheymatForoshAsli(model.getGheymatForosh());
+                        darkhastFaktorSatrModel.setGheymatMasrafKonandehAsli(model.getGheymatMasrafKonandeh());
                         if (darkhastFaktorSatrDAO.insert(darkhastFaktorSatrModel)) {
                             insertedCount++;
                         }
