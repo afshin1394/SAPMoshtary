@@ -108,7 +108,10 @@ public class CalculateHajmiDiscountBrand extends DiscountCalculation
                     zarib = calculateZarib(takhfifHajmiSatrModel.getBeEza(), takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(), sumTedadKartonBrand, sumTedadBastehBrand, sumTedadBrand, sumMablaghKolBrand,(sumVaznBrand/1000.0),tedadAghlam);
                     int tedad = calculateTedad(takhfifHajmiTitrSatrModel.getNoeTedadRial(), takhfifHajmiSatrModel.getCodeNoeBastehBandy(), sumTedadKartonBrandMohasebeh, sumTedadBastehBrandMohasebeh, 1);
                     Mablagh =  calculateMablagh(takhfifHajmiTitrSatrModel.getNoeTedadRial(), (int) takhfifHajmiSatrModel.getBeEza(), (long) sumMablaghKolBrandMohasebeh, (long) mablaghVahed, takhfifHajmiSatrModel.getCcNoeField(), takhfifHajmiSatrModel.getCcGorohMohasebeh());
-                    long mablaghTakhfif = calculateMablaghTakhfif(Mablagh, mablaghVahed, zarib, takhfifHajmiSatrModel.getBeEza(), takhfifHajmiSatrModel.getDarsadTakhfif(), takhfifHajmiTitrSatrModel.getNoeTedadRial());
+                    Log.d("takhfif", "takhfifBrand zarib : " + zarib);
+                    Log.d("takhfif", "takhfifBrand Mablagh : " + Mablagh);
+
+                    long mablaghTakhfif = calculateMablaghTakhfif(sumMablaghKolBrandMohasebeh, mablaghVahed, zarib, takhfifHajmiSatrModel.getBeEza(), takhfifHajmiSatrModel.getDarsadTakhfif(), takhfifHajmiTitrSatrModel.getNoeTedadRial());
                     if (mablaghTakhfif > 0)
                     {
                         long sumMablaghTalkhfifSatr = 0;
