@@ -73,6 +73,7 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
     private CustomTextInputLayout txtinputMablaghJayezeh;
     private CustomTextInputLayout txtinputMande;
     private CustomTextInputLayout txtinputTakhfifFaktor;
+    private Button btnApply;
 
    private ArrayList<KalaMojodiModel> KalaMojodiModelsMaxShomarehBach = new ArrayList<>();
    private ArrayList<KalaMojodiModel> KalaMojodiModelsMaxMojodi = new ArrayList<>();
@@ -111,7 +112,7 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
 
         recyclerView = findViewById(R.id.recyclerView);
         Button btnCancel = findViewById(R.id.btnCancel);
-        Button btnApply = findViewById(R.id.btnApply);
+        btnApply = findViewById(R.id.btnApply);
 
         setJayezehEntekhabiAdapter();
 
@@ -143,6 +144,7 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
             @Override
             public void onClick(View v)
             {
+                btnApply.setClickable(false);
                 mPresenter.checkArzeshAfzoodeh(darkhastFaktorTakhfifModels.get(selectedIndexTakhfif).getNoeJayezehTakhfif(), jayezehEntekhabiMojodiModels, darkhastFaktorTakhfifModels.get(selectedIndexTakhfif), selectedccTakhfif, editTextTakhfifFaktor.getText().toString(), editTextMablaghJayezeh.getText().toString(), editTextMande.getText().toString(), editTextMaxTedadJayezeh.getText().toString(),
                         KalaMojodiModelsMaxShomarehBach, KalaMojodiModelsMaxMojodi);
 
@@ -369,13 +371,14 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
         {
             error = getResources().getString(resId , kalaName);
         }
+        btnApply.setClickable(true);
         customAlertDialog.showMessageAlert(SelectBonusActivity.this, false, "", error, Constants.FAILED_MESSAGE(), getResources().getString(R.string.apply));
     }
 
     @Override
     public void onSuccessInsert()
     {
-
+        btnApply.setClickable(true);
         showToast(R.string.successfullyDoneOps, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
         setResult(RESULT_OK);
         SelectBonusActivity.this.finish();
@@ -430,6 +433,8 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
     }
     @Override
     public void onFailedInsert() {
+        btnApply.setClickable(true);
+
         if (buttonTaghirMandeh!=null)
         buttonTaghirMandeh.setClickable(true);
     }

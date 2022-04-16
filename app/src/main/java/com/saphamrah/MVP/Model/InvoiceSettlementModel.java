@@ -1590,12 +1590,12 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
           * اگر فاصله ی بین تاریخ ارسال فاکتور با تاریخ روز کوچک تر یا مساوی ماکزیموم مدت تعجیل بود اجازه ی تعجیل داده میشود
          */
         int maxModattajil = configNoeVosolMojazeFaktorDAO.getMaxModatTajil(codeNoeVosol , darkhastFaktorModel.getCodeNoeVosolAzMoshtary());
-        Log.i("setTajil", "currentDate: "+maxModattajil);
+        Log.i("setTajil", "maxModattajil: "+maxModattajil);
 
         Date dateNowDate = new Date();
         Date tarikhErsalFaktor = DateUtils.convertStringDateToDateClass(darkhastFaktorModel.getTarikhErsal());
         long difDayForFaktor = DateUtils.getDateDiffAsDay(tarikhErsalFaktor, dateNowDate);
-        Log.i("setTajil", "currentDate: "+difDayForFaktor);
+        Log.i("setTajil", "difDayForFaktor: "+difDayForFaktor);
 
         // بررسی وجود تعطیلات مابین تاریخ ارسال فاکتور و روز جاری برای محاسبه بیشترین زمانی که این فاکتور تعجیل می گیرد
         @SuppressLint("SimpleDateFormat") String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(dateNowDate);

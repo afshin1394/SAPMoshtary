@@ -95,7 +95,9 @@ public class DarkhastFaktorSatrDAO
                         DarkhastFaktorSatrModel.COLUMN_MablaghKharid(),
                         DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandeh(),
                         DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli(),
-                        DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli()
+                        DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli(),
+                        DarkhastFaktorSatrModel.COLUMN_ExtraProp_Maliat(),
+                        DarkhastFaktorSatrModel.COLUMN_ExtraProp_Avarez()
 
                 };
     }
@@ -2379,6 +2381,27 @@ public class DarkhastFaktorSatrDAO
             return false;
         }
     }
+    public boolean updateMaliatAvarezTakhfif(int ccDarkhastFaktorSatr , double maliatTakhfif , double avarezTakhfif)
+    {
+        String query = "UPDATE " + DarkhastFaktorSatrModel.TableName()
+                + " SET " + DarkhastFaktorSatrModel.COLUMN_ExtraProp_Maliat() + " = " + maliatTakhfif + " , " + DarkhastFaktorSatrModel.COLUMN_ExtraProp_Avarez() + " = " + avarezTakhfif +
+                " where " + DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktorSatr() + " = " + ccDarkhastFaktorSatr;
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "updateMablaghForoshKhalesKalaMaliatAvarez" , "");
+            return false;
+        }
+    }
 
     public boolean updateSendedDarkhastFaktor(long ccDarkhastFaktorOld , long ccDarkhastFaktorNew , int isOld)
     {
@@ -2551,6 +2574,8 @@ public class DarkhastFaktorSatrDAO
         contentValues.put(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandeh(), darkhastFaktorSatrModel.getGheymatMasrafKonandeh());
         contentValues.put(DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli(), darkhastFaktorSatrModel.getGheymatForoshAsli());
         contentValues.put(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli(), darkhastFaktorSatrModel.getGheymatMasrafKonandehAsli());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ExtraProp_Maliat(), darkhastFaktorSatrModel.getExtraProp_Maliat());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_ExtraProp_Avarez(), darkhastFaktorSatrModel.getExtraProp_Avarez());
         return contentValues;
     }
 
@@ -2587,6 +2612,8 @@ public class DarkhastFaktorSatrDAO
             darkhastFaktorSatrModel.setGheymatMasrafKonandeh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandeh())));
             darkhastFaktorSatrModel.setGheymatForoshAsli(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli())));
             darkhastFaktorSatrModel.setGheymatMasrafKonandehAsli(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli())));
+            darkhastFaktorSatrModel.setExtraProp_Maliat(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ExtraProp_Maliat())));
+            darkhastFaktorSatrModel.setExtraProp_Avarez(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ExtraProp_Avarez())));
             darkhastFaktorSatrModels.add(darkhastFaktorSatrModel);
             cursor.moveToNext();
         }

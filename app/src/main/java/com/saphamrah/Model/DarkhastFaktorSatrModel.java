@@ -44,6 +44,9 @@ public class DarkhastFaktorSatrModel
     private static final String COLUMN_GheymatForoshAsli = "GheymatForoshAsli";
     private static final String COLUMN_GheymatMasrafKonandehAsli = "GheymatMasrafKonandehAsli";
     private static final String COLUMN_Vazn = "Vazn";
+    private static final String COLUMN_ExtraProp_Maliat = "ExtraProp_Maliat";
+    private static final String COLUMN_ExtraProp_Avarez = "ExtraProp_Avarez";
+
 
 
 
@@ -123,7 +126,12 @@ public class DarkhastFaktorSatrModel
     public static String COLUMN_Vazn() {
         return COLUMN_Vazn;
     }
-
+    public static String COLUMN_ExtraProp_Maliat() {
+        return COLUMN_ExtraProp_Maliat;
+    }
+    public static String COLUMN_ExtraProp_Avarez() {
+        return COLUMN_ExtraProp_Avarez;
+    }
 
 
     @SerializedName("ccDarkhastFaktor")
@@ -261,6 +269,8 @@ public class DarkhastFaktorSatrModel
 
     private float Vazn;
     private boolean ExtraProp_IsOld;
+    private double ExtraProp_Maliat;
+    private double ExtraProp_Avarez;
 
 
 
@@ -525,7 +535,19 @@ public class DarkhastFaktorSatrModel
         this.GheymatMasrafKonandehAsli = GheymatMasrafKonandehAsli;
     }
 
+    public double getExtraProp_Maliat() {
+        return ExtraProp_Maliat;
+    }
+    public void setExtraProp_Maliat(double extraProp_Maliat) {
+        ExtraProp_Maliat = extraProp_Maliat;
+    }
 
+    public double getExtraProp_Avarez() {
+        return ExtraProp_Avarez;
+    }
+    public void setExtraProp_Avarez(double extraProp_Avarez) {
+        ExtraProp_Avarez = extraProp_Avarez;
+    }
 
     public JSONObject toJsonObject(Context context)
     {
@@ -644,6 +666,8 @@ public class DarkhastFaktorSatrModel
                 ", GheymatMasrafKonandehAsli=" + GheymatMasrafKonandehAsli +
                 ", Vazn=" + Vazn +
                 ", ExtraProp_IsOld=" + ExtraProp_IsOld +
+                ", ExtraProp_Maliat=" + ExtraProp_Maliat +
+                ", ExtraProp_Avarez=" + ExtraProp_Avarez +
                 '}';
     }
 

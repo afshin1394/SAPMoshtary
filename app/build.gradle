@@ -8,8 +8,8 @@ android {
         applicationId "com.saphamrah"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 103
-        versionName "2.2.7.1"
+        versionCode 109
+        versionName "2.2.7.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         sourceSets {

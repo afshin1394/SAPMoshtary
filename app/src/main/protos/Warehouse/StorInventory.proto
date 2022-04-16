@@ -55,6 +55,9 @@ message StorInventoryReply{
   string	BatchNumber=34;
   float	OriginalSellPrice=35;
   float	OrginalConsumerPrice=36;
+  double	TaxPercent = 37;
+  double	ComplicationsPercent = 38;
+  double	BonusBudgetCoefficient = 39;
 
 }
 

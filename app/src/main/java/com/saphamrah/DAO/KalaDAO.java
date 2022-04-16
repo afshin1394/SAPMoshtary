@@ -101,7 +101,10 @@ public class KalaDAO
             KalaModel.COLUMN_TarikhEngheza(),
             KalaModel.COLUMN_ShomarehBach(),
             KalaModel.COLUMN_GheymatForoshAsli(),
-            KalaModel.COLUMN_GheymatMasrafKonandehAsli()
+            KalaModel.COLUMN_GheymatMasrafKonandehAsli(),
+            KalaModel.COLUMN_ِDarsadMaliat(),
+            KalaModel.COLUMN_DarsadAvarez(),
+            KalaModel.COLUMN_ZaribTakhfifArzeshAfzodeh()
 
         };
     }
@@ -167,6 +170,8 @@ public class KalaDAO
                                 kalaModel.setShomarehBach(reply.getBatchNumber());
                                 kalaModel.setGheymatForoshAsli((int) reply.getOriginalSellPrice());
                                 kalaModel.setGheymatMasrafKonandehAsli(reply.getOrginalConsumerPrice());
+                                kalaModel.setZaribTakhfifArzeshAfzodeh(reply.getBonusBudgetCoefficient());
+
                                 kalaModels.add(kalaModel);
 
 
@@ -938,6 +943,9 @@ public class KalaDAO
         contentValues.put(KalaModel.COLUMN_ShomarehBach() , kalaModel.getShomarehBach());
         contentValues.put(KalaModel.COLUMN_GheymatForoshAsli() , kalaModel.getGheymatForoshAsli());
         contentValues.put(KalaModel.COLUMN_GheymatMasrafKonandehAsli() , kalaModel.getGheymatMasrafKonandehAsli());
+        contentValues.put(KalaModel.COLUMN_ِDarsadMaliat() , kalaModel.getDarsadMaliat());
+        contentValues.put(KalaModel.COLUMN_DarsadAvarez() , kalaModel.getDarsadAvarez());
+        contentValues.put(KalaModel.COLUMN_ZaribTakhfifArzeshAfzodeh() , kalaModel.getZaribTakhfifArzeshAfzodeh());
 
         return contentValues;
     }
@@ -1010,6 +1018,9 @@ public class KalaDAO
           kalaModel.setShomarehBach(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_ShomarehBach())));
           kalaModel.setGheymatForoshAsli(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_GheymatForoshAsli())));
           kalaModel.setGheymatMasrafKonandehAsli(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_GheymatMasrafKonandehAsli())));
+          kalaModel.setDarsadMaliat(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_ِDarsadMaliat())));
+          kalaModel.setDarsadAvarez(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_DarsadAvarez())));
+          kalaModel.setZaribTakhfifArzeshAfzodeh(cursor.getDouble(cursor.getColumnIndex(KalaModel.COLUMN_ZaribTakhfifArzeshAfzodeh())));
 
           kalaModels.add(kalaModel);
           cursor.moveToNext();

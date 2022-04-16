@@ -131,6 +131,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
             ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
             if (foroshandehMamorPakhshModel != null)
             {
+                KalaDarkhastFaktorSatrDAO kalaDarkhastFaktorSatrDAO = new KalaDarkhastFaktorSatrDAO(mPresenter.getAppContext());
                 int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
                 boolean insertDarkhastFaktorForMamorPakhsh = shared.getBoolean(shared.getInsertDarkhastFaktorSatrForMamorPakhsh() , false);
                 int canEditDarkhastForMovaze = Integer.parseInt(new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Can_Edit_Darkhast_For_Movaze()));
@@ -141,9 +142,17 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
                     calculateGoodsListWithMojodiOnline(ccDarkhastFaktor , shared.getInt(shared.getCcMoshtary() , 0));
                     shared.putBoolean(shared.getInsertDarkhastFaktorSatrForMamorPakhsh() , true);
                 }
-                KalaDarkhastFaktorSatrDAO kalaDarkhastFaktorSatrDAO = new KalaDarkhastFaktorSatrDAO(mPresenter.getAppContext());
-                //todo majid
-                kalaDarkhastFaktorSatrModelArrayList = kalaDarkhastFaktorSatrDAO.getByccDarkhast(ccDarkhastFaktor);
+
+                if((noeMasouliat == 4 || noeMasouliat == 5) && canEditDarkhastForMovaze==0) {
+                    Log.d("Check darkhastkala","getByccDarkhastWithccKalaCode:");
+                    kalaDarkhastFaktorSatrModelArrayList = kalaDarkhastFaktorSatrDAO.getByccDarkhastWithccKalaCode(ccDarkhastFaktor);
+                }
+                else {
+                    Log.d("Check darkhastkala","getByccDarkhast:");
+                    kalaDarkhastFaktorSatrModelArrayList = kalaDarkhastFaktorSatrDAO.getByccDarkhast(ccDarkhastFaktor);
+                }
+
+
                 Log.d("Check1 darkhastkala",ccDarkhastFaktor + "," + ccNoeMoshtary + "," + ccMoshtaryGharardad);
                 //kalaDarkhastFaktorSatrModelArrayList = kalaDarkhastFaktorSatrDAO.getByccDarkhastForDarkhastKala(ccDarkhastFaktor,ccNoeMoshtary, ccMoshtaryGharardad);
                 if (enableKalaAsasi)

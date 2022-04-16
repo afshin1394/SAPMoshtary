@@ -45,6 +45,9 @@ public class KalaModel
     private static final String COLUMN_ShomarehBach = "ShomarehBach";
     private static final String COLUMN_GheymatForoshAsli="GheymatForoshAsli";
     private static final String COLUMN_GheymatMasrafKonandehAsli="GheymatMasrafKonandehAsli";
+    private static final String COLUMN_ِDarsadMaliat="DarsadMaliat";
+    private static final String COLUMN_DarsadAvarez="DarsadAvarez";
+    private static final String COLUMN_ZaribTakhfifArzeshAfzodeh="ZaribTakhfifArzeshAfzodeh";
 
 
 
@@ -158,6 +161,15 @@ public class KalaModel
     }
     public static String COLUMN_GheymatMasrafKonandehAsli() {
         return COLUMN_GheymatMasrafKonandehAsli;
+    }
+    public static String COLUMN_ِDarsadMaliat() {
+        return COLUMN_ِDarsadMaliat;
+    }
+    public static String COLUMN_DarsadAvarez() {
+        return COLUMN_DarsadAvarez;
+    }
+    public static String COLUMN_ZaribTakhfifArzeshAfzodeh() {
+        return COLUMN_ZaribTakhfifArzeshAfzodeh;
     }
 
 
@@ -496,6 +508,29 @@ public class KalaModel
         this.GheymatMasrafKonandehAsli = GheymatMasrafKonandehAsli;
     }
 
+    private double DarsadMaliat;
+    public void setDarsadMaliat(double DarsadMaliat){
+        this.DarsadMaliat = DarsadMaliat;
+    }
+    public double getDarsadMaliat(){
+        return this.DarsadMaliat;
+    }
+
+    private double DarsadAvarez;
+    public void setDarsadAvarez(double DarsadAvarez){
+        this.DarsadAvarez = DarsadAvarez;
+    }
+    public double getDarsadAvarez(){
+        return this.DarsadAvarez;
+    }
+
+    private double ZaribTakhfifArzeshAfzodeh;
+    public void setZaribTakhfifArzeshAfzodeh(double ZaribTakhfifArzeshAfzodeh){
+        this.ZaribTakhfifArzeshAfzodeh = ZaribTakhfifArzeshAfzodeh;
+    }
+    public double getZaribTakhfifArzeshAfzodeh(){
+        return this.ZaribTakhfifArzeshAfzodeh;
+    }
     @Override
     public String toString() {
         return "KalaModel{" +
@@ -536,6 +571,9 @@ public class KalaModel
                 ", Id=" + Id +
                 ", gheymatForoshAsli=" + GheymatForoshAsli +
                 ", GheymatMasrafKonanadehAsli=" + GheymatMasrafKonandehAsli +
+                ", DarsadMaliat=" + DarsadMaliat +
+                ", DarsadAvarez=" + DarsadAvarez +
+                ", ZaribTakhfifArzeshAfzodeh=" + ZaribTakhfifArzeshAfzodeh +
 
                 '}';
     }

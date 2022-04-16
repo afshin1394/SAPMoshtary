@@ -488,13 +488,23 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         long ccDarkhastFaktor = shared.getLong(shared.getCcDarkhastFaktor() , 0L);
         int ccNoeMoshtary = shared.getInt(shared.getCcGorohNoeMoshtary(), -1);
         int ccMoshtaryGharardad = shared.getInt(shared.getCcMoshtaryGharardad(), -1);
+        Log.d("Check verify",ccDarkhastFaktor + "," + ccNoeMoshtary + "," + ccMoshtaryGharardad);
+
         if (ccDarkhastFaktor != 0)
         {
             KalaDarkhastFaktorSatrDAO kalaDarkhastFaktorDAO = new KalaDarkhastFaktorSatrDAO(mPresenter.getAppContext());
             Log.d("Check1 verify",ccDarkhastFaktor + "," + ccNoeMoshtary + "," + ccMoshtaryGharardad);
             //todo majid
-            ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels = kalaDarkhastFaktorDAO.getByccDarkhast(ccDarkhastFaktor);
-
+            int canEditDarkhastForMovaze = Integer.parseInt(new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Can_Edit_Darkhast_For_Movaze()));
+            ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels= null;
+            if(canEditDarkhastForMovaze==1) {
+                Log.d("Check1 verify","if canEditDarkhastForMovaze:" + canEditDarkhastForMovaze);
+                kalaDarkhastFaktorSatrModels = kalaDarkhastFaktorDAO.getByccDarkhast(ccDarkhastFaktor);
+            }
+            else {
+                Log.d("Check1 verify","else canEditDarkhastForMovaze:" + canEditDarkhastForMovaze);
+                kalaDarkhastFaktorSatrModels = kalaDarkhastFaktorDAO.getByccDarkhastWithccKalaCode(ccDarkhastFaktor);
+            }
             //ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels = kalaDarkhastFaktorDAO.getByccDarkhastForDarkhastKala(ccDarkhastFaktor,ccNoeMoshtary,ccMoshtaryGharardad);
 
             String valueCalculateKalaAsasi = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_MOHASEBE_KALA_ASASI);
@@ -3272,7 +3282,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                             {
                                 if (jayezehSatr.getTedadJayezeh() != 0)
                                 {
-                                    Log.d("jayezeh" , "ccKalaCode of jayezeh Satr : " + jayezehSatr.getCcKalaCode());
+                                    Log.d("jayezeh" , "ccKalaCode of jayezeh Satr : " + jayezehSatr.getCcKalaCodeJayezeh());
                                     Log.d("jayezeh" , "getCcNoeField of jayezeh Satr : " + jayezehSatr.getCcNoeField());
                                     KalaModel kalaModel = kalaDAO.getccKalaByKalaGoroh(jayezehSatr.getCcNoeField());
                                     Log.d("jayezeh" , "kalaModel : " + kalaModel.toString());
@@ -3630,6 +3640,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                     int diff = tedadJayezeh - countMaxMojody;
                     if (checkKalaForInsertKalaMojodi(ccKalaCodeJayezeh , countKalaMojodi))
                     {
+                        insertJayezeh(ccDarkhastFaktor,ccJayezeh,ccJayezehSatr,DarkhastFaktorJayezehModel.CodeNoeJayezehAuto(),NameKala,ccKalaJayezeh,ccKalaCodeJayezeh,countKalaMojodi);
                         insertTakhfifNaghdi(ccJayezeh, sharhJayezeh, ccKalaJayezeh, tedadJayezeh, diff);
                     }
                 }
@@ -3649,19 +3660,25 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             KalaMojodiDAO kalaMojodiDAO = new KalaMojodiDAO(mPresenter.getAppContext());
             ArrayList<KalaMojodiModel> kalaMojodiModels = kalaMojodiDAO.getForAutoBonus(ccKalaJayezeh);
             int insertedKala = 0;
+            int tedadJayezehCount = tedadJayezeh;
             Log.d("Jayezeh" , "kalaMojodiModels.size : " + kalaMojodiModels.size() + " , ccKalaJayezeh : " +ccKalaJayezeh);
             for (KalaMojodiModel kala : kalaMojodiModels)
             {
-                if (insertedKala < tedadJayezeh)
+                Log.d("Jayezeh" , "begin FOR insertedKala : " + insertedKala + " , tedadJayezeh : " + tedadJayezeh);
+
+                if (insertedKala < tedadJayezehCount)
                 {
-                    int countNew = (kala.getTedad() >= tedadJayezeh) ? tedadJayezeh : kala.getTedad();
+                    int countNew = (kala.getTedad() >= tedadJayezehCount) ? tedadJayezehCount : kala.getTedad();
                     Log.d("Jayezeh" , "count new : " + countNew + " , kala.getTedad() : " + kala.getTedad() + " , tedadJayezeh : " + tedadJayezeh + " , FinalccAfrad : " + kala.getCcAfrad());
                     Log.d("Jayezeh" , "kala model " + kala.toString());
                     if (insertKalaMojodi(kalaMojodiDAO, kala.getCcTaminKonandeh(), countNew, kala.getShomarehBach(), kala.getTarikhTolid(), kala.getGheymatMasrafKonandeh(), kala.getGheymatForosh(), kala.getCcKalaCode(), kala.getCcForoshandeh(), kala.getCcAfrad(), kala.getTarikhEngheza()))
                     {
                         insertedKala += countNew;
+                        tedadJayezehCount -=countNew;
                     }
                 }
+                Log.d("Jayezeh" , "end FOR insertedKala : " + insertedKala + " , tedadJayezeh : " + tedadJayezeh);
+
             }
             Log.d("Jayezeh" , "insertedKala : " + insertedKala + " , tedadJayezeh : " + tedadJayezeh);
             return insertedKala == tedadJayezeh;
@@ -3699,6 +3716,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
         private boolean insertDarkhastFaktorSatr(int ccTaminKonandeh, int ccKalaCode, int count, String shomarehBach, String tarikhTolid, String tarikhEngheza, float gheymatForosh, float gheymatMasrafKonandeh)
         {
+            Log.d("insertDarkhast" ,"gheymatMasrafKonandeh:"+gheymatMasrafKonandeh);
             DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
             DarkhastFaktorSatrModel darkhastFaktorSatrModel = new DarkhastFaktorSatrModel();
             darkhastFaktorSatrModel.setCcDarkhastFaktor(ccDarkhastFaktor);
@@ -3786,6 +3804,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         long sumMablaghKol = 0;
         double sumMablagh = 0;
         double sumMablaghBaArzeshAfzoodeh = 0;
+        double sumMablaghBaArzeshAfzoodehTakhfif = 0;
         //double sumMablaghTakhfif = 0;
         int sumTedadAghlam = 0;
         int tedadAghlam = 0;
@@ -3795,10 +3814,13 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         double hajmFaktor = 0; // after convert to m3
         double Takhfif_Satr = 0;
         double Mablagh_ArzeshAfzoodeh_Satr = 0;
+        double Mablagh_ArzeshAfzoodehTakhfif_Satr = 0;
         double JamDarsadTakhfifNaghdi = 0;
         double MablaghTakhfifNaghdi = 0;
         double maliat = 0;
         double avarez = 0;
+        double maliatTakhfif = 0;
+        double avarezTakhfif = 0;
         double sumMablaghKhales = 0;
         int sumTedadAghlamPishnehadiBiSetareh = 0;
         //int modatVosolDarkhast = 0;
@@ -3834,32 +3856,34 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 //ArrayList<SystemConfigModel> systemConfigs = systemConfigDAO.getAll();
                 String ccChildParameters = Constants.CC_CHILD_MALIAT + "," + Constants.CC_CHILD_AVAREZ;
                 ArrayList<ParameterChildModel> parameterChildModels = childParameterDAO.getAllByccChildParameter(ccChildParameters);
-                float darsadMaliat = 0;
-                float darsadAvarez = 0;
-                for (ParameterChildModel parameterChildModel : parameterChildModels)
-                {
-                    if (parameterChildModel.getCcParameterChild() == Constants.CC_CHILD_MALIAT)
-                    {
-                        try
-                        {
-                            darsadMaliat = Float.parseFloat(parameterChildModel.getValue());
-                        }
-                        catch (Exception e){e.printStackTrace();}
-                    }
-                    else if (parameterChildModel.getCcParameterChild() == Constants.CC_CHILD_AVAREZ)
-                    {
-                        try
-                        {
-                            darsadAvarez = Float.parseFloat(parameterChildModel.getValue());
-                        }
-                        catch (Exception e){e.printStackTrace();}
-                    }
-                }
+
+//                for (ParameterChildModel parameterChildModel : parameterChildModels)
+//                {
+//                    if (parameterChildModel.getCcParameterChild() == Constants.CC_CHILD_MALIAT)
+//                    {
+//                        try
+//                        {
+//                            darsadMaliat = Float.parseFloat(parameterChildModel.getValue());
+//                        }
+//                        catch (Exception e){e.printStackTrace();}
+//                    }
+//                    else if (parameterChildModel.getCcParameterChild() == Constants.CC_CHILD_AVAREZ)
+//                    {
+//                        try
+//                        {
+//                            darsadAvarez = Float.parseFloat(parameterChildModel.getValue());
+//                        }
+//                        catch (Exception e){e.printStackTrace();}
+//                    }
+//                }
 
                 DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
                 //for (DarkhastFaktorSatrModel model : darkhastFaktorSatrDAO.getByccDarkhastFaktorAndNotNoeKala(ccDarkhastFaktor , 2))
                 for (DarkhastFaktorSatrModel model : darkhastFaktorSatrDAO.getByccDarkhastFaktorAndNotNoeKala(ccDarkhastFaktor , -1))
                 {
+                    double darsadMaliat = 0;
+                    double darsadAvarez = 0;
+                    double zaribTakhfifArzeshAfzodeh = 0;
                     Log.d("verify" , "darkhastFaktorSatr : " + model.toString());
                     if (model.getTedad3() != 0)
                     {
@@ -3871,6 +3895,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
                         Takhfif_Satr = 0;
                         Mablagh_ArzeshAfzoodeh_Satr = 0;
+                        Mablagh_ArzeshAfzoodehTakhfif_Satr = 0;
 
                         KalaDAO kalaDAO = new KalaDAO(mPresenter.getAppContext());
                         KalaModel kala = kalaDAO.getByccKalaCode(model.getCcKalaCode());
@@ -3893,7 +3918,9 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                         }
                         Log.d("mablagh" , "Takhfif_Satr : " + Takhfif_Satr);
                         Mablagh_ArzeshAfzoodeh_Satr = ((model.getTedad3() * model.getMablaghForosh()) - Takhfif_Satr);
+                        Mablagh_ArzeshAfzoodehTakhfif_Satr = ((model.getTedad3() * model.getMablaghForosh()) - Takhfif_Satr);
                         Log.d("mablagh" , "Mablagh_ArzeshAfzoodeh_Satr : " + Mablagh_ArzeshAfzoodeh_Satr);
+                        Log.d("mablagh" , "Mablagh_ArzeshAfzoodehTakhfif_Satr : " + Mablagh_ArzeshAfzoodehTakhfif_Satr);
                         Log.d("mablagh" , "model.getTedad3() * model.getMablaghForosh() : " + (model.getTedad3() * model.getMablaghForosh()) + " , tedad3 : " + model.getTedad3() + ", mablaghforosh : " + model.getMablaghForosh());
                         JamDarsadTakhfifNaghdi = 0;
                         MablaghTakhfifNaghdi = 0;
@@ -3903,33 +3930,46 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                             MablaghTakhfifNaghdi = MablaghTakhfifNaghdi + darkhastFaktorTakhfif.getMablaghTakhfif();
                         }
 
-                        //Mablagh_ArzeshAfzoodeh_Satr = Mablagh_ArzeshAfzoodeh_Satr - ((model.getMablaghForosh() * MablaghTakhfifNaghdi) / MablaghKolDarkhast) * model.getTedad3();
                         Mablagh_ArzeshAfzoodeh_Satr = Mablagh_ArzeshAfzoodeh_Satr - ((model.getMablaghForosh() * MablaghTakhfifNaghdi) / sumMablaghKol) * model.getTedad3();
+                        Mablagh_ArzeshAfzoodehTakhfif_Satr = Mablagh_ArzeshAfzoodehTakhfif_Satr - ((model.getMablaghForosh() * MablaghTakhfifNaghdi) / sumMablaghKol) * model.getTedad3();
                         Log.d("mablagh" , "2 Mablagh_ArzeshAfzoodeh_Satr : " + Mablagh_ArzeshAfzoodeh_Satr + "," + model.getMablaghForosh() + " , " + JamDarsadTakhfifNaghdi + " , " + MablaghTakhfifNaghdi + " , " + sumMablaghKol + " , " + model.getTedad3());
+                        Log.d("mablagh" , "2 Mablagh_ArzeshAfzoodehTakhfif_Satr : " + Mablagh_ArzeshAfzoodehTakhfif_Satr + "," + model.getMablaghForosh() + " , " + JamDarsadTakhfifNaghdi + " , " + MablaghTakhfifNaghdi + " , " + sumMablaghKol + " , " + model.getTedad3());
                         maliat = 0;
                         avarez = 0;
+                        maliatTakhfif = 0;
+                        avarezTakhfif = 0;
                         if (kala.getMashmolMaliatAvarez() == 1 && model.getCodeNoeKala() != 2)
                         {
-                            //maliat = Mablagh_ArzeshAfzoodeh_Satr * systemConfigs.get(0).getMaliat() / 100;
-                            //avarez = Mablagh_ArzeshAfzoodeh_Satr * systemConfigs.get(0).getAvarez() / 100;
-                            maliat = (Mablagh_ArzeshAfzoodeh_Satr / model.getTedad3()) * darsadMaliat / 100;
-                            avarez = (Mablagh_ArzeshAfzoodeh_Satr / model.getTedad3()) * darsadAvarez / 100;
+
+                            darsadMaliat = kala.getDarsadMaliat();
+                            darsadAvarez = kala.getDarsadAvarez();
+                            zaribTakhfifArzeshAfzodeh = kala.getZaribTakhfifArzeshAfzodeh();
+                            Log.d("mablagh" , "2.5 darsadMaliat : " + darsadMaliat + ",darsadAvarez:" + darsadAvarez + " , zaribTakhfifArzeshAfzodeh:" + zaribTakhfifArzeshAfzodeh );
+
+                            maliat = (Mablagh_ArzeshAfzoodeh_Satr / model.getTedad3()) * darsadMaliat  / 100;
+                            avarez = (Mablagh_ArzeshAfzoodeh_Satr / model.getTedad3()) * darsadAvarez  / 100;
+                            maliatTakhfif = (Mablagh_ArzeshAfzoodehTakhfif_Satr / model.getTedad3()) * (darsadMaliat * zaribTakhfifArzeshAfzodeh)  / 100;
+                            avarezTakhfif = (Mablagh_ArzeshAfzoodehTakhfif_Satr / model.getTedad3()) * (darsadAvarez * zaribTakhfifArzeshAfzodeh) / 100;
+
                             Mablagh_ArzeshAfzoodeh_Satr += ((maliat + avarez) * model.getTedad3());
-                            Log.d("mablagh" , "3 Mablagh_ArzeshAfzoodeh_Satr : " + Mablagh_ArzeshAfzoodeh_Satr  + " ,maliat : " + maliat + " , Avarez : " + avarez + " , KolMaliat : " + (maliat + avarez) * model.getTedad3());
-                            //Mablagh_ArzeshAfzoodeh_Satr += Mablagh_ArzeshAfzoodeh_Satr * (systemConfigs.get(0).getMaliat() + systemConfigs.get(0).getAvarez()) / 100;
+                            Log.d("mablagh" , "3 Mablagh_ArzeshAfzoodeh_Satr : " + Mablagh_ArzeshAfzoodeh_Satr  + " ,maliat : " + maliat + " , Avarez : " + avarez );
+                            Log.d("mablagh" , "3 Mablagh_ArzeshAfzoodehTakhfif_Satr : " + Mablagh_ArzeshAfzoodehTakhfif_Satr  + " ,maliatTakhfif : " + maliatTakhfif + " , avarezTakhfif : " + avarezTakhfif );
                         }
                         // اگر جایزه نبود مبلغ فروش خالص کالا باید آپدیت شود
                         if (model.getMablaghForosh() != 1)
                         {
                             darkhastFaktorSatrDAO.updateMablaghForoshKhalesKalaMaliatAvarez(model.getCcDarkhastFaktorSatr(), (Mablagh_ArzeshAfzoodeh_Satr / model.getTedad3()), maliat, avarez);
+                            darkhastFaktorSatrDAO.updateMaliatAvarezTakhfif(model.getCcDarkhastFaktorSatr(), maliatTakhfif, avarezTakhfif);
                         }
-                        //sumMablaghBaArzeshAfzoodeh += (maliat + avarez);
-                        sumMablaghBaArzeshAfzoodeh += ((maliat + avarez) * model.getTedad3());
 
-                        Log.d("mablagh" , "4 Mablagh_ArzeshAfzoodeh_Satr : " + Mablagh_ArzeshAfzoodeh_Satr + " , " + maliat + " , " + avarez);
+                        sumMablaghBaArzeshAfzoodeh += ((maliat + avarez) * model.getTedad3());
+                        sumMablaghBaArzeshAfzoodehTakhfif += ((maliatTakhfif + avarezTakhfif) * model.getTedad3());
+
+                        Log.d("mablagh" , "4 sumMablaghBaArzeshAfzoodeh : " + sumMablaghBaArzeshAfzoodeh );
+                        Log.d("mablagh" , "4 sumMablaghBaArzeshAfzoodehTakhfif : " + sumMablaghBaArzeshAfzoodehTakhfif );
+                        Log.d("mablagh" , "5 Mablagh_ArzeshAfzoodeh_Satr : " + Mablagh_ArzeshAfzoodeh_Satr + " , " + maliat + " , " + avarez);
                         sumMablaghKhales += Mablagh_ArzeshAfzoodeh_Satr;
-                        /*Log.d("mablagh" , "4 Mablagh_ArzeshAfzoodeh_Satr : " + Mablagh_ArzeshAfzoodeh_Satr);
-                        Log.d("mablagh" , "1 sumMablaghBaArzeshAfzoodeh : " + sumMablaghBaArzeshAfzoodeh);*/
+
 
                     }
                 }
@@ -3956,7 +3996,6 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         {
             if (num == 1)
             {
-                //mPresenter.onGetRequestDetail(sumTedadAghlam, tedadAghlam, sumVazn, sumHajm, vaznFaktor, hajmFaktor, sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh);
                 SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
                 long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor() , -1);
                 DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
@@ -3967,10 +4006,10 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 if (!VerifyRequestActivity.SuccessGetBonus && sumMablaghBaArzeshAfzoodeh>0 && canEditDarkhastForMovaze==1)
                 {
                     if (darkhastFaktorTakhfifDAO.deleteTakhfifByCodeNoe(ccDarkhastFaktor, DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh())) {
-                        Log.d("VerifyRequest", "AsyncTaskMohasebehJayezehArzeshAfzoodeh sumMablaghKol:"+ sumMablaghKol + " sumMablaghBaArzeshAfzoodeh:" + sumMablaghBaArzeshAfzoodeh +" sumTedadAghlam:" + sumTedadAghlam + " tedadAghlam:" + tedadAghlam + " sumHajm:"+ sumHajm + " sumVazn:" + sumVazn + " vaznFaktor:" + vaznFaktor);
+                        Log.d("VerifyRequest", "AsyncTaskMohasebehJayezehArzeshAfzoodeh sumMablaghKol:"+ sumMablaghKol + " sumMablaghBaArzeshAfzoodeh:" + sumMablaghBaArzeshAfzoodeh  + " ,sumMablaghBaArzeshAfzoodehTakhfif: "+ sumMablaghBaArzeshAfzoodehTakhfif +" sumTedadAghlam:" + sumTedadAghlam + " tedadAghlam:" + tedadAghlam + " sumHajm:"+ sumHajm + " sumVazn:" + sumVazn + " vaznFaktor:" + vaznFaktor);
                         Log.d("VerifyRequest", "AsyncTaskMohasebehJayezehArzeshAfzoodeh hajmFaktor:"+ hajmFaktor + " sumMablaghKhales:" + sumMablaghKhales +" sumTedadAghlamPishnehadiBiSetareh:" + sumTedadAghlamPishnehadiBiSetareh );
 
-                        AsyncTaskMohasebehJayezehArzeshAfzoodeh asyncTaskMohasebehJayezehArzeshAfzoodeh = new AsyncTaskMohasebehJayezehArzeshAfzoodeh(sumMablaghKol, sumMablaghBaArzeshAfzoodeh, sumTedadAghlam, tedadAghlam, sumHajm, sumVazn, vaznFaktor, hajmFaktor, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh);
+                        AsyncTaskMohasebehJayezehArzeshAfzoodeh asyncTaskMohasebehJayezehArzeshAfzoodeh = new AsyncTaskMohasebehJayezehArzeshAfzoodeh(sumMablaghKol, sumMablaghBaArzeshAfzoodeh,Math.round(sumMablaghBaArzeshAfzoodehTakhfif), sumTedadAghlam, tedadAghlam, sumHajm, sumVazn, vaznFaktor, hajmFaktor, sumMablaghKhales, sumTedadAghlamPishnehadiBiSetareh);
                         asyncTaskMohasebehJayezehArzeshAfzoodeh.execute();
                     }
                     else
@@ -4150,6 +4189,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         long sumMablaghKol = 0;
         double sumMablagh = 0;
         double sumMablaghBaArzeshAfzoodeh;
+        double sumMablaghBaArzeshAfzoodehTakhfif;
         int sumTedadAghlam = 0;
         int tedadAghlam = 0;
         double sumHajm = 0;
@@ -4160,9 +4200,10 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         int sumTedadAghlamPishnehadiBiSetareh = 0;
 
 
-        public AsyncTaskMohasebehJayezehArzeshAfzoodeh(long sumMablaghKol, double sumMablaghBaArzeshAfzoodeh, int sumTedadAghlam, int tedadAghlam, double sumHajm, double sumVazn, double vaznFaktor, double hajmFaktor, double sumMablaghKhales, int sumTedadAghlamPishnehadiBiSetareh) {
+        public AsyncTaskMohasebehJayezehArzeshAfzoodeh(long sumMablaghKol, double sumMablaghBaArzeshAfzoodeh, double sumMablaghBaArzeshAfzoodehTakhfif, int sumTedadAghlam, int tedadAghlam, double sumHajm, double sumVazn, double vaznFaktor, double hajmFaktor, double sumMablaghKhales, int sumTedadAghlamPishnehadiBiSetareh) {
             this.sumMablaghKol = sumMablaghKol;
             this.sumMablaghBaArzeshAfzoodeh = sumMablaghBaArzeshAfzoodeh;
+            this.sumMablaghBaArzeshAfzoodehTakhfif = sumMablaghBaArzeshAfzoodehTakhfif;
             this.sumTedadAghlam = sumTedadAghlam;
             this.tedadAghlam = tedadAghlam;
             this.sumHajm = sumHajm;
@@ -4200,7 +4241,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 {
                     Log.d("JayezehArzeshAfzoodeh","jayezehModel :" + jayezehModel.toString());
                     int ccJayezehSatr = 0;
-                    ccJayezehSatr = jayezehSatrDAO.getccJayezehSatrForArzeshAfzoodeh(jayezehModel.getCcJayezeh(), sumMablaghBaArzeshAfzoodeh);
+                    ccJayezehSatr = jayezehSatrDAO.getccJayezehSatrForArzeshAfzoodeh(jayezehModel.getCcJayezeh(), sumMablaghBaArzeshAfzoodehTakhfif);
                         Log.d("JayezehArzeshAfzoodeh","ccJayezehSatr :" + ccJayezehSatr);
 
                     if(ccJayezehSatr>0){
@@ -4210,11 +4251,11 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                         model.setExtraProp_ccJayezehTakhfif(ccJayezehSatr);
                         model.setSharhTakhfif(jayezehModel.getSharhJayezeh());
                         model.setCodeNoeTakhfif(jayezehModel.getCodeNoe());
-                        model.setMablaghTakhfif((long) sumMablaghBaArzeshAfzoodeh);
+                        model.setMablaghTakhfif((long) sumMablaghBaArzeshAfzoodehTakhfif);
                         model.setExtraProp_ForJayezeh(1);
                         model.setExtraProp_IsTakhfifMazad(0);
                         DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
-                        Log.d("JayezehArzeshAfzoodeh","sumMablaghBaArzeshAfzoodeh:" + sumMablaghBaArzeshAfzoodeh );
+                        Log.d("JayezehArzeshAfzoodeh","sumMablaghBaArzeshAfzoodehTakhfif:" + sumMablaghBaArzeshAfzoodehTakhfif );
                         if (darkhastFaktorTakhfifDAO.insert(model))
                             return 1;
                         else

@@ -632,6 +632,8 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                     dateTarikhSarResidForCheck = sdf.parse(getTarikhSarResidForCheck(darkhastFaktorModel, Integer.parseInt(Constants.VALUE_CHECK()), mablaghMandeh, dpdfForCheck)[1]);
                     int tedadRoozForRotbeh = getTedadRoozForRotbeh(moshtaryModel.getDarajeh(), Integer.parseInt(Constants.VALUE_CHECK()), moshtaryModel.getCcNoeMoshtary());
                     tarikhSanad = sdf.parse(dateUtils.persianWithSlashToGregorianSlash(dariaftPardakhtDarkhastFaktorPPCs.get(i).getTarikhSanadShamsi()));
+                    Log.d("treasury","tarikhSanad:" + tarikhSanad.getTime() + ", dateTarikhSarResidForCheck:" + dateTarikhSarResidForCheck + ", tedadRoozForRotbeh:" + tedadRoozForRotbeh + ", tedadRoozMazad:" +tedadRoozMazad );
+                    Log.d("treasury","addday:" +  dateUtils.addDay(dateTarikhSarResidForCheck, tedadRoozForRotbeh + tedadRoozMazad).getTime());
                     if (tarikhSanad.getTime() > dateUtils.addDay(dateTarikhSarResidForCheck, tedadRoozForRotbeh + tedadRoozMazad).getTime()) {
                         mPresenter.onErrorSendRasGiri(BaseApplication.getContext().getResources().getString(R.string.ErrorSendRasGiri) + " \n " + BaseApplication.getContext().getResources().getString(R.string.shomarehCheck) + " : " + dariaftPardakhtDarkhastFaktorPPCs.get(i).getShomarehSanad());
                         return;
