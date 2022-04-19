@@ -706,6 +706,7 @@ public class Constants
     public static final int CC_CHILD_Check_Shahr_Markazi_Tarikh_Tahvil = 199;
     public static final int CC_CHILD_Require_Image_Customer_Confirm_Request = 200;
     public static final int CC_CHILD_Can_Decrease_Bonus_Select = 201;
+    public static final int CC_CHILD_CHANGE_AMOUNT_MARJOEE = 202;
 
 
 
@@ -1232,6 +1233,10 @@ public class Constants
     {
         return CC_CHILD_IS_SEND_KALA_MOJODI;
     }
+    public static int CC_CHILD_CHANGE_AMOUNT_MARJOEE()
+    {
+        return CC_CHILD_CHANGE_AMOUNT_MARJOEE;
+    }
 
 
     ///////////////////////////// Code Vazeiat Faktor /////////////////////////////
@@ -1440,6 +1445,12 @@ public class Constants
     public static final int RETURN_SEPARATION_STATUS = 100;
     public static final int BIXOLON = 0;
     public static final int UROVO = 2;
+
+
+
+    public static final int BA_MABNA = 1;
+    public static final int BI_MABNA = 0;
+
 
 }
 
