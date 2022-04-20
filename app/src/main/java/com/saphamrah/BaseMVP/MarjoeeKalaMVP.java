@@ -16,7 +16,7 @@ public interface MarjoeeKalaMVP
     {
         Context getAppContext();
         void onGetForoshandehMamorPakhshInfo(int noeMasouliat , int noeSabtMarjoee);
-        void onUpdateListKalaForMarjoee(ArrayList<ListKalaForMarjoeeModel> listKalaForMarjoeeModels);
+        void onUpdateListKalaForMarjoee(ArrayList<ListKalaForMarjoeeModel> listKalaForMarjoeeModels,ArrayList<ListKalaForMarjoeeModel> listKalaForMarjoeeBaMabnaModels,ArrayList<ListKalaForMarjoeeModel> listKalaForMarjoeeBiMabnaModels,boolean showEditablePrice);
         void onGetListElatMarjoeeKala(ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels);
         void onGetKalaMarjoee(ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels);
         void onErrorAddToMarjoee(int errorResId);

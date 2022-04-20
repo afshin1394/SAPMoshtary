@@ -2332,6 +2332,14 @@ get mac address in android 10
             }
         }
 
+        public String concatArrayToString(String[] strings){
+            String text="";
+            for (int i = 0; i < strings.length; i++) {
+               text += strings[i];
+            }
+            return text;
+        }
+
     }
 
     public class ChartUtils{
@@ -2826,8 +2834,12 @@ get mac address in android 10
 
         public ArrayList<Float> calculatePercentFromNumeric(int firstSetFirstValue,int firstSetSecondValue,int secondSetFirstValue,int secondSetSecondValue){
             ArrayList<Float> percentArray=new ArrayList<>();
-            float firstPercentValue = ((float) firstSetFirstValue / (float) firstSetSecondValue) * 100f;
-            float secondPercentValue = ((float) secondSetFirstValue / (float) secondSetSecondValue) * 100f;
+            float firstPercentValue = 0;
+            float secondPercentValue = 0;
+            if (firstSetFirstValue != 0)
+            firstPercentValue = ((float) firstSetFirstValue / (float) firstSetSecondValue) * 100f;
+            if (secondSetSecondValue != 0)
+            secondPercentValue = ((float) secondSetFirstValue / (float) secondSetSecondValue) * 100f;
             percentArray.add(firstPercentValue);
             percentArray.add(secondPercentValue);
 

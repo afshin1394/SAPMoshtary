@@ -51,6 +51,8 @@ public interface RequestCustomerListMVP
         void onDestroy(boolean isChangingConfig);
         void updateMoshtaryMorajehShodehRooz();
         void sendCustomerLocation(int position,MoshtaryAddressModel ccMoshtary);
+        void searchNameTablo(String searchWord, ArrayList<MoshtaryModel> moshtaryModels, ArrayList<MoshtaryAddressModel> moshtaryAddressModels, ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels, ArrayList<Integer> moshtaryNoeMorajeh);
+        void searchTelephone(String newText, ArrayList<MoshtaryModel> moshtaryModels, ArrayList<MoshtaryAddressModel> moshtaryAddressModels, ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels, ArrayList<Integer> moshtaryNoeMorajeh);
     }
 
 

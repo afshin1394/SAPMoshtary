@@ -76,7 +76,9 @@ public class ElamMarjoeeSatrPPCDAO
             ElamMarjoeeSatrPPCModel.COLUMN_Tedad3(),
             ElamMarjoeeSatrPPCModel.COLUMN_Fee(),
             ElamMarjoeeSatrPPCModel.COLUMN_ccTaminkonandeh(),
-            ElamMarjoeeSatrPPCModel.COLUMN_GheymatMasrafkonandeh()
+            ElamMarjoeeSatrPPCModel.COLUMN_GheymatMasrafkonandeh(),
+            ElamMarjoeeSatrPPCModel.COLUMN_GheymatForoshAsli(),
+            ElamMarjoeeSatrPPCModel.COLUMN_IsMabna(),
         };
     }
 
@@ -121,6 +123,8 @@ public class ElamMarjoeeSatrPPCDAO
                                 model.setFee(reply.getPrice());
                                 model.setCcTaminkonandeh(reply.getPrividerID());
                                 model.setGheymatMasrafkonandeh(reply.getConsumerPrice());
+                                model.setGheymatForoshAsli(reply.getOriginalSellPrice());
+                                model.setIsMabna(reply.getIsBase());
 
 
                                 models.add(model);
@@ -177,7 +181,7 @@ public class ElamMarjoeeSatrPPCDAO
         else
         {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-Call<GetMarjoeeForoshandehByDarkhastFaktorSatrResult> call = apiServiceGet.getMarjoeeForoshandehByDarkhastFaktorSatr("2" , ccDarkhastHavaleh);
+            Call<GetMarjoeeForoshandehByDarkhastFaktorSatrResult> call = apiServiceGet.getMarjoeeForoshandehByDarkhastFaktorSatr("2" , ccDarkhastHavaleh);
             call.enqueue(new Callback<GetMarjoeeForoshandehByDarkhastFaktorSatrResult>() {
                 @Override
                 public void onResponse(Call<GetMarjoeeForoshandehByDarkhastFaktorSatrResult> call, Response<GetMarjoeeForoshandehByDarkhastFaktorSatrResult> response)
@@ -578,6 +582,8 @@ Call<GetMarjoeeForoshandehByDarkhastFaktorSatrResult> call = apiServiceGet.getMa
         contentValues.put(ElamMarjoeeSatrPPCModel.COLUMN_Fee() , elamMarjoeeSatrPPCModel.getFee());
         contentValues.put(ElamMarjoeeSatrPPCModel.COLUMN_ccTaminkonandeh() , elamMarjoeeSatrPPCModel.getCcTaminkonandeh());
         contentValues.put(ElamMarjoeeSatrPPCModel.COLUMN_GheymatMasrafkonandeh() , elamMarjoeeSatrPPCModel.getGheymatMasrafkonandeh());
+        contentValues.put(ElamMarjoeeSatrPPCModel.COLUMN_GheymatForoshAsli() , elamMarjoeeSatrPPCModel.getGheymatForoshAsli());
+        contentValues.put(ElamMarjoeeSatrPPCModel.COLUMN_IsMabna() , elamMarjoeeSatrPPCModel.getIsMabna());
 
         return contentValues;
     }
@@ -606,6 +612,8 @@ Call<GetMarjoeeForoshandehByDarkhastFaktorSatrResult> call = apiServiceGet.getMa
             elamMarjoeeSatrPPCModel.setFee(cursor.getInt(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_Fee())));
             elamMarjoeeSatrPPCModel.setCcTaminkonandeh(cursor.getInt(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_ccTaminkonandeh())));
             elamMarjoeeSatrPPCModel.setGheymatMasrafkonandeh(cursor.getInt(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_GheymatMasrafkonandeh())));
+            elamMarjoeeSatrPPCModel.setGheymatForoshAsli(cursor.getInt(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_GheymatForoshAsli())));
+            elamMarjoeeSatrPPCModel.setIsMabna(cursor.getInt(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_IsMabna())));
 
             elamMarjoeeSatrPPCModels.add(elamMarjoeeSatrPPCModel);
             cursor.moveToNext();

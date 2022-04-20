@@ -27,6 +27,7 @@ public class KalaElamMarjoeeModel
     private Integer ccTaminKonandeh;
     private float mablaghForosh;
     private Float mablaghMasrafKonandeh;
+    private Float gheymatForoshAsli;
 
     //ElatMarjoeeKala
     private String Sharh;
@@ -169,5 +170,11 @@ public class KalaElamMarjoeeModel
     }
 
 
+    public Float getGheymatForoshAsli() {
+        return gheymatForoshAsli;
+    }
 
+    public void setGheymatForoshAsli(Float gheymatForoshAsli) {
+        this.gheymatForoshAsli = gheymatForoshAsli;
+    }
 }

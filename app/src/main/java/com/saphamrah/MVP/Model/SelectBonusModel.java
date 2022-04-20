@@ -147,6 +147,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         int FinalCCAfrad = foroshandehMamorPakhshDAO.getIsSelect().getCcAfrad();
         Log.d("bonus", "Jayezeh takhfifNaghdi : " + insertTakhfifNaghdi);
+        Log.d("bonus", "Jayezeh noeJayezehTakhfif : " + noeJayezehTakhfif);
         Log.d("bonus", "Jayezeh ccDarkhastFaktor : " + ccDarkhastFaktor);
         Log.d("bonus", "Jayezeh FinalCCAfrad : " + FinalCCAfrad);
         if (insertTakhfifNaghdi) {
@@ -166,11 +167,19 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
                 insertDarkhastFaktorTakhfifModel.setDarsadTakhfif(0f);
 
             insertDarkhastFaktorTakhfifModel.setCodeNoeTakhfif(Integer.parseInt(codeNoeTakhfif));
-            insertDarkhastFaktorTakhfifModel.setSharhTakhfif(mPresenter.getAppContext().getResources().getString(R.string.takhfifNaghdiforJayezeh));
             insertDarkhastFaktorTakhfifModel.setExtraProp_ForJayezeh(0);
-            insertDarkhastFaktorTakhfifModel.setExtraProp_IsTakhfifMazad(1);
             insertDarkhastFaktorTakhfifModel.setExtraProp_MustSendToSql(1);
             insertDarkhastFaktorTakhfifModel.setExtraProp_ccJayezehTakhfif(selectedccTakhfif);
+            if(noeJayezehTakhfif==DarkhastFaktorJayezehTakhfifModel.NoeArzeshAfzoodeh())
+            {
+                insertDarkhastFaktorTakhfifModel.setSharhTakhfif(mPresenter.getAppContext().getResources().getString(R.string.takhfifNaghdiforJayezehArzeshAfzodeh));
+                insertDarkhastFaktorTakhfifModel.setExtraProp_IsTakhfifMazad(4);
+            }
+            else
+            {
+                insertDarkhastFaktorTakhfifModel.setSharhTakhfif(mPresenter.getAppContext().getResources().getString(R.string.takhfifNaghdiforJayezeh));
+                insertDarkhastFaktorTakhfifModel.setExtraProp_IsTakhfifMazad(1);
+            }
             darkhastFaktorTakhfifDAO.insert(insertDarkhastFaktorTakhfifModel);
         }
         DarkhastFaktorJayezehDAO darkhastFaktorJayezehDAO = new DarkhastFaktorJayezehDAO(mPresenter.getAppContext());

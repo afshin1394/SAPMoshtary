@@ -18,8 +18,54 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class FileUtils {
+
+    public static boolean deleteListOfFilesInFolder(final File dir){
+        ArrayList<Boolean> deleteAll = new ArrayList<>();
+        if (dir!=null) {
+            if (dir.exists()) {
+                for (final File fileEntry : dir.listFiles()) {
+                    if (fileEntry.isDirectory()) {
+                        listFilesForFolder(fileEntry);
+                    } else {
+                        File file = null;
+                        try {
+                            file = new File(fileEntry.getCanonicalPath());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        if (file.exists()) {
+
+                            deleteAll.add(new File( fileEntry.getPath()).delete());
+                            Log.i("filePath", "path: "+file.getAbsolutePath() + "file.exists():"+ dir.getAbsolutePath());
+                        }
+                        else {
+                            Log.i("filePath", "file.exists(): " + file.getAbsolutePath());
+                        }
+                    }
+                }
+            }
+        }
+       return !deleteAll.contains(false);
+    }
+
+
+
+    public static ArrayList<File> listFilesForFolder(final File folder) {
+        ArrayList<File> files = new ArrayList<>();
+        for (final File fileEntry : folder.listFiles()) {
+            if (fileEntry.isDirectory()) {
+                listFilesForFolder(fileEntry);
+            } else {
+                files.add(fileEntry);
+                System.out.println(fileEntry.getName());
+            }
+        }
+        return files;
+    }
 
     public static void saveToFile(Context context, String jsonAllData, String filaName) {
         try {

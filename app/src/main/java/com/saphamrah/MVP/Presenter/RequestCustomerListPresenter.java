@@ -100,8 +100,8 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
         for (int i=0 ; i<moshtaryModels.size() ; i++)
         {
             MoshtaryModel moshtary = moshtaryModels.get(i);
-            if (moshtary.getNameMoshtary().contains(searchWord))
-            {
+            String search = new PubFunc().new LanguageUtil().convertFaNumberToEN(searchWord);
+            if (moshtary.getNameMoshtary().contains(search)) {
 
                 moshtaryModelsSearch.add(moshtary);
                 moshtaryAddressModelsSearch.add(moshtaryAddressModels.get(i));
@@ -127,8 +127,8 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
         for (int i=0 ; i<moshtaryModels.size() ; i++)
         {
             MoshtaryModel moshtary = moshtaryModels.get(i);
-            if (moshtary.getCodeMoshtary().contains(searchWord))
-            {
+            String search = new PubFunc().new LanguageUtil().convertFaNumberToEN(searchWord);
+            if (moshtary.getCodeMoshtary().contains(search)) {
                 moshtaryModelsSearch.add(moshtary);
                 moshtaryAddressModelsSearch.add(moshtaryAddressModels.get(i));
                 moshtaryGharardadModelsSearch.add(moshtaryGharardadModels.get(i));
@@ -209,6 +209,54 @@ try {
         mModel.sendCustomerLocation(position,jsonObject);
 
 
+    }
+
+    @Override
+    public void searchNameTablo(String searchWord, ArrayList<MoshtaryModel> moshtaryModels, ArrayList<MoshtaryAddressModel> moshtaryAddressModels, ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels, ArrayList<Integer> moshtaryNoeMorajeh) {
+        ArrayList<MoshtaryModel> moshtaryModelsSearch = new ArrayList<>();
+        ArrayList<MoshtaryAddressModel> moshtaryAddressModelsSearch = new ArrayList<>();
+        ArrayList<MoshtaryGharardadModel> moshtaryGharardadModelsSearch = new ArrayList<>();
+
+        ArrayList<Integer> moshtaryNoeMorajehSearch = new ArrayList<>();
+        for (int i = 0; i < moshtaryModels.size(); i++) {
+            MoshtaryModel moshtary = moshtaryModels.get(i);
+            String search = new PubFunc().new LanguageUtil().convertFaNumberToEN(searchWord);
+            if (moshtary.getNameTablo().contains(search)) {
+
+                moshtaryModelsSearch.add(moshtary);
+                moshtaryAddressModelsSearch.add(moshtaryAddressModels.get(i));
+                moshtaryGharardadModelsSearch.add(moshtaryGharardadModels.get(i));
+                moshtaryNoeMorajehSearch.add(moshtaryNoeMorajeh.get(i));
+            }
+        }
+
+//        mModel.searchCustomerName(searchWord,moshtaryModels,moshtaryAddressModels,moshtaryGharardadModels,arrayListNoeMorajeh);
+
+        mView.get().onGetSearch(moshtaryModelsSearch, moshtaryAddressModelsSearch, moshtaryGharardadModelsSearch, moshtaryNoeMorajehSearch);
+    }
+
+    @Override
+    public void searchTelephone(String newText, ArrayList<MoshtaryModel> moshtaryModels, ArrayList<MoshtaryAddressModel> moshtaryAddressModels, ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels, ArrayList<Integer> moshtaryNoeMorajeh) {
+        ArrayList<MoshtaryModel> moshtaryModelsSearch = new ArrayList<>();
+        ArrayList<MoshtaryAddressModel> moshtaryAddressModelsSearch = new ArrayList<>();
+        ArrayList<MoshtaryGharardadModel> moshtaryGharardadModelsSearch = new ArrayList<>();
+
+        ArrayList<Integer> moshtaryNoeMorajehSearch = new ArrayList<>();
+        for (int i = 0; i < moshtaryAddressModels.size(); i++) {
+            MoshtaryAddressModel moshtaryAddressModel = moshtaryAddressModels.get(i);
+            String searchWord = new PubFunc().new LanguageUtil().convertFaNumberToEN(newText);
+            if (moshtaryAddressModel.getTelephone().contains(searchWord)) {
+
+                moshtaryAddressModelsSearch.add(moshtaryAddressModel);
+                moshtaryModelsSearch.add(moshtaryModels.get(i));
+                moshtaryGharardadModelsSearch.add(moshtaryGharardadModels.get(i));
+                moshtaryNoeMorajehSearch.add(moshtaryNoeMorajeh.get(i));
+            }
+        }
+
+//        mModel.searchCustomerName(searchWord,moshtaryModels,moshtaryAddressModels,moshtaryGharardadModels,arrayListNoeMorajeh);
+
+        mView.get().onGetSearch(moshtaryModelsSearch, moshtaryAddressModelsSearch, moshtaryGharardadModelsSearch, moshtaryNoeMorajehSearch);
     }
 
 

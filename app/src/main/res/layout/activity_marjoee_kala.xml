@@ -87,13 +87,27 @@
         fab:menu_labels_customFont="@string/fontPath"
         fab:menu_backgroundColor="@android:color/transparent">
 
+
+
         <com.github.clans.fab.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/fabAdd"
+            android:id="@+id/fabAddBiMabna"
             android:src="@drawable/ic_marjoee"
             fab:fab_size="normal"
-            fab:fab_label="@string/add"
+            fab:fab_label="@string/addNonBased"
+            fab:fab_colorNormal="@color/colorFabAddColorfulIcon"
+            fab:fab_colorPressed="@color/colorFabAddClick"
+            android:layout_margin="15dp"/>
+
+
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabAddBaMabna"
+            android:src="@drawable/ic_marjoee"
+            fab:fab_size="normal"
+            fab:fab_label="@string/addBased"
             fab:fab_colorNormal="@color/colorFabAddColorfulIcon"
             fab:fab_colorPressed="@color/colorFabAddClick"
             android:layout_margin="15dp"/>

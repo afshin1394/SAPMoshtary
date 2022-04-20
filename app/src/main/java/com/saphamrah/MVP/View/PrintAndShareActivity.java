@@ -15,6 +15,8 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -129,8 +131,9 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
      * setup recycler
      */
     private void setRecycler() {
-        adapter = new PrintAndShareAdapter(BaseApplication.getContext(), printFaktorModels, (action, position) -> {
+        adapter = new PrintAndShareAdapter(BaseApplication.getContext(), printFaktorModels, (action, position,imgBtn) -> {
             String fileName = "Print-" + printFaktorModels.get(position).getUniqID_Tablet() + ".jpg";
+            Log.i("clickc", "click: ");
 
 
             boolean  isFileExists = checkFileExists( fileName);
@@ -172,9 +175,9 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
 
                     Bitmap bitmap = BitmapFactory.decodeFile(dir + "/" + fileName);
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
-                    onGetPrintfaktor(printFaktorModels.get(position).getUniqID_Tablet(), action, stream.toByteArray() );
+                    onGetPrintfaktor(printFaktorModels.get(position).getUniqID_Tablet(), action, stream.toByteArray());
                 } else {
                     mPresenter.getFaktorImage(action, printFaktorModels.get(position));
                 }
@@ -344,9 +347,7 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
 
         }else if (action == Constants.IMAGE){
             showImageDialog(image,uniqueID);
-
         }
-
 
     }
 
@@ -466,6 +467,7 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
 
     public void onDestroy() {
         super.onDestroy();
+        mPresenter.Destroy();
         if (mPrintService != null)
             mPrintService.stop();
         Log.e("onDestroy", "--- ON DESTROY ---");

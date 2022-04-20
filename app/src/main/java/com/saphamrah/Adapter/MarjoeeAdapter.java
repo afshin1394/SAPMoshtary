@@ -55,7 +55,8 @@ public class MarjoeeAdapter extends RecyclerSwipeAdapter<MarjoeeAdapter.ViewHold
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         holder.lblCodeKalaName.setText(String.format("%1$s - %2$s", kalaElamMarjoeeModels.get(position).getCodeKala(), kalaElamMarjoeeModels.get(position).getNameKala()));
         holder.lblCount.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.adad), kalaElamMarjoeeModels.get(position).getTedad3()));
-        holder.lblCost.setText(String.format("%1$s %2$s", formatter.format((int)kalaElamMarjoeeModels.get(position).getMablaghForosh()), context.getResources().getString(R.string.rial)));
+        holder.lblCost.setText(String.format("%1$s : %2$s %3$s",context.getString(R.string.MablaghForosh), formatter.format(kalaElamMarjoeeModels.get(position).getGheymatForoshAsli()), context.getResources().getString(R.string.rial)));
+        holder.lblMarjoeeCost.setText(String.format("%1$s : %2$s %3$s",context.getString(R.string.MablaghMarjoee), formatter.format(kalaElamMarjoeeModels.get(position).getFee()), context.getResources().getString(R.string.rial)));
         holder.lblDesc.setText(kalaElamMarjoeeModels.get(position).getSharh());
         holder.lblShomareBach.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.shomareBach), kalaElamMarjoeeModels.get(position).getShomarehBach()));
         if (showSwipe)
@@ -99,6 +100,7 @@ public class MarjoeeAdapter extends RecyclerSwipeAdapter<MarjoeeAdapter.ViewHold
         private TextView lblTarikhEngheza;
         private TextView lblCount;
         private TextView lblCost;
+        private TextView lblMarjoeeCost;
         private TextView lblDesc;
         private TextView lblShomareBach;
         private RelativeLayout layDelete;
@@ -116,6 +118,7 @@ public class MarjoeeAdapter extends RecyclerSwipeAdapter<MarjoeeAdapter.ViewHold
             lblTarikhEngheza = view.findViewById(R.id.lblTarikhEngheza);
             lblCount = view.findViewById(R.id.lblTedad);
             lblCost = view.findViewById(R.id.lblMablaghForosh);
+            lblMarjoeeCost = view.findViewById(R.id.lblMablaghMarjoee);
             lblDesc = view.findViewById(R.id.lblDesc);
             lblShomareBach = view.findViewById(R.id.lblShomareBach);
             layDelete = view.findViewById(R.id.layDelete);
@@ -124,6 +127,7 @@ public class MarjoeeAdapter extends RecyclerSwipeAdapter<MarjoeeAdapter.ViewHold
             lblCodeKalaName.setTypeface(font);
             lblTarikhTolid.setTypeface(font);
             lblTarikhEngheza.setTypeface(font);
+            lblMarjoeeCost.setTypeface(font);
             lblCount.setTypeface(font);
             lblCost.setTypeface(font);
             lblDesc.setTypeface(font);

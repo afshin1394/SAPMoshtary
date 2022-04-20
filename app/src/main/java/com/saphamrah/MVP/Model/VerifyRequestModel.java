@@ -1143,7 +1143,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             {
                 ElamMarjoeePPCDAO elamMarjoeePPCDAO = new ElamMarjoeePPCDAO(mPresenter.getAppContext());
                 ElamMarjoeeSatrPPCDAO elamMarjoeeSatrPPCDAO = new ElamMarjoeeSatrPPCDAO(mPresenter.getAppContext());
-
+                Log.d("Marjoee","checkData" + selectFaktorShared.getBoolean(selectFaktorShared.getVerifiedMarjoee() , false));
                 elamMarjoeePPCDAO.deleteAllByccDarkhastFaktor(ccDarkhastFaktor);
                 elamMarjoeeSatrPPCDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
             }

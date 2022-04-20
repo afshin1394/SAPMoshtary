@@ -131,7 +131,24 @@
             fab:fab_label="@string/searchCustomerCode"
             fab:fab_colorNormal="@color/colorFabSearch"
             fab:fab_colorPressed="@color/colorFabSearchClick"/>
-
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabSearchNameTablo"
+            android:src="@drawable/ic_search"
+            fab:fab_size="normal"
+            fab:fab_label="@string/searchNameTablo"
+            fab:fab_colorNormal="@color/colorFabSearch"
+            fab:fab_colorPressed="@color/colorFabSearchClick"/>
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabSearchTelephone"
+            android:src="@drawable/ic_search"
+            fab:fab_size="normal"
+            fab:fab_label="@string/searchTelephone"
+            fab:fab_colorNormal="@color/colorFabSearch"
+            fab:fab_colorPressed="@color/colorFabSearchClick"/>
     </com.github.clans.fab.FloatingActionMenu>
 
 

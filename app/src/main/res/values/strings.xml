@@ -91,6 +91,8 @@
     <string name="searchKalaName">جستجو نام کالا</string>
     <string name="searchCustomerName">جستجو نام مشتری</string>
     <string name="searchCustomerCode">جستجو کد مشتری</string>
+    <string name="searchNameTablo">جستجو نام تابلو</string>
+    <string name="searchTelephone">جستجو شماره تلفن</string>
     <string name="searchFactorNumber">جستجو شماره فاکتور</string>
     <string name="refresh">بروزرسانی</string>
     <string name="selectRadius">انتخاب شعاع</string>
@@ -100,6 +102,8 @@
     <string name="cancel">انصراف</string>
     <string name="back">بازگشت</string>
     <string name="add">افزودن</string>
+    <string name="addBased">افزودن با مبنا</string>
+    <string name="addNonBased">افزودن بی مبنا</string>
     <string name="yes">بله</string>
     <string name="no">خیر</string>
     <string name="send">ارسال</string>
@@ -482,6 +486,7 @@
     <string name="mablaghMarjoee">مبلغ فاکتور مرجوعی(ریال)</string>
     <string name="countMarjoee">تعداد مرجوعی</string>
     <string name="mablaghForosh">مبلغ فروش</string>
+    <string name="baseMablaghForosh">مبلغ فروش مبنا</string>
     <string name="mablaghForoshUnitRial">مبلغ فروش(ریال)</string>
     <string name="countForosh">تعداد فروش</string>
     <string name="shomareBach">شماره بچ</string>
@@ -812,6 +817,7 @@
     <string name="emptyJayezeh">جایزه ای وجود ندارد.</string>
     <string name="jayezePromotion">جایزه پروموشن - </string>
     <string name="takhfifNaghdiforJayezeh">تخفیف نقدی بابت جایزه</string>
+    <string name="takhfifNaghdiforJayezehArzeshAfzodeh">تخفیف نقدی بابت جایزه ارزش افزوده</string>
     <string name="description">توضیحات</string>
     <string name="customerDescription">توضیحات مشتری</string>
     <string name="errorInputDescription">لطفا توضیحات را وارد نمایید.</string>
@@ -1200,4 +1206,10 @@
     <string name="errorSendElatAdamTahvilFailure">"خطا از سمت سرور "</string>
     <string name="errorSendElatAdamTahvilDarkhastِ">"خطا در ارسال اطلاعات به سمت سرور "</string>
     <string name="errorSaveElatAdamTahvilDarkhastِ">خطا در ثبت عدم تحویل فاکتور</string>
+    <string name="errorElatKasrMojodi">به علت کسر در موجودی کالا، ارسال فاکتور انجام نگردید. \n لطفا درخواست را حذف نموده و دوباره ثبت نمایید.</string>
+    <string name="errorTakhfifNaghdi">به علت درج در تخفیف نقدی تکراری، ارسال فاکتور انجام نگردید. \n لطفا درخواست را حذف نموده و دوباره ثبت نمایید.</string>
+    <string name="errorDeleteOldPrints">خطا در حذف عکس فاکنور های قدیمی</string>
+    <string name="errorPrice">مبلغ مورد نظر نمی تواند بزرگتر از مبلغ فروش باشد.</string>
+    <string name="MablaghMarjoee">مبلغ مرجوعی</string>
+    <string name="MablaghForosh">مبلغ فروش</string>
 </resources>

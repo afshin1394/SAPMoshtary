@@ -15,18 +15,24 @@ import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.PrintFaktorDAO;
 import com.saphamrah.BaseMVP.PrintAndShareMVP;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
+import com.saphamrah.Model.ImageStringModel;
 import com.saphamrah.Model.PrintFaktorModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
+import com.saphamrah.PubFunc.FileUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Repository.PrintFaktorRepository;
 import com.saphamrah.Utils.Constants;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 public class PrintAndShareModel implements PrintAndShareMVP.ModelOps {
@@ -34,10 +40,12 @@ public class PrintAndShareModel implements PrintAndShareMVP.ModelOps {
     private PrintAndShareMVP.RequiredPresenterOps mPresenter;
     private PrintFaktorDAO printFaktorDAO = new PrintFaktorDAO(BaseApplication.getContext());
     private ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
+    private CompositeDisposable compositeDisposable;
 
     public PrintAndShareModel(PrintAndShareMVP.RequiredPresenterOps mPresenter)
     {
         this.mPresenter = mPresenter;
+        compositeDisposable = new CompositeDisposable();
     }
 
     @Override
@@ -92,9 +100,51 @@ public class PrintAndShareModel implements PrintAndShareMVP.ModelOps {
 
     @Override
     public void getAllPrintFaktor() {
-        //ArrayList<PrintFaktorModel> modelArrayList = printFaktorDAO.getAll();
-        ArrayList<PrintFaktorModel> modelArrayList = printFaktorDAO.getAllWithOutImage();
-        mPresenter.onGetAllPrintFaktor(modelArrayList);
+        final File dir = new File(android.os.Environment.getExternalStoragePublicDirectory("/SapHamrah/").getAbsolutePath() +"/Print" );
+        ArrayList<File> files = FileUtils.listFilesForFolder(dir);
+        Observable.just(files)
+                 .map(f -> {
+                     ArrayList<Boolean> deleteSuccess = new ArrayList<>();
+                     for (File file : f) {
+                         Date lastModDate = new Date(file.lastModified());
+                         Date today = new Date();
+                         long days = new PubFunc().new DateUtils().getDateDiffAsDay(today,lastModDate);
+                         if (days > 7)
+                         {
+                            deleteSuccess.add(new File(dir,file.getPath()).delete());
+                         }
+                     }
+
+                     return deleteSuccess.contains(false);
+                 })
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Boolean containsNotDeleted) {
+                        if (containsNotDeleted)
+                        {
+                            onError(new Throwable());
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        mPresenter.onError(R.string.errorDeleteOldPrints);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        ArrayList<PrintFaktorModel> modelArrayList = printFaktorDAO.getAllWithOutImage();
+                        mPresenter.onGetAllPrintFaktor(modelArrayList);
+                    }
+                });
+
+
+
     }
 
     public void getImagePrintFaktor(String UniqID) {
@@ -112,7 +162,7 @@ public class PrintAndShareModel implements PrintAndShareMVP.ModelOps {
                   .subscribe(new Observer<Boolean>() {
                       @Override
                       public void onSubscribe(@NonNull Disposable d) {
-
+                       compositeDisposable.add(d);
                       }
 
                       @Override
@@ -141,6 +191,16 @@ public class PrintAndShareModel implements PrintAndShareMVP.ModelOps {
 
     }
 
+    @Override
+    public void Destroy() {
+        if (compositeDisposable!=null) {
+            if (!compositeDisposable.isDisposed()) {
+                compositeDisposable.dispose();
+                compositeDisposable.clear();
+                compositeDisposable = null;
+            }
+        }
+    }
 
 
     private void getPrintFaktorLocal(int action,String uniqueID) {
@@ -150,13 +210,13 @@ public class PrintAndShareModel implements PrintAndShareMVP.ModelOps {
                 .subscribe(new Observer<PrintFaktorModel>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
-
+                      compositeDisposable.add(d);
                     }
 
                     @Override
                     public void onNext(@NonNull PrintFaktorModel printFaktorModel) {
 
-                        mPresenter.onGetPrintFaktor(uniqueID,action ,Base64.decode(printFaktorModel.getFaktorImage(), Base64.NO_WRAP));
+                        mPresenter.onGetPrintFaktor(uniqueID,action ,printFaktorModel.getFaktorImageLocal());
                     }
 
                     @Override
@@ -201,7 +261,7 @@ public class PrintAndShareModel implements PrintAndShareMVP.ModelOps {
                 .subscribe(new Observer<String>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
-
+                      compositeDisposable.add(d);
                     }
 
                     @Override
@@ -238,7 +298,7 @@ public class PrintAndShareModel implements PrintAndShareMVP.ModelOps {
                 .subscribe(new Observer<Boolean>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
-
+                      compositeDisposable.add(d);
                     }
 
                     @Override

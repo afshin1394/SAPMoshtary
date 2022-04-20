@@ -44,7 +44,7 @@ public class KalaElamMarjoeeDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query = "select sk.*, Sharh from (select s.*,k.CodeKala,k.NameKala,s.Fee AS MablaghForosh,s.GheymatMasrafKonandeh AS MablaghMasrafKonandeh \n" +
+            String query = "select sk.*, Sharh from (select s.*,k.CodeKala,k.NameKala,s.Fee AS MablaghForosh,s.GheymatForoshAsli,s.GheymatMasrafKonandeh AS MablaghMasrafKonandeh \n" +
                     "from ElamMarjoeeSatrPPC s \n" +
                     //"left join ListKalaForMarjoee k \n" +
                     "left join (SELECT DISTINCT ccKalaCode,CodeKala,NameKala FROM ListKalaForMarjoee) k \n" +
@@ -101,6 +101,7 @@ public class KalaElamMarjoeeDAO
             kalaElamMarjoeeModel.setTedad3(cursor.getInt(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_Tedad3())));
             kalaElamMarjoeeModel.setFee(cursor.getInt(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_Fee())));
             kalaElamMarjoeeModel.setCcTaminKonandeh(cursor.getInt(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_ccTaminkonandeh())));
+            kalaElamMarjoeeModel.setGheymatForoshAsli(cursor.getFloat(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_GheymatForoshAsli())));
 
             //ListKalaForMarjoee
             kalaElamMarjoeeModel.setCodeKala(cursor.getString(cursor.getColumnIndex(ListKalaForMarjoeeModel.COLUMN_CodeKala())));

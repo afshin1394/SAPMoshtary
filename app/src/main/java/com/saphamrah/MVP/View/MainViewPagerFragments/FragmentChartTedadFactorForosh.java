@@ -215,7 +215,7 @@ public class FragmentChartTedadFactorForosh extends Fragment implements CountFak
         {
             faktorRooz = (float) rptForoshModels.get(0).getCountFaktorRooz();
             faktorMah = (float) rptForoshModels.get(0).getCountFaktorMah();
-            new PubFunc().new ChartUtils().drawSingleBarBarChart(context, barChartCountFaktor, faktorMah, faktorRooz, "", xAxisLables, null, false);
+            new PubFunc().new ChartUtils().drawSingleBarBarChart(context, barChartCountFaktor, faktorRooz , faktorMah , "", xAxisLables, null, false);
         }
 
     }

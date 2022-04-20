@@ -47,11 +47,10 @@ import java.util.function.Consumer;
 
 import me.anwarshahriar.calligrapher.Calligrapher;
 
-public class RequestCustomerListActivity extends AppCompatActivity implements RequestCustomerListMVP.RequiredViewOps
-{
+public class RequestCustomerListActivity extends AppCompatActivity implements RequestCustomerListMVP.RequiredViewOps {
 
     private final String TAG = this.getClass().getSimpleName();
-    StateMaintainer stateMaintainer = new StateMaintainer(this.getSupportFragmentManager() , TAG , RequestCustomerListActivity.this);
+    StateMaintainer stateMaintainer = new StateMaintainer(this.getSupportFragmentManager(), TAG, RequestCustomerListActivity.this);
     RequestCustomerListMVP.PresenterOps mPresenter;
 
     private MaterialSearchView searchView;
@@ -71,13 +70,12 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
     private AlertDialog alertDialog;
     private CustomLoadingDialog customLoadingDialog;
     private CustomAlertDialog customAlertDialog;
-    private int searchStatus; // not in search mode = 0 , search with name = 1 , search with code = 2
+    private int searchStatus; // not in search mode = 0 , search with name = 1 , search with code = 2 , search with NameTablo = 3 , search with Telephone = 4;
     private final int LOCATION_PERMISSION = 100;
-    private  RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_customer_list);
 
@@ -99,6 +97,8 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         searchView = findViewById(R.id.searchView);
         FloatingActionButton fabSearchName = findViewById(R.id.fabSearchName);
         FloatingActionButton fabSearchCode = findViewById(R.id.fabSearchCode);
+        FloatingActionButton fabSearchNameTablo = findViewById(R.id.fabSearchNameTablo);
+        FloatingActionButton fabSearchTelephone = findViewById(R.id.fabSearchTelephone);
         FloatingActionButton fabRefresh = findViewById(R.id.fabRefresh);
         final FloatingActionMenu fabMenu = findViewById(R.id.fabMenu);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -160,7 +160,12 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
                 else if (searchStatus == 2)
                 {
                     //TODO search
-                    mPresenter.searchCustomerCode(searchWord, moshtaryModels, moshtaryAddressModels,moshtaryGharardadModels , moshtaryNoeMorajeh);
+                    mPresenter.searchCustomerCode(searchWord, moshtaryModels, moshtaryAddressModels, moshtaryGharardadModels, moshtaryNoeMorajeh);
+                } else if (searchStatus == 3) {
+                    mPresenter.searchNameTablo(searchWord, moshtaryModels, moshtaryAddressModels, moshtaryGharardadModels, moshtaryNoeMorajeh);
+
+                } else if (searchStatus == 4) {
+                    mPresenter.searchTelephone(searchWord, moshtaryModels, moshtaryAddressModels, moshtaryGharardadModels, moshtaryNoeMorajeh);
                 }
                 return false;
             }
@@ -177,7 +182,12 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
                     else if (searchStatus == 2)
                     {
                         //TODO search
-                        mPresenter.searchCustomerCode(newText, moshtaryModels, moshtaryAddressModels ,moshtaryGharardadModels, moshtaryNoeMorajeh);
+                        mPresenter.searchCustomerCode(newText, moshtaryModels, moshtaryAddressModels, moshtaryGharardadModels, moshtaryNoeMorajeh);
+                    } else if (searchStatus == 3) {
+                        mPresenter.searchNameTablo(newText, moshtaryModels, moshtaryAddressModels, moshtaryGharardadModels, moshtaryNoeMorajeh);
+
+                    } else if (searchStatus == 4) {
+                        mPresenter.searchTelephone(newText, moshtaryModels, moshtaryAddressModels, moshtaryGharardadModels, moshtaryNoeMorajeh);
                     }
                 }
                 else
@@ -251,7 +261,26 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
             }
         });
 
-        fabRefresh.setOnClickListener(v->{
+        fabSearchNameTablo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabMenu.close(true);
+                searchView.showSearch();
+                searchView.setHint(getResources().getString(R.string.searchNameTablo));
+                searchStatus = 3;
+            }
+        });
+        fabSearchTelephone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabMenu.close(true);
+                searchView.showSearch();
+                searchView.setHint(getResources().getString(R.string.searchTelephone));
+                searchStatus = 4;
+            }
+        });
+
+        fabRefresh.setOnClickListener(v -> {
             fabMenu.close(true);
             alertDialog = customLoadingDialog.showLoadingDialog(RequestCustomerListActivity.this);
             mPresenter.updateMoshtaryMorajehShodehRooz();

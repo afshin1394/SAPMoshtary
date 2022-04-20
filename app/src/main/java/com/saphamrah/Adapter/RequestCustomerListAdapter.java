@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.Transformation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.daimajia.swipe.SwipeLayout;
@@ -23,6 +25,8 @@ import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -132,6 +136,10 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
         private TextView lblRadif;
         private TextView lblCustomerFullNameCode;
         private TextView lblCustomerAddress;
+        private ConstraintLayout laySecondCustomer;
+        private LinearLayout lay_expand_btn;
+        private TextView lblNameTablo;
+        private TextView lblPhoneNumber;
 
         public View_Holder_Gheire_Zangireii(View view) {
             super(view);
@@ -149,6 +157,10 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
             layShowCustomerInfo = view.findViewById(R.id.layShowCustomerInfo);
             layUpdateEtebar = view.findViewById(R.id.layUpdateEtebar);
 
+            laySecondCustomer = view.findViewById(R.id.lay_second_customer_customList);
+            lay_expand_btn = view.findViewById(R.id.lay_expand_btn);
+            lblNameTablo = view.findViewById(R.id.lblNameTablo);
+            lblPhoneNumber = view.findViewById(R.id.lblTelephone);
 
 
         }
@@ -169,6 +181,8 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
             lblCustomerFullNameCode.setText(String.format("%1$s - %2$s", moshtaryModels.get(position).getCodeMoshtary(), moshtaryModels.get(position).getNameMoshtary()));
             lblCustomerAddress.setText(address);
             lblRadif.setText(String.valueOf(position + 1));
+            lblNameTablo.setText(moshtaryModels.get(position).getNameTablo());
+            lblPhoneNumber.setText(moshtaryAddressModels.get(position).getTelephone());
 
             //TODO
             layChangeLocation.setVisibility(moshtaryAddressModel.isExtraProp_HasLocation()==0?View.VISIBLE:View.GONE);
@@ -248,8 +262,33 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
                     swipeLayout.close(true);
                 }
             });
+            /**
+             * this is just for show details vosol
+             * 0 == gone
+             * 1 == visible
+             */
+            if (moshtaryModels.get(position).getExtraProp_OpenView() == 1){
+                expand(laySecondCustomer,position);
+                lay_expand_btn.setRotation(180);
+            } else {
+                laySecondCustomer.setVisibility(View.GONE);
+                lay_expand_btn.setRotation(0);
+            }
 
+            /**
+             * click listener for open and close details
+             */
+            lay_expand_btn.setOnClickListener(v -> {
+                if (laySecondCustomer.getVisibility() == View.GONE) {
+                    expand(laySecondCustomer , position);
+                    lay_expand_btn.setRotation(180);
+                } else {
+                    collapse(laySecondCustomer, position);
+                    lay_expand_btn.setRotation(0);
+                }
+            });
         }
+
     }
 
     public class View_Holder_Zangirei extends RecyclerView.ViewHolder  {
@@ -268,6 +307,11 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
         private TextView txtShomarehGharardad;
         private TextView txtNameSazmanForosh;
 
+        private ConstraintLayout laySecondCustomer;
+        private LinearLayout lay_expand_btn;
+        private TextView lblNameTablo;
+        private TextView lblPhoneNumber;
+
         public View_Holder_Zangirei(@NonNull View itemView) {
             super(itemView);
             swipeLayout = itemView.findViewById(R.id.swipe);
@@ -285,8 +329,10 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
             layUpdateEtebar = itemView.findViewById(R.id.layUpdateEtebar);
 
 
-            txtShomarehGharardad =itemView .findViewById(R.id.txtShomareGharardad);
-            txtNameSazmanForosh=itemView .findViewById(R.id.txtNameSazmanForosh);
+            txtShomarehGharardad =itemView.findViewById(R.id.txtShomareGharardad);
+            txtNameSazmanForosh=itemView.findViewById(R.id.txtNameSazmanForosh);
+            lblNameTablo=itemView.findViewById(R.id.lblNameTablo);
+            txtNameSazmanForosh=itemView.findViewById(R.id.lblTelephone);
 
 
         }
@@ -310,6 +356,8 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
             lblCustomerFullNameCode.setText(String.format("%1$s - %2$s", moshtaryModels.get(position).getCodeMoshtary(), moshtaryModels.get(position).getNameMoshtary()));
             lblCustomerAddress.setText(address);
             lblRadif.setText(String.valueOf(position + 1));
+            lblNameTablo.setText(moshtaryModels.get(position).getNameTablo());
+            lblPhoneNumber.setText(moshtaryAddressModels.get(position).getTelephone());
 
             //TODO
             layChangeLocation.setVisibility(moshtaryAddressModel.isExtraProp_HasLocation()==1?View.VISIBLE:View.GONE);
@@ -392,6 +440,32 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
                     swipeLayout.close(true);
                 }
             });
+            /**
+             * this is just for show details vosol
+             * 0 == gone
+             * 1 == visible
+             */
+            if (moshtaryModels.get(position).getExtraProp_OpenView() == 1){
+                expand(laySecondCustomer,position);
+                lay_expand_btn.setRotation(180);
+            } else {
+                laySecondCustomer.setVisibility(View.GONE);
+                lay_expand_btn.setRotation(0);
+            }
+
+            /**
+             * click listener for open and close details
+             */
+            lay_expand_btn.setOnClickListener(v -> {
+                if (laySecondCustomer.getVisibility() == View.GONE) {
+                    expand(laySecondCustomer , position);
+                    lay_expand_btn.setRotation(180);
+                } else {
+                    collapse(laySecondCustomer, position);
+                    lay_expand_btn.setRotation(0);
+                }
+            });
+
 
         }
     }
@@ -406,5 +480,62 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
         return R.id.swipe;
     }
 
+    public void expand(final View v , int position) {
+        int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
+        int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
+        final int targetHeight = v.getMeasuredHeight();
+
+        // Older versions of android (pre API 21) cancel animations for views with a height of 0.
+        v.getLayoutParams().height = 1;
+        v.setVisibility(View.VISIBLE);
+        Animation a = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                v.getLayoutParams().height = interpolatedTime == 1
+                        ? ViewGroup.LayoutParams.WRAP_CONTENT
+                        : (int)(targetHeight * interpolatedTime);
+                v.requestLayout();
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        // Expansion speed of 1dp/ms
+        a.setDuration(400);
+        v.startAnimation(a);
+        moshtaryModels.get(position).setExtraProp_OpenView(1);
+    }
+
+    public void collapse(final View v ,int position) {
+        final int initialHeight = v.getMeasuredHeight();
+
+        Animation a = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                if(interpolatedTime == 1){
+                    v.setVisibility(View.GONE);
+                }else{
+                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        // Collapse speed of 1dp/ms
+        a.setDuration(400);
+        v.startAnimation(a);
+        moshtaryModels.get(position).setExtraProp_OpenView(0);
+    }
 
 }

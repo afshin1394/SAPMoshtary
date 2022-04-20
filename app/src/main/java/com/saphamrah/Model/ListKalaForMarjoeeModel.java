@@ -19,6 +19,7 @@ public class ListKalaForMarjoeeModel
     private static final String COLUMN_MablaghForosh = "MablaghForosh";
     private static final String COLUMN_MablaghMasrafKonandeh = "MablaghMasrafKonandeh";
     private static final String COLUMN_IsKalaZayeatTolid = "IsKalaZayeatTolid";
+    private static final String COLUMN_IsMabna = "IsMabna";
 
 
     public static String TableName() {
@@ -59,6 +60,9 @@ public class ListKalaForMarjoeeModel
     }
     public static String COLUMN_IsKalaZayeatTolid() {
         return COLUMN_IsKalaZayeatTolid;
+    }
+    public static String COLUMN_IsMabna() {
+        return COLUMN_IsMabna;
     }
 
 
@@ -104,6 +108,13 @@ public class ListKalaForMarjoeeModel
     @SerializedName("IsKalaZayeatTolid")
     @Expose
     private Integer isKalaZayeatTolid;
+    @SerializedName("IsMabna")
+    @Expose
+    private int isMabna;
+
+    private float modifiedPrice;
+
+
 
 
     public Integer getRadif() {
@@ -219,7 +230,40 @@ public class ListKalaForMarjoeeModel
     }
 
 
+    public int getIsMabna() {
+        return isMabna;
+    }
 
+    public void setIsMabna(int isMabna) {
+        this.isMabna = isMabna;
+    }
 
+    public float getModifiedPrice() {
+        return modifiedPrice;
+    }
 
+    public void setModifiedPrice(float modifiedPrice) {
+        this.modifiedPrice = modifiedPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "ListKalaForMarjoeeModel{" +
+                "radif=" + radif +
+                ", ccKala=" + ccKala +
+                ", ccKalaCode=" + ccKalaCode +
+                ", codeKala='" + codeKala + '\'' +
+                ", nameKala='" + nameKala + '\'' +
+                ", ccTaminKonandeh=" + ccTaminKonandeh +
+                ", shomarehBach='" + shomarehBach + '\'' +
+                ", tarikhTolid='" + tarikhTolid + '\'' +
+                ", tarikhEngheza='" + tarikhEngheza + '\'' +
+                ", tedad=" + tedad +
+                ", mablaghForosh=" + mablaghForosh +
+                ", mablaghMasrafKonandeh=" + mablaghMasrafKonandeh +
+                ", id=" + id +
+                ", isKalaZayeatTolid=" + isKalaZayeatTolid +
+                ", isMabna=" + isMabna +
+                '}';
+    }
 }

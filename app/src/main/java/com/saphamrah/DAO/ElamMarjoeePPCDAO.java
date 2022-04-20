@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -409,6 +410,8 @@ Call<GetMarjoeeForoshandehByDarkhastFaktorTitrResult> call = apiServiceGet.getMa
     {
         try
         {
+            Log.d("Marjoee","deleteAllByccDarkhastFaktor");
+
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             db.delete(ElamMarjoeePPCModel.TableName(), ElamMarjoeePPCModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor, null);
             db.close();

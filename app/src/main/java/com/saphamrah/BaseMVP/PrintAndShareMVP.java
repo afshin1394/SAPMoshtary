@@ -1,5 +1,7 @@
 package com.saphamrah.BaseMVP;
 
+import android.widget.RelativeLayout;
+
 import com.saphamrah.Model.PrintFaktorModel;
 
 import java.util.ArrayList;
@@ -15,9 +17,9 @@ public interface PrintAndShareMVP
         void onGetAllPrintFaktor(ArrayList<PrintFaktorModel> modelArrayList);
         void onGetImagePrintFaktor(PrintFaktorModel model);
         void closeLoadingDialog();
-
         void onGetPrintfaktor(String uniqueID,int action,byte[] image);
         void showLoading();
+
     }
 
 
@@ -38,10 +40,8 @@ public interface PrintAndShareMVP
         void onGetImagePrintFaktor(PrintFaktorModel model);
         void onUpdateData();
         void failedUpdate();
-
         void onGetPrintFaktor(String uniqueId,int action,byte[] decode);
         void onError(int errorGetImageWithUniqID);
-
         void onWarning(int faktorImageNotAvailable);
     }
 
@@ -51,8 +51,8 @@ public interface PrintAndShareMVP
         void update();
         void getAllPrintFaktor();
         void getImagePrintFaktor(String UniqeID);
-
-        void getFaktorImage(int action,PrintFaktorModel printFaktorModel);
+        void getFaktorImage(int action, PrintFaktorModel printFaktorModel);
+        void Destroy();
     }
 
 }

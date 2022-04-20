@@ -272,6 +272,8 @@ public class MarjoeeKalaModel implements MarjoeeKalaMVP.ModelOps
     private void removeAllMarjoee(long ccDarkhastFaktor)
     {
         ElamMarjoeePPCDAO elamMarjoeePPCDAO = new ElamMarjoeePPCDAO(mPresenter.getAppContext());
+        Log.d("Marjoee","removeAllMarjoee");
+
         elamMarjoeePPCDAO.deleteAllByccDarkhastFaktor(ccDarkhastFaktor);
         ElamMarjoeeSatrPPCDAO elamMarjoeeSatrPPCDAO = new ElamMarjoeeSatrPPCDAO(mPresenter.getAppContext());
         elamMarjoeeSatrPPCDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
@@ -337,6 +339,7 @@ public class MarjoeeKalaModel implements MarjoeeKalaMVP.ModelOps
             if (countSatr == 0)
             {
                 ElamMarjoeePPCDAO elamMarjoeePPCDAO = new ElamMarjoeePPCDAO(mPresenter.getAppContext());
+                Log.d("Marjoee","removeKalaFromMarjoee");
                 elamMarjoeePPCDAO.deleteAllByccDarkhastFaktor(kalaElamMarjoeeModel.getCcDarkhastFaktor());
             }
             mPresenter.onSuccessRemoveItem(position);

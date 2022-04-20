@@ -112,32 +112,32 @@ public class PrintAndShareAdapter extends RecyclerSwipeAdapter<PrintAndShareAdap
             lblInvoiceCostAndShomarehFaktor.setTypeface(font);
         }
 
+
+
         public void bind(final int position , final OnItemClickListener listener)
         {
 
 
             imgPrint.setOnClickListener(v -> {
-                listener.onItemClick(Constants.PRINT(), position);
+                listener.onItemClick(Constants.PRINT(), position,imgPrint);
                 swipeLayout.close(true);
             });
 
             imgShare.setOnClickListener(v -> {
-                listener.onItemClick(Constants.SHARE, position);
+                listener.onItemClick(Constants.SHARE, position,imgShare);
                 swipeLayout.close(true);
             });
-            layImage.setOnClickListener(v->{
-                listener.onItemClick(Constants.IMAGE , position);
+            imgImage.setOnClickListener(v->{
+                listener.onItemClick(Constants.IMAGE , position,imgImage);
                 swipeLayout.close(true);
             });
-
-
         }
     }
 
 
     public interface OnItemClickListener
     {
-        void onItemClick(int action , int position);
+        void onItemClick(int action , int position , ImageView btn);
     }
 
 

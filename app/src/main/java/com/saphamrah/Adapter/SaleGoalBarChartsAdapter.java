@@ -82,8 +82,6 @@ public class SaleGoalBarChartsAdapter extends RecyclerView.Adapter<RecyclerView.
     public int getItemViewType(int position) {
 
         switch (((RptSaleGoalActivity)context).ShowType) {
-            case Numerical:
-                return NUMERICAL_CHART;
             case Percentage:
                 return PERCENTAGE_CHART;
             case Table:
@@ -277,7 +275,7 @@ public class SaleGoalBarChartsAdapter extends RecyclerView.Adapter<RecyclerView.
             }
             textlblHadaf.setText(name);
 
-            ArrayList<Float> percentValues = new PubFunc().new ChartUtils().calculatePercentFromNumeric(baseHadafForoshModel.getTedadForoshMah(), baseHadafForoshModel.getTedadHadafMah(), baseHadafForoshModel.getTedadForoshRooz(), baseHadafForoshModel.getTedadHadafRooz());
+            ArrayList<Float> percentValues = new PubFunc().new ChartUtils().calculatePercentFromNumeric(baseHadafForoshModel.getTedadForoshRooz(), baseHadafForoshModel.getTedadHadafRooz(), baseHadafForoshModel.getTedadForoshMah(), baseHadafForoshModel.getTedadHadafMah());
             new PubFunc().new ChartUtils().drawSingleBarBarChart(context, barChartHadaf, percentValues.get(0), percentValues.get(1), name, xAxisLabels, limitLine, true);
             if (RptSaleGoalActivity.activityState.equals("FragmentLevel1") || RptSaleGoalActivity.activityState.equals("FragmentLevel2")) {
                 itemView.setOnClickListener(new View.OnClickListener() {

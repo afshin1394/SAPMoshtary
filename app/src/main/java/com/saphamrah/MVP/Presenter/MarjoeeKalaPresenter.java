@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.saphamrah.BaseMVP.MarjoeeKalaMVP;
+import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.MVP.Model.MarjoeeKalaModel;
 import com.saphamrah.Model.ElamMarjoeeSatrPPCModel;
 import com.saphamrah.Model.ElatMarjoeeKalaModel;
@@ -14,6 +15,7 @@ import com.saphamrah.Utils.Constants;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MarjoeeKalaPresenter implements MarjoeeKalaMVP.PresenterOps , MarjoeeKalaMVP.RequiredPresenterOps
@@ -240,13 +242,27 @@ public class MarjoeeKalaPresenter implements MarjoeeKalaMVP.PresenterOps , Marjo
     @Override
     public void onSuccessUpdateListKalaForMarjoee(ArrayList<ListKalaForMarjoeeModel> listKalaForMarjoeeModels)
     {
+        ParameterChildDAO parameterChildDAO = new ParameterChildDAO(getAppContext());
+        boolean canEditPrice = Integer.parseInt(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_ENABLE_GET_MESSAGE())) == 1;
+
+        ArrayList<ListKalaForMarjoeeModel> listKalaForMarjoeeBaMabnaModels = new ArrayList<>();
+        ArrayList<ListKalaForMarjoeeModel> listKalaForMarjoeeBiMabnaModels = new ArrayList<>();
+        for (ListKalaForMarjoeeModel listKalaForMarjoeeModel : listKalaForMarjoeeModels) {
+            if (listKalaForMarjoeeModel.getIsMabna() == 1){
+                listKalaForMarjoeeBaMabnaModels.add(listKalaForMarjoeeModel);
+            }else{
+                listKalaForMarjoeeBiMabnaModels.add(listKalaForMarjoeeModel);
+            }
+        }
+
         mView.get().closeAlertLoading();
-        mView.get().onUpdateListKalaForMarjoee(listKalaForMarjoeeModels);
+        mView.get().onUpdateListKalaForMarjoee(listKalaForMarjoeeModels,listKalaForMarjoeeBaMabnaModels,listKalaForMarjoeeBiMabnaModels,canEditPrice);
     }
 
     @Override
     public void onGetListElatMarjoeeKala(ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels)
     {
+
         if (elatMarjoeeKalaModels != null && elatMarjoeeKalaModels.size() > 0)
         {
             mView.get().onGetListElatMarjoeeKala(elatMarjoeeKalaModels);

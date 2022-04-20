@@ -22,6 +22,8 @@ public class ElamMarjoeeSatrPPCModel
     private static final String COLUMN_Fee = "Fee";
     private static final String COLUMN_ccTaminkonandeh = "ccTaminkonandeh";
     private static final String COLUMN_GheymatMasrafkonandeh = "GheymatMasrafkonandeh";
+    private static final String COLUMN_GheymatForoshAsli = "GheymatForoshAsli";
+    private static final String COLUMN_IsMabna = "IsMabna";
 
 
     public static String TableName() {
@@ -69,6 +71,12 @@ public class ElamMarjoeeSatrPPCModel
     public static String COLUMN_GheymatMasrafkonandeh() {
         return COLUMN_GheymatMasrafkonandeh;
     }
+    public static String COLUMN_GheymatForoshAsli() {
+        return COLUMN_GheymatForoshAsli;
+    }
+    public static String COLUMN_IsMabna() {
+        return COLUMN_IsMabna;
+    }
 
 
 
@@ -86,6 +94,8 @@ public class ElamMarjoeeSatrPPCModel
     private int Fee;
     private int ccTaminkonandeh;
     private int GheymatMasrafkonandeh;
+    private int GheymatForoshAsli;
+    private int IsMabna;
 
     public int getCcElamMarjoeeSatrPPC() {
         return ccElamMarjoeeSatrPPC;
@@ -200,6 +210,21 @@ public class ElamMarjoeeSatrPPCModel
     }
 
 
+    public int getGheymatForoshAsli() {
+        return GheymatForoshAsli;
+    }
+
+    public void setGheymatForoshAsli(int gheymatForoshAsli) {
+        GheymatForoshAsli = gheymatForoshAsli;
+    }
+
+    public int getIsMabna() {
+        return IsMabna;
+    }
+
+    public void setIsMabna(int isMabna) {
+        IsMabna = isMabna;
+    }
 
     public JSONObject toJsonObject()
     {
@@ -220,6 +245,8 @@ public class ElamMarjoeeSatrPPCModel
             jsonObject.put("Fee" , Fee);
             jsonObject.put("ccTaminkonandeh" , ccTaminkonandeh);
             jsonObject.put("GheymatMasrafkonandeh" , GheymatMasrafkonandeh);
+            jsonObject.put("GheymatForoshAsli" , GheymatForoshAsli);
+            jsonObject.put("IsMabna" , IsMabna);
         }
         catch (Exception exception)
         {
@@ -248,6 +275,8 @@ public class ElamMarjoeeSatrPPCModel
                 ", Fee=" + Fee +
                 ", ccTaminkonandeh=" + ccTaminkonandeh +
                 ", GheymatMasrafkonandeh=" + GheymatMasrafkonandeh +
+                ", GheymatForoshAsli=" + GheymatForoshAsli +
+                ", IsMabna=" + IsMabna +
                 '}';
     }
 }

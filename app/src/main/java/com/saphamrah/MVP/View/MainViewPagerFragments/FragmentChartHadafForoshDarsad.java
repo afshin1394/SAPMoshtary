@@ -228,8 +228,10 @@ public class FragmentChartHadafForoshDarsad extends Fragment implements HadafFor
         legendLables.add(legendLabel1);
         legendLables.add(legendLabel2);
         Log.i(TAG, "onGetHadafForoshTedady: "+baseHadafForoshModel.getTedadForoshMah());
-        ArrayList<Float> percentValues=new PubFunc().new ChartUtils().calculatePercentFromNumeric(baseHadafForoshModel.getTedadForoshMah(),baseHadafForoshModel.getTedadHadafMah(),baseHadafForoshModel.getTedadForoshRooz(),baseHadafForoshModel.getTedadHadafRooz());
-        new PubFunc().new ChartUtils().drawSingleBarBarChart(context,barChartHadaForoshDarsad, percentValues.get(0), percentValues.get(1), baseHadafForoshModel.getNameBrand(),xAxisLables,limitLinePercentage,true);
+
+        ArrayList<Float> percentValues=new PubFunc().new ChartUtils().calculatePercentFromNumeric(baseHadafForoshModel.getTedadForoshMah(), baseHadafForoshModel.getTedadHadafMah(),baseHadafForoshModel.getTedadForoshRooz() , baseHadafForoshModel.getTedadHadafRooz());
+        Log.i("SDFASD", "onGetHadafForoshTedady: value1:"+percentValues.get(1) +"value2:"+percentValues.get(0)  );
+        new PubFunc().new ChartUtils().drawSingleBarBarChart(context,barChartHadaForoshDarsad, percentValues.get(1)  ,percentValues.get(0) , baseHadafForoshModel.getNameBrand(),xAxisLables,limitLinePercentage,true);
     }
 
     @Override

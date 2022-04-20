@@ -185,8 +185,10 @@ public class DarkhastFaktorTakhfifModel
             jsonObject.put("CodeNoeTakhfif" , CodeNoeTakhfif);
             jsonObject.put("DarsadTakhfif" , DarsadTakhfif);
             jsonObject.put("MablaghTakhfif" , MablaghTakhfif);
-            jsonObject.put("NoeMazad" , 0);
+            jsonObject.put("NoeMazad" , ExtraProp_IsTakhfifMazad);
             jsonObject.put("ccDarkhastFaktorPPC" , 0);
+            jsonObject.put("ccJayezeh" , ExtraProp_ccJayezehTakhfif);
+            jsonObject.put("SharhTakhfif" , SharhTakhfif);
         }
         catch (Exception exception)
         {

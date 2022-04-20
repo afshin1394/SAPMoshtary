@@ -48,6 +48,9 @@ import java.util.ArrayList;
 
 import me.anwarshahriar.calligrapher.Calligrapher;
 
+
+
+
 public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKalaMVP.RequiredViewOps
 {
 
@@ -56,8 +59,15 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
     private MarjoeeKalaMVP.PresenterOps mPresenter;
 
     private ArrayList<ListKalaForMarjoeeModel> listKalaForMarjoeeModels;
+    private ArrayList<ListKalaForMarjoeeModel> listKalaForMarjoeeBaMabnaModels;
+    private ArrayList<ListKalaForMarjoeeModel> listKalaForMarjoeeBiMabnaModels;
+    private boolean canEditPrice;
+
+
+
     private ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels;
     private ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels;
+
     private ArrayList<String> nameElatMarjoeeKala;
     private long ccDarkhastFaktor;
     private int ccMoshtary;
@@ -91,7 +101,8 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
         ImageView imgBack = findViewById(R.id.imgBack);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         fabMenu = findViewById(R.id.fabMenu);
-        FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
+        FloatingActionButton fabAddBaMabna= findViewById(R.id.fabAddBaMabna);
+        FloatingActionButton fabAddBiMabna= findViewById(R.id.fabAddBiMabna);
 
         Intent getIntent = getIntent();
         ccDarkhastFaktor = getIntent.getLongExtra("ccDarkhastFaktor" , -1);
@@ -99,6 +110,8 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
         Log.d("marjoee" , "ccDarkhastFaktor in marjoee kala activity : " + ccDarkhastFaktor);
         checkDarkhastAndMoshtary();
         listKalaForMarjoeeModels = new ArrayList<>();
+        listKalaForMarjoeeBaMabnaModels = new ArrayList<>();
+        listKalaForMarjoeeBiMabnaModels = new ArrayList<>();
         kalaElamMarjoeeModels = new ArrayList<>();
         elatMarjoeeKalaModels = new ArrayList<>();
         nameElatMarjoeeKala = new ArrayList<>();
@@ -131,13 +144,22 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
         mPresenter.getListElatMarjoee();
 
 
-        fabAdd.setOnClickListener(new View.OnClickListener() {
+        fabAddBaMabna.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fabMenu.close(true);
-                showAddItemAlert();
+                showAddItemAlert(Constants.BA_MABNA);
             }
         });
+        fabAddBiMabna.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabMenu.close(true);
+                showAddItemAlert(Constants.BI_MABNA);
+            }
+        });
+
+
 
 
         imgBack.setOnClickListener(new View.OnClickListener() {
@@ -181,10 +203,15 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
     }
 
     @Override
-    public void onUpdateListKalaForMarjoee(ArrayList<ListKalaForMarjoeeModel> listKalaForMarjoeeModels)
+    public void onUpdateListKalaForMarjoee(ArrayList<ListKalaForMarjoeeModel> listKalaForMarjoeeModels,ArrayList<ListKalaForMarjoeeModel> listKalaForMarjoeeBAMabnaModels,ArrayList<ListKalaForMarjoeeModel> listKalaForMarjoeeBiMabnaModels,boolean canEditPrice)
     {
         this.listKalaForMarjoeeModels.clear();
         this.listKalaForMarjoeeModels.addAll(listKalaForMarjoeeModels);
+        this.listKalaForMarjoeeBaMabnaModels.clear();
+        this.listKalaForMarjoeeBaMabnaModels.addAll(listKalaForMarjoeeBAMabnaModels);
+        this.listKalaForMarjoeeBiMabnaModels.clear();
+        this.listKalaForMarjoeeBiMabnaModels.addAll(listKalaForMarjoeeBiMabnaModels);
+        this.canEditPrice = canEditPrice;
         showToast(R.string.successfullyUpdateListMarjoee, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
         mPresenter.getKalaMarjoee(ccDarkhastFaktor);
     }
@@ -198,6 +225,7 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
         {
             nameElatMarjoeeKala.add(model.getSharh());
         }
+
     }
 
     @Override
@@ -264,22 +292,46 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
     }
 
 
-    private void showAddItemAlert()
+    private void showAddItemAlert(int mabnaType)
     {
         final ArrayList<ElatMarjoeeKalaModel> elatMarjoee = new ArrayList<>();
-        final ArrayList<ListKalaForMarjoeeModel> selectedKala = new ArrayList<>(); //this array contain only one item, declare as array for prevent declare global variable
-        final ArrayList<ListKalaForMarjoeeModel> kalaForMojodi = new ArrayList<>(listKalaForMarjoeeModels); //local list for using in adapter
+        final ArrayList<ListKalaForMarjoeeModel> selectedKala = new ArrayList<>();
+        final boolean[] isPriceOk = {true};
+        final ArrayList<ListKalaForMarjoeeModel> kalaForMojodi; //local list for using in adapter
+
+        switch (mabnaType){
+            case Constants.BA_MABNA:
+                kalaForMojodi = new ArrayList<>(listKalaForMarjoeeBaMabnaModels);
+                break;
+
+            case Constants.BI_MABNA:
+                kalaForMojodi = new ArrayList<>(listKalaForMarjoeeBiMabnaModels);
+                break;
+            default:
+                kalaForMojodi = new ArrayList<>(listKalaForMarjoeeModels);
+                break;
+        }
         final AlertDialog.Builder builder = new AlertDialog.Builder(MarjoeeKalaActivity.this);
         alertView = getLayoutInflater().inflate(R.layout.alert_add_kala_to_marjoee , null);
         RecyclerView recyclerViewKala = alertView.findViewById(R.id.recyclerView);
         Log.d("MarjoeeKala","kalaForMojodi:" +kalaForMojodi.toString());
-        final KalaForMarjoeeAdapter adapterKala = new KalaForMarjoeeAdapter(MarjoeeKalaActivity.this, kalaForMojodi, new KalaForMarjoeeAdapter.OnItemClickListener() {
+        final KalaForMarjoeeAdapter adapterKala = new KalaForMarjoeeAdapter(mabnaType,MarjoeeKalaActivity.this, kalaForMojodi,canEditPrice, new KalaForMarjoeeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(ListKalaForMarjoeeModel listKalaForMarjoeeModel, int position) {
+                kalaForMojodi.get(position).setModifiedPrice(listKalaForMarjoeeModel.getMablaghForosh());
                 Log.d("marjoeeKala","listKalaForMarjoeeModel:"+ listKalaForMarjoeeModel.toString() + " , Position:" + position);
                 selectedKala.clear();
                 selectedKala.add(listKalaForMarjoeeModel);
+                isPriceOk[0] = true;
                 Log.d("MarjoeeKala","selctedKala Sizee:"+selectedKala.size()+" , selectedKala:"+selectedKala.toString());
+            }
+
+            @Override
+            public void onTextChange(int position,float modifiedPrice,boolean priceOk)
+            {
+                kalaForMojodi.get(position).setModifiedPrice(modifiedPrice);
+                isPriceOk[0] = priceOk;
+
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(MarjoeeKalaActivity.this);
@@ -287,6 +339,7 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
         recyclerViewKala.setItemAnimator(new DefaultItemAnimator());
         recyclerViewKala.addItemDecoration(new DividerItemDecoration(MarjoeeKalaActivity.this , 0));
         recyclerViewKala.setAdapter(adapterKala);
+
         CustomTextInputLayout txtinputSearch = alertView.findViewById(R.id.txtinputSearchKalaName);
         final CustomTextInputLayout txtinputCount = alertView.findViewById(R.id.txtinputCount);
         EditText edttxtSearch = alertView.findViewById(R.id.txtSearchKalaName);
@@ -393,60 +446,68 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
             btnOK.setOnClickListener(new View.OnClickListener()
             {
                 @Override
-                public void onClick(View v)
-                {
-                    lblError.setVisibility(View.GONE);
-                    txtinputCount.setError(null);
-
-                    boolean isZayeatTolid = false;
-                    boolean isZayeat = false;
-
-                    Log.d("marjoeeKala","selectedKala.size:"+ selectedKala.size());
-                    Log.d("marjoeeKala","getCcElatMarjoeeKala: "+ elatMarjoee.get(0).getCcElatMarjoeeKala());
-                    Log.d("marjoeeKala","isZayeatTolid:"+ isZayeatTolid);
-
-                    if (selectedKala.size() > 0 && selectedKala.get(0) != null)
-                    {
-                        if (elatMarjoee.get(0).getIsZayeatTolid()==1 && selectedKala.get(0).getIsKalaZayeatTolid()==1)
-                            isZayeatTolid=true;
-
-
-
-                        if(!isZayeatTolid && elatMarjoee.get(0).getIsZayeatTolid()==1)
-                        {
-                            lblError.setVisibility(View.VISIBLE);
-                            lblError.setText(getResources().getString(R.string.errorSelectElatMarjooeZayeatTolid));
+                public void onClick(View v) {
+                    if (mabnaType == Constants.BI_MABNA) {
+                        if (isPriceOk[0]) {
+                            if (canEditPrice) {
+                                checkForAddToMarjoee(txtinputCount, lblError, selectedKala, elatMarjoee, edttxtCount,selectedKala.get(selectedKala.size()-1).getModifiedPrice(), mabnaType);
+                            }else{
+                                checkForAddToMarjoee(txtinputCount, lblError, selectedKala, elatMarjoee, edttxtCount,selectedKala.get(selectedKala.size()-1).getModifiedPrice(), mabnaType);
+                            }
+                        } else {
+                            lblError.setText(getResources().getString(R.string.errorPrice));
                         }
-                        else if (elatMarjoee.size() > 0 && elatMarjoee.get(0) != null )
-                        {
-                            ElamMarjoeeSatrPPCModel elamMarjoeeSatrPPCModel = new ElamMarjoeeSatrPPCModel();
-                            elamMarjoeeSatrPPCModel.setCcDarkhastFaktor(ccDarkhastFaktor);
-                            elamMarjoeeSatrPPCModel.setCcElatMarjoeeKala(elatMarjoee.get(0).getCcElatMarjoeeKala());
-                            elamMarjoeeSatrPPCModel.setCodeNoeMarjoee(elatMarjoee.get(0).getCodeNoeElat());
-                            elamMarjoeeSatrPPCModel.setCcKala(selectedKala.get(0).getCcKala());
-                            elamMarjoeeSatrPPCModel.setCcKalaCode(selectedKala.get(0).getCcKalaCode());
-                            elamMarjoeeSatrPPCModel.setShomarehBach(selectedKala.get(0).getShomarehBach());
-                            elamMarjoeeSatrPPCModel.setTarikhTolid(selectedKala.get(0).getTarikhTolid());
-                            elamMarjoeeSatrPPCModel.setTarikhEngheza(selectedKala.get(0).getTarikhEngheza());
-                            elamMarjoeeSatrPPCModel.setFee((int)selectedKala.get(0).getMablaghForosh());
-                            elamMarjoeeSatrPPCModel.setCcTaminkonandeh(selectedKala.get(0).getCcTaminKonandeh());
-                            elamMarjoeeSatrPPCModel.setGheymatMasrafkonandeh((int)selectedKala.get(0).getMablaghMasrafKonandeh());
-                            mPresenter.checkKalaForAddToMarjoee(selectedKala.get(0), kalaElamMarjoeeModels, elamMarjoeeSatrPPCModel, ccMoshtary, edttxtCount.getText().toString().trim());
-                        }
-                        else
-                        {
-                            lblError.setVisibility(View.VISIBLE);
-                            lblError.setText(getResources().getString(R.string.errorSelectElatMarjooe));
-                        }
-                    }
-                    else
-                    {
-                        lblError.setVisibility(View.VISIBLE);
-                        lblError.setText(getResources().getString(R.string.errorSelectItem));
+                    }else{
+                        checkForAddToMarjoee(txtinputCount, lblError, selectedKala, elatMarjoee,edttxtCount,selectedKala.get(selectedKala.size()-1).getModifiedPrice(),mabnaType);
                     }
                 }
             });
 
+        }
+    }
+
+    private void checkForAddToMarjoee(CustomTextInputLayout txtinputCount,TextView lblError,ArrayList<ListKalaForMarjoeeModel> selectedKala,ArrayList<ElatMarjoeeKalaModel> elatMarjoee,EditText edttxtCount,float fee,int mabnaType){
+        lblError.setVisibility(View.GONE);
+        txtinputCount.setError(null);
+
+        boolean isZayeatTolid = false;
+        boolean isZayeat = false;
+
+        Log.d("marjoeeKala", "selectedKala.size:" + selectedKala.size());
+        Log.d("marjoeeKala", "getCcElatMarjoeeKala: " + elatMarjoee.get(0).getCcElatMarjoeeKala());
+        Log.d("marjoeeKala", "isZayeatTolid:" + isZayeatTolid);
+
+        if (selectedKala.size() > 0 && selectedKala.get(0) != null) {
+            if (elatMarjoee.get(0).getIsZayeatTolid() == 1 && selectedKala.get(0).getIsKalaZayeatTolid() == 1)
+                isZayeatTolid = true;
+
+
+            if (!isZayeatTolid && elatMarjoee.get(0).getIsZayeatTolid() == 1) {
+                lblError.setVisibility(View.VISIBLE);
+                lblError.setText(getResources().getString(R.string.errorSelectElatMarjooeZayeatTolid));
+            } else if (elatMarjoee.size() > 0 && elatMarjoee.get(0) != null) {
+                ElamMarjoeeSatrPPCModel elamMarjoeeSatrPPCModel = new ElamMarjoeeSatrPPCModel();
+                elamMarjoeeSatrPPCModel.setCcDarkhastFaktor(ccDarkhastFaktor);
+                elamMarjoeeSatrPPCModel.setCcElatMarjoeeKala(elatMarjoee.get(0).getCcElatMarjoeeKala());
+                elamMarjoeeSatrPPCModel.setCodeNoeMarjoee(elatMarjoee.get(0).getCodeNoeElat());
+                elamMarjoeeSatrPPCModel.setCcKala(selectedKala.get(0).getCcKala());
+                elamMarjoeeSatrPPCModel.setCcKalaCode(selectedKala.get(0).getCcKalaCode());
+                elamMarjoeeSatrPPCModel.setShomarehBach(selectedKala.get(0).getShomarehBach());
+                elamMarjoeeSatrPPCModel.setTarikhTolid(selectedKala.get(0).getTarikhTolid());
+                elamMarjoeeSatrPPCModel.setTarikhEngheza(selectedKala.get(0).getTarikhEngheza());
+                elamMarjoeeSatrPPCModel.setFee(((int) fee));
+                elamMarjoeeSatrPPCModel.setCcTaminkonandeh(selectedKala.get(0).getCcTaminKonandeh());
+                elamMarjoeeSatrPPCModel.setGheymatMasrafkonandeh((int) selectedKala.get(0).getMablaghMasrafKonandeh());
+                elamMarjoeeSatrPPCModel.setGheymatForoshAsli(((int) selectedKala.get(0).getMablaghForosh()));
+                elamMarjoeeSatrPPCModel.setIsMabna(mabnaType);
+                mPresenter.checkKalaForAddToMarjoee(selectedKala.get(0), kalaElamMarjoeeModels, elamMarjoeeSatrPPCModel, ccMoshtary, edttxtCount.getText().toString().trim());
+            } else {
+                lblError.setVisibility(View.VISIBLE);
+                lblError.setText(getResources().getString(R.string.errorSelectElatMarjooe));
+            }
+        } else {
+            lblError.setVisibility(View.VISIBLE);
+            lblError.setText(getResources().getString(R.string.errorSelectItem));
         }
     }
 

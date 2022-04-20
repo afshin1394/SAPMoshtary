@@ -30,13 +30,17 @@ public class PrintFaktorModel {
     @SerializedName("Radif")
     @Expose
     private int Radif;
+
+
     @SerializedName("FaktorImage")
     @Expose
     private String FaktorImage;
+
     @SerializedName("ccDarkhastFaktorNoeForosh")
     @Expose
     private int ccDarkhastFaktorNoeForosh;
 
+    private byte[] FaktorImageLocal;
 
     public long getCcDarkhastFaktor() {
         return ccDarkhastFaktor;
@@ -108,6 +112,14 @@ public class PrintFaktorModel {
 
     public void setCcDarkhastFaktorNoeForosh(int ccDarkhastFaktorNoeForosh) {
         this.ccDarkhastFaktorNoeForosh = ccDarkhastFaktorNoeForosh;
+    }
+
+    public byte[] getFaktorImageLocal() {
+        return FaktorImageLocal;
+    }
+
+    public void setFaktorImageLocal(byte[] faktorImageLocal) {
+        FaktorImageLocal = faktorImageLocal;
     }
 
     public String getTABLE_NAME() {

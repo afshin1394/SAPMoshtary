@@ -134,7 +134,7 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
         findViews(view);
         initFragments();
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         screenHeight = displayMetrics.heightPixels;
         Log.i(TAG, "onCreateView: " + screenHeight);
 

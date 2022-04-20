@@ -6,12 +6,17 @@
     android:background="@drawable/altdlg_bg"
     android:layoutDirection="rtl">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/imageview"
-        android:layout_above="@+id/layButtons"/>
+  <ScrollView
+      android:layout_above="@+id/layButtons"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
 
+      <com.github.chrisbanes.photoview.PhotoView
+          android:id="@+id/imageview"
+          android:scaleType="fitCenter"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+  </ScrollView>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

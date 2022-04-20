@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.Base64;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 
@@ -111,8 +112,12 @@ public class PrintAndSharePresenter implements PrintAndShareMVP.PresenterOps, Pr
         mModel.getImagePrintFaktor(UniqID);
     }
 
-    public void getFaktorImage( int action , PrintFaktorModel printFaktorModel) {
+    public void getFaktorImage(int action , PrintFaktorModel printFaktorModel) {
         mView.get().showLoading();
         mModel.getFaktorImage( action , printFaktorModel);
+    }
+
+    public void Destroy() {
+        mModel.Destroy();
     }
 }

@@ -313,6 +313,13 @@ public class MoshtaryModel
     private String DateOfMasir;
     private int KharejAzMahal;
 
+    /**
+     * this is just for show details vosol
+     * 0 == gone
+     * 1 == visible
+     */
+    private int ExtraProp_OpenView = 0;
+
 
 	
 	
@@ -640,6 +647,15 @@ public class MoshtaryModel
 
     public void setCodeEghtesady(String codeEghtesady) {
         CodeEghtesady = codeEghtesady;
+    }
+
+
+    public int getExtraProp_OpenView() {
+        return ExtraProp_OpenView;
+    }
+
+    public void setExtraProp_OpenView(int extraProp_OpenView) {
+        ExtraProp_OpenView = extraProp_OpenView;
     }
 
     /**

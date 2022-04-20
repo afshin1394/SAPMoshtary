@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.saphamrah.CustomView.CustomTextInputLayout;
 import com.saphamrah.Model.GPSDataModel;
@@ -711,8 +712,9 @@ public class CustomAlertDialog
         Typeface font = Typeface.createFromAsset(activity.getAssets() , activity.getResources().getString(R.string.fontPath));
         btnClose.setTypeface(font);
         btnDelete.setTypeface(font);
-        final Bitmap bitmap = new PubFunc().new ImageUtils().convertByteArrayToBitmap(activity , image);
-        imageView.setImageBitmap(bitmap);
+        Glide.with(imageView)
+                .load(image)
+                .into(imageView);
         btnClose.setText(activity.getResources().getString(R.string.close));
         btnDelete.setText(activity.getResources().getString(R.string.delete));
         if (showDelete)
@@ -759,19 +761,7 @@ public class CustomAlertDialog
                     customAlertDialogResponse.setOnApplyClick();
                 }
             });
-            show.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    try
-                    {
-                        bitmap.recycle();
-                    }
-                    catch (Exception exception)
-                    {
-                        exception.printStackTrace();
-                    }
-                }
-            });
+
         }
     }
 

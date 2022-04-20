@@ -2625,9 +2625,13 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                     break;
                 case -14:
                     sendRequestResponse.onError(R.string.errorTarikhFaktorVosol);
-//                case -15:
-//                    sendRequestResponse.onError(R.string.errorTakhfifNaghdi);
                     break;
+                case -15:
+                    sendRequestResponse.onError(R.string.errorTakhfifNaghdi);
+                    break;
+                case -16:
+                    sendRequestResponse.onError(R.string.errorElatKasrMojodi);
+                break;
                 default:
                     sendRequestResponse.onError(R.string.errorSendData);
             }

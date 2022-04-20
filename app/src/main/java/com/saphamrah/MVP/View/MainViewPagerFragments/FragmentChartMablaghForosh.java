@@ -177,7 +177,7 @@ public class FragmentChartMablaghForosh extends Fragment implements MablaghTedad
             ArrayList<String> xAxisLables=new ArrayList<>();
             xAxisLables.add(getResources().getString(R.string.untilToday));
             xAxisLables.add(getResources().getString(R.string.today));
-            new PubFunc().new ChartUtils().drawSingleBarBarChart( context,barChartMablaghForosh, sumMablaghFaktorMah,sumMablaghFaktorRooz,"",xAxisLables,null,false);
+            new PubFunc().new ChartUtils().drawSingleBarBarChart( context,barChartMablaghForosh,sumMablaghFaktorRooz,sumMablaghFaktorMah,"",xAxisLables,null,false);
         }
     }
 

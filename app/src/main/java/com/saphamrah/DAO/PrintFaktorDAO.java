@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -490,7 +491,7 @@ public class PrintFaktorDAO
         ContentValues contentValues = new ContentValues();
         PrintFaktorModel printFaktorModel = new PrintFaktorModel();
 
-        contentValues.put(printFaktorModel.getCOLUMN_FaktorImage() ,image);
+        contentValues.put(printFaktorModel.getCOLUMN_FaktorImage() , Base64.decode(image, Base64.NO_WRAP));
 
 
 
@@ -535,7 +536,7 @@ public class PrintFaktorDAO
             model.setUniqID_Tablet(cursor.getString(cursor.getColumnIndex(model.getCOLUMN_UniqID_Tablet())));
             model.setRadif(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_Radif())));
             model.setCcDarkhastFaktorNoeForosh(cursor.getInt(cursor.getColumnIndex(model.getCOLUMN_ccDarkhastFaktorNoeForosh())));
-            model.setFaktorImage(cursor.getString(cursor.getColumnIndex(model.getCOLUMN_FaktorImage())));
+            model.setFaktorImageLocal(cursor.getBlob(cursor.getColumnIndex(model.getCOLUMN_FaktorImage())));
 
             models.add(model);
             cursor.moveToNext();
