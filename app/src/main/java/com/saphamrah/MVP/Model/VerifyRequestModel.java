@@ -990,7 +990,9 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             }
         }
         Log.d("checkData","tedadAghlam:"+ tedadAghlam + ", HadeAghalTedadKharid:" + selectFaktorShared.getFloat(selectFaktorShared.getHadeAghalTedadKharid(), 0));
-        if ((tedadAghlam < selectFaktorShared.getFloat(selectFaktorShared.getHadeAghalTedadKharid(), 0)) && (selectFaktorShared.getInt(selectFaktorShared.getCcGorohNoeSenf(), 0) != 350 /*ccNoeSenfMoshtary_NemoonehKala = 345*/))
+        int zangireiParam =Integer.parseInt(new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE()));
+
+        if ((tedadAghlam < selectFaktorShared.getFloat(selectFaktorShared.getHadeAghalTedadKharid(), 0)) && (selectFaktorShared.getInt(selectFaktorShared.getCcGorohNoeSenf(), 0) != zangireiParam /*ccNoeSenfMoshtary_NemoonehKala = 345*/))
         {
 
             if(clickedBottomBarposition!=2)//Page SabtDarkhast
@@ -1667,11 +1669,14 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
     private void getMoshtaryEtebarSazmanForosh( MoshtaryModel moshtaryModel,  ForoshandehMamorPakhshModel foroshandehMamorPakhshModel,  int noeMasouliat)
     {
+        SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
+       int ccSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getCcSazmanForosh(), 0);
+
         final MoshtaryEtebarSazmanForoshDAO moshtaryEtebarSazmanForoshDAO = new MoshtaryEtebarSazmanForoshDAO(mPresenter.getAppContext());
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
         switch(serverIpModel.getWebServiceType()){
             case REST:
-                moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForosh(mPresenter.getAppContext(), "VerifyRequestModel", String.valueOf(moshtaryModel.getCcMoshtary()), String.valueOf(foroshandehMamorPakhshModel.getCcSazmanForosh()), new RetrofitResponse()
+                moshtaryEtebarSazmanForoshDAO.fetchAllvMoshtaryEtebarSazmanForosh(mPresenter.getAppContext(), "VerifyRequestModel", String.valueOf(moshtaryModel.getCcMoshtary()), String.valueOf(ccSazmanForosh), new RetrofitResponse()
                 {
                     @Override
                     public void onSuccess(final ArrayList arrayListData)

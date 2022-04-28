@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.saphamrah.BaseMVP.VerifyRequestMVP;
+import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.MVP.Model.VerifyRequestModel;
 import com.saphamrah.Model.DarkhastFaktorJayezehModel;
 import com.saphamrah.Model.DarkhastFaktorTakhfifModel;
@@ -352,7 +353,8 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
     @Override
     public void onGetRequestsList(ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorModels)
     {
-        mView.get().onGetRequestsList(kalaDarkhastFaktorModels);
+        int zangireiParam = Integer.parseInt( new ParameterChildDAO(getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE()));
+        mView.get().onGetRequestsList(kalaDarkhastFaktorModels,zangireiParam);
     }
 
     @Override
@@ -533,7 +535,7 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
     @Override
     public void onFailedUpdateMoshtaryEtebar() {
         mView.get().closeLoading();
-        mView.get().showAlertDialog(R.string.errorUpdateForoshandehEtebar,false ,Constants.FAILED_MESSAGE());
+        mView.get().showAlertDialog(R.string.errorUpdateMoshtaryEtebar,false ,Constants.FAILED_MESSAGE());
 
     }
 

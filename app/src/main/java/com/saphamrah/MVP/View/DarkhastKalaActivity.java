@@ -112,7 +112,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     private final int READ_EXTERNAL_STORAGE_PERMISSION = 100;
     private final int TAKE_IMAGE = 101;
     private JayezehParentAlertAdapter jayezehAlertAdapter;
-private FloatingActionButton fabShowMoshtaryGharardad;
+    private FloatingActionButton fabShowMoshtaryGharardad;
 
     private View alertView;
     private AlertDialog show;
@@ -142,6 +142,7 @@ private FloatingActionButton fabShowMoshtaryGharardad;
 
     private ImageView btnChooseShowType;
     private int goodsNumberItemEachSection;
+    private int zangireiParam;
 
     //
 
@@ -177,7 +178,7 @@ private FloatingActionButton fabShowMoshtaryGharardad;
 
         fabAdamSefaresh = findViewById(R.id.fabAdamSefaresh);
         RecyclerView recyclerViewRequestedGoods = findViewById(R.id.recyclerView);
-        adapter = new RequestedGoodAdapter(DarkhastKalaActivity.this, kalaDarkhastFaktorModels, true, new RequestedGoodAdapter.OnItemClickListener() {
+        adapter = new RequestedGoodAdapter(DarkhastKalaActivity.this, kalaDarkhastFaktorModels, true,zangireiParam, new RequestedGoodAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(final KalaDarkhastFaktorSatrModel kalaDarkhastFaktorSatrModel, final int position) {
                 customAlertDialog.showLogMessageAlert(DarkhastKalaActivity.this, false, getResources().getString(R.string.warning), getResources().getString(R.string.deleteWarning), Constants.INFO_MESSAGE(), getResources().getString(R.string.no), getResources().getString(R.string.yes), new CustomAlertDialogResponse() {
@@ -206,12 +207,12 @@ private FloatingActionButton fabShowMoshtaryGharardad;
         recyclerViewRequestedGoods.setAdapter(adapter);
 
 
-        adapterRequestKala = new RequestGoodsAdapter(DarkhastKalaActivity.this, this.kalaMojodiZaribModels, new RequestGoodsAdapter.OnItemClickListener() {
+        adapterRequestKala = new RequestGoodsAdapter(DarkhastKalaActivity.this, this.kalaMojodiZaribModels,zangireiParam, new RequestGoodsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(KalaMojodiZaribModel kalaMojodiZaribModel, int position) {
             }
         });
-        adapterRequestKalaList = new RequestGoodsListAdapter(DarkhastKalaActivity.this, this.kalaMojodiZaribModels, false, new RequestGoodsListAdapter.OnItemClickListener() {
+        adapterRequestKalaList = new RequestGoodsListAdapter(DarkhastKalaActivity.this, this.kalaMojodiZaribModels, false,zangireiParam, new RequestGoodsListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(KalaMojodiZaribModel kalaMojodiZaribModel, int position) {
 
@@ -458,16 +459,18 @@ private FloatingActionButton fabShowMoshtaryGharardad;
     }
 
     @Override
-    public void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels,  AddItemType type) {
+    public void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels,AddItemType type,int zangireiParam) {
         this.kalaMojodiZaribModels.clear();
         this.kalaMojodiZaribModels.addAll(kalaMojodiZaribModels);
+        this.zangireiParam = zangireiParam;
         adapterRequestKalaListGrid.notifyDataSetChanged();
         adapterRequestKala.notifyDataSetChanged();
         adapterRequestKalaList.notifyDataSetChanged();
 
 
 
-            switch (type) {
+            switch (type)
+            {
                 case SHOW_GRID_LIST:
                     showGridItemAlert();
                     break;
@@ -711,7 +714,7 @@ private FloatingActionButton fabShowMoshtaryGharardad;
 
         final RecyclerView recyclerView = alertView.findViewById(R.id.recyclerView);
         if (showCatalog) {
-            adapterRequestKala = new RequestGoodsAdapter(DarkhastKalaActivity.this, arrayListKalaModel, new RequestGoodsAdapter.OnItemClickListener() {
+            adapterRequestKala = new RequestGoodsAdapter(DarkhastKalaActivity.this, arrayListKalaModel,zangireiParam, new RequestGoodsAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(KalaMojodiZaribModel kalaMojodiZaribModel, int position) {
 
@@ -720,7 +723,7 @@ private FloatingActionButton fabShowMoshtaryGharardad;
 
 
         } else {
-            adapterRequestKalaList = new RequestGoodsListAdapter(DarkhastKalaActivity.this, arrayListKalaModel, false, new RequestGoodsListAdapter.OnItemClickListener() {
+            adapterRequestKalaList = new RequestGoodsListAdapter(DarkhastKalaActivity.this, arrayListKalaModel, false,zangireiParam, new RequestGoodsListAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(KalaMojodiZaribModel kalaMojodiZaribModel, int position) {
                     Log.i("positionvisible", "onItemClick: " + position);

@@ -20,13 +20,16 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+import com.saphamrah.Adapter.CustomSpinnerAdapter;
 import com.saphamrah.Adapter.MojodiGiriAdapter;
 import com.saphamrah.Adapter.MojodiGiriKalaListAdapter;
 import com.saphamrah.BaseMVP.MojodiGiriMVP;
@@ -38,7 +41,9 @@ import com.saphamrah.Model.ElatAdamDarkhastModel;
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.UIModel.KalaFilterUiModel;
 import com.saphamrah.UIModel.KalaMojodiGiriModel;
+import com.saphamrah.UIModel.KalaMojodiZaribModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
 import com.saphamrah.Utils.CustomAlertDialogResponse;
@@ -87,6 +92,8 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
     private FloatingActionButton fabAdamDarkhast;
     private View alertView;
     private AlertDialog show;
+    private ArrayList<KalaFilterUiModel> kalaFilterUiModels = new ArrayList<>();
+    private ArrayList<String> itemsKalaFilter = new ArrayList<>();
 
 
     @Override
@@ -130,7 +137,9 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
 		mPresenter.updateHaveMojodiGiri();								  
         mPresenter.getInsertedKalaMojodi(ccMoshtary);
         mPresenter.getKala(ccMoshtary);
-		mPresenter.getNoeMasouliat();
+        mPresenter.getKalaFilter();
+
+        mPresenter.getNoeMasouliat();
 
 
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
@@ -520,6 +529,12 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
         customAlertDialog.showToast(MojodiGiriActivity.this , getResources().getString(resId) , messageType , duration);
     }
 
+    @Override
+    public void onKalaFilter(ArrayList<KalaFilterUiModel> kalaFilterUiModels, ArrayList<String> itemsKalaFilter) {
+        this.kalaFilterUiModels = kalaFilterUiModels;
+        this.itemsKalaFilter = itemsKalaFilter;
+    }
+
     private void checkCameraPermission()
     {
         if (Build.VERSION.SDK_INT >= 23)
@@ -641,6 +656,14 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
         recyclerView.addItemDecoration(new DividerItemDecoration(MojodiGiriActivity.this , 0));
         recyclerView.setAdapter(adapter);
 
+
+        Spinner spinnerKalaFilter = alertView.findViewById(R.id.spinnerKalaFilter);
+        final ArrayList<KalaModel> kalaModels = new ArrayList<>(MojodiGiriActivity.this.kalaModels); //local list for using in adapter
+        final ArrayList<KalaModel> kalaModelsFilter = new ArrayList<>(arrayListKalaModel); //local list for using in adapter
+
+        CustomSpinnerAdapter adapterSpinner = new CustomSpinnerAdapter(this, android.R.layout.simple_spinner_item, itemsKalaFilter);
+        spinnerKalaFilter.setAdapter(adapterSpinner);
+
         final CustomTextInputLayout txtinputSearch = alertView.findViewById(R.id.txtinputSearchKalaName);
         final CustomTextInputLayout txtinputCount = alertView.findViewById(R.id.txtinputCount);
         final EditText edttxtSearch = alertView.findViewById(R.id.txtSearchKalaName);
@@ -679,6 +702,37 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
                 logger.insertLogToDB(MojodiGiriActivity.this,Constants.LOG_EXCEPTION(), exception.toString(), "", "MojodiGiriActivity", "showAddItemAlert", "");
             }
 
+
+            spinnerKalaFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                {
+                    edttxtSearch.setText("");
+                    arrayListKalaModel.clear();
+                    kalaModelsFilter.clear();
+
+                    if (kalaFilterUiModels.get(position).getCcGoroh() == 0 ){
+                        arrayListKalaModel.addAll(MojodiGiriActivity.this.kalaModels) ;
+                        kalaModelsFilter.addAll(MojodiGiriActivity.this.kalaModels);
+
+                    } else {
+                        for (int i = 0; i < kalaModels.size(); i++) {
+                            int ccGorohKala = kalaModels.get(i).getCcGorohKala();
+                            if (ccGorohKala == kalaFilterUiModels.get(position).getCcGoroh()) {
+                                arrayListKalaModel.add(kalaModels.get(i));
+                                kalaModelsFilter.add(kalaModels.get(i));
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
             edttxtSearch.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -692,12 +746,12 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
                         String searchWord = new PubFunc().new LanguageUtil().convertFaNumberToEN(s.toString());
                         arrayListKalaModel.clear();
                         adapter.clearSelecedItem();
-                        for (int i=0 ; i<kalaModels.size()  ; i++)
+                        for (int i=0 ; i<kalaModelsFilter.size()  ; i++)
                         {
-                            String nameKala = new PubFunc().new LanguageUtil().convertFaNumberToEN(kalaModels.get(i).getNameKala());
+                            String nameKala = new PubFunc().new LanguageUtil().convertFaNumberToEN(kalaModelsFilter.get(i).getNameKala());
                             if (nameKala.contains(searchWord))
                             {
-                                arrayListKalaModel.add(kalaModels.get(i));
+                                arrayListKalaModel.add(kalaModelsFilter.get(i));
 
                             }
                             adapter.notifyDataSetChanged();
@@ -707,7 +761,7 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
                     {
                         arrayListKalaModel.clear();
                         adapter.clearSelecedItem();
-                        arrayListKalaModel.addAll(kalaModels);
+                        arrayListKalaModel.addAll(kalaModelsFilter);
                     }
                 }
 

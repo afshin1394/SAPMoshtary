@@ -133,6 +133,7 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
         private RelativeLayout layChangeCustomerInfo;
         private RelativeLayout layShowCustomerInfo;
         private RelativeLayout layUpdateEtebar;
+        private RelativeLayout layAdamDarkhast;
         private TextView lblRadif;
         private TextView lblCustomerFullNameCode;
         private TextView lblCustomerAddress;
@@ -156,6 +157,7 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
             layChangeCustomerInfo = view.findViewById(R.id.layChangeCustomerInfo);
             layShowCustomerInfo = view.findViewById(R.id.layShowCustomerInfo);
             layUpdateEtebar = view.findViewById(R.id.layUpdateEtebar);
+            layAdamDarkhast = view.findViewById(R.id.layAdamDarkhast);
 
             laySecondCustomer = view.findViewById(R.id.lay_second_customer_customList);
             lay_expand_btn = view.findViewById(R.id.lay_expand_btn);
@@ -173,6 +175,13 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
             swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
             swipeLayout.addDrag(SwipeLayout.DragEdge.Left,itemView.findViewById(R.id.layLeft));
             swipeLayout.addDrag(SwipeLayout.DragEdge.Right,itemView.findViewById(R.id.layRight));
+
+
+            if (moshtaryModels.get(position).hasAdamDarkhastOption()){
+                layAdamDarkhast.setVisibility(View.VISIBLE);
+            }else{
+                layAdamDarkhast.setVisibility(View.GONE);
+            }
 
             String address = "";
             if (moshtaryAddressModels.get(position).getAddress() != null && !moshtaryAddressModels.get(position).getAddress().trim().equals("")) {
@@ -258,7 +267,14 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
             layUpdateEtebar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemClick(Constants.REQUEST_CUSTOMER_UPDATE_CREDIT(), position);
+                    listener.onItemClick(Constants.REQUEST_NON_REQUEST(), position);
+                    swipeLayout.close(true);
+                }
+            });
+            layAdamDarkhast.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(Constants.REQUEST_NON_REQUEST(), position);
                     swipeLayout.close(true);
                 }
             });
@@ -300,6 +316,8 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
         private RelativeLayout layChangeCustomerInfo;
         private RelativeLayout layShowCustomerInfo;
         private RelativeLayout layUpdateEtebar;
+        private RelativeLayout layAdamDarkhast;
+
         private TextView lblRadif;
         private TextView lblCustomerFullNameCode;
         private TextView lblCustomerAddress;
@@ -327,6 +345,7 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
             layChangeCustomerInfo = itemView.findViewById(R.id.layChangeCustomerInfo);
             layShowCustomerInfo = itemView.findViewById(R.id.layShowCustomerInfo);
             layUpdateEtebar = itemView.findViewById(R.id.layUpdateEtebar);
+            layAdamDarkhast = itemView.findViewById(R.id.layAdamDarkhast);
 
 
             txtShomarehGharardad =itemView.findViewById(R.id.txtShomareGharardad);
@@ -341,6 +360,13 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
 
         public void bindZangireiMoshtary(MoshtaryAddressModel moshtaryAddressModel,int position,final OnItemClickListener listener) {
 
+
+
+            if (moshtaryModels.get(position).hasAdamDarkhastOption()){
+                layAdamDarkhast.setVisibility(View.VISIBLE);
+            }else{
+                layAdamDarkhast.setVisibility(View.GONE);
+            }
             Log.i("moshtaryGharardadModels", "bindZangireiMoshtary: "+moshtaryGharardadModels.get(position).toString() +txtShomarehGharardad);
             txtShomarehGharardad.setText(moshtaryGharardadModels.get(position).getShomarehGharardad());
             txtNameSazmanForosh.setText(moshtaryGharardadModels.get(position).getNameSazmanForosh());
@@ -437,6 +463,14 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
                 @Override
                 public void onClick(View v) {
                     listener.onItemClick(Constants.REQUEST_CUSTOMER_UPDATE_CREDIT(), getAdapterPosition());
+                    swipeLayout.close(true);
+                }
+            });
+
+            layAdamDarkhast.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(Constants.REQUEST_NON_REQUEST(), getAdapterPosition());
                     swipeLayout.close(true);
                 }
             });

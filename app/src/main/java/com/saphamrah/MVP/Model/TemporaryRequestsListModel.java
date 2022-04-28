@@ -2967,69 +2967,69 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                 case REST:
                     APIServiceRxjava apiServiceRxjava = RxHttpRequest.getInstance().getApiRx(serverIpModel);
                     apiServiceRxjava.getMandehMojodyMashin( ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh,ccKalaCodes, ccSazmanForoshFaktor)
+                            .compose(RxHttpRequest.parseHttpErrors(TemporaryRequestsListModel.class.getSimpleName(),TemporaryRequestsListActivity.class.getSimpleName(),"checkContradicts"))
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Observer<Response<GetMandehMojodyMashinResponse>>() {
                                 @Override
                                 public void onSubscribe( Disposable d) {
-
+                                    mPresenter.bindDisposable(d);
                                 }
 
                                 @Override
                                 public void onNext( Response<GetMandehMojodyMashinResponse> getMandehMojodyMashinResponseResponse) {
-                                    ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels = new ArrayList<>();
 
                                     final Set<String> allContradictions = new HashSet<>();
-
-                                    checkContradicts(mandehMojodyMashinModels, darkhastFaktorSatrModels, new Observer<HashMap<Integer,String>>() {
-                                        @Override
-                                        public void onSubscribe(@NonNull Disposable d)
-                                        {
-                                            mPresenter.bindDisposable(d);
-                                        }
-
-                                        @Override
-                                        public void onNext(@NonNull HashMap<Integer,String> contradicts)
-                                        {
-
-
-                                            if (contradicts != null)
-                                                if (contradicts.size() > 0)
-                                                    for (Integer key : contradicts.keySet()) {
-
-                                                        allContradictions.add( contradicts.get(key));
-                                                    }
-
-
-                                            Log.i("contradicts", "onNext: "+contradicts);
-                                        }
-
-                                        @Override
-                                        public void onError(@NonNull Throwable e)
-                                        {
-                                            mPresenter.onErrorSendRequest(R.string.errorCheckMoghayerat, "");
-                                        }
-
-                                        @Override
-                                        public void onComplete()
-                                        {
-
-
-                                            switch (allContradictions.size()) {
-                                                ////**هیچ مغایرتی  نداریم**
-                                                case 0:
-                                                    sendTempFaktor(customerDarkhastFaktorModel, position);
-                                                    break;
-                                                default:
-                                                    String name="";
-                                                    for(String nameKala : allContradictions){
-                                                        name += " - " + nameKala ;
-                                                    }
-                                                    mPresenter.onErrorSendRequest(R.string.errormoghayeratdarmojodiKala, name);
-                                                    break;
+                                    if(getMandehMojodyMashinResponseResponse.body()!=null) {
+                                        checkContradicts(getMandehMojodyMashinResponseResponse.body().getMandehMojodyMashinModels(), darkhastFaktorSatrModels, new Observer<HashMap<Integer, String>>() {
+                                            @Override
+                                            public void onSubscribe(@NonNull Disposable d) {
+                                                mPresenter.bindDisposable(d);
                                             }
-                                        }
-                                    });
+
+                                            @Override
+                                            public void onNext(@NonNull HashMap<Integer, String> contradicts) {
+
+
+                                                if (contradicts != null)
+                                                    if (contradicts.size() > 0)
+                                                        for (Integer key : contradicts.keySet()) {
+
+                                                            allContradictions.add(contradicts.get(key));
+                                                        }
+                                                Log.i("contradicts", "onNext: " + contradicts);
+                                            }
+
+                                            @Override
+                                            public void onError(@NonNull Throwable e) {
+                                                mPresenter.onErrorSendRequest(R.string.errorCheckMoghayerat, "");
+                                                setLogToDB(Constants.LOG_EXCEPTION(), e.getMessage(), "TemporaryRequestsListModel", "" , "checkContradicts" , "onNext");
+                                            }
+
+                                            @Override
+                                            public void onComplete() {
+
+
+                                                switch (allContradictions.size()) {
+                                                    ////**هیچ مغایرتی  نداریم**
+                                                    case 0:
+                                                        sendTempFaktor(customerDarkhastFaktorModel, position);
+                                                        break;
+                                                    default:
+                                                        String name = "";
+                                                        for (String nameKala : allContradictions) {
+                                                            name += " - " + nameKala;
+                                                        }
+                                                        mPresenter.onErrorSendRequest(R.string.errormoghayeratdarmojodiKala, name);
+                                                        break;
+                                                }
+                                            }
+                                        });
+                                    }else{
+                                        mPresenter.onErrorSendRequest(R.string.errorCheckMoghayerat, "");
+                                        setLogToDB(Constants.LOG_EXCEPTION(), "null body", "TemporaryRequestsListModel", "" , "checkContradicts" , "onNext");
+
+                                    }
                                 }
 
                                 @Override
@@ -3048,8 +3048,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                     mandehMojodyMashinDAO.fetchMandehMojodyMashinGrpc(mPresenter.getAppContext(), TreasuryListMapActivity.class.getSimpleName(), ccAnbarakAfrad, ccForoshandeh, ccMamorPakhsh,ccKalaCodes,ccSazmanForoshFaktor, new RetrofitResponse() {
                         @Override
                         public void onSuccess(ArrayList arrayListData) {
-                            ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels = new ArrayList<>();
-
+                             ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels = new ArrayList<>(arrayListData);
                             final Set<String> allContradictions = new HashSet<>();
 
                             checkContradicts(mandehMojodyMashinModels, darkhastFaktorSatrModels, new Observer<HashMap<Integer,String>>() {

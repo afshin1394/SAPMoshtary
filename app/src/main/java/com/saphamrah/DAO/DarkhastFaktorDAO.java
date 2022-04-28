@@ -1682,10 +1682,10 @@ public class DarkhastFaktorDAO
     }
 
     /**
-     * 350 == ZANJIRE
+     * ZANJIRE
      * @return ccMoshtary by janjire
      */
-    public String getCcMoshtaryForZanjire(){
+    public String getCcMoshtaryForZanjire(int zangireiParam){
 
         String ccMoshtary = "-1";
         try
@@ -1693,7 +1693,7 @@ public class DarkhastFaktorDAO
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             String query = "SELECT DarkhastFaktor.ccMoshtary FROM DarkhastFaktor " +
                     "LEFT JOIN Moshtary ON Moshtary.ccMoshtary = DarkhastFaktor.ccMoshtary " +
-                    "WHERE ccNoeMoshtary = 350 "  ;
+                    "WHERE ccNoeMoshtary = "+ zangireiParam;
             Cursor cursor = db.rawQuery(query, null);
             if (cursor != null)
             {
@@ -1723,7 +1723,7 @@ public class DarkhastFaktorDAO
 
     }
 
-    public String getCcdarkhastFaktorsForZanjirei(){
+    public String getCcdarkhastFaktorsForZanjirei(int zangireiParam){
 
         String ccDarkhastFaktor = "-1";
         try
@@ -1731,7 +1731,7 @@ public class DarkhastFaktorDAO
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             String query = "SELECT DarkhastFaktor.ccDarkhastFaktor FROM DarkhastFaktor " +
                     "LEFT JOIN Moshtary ON Moshtary.ccMoshtary = DarkhastFaktor.ccMoshtary " +
-                    "WHERE ccNoeMoshtary = 350 "  ;
+                    "WHERE ccNoeMoshtary = " + zangireiParam  ;
             Cursor cursor = db.rawQuery(query, null);
             if (cursor != null)
             {
@@ -1965,14 +1965,14 @@ public class DarkhastFaktorDAO
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "updateResid" , "");
         }
     }
-    public JSONArray getZangireiFaktorInfo() {
+    public JSONArray getZangireiFaktorInfo(int zangireiParam) {
         JSONArray jsonArray = new JSONArray();
         Log.d("GetProgram", "getAllMoshtaryGharardadAndGharardadKala3" );
 
         try
         {
             String query = " select DISTINCT df.ccMoshtaryGharardad, df.MoshtaryGharardadccSazmanForosh   from darkhastFaktor df \n" +
-                    " left join moshtary m on df.ccMoshtary = m.ccMoshtary where m.ccNoeMoshtary = 350 and df.ccDarkhastFaktorNoeForosh = 2" ;
+                    " left join moshtary m on df.ccMoshtary = m.ccMoshtary where m.ccNoeMoshtary = "+zangireiParam+" and df.ccDarkhastFaktorNoeForosh = 2" ;
             Log.d("GetProgram", "getAllMoshtaryGharardadAndGharardadKala4"+query );
 
             SQLiteDatabase db = dbHelper.getReadableDatabase();

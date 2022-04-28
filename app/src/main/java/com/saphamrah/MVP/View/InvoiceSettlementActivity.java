@@ -184,6 +184,7 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
 
 
         FloatingActionButton fabInquirySayyadCheck = findViewById(R.id.fabInquirySayyadCheck);
+        FloatingActionButton fabInquiryPichakCheck = findViewById(R.id.fabInquiryPichakCheck);
         lblActivityTitle = findViewById(R.id.lblActivityTitle);
         layAddVosol = findViewById(R.id.layAddVosol);
         recyclerView = findViewById(R.id.recyclerView);
@@ -436,7 +437,17 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
         fabInquirySayyadCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(InvoiceSettlementActivity.this, InquirySayyadCheckActivity.class));
+                Intent intent = new Intent(InvoiceSettlementActivity.this, InquirySayyadCheckActivity.class);
+                intent.putExtra("uri", "https://cbi.ir/EstelamSayad/19689.aspx");
+                startActivity(intent);
+            }
+        });
+        fabInquiryPichakCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(InvoiceSettlementActivity.this, InquirySayyadCheckActivity.class);
+                intent.putExtra("uri", "https://cbi.ir/estelampichak/22036.aspx");
+                startActivity(intent);
             }
         });
 

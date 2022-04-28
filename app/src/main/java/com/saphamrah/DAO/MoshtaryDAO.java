@@ -1171,9 +1171,9 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
         return ccMasir;
     }
 
-    public ArrayList<MoshtaryModel> getMoshtaryZanjiree(){
+    public ArrayList<MoshtaryModel> getMoshtaryZanjiree(int zangireiParam){
         ArrayList<MoshtaryModel> models = new ArrayList<>();
-        String query = "SELECT * FROM Moshtary WHERE ccNoeMoshtary = 350";
+        String query = "SELECT * FROM Moshtary WHERE ccNoeMoshtary ="+zangireiParam;
         try {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);

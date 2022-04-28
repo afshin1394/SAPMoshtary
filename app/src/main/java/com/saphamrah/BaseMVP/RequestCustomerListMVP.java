@@ -3,6 +3,7 @@ package com.saphamrah.BaseMVP;
 import android.content.Context;
 
 import com.google.gson.JsonObject;
+import com.saphamrah.Model.ElatAdamDarkhastModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.Model.MoshtaryGharardadModel;
 import com.saphamrah.Model.MoshtaryModel;
@@ -33,6 +34,13 @@ public interface RequestCustomerListMVP
         void showErrorAlert(int resId, int messageType, boolean closeActivity);
 
         void onSuccessUpdateCustomerAddress(int position);
+        void onGetElatAdamDarkhast(int ccMoshtary,ArrayList<ElatAdamDarkhastModel> elatAdamDarkhastModels, ArrayList<String> elatAdamDarkhastTitles);
+
+        void showTakeImageAlert(ElatAdamDarkhastModel elatAdamDarkhastModel);
+
+        void showDuplicatedCustomerCodeAlert(int ccMoshtary,ElatAdamDarkhastModel elatAdamDarkhastModel);
+
+        void onSuccessInsertAdamDarkhast();
     }
 
 
@@ -53,6 +61,10 @@ public interface RequestCustomerListMVP
         void sendCustomerLocation(int position,MoshtaryAddressModel ccMoshtary);
         void searchNameTablo(String searchWord, ArrayList<MoshtaryModel> moshtaryModels, ArrayList<MoshtaryAddressModel> moshtaryAddressModels, ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels, ArrayList<Integer> moshtaryNoeMorajeh);
         void searchTelephone(String newText, ArrayList<MoshtaryModel> moshtaryModels, ArrayList<MoshtaryAddressModel> moshtaryAddressModels, ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels, ArrayList<Integer> moshtaryNoeMorajeh);
+        void getElatAdamDarkhast(int ccMoshtary);
+        void checkSeletedAdamDarkhastItem(int ccMoshtary, ElatAdamDarkhastModel elatAdamDarkhastModel);
+
+        void checkAdamDarkhastForInsert(int ccMoshtary, ElatAdamDarkhastModel elatAdamDarkhastModel, byte[] imageAdamDarkhast, String codeMoshtaryTekrari);
     }
 
 
@@ -80,6 +92,12 @@ public interface RequestCustomerListMVP
         void onFailUpdateMoshtaryMorajehShodehRooz();
         void onSuccessUpdateCustomerAddress(int position);
         void onFailedUpdateCustomerAddress();
+
+        void onGetElatAdamDarkhast(int ccMoshtary,ArrayList<ElatAdamDarkhastModel> elatAdamDarkhastModels);
+
+        void onSuccessInsertAdamDarkhast();
+
+        void onFailedInsertAdamDarkhast();
     }
 
 
@@ -94,8 +112,10 @@ public interface RequestCustomerListMVP
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
         void updateMoshtaryMorajehShodehRooz();
-
         void sendCustomerLocation(int position, JSONObject jsonObjectFinal);
+        void getElatAdamDarkhast(int ccMoshtary);
+
+        void insertAdamDarkhast(int ccMoshtary, Integer ccElatAdamDarkhast, byte[] imageAdamDarkhast, String codeMoshtaryTekrari);
     }
 
 }

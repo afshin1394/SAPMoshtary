@@ -41,8 +41,9 @@ public class RequestGoodsAdapter extends RecyclerSwipeAdapter<RequestGoodsAdapte
     private final OnItemClickListener listener;
     private ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels;
     private int lastSelectedItem;
+    private int zangireiParam;
 
-    public RequestGoodsAdapter(Context context, ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels , OnItemClickListener listener)
+    public RequestGoodsAdapter(Context context, ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels,int zangireiParam , OnItemClickListener listener)
     {
         this.context = context;
         this.listener = listener;

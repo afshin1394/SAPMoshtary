@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.google.gson.JsonObject;
 import com.saphamrah.BaseMVP.RequestCustomerListMVP;
 import com.saphamrah.MVP.Model.RequestCustomerListModel;
+import com.saphamrah.Model.ElatAdamDarkhastModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.Model.MoshtaryGharardadModel;
 import com.saphamrah.Model.MoshtaryModel;
@@ -69,6 +70,27 @@ public class RequestCustomerListPresenter implements RequestCustomerListMVP.Pres
     public void onFailedUpdateCustomerAddress() {
         mView.get().closeLoading();
         mView.get().showErrorAlert(R.string.errorUpdateCustomerLocation , Constants.FAILED_MESSAGE(), false);
+    }
+
+    @Override
+    public void onGetElatAdamDarkhast(int ccMoshtary,ArrayList<ElatAdamDarkhastModel> elatAdamDarkhastModels) {
+        ArrayList<String> elatAdamDarkhastTitles = new ArrayList<>();
+        for (ElatAdamDarkhastModel model : elatAdamDarkhastModels)
+        {
+            elatAdamDarkhastTitles.add(model.getNameElatAdamDarkhast());
+        }
+        mView.get().onGetElatAdamDarkhast(ccMoshtary,elatAdamDarkhastModels , elatAdamDarkhastTitles);
+    }
+
+    @Override
+    public void onSuccessInsertAdamDarkhast() {
+        mView.get().onSuccessInsertAdamDarkhast();
+    }
+
+    @Override
+    public void onFailedInsertAdamDarkhast() {
+        mView.get().showToast(R.string.errorOperation, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+
     }
 
     @Override
@@ -257,6 +279,65 @@ try {
 //        mModel.searchCustomerName(searchWord,moshtaryModels,moshtaryAddressModels,moshtaryGharardadModels,arrayListNoeMorajeh);
 
         mView.get().onGetSearch(moshtaryModelsSearch, moshtaryAddressModelsSearch, moshtaryGharardadModelsSearch, moshtaryNoeMorajehSearch);
+    }
+
+    @Override
+    public void getElatAdamDarkhast(int ccMoshtary) {
+        mModel.getElatAdamDarkhast(ccMoshtary);
+    }
+
+    @Override
+    public void checkSeletedAdamDarkhastItem(int ccMoshtary, ElatAdamDarkhastModel elatAdamDarkhastModel) {
+        if (elatAdamDarkhastModel.getGetImage() == 1)
+        {
+            mView.get().showTakeImageAlert(elatAdamDarkhastModel);
+        }
+        else if (elatAdamDarkhastModel.getCcElatAdamDarkhast() == Constants.NEED_CUSTOMER_DUPLICATED_CODE())
+        {
+            mView.get().showDuplicatedCustomerCodeAlert(ccMoshtary,elatAdamDarkhastModel);
+        }
+        else
+        {
+            checkAdamDarkhastForInsert(ccMoshtary, elatAdamDarkhastModel, null , "");
+        }
+    }
+
+
+    @Override
+    public void checkAdamDarkhastForInsert(int ccMoshtary, ElatAdamDarkhastModel elatAdamDarkhastModel, byte[] imageAdamDarkhast, String codeMoshtaryTekrari) {
+        if (elatAdamDarkhastModel == null)
+        {
+            mView.get().showToast(R.string.errorSelectElatAdamDarkhast, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }
+        else
+        {
+            if (elatAdamDarkhastModel.getGetImage() == 1)
+            {
+                if (imageAdamDarkhast != null && imageAdamDarkhast.length > 0)
+                {
+                    mModel.insertAdamDarkhast(ccMoshtary, elatAdamDarkhastModel.getCcElatAdamDarkhast(), imageAdamDarkhast, codeMoshtaryTekrari);
+                }
+                else
+                {
+                    mView.get().showToast(R.string.errorSelectImage, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                }
+            }
+            else if (elatAdamDarkhastModel.getCcElatAdamDarkhast() == Constants.NEED_CUSTOMER_DUPLICATED_CODE())
+            {
+                if (codeMoshtaryTekrari != null && codeMoshtaryTekrari.trim().length() > 0)
+                {
+                    mModel.insertAdamDarkhast(ccMoshtary, elatAdamDarkhastModel.getCcElatAdamDarkhast(), imageAdamDarkhast, codeMoshtaryTekrari);
+                }
+                else
+                {
+                    mView.get().showToast(R.string.errorCustomerDuplicatedCode, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                }
+            }
+            else
+            {
+                mModel.insertAdamDarkhast(ccMoshtary, elatAdamDarkhastModel.getCcElatAdamDarkhast(), imageAdamDarkhast, codeMoshtaryTekrari);
+            }
+        }
     }
 
 

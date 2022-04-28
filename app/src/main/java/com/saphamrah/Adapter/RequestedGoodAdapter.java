@@ -38,12 +38,14 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
     private Context context;
     private SelectFaktorShared shared = new SelectFaktorShared(BaseApplication.getContext());
     private  int ccNoeMoshtary = 0;
-    public RequestedGoodAdapter(Context context , ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels , boolean showSwipe , OnItemClickListener listener)
+    private  int zangireiParam = 0;
+    public RequestedGoodAdapter(Context context , ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels , boolean showSwipe,int zangireiParam , OnItemClickListener listener)
     {
         this.context = context;
         this.kalaDarkhastFaktorSatrModels = kalaDarkhastFaktorSatrModels;
         this.listener = listener;
         this.showSwipe = showSwipe;
+        this.zangireiParam = zangireiParam;
     }
 
     @NonNull
@@ -67,7 +69,7 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
         holder.lblCartonCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.carton), String.valueOf(counts[0])));
         holder.lblBasteCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.basteh), String.valueOf(counts[1])));
         holder.lblAdadCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.adad), String.valueOf(counts[2])));
-        if (ccNoeMoshtary == 350){
+        if (ccNoeMoshtary == zangireiParam){
             holder.lblCodeNameKala.setText(String.format("%1$s - %2$s - %3$s", kalaDarkhastFaktorSatrModels.get(position).getCodeKala(), kalaDarkhastFaktorSatrModels.get(position).getNameKala() , kalaDarkhastFaktorSatrModels.get(position).getBarCode()));
         } else {
             holder.lblCodeNameKala.setText(String.format("%1$s - %2$s", kalaDarkhastFaktorSatrModels.get(position).getCodeKala(), kalaDarkhastFaktorSatrModels.get(position).getNameKala()));

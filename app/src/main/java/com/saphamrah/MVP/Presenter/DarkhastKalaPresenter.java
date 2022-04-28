@@ -7,6 +7,7 @@ import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.DarkhastKalaMVP;
 import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
 import com.saphamrah.DAO.KalaOlaviatGheymatDAO;
+import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.MVP.Model.DarkhastKalaModel;
 import com.saphamrah.MVP.View.DarkhastKalaActivity;
 import com.saphamrah.Model.DarkhastFaktorSatrModel;
@@ -394,6 +395,8 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
     }
 
 
+
+
     @Override
     public void checkJayezeh(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor,int position) {
         mModel.checkJayezeh(ccJayezeh,tedadKala,mablaghForosh,ccKalaCode,ccDarkhastFaktor ,position);
@@ -443,14 +446,16 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
     @Override
     public void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels, DarkhastKalaActivity.AddItemType type)
     {
+        int zangireiParam = Integer.parseInt( new ParameterChildDAO(getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE()));
+
         Log.d("DarkhastKala", "on get kala in presenter");
         if (kalaMojodiZaribModels.size() > 0)
         {
-            mView.get().onGetAllKalaWithMojodiZarib(kalaMojodiZaribModels,type);
+            mView.get().onGetAllKalaWithMojodiZarib(kalaMojodiZaribModels,type,zangireiParam);
         }
         else
         {
-            mView.get().onGetAllKalaWithMojodiZarib(new ArrayList<KalaMojodiZaribModel>(),type);
+            mView.get().onGetAllKalaWithMojodiZarib(new ArrayList<KalaMojodiZaribModel>(),type,zangireiParam);
 //            mView.get().showAlertDialog(R.string.notFoundKalaMojodiInAnbarak, Constants.FAILED_MESSAGE(), true);
         }
     }

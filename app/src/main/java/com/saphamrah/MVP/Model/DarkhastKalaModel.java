@@ -240,8 +240,8 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
                 Log.d("DarkhastKalaModel", "ccKalaCode:"+ ccKalaCode+",ccDarkhastFaktor:"+ccDarkhastFaktor+", moshtaryGharardadccSazmanForosh:"+moshtaryGharardadccSazmanForosh +"," + ccMoshtaryGharardad);
                 Log.d("DarkhastKalaModel","darkhastFaktorSatrDAO.delete    calculateGoodsListWithMojodiOnline");
                 darkhastFaktorSatrDAO.deleteByccKalaCodeAndccDarkhastFaktor(ccDarkhastFaktor , ccKalaCode);
-
-                ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = kalaMojodiZaribForoshDAO.getByMoshtaryAndccKalaCode(daraje, noeMoshtary,noeSenf,ccMarkazForosh,ccSazmanForosh, ccKalaCode, moshtaryGharardadccSazmanForosh,ccMoshtaryGharardad);
+                int zangireiParam = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE()));
+                ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = kalaMojodiZaribForoshDAO.getByMoshtaryAndccKalaCode(daraje, noeMoshtary,noeSenf,ccMarkazForosh,ccSazmanForosh, ccKalaCode, moshtaryGharardadccSazmanForosh,ccMoshtaryGharardad,zangireiParam);
                 Log.d("DarkhastKalaModel","kalaMojodiZaribModels:" + kalaMojodiZaribModels.toString());
 
                 int sumSelectedNew = 0;
@@ -370,7 +370,8 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
         int ccMarkazForosh = selectFaktorShared.getInt(selectFaktorShared.getCcMarkazForosh(),-1);
         int ccSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getCcSazmanForosh(),-1);
         //TODO
-        final ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = kalaMojodiZaribForoshDAO.getAllByMoshtary(daraje, noeMoshtary, noeSenf, ccMarkazForosh,ccSazmanForosh, moshtaryGharardadccSazmanForosh, ccMoshtaryGharardad,type);
+        int zangireiParam = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE()));
+        final ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = kalaMojodiZaribForoshDAO.getAllByMoshtary(daraje, noeMoshtary, noeSenf, ccMarkazForosh,ccSazmanForosh, moshtaryGharardadccSazmanForosh  , ccMoshtaryGharardad,zangireiParam,type);
 
 
         Log.d("DarkhastKalaModel", "end of get goods and size : " + kalaMojodiZaribModels.size() + "kalaMojodiZaribModels:" + kalaMojodiZaribModels.toString());

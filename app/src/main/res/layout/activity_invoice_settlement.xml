@@ -1075,6 +1075,16 @@
         <com.github.clans.fab.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/fabInquiryPichakCheck"
+            android:src="@drawable/ic_check_book"
+            fab:fab_size="normal"
+            fab:fab_label="@string/inquiryPichakCheck"
+            fab:fab_colorNormal="@color/colorFabAdd"
+            fab:fab_colorPressed="@color/colorFabAddClick"
+            android:layout_margin="15dp"/>
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/fabAdd"
             android:src="@drawable/ic_fab_add"
             fab:fab_size="normal"

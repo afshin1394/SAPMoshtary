@@ -39,14 +39,16 @@ public class RequestGoodsListAdapter extends RecyclerSwipeAdapter<RequestGoodsLi
     private static int lastSelectedItem; // todo Add Static
     private SelectFaktorShared shared = new SelectFaktorShared(BaseApplication.getContext());
     private  int ccNoeMoshtary = 0;
+    private  int zangireiParam;
 
-    public RequestGoodsListAdapter(Context context , ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels , boolean showSwipe, OnItemClickListener listener)
+    public RequestGoodsListAdapter(Context context , ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels , boolean showSwipe,int zangireiParam, OnItemClickListener listener)
     {
         this.context = context;
         this.kalaMojodiZaribModels = kalaMojodiZaribModels;
         this.listener = listener;
         this.showSwipe = showSwipe;
         lastSelectedItem = -1;
+        this.zangireiParam = zangireiParam;
     }
 
     @NonNull
@@ -81,7 +83,7 @@ public class RequestGoodsListAdapter extends RecyclerSwipeAdapter<RequestGoodsLi
         holder.lblBasteCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.basteh), String.valueOf(counts[1])));
         holder.lblAdadCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.adad), String.valueOf(counts[2])));
 //todo ccNoeMoshtary From Parameter
-        if (ccNoeMoshtary == 350){
+        if (ccNoeMoshtary == zangireiParam){
             holder.lblCodeNameKala.setText(String.format("%1$s - %2$s - %3$s", kalaMojodiZaribModels.get(position).getCodeKala(), kalaMojodiZaribModels.get(position).getNameKala() , kalaMojodiZaribModels.get(position).getBarCode()));
 
         } else {

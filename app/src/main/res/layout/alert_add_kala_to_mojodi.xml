@@ -6,9 +6,19 @@
     android:layout_height="wrap_content"
     android:background="@drawable/altdlg_bg"
     android:layoutDirection="rtl">
-
-    <com.saphamrah.CustomView.CustomTextInputLayout
+    <LinearLayout
+        android:id="@+id/laytxtinputSearchKalaName"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="horizontal">
+    <com.saphamrah.CustomView.CustomTextInputLayout
+        android:layout_width="0dp"
+        android:layout_weight="0.7"
         android:layout_height="wrap_content"
         android:id="@+id/txtinputSearchKalaName"
         android:layout_margin="5dp"
@@ -25,21 +35,28 @@
             android:textColor="@color/colorTextPrimary"
             android:inputType="text"
             android:maxLines="1" />
+
+
     </com.saphamrah.CustomView.CustomTextInputLayout>
+        <Spinner
+            android:id="@+id/spinnerKalaFilter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recyclerView"
-        android:scrollbars="vertical"
-        android:layoutDirection="rtl"
-        android:paddingTop="10dp"
-        android:paddingBottom="20dp"
-        android:paddingRight="5dp"
-        android:paddingLeft="5dp"
         android:layout_above="@+id/txtinputCount"
-        android:layout_below="@+id/txtinputSearchKalaName">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_below="@+id/laytxtinputSearchKalaName"
+        android:layoutDirection="rtl"
+        android:paddingLeft="5dp"
+        android:paddingTop="10dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="20dp"
+        android:scrollbars="vertical"></androidx.recyclerview.widget.RecyclerView>
 
     <com.saphamrah.CustomView.CustomTextInputLayout
         android:layout_width="200dp"

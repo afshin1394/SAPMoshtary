@@ -1212,4 +1212,5 @@
     <string name="errorPrice">مبلغ مورد نظر نمی تواند بزرگتر از مبلغ فروش باشد.</string>
     <string name="MablaghMarjoee">مبلغ مرجوعی</string>
     <string name="MablaghForosh">مبلغ فروش</string>
+    <string name="inquiryPichakCheck">استعلام پیچک</string>
 </resources>

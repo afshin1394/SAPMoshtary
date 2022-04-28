@@ -319,6 +319,7 @@ public class MoshtaryModel
      * 1 == visible
      */
     private int ExtraProp_OpenView = 0;
+    private boolean HasAdamDarkhastOption;
 
 
 	
@@ -656,6 +657,14 @@ public class MoshtaryModel
 
     public void setExtraProp_OpenView(int extraProp_OpenView) {
         ExtraProp_OpenView = extraProp_OpenView;
+    }
+
+    public boolean hasAdamDarkhastOption() {
+        return HasAdamDarkhastOption;
+    }
+
+    public void setHasAdamDarkhastOption(boolean hasAdamDarkhastOption) {
+        HasAdamDarkhastOption = hasAdamDarkhastOption;
     }
 
     /**

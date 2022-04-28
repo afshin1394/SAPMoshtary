@@ -557,14 +557,14 @@ public class KalaDAO
 
 
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            String query = "select distinct(k.ccKalaCode),k.nameKala from Kala k  \n" +
+            String query = "select distinct(k.ccKalaCode),k.nameKala,k.ccGorohKala from Kala k  \n" +
                     " where k.ccKalaCode IN (SELECT  ccKalaCode From DarkhastFaktorKalaPishnahadi  \n" +
                     "WHERE  ccMoshtary =" + ccMoshtary + ")" +
                     " AND k.ccKalaCode IN (SELECT ccKalaCode FROM KalaZaribForosh WHERE ZaribForosh > 0 ) \n" +
                     " AND k.ccKalaCode Not IN(select ccKalaCode FROM KalaGoroh WHERE ccGoroh = 636) \n" +
                     " AND ccKalaCode IN (SELECT ccKalaCode FROM Rpt_HadafForoshTedady WHERE TedadHadafMah > 0 ) \n" +
                     "UNION ALL \n" +
-                    "select distinct(k.ccKalaCode),k.nameKala from Kala k  \n" +
+                    "select distinct(k.ccKalaCode),k.nameKala,k.ccGorohKala from Kala k  \n" +
                     " where k.ccKalaCode NOT IN (SELECT  ccKalaCode From DarkhastFaktorKalaPishnahadi  \n" +
                     "WHERE  ccMoshtary =" + ccMoshtary + ")" +
                     " AND k.ccKalaCode IN (SELECT ccKalaCode FROM KalaZaribForosh WHERE ZaribForosh > 0 ) \n" +
@@ -967,6 +967,7 @@ public class KalaDAO
 
             kalaModel.setCcKalaCode(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccKalaCode())));
             kalaModel.setNameKala(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_NameKala())));
+            kalaModel.setCcGorohKala(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccGorohKala())));
 
             kalaModels.add(kalaModel);
             cursor.moveToNext();

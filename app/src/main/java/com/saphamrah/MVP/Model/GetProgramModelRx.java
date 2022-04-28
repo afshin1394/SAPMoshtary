@@ -8806,6 +8806,13 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
     }
 
     private void getAllConfigNoeVosolAndMarjoeeMamorPakhsh(int getProgramType) {
+        int khordehParam = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_KHORDE()));
+        int omdehParam = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_OMDE()));
+        int taavoni_vijeh = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_TAAVONI_VIJE()));
+        int zangireiParam = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE()));
+        int namayandeh1 = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_NAMAYANDE1()));
+        int namayandeh2 = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_NAMAYANDE2()));
+        int taavoniKarkonan = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_TAAVONI_KARKONAN()));
 
         new MoshtaryRepository(mPresenter.getAppContext())
                 .getAllccNoeSenf()
@@ -8818,7 +8825,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
                     @Override
                     public void onNext(@NonNull String ccNoeMoshtaries) {
-                        String noeMoshtaries = "-1,347,348,349,350,351,352,353," + ccNoeMoshtaries;
+                        String noeMoshtaries = "-1"+","+zangireiParam+","+khordehParam+","+omdehParam+","+taavoni_vijeh+","+namayandeh1+","+namayandeh2+","+taavoniKarkonan+","+ccNoeMoshtaries;
                         fetchConfigNoeVosolApis(getProgramType, noeMoshtaries);
                     }
 
@@ -8973,8 +8980,9 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
 
     private void getMarjoeeMamorPakhshRx(int getProgramType) {
 
+        int zangireiParam = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE()));
 
-        Disposable disposable = new DarkhastFaktorRepository(mPresenter.getAppContext()).getCcMoshtaryForZanjire()
+        Disposable disposable = new DarkhastFaktorRepository(mPresenter.getAppContext()).getCcMoshtaryForZanjire(zangireiParam)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ccMoshtaryForZanjire -> {
                     fetchMarjoeeMamorPakhsh(getProgramType, ccMoshtaryForZanjire);
@@ -9547,7 +9555,8 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
         if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3) {
             getAllMoshtaryGharardad(getProgramType, String.valueOf(ccForoshandeh));
         } else if (noeMasouliat == 4 || noeMasouliat == 5) {
-            Disposable disposable = darkhastFaktorRepository.getZangireiFaktorInfo()
+            int zangireiParam = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE()));
+            Disposable disposable = darkhastFaktorRepository.getZangireiFaktorInfo(zangireiParam)
                     .subscribe(jsonArray -> {
                         if (jsonArray.length() > 0) {
                             getAllMoshtaryGharardad(getProgramType, jsonArray);

@@ -1744,7 +1744,7 @@ public class DarkhastFaktorSatrDAO
             {
                 query += " SUM(Tedad3 * " + gheymat + " ) - (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
                      //   + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
-                        + " and ccDarkhastFaktorSatr in (SELECT ccDarkhastFaktor FROM DarkhastFaktorSatr LEFT JOIN KalaGoroh on KalaGoroh.ccKalaCode = darkhastfaktorsatr.ccKalaCode  where ccDarkhastFaktor=  " + ccDarkhastFaktor + " and KalaGoroh.ccGoroh = " + ccGorohMohasebeh + " ) ) AS MablaghKol ";
+                        + " and ccDarkhastFaktorSatr in (SELECT ccDarkhastFaktorSatr FROM DarkhastFaktorSatr LEFT JOIN KalaGoroh on KalaGoroh.ccKalaCode = darkhastfaktorsatr.ccKalaCode  where ccDarkhastFaktor=  " + ccDarkhastFaktor + " and KalaGoroh.ccGoroh = " + ccGorohMohasebeh + " ) ) AS MablaghKol ";
             }
             query += " , MAX(TedadDarKarton) AS TedadDarKarton, MAX(TedadDarBasteh) AS TedadDarBasteh"
                     + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
@@ -1802,7 +1802,7 @@ public class DarkhastFaktorSatrDAO
             {
                 query += " SUM(Tedad3 *  " + gheymat + " ) - (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
                        // + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
-                        + " and ccDarkhastFaktorSatr in (SELECT ccDarkhastFaktor FROM DarkhastFaktorSatr LEFT JOIN KalaGoroh on KalaGoroh.ccKalaCode = darkhastfaktorsatr.ccKalaCode  where ccDarkhastFaktor=  " + ccDarkhastFaktor + " and KalaGoroh.ccGoroh = " + ccGorohMohasebeh + " ) ) AS MablaghKol ";
+                        + " and ccDarkhastFaktorSatr in (SELECT ccDarkhastFaktorSatr FROM DarkhastFaktorSatr LEFT JOIN KalaGoroh on KalaGoroh.ccKalaCode = darkhastfaktorsatr.ccKalaCode  where ccDarkhastFaktor=  " + ccDarkhastFaktor + " and KalaGoroh.ccGoroh = " + ccGorohMohasebeh + " ) ) AS MablaghKol ";
             }
             query += " , MAX(TedadDarKarton) AS TedadDarKarton, MAX(TedadDarBasteh) AS TedadDarBasteh"
                     + "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "

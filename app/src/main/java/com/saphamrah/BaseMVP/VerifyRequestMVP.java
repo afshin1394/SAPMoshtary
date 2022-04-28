@@ -33,7 +33,7 @@ public interface VerifyRequestMVP
         void openCustomerSignActivity();
         void onGetInfo(long ccDarkhastFaktor , int modatVosol , ArrayList<ParameterChildModel> childParameterModelsVosols , ArrayList<String> vosolTitles);
         void openMarjoeeKalaActivity(long ccDarkhastFaktor , int ccMoshtary);
-        void onGetRequestsList(ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorModels);
+        void onGetRequestsList(ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorModels,int zangireiParam);
         void onGetMarjoeeList(ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels);
         void onGetDiscounts(ArrayList<DarkhastFaktorTakhfifModel> darkhastFaktorTakhfifModels, double sumMablaghTakhfif);
         void onGetBonus(ArrayList<DarkhastFaktorJayezehModel> darkhastFaktorJayezehModels , boolean showAddBonusBtn, boolean haveBonus);

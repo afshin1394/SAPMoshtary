@@ -7,11 +7,13 @@ import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.DAO.MoshtaryGharardadDAO;
 import com.saphamrah.DAO.MoshtaryGharardadKalaDAO;
 import com.saphamrah.BaseMVP.RptMoshtaryGharardadMVP;
+import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.Model.MoshtaryGharardadModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.R;
 import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.UIModel.RptMoshtaryGharardadUiModel;
+import com.saphamrah.Utils.Constants;
 
 import java.util.ArrayList;
 
@@ -21,6 +23,7 @@ public class RptMoshtaryGharardadModel implements RptMoshtaryGharardadMVP.ModelO
     private MoshtaryDAO moshtaryDAO = new MoshtaryDAO(BaseApplication.getContext());
     private MoshtaryGharardadDAO moshtaryGharardadDAO = new MoshtaryGharardadDAO(BaseApplication.getContext());
     private MoshtaryGharardadKalaDAO moshtaryGharardadKalaDAO = new MoshtaryGharardadKalaDAO(BaseApplication.getContext());
+    private ParameterChildDAO parameterChildDAO = new ParameterChildDAO(BaseApplication.getContext());
     public RptMoshtaryGharardadModel(RptMoshtaryGharardadMVP.RequiredPresenterOps presenterOps)
     {
         mPresenter = presenterOps;
@@ -29,7 +32,8 @@ public class RptMoshtaryGharardadModel implements RptMoshtaryGharardadMVP.ModelO
 
     @Override
     public void getMoshtary() {
-        ArrayList<MoshtaryModel> moshtaryModels = moshtaryDAO.getMoshtaryZanjiree();
+        int zangireiParam =Integer.parseInt(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE()));
+        ArrayList<MoshtaryModel> moshtaryModels = moshtaryDAO.getMoshtaryZanjiree(zangireiParam);
 
         if (moshtaryModels.size() > 0)
         {

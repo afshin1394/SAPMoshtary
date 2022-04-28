@@ -83,12 +83,12 @@ public class DarkhastFaktorRepository {
         return () -> darkhastFaktorDAO.getccMarkazSazmanForoshSakhtarForosh();
     }
 
-    private Callable<String> getCcMoshtaryForZanjireCallable() {
-        return () -> darkhastFaktorDAO.getCcMoshtaryForZanjire();
+    private Callable<String> getCcMoshtaryForZanjireCallable(int zangireiParam) {
+        return () -> darkhastFaktorDAO.getCcMoshtaryForZanjire(zangireiParam);
     }
 
-    private Callable<JSONArray> getZangireiFaktorInfoCallable() {
-        return () -> darkhastFaktorDAO.getZangireiFaktorInfo();
+    private Callable<JSONArray> getZangireiFaktorInfoCallable(int zangireiParam) {
+        return () -> darkhastFaktorDAO.getZangireiFaktorInfo(zangireiParam);
     }
 
     private Callable<String> getAllccMoshtaryCallable() {
@@ -159,13 +159,13 @@ public class DarkhastFaktorRepository {
     }
 
 
-    public Observable<String> getCcMoshtaryForZanjire() {
-        return RxAsync.makeObservable(getCcMoshtaryForZanjireCallable())
+    public Observable<String> getCcMoshtaryForZanjire(int zangireiParam) {
+        return RxAsync.makeObservable(getCcMoshtaryForZanjireCallable(zangireiParam))
                 .subscribeOn(Schedulers.io());
     }
 
-    public Observable<JSONArray> getZangireiFaktorInfo() {
-        return RxAsync.makeObservable(getZangireiFaktorInfoCallable())
+    public Observable<JSONArray> getZangireiFaktorInfo(int zangireiParam) {
+        return RxAsync.makeObservable(getZangireiFaktorInfoCallable(zangireiParam))
                 .subscribeOn(Schedulers.io());
     }
 

@@ -26,7 +26,7 @@ public interface DarkhastKalaMVP
         void prepareDataForCheckInsertFaktor();
         void openBarkhordAvalieActivity();
         void onGetRequestedGoods(ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorsatrModels);
-        void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels,  DarkhastKalaActivity.AddItemType type);
+        void onGetAllKalaWithMojodiZarib(ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels,  DarkhastKalaActivity.AddItemType type,int zangireiParam);
         void onErrorAddNewRequestedKala(int errorResId);
         void onErrorAddNewRequestedKala(int resId, String parameter);
         void onSuccessAddNewRequestedKala(boolean isTedadKalaAsasi , boolean isTedadKalaAsasiWithTedad);

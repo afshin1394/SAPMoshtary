@@ -27,12 +27,11 @@
                 android:id="@+id/layStatusRight"
                 android:orientation="horizontal"/>
             <com.daimajia.swipe.SwipeLayout
-                xmlns:swipe="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/swipe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                swipe:leftEdgeSwipeOffset="0dp"
-                swipe:rightEdgeSwipeOffset="0dp">
+                app:leftEdgeSwipeOffset="0dp"
+                app:rightEdgeSwipeOffset="0dp">
 
                 <LinearLayout
                     android:layout_width="210dp"
@@ -80,14 +79,15 @@
                         android:id="@+id/layUpdateEtebar"
                         android:layout_gravity="center"
                         android:background="@color/colorSliderEtebarForoshandeh">
+
                         <ImageView
+                            android:id="@+id/imgUpdateEtebar"
                             android:layout_width="@dimen/iconSize64"
                             android:layout_height="@dimen/iconSize64"
-                            android:id="@+id/imgUpdateEtebar"
                             android:layout_centerInParent="true"
-                            android:src="@drawable/ic_money"
                             android:layout_gravity="center"
-                            android:layoutDirection="rtl" />
+                            android:layoutDirection="rtl"
+                            android:src="@drawable/ic_money" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -127,6 +127,24 @@
                             android:id="@+id/imgShowCustomerInfo"
                             android:layout_centerInParent="true"
                             android:src="@drawable/ic_user_info"
+                            android:layout_gravity="center"
+                            android:layoutDirection="rtl" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/layAdamDarkhast"
+                        android:layout_gravity="center"
+                        android:background="@color/colorFabSort">
+                        <ImageView
+                            android:layout_width="@dimen/iconSize64"
+                            android:layout_height="@dimen/iconSize64"
+                            android:id="@+id/imgAdamDarkhast"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/ic_no_request"
+                            android:padding="@dimen/_2sdp"
                             android:layout_gravity="center"
                             android:layoutDirection="rtl" />
                     </RelativeLayout>
@@ -328,9 +346,9 @@
                       >
                       <LinearLayout
                           android:id="@+id/layNameTablo"
-                          swipe:layout_constraintLeft_toLeftOf="parent"
-                          swipe:layout_constraintRight_toRightOf="parent"
-                          swipe:layout_constraintTop_toTopOf="parent"
+                          app:layout_constraintLeft_toLeftOf="parent"
+                          app:layout_constraintRight_toRightOf="parent"
+                          app:layout_constraintTop_toTopOf="parent"
                           android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:orientation="horizontal"
@@ -360,9 +378,9 @@
                               android:layout_marginRight="10dp"/>
                       </LinearLayout>
                       <LinearLayout
-                          swipe:layout_constraintLeft_toLeftOf="parent"
-                          swipe:layout_constraintRight_toRightOf="parent"
-                          swipe:layout_constraintTop_toBottomOf="@+id/layNameTablo"
+                          app:layout_constraintLeft_toLeftOf="parent"
+                          app:layout_constraintRight_toRightOf="parent"
+                          app:layout_constraintTop_toBottomOf="@+id/layNameTablo"
                           android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:orientation="horizontal"

@@ -327,7 +327,7 @@ public class RptDarkhastFaktorVazeiatPPCDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(RptDarkhastFaktorVazeiatPPCModel.TableName(), allColumns(), null, null, null, null, RptDarkhastFaktorVazeiatPPCModel.COLUMN_TarikhFaktor() + " desc ");
+            Cursor cursor = db.query(RptDarkhastFaktorVazeiatPPCModel.TableName(), allColumns(), null, null, null, null, RptDarkhastFaktorVazeiatPPCModel.COLUMN_TarikhFaktor() + " ASC ");
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)

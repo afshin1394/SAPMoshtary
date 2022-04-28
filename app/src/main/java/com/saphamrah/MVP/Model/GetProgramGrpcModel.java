@@ -3501,7 +3501,9 @@ public class GetProgramGrpcModel implements GetProgramMVP.ModelOps {
     private void getMarjoeeMamorPakhsh(int getProgramType) {
         Log.i("itemCounter", "getMarjoeeMamorPakhsh : " + itemCounter);
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
-        String ccMoshtary = darkhastFaktorDAO.getCcdarkhastFaktorsForZanjirei();
+        int zangireiParam = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE()));
+
+        String ccMoshtary = darkhastFaktorDAO.getCcdarkhastFaktorsForZanjirei(zangireiParam);
         if (noeMasouliat == 4 || noeMasouliat == 5) {
             MarjoeeMamorPakhshDAO marjoeeMamorPakhshDAO = new MarjoeeMamorPakhshDAO(mPresenter.getAppContext());
             marjoeeMamorPakhshDAO.fetchMarjoeeMamorPakhshGrpc(mPresenter.getAppContext(), activityNameForLog, ccMoshtary, new RetrofitResponse() {
@@ -3646,7 +3648,14 @@ public class GetProgramGrpcModel implements GetProgramMVP.ModelOps {
     private void getConfigNoeVosolMojazeMoshtary(int getProgramType) {
         Log.i("itemCounter", "getConfigNoeVosolMojazeMoshtary :" + itemCounter);
         MoshtaryDAO moshtaryDAO = new MoshtaryDAO(BaseApplication.getContext());
-        String moshtarys = "-1,347,348,349,350,351,352,353," + moshtaryDAO.getAllccNoeSenf();
+        int khordehParam = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_KHORDE()));
+        int omdehParam = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_OMDE()));
+        int taavoni_vijeh = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_TAAVONI_VIJE()));
+        int zangireiParam = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE()));
+        int namayandeh1 = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_NAMAYANDE1()));
+        int namayandeh2 = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_NAMAYANDE2()));
+        int taavoniKarkonan = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_TAAVONI_KARKONAN()));
+        String moshtarys = "-1"+","+zangireiParam+","+khordehParam+","+omdehParam+","+taavoni_vijeh+","+namayandeh1+","+namayandeh2+","+taavoniKarkonan+","+moshtaryDAO.getAllccNoeSenf();
         Log.i("NoeVosolMojazeMoshtary", "moshtarys :" + moshtarys);
         ConfigNoeVosolMojazeMoshtaryDAO configNoeVosolMojazeMoshtaryDAO = new ConfigNoeVosolMojazeMoshtaryDAO(BaseApplication.getContext());
         configNoeVosolMojazeMoshtaryDAO.fetchConfigNoeVosolMojazeMoshtaryGrpc(BaseApplication.getContext(), activityNameForLog, moshtarys, new RetrofitResponse() {
@@ -3778,7 +3787,8 @@ public class GetProgramGrpcModel implements GetProgramMVP.ModelOps {
     private void prepareToGetMoshtaryGharardad(int getProgramType, int ccForoshandeh) {
 
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-        JSONArray jsonArray = darkhastFaktorDAO.getZangireiFaktorInfo();
+        int zangireiParam = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE()));
+        JSONArray jsonArray = darkhastFaktorDAO.getZangireiFaktorInfo(zangireiParam);
         if (noeMasouliat == 1 || noeMasouliat == 2 || noeMasouliat == 3)
             getAllMoshtaryGharardad(getProgramType, String.valueOf(ccForoshandeh));
         else if (noeMasouliat == 4 || noeMasouliat == 5)

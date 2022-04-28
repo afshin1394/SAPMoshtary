@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.saphamrah.Model.ElatAdamDarkhastModel;
 import com.saphamrah.Model.KalaModel;
+import com.saphamrah.UIModel.KalaFilterUiModel;
 import com.saphamrah.UIModel.KalaMojodiGiriModel;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public interface MojodiGiriMVP
         void showDuplicatedCustomerCodeAlert(ElatAdamDarkhastModel elatAdamDarkhastModel);
         void onSuccessInsertAdamDarkhast();
         void showToast(int resId, int messageType , int duration);
+        void onKalaFilter(ArrayList<KalaFilterUiModel> kalaFilterUiModels, ArrayList<String> itemsKalaFilter);
     }
 
 
@@ -48,6 +50,7 @@ public interface MojodiGiriMVP
         void checkAdamDarkhastForInsert(int ccMoshtary , ElatAdamDarkhastModel elatAdamDarkhastModel , byte[] imageAdamDarkhast , String codeMoshtaryTekrari);
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
+        void getKalaFilter();
     }
 
 
@@ -66,6 +69,7 @@ public interface MojodiGiriMVP
         void onSuccessInsertAdamDarkhast();
         void onFailedInsertAdamDarkhast();
         void onErrorAccessToLocation();
+        void onKalaFilter(ArrayList<KalaFilterUiModel> kalaFilterUiModels);
     }
 
 
@@ -81,6 +85,7 @@ public interface MojodiGiriMVP
         void insertAdamDarkhast(int ccMoshtary , int ccElatAdamDarkhast , byte[] imageAdamDarkhast , String codeMoshtaryTekrari);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
+        void getKalaFilter();
     }
 
 }

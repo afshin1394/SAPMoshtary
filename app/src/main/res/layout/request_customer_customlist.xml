@@ -130,6 +130,23 @@
                             android:layout_gravity="center"
                             android:layoutDirection="rtl" />
                     </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/layAdamDarkhast"
+                        android:layout_gravity="center"
+                        android:background="@color/colorFabSort">
+                        <ImageView
+                            android:layout_width="@dimen/iconSize64"
+                            android:layout_height="@dimen/iconSize64"
+                            android:id="@+id/imgAdamDarkhast"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/ic_no_request"
+                            android:padding="@dimen/_2sdp"
+                            android:layout_gravity="center"
+                            android:layoutDirection="rtl" />
+                    </RelativeLayout>
                 </LinearLayout>
               <LinearLayout
                   android:orientation="vertical"
@@ -248,10 +265,7 @@
                         android:layout_height="wrap_content"
                         android:visibility="visible"
                         android:animateLayoutChanges="true"
-
                         >
-
-
 
                         <LinearLayout
                             android:id="@+id/layNameTablo"

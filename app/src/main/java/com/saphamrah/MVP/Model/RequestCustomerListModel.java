@@ -23,6 +23,7 @@ import com.saphamrah.DAO.AnbarakAfradDAO;
 import com.saphamrah.DAO.BargashtyDAO;
 import com.saphamrah.DAO.CustomerAddressDAO;
 import com.saphamrah.DAO.DarkhastFaktorDAO;
+import com.saphamrah.DAO.ElatAdamDarkhastDAO;
 import com.saphamrah.DAO.ForoshandehAmoozeshiDeviceNumberDAO;
 import com.saphamrah.DAO.ForoshandehEtebarDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
@@ -46,8 +47,10 @@ import com.saphamrah.DAO.RptForoshDAO;
 import com.saphamrah.DAO.RptMandehdarDAO;
 import com.saphamrah.DAO.RptSanadDAO;
 import com.saphamrah.MVP.View.TreasuryListMapActivity;
+import com.saphamrah.Model.AdamDarkhastModel;
 import com.saphamrah.Model.AnbarakAfradModel;
 import com.saphamrah.Model.BargashtyModel;
+import com.saphamrah.Model.ElatAdamDarkhastModel;
 import com.saphamrah.Model.ForoshandehAmoozeshiModel;
 import com.saphamrah.Model.ForoshandehEtebarModel;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
@@ -225,6 +228,8 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             {
                 super.run();
 
+                boolean checkCheckBargashty = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CHECK_MOSHTARY_MASIR_ROOZ_CHECK_BARGASHTY()).equals("1");
+
                 ParameterChildDAO childParameterDAO = new ParameterChildDAO(mPresenter.getAppContext());
                 String canInsertFaktorForMoshtaryJadid = "1";
                 try
@@ -249,7 +254,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     customerAddressModels = customerAddressDAO.getByMasirWithoutMoshtaryJadid();
                 }
                 for (int i = 0; i < customerAddressModels.size(); i++) {
-                    //TODO
+
                     MoshtaryAddressModel moshtaryAddressModel = customerAddressModels.get(i).getMoshtaryAddressModels().get(0);
                     Log.i("moshtaryAddressModel", "run: latitude:"+moshtaryAddressModel.getLatitude_y() + "longitude:"+moshtaryAddressModel.getLongitude_x());
                     if (moshtaryAddressModel.getLatitude_y() == 0d || moshtaryAddressModel.getLongitude_x() == 0d) {
@@ -257,7 +262,15 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     } else {
                         moshtaryAddressModel.setExtraProp_HasLocation(1);
                     }
-
+                    //TODO check check bargashty
+                    BargashtyDAO bargashtyDAO = new BargashtyDAO(mPresenter.getAppContext());
+                    MoshtaryEtebarSazmanForoshDAO moshtaryEtebarSazmanForoshDAO = new MoshtaryEtebarSazmanForoshDAO(mPresenter.getAppContext());
+                    ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
+                    int ccSazmanForosh = foroshandehMamorPakhshModel.getCcSazmanForosh();
+                    int tedadBargashti = bargashtyDAO.getCountByccMoshtaryAndSazmanForosh(customerAddressModels.get(i).getMoshtaryModel().getCcMoshtary(), ccSazmanForosh);
+                    int tedadEtebarCheckBargashti = moshtaryEtebarSazmanForoshDAO.getByccMoshtary(customerAddressModels.get(i).getMoshtaryModel().getCcMoshtary()).getTedadBargashty();
+                    if(checkCheckBargashty && tedadBargashti > tedadEtebarCheckBargashti)
+                        customerAddressModels.get(i).getMoshtaryModel().setHasAdamDarkhastOption(true);
                     moshtaryModels.add(customerAddressModels.get(i).getMoshtaryModel());
                     moshtaryAddressModels.add(customerAddressModels.get(i).getMoshtaryAddressModels().get(0));
                     arrayListNoeMorajeh.add(customerAddressModels.get(i).getMoshtaryMorajehShodehRoozModel().getNoeMorajeh());
@@ -619,7 +632,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                         else
                         {
                             getCustomers();
-                            mPresenter.onFailUpdateMoshtaryMorajehShodehRooz();
+                            mPresenter.onUpdateMoshtaryMorajehShodehRooz();
                         }
 
                     }
@@ -747,6 +760,67 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
 
 
+    }
+
+    @Override
+    public void getElatAdamDarkhast(int ccMoshtary) {
+        MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
+        MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
+
+        ElatAdamDarkhastDAO elatAdamDarkhastDAO = new ElatAdamDarkhastDAO(mPresenter.getAppContext());
+        ArrayList<ElatAdamDarkhastModel> elatAdamDarkhastModels = elatAdamDarkhastDAO.getElatAdamDarkhast(moshtaryModel.getCodeVazeiat() , moshtaryModel.getCcNoeMoshtary());
+
+        mPresenter.onGetElatAdamDarkhast(moshtaryModel.getCcMoshtary() , elatAdamDarkhastModels);
+    }
+
+    @Override
+    public void insertAdamDarkhast(int ccMoshtary, Integer ccElatAdamDarkhast, byte[] imageAdamDarkhast, String codeMoshtaryTekrari) {
+        PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
+        /*if (!googleLocationProvider.getHasAccess())
+        {
+            mPresenter.onErrorAccessToLocation();
+        }
+        else
+        {*/
+        SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
+        int ccForoshandeh = shared.getInt(shared.getCcForoshandeh() , 0);
+        AdamDarkhastDAO adamDarkhastDAO = new AdamDarkhastDAO(mPresenter.getAppContext());
+        AdamDarkhastModel adamDarkhastModel = new AdamDarkhastModel();
+
+        adamDarkhastModel.setCcElatAdamDarkhast(ccElatAdamDarkhast);
+        adamDarkhastModel.setCodeMoshtaryTekrari(codeMoshtaryTekrari);
+        adamDarkhastModel.setAdamDarkhastImage(imageAdamDarkhast);
+        adamDarkhastModel.setCcMoshtary(ccMoshtary);
+        adamDarkhastModel.setCcForoshandeh(ccForoshandeh);
+        adamDarkhastModel.setDateAdamDarkhast(getCurrentDate());
+        adamDarkhastModel.setLongitude((float) googleLocationProvider.getLongitude());
+        adamDarkhastModel.setLatitude((float) googleLocationProvider.getLatitude());
+        adamDarkhastModel.setIsSentToServer(false);
+
+        if (adamDarkhastDAO.insert(adamDarkhastModel))
+        {
+            mPresenter.onSuccessInsertAdamDarkhast();
+        }
+        else
+        {
+            mPresenter.onFailedInsertAdamDarkhast();
+        }
+    }
+    private Date getCurrentDate()
+    {
+        Date currentDate = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
+        String date = sdf.format(new Date());
+        try
+        {
+            currentDate = sdf.parse(date);
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            setLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "MojoodiGiriModel", "", "insertAdamDarkhast", "");
+        }
+        return currentDate;
     }
 
     private void updateOlaviat() {

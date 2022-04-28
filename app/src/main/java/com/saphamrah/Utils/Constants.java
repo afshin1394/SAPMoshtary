@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE =7 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest 8-Pegah-grpc 9-Badr
+    private static final int CURRENT_VERSION_TYPE =9 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest 8-Pegah-grpc 9-Badr
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 
@@ -420,6 +420,7 @@ public class Constants
     private static final int REQUEST_CUSTOMER_CHANGE_CUSTOMER_INFO = 4;
     private static final int REQUEST_CUSTOMER_SELECT_CUSTOMER = 5;
     private static final int REQUEST_CUSTOMER_UPDATE_CREDIT = 6;
+    private static final int REQUEST_NON_REQUEST = 7;
 
 
     private static final int REQUEST_CUSTOMER_CCPARAMETER_OF_CHECKS = 17;
@@ -452,6 +453,9 @@ public class Constants
     }
     public static int REQUEST_CUSTOMER_UPDATE_CREDIT() {
         return REQUEST_CUSTOMER_UPDATE_CREDIT;
+    }
+    public static int REQUEST_NON_REQUEST() {
+        return REQUEST_NON_REQUEST;
     }
     public static int REQUEST_CUSTOMER_SELECT_CUSTOMER() {
         return REQUEST_CUSTOMER_SELECT_CUSTOMER;

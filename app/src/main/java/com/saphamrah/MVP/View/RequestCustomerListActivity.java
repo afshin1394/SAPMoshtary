@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,10 +18,18 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -28,9 +37,12 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.saphamrah.Adapter.RequestCustomerListAdapter;
 import com.saphamrah.BaseMVP.RequestCustomerListMVP;
+import com.saphamrah.CustomView.CustomSpinner;
+import com.saphamrah.CustomView.CustomTextInputLayout;
 import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.MVP.Model.GetProgramModel;
 import com.saphamrah.MVP.Presenter.RequestCustomerListPresenter;
+import com.saphamrah.Model.ElatAdamDarkhastModel;
 import com.saphamrah.Model.MoshtaryAddressModel;
 import com.saphamrah.Model.MoshtaryGharardadModel;
 import com.saphamrah.Model.MoshtaryModel;
@@ -40,9 +52,14 @@ import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
 import com.saphamrah.Utils.CustomAlertDialogResponse;
 import com.saphamrah.Utils.CustomLoadingDialog;
+import com.saphamrah.Utils.CustomSpinnerResponse;
 import com.saphamrah.Utils.StateMaintainer;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.function.Consumer;
 
 import me.anwarshahriar.calligrapher.Calligrapher;
@@ -52,6 +69,9 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
     private final String TAG = this.getClass().getSimpleName();
     StateMaintainer stateMaintainer = new StateMaintainer(this.getSupportFragmentManager(), TAG, RequestCustomerListActivity.this);
     RequestCustomerListMVP.PresenterOps mPresenter;
+    private final int TAKE_IMAGE = 100;
+    private final int CAMERA_PERMISSION = 200;
+
 
     private MaterialSearchView searchView;
     private RequestCustomerListAdapter adapter;
@@ -66,7 +86,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
 
     private boolean canUpdateCustomer;
     //private ArrayList<Integer> moshtaryNoeMorajehSearch;
-
+    private ElatAdamDarkhastModel elatAdamDarkhastModel;
     private AlertDialog alertDialog;
     private CustomLoadingDialog customLoadingDialog;
     private CustomAlertDialog customAlertDialog;
@@ -136,12 +156,14 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
             }
             else
             {
+                alertDialog = customLoadingDialog.showLoadingDialog(RequestCustomerListActivity.this);
                 mPresenter.checkDateOfGetProgram();
                 mPresenter.getCustomers();
             }
         }
         else
         {
+            alertDialog = customLoadingDialog.showLoadingDialog(RequestCustomerListActivity.this);
             mPresenter.checkDateOfGetProgram();
             mPresenter.getCustomers();
         }
@@ -306,6 +328,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
+                alertDialog = customLoadingDialog.showLoadingDialog(RequestCustomerListActivity.this);
                 mPresenter.checkDateOfGetProgram();
                 mPresenter.getCustomers();
             }
@@ -337,6 +360,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
     @Override
     public void onGetCustomers(final ArrayList<MoshtaryModel> moshtaryModels , final ArrayList<MoshtaryAddressModel> moshtaryAddressModels , ArrayList<Integer> arrayListNoeMorajeh, ArrayList<MoshtaryGharardadModel> moshtaryGharardadModels , boolean canUpdateCustomer)
     {
+
         this.moshtaryModels = moshtaryModels;
         this.moshtaryAddressModels = moshtaryAddressModels;
         this.moshtaryNoeMorajeh = arrayListNoeMorajeh;
@@ -349,6 +373,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
 //                Log.i("forEach", "accept: "+moshtaryGharardadModel.toString());
 //            }
 //        });
+
         adapter = new RequestCustomerListAdapter(RequestCustomerListActivity.this, moshtaryModels , moshtaryAddressModels , arrayListNoeMorajeh,moshtaryGharardadModels , canUpdateCustomer , new RequestCustomerListAdapter.OnItemClickListener() {
             @SuppressLint("LongLogTag")
             @Override
@@ -363,6 +388,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(RequestCustomerListActivity.this , 0));
         recyclerView.setAdapter(adapter);
+        closeLoading();
     }
 
 
@@ -467,6 +493,7 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         }
     }
 
+
     private void onListItemClickListener(int position,int operation , MoshtaryModel moshtaryModel , MoshtaryAddressModel moshtaryAddressModel, MoshtaryGharardadModel moshtaryGharardadModel)
     {
         if (operation == Constants.REQUEST_CUSTOMER_SHOW_LOCATION())
@@ -508,6 +535,9 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
         {
             mPresenter.checkUpdateEtebarMoshtary(moshtaryModel);
         }
+        else if (operation == Constants.REQUEST_NON_REQUEST()){
+            mPresenter.getElatAdamDarkhast(moshtaryModel.getCcMoshtary());
+        }
     }
 
 
@@ -527,6 +557,166 @@ public class RequestCustomerListActivity extends AppCompatActivity implements Re
     public void onSuccessUpdateCustomerAddress(int position) {
         moshtaryAddressModels.get(position).setExtraProp_HasLocation(1);
         adapter.notifyItemChanged(position);
+    }
+
+    @Override
+    public void onGetElatAdamDarkhast(int ccMoshtary,ArrayList<ElatAdamDarkhastModel> elatAdamDarkhastModels, ArrayList<String> elatAdamDarkhastTitles) {
+        CustomSpinner customSpinner = new CustomSpinner();
+        customSpinner.showSpinner(RequestCustomerListActivity.this, elatAdamDarkhastTitles, new CustomSpinnerResponse() {
+            @Override
+            public void onApplySingleSelection(int selectedIndex) {
+                mPresenter.checkSeletedAdamDarkhastItem(ccMoshtary, elatAdamDarkhastModels.get(selectedIndex));
+            }
+
+            @Override
+            public void onApplyMultiSelection(ArrayList<Integer> selectedIndexes) {
+
+            }
+        });
+    }
+
+    @Override
+    public void showTakeImageAlert(ElatAdamDarkhastModel elatAdamDarkhastModel) {
+        this.elatAdamDarkhastModel = elatAdamDarkhastModel;
+        customAlertDialog.showMessageAlert(RequestCustomerListActivity.this, "", getResources().getString(R.string.needTakeImage), Constants.INFO_MESSAGE(), getResources().getString(R.string.takeImage), new CustomAlertDialogResponse() {
+            @Override
+            public void setOnCancelClick()
+            {
+                checkCameraPermission();
+            }
+
+            @Override
+            public void setOnApplyClick() {
+
+            }
+        });
+    }
+
+    private void checkCameraPermission()
+    {
+        if (Build.VERSION.SDK_INT >= 23)
+        {
+            if (ContextCompat.checkSelfPermission(RequestCustomerListActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
+            {
+                openCamera();
+            }
+            else
+            {
+                ActivityCompat.requestPermissions(RequestCustomerListActivity.this, new String[]{Manifest.permission.CAMERA} , CAMERA_PERMISSION);
+            }
+        }
+        else
+        {
+            openCamera();
+        }
+    }
+
+
+    public void openCamera()
+    {
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY))
+        {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null)
+            {
+                File photoFile = null;
+                try
+                {
+                    photoFile = createImageFile();
+                }
+                catch (IOException ex)
+                {ex.printStackTrace();}
+                if (photoFile != null)
+                {
+                    Uri photoURI = FileProvider.getUriForFile(RequestCustomerListActivity.this, "com.saphamrah.imagefileprovider", photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, TAKE_IMAGE); //add 10 to index for difference of requestcode between gallery and camera
+                }
+            }
+        }
+    }
+    String mCurrentPhotoPath;
+    private File createImageFile() throws IOException
+    {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "ADAMDARKHAST_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStorageDirectory();
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    @Override
+    public void showDuplicatedCustomerCodeAlert(int ccMoshtary,ElatAdamDarkhastModel elatAdamDarkhastModel) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(RequestCustomerListActivity.this);
+        View myview = getLayoutInflater().inflate(R.layout.alert_duplicated_customer_code , null);
+        final CustomTextInputLayout txtinputCode = myview.findViewById(R.id.txtinputLay);
+        final EditText edttxt = myview.findViewById(R.id.txt);
+        Button btnOK = myview.findViewById(R.id.btnApply);
+        Typeface font = Typeface.createFromAsset(getAssets(), getResources().getString(R.string.fontPath));
+        txtinputCode.setTypeface(font);
+        edttxt.setTypeface(font);
+        btnOK.setTypeface(font);
+        builder.setCancelable(true);
+        builder.setView(myview);
+        builder.create();
+        if (!(RequestCustomerListActivity.this).isFinishing())
+        {
+            final AlertDialog show = builder.show();
+            try
+            {
+                if (show.getWindow() != null)
+                {
+                    show.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                }
+            }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+                PubFunc.Logger logger = new PubFunc().new Logger();
+                logger.insertLogToDB(RequestCustomerListActivity.this,Constants.LOG_EXCEPTION(), exception.toString(), "", "MojodiGiriActivity", "showDuplicatedCustomerCodeAlert", "");
+            }
+
+            btnOK.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    txtinputCode.setError(null);
+                    if (edttxt.getText().toString().length() > 0)
+                    {
+                        mPresenter.checkAdamDarkhastForInsert(ccMoshtary, elatAdamDarkhastModel, null, edttxt.getText().toString());
+                    }
+                    else
+                    {
+                        txtinputCode.setError(getResources().getString(R.string.errorCustomerDuplicatedCode));
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onSuccessInsertAdamDarkhast() {
+        customAlertDialog.showMessageAlert(RequestCustomerListActivity.this, getResources().getString(R.string.success), getResources().getString(R.string.successfullyDoneOps), Constants.SUCCESS_MESSAGE(), getResources().getString(R.string.apply), new CustomAlertDialogResponse() {
+            @Override
+            public void setOnCancelClick() {
+
+            }
+
+            @Override
+            public void setOnApplyClick() {
+                Intent intent = new Intent(RequestCustomerListActivity.this , TemporaryRequestsListActivity.class);
+                intent.putExtra("requests" , false);
+                startActivity(intent);
+                overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
+                RequestCustomerListActivity.this.finish();
+            }
+        });
     }
 
     public void startMVPOps()

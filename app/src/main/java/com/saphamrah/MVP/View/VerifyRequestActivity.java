@@ -118,6 +118,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     private CustomLoadingDialog customLoadingDialog;
     private View alertView;
     private AlertDialog show;
+    private int zangireiParam;
 
     //getModatRoozRaasgiri -> calculate and get Discounts -> calculate and get request details
 
@@ -511,10 +512,11 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     }
 
     @Override
-    public void onGetRequestsList(ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels)
+    public void onGetRequestsList(ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels,int zangireiParam)
     {
         this.kalaDarkhastFaktorSatrModels.clear();
         this.kalaDarkhastFaktorSatrModels.addAll(kalaDarkhastFaktorSatrModels);
+        this.zangireiParam = zangireiParam;
         if (kalaDarkhastFaktorSatrModels.size() == 0)
         {
             lblRequestedGoodsTitle.setVisibility(View.GONE);
@@ -524,7 +526,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         {
             lblRequestedGoodsTitle.setVisibility(View.VISIBLE);
             recyclerViewRequestedGoods.setVisibility(View.VISIBLE);
-            RequestedGoodAdapter adapter = new RequestedGoodAdapter(VerifyRequestActivity.this, kalaDarkhastFaktorSatrModels, false, new RequestedGoodAdapter.OnItemClickListener() {
+            RequestedGoodAdapter adapter = new RequestedGoodAdapter(VerifyRequestActivity.this, kalaDarkhastFaktorSatrModels, false,zangireiParam, new RequestedGoodAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(KalaDarkhastFaktorSatrModel kalaDarkhastFaktorModel, int position) {
 

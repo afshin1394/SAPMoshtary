@@ -13,6 +13,7 @@ import com.saphamrah.Model.KalaModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.SelectFaktorShared;
+import com.saphamrah.UIModel.KalaFilterUiModel;
 import com.saphamrah.UIModel.KalaMojodiGiriModel;
 import com.saphamrah.Utils.Constants;
 
@@ -251,6 +252,11 @@ public class MojodiGiriPresenter implements MojodiGiriMVP.PresenterOps , MojodiG
 
     }
 
+    @Override
+    public void getKalaFilter() {
+        mModel.getKalaFilter();
+    }
+
 
     /////////////////////////// RequiredPresenterOps ///////////////////////////
 
@@ -340,5 +346,15 @@ public class MojodiGiriPresenter implements MojodiGiriMVP.PresenterOps , MojodiG
     public void onErrorAccessToLocation()
     {
         mView.get().showToast(R.string.errorAccessToLocation, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+    }
+
+    @Override
+    public void onKalaFilter(ArrayList<KalaFilterUiModel> kalaFilterUiModels) {
+        ArrayList<String> itemsKalaFilter = new ArrayList<>();
+        for (KalaFilterUiModel model : kalaFilterUiModels){
+            itemsKalaFilter.add(model.getNameGoroh());
+        }
+
+        mView.get().onKalaFilter(kalaFilterUiModels,itemsKalaFilter);
     }
 }

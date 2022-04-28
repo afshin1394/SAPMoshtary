@@ -9,6 +9,7 @@ import com.saphamrah.DAO.ElatAdamDarkhastDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.GPSDataPpcDAO;
 import com.saphamrah.DAO.KalaDAO;
+import com.saphamrah.DAO.KalaGorohDAO;
 import com.saphamrah.DAO.KalaMojodiGiriDAO;
 import com.saphamrah.DAO.MojoodiGiriDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
@@ -22,6 +23,7 @@ import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.Shared.SelectFaktorShared;
+import com.saphamrah.UIModel.KalaFilterUiModel;
 import com.saphamrah.UIModel.KalaMojodiGiriModel;
 import com.saphamrah.Utils.Constants;
 
@@ -258,6 +260,13 @@ public class MojodiGiriModel implements MojodiGiriMVP.ModelOps
     public void onDestroy()
     {
 
+    }
+
+    @Override
+    public void getKalaFilter() {
+        KalaGorohDAO kalaGorohDAO = new KalaGorohDAO(mPresenter.getAppContext());
+        ArrayList<KalaFilterUiModel> kalaFilterUiModels = kalaGorohDAO.getKalaFilter();
+        mPresenter.onKalaFilter(kalaFilterUiModels);
     }
 
 }
