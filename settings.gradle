@@ -1,1 +1,4 @@
 include ':app'
+include ':folding-cell'
+include ':folding-cell-listview-example'
+include ':folding-cell-simple-example'
