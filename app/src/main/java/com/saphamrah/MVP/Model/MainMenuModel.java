@@ -5,6 +5,7 @@ import android.util.Log;
 import com.saphamrah.BaseMVP.MainMenuMVP;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.SystemMenuDAO;
+import com.saphamrah.DAO.TaghiratVersionPPCDAO;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.SystemMenuModel;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
@@ -61,6 +62,8 @@ public class MainMenuModel implements MainMenuMVP.ModelOps
 
 
         final String currentVersion = new PubFunc().new DeviceInfo().getCurrentVersion(mPresenter.getAppContext());
+        TaghiratVersionPPCDAO taghiratVersionPPCDAO = new TaghiratVersionPPCDAO(mPresenter.getAppContext());
+        final String newFeatures = taghiratVersionPPCDAO.getNewFeaturesDesc().replace("#" , "\n");
 
         if (!currentVersion.trim().equals("") && !serverIpModel.getServerIp().equals("") && !serverIpModel.getPort().equals(""))
         {
@@ -81,18 +84,18 @@ public class MainMenuModel implements MainMenuMVP.ModelOps
                         if (response.isSuccessful() && response.body() != null)
                         {
                             GetVersionResult result = response.body();
-                            mPresenter.onGetAlertAboutData(currentVersion, result.getNewVersion(), result.getStableVersion() , "");
+                            mPresenter.onGetAlertAboutData(currentVersion, result.getNewVersion(), result.getStableVersion() , newFeatures);
                         }
                         else
                         {
-                            mPresenter.onGetAlertAboutData(currentVersion , "" , "" , "");
+                            mPresenter.onGetAlertAboutData(currentVersion , "" , "" , newFeatures);
                         }
                     }
                     catch (Exception exception)
                     {
                         setLogToDB(Constants.LOG_EXCEPTION(),exception.toString(), "MainModel", "", "getAlertAboutData", "onResponse");
                         exception.printStackTrace();
-                        mPresenter.onGetAlertAboutData(currentVersion , "" , "" , "");
+                        mPresenter.onGetAlertAboutData(currentVersion , "" , "" , newFeatures);
                     }
                 }
 
@@ -100,13 +103,13 @@ public class MainMenuModel implements MainMenuMVP.ModelOps
                 public void onFailure(Call<GetVersionResult> call, Throwable t)
                 {
                     setLogToDB(Constants.LOG_EXCEPTION(),t.toString(), "MainModel", "", "getAlertAboutData", "onFailure");
-                    mPresenter.onGetAlertAboutData(currentVersion , "" , "" , "");
+                    mPresenter.onGetAlertAboutData(currentVersion , "" , "" , newFeatures);
                 }
             });
         }
         else
         {
-            mPresenter.onGetAlertAboutData(currentVersion , "" , "" , "");
+            mPresenter.onGetAlertAboutData(currentVersion , "" , "" , newFeatures);
         }
     }
 
