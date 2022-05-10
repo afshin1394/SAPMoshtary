@@ -92,10 +92,10 @@ public class DarkhastFaktorSatrDAO
                         DarkhastFaktorSatrModel.COLUMN_TarikhEngheza(),
                         DarkhastFaktorSatrModel.COLUMN_ccAnbarMarjoee(),
                         DarkhastFaktorSatrModel.COLUMN_ccAnbarGhesmat(),
-                        DarkhastFaktorSatrModel.COLUMN_MablaghKharid(),
                         DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandeh(),
                         DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli(),
                         DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli(),
+                        DarkhastFaktorSatrModel.COLUMN_GheymatKharid(),
                         DarkhastFaktorSatrModel.COLUMN_ExtraProp_Maliat(),
                         DarkhastFaktorSatrModel.COLUMN_ExtraProp_Avarez()
 
@@ -144,7 +144,7 @@ public class DarkhastFaktorSatrDAO
                                 model.setTarikhEngheza(reply.getExpirationDate());
                                 model.setCcAnbarMarjoee(reply.getReturnStoreID());
                                 model.setCcAnbarGhesmat(reply.getStorePortionID());
-                                model.setMablaghKharid(reply.getBuyPrice());
+                                model.setGheymatKharid(reply.getBuyPrice());
                                 model.setGheymatMasrafKonandeh(reply.getConsumerPrice());
                                 model.setGheymatForoshAsli(reply.getOriginalSellPrice());
                                 model.setGheymatMasrafKonandehAsli(reply.getOrginalConsumerPrice());
@@ -378,7 +378,7 @@ public class DarkhastFaktorSatrDAO
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(DarkhastFaktorSatrModel.TableName(), allColumns(), DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor, null, null, null, null);
+            Cursor cursor = db.query(DarkhastFaktorSatrModel.TableName(), allColumns(), DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " AND Tedad3 > 0", null, null, null, null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)
@@ -1152,13 +1152,13 @@ public class DarkhastFaktorSatrDAO
         return hashMap;
     }
 
-    public ArrayList<DarkhastFaktorSatrModel> getByccDarkhastFaktorAndNotNoeKala(long ccDarkhastFaktor , int codeNoeKala)
+    public ArrayList<DarkhastFaktorSatrModel> getByccDarkhastFaktorAndNotNoeKala(long ccDarkhastFaktor , int codeNoeKala, int ccForoshandeh)
     {
         ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels = new ArrayList<>();
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(DarkhastFaktorSatrModel.TableName(), allColumns(), DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " and " + DarkhastFaktorSatrModel.COLUMN_CodeNoeKala() + " != " + codeNoeKala, null, null, null, null);
+            Cursor cursor = db.query(DarkhastFaktorSatrModel.TableName(), allColumns(), DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " and " + DarkhastFaktorSatrModel.COLUMN_CodeNoeKala() + " != " + codeNoeKala + " and " + DarkhastFaktorSatrModel.COLUMN_ccAfrad() + " = " + ccForoshandeh, null, null, null, null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)
@@ -2264,6 +2264,7 @@ public class DarkhastFaktorSatrDAO
                     + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " AND ccGoroh = " + ccGorohKala
                     + " GROUP BY B.ccGoroh";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Log.d("takhfif","getTedadKartonByccGorohKala query:" + query);
             Cursor cursor = db.rawQuery(query, null);
             if (cursor != null)
             {
@@ -2342,6 +2343,59 @@ public class DarkhastFaktorSatrDAO
         return mablaghMasrafKonandeh - mablaghPasAzKasrMaliatAvarez;
     }
 
+    public ArrayList<DataTableModel> getTedadBastehByccGorohKala(long ccDarkhastFaktor, TakhfifHajmiTitrSatrModel takhfifHajmiTitrSatrModel, int ccGorohKala)
+    {
+        ArrayList<DataTableModel> gorohs = new ArrayList<>();
+        int ccTakhfifHajmi=takhfifHajmiTitrSatrModel.getCcTakhfifHajmi();
+        int noeGheymat=takhfifHajmiTitrSatrModel.getNoeGheymat();
+        int currentOlaviat=takhfifHajmiTitrSatrModel.getOlaviat();
+
+        try
+        {
+            String query = "SELECT B.ccGoroh, SUM(A.Tedad3 * 1.0/ TedadDarKarton ) AS TedadBox, SUM(A.Tedad3 * 1.0/ TedadDarBasteh ) AS TedadPackage, \n"
+                    + "  SUM(A.Tedad3 * 1.0) AS Tedad, ";
+            if(currentOlaviat == 0 || currentOlaviat == 1)
+            {
+                query += " SUM(Tedad3 *  MablaghForosh ) AS MablaghKol ";
+            }
+            else
+            {
+                query += " SUM(Tedad3 * MablaghForosh) - (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
+                        + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
+            }
+            query += "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
+                    + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.TedadDarKarton, A.TedadDarBasteh "
+                    + "          FROM Kala A LEFT OUTER JOIN "
+                    + "               (SELECT A.ccKalaCode, B.ccNoeField AS ccGoroh "
+                    + "                  FROM KalaGoroh A LEFT OUTER JOIN TakhfifHajmiSatr B"
+                    + "                       ON A.ccGoroh= B.ccNoeField OR A.ccGorohLink= B.ccNoeField OR A.ccRoot= B.ccNoeField "
+                    + "                  WHERE B.ccTakhfifHajmi= " + ccTakhfifHajmi +  "  and B.ccNoeField=  " + ccGorohKala
+                    + "               )G ON A.ccKalaCode= G.ccKalaCode "
+                    + "       )B ON A.ccKalaCode= B.ccKalaCode"
+                    + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " AND ccGoroh = " + ccGorohKala
+                    + " GROUP BY B.ccGoroh";
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    gorohs = new PubFunc().new DAOUtil().cursorToDataTable(context , cursor);
+                    //tedadKarton = Float.valueOf(gorohs.get(0).getFiled1()) ;
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "getTedadKartonByccGorohKala" , "");
+        }
+        return gorohs;
+    }
 
     public boolean deleteAll() {
         try {
@@ -2424,7 +2478,7 @@ public class DarkhastFaktorSatrDAO
         }
     }
 
-    public boolean delete(long ccDarkhastFaktor , int ccTaminKonandeh , int ccKala , int ccKalaCode , String shomareBach, String TarikhTolid, String TarikhEngheza, float gheymatForoshAsli, float gheymatMasrafKonandehAsli)
+    public boolean delete(long ccDarkhastFaktor , int ccTaminKonandeh , int ccKala , int ccKalaCode , String shomareBach, String TarikhTolid, String TarikhEngheza, double gheymatForoshAsli, double gheymatMasrafKonandehAsli, double gheymatKharid)
     {
 
         try
@@ -2438,7 +2492,8 @@ public class DarkhastFaktorSatrDAO
                     " and " + DarkhastFaktorSatrModel.COLUMN_TarikhTolid() + " = '" + TarikhTolid + "'" +
                     " and " + DarkhastFaktorSatrModel.COLUMN_TarikhEngheza() + " = '" + TarikhEngheza + "'" +
                     " and " + DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli() + " = '" + gheymatMasrafKonandehAsli + "'" +
-                    " and " + DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli() + " = '" + gheymatForoshAsli + "'"
+                    " and " + DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli() + " = '" + gheymatForoshAsli + "'" +
+                    " and " + DarkhastFaktorSatrModel.COLUMN_GheymatKharid() + " = '" + gheymatKharid + "'"
                     , null);
             db.close();
             return true;
@@ -2459,6 +2514,26 @@ public class DarkhastFaktorSatrDAO
         {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             db.delete(DarkhastFaktorSatrModel.TableName(), DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " and " + DarkhastFaktorSatrModel.COLUMN_ccKalaCode() + " = " + ccKalaCode , null);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "deleteByccKalaCodeAndccDarkhastFaktor" , "");
+            return false;
+        }
+    }
+
+
+    public boolean deleteByccDarkhastFaktor(long ccDarkhastFaktor)
+    {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.delete(DarkhastFaktorSatrModel.TableName(), DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor , null);
             db.close();
             return true;
         }
@@ -2570,10 +2645,10 @@ public class DarkhastFaktorSatrDAO
         contentValues.put(DarkhastFaktorSatrModel.COLUMN_TarikhEngheza(), darkhastFaktorSatrModel.getTarikhEngheza());
         contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccAnbarMarjoee(), darkhastFaktorSatrModel.getCcAnbarMarjoee());
         contentValues.put(DarkhastFaktorSatrModel.COLUMN_ccAnbarGhesmat(), darkhastFaktorSatrModel.getCcAnbarGhesmat());
-        contentValues.put(DarkhastFaktorSatrModel.COLUMN_MablaghKharid(), darkhastFaktorSatrModel.getMablaghKharid());
         contentValues.put(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandeh(), darkhastFaktorSatrModel.getGheymatMasrafKonandeh());
         contentValues.put(DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli(), darkhastFaktorSatrModel.getGheymatForoshAsli());
         contentValues.put(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli(), darkhastFaktorSatrModel.getGheymatMasrafKonandehAsli());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_GheymatKharid(), darkhastFaktorSatrModel.getGheymatKharid());
         contentValues.put(DarkhastFaktorSatrModel.COLUMN_ExtraProp_Maliat(), darkhastFaktorSatrModel.getExtraProp_Maliat());
         contentValues.put(DarkhastFaktorSatrModel.COLUMN_ExtraProp_Avarez(), darkhastFaktorSatrModel.getExtraProp_Avarez());
         return contentValues;
@@ -2599,19 +2674,19 @@ public class DarkhastFaktorSatrDAO
             darkhastFaktorSatrModel.setShomarehBach(cursor.getString(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ShomarehBach())));
             darkhastFaktorSatrModel.setTarikhTolid(cursor.getString(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_TarikhTolid())));
             darkhastFaktorSatrModel.setMablaghForosh(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_MablaghForosh())));
-            darkhastFaktorSatrModel.setMablaghForoshKhalesKala(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_MablaghForoshKhalesKala())));
-            darkhastFaktorSatrModel.setMablaghTakhfifNaghdiVahed(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_MablaghTakhfifNaghdiVahed())));
-            darkhastFaktorSatrModel.setMaliat(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_Maliat())));
-            darkhastFaktorSatrModel.setAvarez(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_Avarez())));
+            darkhastFaktorSatrModel.setMablaghForoshKhalesKala(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_MablaghForoshKhalesKala())));
+            darkhastFaktorSatrModel.setMablaghTakhfifNaghdiVahed(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_MablaghTakhfifNaghdiVahed())));
+            darkhastFaktorSatrModel.setMaliat(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_Maliat())));
+            darkhastFaktorSatrModel.setAvarez(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_Avarez())));
             darkhastFaktorSatrModel.setCcAfrad(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ccAfrad())));
             darkhastFaktorSatrModel.setExtraProp_IsOld(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ExtraProp_IsOld())) > 0);
             darkhastFaktorSatrModel.setTarikhEngheza(cursor.getString(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_TarikhEngheza())));
             darkhastFaktorSatrModel.setCcAnbarMarjoee(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ccAnbarMarjoee())));
             darkhastFaktorSatrModel.setCcAnbarGhesmat(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ccAnbarGhesmat())));
-            darkhastFaktorSatrModel.setMablaghKharid(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_MablaghKharid())));
-            darkhastFaktorSatrModel.setGheymatMasrafKonandeh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandeh())));
-            darkhastFaktorSatrModel.setGheymatForoshAsli(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli())));
-            darkhastFaktorSatrModel.setGheymatMasrafKonandehAsli(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli())));
+            darkhastFaktorSatrModel.setGheymatMasrafKonandeh(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandeh())));
+            darkhastFaktorSatrModel.setGheymatForoshAsli(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli())));
+            darkhastFaktorSatrModel.setGheymatMasrafKonandehAsli(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli())));
+            darkhastFaktorSatrModel.setGheymatKharid(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatKharid())));
             darkhastFaktorSatrModel.setExtraProp_Maliat(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ExtraProp_Maliat())));
             darkhastFaktorSatrModel.setExtraProp_Avarez(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ExtraProp_Avarez())));
             darkhastFaktorSatrModels.add(darkhastFaktorSatrModel);
@@ -2619,59 +2694,7 @@ public class DarkhastFaktorSatrDAO
         }
         return darkhastFaktorSatrModels;
     }
-    public ArrayList<DataTableModel> getTedadBastehByccGorohKala(long ccDarkhastFaktor, TakhfifHajmiTitrSatrModel takhfifHajmiTitrSatrModel, int ccGorohKala)
-    {
-        ArrayList<DataTableModel> gorohs = new ArrayList<>();
-        int ccTakhfifHajmi=takhfifHajmiTitrSatrModel.getCcTakhfifHajmi();
-        int noeGheymat=takhfifHajmiTitrSatrModel.getNoeGheymat();
-        int currentOlaviat=takhfifHajmiTitrSatrModel.getOlaviat();
 
-        try
-        {
-            String query = "SELECT B.ccGoroh, SUM(A.Tedad3 * 1.0/ TedadDarKarton ) AS TedadBox, SUM(A.Tedad3 * 1.0/ TedadDarBasteh ) AS TedadPackage, \n"
-                    + "  SUM(A.Tedad3 * 1.0) AS Tedad, ";
-            if(currentOlaviat == 0 || currentOlaviat == 1)
-            {
-                query += " SUM(Tedad3 *  MablaghForosh ) AS MablaghKol ";
-            }
-            else
-            {
-                query += " SUM(Tedad3 * MablaghForosh) - (select ifnull(sum(MablaghTakhfif),0) from DarkhastFaktorSatrTakhfif where ExtraProp_Olaviat < " + (currentOlaviat)
-                        + " and ccDarkhastFaktorSatr in (select ccdarkhastfaktorsatr from darkhastfaktorsatr where ccdarkhastfaktor = " + ccDarkhastFaktor + ") ) AS MablaghKol ";
-            }
-            query += "  FROM DarkhastFaktorSatr A LEFT OUTER JOIN "
-                    + "       (SELECT DISTINCT A.ccKalaCode, G.ccGoroh, A.TedadDarKarton, A.TedadDarBasteh "
-                    + "          FROM Kala A LEFT OUTER JOIN "
-                    + "               (SELECT A.ccKalaCode, B.ccNoeField AS ccGoroh "
-                    + "                  FROM KalaGoroh A LEFT OUTER JOIN TakhfifHajmiSatr B"
-                    + "                       ON A.ccGoroh= B.ccNoeField OR A.ccGorohLink= B.ccNoeField OR A.ccRoot= B.ccNoeField "
-                    + "                  WHERE B.ccTakhfifHajmi= " + ccTakhfifHajmi +  "  and B.ccNoeField=  " + ccGorohKala
-                    + "               )G ON A.ccKalaCode= G.ccKalaCode "
-                    + "       )B ON A.ccKalaCode= B.ccKalaCode"
-                    + " WHERE ccDarkhastFaktor= " + ccDarkhastFaktor + " AND ccGoroh = " + ccGorohKala
-                    + " GROUP BY B.ccGoroh";
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.rawQuery(query, null);
-            if (cursor != null)
-            {
-                if (cursor.getCount() > 0)
-                {
-                    gorohs = new PubFunc().new DAOUtil().cursorToDataTable(context , cursor);
-                    //tedadKarton = Float.valueOf(gorohs.get(0).getFiled1()) ;
-                }
-                cursor.close();
-            }
-            db.close();
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace();
-            PubFunc.Logger logger = new PubFunc().new Logger();
-            String message = context.getResources().getString(R.string.errorDeleteAll , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
-            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "getTedadKartonByccGorohKala" , "");
-        }
-        return gorohs;
-    }
 
 
 }

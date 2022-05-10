@@ -39,10 +39,10 @@ public class DarkhastFaktorSatrModel
     private static final String COLUMN_TarikhEngheza = "TarikhEngheza";
     private static final String COLUMN_ccAnbarMarjoee = "ccAnbarMarjoee";
     private static final String COLUMN_ccAnbarGhesmat = "ccAnbarGhesmat";
-    private static final String COLUMN_MablaghKharid = "MablaghKharid";
     private static final String COLUMN_GheymatMasrafKonandeh = "GheymatMasrafKonandeh";
     private static final String COLUMN_GheymatForoshAsli = "GheymatForoshAsli";
     private static final String COLUMN_GheymatMasrafKonandehAsli = "GheymatMasrafKonandehAsli";
+    private static final String COLUMN_GheymatKharid = "GheymatKharid";
     private static final String COLUMN_Vazn = "Vazn";
     private static final String COLUMN_ExtraProp_Maliat = "ExtraProp_Maliat";
     private static final String COLUMN_ExtraProp_Avarez = "ExtraProp_Avarez";
@@ -111,9 +111,6 @@ public class DarkhastFaktorSatrModel
     public static String COLUMN_ccAnbarGhesmat() {
         return COLUMN_ccAnbarGhesmat;
     }
-    public static String COLUMN_MablaghKharid() {
-        return COLUMN_MablaghKharid;
-    }
     public static String COLUMN_GheymatMasrafKonandeh() {
         return COLUMN_GheymatMasrafKonandeh;
     }
@@ -122,6 +119,9 @@ public class DarkhastFaktorSatrModel
     }
     public static String COLUMN_GheymatMasrafKonandehAsli() {
         return COLUMN_GheymatMasrafKonandehAsli;
+    }
+    public static String COLUMN_GheymatKharid() {
+        return COLUMN_GheymatKharid;
     }
     public static String COLUMN_Vazn() {
         return COLUMN_Vazn;
@@ -211,7 +211,7 @@ public class DarkhastFaktorSatrModel
     private String ccUser;
     @SerializedName("MablaghTakhfifNaghdiVahed")
     @Expose
-    private float MablaghTakhfifNaghdiVahed;
+    private double MablaghTakhfifNaghdiVahed;
     @SerializedName("DisCntType")
     @Expose
     private String DisCntType;
@@ -220,22 +220,20 @@ public class DarkhastFaktorSatrModel
     private String DisCntSubType;
     @SerializedName("GheymatKharid")
     @Expose
-    private String GheymatKharid;
+    private double GheymatKharid;
     @SerializedName("TarikhFaktor")
     @Expose
     private String TarikhFaktor;
     @SerializedName("Maliat")
     @Expose
-    private float Maliat;
+    private double Maliat;
     @SerializedName("Avarez")
     @Expose
-    private float Avarez;
+    private double Avarez;
     @SerializedName("MablaghForoshKhalesKala")
     @Expose
-    private float MablaghForoshKhalesKala;
-    @SerializedName("MablaghKharid")
-    @Expose
-    private float MablaghKharid;
+    private double MablaghForoshKhalesKala;
+
     @SerializedName("MablaghMasrafKonandeh")
     @Expose
     private int MablaghMasrafKonandeh;
@@ -247,13 +245,13 @@ public class DarkhastFaktorSatrModel
     private int ccAnbarGhesmat;
     @SerializedName("GheymatMasrafKonandeh")
     @Expose
-    private float GheymatMasrafKonandeh;
+    private double GheymatMasrafKonandeh;
     @SerializedName("GheymatForoshAsli")
     @Expose
-    private float GheymatForoshAsli;
+    private double GheymatForoshAsli;
     @SerializedName("GheymatMasrafKonandehAsli")
     @Expose
-    private float GheymatMasrafKonandehAsli;
+    private double GheymatMasrafKonandehAsli;
     @SerializedName("ccMoshtaryGharardad")
     @Expose
     private int ccMoshtaryGharardad;
@@ -424,10 +422,10 @@ public class DarkhastFaktorSatrModel
     public String getCcUser(){
         return this.ccUser;
     }
-    public void setMablaghTakhfifNaghdiVahed(float MablaghTakhfifNaghdiVahed){
+    public void setMablaghTakhfifNaghdiVahed(double MablaghTakhfifNaghdiVahed){
         this.MablaghTakhfifNaghdiVahed = MablaghTakhfifNaghdiVahed;
     }
-    public float getMablaghTakhfifNaghdiVahed(){
+    public double getMablaghTakhfifNaghdiVahed(){
         return this.MablaghTakhfifNaghdiVahed;
     }
     public void setDisCntType(String DisCntType){
@@ -442,10 +440,10 @@ public class DarkhastFaktorSatrModel
     public String getDisCntSubType(){
         return this.DisCntSubType;
     }
-    public void setGheymatKharid(String GheymatKharid){
+    public void setGheymatKharid(double GheymatKharid){
         this.GheymatKharid = GheymatKharid;
     }
-    public String getGheymatKharid(){
+    public double getGheymatKharid(){
         return this.GheymatKharid;
     }
     public void setTarikhFaktor(String TarikhFaktor){
@@ -454,30 +452,25 @@ public class DarkhastFaktorSatrModel
     public String getTarikhFaktor(){
         return this.TarikhFaktor;
     }
-    public void setMaliat(float Maliat){
+    public void setMaliat(double Maliat){
         this.Maliat = Maliat;
     }
-    public float getMaliat(){
+    public double getMaliat(){
         return this.Maliat;
     }
-    public void setAvarez(float Avarez){
+    public void setAvarez(double Avarez){
         this.Avarez = Avarez;
     }
-    public float getAvarez(){
+    public double getAvarez(){
         return this.Avarez;
     }
-    public void setMablaghForoshKhalesKala(float MablaghForoshKhalesKala){
+    public void setMablaghForoshKhalesKala(Double MablaghForoshKhalesKala){
         this.MablaghForoshKhalesKala = MablaghForoshKhalesKala;
     }
-    public float getMablaghForoshKhalesKala(){
+    public double getMablaghForoshKhalesKala(){
         return this.MablaghForoshKhalesKala;
     }
-    public void setMablaghKharid(float MablaghKharid){
-        this.MablaghKharid = MablaghKharid;
-    }
-    public float getMablaghKharid(){
-        return this.MablaghKharid;
-    }
+
     public void setMablaghMasrafKonandeh(int MablaghMasrafKonandeh){
         this.MablaghMasrafKonandeh = MablaghMasrafKonandeh;
     }
@@ -496,10 +489,10 @@ public class DarkhastFaktorSatrModel
     public int getCcAnbarGhesmat(){
         return this.ccAnbarGhesmat;
     }
-    public void setGheymatMasrafKonandeh(float GheymatMasrafKonandeh){
+    public void setGheymatMasrafKonandeh(Double GheymatMasrafKonandeh){
         this.GheymatMasrafKonandeh = GheymatMasrafKonandeh;
     }
-    public float getGheymatMasrafKonandeh(){
+    public double getGheymatMasrafKonandeh(){
         return this.GheymatMasrafKonandeh;
     }
     public void setDarkhastFaktorSatrTakhfifs(String darkhastFaktorSatrTakhfifs){
@@ -514,10 +507,10 @@ public class DarkhastFaktorSatrModel
     public void setExtraProp_IsOld(boolean extraProp_IsOld) {
         ExtraProp_IsOld = extraProp_IsOld;
     }
-    public float getGheymatForoshAsli() {
+    public double getGheymatForoshAsli() {
         return GheymatForoshAsli;
     }
-    public void setGheymatForoshAsli(float gheymatForoshAsli) {
+    public void setGheymatForoshAsli(double gheymatForoshAsli) {
         GheymatForoshAsli = gheymatForoshAsli;
     }
     public float getVazn() {
@@ -527,11 +520,11 @@ public class DarkhastFaktorSatrModel
         Vazn = vazn;
     }
 
-    public float getGheymatMasrafKonandehAsli() {
+    public double getGheymatMasrafKonandehAsli() {
         return GheymatMasrafKonandehAsli;
     }
 
-    public void setGheymatMasrafKonandehAsli(float GheymatMasrafKonandehAsli) {
+    public void setGheymatMasrafKonandehAsli(double GheymatMasrafKonandehAsli) {
         this.GheymatMasrafKonandehAsli = GheymatMasrafKonandehAsli;
     }
 
@@ -573,6 +566,7 @@ public class DarkhastFaktorSatrModel
             jsonObject.put("GheymatMasrafKonandeh" , GheymatMasrafKonandeh);
             jsonObject.put("GheymatForoshAsli" , GheymatForoshAsli);
             jsonObject.put("GheymatMasrafKonandehAsli" , GheymatMasrafKonandehAsli);
+            jsonObject.put("GheymatKharid" , GheymatKharid);
 
         }
         catch (Exception exception)
@@ -606,6 +600,7 @@ public class DarkhastFaktorSatrModel
             jsonObject.put("GheymatMasrafKonandeh" , GheymatMasrafKonandeh);
             jsonObject.put("GheymatForoshAsli" , GheymatForoshAsli);
             jsonObject.put("GheymatMasrafKonandehAsli" , GheymatMasrafKonandehAsli);
+            jsonObject.put("GheymatKharid" , GheymatKharid);
 
         }
         catch (Exception exception)
@@ -654,7 +649,6 @@ public class DarkhastFaktorSatrModel
                 ", Maliat=" + Maliat +
                 ", Avarez=" + Avarez +
                 ", MablaghForoshKhalesKala=" + MablaghForoshKhalesKala +
-                ", MablaghKharid=" + MablaghKharid +
                 ", MablaghMasrafKonandeh=" + MablaghMasrafKonandeh +
                 ", ccAnbarMarjoee=" + ccAnbarMarjoee +
                 ", ccAnbarGhesmat=" + ccAnbarGhesmat +
@@ -689,20 +683,19 @@ public class DarkhastFaktorSatrModel
                 Double.compare(that.MablaghForosh, MablaghForosh) == 0 &&
                 GheymatMiangin == that.GheymatMiangin &&
                 CodeVazeiat == that.CodeVazeiat &&
-                Float.compare(that.MablaghTakhfifNaghdiVahed, MablaghTakhfifNaghdiVahed) == 0 &&
-                Float.compare(that.Maliat, Maliat) == 0 &&
-                Float.compare(that.Avarez, Avarez) == 0 &&
-                Float.compare(that.MablaghForoshKhalesKala, MablaghForoshKhalesKala) == 0 &&
-                Float.compare(that.MablaghKharid, MablaghKharid) == 0 &&
+                Double.compare(that.MablaghTakhfifNaghdiVahed, MablaghTakhfifNaghdiVahed) == 0 &&
+                Double.compare(that.Maliat, Maliat) == 0 &&
+                Double.compare(that.Avarez, Avarez) == 0 &&
+                Double.compare(that.MablaghForoshKhalesKala, MablaghForoshKhalesKala) == 0 &&
                 MablaghMasrafKonandeh == that.MablaghMasrafKonandeh &&
                 ccAnbarMarjoee == that.ccAnbarMarjoee &&
                 ccAnbarGhesmat == that.ccAnbarGhesmat &&
-                Float.compare(that.GheymatMasrafKonandeh, GheymatMasrafKonandeh) == 0 &&
-                Float.compare(that.GheymatForoshAsli, GheymatForoshAsli) == 0 &&
-                Float.compare(that.GheymatMasrafKonandehAsli, GheymatMasrafKonandehAsli) == 0 &&
-                Float.compare(that.GheymatForoshAsli, GheymatForoshAsli) == 0 &&
-                Float.compare(that.GheymatMasrafKonandehAsli, GheymatMasrafKonandehAsli) == 0 &&
-                Float.compare(that.Vazn, Vazn) == 0 &&
+                Double.compare(that.GheymatMasrafKonandeh, GheymatMasrafKonandeh) == 0 &&
+                Double.compare(that.GheymatForoshAsli, GheymatForoshAsli) == 0 &&
+                Double.compare(that.GheymatMasrafKonandehAsli, GheymatMasrafKonandehAsli) == 0 &&
+                Double.compare(that.GheymatForoshAsli, GheymatForoshAsli) == 0 &&
+                Double.compare(that.GheymatMasrafKonandehAsli, GheymatMasrafKonandehAsli) == 0 &&
+                Double.compare(that.Vazn, Vazn) == 0 &&
                 ExtraProp_IsOld == that.ExtraProp_IsOld &&
                 Objects.equals(ccDarkhastFaktor, that.ccDarkhastFaktor) &&
                 Objects.equals(ccDarkhastFaktorSatrTaavoni, that.ccDarkhastFaktorSatrTaavoni) &&
@@ -726,7 +719,7 @@ public class DarkhastFaktorSatrModel
 
     @Override
     public int hashCode() {
-        return Objects.hash(ccDarkhastFaktor, ccDarkhastFaktorSatr, ccDarkhastFaktorSatrTaavoni, ccDarkhastFaktorSatrPPC, ccAfrad, CodeNoeKala, ccKala, ccKalaCode, ccTaminKonandeh, ShomarehBach, TarikhTolid, TarikhEngheza, Tedad1, Tedad2, Tedad3, MablaghForosh, MablaghTakhfifDarkhast, MablaghTakhfifFaktor, GheymatMiangin, ccTafkikJoze, MojodyGhabelForosh, DateVorod, CodeVazeiat, DarsadTakhfifTaavoni, ccUser, MablaghTakhfifNaghdiVahed, DisCntType, DisCntSubType, GheymatKharid, TarikhFaktor, Maliat, Avarez, MablaghForoshKhalesKala, MablaghKharid, MablaghMasrafKonandeh, ccAnbarMarjoee, ccAnbarGhesmat, GheymatMasrafKonandeh, GheymatForoshAsli, GheymatMasrafKonandehAsli, ccMoshtaryGharardad, MoshtaryGharardadccSazmanForosh, darkhastFaktorSatrTakhfifs, GheymatForoshAsli, GheymatMasrafKonandehAsli, Vazn, ExtraProp_IsOld);
+        return Objects.hash(ccDarkhastFaktor, ccDarkhastFaktorSatr, ccDarkhastFaktorSatrTaavoni, ccDarkhastFaktorSatrPPC, ccAfrad, CodeNoeKala, ccKala, ccKalaCode, ccTaminKonandeh, ShomarehBach, TarikhTolid, TarikhEngheza, Tedad1, Tedad2, Tedad3, MablaghForosh, MablaghTakhfifDarkhast, MablaghTakhfifFaktor, GheymatMiangin, ccTafkikJoze, MojodyGhabelForosh, DateVorod, CodeVazeiat, DarsadTakhfifTaavoni, ccUser, MablaghTakhfifNaghdiVahed, DisCntType, DisCntSubType, GheymatKharid, TarikhFaktor, Maliat, Avarez, MablaghForoshKhalesKala, MablaghMasrafKonandeh, ccAnbarMarjoee, ccAnbarGhesmat, GheymatMasrafKonandeh, GheymatForoshAsli, GheymatMasrafKonandehAsli, ccMoshtaryGharardad, MoshtaryGharardadccSazmanForosh, darkhastFaktorSatrTakhfifs, GheymatForoshAsli, GheymatMasrafKonandehAsli, Vazn, ExtraProp_IsOld);
     }
 
     public DarkhastFaktorSatrModel(Long ccDarkhastFaktor, int ccDarkhastFaktorSatr, int ccKalaCode, String shomarehBach, int gheymatMiangin) {
