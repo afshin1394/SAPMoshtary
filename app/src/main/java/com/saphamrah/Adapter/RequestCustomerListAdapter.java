@@ -267,7 +267,7 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
             layUpdateEtebar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemClick(Constants.REQUEST_NON_REQUEST(), position);
+                    listener.onItemClick(Constants.REQUEST_CUSTOMER_UPDATE_CREDIT(), position);
                     swipeLayout.close(true);
                 }
             });
