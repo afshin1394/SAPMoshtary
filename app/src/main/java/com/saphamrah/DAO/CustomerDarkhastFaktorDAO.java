@@ -3,6 +3,7 @@ package com.saphamrah.DAO;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
 import com.saphamrah.Model.DarkhastFaktorModel;
@@ -69,6 +70,7 @@ public class CustomerDarkhastFaktorDAO
                 " where d.ShomarehFaktor = 0 and d.ExtraProp_InsertInPPC = 1 order by d.TarikhFaktor) dm \n" +
                 " left join DarkhastFaktor_EmzaMoshtary de \n" +
                 " on dm.ccDarkhastFaktor = de.ccDarkhastFaktor";
+        Log.d("CustomerDarkhastFaktorDAO" , "getAllDarkhastFaktor query:" + query);
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();

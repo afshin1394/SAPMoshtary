@@ -375,8 +375,8 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
 
 
     @Override
-    public void checkJayezehParent(int ccKalaCode , int tedadKala , Long ccDarkhastFaktor, double mablaghForosh) {
-        mModel.checkJayezehParent(ccKalaCode ,  tedadKala , ccDarkhastFaktor,mablaghForosh);
+    public void checkJayezehParent(int ccKalaCode , int tedadKala , Long ccDarkhastFaktor, double mablaghForosh, int ccMoshtary) {
+        mModel.checkJayezehParent(ccKalaCode ,  tedadKala , ccDarkhastFaktor,mablaghForosh,ccMoshtary);
     }
 
     @Override
@@ -398,8 +398,8 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
 
 
     @Override
-    public void checkJayezeh(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor,int position) {
-        mModel.checkJayezeh(ccJayezeh,tedadKala,mablaghForosh,ccKalaCode,ccDarkhastFaktor ,position);
+    public void checkJayezeh(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor,int position, int ccMoshtary) {
+        mModel.checkJayezeh(ccJayezeh,tedadKala,mablaghForosh,ccKalaCode,ccDarkhastFaktor ,position, ccMoshtary);
     }
 
 

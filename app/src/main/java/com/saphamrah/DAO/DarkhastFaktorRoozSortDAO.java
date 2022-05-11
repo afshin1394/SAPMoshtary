@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import androidx.core.database.CursorWindowCompat;
 
+import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
 import com.saphamrah.Model.DarkhastFaktorRoozSortModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -138,6 +139,25 @@ public class DarkhastFaktorRoozSortDAO
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorDeleteAll , DarkhastFaktorRoozSortModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, CLASS_NAME , "" , "deleteAll" , "");
+            return false;
+        }
+    }
+
+    public boolean deleteByccDarkhastFaktor(long ccDarkhastFaktor)
+    {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.delete(DarkhastFaktorRoozSortModel.TableName(), DarkhastFaktorRoozSortModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor, null);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , DarkhastFaktorRoozSortModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorRoozSortDAO" , "" , "deleteByccDarkhastFaktor" , "");
             return false;
         }
     }

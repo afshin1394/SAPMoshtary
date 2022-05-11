@@ -38,6 +38,8 @@ public class DariaftPardakhtDarkhastFaktorPPCModel
     private static final String COLUMN_ccMarkazSazmanForoshSakhtarForosh = "ccMarkazSazmanForoshSakhtarForosh";
     private static final String COLUMN_ExtraProp_ccDaryaftPardakhtCheckBargashty = "ExtraProp_ccDaryaftPardakhtCheckBargashty";
     private static final String COLUMN_IsTaeedShodeh = "IsTaeedShodeh";
+    private static final String COLUMN_ExtraProp_ccMoshtary = "ExtraProp_ccMoshtary";
+
 
 
     public static String TableName() {
@@ -118,6 +120,9 @@ public class DariaftPardakhtDarkhastFaktorPPCModel
     public static String COLUMN_ExtraProp_IsTajil() {
         return COLUMN_ExtraProp_IsTajil;
     }
+    public static String COLUMN_ExtraProp_ccMoshtary() {
+        return COLUMN_ExtraProp_ccMoshtary;
+    }
     public static String COLUMN_ExtraProp_ccDarkhastFaktorServer() {
         return COLUMN_ExtraProp_ccDarkhastFaktorServer;
     }
@@ -192,6 +197,7 @@ public class DariaftPardakhtDarkhastFaktorPPCModel
     private int ExtraProp_CanDelete;
     private int ExtraProp_IsTajil;
     private long ExtraProp_ccDarkhastFaktorServer;
+    private int ExtraProp_ccMoshtary;
     private int IsTaeedShodeh;
 
     public long getExtraProp_ccDaryaftPardakhtCheckBargashty() {
@@ -411,6 +417,14 @@ public class DariaftPardakhtDarkhastFaktorPPCModel
         ExtraProp_ccDarkhastFaktorServer = extraProp_ccDarkhastFaktorServer;
     }
 
+    public int getExtraProp_ccMoshtary() {
+        return ExtraProp_ccMoshtary;
+    }
+
+    public void setExtraProp_ccMoshtary(int extraProp_ccMoshtary) {
+        ExtraProp_ccMoshtary = extraProp_ccMoshtary;
+    }
+
     public int getIsTaeedShodeh() {
         return IsTaeedShodeh;
     }
@@ -505,6 +519,7 @@ public class DariaftPardakhtDarkhastFaktorPPCModel
                 ", NaghlAzGhabl=" + NaghlAzGhabl +
                 ", IsForTasviehTakhir=" + IsForTasviehTakhir +
                 ", ExtraProp_ccDaryaftPardakhtCheckBargashty=" + ExtraProp_ccDaryaftPardakhtCheckBargashty +
+                ", ExtraProp_ccMoshtary=" + ExtraProp_ccMoshtary +
                 ", IsTaeedShodeh=" + IsTaeedShodeh +
                 '}';
     }

@@ -204,13 +204,13 @@ public class TemporaryRequestsListPresenter implements TemporaryRequestsListMVP.
     @Override
     public void onCheckPrint(CustomerDarkhastFaktorModel customerDarkhastFaktorModel)
     {
-        mView.get().openPrintActivity(customerDarkhastFaktorModel.getCcDarkhastFaktor());
+        mView.get().openPrintActivity(customerDarkhastFaktorModel.getCcDarkhastFaktor(),customerDarkhastFaktorModel.getCcMoshtary());
     }
 
     @Override
-    public void onCheckSaveImage(long ccDarkhastFaktor,int type)
+    public void onCheckSaveImage(long ccDarkhastFaktor,int type, int ccMoshtary)
     {
-        mView.get().openSaveImageActivity(ccDarkhastFaktor,type);
+        mView.get().openSaveImageActivity(ccDarkhastFaktor,type, ccMoshtary);
     }
 
     @Override

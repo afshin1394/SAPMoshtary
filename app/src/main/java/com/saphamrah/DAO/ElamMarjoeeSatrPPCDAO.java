@@ -78,7 +78,9 @@ public class ElamMarjoeeSatrPPCDAO
             ElamMarjoeeSatrPPCModel.COLUMN_ccTaminkonandeh(),
             ElamMarjoeeSatrPPCModel.COLUMN_GheymatMasrafkonandeh(),
             ElamMarjoeeSatrPPCModel.COLUMN_GheymatForoshAsli(),
+            ElamMarjoeeSatrPPCModel.COLUMN_GheymatKharid(),
             ElamMarjoeeSatrPPCModel.COLUMN_IsMabna(),
+            ElamMarjoeeSatrPPCModel.COLUMN_ExtraProp_ccMoshtary()
         };
     }
 
@@ -124,6 +126,7 @@ public class ElamMarjoeeSatrPPCDAO
                                 model.setCcTaminkonandeh(reply.getPrividerID());
                                 model.setGheymatMasrafkonandeh(reply.getConsumerPrice());
                                 model.setGheymatForoshAsli(reply.getOriginalSellPrice());
+                                model.setGheymatKharid(reply.getOriginalSellPrice());
                                 model.setIsMabna(reply.getIsBase());
 
 
@@ -583,6 +586,7 @@ public class ElamMarjoeeSatrPPCDAO
         contentValues.put(ElamMarjoeeSatrPPCModel.COLUMN_ccTaminkonandeh() , elamMarjoeeSatrPPCModel.getCcTaminkonandeh());
         contentValues.put(ElamMarjoeeSatrPPCModel.COLUMN_GheymatMasrafkonandeh() , elamMarjoeeSatrPPCModel.getGheymatMasrafkonandeh());
         contentValues.put(ElamMarjoeeSatrPPCModel.COLUMN_GheymatForoshAsli() , elamMarjoeeSatrPPCModel.getGheymatForoshAsli());
+        contentValues.put(ElamMarjoeeSatrPPCModel.COLUMN_GheymatKharid() , elamMarjoeeSatrPPCModel.getGheymatKharid());
         contentValues.put(ElamMarjoeeSatrPPCModel.COLUMN_IsMabna() , elamMarjoeeSatrPPCModel.getIsMabna());
 
         return contentValues;
@@ -609,10 +613,11 @@ public class ElamMarjoeeSatrPPCDAO
             elamMarjoeeSatrPPCModel.setTarikhTolid(cursor.getString(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_TarikhTolid())));
             elamMarjoeeSatrPPCModel.setTarikhEngheza(cursor.getString(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_TarikhEngheza())));
             elamMarjoeeSatrPPCModel.setTedad3(cursor.getInt(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_Tedad3())));
-            elamMarjoeeSatrPPCModel.setFee(cursor.getInt(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_Fee())));
+            elamMarjoeeSatrPPCModel.setFee(cursor.getDouble(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_Fee())));
             elamMarjoeeSatrPPCModel.setCcTaminkonandeh(cursor.getInt(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_ccTaminkonandeh())));
-            elamMarjoeeSatrPPCModel.setGheymatMasrafkonandeh(cursor.getInt(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_GheymatMasrafkonandeh())));
-            elamMarjoeeSatrPPCModel.setGheymatForoshAsli(cursor.getInt(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_GheymatForoshAsli())));
+            elamMarjoeeSatrPPCModel.setGheymatMasrafkonandeh(cursor.getDouble(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_GheymatMasrafkonandeh())));
+            elamMarjoeeSatrPPCModel.setGheymatForoshAsli(cursor.getDouble(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_GheymatForoshAsli())));
+            elamMarjoeeSatrPPCModel.setGheymatKharid(cursor.getDouble(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_GheymatKharid())));
             elamMarjoeeSatrPPCModel.setIsMabna(cursor.getInt(cursor.getColumnIndex(ElamMarjoeeSatrPPCModel.COLUMN_IsMabna())));
 
             elamMarjoeeSatrPPCModels.add(elamMarjoeeSatrPPCModel);

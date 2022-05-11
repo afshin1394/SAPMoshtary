@@ -1871,6 +1871,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                                 kalaMojodiModel.setTarikhEngheza(mandehMojodyMashinModel.getTarikhEngheza());
                                 kalaMojodiModel.setGheymatMasrafKonandeh(mandehMojodyMashinModel.getGheymatMasrafKonandeh());
                                 kalaMojodiModel.setGheymatForosh(mandehMojodyMashinModel.getGheymatForosh());
+                                kalaMojodiModel.setGheymatKharid(mandehMojodyMashinModel.getGheymatKharid());
                                 kalaMojodiModel.setCcTaminKonandeh(mandehMojodyMashinModel.getCcTaminKonandeh());
                                 kalaMojodiModel.setZamaneSabt(currentDate);
                                 kalaMojodiModel.setIsAdamForosh(mandehMojodyMashinModel.getIsAdamForosh());

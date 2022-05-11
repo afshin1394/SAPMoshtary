@@ -100,7 +100,7 @@ public class MarjoeeForoshandehFragment extends Fragment implements MarjoeeForos
                 showEditCountmAlert(elamMarjoeeForoshandehModel.getCcElamMarjoeeSatr(), elamMarjoeeForoshandehModel.getNameKala(), elamMarjoeeForoshandehModel.getTedad3(), position);
             } else if (Constants.DELETE() == operation) {
                 elamMarjoeeForoshandehModelCheckTaeidSabt = elamMarjoeeForoshandehModel;
-                mPresenter.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt, ccDarkhastFaktor, 0, 0, position,false);
+                mPresenter.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt, ccDarkhastFaktor, 0, 0, position,false,Integer.parseInt(ccMoshtary));
 
             }
 
@@ -178,7 +178,7 @@ public class MarjoeeForoshandehFragment extends Fragment implements MarjoeeForos
                             if (selectedCount > 0 && selectedCount <= itemCount) {
                                 show.dismiss();
                                 //TODO::
-                                mPresenter.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt, ccDarkhastFaktor, itemCount, selectedCount, position,true);
+                                mPresenter.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt, ccDarkhastFaktor, itemCount, selectedCount, position,true, Integer.parseInt(ccMoshtary));
                             } else {
                                 lblError.setVisibility(View.VISIBLE);
                                 lblError.setText(getResources().getString(R.string.invalidRangeForEditMarjoee));
@@ -186,7 +186,7 @@ public class MarjoeeForoshandehFragment extends Fragment implements MarjoeeForos
                         } else {
                             if (selectedCount > 0 && selectedCount <= elamMarjoeeForoshandehModelsAdpater.get(position).getTedad3()) {
 
-                                mPresenter.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt, ccDarkhastFaktor, itemCount, selectedCount, position,true);
+                                mPresenter.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt, ccDarkhastFaktor, itemCount, selectedCount, position,true, Integer.parseInt(ccMoshtary));
                                 show.dismiss();
 
 

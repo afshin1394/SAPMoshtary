@@ -31,10 +31,11 @@ public class JayezehParentAlertAdapter extends RecyclerView.Adapter<JayezehParen
     private double mablaghForosh ;
     private int ccKalaCode ;
     private Long ccDarkhastFaktor;
+    private int ccMoshtary;
     JayezehAlertAdapter jayezehAlertAdapter;
     private boolean first = true;
 
-    public JayezehParentAlertAdapter(Context context , ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels , int tedadKala, double mablaghForosh , int ccKalaCode , Long ccDarkhastFaktor , OnItemClickListener listener)
+    public JayezehParentAlertAdapter(Context context , ArrayList<JayezehByccKalaCodeModel> jayezehByccKalaCodeParentModels , int tedadKala, double mablaghForosh , int ccKalaCode , Long ccDarkhastFaktor, int ccMoshtary , OnItemClickListener listener)
     {
         this.context = context;
         this.listener=listener;
@@ -43,6 +44,7 @@ public class JayezehParentAlertAdapter extends RecyclerView.Adapter<JayezehParen
         this.mablaghForosh = mablaghForosh;
         this.ccKalaCode = ccKalaCode;
         this.ccDarkhastFaktor = ccDarkhastFaktor;
+        this.ccMoshtary = ccMoshtary;
     }
 
 
@@ -123,7 +125,7 @@ public class JayezehParentAlertAdapter extends RecyclerView.Adapter<JayezehParen
                 if (first){
                     expand(recycler_view );
                     expand_btn.setRotation(0);
-                    listener.onItemClick(ccJayezeh , tedadKala,mablaghForosh,ccKalaCode,ccDarkhastFaktor,position);
+                    listener.onItemClick(ccJayezeh , tedadKala,mablaghForosh,ccKalaCode,ccDarkhastFaktor,position, ccMoshtary );
 
                     if (jayezehByccKalaCodeParentModels.get(position).getJayezehByccKalaCodeModels() != null){
                         if (jayezehByccKalaCodeParentModels.get(position).getJayezehByccKalaCodeModels().size() > 0){
@@ -133,7 +135,7 @@ public class JayezehParentAlertAdapter extends RecyclerView.Adapter<JayezehParen
                     }
 
                 } else {
-                    listener.onItemClick(ccJayezeh , tedadKala,mablaghForosh,ccKalaCode,ccDarkhastFaktor,position);
+                    listener.onItemClick(ccJayezeh , tedadKala,mablaghForosh,ccKalaCode,ccDarkhastFaktor,position, ccMoshtary);
 
                     if (jayezehByccKalaCodeParentModels.get(position).getJayezehByccKalaCodeModels() != null){
                         if (jayezehByccKalaCodeParentModels.get(position).getJayezehByccKalaCodeModels().size() > 0){
@@ -218,7 +220,7 @@ public class JayezehParentAlertAdapter extends RecyclerView.Adapter<JayezehParen
 
     public interface OnItemClickListener
     {
-        void onItemClick(int ccJayezeh , int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor , int position);
+        void onItemClick(int ccJayezeh , int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor , int position, int ccMoshtary);
     }
 
 }

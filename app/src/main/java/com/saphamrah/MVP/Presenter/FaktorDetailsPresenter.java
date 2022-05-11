@@ -39,7 +39,7 @@ public class FaktorDetailsPresenter implements FaktorDetailsMVP.PresenterOps , F
     }
 
     @Override
-    public void getFaktorDetails(long ccDarkhastFaktor , boolean getDetailOfNewFaktor)
+    public void getFaktorDetails(long ccDarkhastFaktor, int ccMoshtary , boolean getDetailOfNewFaktor)
     {
         if (ccDarkhastFaktor <= 0)
         {
@@ -49,11 +49,11 @@ public class FaktorDetailsPresenter implements FaktorDetailsMVP.PresenterOps , F
         {
             if (getDetailOfNewFaktor)
             {
-                mModel.getFaktorDetails(ccDarkhastFaktor);
+                mModel.getFaktorDetails(ccDarkhastFaktor,  ccMoshtary);
             }
             else
             {
-                mModel.getFaktorDetailsForTreasuryList(ccDarkhastFaktor);
+                mModel.getFaktorDetailsForTreasuryList(ccDarkhastFaktor,ccMoshtary);
             }
         }
     }

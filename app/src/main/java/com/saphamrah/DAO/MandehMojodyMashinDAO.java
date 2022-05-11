@@ -79,6 +79,7 @@ public class MandehMojodyMashinDAO
             MandehMojodyMashinModel.COLUMN_TarikhEngheza(),
             MandehMojodyMashinModel.COLUMN_GheymatMasrafKonandeh(),
             MandehMojodyMashinModel.COLUMN_GheymatForosh(),
+            MandehMojodyMashinModel.COLUMN_GheymatKharid(),
             MandehMojodyMashinModel.COLUMN_ccTaminKonandeh(),
             MandehMojodyMashinModel.COLUMN_Max_Mojody(),
             MandehMojodyMashinModel.COLUMN_Max_MojodyByShomarehBach(),
@@ -381,6 +382,7 @@ public class MandehMojodyMashinDAO
         contentValues.put(MandehMojodyMashinModel.COLUMN_TarikhEngheza() , mandehMojodyMashinModel.getTarikhEngheza());
         contentValues.put(MandehMojodyMashinModel.COLUMN_GheymatMasrafKonandeh() , mandehMojodyMashinModel.getGheymatMasrafKonandeh());
         contentValues.put(MandehMojodyMashinModel.COLUMN_GheymatForosh() , mandehMojodyMashinModel.getGheymatForosh());
+        contentValues.put(MandehMojodyMashinModel.COLUMN_GheymatKharid() , mandehMojodyMashinModel.getGheymatKharid());
         contentValues.put(MandehMojodyMashinModel.COLUMN_ccTaminKonandeh() , mandehMojodyMashinModel.getCcTaminKonandeh());
         contentValues.put(MandehMojodyMashinModel.COLUMN_Max_Mojody() , mandehMojodyMashinModel.getMaxMojody());
         contentValues.put(MandehMojodyMashinModel.COLUMN_Max_MojodyByShomarehBach() , mandehMojodyMashinModel.getMax_MojodyByShomarehBach());
@@ -405,8 +407,9 @@ public class MandehMojodyMashinDAO
             mandehMojodyMashinModel.setShomarehBach(cursor.getString(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_ShomarehBach())));
             mandehMojodyMashinModel.setTarikhTolid(cursor.getString(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_TarikhTolid())));
             mandehMojodyMashinModel.setTarikhEngheza(cursor.getString(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_TarikhEngheza())));
-            mandehMojodyMashinModel.setGheymatMasrafKonandeh(cursor.getInt(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_GheymatMasrafKonandeh())));
-            mandehMojodyMashinModel.setGheymatForosh(cursor.getInt(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_GheymatForosh())));
+            mandehMojodyMashinModel.setGheymatMasrafKonandeh(cursor.getDouble(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_GheymatMasrafKonandeh())));
+            mandehMojodyMashinModel.setGheymatForosh(cursor.getDouble(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_GheymatForosh())));
+            mandehMojodyMashinModel.setGheymatKharid(cursor.getDouble(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_GheymatKharid())));
             mandehMojodyMashinModel.setCcTaminKonandeh(cursor.getInt(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_ccTaminKonandeh())));
             mandehMojodyMashinModel.setMaxMojody(cursor.getInt(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_Max_Mojody())));
             mandehMojodyMashinModel.setMax_MojodyByShomarehBach(cursor.getInt(cursor.getColumnIndex(MandehMojodyMashinModel.COLUMN_Max_MojodyByShomarehBach())));

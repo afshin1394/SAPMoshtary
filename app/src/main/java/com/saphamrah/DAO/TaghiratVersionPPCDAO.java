@@ -310,7 +310,10 @@ public class TaghiratVersionPPCDAO
                 if (cursor.getCount() > 0)
                 {
                     cursor.moveToFirst();
-                    desc = cursor.getString(0);
+                    while (!cursor.isAfterLast()) {
+                        desc += cursor.getString(0) + "#";
+                        cursor.moveToNext();
+                    }
                 }
                 cursor.close();
             }

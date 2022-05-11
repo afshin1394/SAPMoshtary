@@ -34,10 +34,10 @@ public class FaktorDetailsModel implements FaktorDetailsMVP.ModelOps
     }
 
     @Override
-    public void getFaktorDetails(long ccDarkhastFaktor)
+    public void getFaktorDetails(long ccDarkhastFaktor, int ccMoshtary)
     {
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
 
         MoshtaryModel moshtaryModel = new MoshtaryDAO(mPresenter.getAppContext()).getByccMoshtary(darkhastFaktorModel.getCcMoshtary());
         MoshtaryAddressModel moshtaryAddressModel = new MoshtaryAddressDAO(mPresenter.getAppContext()).getByccMoshtaryAndccAddress(darkhastFaktorModel.getCcMoshtary(), darkhastFaktorModel.getCcAddressMoshtary());
@@ -58,7 +58,7 @@ public class FaktorDetailsModel implements FaktorDetailsMVP.ModelOps
 
 
         KalaElamMarjoeeDAO kalaElamMarjoeeDAO = new KalaElamMarjoeeDAO(mPresenter.getAppContext());
-        ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels = kalaElamMarjoeeDAO.getByccDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor());
+        ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels = kalaElamMarjoeeDAO.getByccDarkhastFaktor(darkhastFaktorModel.getCcDarkhastFaktor(),darkhastFaktorModel.getCcMoshtary());
         mPresenter.onGetKalaElamMarjoee(kalaElamMarjoeeModels);
 
 
@@ -81,12 +81,12 @@ public class FaktorDetailsModel implements FaktorDetailsMVP.ModelOps
 
 
     @Override
-    public void getFaktorDetailsForTreasuryList(long ccDarkhastFaktor)
+    public void getFaktorDetailsForTreasuryList(long ccDarkhastFaktor, int ccMoshtary)
     {
         Log.d("FaktorDetail" , "ccDarkhastFaktor : " + ccDarkhastFaktor);
 
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
 
         MoshtaryModel moshtaryModel = new MoshtaryDAO(mPresenter.getAppContext()).getByccMoshtary(darkhastFaktorModel.getCcMoshtary());
         MoshtaryAddressModel moshtaryAddressModel = new MoshtaryAddressDAO(mPresenter.getAppContext()).getByccMoshtaryAndccAddress(darkhastFaktorModel.getCcMoshtary(), darkhastFaktorModel.getCcAddressMoshtary());

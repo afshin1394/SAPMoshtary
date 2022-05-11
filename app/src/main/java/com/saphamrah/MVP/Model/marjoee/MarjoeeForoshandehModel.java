@@ -80,11 +80,11 @@ import java.util.Date;
      * sabt marjoee foroshandeh
      */
     @Override
-    public void checkTaeidSabtMarjoee(ElamMarjoeeForoshandehModel entity  , long ccDarkhastFaktor, int itemCount, int selectedCount, int position,boolean addMarjoee) {
+    public void checkTaeidSabtMarjoee(ElamMarjoeeForoshandehModel entity  , long ccDarkhastFaktor, int itemCount, int selectedCount, int position,boolean addMarjoee, int ccMoshtary) {
         this.ccDarkhastFaktor = ccDarkhastFaktor;
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         tedadMarjoeeForInsert = selectedCount;
-        insertKardexForoshandeh( entity, foroshandehMamorPakhshModel.getCcMarkazAnbar(), ccDarkhastFaktor);
+        insertKardexForoshandeh( entity, foroshandehMamorPakhshModel.getCcMarkazAnbar(), ccDarkhastFaktor, ccMoshtary);
         ccKardex =kardexDAO.findccKardexByccRefrence(Long.parseLong(entity.getCcDarkhastFaktor()));
         if(ccKardex > 0) {
               ccKardexSatr = insertKardexSatrForoshandeh(entity, ccKardex);
@@ -147,13 +147,13 @@ import java.util.Date;
 
      * @return
      */
-   private long insertKardexForoshandeh(ElamMarjoeeForoshandehModel entity, int ccMarkazAnbar, long ccRefrence)
+   private long insertKardexForoshandeh(ElamMarjoeeForoshandehModel entity, int ccMarkazAnbar, long ccRefrence, int ccMoshtary)
    {
        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
        KardexModel kardex= new KardexModel();
        DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
-       DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccRefrence);
+       DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccRefrence, ccMoshtary);
 
        try
        {
@@ -312,15 +312,15 @@ import java.util.Date;
             //--------------- Update_MablaghMandehFaktor ----------
             DariaftPardakhtDarkhastFaktorPPCModel dariaftPardakhtDarkhastFaktorPPC= new DariaftPardakhtDarkhastFaktorPPCModel();
             DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(context);
-            darkhastFaktorDAO.updateMandehDarkhastFaktor(ccDarkhastFaktor);
-            double MablaghMandehFaktor = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor).getMablaghMandeh();
+            darkhastFaktorDAO.updateMandehDarkhastFaktor(ccDarkhastFaktor,kardexSatr.getCcMoshtary());
+            double MablaghMandehFaktor = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor, kardexSatr.getCcMoshtary()).getMablaghMandeh();
 
             double MablaghMarjoee= kardexSatr.getGheymatForosh() * kardexSatr.getTedad3();
             double MablaghDariaftPardakhtDarkhastFaktor = MablaghMarjoee < MablaghMandehFaktor ? MablaghMarjoee : MablaghMandehFaktor;
             //--------------------------------------
             dariaftPardakhtDarkhastFaktorPPC= dariaftPardakhtDarkhastFaktorPPCDAO.SetForInsert_DariaftPardakhtDarkhastFaktorPPC(
                     ccDarkhastFaktor, ccDariaftPardakht, Constants.VALUE_MARJOEE(), "مرجوعی",
-                    "0", new Date(), "", MablaghMarjoee, MablaghDariaftPardakhtDarkhastFaktor, 0, 0, 0, ccKardexSatr, 0,0,0,0);
+                    "0", new Date(), "", MablaghMarjoee, MablaghDariaftPardakhtDarkhastFaktor, 0, 0, 0, ccKardexSatr, 0,0,0,0, kardexSatr.getCcMoshtary());
             dariaftPardakhtDarkhastFaktorPPCDAO.insert(dariaftPardakhtDarkhastFaktorPPC);
 
 

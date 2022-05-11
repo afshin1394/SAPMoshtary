@@ -47,8 +47,8 @@ public class MarjoeeForoshandehPresenter implements MarjoeeForoshandehMVP.Presen
     }
 
     @Override
-    public void checkTaeidSabtMarjoee( ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,long ccDarkhastFaktor, int itemCount, int selectedCount, int position,boolean insert) {
-        mModel.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt , ccDarkhastFaktor  , itemCount , selectedCount,position,insert);
+    public void checkTaeidSabtMarjoee( ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,long ccDarkhastFaktor, int itemCount, int selectedCount, int position,boolean insert,int ccMoshtary) {
+        mModel.checkTaeidSabtMarjoee(elamMarjoeeForoshandehModelCheckTaeidSabt , ccDarkhastFaktor  , itemCount , selectedCount,position,insert,ccMoshtary);
     }
 
 //    @Override

@@ -142,10 +142,11 @@ public class VerifyCustomerRequestActivity extends AppCompatActivity implements 
     }
 
     @Override
-    public void openFaktorDetailActivity(long ccDarkhastFaktor)
+    public void openFaktorDetailActivity(long ccDarkhastFaktor, int ccMoshtary)
     {
         Intent intent = new Intent(VerifyCustomerRequestActivity.this , FaktorDetailsActivity.class);
         intent.putExtra("ccDarkhastFaktor" , ccDarkhastFaktor);
+        intent.putExtra("ccMoshtary" , ccMoshtary);
         intent.putExtra("sourceActivity" , "VerifyCustomerRequestActivity");
         startActivity(intent);
         overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);

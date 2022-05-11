@@ -103,10 +103,10 @@ public class MarjoeeKalaModel implements MarjoeeKalaMVP.ModelOps
     }
 
     @Override
-    public void getKalaMarjoee(long ccDarkhastFaktor)
+    public void getKalaMarjoee(long ccDarkhastFaktor, int ccMoshtary)
     {
         KalaElamMarjoeeDAO kalaElamMarjoeeDAO = new KalaElamMarjoeeDAO(mPresenter.getAppContext());
-        ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels = kalaElamMarjoeeDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels = kalaElamMarjoeeDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
         Log.d("MarjoeeKala","kalaElamMarjoeeModels: " + kalaElamMarjoeeModels.toString());
         mPresenter.onGetKalaMarjoee(kalaElamMarjoeeModels);
     }
@@ -124,10 +124,11 @@ public class MarjoeeKalaModel implements MarjoeeKalaMVP.ModelOps
         {
             Log.d("MarjoeeKala" , "in if ,  ccElamMarjoee before insert satr : " + ccElamMarjoee);
             elamMarjoeeSatrPPCModel.setCcElamMarjoeePPC(ccElamMarjoee);
+            elamMarjoeeSatrPPCModel.setExtraProp_ccMoshtary(ccMoshtary);
             Log.d("MarjoeeKala" , "in if ,  getCcElamMarjoeePPC(ccElamMarjoee) : " + elamMarjoeeSatrPPCModel.getCcElamMarjoeePPC());
             if (elamMarjoeeSatrPPCDAO.insert(elamMarjoeeSatrPPCModel))
             {
-                getKalaMarjoee(elamMarjoeeSatrPPCModel.getCcDarkhastFaktor());
+                getKalaMarjoee(elamMarjoeeSatrPPCModel.getCcDarkhastFaktor(),elamMarjoeeSatrPPCModel.getExtraProp_ccMoshtary());
                 mPresenter.onSuccessInsertMarjoee();
             }
             else
@@ -152,9 +153,10 @@ public class MarjoeeKalaModel implements MarjoeeKalaMVP.ModelOps
             if (ccElamMarjoee > 0)
             {
                 elamMarjoeeSatrPPCModel.setCcElamMarjoeePPC(ccElamMarjoee);
+                elamMarjoeeSatrPPCModel.setExtraProp_ccMoshtary(ccMoshtary);
                 if (elamMarjoeeSatrPPCDAO.insert(elamMarjoeeSatrPPCModel))
                 {
-                    getKalaMarjoee(elamMarjoeeSatrPPCModel.getCcDarkhastFaktor());
+                    getKalaMarjoee(elamMarjoeeSatrPPCModel.getCcDarkhastFaktor(),ccMoshtary);
                     mPresenter.onSuccessInsertMarjoee();
                 }
                 else
@@ -183,7 +185,7 @@ public class MarjoeeKalaModel implements MarjoeeKalaMVP.ModelOps
         {
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
             DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-            DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+            DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor, ccMoshtary);
             MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
             MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
 
@@ -244,7 +246,7 @@ public class MarjoeeKalaModel implements MarjoeeKalaMVP.ModelOps
                 Log.d("mablaghMandeh" , "getExtraProp_MablaghNahaeeFaktor : " + darkhastFaktorModel.getExtraProp_MablaghNahaeeFaktor());
 
                 boolean insertResult = insertMarjoeeDariaftPardakhtDarkhastFaktor(foroshandehMamorPakhshModel, darkhastFaktorModel, ccDariaftPardakht,MablaghKolMarjoeeMoshtary,(long) MablaghDariaftPardakhtDarkhastFaktor);
-                boolean updateResult = darkhastFaktorDAO.updateMandehDarkhastFaktor(ccDarkhastFaktor);
+                boolean updateResult = darkhastFaktorDAO.updateMandehDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
 
                 //Log.d("mablaghMandeh" , "mandeh in marjoee : " + darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor).getMablaghMandeh());
 
@@ -316,6 +318,7 @@ public class MarjoeeKalaModel implements MarjoeeKalaMVP.ModelOps
             dariaftPardakhtDarkhastFaktorPPC.setExtraProp_CanDelete(0);
             dariaftPardakhtDarkhastFaktorPPC.setExtraProp_IsTajil(0);
             dariaftPardakhtDarkhastFaktorPPC.setExtraProp_ccDarkhastFaktorServer(darkhastFaktorModel.getCcDarkhastFaktor());
+            dariaftPardakhtDarkhastFaktorPPC.setExtraProp_ccMoshtary(darkhastFaktorModel.getCcMoshtary());
 
             return dariaftPardakhtDarkhastFaktorPPCDAO.insert(dariaftPardakhtDarkhastFaktorPPC) > 0;
         }
@@ -351,13 +354,13 @@ public class MarjoeeKalaModel implements MarjoeeKalaMVP.ModelOps
     }
 
     @Override
-    public void updateCountOfMarjoee(long ccDarkhastFaktor, int ccElamMarjoeeSatr, int newCount)
+    public void updateCountOfMarjoee(long ccDarkhastFaktor, int ccMoshtary, int ccElamMarjoeeSatr, int newCount)
     {
         ElamMarjoeeSatrPPCDAO elamMarjoeeSatrPPCDAO = new ElamMarjoeeSatrPPCDAO(mPresenter.getAppContext());
         int affectedRows = elamMarjoeeSatrPPCDAO.updateCount(ccElamMarjoeeSatr, newCount);
         if (affectedRows > 0)
         {
-            getKalaMarjoee(ccDarkhastFaktor);
+            getKalaMarjoee(ccDarkhastFaktor,ccMoshtary);
             mPresenter.onUpdateCount(true);
         }
         else

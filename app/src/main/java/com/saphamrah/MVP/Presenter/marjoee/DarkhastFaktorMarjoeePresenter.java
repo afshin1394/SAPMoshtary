@@ -40,8 +40,8 @@ public class DarkhastFaktorMarjoeePresenter implements DarkhastFaktorMarjoeeMVP.
 
 
     @Override
-    public void sendMarjoee(long ccDarkhastFaktor) {
-        mModel.sendMarjoee(ccDarkhastFaktor);
+    public void sendMarjoee(long ccDarkhastFaktor, int ccMoshtary) {
+        mModel.sendMarjoee(ccDarkhastFaktor, ccMoshtary);
     }
 
 

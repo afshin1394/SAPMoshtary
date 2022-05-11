@@ -38,17 +38,17 @@ public class CalculateHajmiDiscountTaminKonandeh extends DiscountCalculation
         {
             String codeTakhfif = "";
             int ccTaminKonandeh;
-            long sumTedadTaminKonandeh; // Sum Tedad3 Darkhast Bar Hasbe TaminKonandeh..
-            long sumTedadBastehTaminKonandeh;
-            long sumTedadKartonTaminKonandeh;
+            Double sumTedadTaminKonandeh; // Sum Tedad3 Darkhast Bar Hasbe TaminKonandeh..
+            Double sumTedadBastehTaminKonandeh;
+            Double sumTedadKartonTaminKonandeh;
             long sumMablaghKolTaminKonandeh;// Sum MablaghKol Darkhast Bar Hasbe TaminKonandeh..
             long sumVaznTaminKonandeh;
             int tedadAghlam;
 
             int ccTaminKonandehMohasebeh;
-            long sumTedadTaminKonandehMohasebeh; // Sum Tedad3 Darkhast Bar Hasbe TaminKonandeh Mohasebeh..
-            long sumTedadBastehTaminKonandehMohasebeh;
-            long sumTedadKartonTaminKonandehMohasebeh;
+            Double sumTedadTaminKonandehMohasebeh; // Sum Tedad3 Darkhast Bar Hasbe TaminKonandeh Mohasebeh..
+            Double sumTedadBastehTaminKonandehMohasebeh;
+            Double sumTedadKartonTaminKonandehMohasebeh;
             long sumMablaghKolTaminKonandehMohasebeh; // Sum MablaghKol Darkhast Bar Hasbe TaminKonandeh Mohasebeh..
             long Mablagh=0;
             long MablaghKol=0;
@@ -63,9 +63,9 @@ public class CalculateHajmiDiscountTaminKonandeh extends DiscountCalculation
             for (DataTableModel taminKonandeh : taminKonandehs)
             {
                 ccTaminKonandeh = Integer.valueOf(taminKonandeh.getFiled1());
-                sumTedadTaminKonandeh = Long.valueOf(taminKonandeh.getFiled2());
-                sumTedadBastehTaminKonandeh = Long.valueOf(taminKonandeh.getFiled3());
-                sumTedadKartonTaminKonandeh = Long.valueOf(taminKonandeh.getFiled4());
+                sumTedadTaminKonandeh = Double.valueOf(taminKonandeh.getFiled2());
+                sumTedadBastehTaminKonandeh = Double.valueOf(taminKonandeh.getFiled3());
+                sumTedadKartonTaminKonandeh = Double.valueOf(taminKonandeh.getFiled4());
                 sumMablaghKolTaminKonandeh = Math.round(Double.valueOf(taminKonandeh.getFiled5()));
                 sumVaznTaminKonandeh = Math.round(Double.valueOf(taminKonandeh.getFiled6()));
                 tedadAghlam = Integer.valueOf(taminKonandeh.getFiled7());
@@ -92,9 +92,9 @@ public class CalculateHajmiDiscountTaminKonandeh extends DiscountCalculation
 
                         ArrayList<DataTableModel> brandByccTaminKonandehMohasebeh = darkhastFaktorSatrDAO.getBrandByccTaminKonandehMohasebeh(darkhastFaktorModel.getCcDarkhastFaktor(), ccTaminKonandehMohasebeh, takhfifHajmiTitrSatrModel.getOlaviat(), takhfifHajmiTitrSatrModel.getNoeGheymat());
 
-                        sumTedadTaminKonandehMohasebeh = Long.valueOf(brandByccTaminKonandehMohasebeh.get(0).getFiled2());
-                        sumTedadBastehTaminKonandehMohasebeh = Long.valueOf(brandByccTaminKonandehMohasebeh.get(0).getFiled3());
-                        sumTedadKartonTaminKonandehMohasebeh = Long.valueOf(brandByccTaminKonandehMohasebeh.get(0).getFiled4());
+                        sumTedadTaminKonandehMohasebeh = Double.valueOf(brandByccTaminKonandehMohasebeh.get(0).getFiled2());
+                        sumTedadBastehTaminKonandehMohasebeh = Double.valueOf(brandByccTaminKonandehMohasebeh.get(0).getFiled3());
+                        sumTedadKartonTaminKonandehMohasebeh = Double.valueOf(brandByccTaminKonandehMohasebeh.get(0).getFiled4());
                         sumMablaghKolTaminKonandehMohasebeh = Math.round(Double.valueOf(brandByccTaminKonandehMohasebeh.get(0).getFiled5()));
                         mablaghVahed = Math.round(sumMablaghKolTaminKonandehMohasebeh / sumTedadTaminKonandehMohasebeh);
 

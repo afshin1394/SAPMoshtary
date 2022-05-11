@@ -69,7 +69,7 @@ public class PishDaryaftModel implements PishDaryaftMVP.ModelOps {
                 } else {
                     int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
                     DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
-                    DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(dariaftPardakhtPPCModels.get(0).getCcDarkhastFaktor());
+                    DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(dariaftPardakhtPPCModels.get(0).getCcDarkhastFaktor(),dariaftPardakhtPPCModels.get(0).getCcMoshtary());
                     ParameterChildDAO childParameterDAO = new ParameterChildDAO(BaseApplication.getContext());
                     int codeNoeVosolVajhNaghd = Integer.parseInt(childParameterDAO.getAllByccChildParameter(String.valueOf(Constants.CC_CHILD_CODE_NOE_VOSOL_VAJH_NAGHD())).get(0).getValue());
                     String currentVersionNumber = new PubFunc().new DeviceInfo().getCurrentVersion(BaseApplication.getContext());

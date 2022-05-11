@@ -35,17 +35,17 @@ public class CalculateHajmiDiscountBrand extends DiscountCalculation
         try
         {
             int ccBrand;
-            long sumTedadBrand; // Sum Tedad3 Darkhast Bar Hasbe Brand..
-            long sumTedadBastehBrand;
-            long sumTedadKartonBrand;
+            double sumTedadBrand; // Sum Tedad3 Darkhast Bar Hasbe Brand..
+            double sumTedadBastehBrand;
+            double sumTedadKartonBrand;
             long sumMablaghKolBrand; // Sum MablaghKol Darkhast Bar Hasbe Brand..
             long sumVaznBrand=0;
             int tedadAghlam=0;
 
             int ccBrandMohasebeh;
-            long sumTedadBrandMohasebeh; // Sum Tedad3 Darkhast Bar Hasbe Brand Mohasebeh..
-            long sumTedadBastehBrandMohasebeh;
-            long sumTedadKartonBrandMohasebeh;
+            double sumTedadBrandMohasebeh; // Sum Tedad3 Darkhast Bar Hasbe Brand Mohasebeh..
+            double sumTedadBastehBrandMohasebeh;
+            double sumTedadKartonBrandMohasebeh;
             long sumMablaghKolBrandMohasebeh; // Sum MablaghKol Darkhast Bar Hasbe Brand Mohasebeh..
 
             long mablaghVahed=0;
@@ -62,9 +62,9 @@ public class CalculateHajmiDiscountBrand extends DiscountCalculation
             for (DataTableModel brand : brands)
             {
                 ccBrand = Integer.valueOf(brand.getFiled1());
-                sumTedadBrand = Long.valueOf(brand.getFiled2());
-                sumTedadBastehBrand = Long.valueOf(brand.getFiled4());
-                sumTedadKartonBrand = Long.valueOf(brand.getFiled3());
+                sumTedadBrand = Double.valueOf(brand.getFiled2());
+                sumTedadBastehBrand = Double.valueOf(brand.getFiled4());
+                sumTedadKartonBrand = Double.valueOf(brand.getFiled3());
                 sumMablaghKolBrand = Math.round(Double.valueOf(brand.getFiled5()));
                 sumVaznBrand = Math.round(Double.valueOf(brand.getFiled6()));
                 tedadAghlam = Integer.valueOf(brand.getFiled7());
@@ -92,9 +92,9 @@ public class CalculateHajmiDiscountBrand extends DiscountCalculation
                     ccBrandMohasebeh = takhfifHajmiSatrModel.getCcGorohMohasebeh();
                     ArrayList<DataTableModel> brandMohasebeh = darkhastFaktorSatrDAO.getTedadBeTafkikBrandMohasebeh(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getOlaviat(), ccBrandMohasebeh,takhfifHajmiTitrSatrModel.getNoeGheymat());
 
-                    sumTedadBrandMohasebeh = Long.valueOf(brandMohasebeh.get(0).getFiled2());
-                    sumTedadBastehBrandMohasebeh = Long.valueOf(brandMohasebeh.get(0).getFiled4());
-                    sumTedadKartonBrandMohasebeh = Long.valueOf(brandMohasebeh.get(0).getFiled3());
+                    sumTedadBrandMohasebeh = Double.valueOf(brandMohasebeh.get(0).getFiled2());
+                    sumTedadBastehBrandMohasebeh = Double.valueOf(brandMohasebeh.get(0).getFiled4());
+                    sumTedadKartonBrandMohasebeh = Double.valueOf(brandMohasebeh.get(0).getFiled3());
                     sumMablaghKolBrandMohasebeh = Math.round(Double.valueOf(brandMohasebeh.get(0).getFiled5()));
 
                     mablaghVahed = Math.round (sumMablaghKolBrandMohasebeh / sumTedadBrandMohasebeh);

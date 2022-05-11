@@ -192,7 +192,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
 
             if (model.getSelectedCount() > 0) {
                 Log.d("bonus", "jayezeh select count >0 ");
-
+// todo - double
                 count++;
                 DarkhastFaktorJayezehModel darkhastFaktorJayezehModel = new DarkhastFaktorJayezehModel();
                 darkhastFaktorJayezehModel.setCcKalaCode(model.getCcKalaCode());
@@ -216,6 +216,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
                     kalaMojodiModel.setShomarehBach(model.getShomarehBach());
                     kalaMojodiModel.setGheymatMasrafKonandeh(model.getGheymatMasrafKonandeh());
                     kalaMojodiModel.setGheymatForosh(model.getGheymatForosh());
+                    kalaMojodiModel.setGheymatKharid(model.getGheymatKharid());
                     kalaMojodiModel.setCcKalaCode(model.getCcKalaCode());
                     kalaMojodiModel.setCcForoshandeh(selectFaktorShared.getInt(selectFaktorShared.getCcForoshandeh(), model.getCcForoshandeh()));
                     kalaMojodiModel.setCcDarkhastFaktor(ccDarkhastFaktor);
@@ -225,7 +226,9 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
                     kalaMojodiModel.setMax_MojodyByShomarehBach(-1 * model.getSelectedCount());
                     kalaMojodiModel.setCcAfrad(FinalCCAfrad);
                     if (kalaMojodiDAO.insert(kalaMojodiModel)) {
-                        Log.d("bonus", "model.getGheymatForosh() : " + model.getGheymatForosh());
+                        SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
+                        int ccForoshandeh = shared.getInt(shared.getCcForoshandeh(), -1);
+                        Log.d("bonus", "model.getGheymatForosh() : " + model.getGheymatForosh() + " ,ccForoshandeh=" + ccForoshandeh);
                         DarkhastFaktorSatrModel darkhastFaktorSatrModel = new DarkhastFaktorSatrModel();
                         darkhastFaktorSatrModel.setCcDarkhastFaktor(ccDarkhastFaktor);
                         darkhastFaktorSatrModel.setCcTaminKonandeh(model.getCcTaminKonandeh());
@@ -237,16 +240,17 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
                         darkhastFaktorSatrModel.setTarikhTolid(model.getTarikhTolid());
                         darkhastFaktorSatrModel.setTarikhEngheza(model.getTarikhEngheza());
                         darkhastFaktorSatrModel.setMablaghForosh(1);
-                        darkhastFaktorSatrModel.setMablaghForoshKhalesKala(model.getGheymatForosh());
+                        darkhastFaktorSatrModel.setMablaghForoshKhalesKala((double)model.getGheymatForosh());
                         Log.d("bonus", "model.setMablaghForoshKhalesKala() : " + darkhastFaktorSatrModel.getMablaghForoshKhalesKala());
                         darkhastFaktorSatrModel.setMablaghTakhfifNaghdiVahed(0);
                         darkhastFaktorSatrModel.setMaliat(0);
                         darkhastFaktorSatrModel.setAvarez(0);
-                        darkhastFaktorSatrModel.setCcAfrad(0);
+                        darkhastFaktorSatrModel.setCcAfrad(ccForoshandeh);
                         darkhastFaktorSatrModel.setExtraProp_IsOld(false);
-                        darkhastFaktorSatrModel.setGheymatMasrafKonandeh(model.getGheymatMasrafKonandeh());
+                        darkhastFaktorSatrModel.setGheymatMasrafKonandeh((double)model.getGheymatMasrafKonandeh());
                         darkhastFaktorSatrModel.setGheymatForoshAsli(model.getGheymatForosh());
                         darkhastFaktorSatrModel.setGheymatMasrafKonandehAsli(model.getGheymatMasrafKonandeh());
+                        darkhastFaktorSatrModel.setGheymatKharid(model.getGheymatKharid());
                         if (darkhastFaktorSatrDAO.insert(darkhastFaktorSatrModel)) {
                             insertedCount++;
                         }

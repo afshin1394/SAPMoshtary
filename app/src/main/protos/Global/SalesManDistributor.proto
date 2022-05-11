@@ -71,6 +71,7 @@ message SalesManDistributorReply {
   int32 ReturnedStoreID = 48;
   int32 ReturnedStoreTypeCode = 49;
   string Version = 50;
+  int32 IsKasrMojodi = 51;
 
 
 

@@ -18,6 +18,7 @@ public class ListKalaForMarjoeeModel
     private static final String COLUMN_Tedad = "Tedad";
     private static final String COLUMN_MablaghForosh = "MablaghForosh";
     private static final String COLUMN_MablaghMasrafKonandeh = "MablaghMasrafKonandeh";
+    private static final String COLUMN_MablaghKharid = "MablaghKharid";
     private static final String COLUMN_IsKalaZayeatTolid = "IsKalaZayeatTolid";
     private static final String COLUMN_IsMabna = "IsMabna";
 
@@ -57,6 +58,9 @@ public class ListKalaForMarjoeeModel
     }
     public static String COLUMN_MablaghMasrafKonandeh() {
         return COLUMN_MablaghMasrafKonandeh;
+    }
+    public static String COLUMN_MablaghKharid() {
+        return COLUMN_MablaghKharid;
     }
     public static String COLUMN_IsKalaZayeatTolid() {
         return COLUMN_IsKalaZayeatTolid;
@@ -98,10 +102,13 @@ public class ListKalaForMarjoeeModel
     private Integer tedad;
     @SerializedName("MablaghForosh")
     @Expose
-    private float mablaghForosh;
+    private double mablaghForosh;
     @SerializedName("MablaghMasrafKonandeh")
     @Expose
-    private float mablaghMasrafKonandeh;
+    private double mablaghMasrafKonandeh;
+    @SerializedName("MablaghKharid")
+    @Expose
+    private double mablaghKharid;
     @SerializedName("Id")
     @Expose
     private Integer id;
@@ -112,7 +119,7 @@ public class ListKalaForMarjoeeModel
     @Expose
     private int isMabna;
 
-    private float modifiedPrice;
+    private double modifiedPrice;
 
 
 
@@ -197,20 +204,27 @@ public class ListKalaForMarjoeeModel
         this.tedad = tedad;
     }
 
-    public float getMablaghForosh() {
+    public double getMablaghForosh() {
         return mablaghForosh;
     }
 
-    public void setMablaghForosh(float mablaghForosh) {
+    public void setMablaghForosh(double mablaghForosh) {
         this.mablaghForosh = mablaghForosh;
     }
 
-    public float getMablaghMasrafKonandeh() {
+    public double getMablaghMasrafKonandeh() {
         return mablaghMasrafKonandeh;
     }
 
-    public void setMablaghMasrafKonandeh(float mablaghMasrafKonandeh) {
+    public void setMablaghMasrafKonandeh(double mablaghMasrafKonandeh) {
         this.mablaghMasrafKonandeh = mablaghMasrafKonandeh;
+    }
+    public double getMablaghKharid() {
+        return mablaghKharid;
+    }
+
+    public void setMablaghKharid(double mablaghKharid) {
+        this.mablaghKharid = mablaghKharid;
     }
 
     public Integer getId() {
@@ -238,11 +252,11 @@ public class ListKalaForMarjoeeModel
         this.isMabna = isMabna;
     }
 
-    public float getModifiedPrice() {
+    public double getModifiedPrice() {
         return modifiedPrice;
     }
 
-    public void setModifiedPrice(float modifiedPrice) {
+    public void setModifiedPrice(double modifiedPrice) {
         this.modifiedPrice = modifiedPrice;
     }
 
@@ -261,6 +275,7 @@ public class ListKalaForMarjoeeModel
                 ", tedad=" + tedad +
                 ", mablaghForosh=" + mablaghForosh +
                 ", mablaghMasrafKonandeh=" + mablaghMasrafKonandeh +
+                ", mablaghKharid=" + mablaghKharid +
                 ", id=" + id +
                 ", isKalaZayeatTolid=" + isKalaZayeatTolid +
                 ", isMabna=" + isMabna +

@@ -116,7 +116,8 @@ public class ForoshandehMamorPakhshDAO
 			ForoshandehMamorPakhshModel.COLUMN_FromDateKharejAzMahal(),
 			ForoshandehMamorPakhshModel.COLUMN_EndDateKharejAzMahal(),
 			ForoshandehMamorPakhshModel.COLUMN_CodeNoeAnbarMarjoee(),
-            ForoshandehMamorPakhshModel.COLUMN_Version()
+            ForoshandehMamorPakhshModel.COLUMN_Version(),
+            ForoshandehMamorPakhshModel.COLUMN_IsKasrMojodi()
 
         };
     }
@@ -192,6 +193,7 @@ public class ForoshandehMamorPakhshDAO
                                 model.setCcDarkhastFaktorNoeForosh(reply.getSellTypeInvoiceRequestID());
                                 model.setCheckOlaviatMoshtary(reply.getCheckCustomerPriority());
                                 model.setCodeNoeAnbarMarjoee(reply.getReturnedStoreTypeCode());
+                                model.setIsKasrMojodi(reply.getIsKasrMojodi());
                                 models.add(model);
                             }
 
@@ -723,6 +725,7 @@ public class ForoshandehMamorPakhshDAO
 				foroshandehMamorPakhshModel.setEndDateKharejAzMahal(cursor.getString(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_EndDateKharejAzMahal())));
 				foroshandehMamorPakhshModel.setCodeNoeAnbarMarjoee(cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_CodeNoeAnbarMarjoee())));
                 foroshandehMamorPakhshModel.setVersion(cursor.getString(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_Version())));
+                foroshandehMamorPakhshModel.setIsKasrMojodi(cursor.getInt(cursor.getColumnIndex(ForoshandehMamorPakhshModel.COLUMN_IsKasrMojodi())));
 
                 foroshandehMamorPakhshModels.add(foroshandehMamorPakhshModel);
                 cursor.moveToNext();
@@ -785,6 +788,7 @@ public class ForoshandehMamorPakhshDAO
 		contentValues.put(ForoshandehMamorPakhshModel.COLUMN_EndDateKharejAzMahal() , model.getEndDateKharejAzMahal());
 		contentValues.put(ForoshandehMamorPakhshModel.COLUMN_CodeNoeAnbarMarjoee() , model.getCodeNoeAnbarMarjoee());
         contentValues.put(ForoshandehMamorPakhshModel.COLUMN_Version(), model.getVersion());
+        contentValues.put(ForoshandehMamorPakhshModel.COLUMN_IsKasrMojodi(), model.getIsKasrMojodi());
 
 
         return contentValues;

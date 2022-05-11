@@ -332,7 +332,7 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
         mPresenter.getInfo(ccDarkhastFaktor, from);
         mPresenter.getNoeVosols(ccDarkhastFaktor, getFromShared, from, ccMoshtary);
         if (from == Constants.FROM_TREASURYLIST || from == Constants.FROM_CHECK_BARGASHTI || from == -1) {
-            mPresenter.getVosols(ccDarkhastFaktor);
+            mPresenter.getVosols(ccDarkhastFaktor, ccMoshtary);
         } else if (from == Constants.FROM_PISH_DARYAFT) {
             mPresenter.getVosolsPishDariaft(ccMoshtary);
         }
@@ -1333,7 +1333,7 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
 //        }
         if (from == Constants.FROM_TREASURYLIST || from == Constants.FROM_CHECK_BARGASHTI || from == -1) {
             //mPresenter.callTajil(ccDarkhastFaktor, 0);
-            mPresenter.getVosols(ccDarkhastFaktor);
+            mPresenter.getVosols(ccDarkhastFaktor,ccMoshtary);
             editTextMablaghMandeh.setText(decimalFormatter.format(mablaghMandeh));
         } else {
             mPresenter.getVosolsPishDariaft(ccMoshtary);
@@ -1473,7 +1473,7 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
                     public void setOnApplyClick() {
                         if (dariaftPardakhtDarkhastFaktorPPCModelsVosol.size() > 0) {
                             if (canDelete){
-                                mPresenter.removeItem(dariaftPardakhtDarkhastFaktorPPCModelsVosol.get(position), position, from,ccDarkhastFaktor);
+                                mPresenter.removeItem(dariaftPardakhtDarkhastFaktorPPCModelsVosol.get(position), position, from,ccDarkhastFaktor, ccMoshtary);
                             } else {
                                 customAlertDialog.showToast(InvoiceSettlementActivity.this, getResources().getString(R.string.canNotDelete), Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
 

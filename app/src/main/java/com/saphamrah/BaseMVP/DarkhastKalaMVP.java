@@ -67,8 +67,8 @@ public interface DarkhastKalaMVP
         void checkOnBackPress();
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
-        void checkJayezeh(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor,int position);
-        void checkJayezehParent(int ccKalaCode , int tedadKala , Long ccDarkhastFaktor, double mablaghForosh);
+        void checkJayezeh(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor,int position, int ccMoshtary);
+        void checkJayezehParent(int ccKalaCode , int tedadKala , Long ccDarkhastFaktor, double mablaghForosh, int ccMoshtary);
         void getRecyclerDetails();
         void checkZanjiree();
         void getKalaFilter();
@@ -116,8 +116,8 @@ public interface DarkhastKalaMVP
         void checkData();
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
-        void checkJayezeh(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor,int position);
-        void checkJayezehParent(int ccKalaCode , int tedadKala , Long ccDarkhastFaktor, double mablaghForosh);
+        void checkJayezeh(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor,int position, int ccMoshtary);
+        void checkJayezehParent(int ccKalaCode , int tedadKala , Long ccDarkhastFaktor, double mablaghForosh, int ccMoshtary);
 
         //Todo
         void getRecyclerDetails();

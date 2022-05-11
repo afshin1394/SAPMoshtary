@@ -55,7 +55,7 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     }
 
     @Override
-    public void getDariaftPardakhtForSend(long ccDarkhastFaktor , int codeVazeiat , int position)
+    public void getDariaftPardakhtForSend(long ccDarkhastFaktor, int ccMoshtary , int codeVazeiat , int position)
     {
         if (codeVazeiat < 6)
         {
@@ -64,7 +64,7 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
         else
         {
             mView.get().showLoading();
-            mModel.getDariaftPardakhtForSend(ccDarkhastFaktor , position);
+            mModel.getDariaftPardakhtForSend(ccDarkhastFaktor, ccMoshtary , position);
         }
     }
 
@@ -133,8 +133,8 @@ public class TreasuryListPresenter implements TreasuryListMVP.PresenterOps , Tre
     }
 
     @Override
-    public void getElatAdamTahvilDarkhast(long ccDarkhastFaktor,int position) {
-        mModel.getElatAdamTahvilDarkhast(ccDarkhastFaktor,position);
+    public void getElatAdamTahvilDarkhast(long ccDarkhastFaktor, int ccMoshtary,int position) {
+        mModel.getElatAdamTahvilDarkhast(ccDarkhastFaktor, ccMoshtary,position);
     }
 
 

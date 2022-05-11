@@ -50,17 +50,17 @@ public class CalculateHajmiDiscountGorohKala extends DiscountCalculation
         try
         {
             String codeTakhfif = new ParameterChildDAO(context).getValueByccChildParameter(Constants.CC_CHILD_CODE_TAKHFIF_HAJMI());
-            long sumTedadGorohKala = 0; // Sum Tedad Darkhast Bar Hasbe GorohKala..
-            long sumTedadBastehGorohKala = 0;
-            long sumTedadKartonGorohKala = 0;
+            double sumTedadGorohKala = 0; // Sum Tedad Darkhast Bar Hasbe GorohKala..
+            double sumTedadBastehGorohKala = 0;
+            double sumTedadKartonGorohKala = 0;
             long sumMablaghForoshGorohKala = 0;// Sum MablaghForosh Darkhast Bar Hasbe GorohKala..
             long sumMablaghKolGorohKala = 0; // Sum MablaghKol Darkhast Bar Hasbe GorohKala..
             long sumVaznGorohkala=0;
             long  tedadAghlam=0;
 
-            long sumTedadGorohKalaMohasebeh = 0; // Sum Tedad Darkhast Bar Hasbe GorohKala Mohasebeh..
-            long sumTedadBastehGorohKalaMohasebeh = 0;
-            long sumTedadKartonGorohKalaMohasebeh = 0;
+            double sumTedadGorohKalaMohasebeh = 0; // Sum Tedad Darkhast Bar Hasbe GorohKala Mohasebeh..
+            double sumTedadBastehGorohKalaMohasebeh = 0;
+            double sumTedadKartonGorohKalaMohasebeh = 0;
             long sumMablaghForoshGorohKalaMohasebeh = 0;// Sum MablaghForosh Darkhast Bar Hasbe GorohKala Mohasebeh..
             long sumMablaghKolGorohKalaMohasebeh = 0; // Sum MablaghKol Darkhast Bar Hasbe GorohKala Mohasebeh..
 
@@ -98,17 +98,18 @@ public class CalculateHajmiDiscountGorohKala extends DiscountCalculation
                     Log.d("takhfif" , "takhfifHajmi takhfifhajmiSatr1 : " + takhfifhajmiSatr.toString());
                     if(takhfifhajmiSatr.getCodeNoeBastehBandy() == getBasteBandiBaste())
                     {
-                        ArrayList<DataTableModel> gorohs = darkhastFaktorSatrDAO.getTedadKartonByccGorohKala(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), Integer.valueOf(gorohKala.getFiled1()), takhfifHajmiTitrSatrModel.getOlaviat());
-                        sumTedadGorohKala= Math.round(Double.valueOf(gorohs.get(0).getFiled4()));
-                        sumTedadBastehGorohKala = Math.round(Double.valueOf(gorohs.get(0).getFiled3()));
-                        sumTedadKartonGorohKala = Math.round(Double.valueOf(gorohs.get(0).getFiled2()));
+                        ArrayList<DataTableModel> gorohs = darkhastFaktorSatrDAO.getTedadKartonByccGorohKala(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), Integer.valueOf(gorohKala.getFiled2()), takhfifHajmiTitrSatrModel.getOlaviat());
+                        //todo round
+                        sumTedadGorohKala= Double.valueOf(gorohs.get(0).getFiled4());
+                        sumTedadBastehGorohKala = Double.valueOf(gorohs.get(0).getFiled3());
+                        sumTedadKartonGorohKala = Double.valueOf(gorohs.get(0).getFiled2());
                     }
                     else if (takhfifhajmiSatr.getCodeNoeBastehBandy() == getBasteBandiCarton())
                     {
                         ArrayList<DataTableModel> gorohs = darkhastFaktorSatrDAO.getTedadKartonByccGorohKala(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), Integer.valueOf(gorohKala.getFiled1()), takhfifHajmiTitrSatrModel.getOlaviat());
-                        sumTedadGorohKala= Math.round(Double.valueOf(gorohs.get(0).getFiled4()));
-                        sumTedadBastehGorohKala = Math.round(Double.valueOf(gorohs.get(0).getFiled3()));
-                        sumTedadKartonGorohKala = Math.round(Double.valueOf(gorohs.get(0).getFiled2()));
+                        sumTedadGorohKala= Double.valueOf(gorohs.get(0).getFiled4());
+                        sumTedadBastehGorohKala = Double.valueOf(gorohs.get(0).getFiled3());
+                        sumTedadKartonGorohKala = Double.valueOf(gorohs.get(0).getFiled2());
                     }
 
                     Log.d("takhfif" , "takhfifHajmi takhfifHajmiSatrs : before" );
@@ -129,9 +130,9 @@ public class CalculateHajmiDiscountGorohKala extends DiscountCalculation
 
                         if(gorohKalaMohasebehs.size()>0)
                         {
-                            sumTedadGorohKalaMohasebeh = Math.round(Double.valueOf(gorohKalaMohasebehs.get(0).getFiled2()));
-                            sumTedadBastehGorohKalaMohasebeh = Math.round(Double.valueOf(gorohKalaMohasebehs.get(0).getFiled3()));
-                            sumTedadKartonGorohKalaMohasebeh = Math.round(Double.valueOf(gorohKalaMohasebehs.get(0).getFiled4()));
+                            sumTedadGorohKalaMohasebeh = Double.valueOf(gorohKalaMohasebehs.get(0).getFiled2());
+                            sumTedadBastehGorohKalaMohasebeh = Double.valueOf(gorohKalaMohasebehs.get(0).getFiled3());
+                            sumTedadKartonGorohKalaMohasebeh = Double.valueOf(gorohKalaMohasebehs.get(0).getFiled4());
                             sumMablaghKolGorohKalaMohasebeh = Math.round(Double.valueOf(gorohKalaMohasebehs.get(0).getFiled5()));
                         }
 
@@ -273,9 +274,9 @@ public class CalculateHajmiDiscountGorohKala extends DiscountCalculation
         try
         {
             String codeTakhfif = new ParameterChildDAO(context).getValueByccChildParameter(Constants.CC_CHILD_CODE_TAKHFIF_HAJMI());
-            long sumTedadGorohKala= 0;
-            long sumTedadBastehGorohKala= 0;
-            long sumTedadKartonGorohKala= 0;
+            double sumTedadGorohKala= 0;
+            double sumTedadBastehGorohKala= 0;
+            double sumTedadKartonGorohKala= 0;
             long sumMablaghKolGorohKala= 0;
             long sumVaznGorohKala = 0;
             int tedadKalaTakidi = 0;
@@ -306,9 +307,9 @@ public class CalculateHajmiDiscountGorohKala extends DiscountCalculation
 
                 for (DataTableModel gorohKala : gorohKalas)
                 {
-                    sumTedadGorohKala= Long.valueOf(gorohKala.getFiled2());
-                    sumTedadBastehGorohKala = Long.valueOf(gorohKala.getFiled3());
-                    sumTedadKartonGorohKala = Long.valueOf(gorohKala.getFiled4());
+                    sumTedadGorohKala= Double.valueOf(gorohKala.getFiled2());
+                    sumTedadBastehGorohKala = Double.valueOf(gorohKala.getFiled3());
+                    sumTedadKartonGorohKala = Double.valueOf(gorohKala.getFiled4());
                     sumMablaghKolGorohKala = Math.round(Double.valueOf(gorohKala.getFiled5()));
                     sumVaznGorohKala = Long.valueOf(gorohKala.getFiled8());
                     tedadAghlam = Integer.valueOf(gorohKala.getFiled9());
@@ -321,9 +322,9 @@ public class CalculateHajmiDiscountGorohKala extends DiscountCalculation
                         if(takhfifhajmiSatr.getCodeNoeBastehBandy() == getBasteBandiCarton())
                         {
                             ArrayList<DataTableModel> gorohs = darkhastFaktorSatrDAO.getTedadKartonByccGorohKala(darkhastFaktorModel.getCcDarkhastFaktor(), takhfifHajmiTitrSatrModel.getCcTakhfifHajmi(), Integer.valueOf(gorohKala.getFiled1()), takhfifHajmiTitrSatrModel.getOlaviat());
-                            sumTedadGorohKala= Long.valueOf(gorohs.get(0).getFiled4());
-                            sumTedadBastehGorohKala = Long.valueOf(gorohs.get(0).getFiled3());
-                            sumTedadKartonGorohKala = Long.valueOf(gorohs.get(0).getFiled2());
+                            sumTedadGorohKala= Double.valueOf(gorohs.get(0).getFiled4());
+                            sumTedadBastehGorohKala = Double.valueOf(gorohs.get(0).getFiled3());
+                            sumTedadKartonGorohKala = Double.valueOf(gorohs.get(0).getFiled2());
                         }
                         //Satrhaye Takhfif..
                         ArrayList<TakhfifHajmiSatrModel> takhfifHajmiSatrs = takhfifHajmiSatrDAO.getForFaktor(takhfifHajmiTitrSatrModel.getCcTakhfifHajmi() ,

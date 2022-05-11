@@ -11,7 +11,7 @@ public interface VerifyCustomerRequestMVP
         void openBarkhordAvalieActivity();
         void onGetAgreementContent(String text);
         void onSuccessInsertCustomerSign();
-        void openFaktorDetailActivity(long ccDarkhastFaktor);
+        void openFaktorDetailActivity(long ccDarkhastFaktor, int ccMoshtary);
         void showToast(int resId, int messageType , int duration);
         void onCheckLayoutTozihat(int visibility);
     }
@@ -37,7 +37,7 @@ public interface VerifyCustomerRequestMVP
         void onGetAgreementContent(String text);
         void onSuccessInsertCustomerSign();
         void onFailedInsertCustomerSign(int errorResId);
-        void onGetccDarkhastFaktor(long ccDarkhastFaktor);
+        void onGetccDarkhastFaktor(long ccDarkhastFaktor, int ccMoshtary);
         void onCheckLayoutTozihat(int visibility);
 
     }

@@ -50,8 +50,8 @@ public class MarjoeeKoliPresenter implements MarjoeekoliMVP.PresenterOps, Marjoe
     }
 
     @Override
-    public void checkTaeidSabtMarjoee(ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels, int position , int ccDarkhastFaktor) {
-        mModel.checkTaeidSabtMarjoee(elatMarjoeeKalaModels , position , ccDarkhastFaktor);
+    public void checkTaeidSabtMarjoee(ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels, int position , int ccDarkhastFaktor, int ccMoshtary) {
+        mModel.checkTaeidSabtMarjoee(elatMarjoeeKalaModels , position , ccDarkhastFaktor, ccMoshtary);
     }
 
     @Override

@@ -41,7 +41,7 @@ public class VerifyCustomerRequestModel implements VerifyCustomerRequestMVP.Mode
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor() , -1);
         //KalaDarkhastFaktorSatrDAO kalaDarkhastFaktorDAO = new KalaDarkhastFaktorSatrDAO(mPresenter.getAppContext());
         //ArrayList<KalaDarkhastFaktorModel> kalaDarkhastFaktorModels = kalaDarkhastFaktorDAO.getByccDarkhast(ccDarkhastFaktor);
-        DarkhastFaktorModel darkhastFaktorModel = new DarkhastFaktorDAO(mPresenter.getAppContext()).getByccDarkhastFaktor(ccDarkhastFaktor);
+        DarkhastFaktorModel darkhastFaktorModel = new DarkhastFaktorDAO(mPresenter.getAppContext()).getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
         int tedadAghlam = new DarkhastFaktorSatrDAO(mPresenter.getAppContext()).getTedadAghlamByccDarkhastFaktor(ccDarkhastFaktor);
         double sumMablagh = darkhastFaktorModel.getMablaghKolFaktor();
         /*for (KalaDarkhastFaktorModel model : kalaDarkhastFaktorModels)
@@ -101,7 +101,8 @@ public class VerifyCustomerRequestModel implements VerifyCustomerRequestMVP.Mode
     {
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor() , -1);
-        mPresenter.onGetccDarkhastFaktor(ccDarkhastFaktor);
+        int ccMoshtary = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary() , -1);
+        mPresenter.onGetccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
     }
 
     @Override

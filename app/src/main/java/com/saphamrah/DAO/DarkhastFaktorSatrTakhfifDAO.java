@@ -479,6 +479,28 @@ public class DarkhastFaktorSatrTakhfifDAO
         }
     }
 
+    public boolean deleteByccDarkhastFaktor(long ccDarkhastFaktor)
+    {
+        try
+        {
+            String query = "DELETE FROM DarkhastFaktorSatrTakhfif \n" +
+                    "WHERE ccDarkhastFaktorSatr IN (\n" +
+                    "SELECT ccDarkhastFaktorSatr FROM DarkhastFaktorSatr WHERE ccDarkhastFaktor = " + ccDarkhastFaktor +")";
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , DarkhastFaktorSatrTakhfifModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrTakhfifDAO" , "" , "deleteAll" , "");
+            return false;
+        }
+    }
+
     public boolean updateWithLoop(ArrayList<Integer> arrayList)
     {
         SQLiteDatabase db = dbHelper.getWritableDatabase();

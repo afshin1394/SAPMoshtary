@@ -651,6 +651,26 @@ public class GPSDataPpcDAO
             return false;
         }
     }
+    public boolean deleteByccDarkhastFaktorAndccMoshtary(long ccDarkhastFaktor, int ccMoshtary)
+    {
+        //String query = "delete from " + GPSDataModel.TableName() + " where " + GPSDataModel.COLUMN_ExtraProp_IsSend() + " = 1 ";
+        String query = "delete from " + GPSDataModel.TableName() + " where (" + GPSDataModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " OR  "  + GPSDataModel.COLUMN_ccDarkhastHavaleh() + " = "  + ccDarkhastFaktor + " ) And " +  GPSDataModel.COLUMN_ccMoshtary() + " = " + ccMoshtary;
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , GPSDataModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "GPSDataPpcDAO" , "" , "deleteSendedRecords" , "");
+            return false;
+        }
+    }
 
     private ContentValues modelToContentValue(GPSDataModel model)
     {

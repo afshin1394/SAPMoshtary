@@ -55,7 +55,7 @@ public class DarkhastFaktorMarjoeeActivity extends AppCompatActivity implements 
     @OnClick(R.id.fabSend)
     public void fabSend(){
         showLoading();
-        mPresenter.sendMarjoee(Long.parseLong(ccDarkhastFaktor));
+        mPresenter.sendMarjoee(Long.parseLong(ccDarkhastFaktor),Integer.parseInt(ccMoshtary));
     }
 
     @Override

@@ -32,6 +32,7 @@ public class JayezehEntekhabiMojodiModel
     private static final String COLUMN_TarikhEngheza = "TarikhEngheza";
     private static final String COLUMN_GheymatMasrafKonandeh = "GheymatMasrafKonandeh";
     private static final String COLUMN_GheymatForosh = "GheymatForosh";
+    private static final String COLUMN_GheymatKharid = "GheymatKharid";
     private static final String COLUMN_ccTaminKonandeh = "ccTaminKonandeh";
     private static final String COLUMN_Max_Mojody = "Max_Mojody";
     private static final String COLUMN_Max_MojodyByShomarehBach = "Max_MojodyByShomarehBach";
@@ -91,6 +92,9 @@ public class JayezehEntekhabiMojodiModel
     public static String COLUMN_GheymatForosh() {
         return COLUMN_GheymatForosh;
     }
+    public static String COLUMN_GheymatKharid() {
+        return COLUMN_GheymatKharid;
+    }
     public static String COLUMN_TarikhEngheza() {
         return COLUMN_TarikhEngheza;
     }
@@ -113,7 +117,7 @@ public class JayezehEntekhabiMojodiModel
     private String CodeKalaOld;
     private String NameKala;
     private int ccMarkazForosh;
-    private float MablaghForosh;
+    private double MablaghForosh;
     private int ccNoeMoshtary;
     private int CodeNoe;
     private int ccTakhfifHajmi;
@@ -128,8 +132,9 @@ public class JayezehEntekhabiMojodiModel
     private String ShomarehBach;
     private String TarikhTolid;
     private String ZamaneSabt;
-    private int GheymatMasrafKonandeh;
-    private int GheymatForosh;
+    private double GheymatMasrafKonandeh;
+    private double GheymatForosh;
+    private double GheymatKharid;
     private int ccTaminKonandeh;
     private int Max_Mojody;
     private int Max_MojodyByShomarehBach;
@@ -222,11 +227,11 @@ public class JayezehEntekhabiMojodiModel
         this.ccMarkazForosh = ccMarkazForosh;
     }
 
-    public float getMablaghForosh() {
+    public double getMablaghForosh() {
         return MablaghForosh;
     }
 
-    public void setMablaghForosh(float mablaghForosh) {
+    public void setMablaghForosh(double mablaghForosh) {
         MablaghForosh = mablaghForosh;
     }
 
@@ -328,20 +333,28 @@ public class JayezehEntekhabiMojodiModel
         ZamaneSabt = zamaneSabt;
     }
 
-    public int getGheymatMasrafKonandeh() {
+    public double getGheymatMasrafKonandeh() {
         return GheymatMasrafKonandeh;
     }
 
-    public void setGheymatMasrafKonandeh(int gheymatMasrafKonandeh) {
+    public void setGheymatMasrafKonandeh(double gheymatMasrafKonandeh) {
         GheymatMasrafKonandeh = gheymatMasrafKonandeh;
     }
 
-    public int getGheymatForosh() {
+    public double getGheymatForosh() {
         return GheymatForosh;
     }
 
-    public void setGheymatForosh(int gheymatForosh) {
+    public void setGheymatForosh(double gheymatForosh) {
         GheymatForosh = gheymatForosh;
+    }
+
+    public double getGheymatKharid() {
+        return GheymatKharid;
+    }
+
+    public void setGheymatKharid(double gheymatKharid) {
+        GheymatKharid = gheymatKharid;
     }
 
     public int getCcTaminKonandeh() {
@@ -421,6 +434,7 @@ public class JayezehEntekhabiMojodiModel
                 ", ZamaneSabt='" + ZamaneSabt + '\'' +
                 ", GheymatMasrafKonandeh=" + GheymatMasrafKonandeh +
                 ", GheymatForosh=" + GheymatForosh +
+                ", Gheymatkharid=" + GheymatKharid +
                 ", ccTaminKonandeh=" + ccTaminKonandeh +
                 ", Max_Mojody=" + Max_Mojody +
                 ", Max_MojodyByShomarehBach=" + Max_MojodyByShomarehBach +

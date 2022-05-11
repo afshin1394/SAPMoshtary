@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.saphamrah.Model.DarkhastFaktorAfradForoshModel;
+import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
@@ -178,6 +179,24 @@ public class DarkhastFaktorAfradForoshDAO
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorDeleteAll , DarkhastFaktorAfradForoshModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorAfradForoshDAO" , "" , "deleteAll" , "");
+            return false;
+        }
+    }
+    public boolean deleteByccDarkhastFaktor(long ccDarkhastFaktor)
+    {
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.delete(DarkhastFaktorAfradForoshModel.TableName(), DarkhastFaktorAfradForoshModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor, null);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , DarkhastFaktorAfradForoshModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorAfradForoshDAO" , "" , "deleteByccDarkhastFaktor" , "");
             return false;
         }
     }

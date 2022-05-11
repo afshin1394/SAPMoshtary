@@ -45,7 +45,7 @@ public interface TreasuryListMVP
         void checkDateAndFakeLocation(int state);
         void getTreasuryList(int faktorRooz, int sortType);
         void getTreasuryListWithRouting(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels);
-        void getDariaftPardakhtForSend(long ccDarkhastFaktor , int codeVazeiat , int position);
+        void getDariaftPardakhtForSend(long ccDarkhastFaktor, int ccMoshtary , int codeVazeiat , int position);
         void getCustomerLocation(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
         void getFaktorImage(long ccDarkhastFaktor);
         void setDarkhastFaktorShared(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
@@ -58,7 +58,7 @@ public interface TreasuryListMVP
 
         void checkIsLocationSendToServer(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
         void searchCustomer(String searchWord , ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels);
-        void getElatAdamTahvilDarkhast(long ccDarkhastFaktor,int position);
+        void getElatAdamTahvilDarkhast(long ccDarkhastFaktor, int ccMoshtary,int position);
         void sendElatAdamTahvilDarkhast(ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel , DarkhastFaktorModel darkhastFaktorModel,int position);
     }
 
@@ -97,7 +97,7 @@ public interface TreasuryListMVP
         void checkDateAndFakeLocation(int state);
         void getTreasuryList(int faktorRooz, int sortType);
         void getTreasuryListWithRouting(ArrayList<DarkhastFaktorMoshtaryForoshandeModel> darkhastFaktorMoshtaryForoshandeModels);
-        void getDariaftPardakhtForSend(long ccDarkhastFaktor , int position);
+        void getDariaftPardakhtForSend(long ccDarkhastFaktor , int ccMoshtary, int position);
         void getCustomerLocation(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
         void getFaktorImage(long ccDarkhastFaktor);
         void setDarkhastFaktorShared(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
@@ -106,7 +106,7 @@ public interface TreasuryListMVP
         void checkMohtaryKharejAzMahal(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel,int position);
         void updateGpsData();
         void checkIsLocationSendToServer(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
-        void getElatAdamTahvilDarkhast(long ccDarkhastFaktor,int position);
+        void getElatAdamTahvilDarkhast(long ccDarkhastFaktor, int ccMoshtary,int position);
         void sendElatAdamTahvilDarkhast(ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel , DarkhastFaktorModel darkhastFaktorModel,int position);
 
     }

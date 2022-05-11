@@ -849,7 +849,7 @@ public class TreasuryListMapActivity extends AppCompatActivity implements Treasu
             public void onClick(View view) {
                 int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                mPresenter.getElatAdamTahvilDarkhast(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor() , position);
+                mPresenter.getElatAdamTahvilDarkhast(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor() , darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary(),position);
             }
         });
 

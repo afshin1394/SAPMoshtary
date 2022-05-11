@@ -138,11 +138,11 @@ public class VerifyCustomerRequestPresenter implements VerifyCustomerRequestMVP.
     }
 
     @Override
-    public void onGetccDarkhastFaktor(long ccDarkhastFaktor)
+    public void onGetccDarkhastFaktor(long ccDarkhastFaktor, int ccMoshtary)
     {
         if (ccDarkhastFaktor != -1)
         {
-            mView.get().openFaktorDetailActivity(ccDarkhastFaktor);
+            mView.get().openFaktorDetailActivity(ccDarkhastFaktor,ccMoshtary);
         }
         else
         {

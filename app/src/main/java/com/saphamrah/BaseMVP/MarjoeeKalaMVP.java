@@ -39,10 +39,10 @@ public interface MarjoeeKalaMVP
         void getForoshandehMamorPakhshInfo();
         void updateListKalaForMarjoee(long ccDarkhastFaktor);
         void getListElatMarjoee();
-        void getKalaMarjoee(long ccDarkhastFaktor);
+        void getKalaMarjoee(long ccDarkhastFaktor,int ccMoshtary);
         void checkKalaForAddToMarjoee(ListKalaForMarjoeeModel selectedKala,ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels , ElamMarjoeeSatrPPCModel elamMarjoeeSatrPPCModel , int ccMoshtary , String count);
         void checkRemoveKalaFromMarjoee(KalaElamMarjoeeModel kalaElamMarjoeeModel , int position);
-        void checkUpdateCountOfMarjoee(long ccDarkhastFaktor, int ccElamMarjoeeSatr, int oldCount, int newCount);
+        void checkUpdateCountOfMarjoee(long ccDarkhastFaktor, int ccMoshtary, int ccElamMarjoeeSatr, int oldCount, int newCount);
         void insertDariaftPardakht(long ccDarkhastFaktor , int ccMoshtary); // when close activity, call this method for insert dariaftPardakht
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
@@ -73,10 +73,10 @@ public interface MarjoeeKalaMVP
         void getForoshandehMamorPakhshInfo();
         void updateListKalaForMarjoee(long ccDarkhastFaktor);
         void getListElatMarjoee();
-        void getKalaMarjoee(long ccDarkhastFaktor);
+        void getKalaMarjoee(long ccDarkhastFaktor, int ccMoshtary);
         void insertKalaToMarjoee(ElamMarjoeeSatrPPCModel elamMarjoeeSatrPPCModel , int ccMoshtary);
         void removeKalaFromMarjoee(KalaElamMarjoeeModel kalaElamMarjoeeModel , int position);
-        void updateCountOfMarjoee(long ccDarkhastFaktor, int ccElamMarjoeeSatr, int newCount);
+        void updateCountOfMarjoee(long ccDarkhastFaktor, int ccMoshtary, int ccElamMarjoeeSatr, int newCount);
         void insertDariaftPardakht(long ccDarkhastFaktor , int ccMoshtary);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();

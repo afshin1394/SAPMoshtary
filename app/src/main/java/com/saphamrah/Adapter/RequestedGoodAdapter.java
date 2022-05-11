@@ -38,6 +38,7 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
     private Context context;
     private SelectFaktorShared shared = new SelectFaktorShared(BaseApplication.getContext());
     private  int ccNoeMoshtary = 0;
+    private  int ccMoshtary = 0;
     private  int zangireiParam = 0;
     public RequestedGoodAdapter(Context context , ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels , boolean showSwipe,int zangireiParam , OnItemClickListener listener)
     {
@@ -54,6 +55,7 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
     {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.requested_good_customlist, parent, false);
         ccNoeMoshtary = shared.getInt(shared.getCcGorohNoeMoshtary(), -1);
+        ccMoshtary = shared.getInt(shared.getCcMoshtary(), -1);
         return new MyViewHolder(itemView);
     }
 
@@ -183,7 +185,7 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
                 @Override public void onClick(View v) {
                     swipeLayout.close(true);
                     Log.d("DarkhastKala" , kalaDarkhastFaktorSatrModels.toString());
-                    listener.onItemClickJayezeh(kalaDarkhastFaktorSatrModels.getCcKalaCode() , kalaDarkhastFaktorSatrModels.getTedad3() , kalaDarkhastFaktorSatrModels.getCcDarkhastFaktor() ,kalaDarkhastFaktorSatrModels.getMablaghForosh());
+                    listener.onItemClickJayezeh(kalaDarkhastFaktorSatrModels.getCcKalaCode() , kalaDarkhastFaktorSatrModels.getTedad3() , kalaDarkhastFaktorSatrModels.getCcDarkhastFaktor() ,kalaDarkhastFaktorSatrModels.getMablaghForosh(), ccMoshtary);
                 }
             });
         }
@@ -195,7 +197,7 @@ public class RequestedGoodAdapter extends RecyclerSwipeAdapter<RequestedGoodAdap
     public interface OnItemClickListener
     {
         void onItemClick(KalaDarkhastFaktorSatrModel kalaDarkhastFaktorSatrModels , int position);
-        void onItemClickJayezeh(int CcKalaCode , int tedadKala , Long ccDarkhastFaktor , double  mablaghForosh );
+        void onItemClickJayezeh(int CcKalaCode , int tedadKala , Long ccDarkhastFaktor , double  mablaghForosh , int ccMoshtary);
 
     }
 

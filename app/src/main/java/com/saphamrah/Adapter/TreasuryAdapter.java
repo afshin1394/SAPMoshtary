@@ -102,6 +102,7 @@ public class TreasuryAdapter extends RecyclerSwipeAdapter<TreasuryAdapter.ViewHo
         }
 
         try {
+            Log.d("TreasuryAdaptor" , "models.get(position).getTarikhMoarefiMoshtary()" + models.get(position).getCodeMoshtary());
             Date date = sdf.parse(models.get(position).getTarikhMoarefiMoshtary());
             String tarikhMoarefiMoshtary = (String) DateFormat.format(Constants.DATE_SHORT_FORMAT_WITH_SLASH() , date);
             holder.lblTarikhMoarefiMoshtary.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.tarikhMoarefiMoshtary), dateUtils.gregorianWithSlashToPersianSlash(tarikhMoarefiMoshtary)));

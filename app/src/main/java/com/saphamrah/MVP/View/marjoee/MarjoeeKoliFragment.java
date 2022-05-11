@@ -156,7 +156,7 @@ public class MarjoeeKoliFragment extends Fragment implements MarjoeekoliMVP.Requ
         customSpinner.showSpinner(getActivity(), elatMarjoeeKalaTitles, new CustomSpinnerResponse() {
             @Override
             public void onApplySingleSelection(int selectedIndex) {
-                mPresenter.checkTaeidSabtMarjoee(elatMarjoeeKalaModels , selectedIndex , Integer.parseInt(ccDarkhastFaktor));
+                mPresenter.checkTaeidSabtMarjoee(elatMarjoeeKalaModels , selectedIndex , Integer.parseInt(ccDarkhastFaktor), Integer.parseInt(ccMoshtary));
             }
 
             @Override

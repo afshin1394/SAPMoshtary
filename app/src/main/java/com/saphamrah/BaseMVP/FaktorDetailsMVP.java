@@ -30,7 +30,7 @@ public interface FaktorDetailsMVP
     interface PresenterOps
     {
         void onConfigurationChanged(FaktorDetailsMVP.RequiredViewOps view);
-        void getFaktorDetails(long ccDarkhastFaktor , boolean getDetailOfNewFaktor); //if getDetailOfNewFaktor == true => from darkhastFaktor or ersalDarkhast and get list of kala and takhfif and marjoee and jayezeh , else from treasuryList and only get kala
+        void getFaktorDetails(long ccDarkhastFaktor, int ccMoshtary , boolean getDetailOfNewFaktor); //if getDetailOfNewFaktor == true => from darkhastFaktor or ersalDarkhast and get list of kala and takhfif and marjoee and jayezeh , else from treasuryList and only get kala
         void checkUpdateDarkhastFaktorEmza(byte[] imageBytes , long ccDarkhastFaktor);
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);
@@ -54,8 +54,8 @@ public interface FaktorDetailsMVP
 
     interface ModelOps
     {
-        void getFaktorDetails(long ccDarkhastFaktor);
-        void getFaktorDetailsForTreasuryList(long ccDarkhastFaktor);
+        void getFaktorDetails(long ccDarkhastFaktor, int ccMoshtary);
+        void getFaktorDetailsForTreasuryList(long ccDarkhastFaktor, int ccMoshtary);
         void updateDarkhastFaktorEmza(byte[] imageBytes , long ccDarkhastFaktor);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();

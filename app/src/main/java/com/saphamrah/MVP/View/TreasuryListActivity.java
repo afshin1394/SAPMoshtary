@@ -300,9 +300,9 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
                 } else if (operation == Constants.SHOW_IMAGE()) {
                     mPresenter.getFaktorImage(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
                 } else if (operation == Constants.SHOW_FAKTOR_DETAIL()) {
-                    openFaktorDetailActivity(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
+                    openFaktorDetailActivity(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor(),darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary());
                 } else if (operation == Constants.SEND()) {
-                    showSendAlert(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor(), darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat(), position);
+                    showSendAlert(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor(),darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary(), darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat(), position);
                 } else if (operation == Constants.EDIT_DARKHAST()) {
                     showLoading();
                     Log.d("TreasuryListActivity", "Loading 208");
@@ -314,7 +314,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
                     showLoading();
                     mPresenter.checkMoshtaryKharejAzMahal(darkhastFaktorMoshtaryForoshandeModels.get(position),position);
                 } else if (operation == Constants.ELAT_ADAM_TAHVIL){
-                    mPresenter.getElatAdamTahvilDarkhast(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor() , position);
+                    mPresenter.getElatAdamTahvilDarkhast(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor(),darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary() , position);
                 }
             }
         });
@@ -348,7 +348,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
                     Log.d("MarjoeeKoliFragment", String.valueOf(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor()));
                     startActivityBundle(DarkhastFaktorMarjoeeActivity.class, "marjoee", String.valueOf(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor()), "ccMoshtaryMarjoee", String.valueOf(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary()));
                 } else if (operation == Constants.SEND()) {
-                    showSendAlert(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor(), darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat(), position);
+                    showSendAlert(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor(),darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary(), darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat(), position);
                 }
             }
         });
@@ -379,9 +379,9 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
                 } else if (operation == Constants.SHOW_IMAGE()) {
                     mPresenter.getFaktorImage(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
                 } else if (operation == Constants.SHOW_FAKTOR_DETAIL()) {
-                    openFaktorDetailActivity(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor());
+                    openFaktorDetailActivity(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor(),darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary());
                 } else if (operation == Constants.SEND()) {
-                    showSendAlert(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor(), darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat(), position);
+                    showSendAlert(darkhastFaktorMoshtaryForoshandeModels.get(position).getCcDarkhastFaktor(),darkhastFaktorMoshtaryForoshandeModels.get(position).getCcMoshtary(), darkhastFaktorMoshtaryForoshandeModels.get(position).getCodeVazeiat(), position);
                 } else if (operation == Constants.EDIT_DARKHAST()) {
                     showLoading();
                     Log.d("TreasuryListActivity", "Loading 287");
@@ -547,7 +547,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
         }
     }
 
-    private void showSendAlert(final long ccDarkhastFaktor, final int codeVazeiat, final int position) {
+    private void showSendAlert(final long ccDarkhastFaktor, final int ccMoshtary, final int codeVazeiat, final int position) {
         customAlertDialog.showLogMessageAlert(TreasuryListActivity.this, false, "", getResources().getString(R.string.sendWarning), Constants.INFO_MESSAGE(), getResources().getString(R.string.cancel), getResources().getString(R.string.apply), new CustomAlertDialogResponse() {
             @Override
             public void setOnCancelClick() {
@@ -555,7 +555,7 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
 
             @Override
             public void setOnApplyClick() {
-                mPresenter.getDariaftPardakhtForSend(ccDarkhastFaktor, codeVazeiat, position);
+                mPresenter.getDariaftPardakhtForSend(ccDarkhastFaktor, ccMoshtary, codeVazeiat, position);
             }
         });
     }
@@ -633,9 +633,10 @@ public class TreasuryListActivity extends AppCompatActivity implements TreasuryL
         }
     }
 
-    private void openFaktorDetailActivity(long ccDarkhastFaktor) {
+    private void openFaktorDetailActivity(long ccDarkhastFaktor,int ccMoshtary) {
         Intent intent = new Intent(TreasuryListActivity.this, FaktorDetailsActivity.class);
         intent.putExtra("ccDarkhastFaktor", ccDarkhastFaktor);
+        intent.putExtra("ccMoshtary", ccMoshtary);
         intent.putExtra("sourceActivity", "TreasuryListActivity");
         startActivity(intent);
         overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);

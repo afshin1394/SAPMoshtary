@@ -397,13 +397,17 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
     @Override
     public void onGetTarikhPishbiniTahvilInfo(int maxTedadRooz, List<TaghvimTatilModel> taghvimTatilModels)
     {
+      try {
+        ParameterChildDAO parameterChildDAO = new ParameterChildDAO(getAppContext());
+        int startRoozPishbiniTahvil = Integer.parseInt(parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_START_ROOZ_PISHBINITAHVIL()));
+        Log.d("verifyRequest","startRoozPishbiniTahvil:" + startRoozPishbiniTahvil);
         if (maxTedadRooz != 0)
         {
             SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_SHORT_FORMAT());
             DateUtils dateUtils = new DateUtils();
             Map<String, Date> mapDates = new TreeMap<>();
             Date todayDate = new Date();
-            int counter = 1;
+            int counter = startRoozPishbiniTahvil;
             int registeredDateCount = 0;
 
             try
@@ -452,6 +456,10 @@ public class VerifyRequestPresenter implements VerifyRequestMVP.PresenterOps , V
         else
         {
             mView.get().showToast(R.string.errorGetMaxRoozTahvil, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+        }
+        }catch (Exception exception){
+          checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "VerifyRequestPresenter", "onGetTarikhPishbiniTahvilInfo", "");
+          exception.printStackTrace();
         }
     }
 

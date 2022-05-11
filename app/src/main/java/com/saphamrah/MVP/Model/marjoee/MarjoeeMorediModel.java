@@ -135,7 +135,7 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         KardexModel kardex= new KardexModel();
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
-        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccRefrence);
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccRefrence,entity.getCcMoshtary());
 
         try
         {
@@ -297,7 +297,7 @@ public class MarjoeeMorediModel implements MarjoeeMorediMVP.ModelOps
             //--------------------------------------
             dariaftPardakhtDarkhastFaktorPPC= dariaftPardakhtDarkhastFaktorPPCDAO.SetForInsert_DariaftPardakhtDarkhastFaktorPPC(
                     0, ccDariaftPardakht, Constants.VALUE_MARJOEE(), "مرجوعی",
-                    "0", new Date(), "", MablaghMarjoee, MablaghDariaftPardakhtDarkhastFaktor, 0, 0, 0, ccKardexSatr, 0,0,0,0);
+                    "0", new Date(), "", MablaghMarjoee, MablaghDariaftPardakhtDarkhastFaktor, 0, 0, 0, ccKardexSatr, 0,0,0,0, kardexSatr.getCcMoshtary());
             dariaftPardakhtDarkhastFaktorPPCDAO.insert(dariaftPardakhtDarkhastFaktorPPC);
 
 

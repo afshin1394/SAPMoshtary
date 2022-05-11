@@ -4971,6 +4971,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                                     kalaMojodiModel.setTarikhTolid(mandehMojodyMashinModel.getTarikhTolid());
                                     kalaMojodiModel.setGheymatMasrafKonandeh(mandehMojodyMashinModel.getGheymatMasrafKonandeh());
                                     kalaMojodiModel.setGheymatForosh(mandehMojodyMashinModel.getGheymatForosh());
+                                    kalaMojodiModel.setGheymatKharid(mandehMojodyMashinModel.getGheymatKharid());
                                     kalaMojodiModel.setCcTaminKonandeh(mandehMojodyMashinModel.getCcTaminKonandeh());
                                     kalaMojodiModel.setZamaneSabt(currentDate);
                                     kalaMojodiModel.setIsAdamForosh(mandehMojodyMashinModel.getIsAdamForosh());
@@ -11042,6 +11043,7 @@ public class GetProgramModelRx implements GetProgramMVP.ModelOps {
                         kalaMojodiModel.setTarikhEngheza(mandehMojodyMashinModel.getTarikhEngheza());
                         kalaMojodiModel.setGheymatMasrafKonandeh(mandehMojodyMashinModel.getGheymatMasrafKonandeh());
                         kalaMojodiModel.setGheymatForosh(mandehMojodyMashinModel.getGheymatForosh());
+                        kalaMojodiModel.setGheymatKharid(mandehMojodyMashinModel.getGheymatKharid());
                         kalaMojodiModel.setCcTaminKonandeh(mandehMojodyMashinModel.getCcTaminKonandeh());
                         kalaMojodiModel.setZamaneSabt(currentDate);
                         kalaMojodiModel.setIsAdamForosh(mandehMojodyMashinModel.getIsAdamForosh());

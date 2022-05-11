@@ -489,7 +489,7 @@ public class SelectBonusActivity extends AppCompatActivity implements SelectBonu
         lblMablaghJayezeh.setTypeface(font);
         lblMandehJayezeh.setTypeface(font);
         lblMaxTedadJayezeh.setTypeface(font);
-        int maxTedad = Math.round(darkhastFaktorTakhfifModels.get(0).getMablaghJayezehTakhfif() / jayezehEntekhabiMojodiModels.get(0).getMablaghForosh());
+        int maxTedad =(int) Math.round(darkhastFaktorTakhfifModels.get(0).getMablaghJayezehTakhfif() / jayezehEntekhabiMojodiModels.get(0).getMablaghForosh());
         lblTakhfifFaktor.setText(String.format("%1$s : %2$s", getResources().getString(R.string.takhfifFaktor), formatter.format(darkhastFaktorTakhfifModels.get(0).getMablaghJayezehTakhfif())));
         lblMablaghJayezeh.setText(String.format("%1$s : %2$s", getResources().getString(R.string.mablaghJayezeh), formatter.format(darkhastFaktorTakhfifModels.get(0).getMablaghJayezehTakhfif())));
         lblMandehJayezeh.setText(String.format("%1$s : %2$s", getResources().getString(R.string.mande), formatter.format(darkhastFaktorTakhfifModels.get(0).getMablaghJayezehTakhfif())));

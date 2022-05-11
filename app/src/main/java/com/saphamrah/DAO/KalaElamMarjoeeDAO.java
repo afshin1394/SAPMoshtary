@@ -3,6 +3,7 @@ package com.saphamrah.DAO;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.saphamrah.Model.ElamMarjoeeSatrPPCModel;
 import com.saphamrah.Model.ElatMarjoeeKalaModel;
@@ -38,7 +39,7 @@ public class KalaElamMarjoeeDAO
     }
 
 
-    public ArrayList<KalaElamMarjoeeModel> getByccDarkhastFaktor(long ccDarkhastFaktor)
+    public ArrayList<KalaElamMarjoeeModel> getByccDarkhastFaktor(long ccDarkhastFaktor, int ccMoshtary)
     {
         ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels = new ArrayList<>();
         try
@@ -56,6 +57,7 @@ public class KalaElamMarjoeeDAO
                     "inner join ElatMarjoeeKala \n" +
                     "on sk.ccElatMarjoeeKala = ElatMarjoeeKala.ccElatMarjoeeKala \n" +
                     "where sk.ccDarkhastFaktor = " + ccDarkhastFaktor;
+            Log.d("Marjoee", "getByccDarkhastFaktor query:" + query);
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {

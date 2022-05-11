@@ -23,6 +23,7 @@ public class DarkhastFaktorModel
 
 
     private static final String TABLE_NAME = "DarkhastFaktor";
+    private static final String COLUMN_Radif = "Radif";
     private static final String COLUMN_ccDarkhastFaktor = "ccDarkhastFaktor";
     private static final String COLUMN_TarikhFaktor = "TarikhFaktor";
     private static final String COLUMN_ShomarehDarkhast = "ShomarehDarkhast";
@@ -102,6 +103,9 @@ public class DarkhastFaktorModel
 
     public static String TableName() {
         return TABLE_NAME;
+    }
+    public static String COLUMN_Radif() {
+        return COLUMN_Radif;
     }
     public static String COLUMN_ccDarkhastFaktor() {
         return COLUMN_ccDarkhastFaktor;
@@ -323,6 +327,9 @@ public class DarkhastFaktorModel
 
 
 
+    @SerializedName("Radif")
+    @Expose
+    private int Radif;
     @SerializedName("ccDarkhastFaktor")
     @Expose
     private long ccDarkhastFaktor;
@@ -583,7 +590,12 @@ public class DarkhastFaktorModel
     private int ExtraProp_CodeNoeVorod;
 
 
-
+    public void setRadif(int Radif){
+        this.Radif = Radif;
+    }
+    public long getRadif(){
+        return this.Radif;
+    }
     public void setCcDarkhastFaktor(long ccDarkhastFaktor){
         this.ccDarkhastFaktor = ccDarkhastFaktor;
     }

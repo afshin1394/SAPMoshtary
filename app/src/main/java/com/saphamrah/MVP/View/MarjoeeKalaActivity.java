@@ -213,7 +213,7 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
         this.listKalaForMarjoeeBiMabnaModels.addAll(listKalaForMarjoeeBiMabnaModels);
         this.canEditPrice = canEditPrice;
         showToast(R.string.successfullyUpdateListMarjoee, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
-        mPresenter.getKalaMarjoee(ccDarkhastFaktor);
+        mPresenter.getKalaMarjoee(ccDarkhastFaktor,ccMoshtary);
     }
 
     @Override
@@ -466,7 +466,7 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
         }
     }
 
-    private void checkForAddToMarjoee(CustomTextInputLayout txtinputCount,TextView lblError,ArrayList<ListKalaForMarjoeeModel> selectedKala,ArrayList<ElatMarjoeeKalaModel> elatMarjoee,EditText edttxtCount,float fee,int mabnaType){
+    private void checkForAddToMarjoee(CustomTextInputLayout txtinputCount,TextView lblError,ArrayList<ListKalaForMarjoeeModel> selectedKala,ArrayList<ElatMarjoeeKalaModel> elatMarjoee,EditText edttxtCount,double fee,int mabnaType){
         lblError.setVisibility(View.GONE);
         txtinputCount.setError(null);
 
@@ -499,6 +499,7 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
                 elamMarjoeeSatrPPCModel.setCcTaminkonandeh(selectedKala.get(0).getCcTaminKonandeh());
                 elamMarjoeeSatrPPCModel.setGheymatMasrafkonandeh((int) selectedKala.get(0).getMablaghMasrafKonandeh());
                 elamMarjoeeSatrPPCModel.setGheymatForoshAsli(((int) selectedKala.get(0).getMablaghForosh()));
+                elamMarjoeeSatrPPCModel.setGheymatKharid(((int) selectedKala.get(0).getMablaghKharid()));
                 elamMarjoeeSatrPPCModel.setIsMabna(mabnaType);
                 mPresenter.checkKalaForAddToMarjoee(selectedKala.get(0), kalaElamMarjoeeModels, elamMarjoeeSatrPPCModel, ccMoshtary, edttxtCount.getText().toString().trim());
             } else {
@@ -563,7 +564,7 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
                                 if (selectedCount > 0 && selectedCount <= itemCount)
                                 {
                                     show.dismiss();
-                                    mPresenter.checkUpdateCountOfMarjoee(ccDarkhastFaktor, ccElamMarjoeeSatr, itemCount, selectedCount);
+                                    mPresenter.checkUpdateCountOfMarjoee(ccDarkhastFaktor, ccMoshtary, ccElamMarjoeeSatr, itemCount, selectedCount);
                                 }
                                 else
                                 {
@@ -576,7 +577,7 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
                                 if (selectedCount > 0)
                                 {
                                     show.dismiss();
-                                    mPresenter.checkUpdateCountOfMarjoee(ccDarkhastFaktor, ccElamMarjoeeSatr, itemCount, selectedCount);
+                                    mPresenter.checkUpdateCountOfMarjoee(ccDarkhastFaktor,ccMoshtary, ccElamMarjoeeSatr, itemCount, selectedCount);
                                 }
                                 else
                                 {
@@ -590,7 +591,7 @@ public class MarjoeeKalaActivity extends AppCompatActivity implements MarjoeeKal
                             if (selectedCount > 0 && selectedCount <= itemCount)
                             {
                                 show.dismiss();
-                                mPresenter.checkUpdateCountOfMarjoee(ccDarkhastFaktor, ccElamMarjoeeSatr, itemCount, selectedCount);
+                                mPresenter.checkUpdateCountOfMarjoee(ccDarkhastFaktor,ccMoshtary, ccElamMarjoeeSatr, itemCount, selectedCount);
                             }
                             else
                             {

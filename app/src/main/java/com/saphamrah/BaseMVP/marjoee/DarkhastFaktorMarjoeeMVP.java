@@ -20,7 +20,7 @@ public interface DarkhastFaktorMarjoeeMVP
     {
         void onConfigurationChanged(RequiredViewOps view);
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
-        void sendMarjoee(long ccDarkhastFaktor);
+        void sendMarjoee(long ccDarkhastFaktor, int ccMoshtary);
     }
 
 
@@ -34,7 +34,7 @@ public interface DarkhastFaktorMarjoeeMVP
     interface ModelOps
     {
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
-        void sendMarjoee(long ccDarkhastFaktor);
+        void sendMarjoee(long ccDarkhastFaktor,int ccMoshtary);
     }
 
 }

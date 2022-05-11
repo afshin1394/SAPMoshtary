@@ -23,7 +23,9 @@ public class ElamMarjoeeSatrPPCModel
     private static final String COLUMN_ccTaminkonandeh = "ccTaminkonandeh";
     private static final String COLUMN_GheymatMasrafkonandeh = "GheymatMasrafkonandeh";
     private static final String COLUMN_GheymatForoshAsli = "GheymatForoshAsli";
+    private static final String COLUMN_GheymatKharid = "GheymatKharid";
     private static final String COLUMN_IsMabna = "IsMabna";
+    private static final String COLUMN_ExtraProp_ccMoshtary = "ExtraProp_ccMoshtary";
 
 
     public static String TableName() {
@@ -74,8 +76,14 @@ public class ElamMarjoeeSatrPPCModel
     public static String COLUMN_GheymatForoshAsli() {
         return COLUMN_GheymatForoshAsli;
     }
+    public static String COLUMN_GheymatKharid() {
+        return COLUMN_GheymatKharid;
+    }
     public static String COLUMN_IsMabna() {
         return COLUMN_IsMabna;
+    }
+    public static String COLUMN_ExtraProp_ccMoshtary() {
+        return COLUMN_ExtraProp_ccMoshtary;
     }
 
 
@@ -91,11 +99,13 @@ public class ElamMarjoeeSatrPPCModel
     private String TarikhTolid;
     private String TarikhEngheza;
     private int Tedad3;
-    private int Fee;
+    private double Fee;
     private int ccTaminkonandeh;
-    private int GheymatMasrafkonandeh;
-    private int GheymatForoshAsli;
+    private double GheymatMasrafkonandeh;
+    private double GheymatForoshAsli;
+    private double GheymatKharid;
     private int IsMabna;
+    private int ExtraProp_ccMoshtary;
 
     public int getCcElamMarjoeeSatrPPC() {
         return ccElamMarjoeeSatrPPC;
@@ -185,11 +195,11 @@ public class ElamMarjoeeSatrPPCModel
         Tedad3 = tedad3;
     }
 
-    public int getFee() {
+    public double getFee() {
         return Fee;
     }
 
-    public void setFee(int fee) {
+    public void setFee(double fee) {
         Fee = fee;
     }
 
@@ -201,21 +211,28 @@ public class ElamMarjoeeSatrPPCModel
         this.ccTaminkonandeh = ccTaminkonandeh;
     }
 
-    public int getGheymatMasrafkonandeh() {
+    public double getGheymatMasrafkonandeh() {
         return GheymatMasrafkonandeh;
     }
 
-    public void setGheymatMasrafkonandeh(int gheymatMasrafkonandeh) {
+    public void setGheymatMasrafkonandeh(double gheymatMasrafkonandeh) {
         GheymatMasrafkonandeh = gheymatMasrafkonandeh;
     }
 
 
-    public int getGheymatForoshAsli() {
+    public double getGheymatForoshAsli() {
         return GheymatForoshAsli;
     }
 
-    public void setGheymatForoshAsli(int gheymatForoshAsli) {
+    public void setGheymatForoshAsli(double gheymatForoshAsli) {
         GheymatForoshAsli = gheymatForoshAsli;
+    }
+    public double getGheymatKharid() {
+        return GheymatKharid;
+    }
+
+    public void setGheymatKharid(double gheymatKharid) {
+        GheymatKharid = gheymatKharid;
     }
 
     public int getIsMabna() {
@@ -224,6 +241,14 @@ public class ElamMarjoeeSatrPPCModel
 
     public void setIsMabna(int isMabna) {
         IsMabna = isMabna;
+    }
+
+    public int getExtraProp_ccMoshtary() {
+        return ExtraProp_ccMoshtary;
+    }
+
+    public void setExtraProp_ccMoshtary(int extraProp_ccMoshtary) {
+        ExtraProp_ccMoshtary = extraProp_ccMoshtary;
     }
 
     public JSONObject toJsonObject()
@@ -246,6 +271,7 @@ public class ElamMarjoeeSatrPPCModel
             jsonObject.put("ccTaminkonandeh" , ccTaminkonandeh);
             jsonObject.put("GheymatMasrafkonandeh" , GheymatMasrafkonandeh);
             jsonObject.put("GheymatForoshAsli" , GheymatForoshAsli);
+            jsonObject.put("GheymatKharid" , GheymatKharid);
             jsonObject.put("IsMabna" , IsMabna);
         }
         catch (Exception exception)
@@ -276,6 +302,7 @@ public class ElamMarjoeeSatrPPCModel
                 ", ccTaminkonandeh=" + ccTaminkonandeh +
                 ", GheymatMasrafkonandeh=" + GheymatMasrafkonandeh +
                 ", GheymatForoshAsli=" + GheymatForoshAsli +
+                ", GheymatKharid=" + GheymatKharid +
                 ", IsMabna=" + IsMabna +
                 '}';
     }

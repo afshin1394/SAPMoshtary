@@ -47,11 +47,11 @@ public class JayezehEntekhabiMojodiDAO
                     " on j.ccKalaCode = m.ccKalaCode and j.ccTakhfifHajmi = " + ccTakhfifHajmi +
                     " group by  m.ccKalaCode, m.ShomarehBach, m.ccTaminKonandeh, m.GheymatForosh, m.GheymatMasrafKonandeh having sum(m.Tedad) > 0";*/
             String query = "select j.*, km.ccKalaMojodi, km.ccForoshandeh, km.sumTedad AS sumTedad, km.ccDarkhastFaktor, km.TarikhDarkhast, km.ShomarehBach, \n" +
-                    " km.TarikhTolid, km.ZamaneSabt, km.TarikhEngheza, km.GheymatMasrafKonandeh, km.GheymatForosh, km.ccTaminKonandeh, km.Max_Mojody, km.Max_MojodyByShomarehBach \n" +
+                    " km.TarikhTolid, km.ZamaneSabt, km.TarikhEngheza, km.GheymatMasrafKonandeh, km.GheymatForosh, km.GheymatKharid, km.ccTaminKonandeh, km.Max_Mojody, km.Max_MojodyByShomarehBach \n" +
                     " from JayezehEntekhabi j inner join \n" +
-                    " (select k.* , m.sumTedad, m.GheymatForosh, m.ZamaneSabt, m.ccKalaMojodi, m.ccForoshandeh, m.ccDarkhastFaktor, m.TarikhDarkhast, m.GheymatMasrafKonandeh, m.Max_Mojody, m.Max_MojodyByShomarehBach \n" +
+                    " (select k.* , m.sumTedad, m.GheymatForosh,m.GheymatKharid, m.ZamaneSabt, m.ccKalaMojodi, m.ccForoshandeh, m.ccDarkhastFaktor, m.TarikhDarkhast, m.GheymatMasrafKonandeh, m.Max_Mojody, m.Max_MojodyByShomarehBach \n" +
                     " from Kala k left join (select KalaMojodi.* , sum(Tedad) sumTedad from KalaMojodi where IsAdamForosh = 0 \n" +
-                    " group by ccKalaCode , ShomarehBach, GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh, TarikhTolid, TarikhEngheza) m \n" +
+                    " group by ccKalaCode , ShomarehBach, GheymatForosh, GheymatMasrafKonandeh, ccTaminKonandeh, TarikhTolid, TarikhEngheza) m \n" +
                     " on k.ccKalaCode = m.ccKalaCode and k.ccTaminKonandeh = m.ccTaminkonandeh and \n" +
                     " k.ShomarehBach = m.ShomarehBach and k.MablaghMasrafKonandeh = m.GheymatMasrafKonandeh and k.MablaghForosh = m.GheymatForosh and\n" +
                     " k.TarikhTolid = m.TarikhTolid and k.TarikhEngheza = m.TarikhEngheza  \n" +
@@ -91,9 +91,9 @@ public class JayezehEntekhabiMojodiDAO
                     " on j.ccKalaCode = m.ccKalaCode and j.ccTakhfifHajmi = " + ccTakhfifHajmi +
                     " group by  m.ccKalaCode, m.ShomarehBach, m.ccTaminKonandeh, m.GheymatForosh, m.GheymatMasrafKonandeh having sum(m.Tedad) > 0";*/
             String query = "select j.*, km.ccKalaMojodi, km.ccForoshandeh, km.sumTedad AS sumTedad, km.ccDarkhastFaktor, km.TarikhDarkhast, km.ShomarehBach, \n" +
-                    " km.TarikhTolid, km.ZamaneSabt, km.TarikhEngheza, km.GheymatMasrafKonandeh, km.GheymatForosh, km.ccTaminKonandeh, km.Max_Mojody, km.Max_MojodyByShomarehBach \n" +
+                    " km.TarikhTolid, km.ZamaneSabt, km.TarikhEngheza, km.GheymatMasrafKonandeh, km.GheymatForosh, km.GheymatKharid, km.ccTaminKonandeh, km.Max_Mojody, km.Max_MojodyByShomarehBach \n" +
                     " from JayezehEntekhabi j inner join \n" +
-                    " (select k.* , m.sumTedad, m.GheymatForosh, m.ZamaneSabt, m.ccKalaMojodi, m.ccForoshandeh, m.ccDarkhastFaktor, m.TarikhDarkhast, m.GheymatMasrafKonandeh, m.Max_Mojody, m.Max_MojodyByShomarehBach \n" +
+                    " (select k.* , m.sumTedad, m.GheymatForosh, m.GheymatKharid, m.ZamaneSabt, m.ccKalaMojodi, m.ccForoshandeh, m.ccDarkhastFaktor, m.TarikhDarkhast, m.GheymatMasrafKonandeh, m.Max_Mojody, m.Max_MojodyByShomarehBach \n" +
                     " from Kala k left join (select KalaMojodi.* , sum(Tedad) sumTedad from KalaMojodi where IsAdamForosh = 0 \n" +
                     " group by ccKalaCode , ShomarehBach, GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh, TarikhTolid, TarikhEngheza) m \n" +
                     " on k.ccKalaCode = m.ccKalaCode and k.ccTaminKonandeh = m.ccTaminkonandeh and \n" +
@@ -193,6 +193,7 @@ public class JayezehEntekhabiMojodiDAO
             jayezehEntekhabiMojodiModel.setZamaneSabt(cursor.getString(cursor.getColumnIndex(KalaMojodiModel.COLUMN_ZamaneSabt())));
             jayezehEntekhabiMojodiModel.setGheymatMasrafKonandeh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatMasrafKonandeh())));
             jayezehEntekhabiMojodiModel.setGheymatForosh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatForosh())));
+            jayezehEntekhabiMojodiModel.setGheymatKharid(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatKharid())));
             jayezehEntekhabiMojodiModel.setCcTaminKonandeh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_ccTaminKonandeh())));
             jayezehEntekhabiMojodiModel.setMax_Mojody(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_Max_Mojody())));
             jayezehEntekhabiMojodiModel.setMax_MojodyByShomarehBach(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_Max_MojodyByShomarehBach())));

@@ -29,22 +29,21 @@ public class KalaDarkhastFaktorSatrModel
     private int CodeVazeiat;
     private String DarsadTakhfifTaavoni;
     private String ccUser;
-    private float MablaghTakhfifNaghdiVahed;
+    private Double MablaghTakhfifNaghdiVahed;
     private String DisCntType;
     private String DisCntSubType;
-    private String GheymatKharid;
     private String TarikhFaktor;
-    private float Maliat;
-    private float Avarez;
-    private float MablaghForoshKhalesKala;
-    private float MablaghKharid;
-    private int MablaghMasrafKonandeh;
+    private double Maliat;
+    private double Avarez;
+    private double MablaghForoshKhalesKala;
+    private double MablaghKharid;
+    private double MablaghMasrafKonandeh;
     private int ccAnbarMarjoee;
     private int ccAnbarGhesmat;
-    private float GheymatMasrafKonandeh;
+    private double GheymatMasrafKonandeh;
     private String darkhastFaktorSatrTakhfifs;
-    private float GheymatForoshAsli;
-    private float GheymatMasrafKonandehAsli;
+    private double GheymatForoshAsli;
+    private double GheymatMasrafKonandehAsli;
     private boolean ExtraProp_IsOld;
     // Kala
     private String NameKala;
@@ -252,11 +251,11 @@ public class KalaDarkhastFaktorSatrModel
         this.ccUser = ccUser;
     }
 
-    public float getMablaghTakhfifNaghdiVahed() {
+    public double getMablaghTakhfifNaghdiVahed() {
         return MablaghTakhfifNaghdiVahed;
     }
 
-    public void setMablaghTakhfifNaghdiVahed(float mablaghTakhfifNaghdiVahed) {
+    public void setMablaghTakhfifNaghdiVahed(double mablaghTakhfifNaghdiVahed) {
         MablaghTakhfifNaghdiVahed = mablaghTakhfifNaghdiVahed;
     }
 
@@ -276,14 +275,6 @@ public class KalaDarkhastFaktorSatrModel
         DisCntSubType = disCntSubType;
     }
 
-    public String getGheymatKharid() {
-        return GheymatKharid;
-    }
-
-    public void setGheymatKharid(String gheymatKharid) {
-        GheymatKharid = gheymatKharid;
-    }
-
     public String getTarikhFaktor() {
         return TarikhFaktor;
     }
@@ -292,43 +283,43 @@ public class KalaDarkhastFaktorSatrModel
         TarikhFaktor = tarikhFaktor;
     }
 
-    public float getMaliat() {
+    public double getMaliat() {
         return Maliat;
     }
 
-    public void setMaliat(float maliat) {
+    public void setMaliat(double maliat) {
         Maliat = maliat;
     }
 
-    public float getAvarez() {
+    public double getAvarez() {
         return Avarez;
     }
 
-    public void setAvarez(float avarez) {
+    public void setAvarez(double avarez) {
         Avarez = avarez;
     }
 
-    public float getMablaghForoshKhalesKala() {
+    public double getMablaghForoshKhalesKala() {
         return MablaghForoshKhalesKala;
     }
 
-    public void setMablaghForoshKhalesKala(float mablaghForoshKhalesKala) {
+    public void setMablaghForoshKhalesKala(double mablaghForoshKhalesKala) {
         MablaghForoshKhalesKala = mablaghForoshKhalesKala;
     }
 
-    public float getMablaghKharid() {
+    public double getMablaghKharid() {
         return MablaghKharid;
     }
 
-    public void setMablaghKharid(float mablaghKharid) {
+    public void setMablaghKharid(double mablaghKharid) {
         MablaghKharid = mablaghKharid;
     }
 
-    public int getMablaghMasrafKonandeh() {
+    public double getMablaghMasrafKonandeh() {
         return MablaghMasrafKonandeh;
     }
 
-    public void setMablaghMasrafKonandeh(int mablaghMasrafKonandeh) {
+    public void setMablaghMasrafKonandeh(double mablaghMasrafKonandeh) {
         MablaghMasrafKonandeh = mablaghMasrafKonandeh;
     }
 
@@ -348,11 +339,11 @@ public class KalaDarkhastFaktorSatrModel
         this.ccAnbarGhesmat = ccAnbarGhesmat;
     }
 
-    public float getGheymatMasrafKonandeh() {
+    public double getGheymatMasrafKonandeh() {
         return GheymatMasrafKonandeh;
     }
 
-    public void setGheymatMasrafKonandeh(float gheymatMasrafKonandeh) {
+    public void setGheymatMasrafKonandeh(double gheymatMasrafKonandeh) {
         GheymatMasrafKonandeh = gheymatMasrafKonandeh;
     }
 
@@ -364,11 +355,11 @@ public class KalaDarkhastFaktorSatrModel
         this.darkhastFaktorSatrTakhfifs = darkhastFaktorSatrTakhfifs;
     }
 
-    public float getGheymatForoshAsli() {
+    public double getGheymatForoshAsli() {
         return GheymatForoshAsli;
     }
 
-    public void setGheymatForoshAsli(float gheymatForoshAsli) {
+    public void setGheymatForoshAsli(double gheymatForoshAsli) {
         GheymatForoshAsli = gheymatForoshAsli;
     }
 
@@ -510,11 +501,11 @@ public class KalaDarkhastFaktorSatrModel
     }
 
 
-    public float getGheymatMasrafKonandehAsli() {
+    public double getGheymatMasrafKonandehAsli() {
         return GheymatMasrafKonandehAsli;
     }
 
-    public void setGheymatMasrafKonandehAsli(float gheymatMasrafKonandehAsli) {
+    public void setGheymatMasrafKonandehAsli(double gheymatMasrafKonandehAsli) {
         GheymatMasrafKonandehAsli = gheymatMasrafKonandehAsli;
     }
 
@@ -548,7 +539,6 @@ public class KalaDarkhastFaktorSatrModel
                 ", MablaghTakhfifNaghdiVahed=" + MablaghTakhfifNaghdiVahed +
                 ", DisCntType='" + DisCntType + '\'' +
                 ", DisCntSubType='" + DisCntSubType + '\'' +
-                ", GheymatKharid='" + GheymatKharid + '\'' +
                 ", TarikhFaktor='" + TarikhFaktor + '\'' +
                 ", Maliat=" + Maliat +
                 ", Avarez=" + Avarez +

@@ -23,7 +23,7 @@ public interface MarjoeeForoshandehMVP
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void getMarjoee(long ccDarkhastFaktor);
         void getForoshandehMamorPakhshInfo();
-        void checkTaeidSabtMarjoee(ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,long ccDarkhastFaktor, int itemCount, int selectedCount , int position,boolean addMarjoee);
+        void checkTaeidSabtMarjoee(ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,long ccDarkhastFaktor, int itemCount, int selectedCount , int position,boolean addMarjoee, int ccMoshtary);
 //        void deleteMarjoee(long ccDarkhastFaktor,int ccKalaCode);
     }
 
@@ -41,7 +41,7 @@ public interface MarjoeeForoshandehMVP
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void getMarjoee(long ccDarkhastFaktor);
         void getForoshandehMamorPakhshInfo();
-        void checkTaeidSabtMarjoee( ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,long ccDarkhastFaktor, int itemCount, int selectedCount, int position,boolean insert);
+        void checkTaeidSabtMarjoee( ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModelCheckTaeidSabt ,long ccDarkhastFaktor, int itemCount, int selectedCount, int position,boolean insert, int ccMoshtary);
 //        void deleteMarjoee(long ccDarkhastFaktor,int ccKalaCode,int selectedCount,int position);
     }
 

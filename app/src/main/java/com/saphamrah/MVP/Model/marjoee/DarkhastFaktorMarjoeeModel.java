@@ -60,8 +60,8 @@ public class DarkhastFaktorMarjoeeModel implements DarkhastFaktorMarjoeeMVP.Mode
 
 
     @Override
-    public void sendMarjoee(long ccDarkhastFaktor) {
-        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+    public void sendMarjoee(long ccDarkhastFaktor, int ccMoshtary) {
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
         boolean isMarjoeeKamel = darkhastFaktorModel.getExtraProp_IsMarjoeeKamel() == 1 ? true : false;
         boolean isMarjoee = kardexDAO.getByCcRefrence(ccDarkhastFaktor).size() > 0 ? true : false;
         if (isMarjoeeKamel || isMarjoee) {
@@ -96,9 +96,10 @@ public class DarkhastFaktorMarjoeeModel implements DarkhastFaktorMarjoeeMVP.Mode
         int ccAfrad = foroshandehMamorPakhshModel.getCcAfrad();
         int ccAnbarak = foroshandehMamorPakhshModel.getCcAnbarak();
         int faktorRooz = (int)darkhastFaktorModel.getFaktorRooz();
+        int isKasrMojodi = foroshandehMamorPakhshModel.getIsKasrMojodi();
 
 
-        jsonArrayAfradAnbarak.put(AfradAnbarakToJson(ccAnbarak,ccAfrad,faktorRooz));
+        jsonArrayAfradAnbarak.put(AfradAnbarakToJson(ccAnbarak,ccAfrad,faktorRooz,isKasrMojodi));
 
         /*
          * add kardex and kardexSatr and marjoee Image to json
@@ -172,12 +173,14 @@ public class DarkhastFaktorMarjoeeModel implements DarkhastFaktorMarjoeeMVP.Mode
         }
     }
 
-    private JSONObject AfradAnbarakToJson(int ccAnbarak, int ccAfrad, int faktorRooz) {
+    private JSONObject AfradAnbarakToJson(int ccAnbarak, int ccAfrad, int faktorRooz, int isKasrMojodi) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("ccAfrad",ccAfrad);
             jsonObject.put("ccAnbarak",ccAnbarak);
             jsonObject.put("FaktorRooz",faktorRooz);
+            jsonObject.put("IsKasrMojodi",isKasrMojodi);
+
         }catch (Exception exception){
             exception.printStackTrace();
         }

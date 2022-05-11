@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE =9 ; //  0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest 8-Pegah-grpc 9-Badr
+    private static final int CURRENT_VERSION_TYPE =9 ; // 0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest 8-Pegah-grpc 9-Badr
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 
@@ -711,6 +711,7 @@ public class Constants
     public static final int CC_CHILD_Require_Image_Customer_Confirm_Request = 200;
     public static final int CC_CHILD_Can_Decrease_Bonus_Select = 201;
     public static final int CC_CHILD_CHANGE_AMOUNT_MARJOEE = 202;
+    public static final int CC_CHILD_START_ROOZ_PISHBINITAHVIL = 204;
 
 
 
@@ -1240,6 +1241,10 @@ public class Constants
     public static int CC_CHILD_CHANGE_AMOUNT_MARJOEE()
     {
         return CC_CHILD_CHANGE_AMOUNT_MARJOEE;
+    }
+    public static int CC_CHILD_START_ROOZ_PISHBINITAHVIL()
+    {
+        return CC_CHILD_START_ROOZ_PISHBINITAHVIL;
     }
 
 

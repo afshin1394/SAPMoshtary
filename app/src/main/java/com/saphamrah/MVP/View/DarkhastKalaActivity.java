@@ -194,9 +194,9 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
             }
 
             @Override
-            public void onItemClickJayezeh(int CcKalaCode, int tedadKala, Long ccDarkhastFaktor, double mablaghForosh) {
+            public void onItemClickJayezeh(int CcKalaCode, int tedadKala, Long ccDarkhastFaktor, double mablaghForosh, int ccMoshtary) {
                 Log.i("DarkhastKala", "CcKalaCode : " + String.valueOf(CcKalaCode) + " , tedadKala  :" + tedadKala + "  ,  ccDarkhastFaktor : " + ccDarkhastFaktor);
-                mPresenter.checkJayezehParent(CcKalaCode, tedadKala, ccDarkhastFaktor, mablaghForosh);
+                mPresenter.checkJayezehParent(CcKalaCode, tedadKala, ccDarkhastFaktor, mablaghForosh,ccMoshtary);
             }
 
         });
@@ -1384,8 +1384,8 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
      * @param position
      */
     @Override
-    public void onItemClick(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor, int position) {
-        mPresenter.checkJayezeh(ccJayezeh, tedadKala, mablaghForosh, ccKalaCode, ccDarkhastFaktor, position);
+    public void onItemClick(int ccJayezeh, int tedadKala, double mablaghForosh, int ccKalaCode, Long ccDarkhastFaktor, int position, int ccMoshtary) {
+        mPresenter.checkJayezeh(ccJayezeh, tedadKala, mablaghForosh, ccKalaCode, ccDarkhastFaktor, position, ccMoshtary);
     }
 
     /**
@@ -1427,7 +1427,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
         AlertDialog.Builder builder = new AlertDialog.Builder(DarkhastKalaActivity.this);
         alertView = getLayoutInflater().inflate(R.layout.alert_jayezeh, null);
         RecyclerView recyclerView = alertView.findViewById(R.id.recyclerView);
-        jayezehAlertAdapter = new JayezehParentAlertAdapter(this, jayezehByccKalaCodeParentModels, tedadKala, mablaghForosh, ccKalaCode, ccDarkhastFaktor, this);
+        jayezehAlertAdapter = new JayezehParentAlertAdapter(this, jayezehByccKalaCodeParentModels, tedadKala, mablaghForosh, ccKalaCode, ccDarkhastFaktor, ccMoshtary, this);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(jayezehAlertAdapter);

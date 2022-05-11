@@ -1208,6 +1208,7 @@
     <string name="errorSaveElatAdamTahvilDarkhastِ">خطا در ثبت عدم تحویل فاکتور</string>
     <string name="errorElatKasrMojodi">به علت کسر در موجودی کالا، ارسال فاکتور انجام نگردید. \n لطفا درخواست را حذف نموده و دوباره ثبت نمایید.</string>
     <string name="errorTakhfifNaghdi">به علت درج در تخفیف نقدی تکراری، ارسال فاکتور انجام نگردید. \n لطفا درخواست را حذف نموده و دوباره ثبت نمایید.</string>
+    <string name="errorMoghayeratVersion">به علت مغایرت در نسخه ساپ همراه شما با مرکز، ارسال فاکتور انجام نگردید. \n لطفا با مرکز تماس حاصل فرمایید.</string>
     <string name="errorDeleteOldPrints">خطا در حذف عکس فاکنور های قدیمی</string>
     <string name="errorPrice">مبلغ مورد نظر نمی تواند بزرگتر از مبلغ فروش باشد.</string>
     <string name="MablaghMarjoee">مبلغ مرجوعی</string>

@@ -89,11 +89,11 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
      * @param ccDarkhastFaktor
      */
     @Override
-    public void checkTaeidSabtMarjoee(ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels, int position , int ccDarkhastFaktor) {
+    public void checkTaeidSabtMarjoee(ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels, int position , int ccDarkhastFaktor, int ccMoshtary) {
 
         this.ccDarkhastFaktor = (long) ccDarkhastFaktor;
         if (IsValidData_MarjoeeKol(ccDarkhastFaktor)){
-            ccKardex =  Insert_Kardex(ccDarkhastFaktor , elatMarjoeeKalaModels.get(position).getCcElatMarjoeeKala());
+            ccKardex =  Insert_Kardex(ccDarkhastFaktor , elatMarjoeeKalaModels.get(position).getCcElatMarjoeeKala(), ccMoshtary);
             if (ccKardex > 0)
             insert_KardexSatr(ccKardex , elatMarjoeeKalaModels.get(position).getCcElatMarjoeeKala() , elatMarjoeeKalaModels.get(position).getSharh());
             Insert_DariaftPardakht();
@@ -138,7 +138,7 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
     }
 
 
-    private int Insert_Kardex(long ccDarkhastFaktor , int ExtraProp_ccElatMarjoeeKala)
+    private int Insert_Kardex(long ccDarkhastFaktor , int ExtraProp_ccElatMarjoeeKala, int ccMoshtary)
     {
         int ccKardex;
         try
@@ -147,7 +147,7 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
             ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             KardexDAO kardexDAO= new KardexDAO(BaseApplication.getContext());
             DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
-            darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+            darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
             ArrayList<KardexModel> kardexModels = new ArrayList<>();
             KardexModel kardexModel = new KardexModel();
             CcMoshtary = darkhastFaktorModel.getCcMoshtary();
@@ -204,7 +204,7 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
                         darkhastFaktorSatrModel.getTarikhTolid(),
                         darkhastFaktorSatrModel.getTarikhEngheza(),
                         darkhastFaktorSatrModel.getTedad3(),
-                        darkhastFaktorSatrModel.getMablaghKharid(),
+                        darkhastFaktorSatrModel.getGheymatKharid(),
                         (float) darkhastFaktorSatrModel.getMablaghForosh(),
                         darkhastFaktorSatrModel.getMablaghForoshKhalesKala(),
                         darkhastFaktorSatrModel.getGheymatMasrafKonandeh(),
@@ -306,7 +306,8 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
                     0,
                     0,
                     0,
-                    0);
+                    0,
+                    darkhastFaktorModel.getCcMoshtary());
 
             dariaftPardakhtDarkhastFaktorPPCDAO.insert(dariaftPardakhtDarkhastFaktorPPC);
 

@@ -236,16 +236,17 @@ public class TemporaryRequestsListActivity extends AppCompatActivity implements 
     }
 
     @Override
-    public void openPrintActivity(long ccDarkhastFaktor)
+    public void openPrintActivity(long ccDarkhastFaktor, int ccMoshtary)
     {
         Intent intent = new Intent(TemporaryRequestsListActivity.this , PrintActivity.class);
         intent.putExtra("ccDarkhastFaktor" , ccDarkhastFaktor);
+        intent.putExtra("ccMoshtary" , ccMoshtary);
         startActivity(intent);
         overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
     }
 
     @Override
-    public void openSaveImageActivity(long ccDarkhastFaktor,int type)
+    public void openSaveImageActivity(long ccDarkhastFaktor,int type, int ccMoshtary)
     {
         Intent intent = null;
         if (type ==Constants.ccNoeHavale){
@@ -255,6 +256,7 @@ public class TemporaryRequestsListActivity extends AppCompatActivity implements 
            intent = new Intent(TemporaryRequestsListActivity.this , PrintNoe2Activity.class);
         }
         intent.putExtra("ccDarkhastFaktor" , ccDarkhastFaktor);
+        intent.putExtra("ccMoshtary" , ccMoshtary);
         intent.putExtra("sourceActivity" , "TemporaryRequestsListActivity");
         startActivityForResult(intent , OPEN_FAKTOR_DETAIL);
         overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);

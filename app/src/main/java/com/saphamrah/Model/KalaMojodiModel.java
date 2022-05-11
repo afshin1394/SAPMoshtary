@@ -18,6 +18,7 @@ public class KalaMojodiModel
     private static final String COLUMN_TarikhEngheza = "TarikhEngheza";
     private static final String COLUMN_GheymatMasrafKonandeh = "GheymatMasrafKonandeh";
     private static final String COLUMN_GheymatForosh = "GheymatForosh";
+    private static final String COLUMN_GheymatKharid = "GheymatKharid";
     private static final String COLUMN_ccTaminKonandeh = "ccTaminKonandeh";
     private static final String COLUMN_ForJayezeh = "ForJayezeh";
     private static final String COLUMN_ZamaneSabt = "ZamaneSabt";
@@ -63,6 +64,9 @@ public class KalaMojodiModel
     public static String COLUMN_GheymatForosh() {
         return COLUMN_GheymatForosh;
     }
+    public static String COLUMN_GheymatKharid() {
+        return COLUMN_GheymatKharid;
+    }
     public static String COLUMN_ccTaminKonandeh() {
         return COLUMN_ccTaminKonandeh;
     }
@@ -96,8 +100,9 @@ public class KalaMojodiModel
     private String ShomarehBach;
     private String TarikhTolid;
     private String TarikhEngheza;
-    private float GheymatMasrafKonandeh;
-    private float GheymatForosh;
+    private double GheymatMasrafKonandeh;
+    private double GheymatForosh;
+    private double GheymatKharid;
     private int ccTaminKonandeh;
     private int ForJayezeh;
     private String ZamaneSabt;
@@ -181,18 +186,25 @@ public class KalaMojodiModel
         TarikhEngheza = tarikhEngheza;
     }
 
-    public float getGheymatMasrafKonandeh() {
+    public double getGheymatMasrafKonandeh() {
         return GheymatMasrafKonandeh;
     }
-    public void setGheymatMasrafKonandeh(float gheymatMasrafKonandeh) {
+    public void setGheymatMasrafKonandeh(double gheymatMasrafKonandeh) {
         GheymatMasrafKonandeh = gheymatMasrafKonandeh;
     }
 
-    public float getGheymatForosh() {
+    public double getGheymatForosh() {
         return GheymatForosh;
     }
-    public void setGheymatForosh(float gheymatForosh) {
+    public void setGheymatForosh(double gheymatForosh) {
         GheymatForosh = gheymatForosh;
+    }
+
+    public double getGheymatKharid() {
+        return GheymatKharid;
+    }
+    public void setGheymatKharid(double gheymatKharid) {
+        GheymatKharid = gheymatKharid;
     }
 
     public int getCcTaminKonandeh() {
@@ -270,6 +282,7 @@ public class KalaMojodiModel
             jsonObject.put("TarikhEngheza" , TarikhEngheza);
             jsonObject.put("GheymatMasrafKonandeh" , GheymatMasrafKonandeh);
             jsonObject.put("GheymatForosh" , GheymatForosh);
+            jsonObject.put("GheymatKharid" , GheymatKharid);
             jsonObject.put("ccTaminKonandeh" , ccTaminKonandeh);
             jsonObject.put("ForJayezeh" , ForJayezeh);
             jsonObject.put("ZamaneSabt" , ZamaneSabt);
@@ -302,6 +315,7 @@ public class KalaMojodiModel
                 ", TarikhEngheza='" + TarikhEngheza + '\'' +
                 ", GheymatMasrafKonandeh=" + GheymatMasrafKonandeh +
                 ", GheymatForosh=" + GheymatForosh +
+                ", GheymatKharid=" + GheymatKharid +
                 ", ccTaminKonandeh=" + ccTaminKonandeh +
                 ", ForJayezeh=" + ForJayezeh +
                 ", ZamaneSabt='" + ZamaneSabt + '\'' +

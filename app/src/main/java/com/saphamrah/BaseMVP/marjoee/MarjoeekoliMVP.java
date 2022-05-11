@@ -26,7 +26,7 @@ public interface MarjoeekoliMVP
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void getMarjoee(long ccDarkhastFaktor);
         void getElatMarjoeeKol();
-        void checkTaeidSabtMarjoee(ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels , int position , int ccDarkhastFaktor);
+        void checkTaeidSabtMarjoee(ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels , int position , int ccDarkhastFaktor, int ccMoshtary);
         void checkMarjoeeForInsert(byte[] imageMarjoee);
 //        void getImageProfile();
     }
@@ -48,7 +48,7 @@ public interface MarjoeekoliMVP
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void getMarjoee(long ccDarkhastFaktor);
         void getElatMarjoeeKol();
-        void checkTaeidSabtMarjoee(ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels , int position , int ccDarkhastFaktor);
+        void checkTaeidSabtMarjoee(ArrayList<ElatMarjoeeKalaModel> elatMarjoeeKalaModels , int position , int ccDarkhastFaktor, int ccMoshtary);
         void insertMarjoee(byte[] imageMarjoee);
 //        void getImageProfile();
     }

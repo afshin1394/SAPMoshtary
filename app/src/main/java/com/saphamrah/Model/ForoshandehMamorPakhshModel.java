@@ -61,6 +61,7 @@ public class ForoshandehMamorPakhshModel
 	private static final String COLUMN_EndDateKharejAzMahal = "EndDateKharejAzMahal";
 	private static final String COLUMN_CodeAnbarMarjoee= "CodeNoeAnbarMarjoee";
     private static final String COLUMN_Version= "Version";
+    private static final String COLUMN_IsKasrMojodi= "IsKasrMojodi";
 
 
     public static String TableName() {
@@ -217,6 +218,9 @@ public class ForoshandehMamorPakhshModel
     //TODO
     public static String COLUMN_Version() {
         return COLUMN_Version;
+    }
+    public static String COLUMN_IsKasrMojodi() {
+        return COLUMN_IsKasrMojodi;
     }
 
 
@@ -379,6 +383,9 @@ public class ForoshandehMamorPakhshModel
     @Expose
     private String version;
 
+    @SerializedName("IsKasrMojodi")
+    @Expose
+    private int IsKasrMojodi;
 
 
     public Integer getCcAfrad() {
@@ -872,11 +879,16 @@ public class ForoshandehMamorPakhshModel
         this.btnUpdateParametersClickListener = btnUpdateParametersClickListener;
     }
 
+    public int getIsKasrMojodi() {
+        return IsKasrMojodi;
+    }
 
-    @NonNull
+    public void setIsKasrMojodi(int isKasrMojodi) {
+        IsKasrMojodi = isKasrMojodi;
+    }
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "ForoshandehMamorPakhshModel{" +
                 "ccAfrad=" + ccAfrad +
                 ", ccAmargar=" + ccAmargar +
@@ -927,7 +939,10 @@ public class ForoshandehMamorPakhshModel
                 ", CheckOlaviatMoshtary=" + CheckOlaviatMoshtary +
                 ", FromDateKharejAzMahal='" + FromDateKharejAzMahal + '\'' +
                 ", EndDateKharejAzMahal='" + EndDateKharejAzMahal + '\'' +
+                ", CodeNoeAnbarMarjoee=" + CodeNoeAnbarMarjoee +
                 ", extraPropIsSelect=" + extraPropIsSelect +
+                ", version='" + version + '\'' +
+                ", IsKasrMojodi='" + IsKasrMojodi + '\'' +
                 ", btnGetProgramClickListener=" + btnGetProgramClickListener +
                 ", layShowDateAlertClickListener=" + layShowDateAlertClickListener +
                 ", btnUpdateForoshandehClickListener=" + btnUpdateForoshandehClickListener +

@@ -103,6 +103,7 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
             DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ccMarkazForosh(),
             DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ccMarkazSazmanForoshSakhtarForosh(),
             DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_IsTaeedShodeh(),
+            DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_ExtraProp_ccMoshtary()
         };
     }
 
@@ -399,7 +400,8 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
                     "			sum(Mablagh) Mablagh,0 CodeVazeiat, ZamaneTakhsiseFaktor, 0 ccAfradMamorVosol,0 ccMarkazAnbar, " +
                     "			0 AS Tabdil_NaghdBeFish, 0 AS ccTafkikJoze, 0 AS NaghlAzGhabl,0 AS IsForTasviehTakhir, ZamaneTakhsiseFaktorShamsi," +
                     "			0 AS ExtraProp_IsDirkard, 0 AS ExtraProp_ccKardexSatr," +
-                    "			0 ExtraProp_IsBestankari_ForTasviehTakhir, ExtraProp_IsSend, 0 AS ExtraProp_CanDelete, 0 AS ExtraProp_IsTajil, 0 as ExtraProp_ccDarkhastFaktorServer, 0 as ccMarkazForosh, 0 as ccMarkazSazmanForoshSakhtarForosh , 0 as  ExtraProp_ccDaryaftPardakhtCheckBargashty , 0 IsTaeedShodeh " +
+                    "			0 ExtraProp_IsBestankari_ForTasviehTakhir, ExtraProp_IsSend, 0 AS ExtraProp_CanDelete, 0 AS ExtraProp_IsTajil, 0 as ExtraProp_ccDarkhastFaktorServer, 0 as ccMarkazForosh, 0 as ccMarkazSazmanForoshSakhtarForosh , 0 as  ExtraProp_ccDaryaftPardakhtCheckBargashty , 0 IsTaeedShodeh, " +
+                    "           ExtraProp_ccMoshtary"    +
                     " 	FROM DariaftPardakhtDarkhastFaktorPPC " +
                     " 	WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeVosol = " + Constants.VALUE_MARJOEE() + " AND "+DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_Mablagh() + " <> 0  AND "+ DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_MablaghDariaftPardakht() + " <> 0 "+
                     " 	GROUP BY CodeNoeVosol, NameNoeVosol, TarikhSanadShamsi, ccDarkhastFaktor" + " ) A" +
@@ -498,7 +500,7 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
 
 
 
-    public ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> getByccDarkhastFaktorWithoutMarjoee(long ccDarkhastFaktor)
+    public ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> getByccDarkhastFaktorWithoutMarjoee(long ccDarkhastFaktor,int ccMoshtary)
     {
         ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCModels = new ArrayList<>();
         try
@@ -658,7 +660,7 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
     public DariaftPardakhtDarkhastFaktorPPCModel SetForInsert_DariaftPardakhtDarkhastFaktorPPC(long ccDarkhastFaktor, long ccDariaftPardakht,
                                                                                                String CodeNoeSanad, String NameNoeVosol, String ShomarehSanad, Date TarikhSanad, String TarikhSanadShamsi,
                                                                                                double MablaghDariaftPardakht, double MablaghTakhsis, int ccMarkazAnbar, int IsDirkard, long ccTafkikJoze,
-                                                                                               long ccKardexSatr, int ExtraProp_IsBestankari_ForTasviehTakhir, int IsForTasviehTakhir, int ExtraProp_CanDelete, int IsTajil)
+                                                                                               long ccKardexSatr, int ExtraProp_IsBestankari_ForTasviehTakhir, int IsForTasviehTakhir, int ExtraProp_CanDelete, int IsTajil, int ccMoshtary)
 
     {
 

@@ -72,9 +72,9 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
     }
 
     @Override
-    public void getVosols(long ccDarkhastFaktor)
+    public void getVosols(long ccDarkhastFaktor, int ccMoshtary)
     {
-        mModel.getVosols(ccDarkhastFaktor);
+        mModel.getVosols(ccDarkhastFaktor, ccMoshtary);
     }
 
     @Override
@@ -235,11 +235,11 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
 
 
     @Override
-    public void removeItem(DariaftPardakhtDarkhastFaktorPPCModel dariaftPardakhtDarkhastFaktorPPCModel , int position , int from,long ccDarkhastFaktor)
+    public void removeItem(DariaftPardakhtDarkhastFaktorPPCModel dariaftPardakhtDarkhastFaktorPPCModel , int position , int from,long ccDarkhastFaktor, int ccMoshtary)
     {
         if (dariaftPardakhtDarkhastFaktorPPCModel != null && dariaftPardakhtDarkhastFaktorPPCModel.getCcDariaftPardakhtDarkhastFaktor() > 0)
         {
-            mModel.removeItem(dariaftPardakhtDarkhastFaktorPPCModel , position , from, ccDarkhastFaktor);
+            mModel.removeItem(dariaftPardakhtDarkhastFaktorPPCModel , position , from, ccDarkhastFaktor, ccMoshtary);
         }
         else
         {

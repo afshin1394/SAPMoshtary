@@ -19,8 +19,9 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
     private int TedadMojodyGhabelForosh;
     private int Adad;
     private int Tedad;
-    private int GheymatForosh;
-    private int MablaghMasrafKonandeh;
+    private double GheymatForosh;
+    private double MablaghMasrafKonandeh;
+    private double GheymatKharid;
     private int ZaribForosh;
     private String TarikhTolid;
     private String TarikhEngheza;
@@ -40,8 +41,8 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
     private int tedadPishnahadi;
     private boolean kalaYekSetareh;
     private boolean kalaDoSetareh;
-    private float GheymatMasrafKonandehAsli;
-    private float GheymatForoshAsli;
+    private double GheymatMasrafKonandehAsli;
+    private double GheymatForoshAsli;
     private Bitmap imageDb;
     private int ccGorohKala;
 
@@ -119,17 +120,23 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
     public void setTedad(int tedad) {
         Tedad = tedad;
     }
-    public int getGheymatForosh() {
+    public double getGheymatForosh() {
         return GheymatForosh;
     }
-    public void setGheymatForosh(int gheymatForosh) {
+    public void setGheymatForosh(double gheymatForosh) {
         GheymatForosh = gheymatForosh;
     }
-    public int getMablaghMasrafKonandeh() {
+    public double getMablaghMasrafKonandeh() {
         return MablaghMasrafKonandeh;
     }
-    public void setMablaghMasrafKonandeh(int mablaghMasrafKonandeh) {
+    public void setMablaghMasrafKonandeh(double mablaghMasrafKonandeh) {
         MablaghMasrafKonandeh = mablaghMasrafKonandeh;
+    }
+    public double getGheymatKharid() {
+        return GheymatKharid;
+    }
+    public void setGheymatKharid(double gheymatKharid) {
+        GheymatKharid = gheymatKharid;
     }
     public int getZaribForosh() {
         return ZaribForosh;
@@ -272,19 +279,19 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
         this.ccGorohKala = ccGorohKala;
     }
 
-    public float getGheymatMasrafKonandehAsli() {
+    public double getGheymatMasrafKonandehAsli() {
         return GheymatMasrafKonandehAsli;
     }
 
-    public void setGheymatMasrafKonandehAsli(float gheymatMasrafKonandehAsli) {
+    public void setGheymatMasrafKonandehAsli(double gheymatMasrafKonandehAsli) {
         GheymatMasrafKonandehAsli = gheymatMasrafKonandehAsli;
     }
 
-    public float getGheymatForoshAsli() {
+    public double getGheymatForoshAsli() {
         return GheymatForoshAsli;
     }
 
-    public void setGheymatForoshAsli(float gheymatForoshAsli) {
+    public void setGheymatForoshAsli(double gheymatForoshAsli) {
         GheymatForoshAsli = gheymatForoshAsli;
     }
 
@@ -395,6 +402,7 @@ public class KalaMojodiZaribModel implements Comparable<KalaMojodiZaribModel>
                 ", Adad=" + Adad +
                 ", Tedad=" + Tedad +
                 ", GheymatForosh=" + GheymatForosh +
+                ", GheymatKharid=" + GheymatKharid +
                 ", MablaghMasrafKonandeh=" + MablaghMasrafKonandeh +
                 ", ZaribForosh=" + ZaribForosh +
                 ", TarikhTolid='" + TarikhTolid + '\'' +

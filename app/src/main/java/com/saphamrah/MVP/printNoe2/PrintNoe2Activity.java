@@ -175,6 +175,7 @@ public class PrintNoe2Activity extends AppCompatActivity
     private View MainView;
 
     long ccDarkhastFaktor;
+    int ccMoshtary;
     long TotalTakhfif = 0, TedadAghlamFaktor = 0, TotalMarjoee = 0;
     double MablaghMaliat = 0;
     int DarsadMaliat = 0, DarsadAvarez = 0;
@@ -309,6 +310,7 @@ public class PrintNoe2Activity extends AppCompatActivity
 
             Intent intent = getIntent();
             ccDarkhastFaktor = intent.getLongExtra("ccDarkhastFaktor", 0);
+            ccMoshtary = intent.getIntExtra("ccMoshtary", 0);
 
             haveImage = darkhastFaktorEmzaMoshtaryDAO.haveImage(ccDarkhastFaktor);
             if (haveImage){
@@ -364,7 +366,7 @@ public class PrintNoe2Activity extends AppCompatActivity
             //---------------------------Darkhast Faktor------------------------
 
             DarkhastFaktorDAO darkhastfaktorDAO = new DarkhastFaktorDAO(PrintNoe2Activity.this);
-            DarkhastFaktorModel darkhastfaktor = darkhastfaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+            DarkhastFaktorModel darkhastfaktor = darkhastfaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
 
             ForoshandehMamorPakhshDAO foroshandehmamorpakhshDAO = new ForoshandehMamorPakhshDAO(PrintNoe2Activity.this);
             ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehmamorpakhshDAO.getByccForoshandeh(darkhastfaktor.getCcForoshandeh());
@@ -525,7 +527,7 @@ public class PrintNoe2Activity extends AppCompatActivity
             LinearLayout lyMarjooe = findViewById(R.id.lyMarjoee);
             RecyclerView lstKalaMarjoee = findViewById(R.id.lstKalaMarjoee);
             KalaElamMarjoeeDAO kalaElamMarjoeeDAO = new KalaElamMarjoeeDAO(PrintNoe2Activity.this);
-            ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels = kalaElamMarjoeeDAO.getByccDarkhastFaktor(darkhastfaktor.getCcDarkhastFaktor());
+            ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels = kalaElamMarjoeeDAO.getByccDarkhastFaktor(darkhastfaktor.getCcDarkhastFaktor(),darkhastfaktor.getCcMoshtary());
             for (int i = 0; i < kalaElamMarjoeeModels.size(); i++)
             {
                 TotalMarjoee += (int) kalaElamMarjoeeModels.get(i).getFee() * kalaElamMarjoeeModels.get(i).getTedad3();

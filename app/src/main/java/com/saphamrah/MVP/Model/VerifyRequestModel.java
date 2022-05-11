@@ -385,7 +385,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         if (noeMasouliat == 4 || noeMasouliat == 5)
         {
             DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-            DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+            DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
             if (darkhastFaktorModel != null)
             {
                 //todo shanbe
@@ -428,7 +428,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         if (noeMasouliat == 4 || noeMasouliat == 5)
         {
             DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-            DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+            DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
             if (darkhastFaktorModel != null)
             {
                 if (darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Constants.CODE_NOE_VOSOL_MOSHTARY_VAJH_NAGHD())
@@ -488,6 +488,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         long ccDarkhastFaktor = shared.getLong(shared.getCcDarkhastFaktor() , 0L);
         int ccNoeMoshtary = shared.getInt(shared.getCcGorohNoeMoshtary(), -1);
         int ccMoshtaryGharardad = shared.getInt(shared.getCcMoshtaryGharardad(), -1);
+        int ccForoshandeh = shared.getInt(shared.getCcForoshandeh(), -1);
         Log.d("Check verify",ccDarkhastFaktor + "," + ccNoeMoshtary + "," + ccMoshtaryGharardad);
 
         if (ccDarkhastFaktor != 0)
@@ -503,7 +504,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             }
             else {
                 Log.d("Check1 verify","else canEditDarkhastForMovaze:" + canEditDarkhastForMovaze);
-                kalaDarkhastFaktorSatrModels = kalaDarkhastFaktorDAO.getByccDarkhastWithccKalaCode(ccDarkhastFaktor);
+                kalaDarkhastFaktorSatrModels = kalaDarkhastFaktorDAO.getByccDarkhastWithccKalaCode(ccDarkhastFaktor,ccForoshandeh);
             }
             //ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels = kalaDarkhastFaktorDAO.getByccDarkhastForDarkhastKala(ccDarkhastFaktor,ccNoeMoshtary,ccMoshtaryGharardad);
 
@@ -555,10 +556,11 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
     {
         SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = shared.getLong(shared.getCcDarkhastFaktor() , 0L);
+        int ccMoshtary = shared.getInt(shared.getCcMoshtary() , -1);
         if (ccDarkhastFaktor != 0)
         {
             KalaElamMarjoeeDAO kalaElamMarjoeeDAO = new KalaElamMarjoeeDAO(mPresenter.getAppContext());
-            ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels = kalaElamMarjoeeDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+            ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels = kalaElamMarjoeeDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
             mPresenter.onGetMarjoeeList(kalaElamMarjoeeModels);
         }
         else
@@ -622,9 +624,10 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         Log.i("verifyRequest", "calculateDiscounts: ccMarkazSazmanForosh\t"+ccMarkazSazmanForosh);
 
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor() , -1);
+        int ccMoshtary = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary() , -1);
 
             if (ccDarkhastFaktor != -1) {
-                AsyncTaskCalculateDiscount asyncTaskCalculateDiscount = new AsyncTaskCalculateDiscount(ccDarkhastFaktor, ccMoshtaryGharardad, ccMoshtaryGharardadSazmanForosh, ccMarkazSazmanForosh, ccChildParameterNoeVosol, valueNoeVosol, selectFaktorShared, new OnCalculateDiscountResponse() {
+                AsyncTaskCalculateDiscount asyncTaskCalculateDiscount = new AsyncTaskCalculateDiscount(ccDarkhastFaktor, ccMoshtary, ccMoshtaryGharardad, ccMoshtaryGharardadSazmanForosh, ccMarkazSazmanForosh, ccChildParameterNoeVosol, valueNoeVosol, selectFaktorShared, new OnCalculateDiscountResponse() {
                     @Override
                     public void onFailedCalculate(int resId) {
                         mPresenter.onErrorCalculateDiscount(resId);
@@ -737,7 +740,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
         // update location from SelectFaktorShared if location equal 0,0
         if (darkhastFaktorModel.getLatitude() == 0)
         {
@@ -1110,7 +1113,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             //int ccForoshandeh = selectFaktorShared.getInt(selectFaktorShared.getCcForoshandeh() , 0);
             int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect());
             DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-            DarkhastFaktorModel entity = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+            DarkhastFaktorModel entity = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
             entity.setTarikhPishbinyTahvil(strTarikhPishbiniTahvil);
             Log.d("verifyRequest" , "tarikhPishbiniTahvil : " + entity.getTarikhPishbinyTahvil());
             entity.setCodeNoeVosolAzMoshtary(codeNoeVosol);
@@ -1172,7 +1175,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         {
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
             DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-            DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+            DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
             MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
             MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
 
@@ -1228,7 +1231,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 double MablaghDariaftPardakhtDarkhastFaktor = MablaghKolMarjoeeMoshtary < darkhastFaktorModel.getExtraProp_MablaghNahaeeFaktor() ? MablaghKolMarjoeeMoshtary : darkhastFaktorModel.getExtraProp_MablaghNahaeeFaktor();
 
                 boolean insertResult = insertMarjoeeDariaftPardakhtDarkhastFaktor(foroshandehMamorPakhshModel, darkhastFaktorModel, ccDariaftPardakht,MablaghKolMarjoeeMoshtary,(long) MablaghDariaftPardakhtDarkhastFaktor);
-                boolean updateResult = darkhastFaktorDAO.updateMandehDarkhastFaktor(ccDarkhastFaktor);
+                boolean updateResult = darkhastFaktorDAO.updateMandehDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
                 if (!insertResult || !updateResult)
                 {
                     return false;
@@ -1280,6 +1283,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             dariaftPardakhtDarkhastFaktorPPC.setExtraProp_CanDelete(0);
             dariaftPardakhtDarkhastFaktorPPC.setExtraProp_IsTajil(0);
             dariaftPardakhtDarkhastFaktorPPC.setExtraProp_ccDarkhastFaktorServer(darkhastFaktorModel.getCcDarkhastFaktor());
+            dariaftPardakhtDarkhastFaktorPPC.setExtraProp_ccMoshtary(darkhastFaktorModel.getCcMoshtary());
 
             return dariaftPardakhtDarkhastFaktorPPCDAO.insert(dariaftPardakhtDarkhastFaktorPPC) > 0;
         }
@@ -1338,7 +1342,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             }
             else
             {
-                DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor( selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(),-1));
+                DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor( selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(),-1),selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary(),-1));
                 MoshtaryEtebarSazmanForoshDAO moshtaryEtebarSazmanForoshDAO = new MoshtaryEtebarSazmanForoshDAO(mPresenter.getAppContext());
                 MoshtaryEtebarSazmanForoshModel moshtaryEtebarSazmanForoshModel = moshtaryEtebarSazmanForoshDAO.getByccMoshtaryccSazmanForosh(ccMoshtary, selectFaktorShared.getInt(selectFaktorShared.getCcSazmanForosh(),-1));
                 Log.d("etebar","CcSazmanForosh: "+ selectFaktorShared.getInt(selectFaktorShared.getCcSazmanForosh(),-1));
@@ -1759,6 +1763,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
     {
         OnCalculateDiscountResponse onCalculateDiscountResponse;
         long ccDarkhastFaktor;
+        int ccMoshtary;
         int ccMarkazSazmanForosh;
         int ccChildParameterNoeVosol;
         int valueNoeVosol;
@@ -1767,13 +1772,14 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
         SelectFaktorShared selectFaktorShared;
         int resultOfProccess = 1;
 
-        AsyncTaskCalculateDiscount(long ccDarkhastFaktor, int ccMoshtaryGharardad,int ccMoshtaryGharardadSazmanForosh,int ccMarkazSazmanForosh, int ccChildParameterNoeVosol, int valueNoeVosol, SelectFaktorShared selectFaktorShared, OnCalculateDiscountResponse onCalculateDiscountResponse)
+        AsyncTaskCalculateDiscount(long ccDarkhastFaktor, int ccMoshtary, int ccMoshtaryGharardad,int ccMoshtaryGharardadSazmanForosh,int ccMarkazSazmanForosh, int ccChildParameterNoeVosol, int valueNoeVosol, SelectFaktorShared selectFaktorShared, OnCalculateDiscountResponse onCalculateDiscountResponse)
         {
             this.ccDarkhastFaktor = ccDarkhastFaktor;
             this.ccChildParameterNoeVosol = ccChildParameterNoeVosol;
             this.valueNoeVosol = valueNoeVosol;
             this.selectFaktorShared = selectFaktorShared;
             this.onCalculateDiscountResponse = onCalculateDiscountResponse;
+            this.ccMoshtary = ccMoshtary;
             Log.i("verifyRequest", "AsyncTaskCalculateDiscount: ccMoshtaryGharardad \t"+ccMoshtaryGharardad+"ccMoshtaryGharardadSazmanForosh\t"+ccMoshtaryGharardadSazmanForosh+"ccMarkazSazmanForosh"+ccMarkazSazmanForosh);
         }
 
@@ -1809,7 +1815,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 Log.d("darkhastfaktor", "seperatedccChildParameterOfTakhfif : " + seperatedccChildParameterOfTakhfif.toString());
                 if (seperatedccChildParameterOfTakhfif.length > 0) {
                     DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-                    DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+                    DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
                     Log.d("darkhastFaktor", "calculateDiscounts : " + darkhastFaktorModel.toString());
                     ArrayList<ParameterChildModel> parameterChildModels = new ParameterChildDAO(mPresenter.getAppContext()).getAllByccParameter(Constants.CC_NOE_BASTE_BANDI() + "," + Constants.CC_NOE_TEDAD_RIAL());
                     Log.d("darkhastfaktor", "parameterChildModels : " + parameterChildModels.toString());
@@ -1884,7 +1890,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 Log.d("darkhastfaktor", "seperatedccChildParameterOfTakhfif : " + seperatedccChildParameterOfTakhfif.toString());
                 if (seperatedccChildParameterOfTakhfif.length > 0) {
                     DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-                    DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+                    DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
                     Log.d("darkhastFaktor", "calculateDiscounts : " + darkhastFaktorModel.toString());
                     ArrayList<ParameterChildModel> parameterChildModels = new ParameterChildDAO(mPresenter.getAppContext()).getAllByccParameter(Constants.CC_NOE_BASTE_BANDI() + "," + Constants.CC_NOE_TEDAD_RIAL());
                     Log.d("darkhastfaktor", "parameterChildModels : " + parameterChildModels.toString());
@@ -3671,12 +3677,13 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             {
                 Log.d("Jayezeh" , "begin FOR insertedKala : " + insertedKala + " , tedadJayezeh : " + tedadJayezeh);
 
-                if (insertedKala < tedadJayezehCount)
+                //if (insertedKala <= tedadJayezehCount)
+                if (insertedKala < tedadJayezeh)
                 {
                     int countNew = (kala.getTedad() >= tedadJayezehCount) ? tedadJayezehCount : kala.getTedad();
                     Log.d("Jayezeh" , "count new : " + countNew + " , kala.getTedad() : " + kala.getTedad() + " , tedadJayezeh : " + tedadJayezeh + " , FinalccAfrad : " + kala.getCcAfrad());
                     Log.d("Jayezeh" , "kala model " + kala.toString());
-                    if (insertKalaMojodi(kalaMojodiDAO, kala.getCcTaminKonandeh(), countNew, kala.getShomarehBach(), kala.getTarikhTolid(), kala.getGheymatMasrafKonandeh(), kala.getGheymatForosh(), kala.getCcKalaCode(), kala.getCcForoshandeh(), kala.getCcAfrad(), kala.getTarikhEngheza()))
+                    if (insertKalaMojodi(kalaMojodiDAO, kala.getCcTaminKonandeh(), countNew, kala.getShomarehBach(), kala.getTarikhTolid(), kala.getGheymatMasrafKonandeh(), kala.getGheymatForosh(), kala.getGheymatKharid(), kala.getCcKalaCode(), kala.getCcForoshandeh(), kala.getCcAfrad(), kala.getTarikhEngheza()))
                     {
                         insertedKala += countNew;
                         tedadJayezehCount -=countNew;
@@ -3689,7 +3696,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             return insertedKala == tedadJayezeh;
         }
 
-        private boolean insertKalaMojodi(KalaMojodiDAO kalaMojodiDAO, int ccTaminKonandeh, int count, String shomarehBach, String tarikhTolid, float gheymatMasrafKonandeh, float gheymatForosh, int ccKalaCode, int ccForoshandeh, int ccAfrad,  String tarikhEngheza)
+        private boolean insertKalaMojodi(KalaMojodiDAO kalaMojodiDAO, int ccTaminKonandeh, int count, String shomarehBach, String tarikhTolid, double gheymatMasrafKonandeh, double gheymatForosh,double gheymatKharid, int ccKalaCode, int ccForoshandeh, int ccAfrad,  String tarikhEngheza)
         {
             String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
             KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
@@ -3699,6 +3706,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             kalaMojodiModel.setShomarehBach(shomarehBach);
             kalaMojodiModel.setGheymatMasrafKonandeh(gheymatMasrafKonandeh);
             kalaMojodiModel.setGheymatForosh(gheymatForosh);
+            kalaMojodiModel.setGheymatKharid(gheymatKharid);
             kalaMojodiModel.setCcKalaCode(ccKalaCode);
             kalaMojodiModel.setCcForoshandeh(selectFaktorShared.getInt(selectFaktorShared.getCcForoshandeh() , ccForoshandeh));
             kalaMojodiModel.setCcDarkhastFaktor(ccDarkhastFaktor);
@@ -3711,7 +3719,7 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             kalaMojodiModel.setTarikhEngheza(tarikhEngheza);
             if (kalaMojodiDAO.insert(kalaMojodiModel))
             {
-                return insertDarkhastFaktorSatr(ccTaminKonandeh, ccKalaCode, count, shomarehBach, tarikhTolid, tarikhEngheza, gheymatForosh, gheymatMasrafKonandeh);
+                return insertDarkhastFaktorSatr(ccTaminKonandeh, ccKalaCode, count, shomarehBach, tarikhTolid, tarikhEngheza, gheymatForosh, gheymatMasrafKonandeh,gheymatKharid);
             }
             else
             {
@@ -3719,9 +3727,11 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             }
         }
 
-        private boolean insertDarkhastFaktorSatr(int ccTaminKonandeh, int ccKalaCode, int count, String shomarehBach, String tarikhTolid, String tarikhEngheza, float gheymatForosh, float gheymatMasrafKonandeh)
+        private boolean insertDarkhastFaktorSatr(int ccTaminKonandeh, int ccKalaCode, int count, String shomarehBach, String tarikhTolid, String tarikhEngheza, double gheymatForosh, double gheymatMasrafKonandeh, double gheymatKharid)
         {
-            Log.d("insertDarkhast" ,"gheymatMasrafKonandeh:"+gheymatMasrafKonandeh);
+            SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
+            int ccForoshandeh = shared.getInt(shared.getCcForoshandeh(), -1);
+            Log.d("insertDarkhast" ,"gheymatMasrafKonandeh:"+gheymatMasrafKonandeh + " ,ccForoshandeh: " + ccForoshandeh);
             DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
             DarkhastFaktorSatrModel darkhastFaktorSatrModel = new DarkhastFaktorSatrModel();
             darkhastFaktorSatrModel.setCcDarkhastFaktor(ccDarkhastFaktor);
@@ -3738,11 +3748,12 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
             darkhastFaktorSatrModel.setMablaghTakhfifNaghdiVahed(0);
             darkhastFaktorSatrModel.setMaliat(0);
             darkhastFaktorSatrModel.setAvarez(0);
-            darkhastFaktorSatrModel.setCcAfrad(0);
+            darkhastFaktorSatrModel.setCcAfrad(ccForoshandeh);
             darkhastFaktorSatrModel.setExtraProp_IsOld(false);
             darkhastFaktorSatrModel.setGheymatMasrafKonandeh(gheymatMasrafKonandeh);
             darkhastFaktorSatrModel.setGheymatForoshAsli(gheymatForosh);
             darkhastFaktorSatrModel.setGheymatMasrafKonandehAsli(gheymatMasrafKonandeh);
+            darkhastFaktorSatrModel.setGheymatKharid(gheymatKharid);
             return darkhastFaktorSatrDAO.insert(darkhastFaktorSatrModel);
         }
 
@@ -3882,9 +3893,12 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 //                    }
 //                }
 
+                int ccForoshandeh = selectFaktorShared.getInt(selectFaktorShared.getCcForoshandeh() , -1);
+                Log.d("verify" , "darkhastFaktorSatr ccForoshandeh : " + ccForoshandeh);
+
                 DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
                 //for (DarkhastFaktorSatrModel model : darkhastFaktorSatrDAO.getByccDarkhastFaktorAndNotNoeKala(ccDarkhastFaktor , 2))
-                for (DarkhastFaktorSatrModel model : darkhastFaktorSatrDAO.getByccDarkhastFaktorAndNotNoeKala(ccDarkhastFaktor , -1))
+                for (DarkhastFaktorSatrModel model : darkhastFaktorSatrDAO.getByccDarkhastFaktorAndNotNoeKala(ccDarkhastFaktor , -1, ccForoshandeh))
                 {
                     double darsadMaliat = 0;
                     double darsadAvarez = 0;
@@ -4227,10 +4241,11 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
 
                 SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
                 long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(), -1);
+                int ccMoshtary = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary(), -1);
                 Log.d("JayezehArzeshAfzoodeh","ccDarkhastFaktor:" + ccDarkhastFaktor);
 
                 DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-                DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+                DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
                 Log.d("JayezehArzeshAfzoodeh","darkhastFaktorModel:" + darkhastFaktorModel.toString());
 
                 MoshtaryModel moshtary = moshtaryDAO.getByccMoshtary(darkhastFaktorModel.getCcMoshtary());

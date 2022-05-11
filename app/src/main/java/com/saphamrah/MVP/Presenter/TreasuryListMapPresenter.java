@@ -127,7 +127,7 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
         }
         else
         {
-            mModel.sendDariaftPardakht(darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor());
+            mModel.sendDariaftPardakht(darkhastFaktorMoshtaryForoshandeModel.getCcDarkhastFaktor(),darkhastFaktorMoshtaryForoshandeModel.getCcMoshtary());
         }
     }
 
@@ -191,8 +191,8 @@ public class TreasuryListMapPresenter implements TreasuryListMapMVP.PresenterOps
     }
 
     @Override
-    public void getElatAdamTahvilDarkhast(long ccDarkhastFaktor, int position) {
-        mModel.getElatAdamTahvilDarkhast(ccDarkhastFaktor,position);
+    public void getElatAdamTahvilDarkhast(long ccDarkhastFaktor, int ccMoshtary, int position) {
+        mModel.getElatAdamTahvilDarkhast(ccDarkhastFaktor,ccMoshtary,position);
     }
 
     @Override

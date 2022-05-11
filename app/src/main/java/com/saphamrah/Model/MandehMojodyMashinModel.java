@@ -14,6 +14,7 @@ public class MandehMojodyMashinModel
     private static final String COLUMN_TarikhEngheza = "TarikhEngheza";
     private static final String COLUMN_GheymatMasrafKonandeh = "GheymatMasrafKonandeh";
     private static final String COLUMN_GheymatForosh = "GheymatForosh";
+    private static final String COLUMN_GheymatKharid = "GheymatKharid";
     private static final String COLUMN_ccTaminKonandeh = "ccTaminKonandeh";
     private static final String COLUMN_Max_Mojody = "Max_Mojody";
     private static final String COLUMN_Max_MojodyByShomarehBach = "Max_MojodyByShomarehBach";
@@ -47,6 +48,9 @@ public class MandehMojodyMashinModel
     public static String COLUMN_GheymatForosh() {
         return COLUMN_GheymatForosh;
     }
+    public static String COLUMN_GheymatKharid() {
+        return COLUMN_GheymatKharid;
+    }
     public static String COLUMN_ccTaminKonandeh() {
         return COLUMN_ccTaminKonandeh;
     }
@@ -69,8 +73,9 @@ public class MandehMojodyMashinModel
     private String ShomarehBach;
     private String TarikhTolid;
     private String TarikhEngheza;
-    private int GheymatMasrafKonandeh;
-    private int GheymatForosh;
+    private double GheymatMasrafKonandeh;
+    private double GheymatForosh;
+    private double GheymatKharid;
     private int ccTaminKonandeh;
     private int Max_Mojody;
     private int Max_MojodyByShomarehBach;
@@ -126,18 +131,25 @@ public class MandehMojodyMashinModel
         return this.TarikhEngheza;
     }
 
-    public void setGheymatMasrafKonandeh(int GheymatMasrafKonandeh){
+    public void setGheymatMasrafKonandeh(double GheymatMasrafKonandeh){
         this.GheymatMasrafKonandeh = GheymatMasrafKonandeh;
     }
-    public int getGheymatMasrafKonandeh(){
+    public double getGheymatMasrafKonandeh(){
         return this.GheymatMasrafKonandeh;
     }
 
-    public void setGheymatForosh(int GheymatForosh){
+    public void setGheymatForosh(double GheymatForosh){
         this.GheymatForosh = GheymatForosh;
     }
-    public int getGheymatForosh(){
+    public double getGheymatForosh(){
         return this.GheymatForosh;
+    }
+
+    public void setGheymatKharid(double GheymatKharid){
+        this.GheymatKharid = GheymatKharid;
+    }
+    public double getGheymatKharid(){
+        return this.GheymatKharid;
     }
 
     public int getCcTaminKonandeh() {
@@ -195,6 +207,7 @@ public class MandehMojodyMashinModel
                 ", TarikhEngheza='" + TarikhEngheza + '\'' +
                 ", GheymatMasrafKonandeh=" + GheymatMasrafKonandeh +
                 ", GheymatForosh=" + GheymatForosh +
+                ", GheymatKharid=" + GheymatKharid +
                 ", ccTaminKonandeh=" + ccTaminKonandeh +
                 ", Max_Mojody=" + Max_Mojody +
                 ", Max_MojodyByShomarehBach=" + Max_MojodyByShomarehBach +

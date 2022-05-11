@@ -73,7 +73,7 @@ public interface TreasuryListMapMVP
 
         void checkClearingTreasury(int noeMasouliat, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
 
-        void getElatAdamTahvilDarkhast(long ccDarkhastFaktor, int position);
+        void getElatAdamTahvilDarkhast(long ccDarkhastFaktor,int ccMoshtary, int position);
 
         void sendElatAdamTahvilDarkhast(ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel, DarkhastFaktorModel darkhastFaktorModel, int position);
     }
@@ -126,7 +126,7 @@ public interface TreasuryListMapMVP
         void getTodayTreasuryListByCustomerCode();
         void getFaktorImage(long ccDarkhastFaktor);
         void setDarkhastFaktorShared(DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
-        void sendDariaftPardakht(long ccDarkhastFaktor);
+        void sendDariaftPardakht(long ccDarkhastFaktor, int ccMoshtary);
         void routingFromCurrentLocation(int ccMoshtary, String customerName, double desLatitude , double desLongitude);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
@@ -136,7 +136,7 @@ public interface TreasuryListMapMVP
 
         void checkIsLocationSendToServer(int noeMasouliat, DarkhastFaktorMoshtaryForoshandeModel darkhastFaktorMoshtaryForoshandeModel);
 
-        void getElatAdamTahvilDarkhast(long ccDarkhastFaktor, int position);
+        void getElatAdamTahvilDarkhast(long ccDarkhastFaktor,int ccMoshtary, int position);
 
         void sendElatAdamTahvilDarkhast(ElatAdamTahvilDarkhastModel elatAdamTahvilDarkhastModel, DarkhastFaktorModel darkhastFaktorModel, int position);
     }

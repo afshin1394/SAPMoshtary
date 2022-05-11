@@ -70,11 +70,11 @@ public class MarjoeeKalaPresenter implements MarjoeeKalaMVP.PresenterOps , Marjo
     }
 
     @Override
-    public void getKalaMarjoee(long ccDarkhastFaktor)
+    public void getKalaMarjoee(long ccDarkhastFaktor, int ccMoshtary)
     {
         if (ccDarkhastFaktor > 0)
         {
-            mModel.getKalaMarjoee(ccDarkhastFaktor);
+            mModel.getKalaMarjoee(ccDarkhastFaktor,ccMoshtary);
         }
     }
 
@@ -131,7 +131,7 @@ public class MarjoeeKalaPresenter implements MarjoeeKalaMVP.PresenterOps , Marjo
                 return;
             }
             if (elamMarjoeeSatrPPCModel.getCcKala()<0 || elamMarjoeeSatrPPCModel.getCcKalaCode()<=0 || elamMarjoeeSatrPPCModel.getShomarehBach().trim().length()==0 ||
-                    elamMarjoeeSatrPPCModel.getTarikhTolid().trim().replace("/" , "").length()==0 || elamMarjoeeSatrPPCModel.getGheymatMasrafkonandeh()<=0 ||
+                    elamMarjoeeSatrPPCModel.getTarikhTolid().trim().replace("/" , "").length()==0 || elamMarjoeeSatrPPCModel.getGheymatMasrafkonandeh()<=0 || elamMarjoeeSatrPPCModel.getGheymatKharid()<0 ||
                     elamMarjoeeSatrPPCModel.getTarikhEngheza().trim().replace("/" , "").length()==0 ||
                     elamMarjoeeSatrPPCModel.getFee()<=0 || elamMarjoeeSatrPPCModel.getCcTaminkonandeh()<=0)
             {
@@ -173,7 +173,7 @@ public class MarjoeeKalaPresenter implements MarjoeeKalaMVP.PresenterOps , Marjo
     }
 
     @Override
-    public void checkUpdateCountOfMarjoee(long ccDarkhastFaktor, int ccElamMarjoeeSatr, int oldCount, int newCount)
+    public void checkUpdateCountOfMarjoee(long ccDarkhastFaktor, int ccMoshtary, int ccElamMarjoeeSatr, int oldCount, int newCount)
     {
         if (ccElamMarjoeeSatr <= 0)
         {
@@ -185,7 +185,7 @@ public class MarjoeeKalaPresenter implements MarjoeeKalaMVP.PresenterOps , Marjo
         }
         else
         {
-            mModel.updateCountOfMarjoee(ccDarkhastFaktor, ccElamMarjoeeSatr, newCount);
+            mModel.updateCountOfMarjoee(ccDarkhastFaktor,ccMoshtary, ccElamMarjoeeSatr, newCount);
         }
     }
 

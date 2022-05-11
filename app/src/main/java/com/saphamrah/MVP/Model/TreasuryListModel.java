@@ -576,7 +576,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
 
     @Override
-    public void getDariaftPardakhtForSend(long ccDarkhastFaktor , int position)
+    public void getDariaftPardakhtForSend(long ccDarkhastFaktor , int ccMoshtary, int position)
     {
          /*
           چک کردن راس گیری چک ها قبل از ارسال
@@ -589,7 +589,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
 
 
-        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor, ccMoshtary);
         MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(darkhastFaktorModel.getCcMoshtary());
         DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(BaseApplication.getContext());
         ArrayList<DariaftPardakhtDarkhastFaktorPPCModel> dariaftPardakhtDarkhastFaktorPPCs = dariaftPardakhtDarkhastFaktorPPCDAO.getByccDarkhastFaktorCheck(darkhastFaktorModel.getCcDarkhastFaktor());
@@ -661,7 +661,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
          */
         String codeNoeVosolMoshtaryVajhNaghd = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_VAJH_NAGHD());
         String codeNoeVosolMoshtaryCheck = new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_VOSOL_MOSHTARY_CHECK());
-        long mablaghMandehFaktor = setMablaghMandehFaktor(ccDarkhastFaktor);
+        long mablaghMandehFaktor = setMablaghMandehFaktor(ccDarkhastFaktor,ccMoshtary);
         int checkMandehFaktorIsZeroForNaghdValue = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Check_Mandeh_Faktor_Is_Zero_For_Naghd_Before_Send_Vosol()));
         if(checkMandehFaktorIsZeroForNaghdValue==1) {
             if ((darkhastFaktorModel.getCodeNoeVosolAzMoshtary() == Integer.parseInt(codeNoeVosolMoshtaryVajhNaghd) ||
@@ -719,10 +719,10 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
         return tedadRooz;
     }
 
-    private long setMablaghMandehFaktor(long ccDarkhastFaktor) {
+    private long setMablaghMandehFaktor(long ccDarkhastFaktor, int ccMoshtary) {
         //--------------------- Update_MandehDarkhastFaktor --------------------------
-        darkhastFaktorDAO.updateMandehDarkhastFaktor(ccDarkhastFaktor);
-        return darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor).getMablaghMandeh();
+        darkhastFaktorDAO.updateMandehDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
+        return darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary).getMablaghMandeh();
     }
 
     private void sendDariaftPardakhtToServer(final int position , String ip , String port , final ArrayList<DariaftPardakhtPPCModel> dariaftPardakhtPPCModels, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel, int noeMasouliat, final DarkhastFaktorModel darkhastFaktorModel, int codeNoeVosolVajhNaghd, String currentVersionNumber)
@@ -1800,6 +1800,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                             kalaMojodiModel.setTarikhEngheza(mandehMojodyMashinModel.getTarikhEngheza());
                             kalaMojodiModel.setGheymatMasrafKonandeh(mandehMojodyMashinModel.getGheymatMasrafKonandeh());
                             kalaMojodiModel.setGheymatForosh(mandehMojodyMashinModel.getGheymatForosh());
+                            kalaMojodiModel.setGheymatKharid(mandehMojodyMashinModel.getGheymatKharid());
                             kalaMojodiModel.setCcTaminKonandeh(mandehMojodyMashinModel.getCcTaminKonandeh());
                             kalaMojodiModel.setZamaneSabt(currentDate);
                             kalaMojodiModel.setIsAdamForosh(mandehMojodyMashinModel.getIsAdamForosh());
@@ -2581,9 +2582,9 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
     }
 
     @Override
-    public void getElatAdamTahvilDarkhast(long ccDarkhastFaktor,int position) {
+    public void getElatAdamTahvilDarkhast(long ccDarkhastFaktor, int ccMoshtary,int position) {
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
-        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
         ElatAdamTahvilDarkhastDAO elatAdamTahvilDarkhastDAO = new ElatAdamTahvilDarkhastDAO(BaseApplication.getContext());
         ArrayList<ElatAdamTahvilDarkhastModel> models = elatAdamTahvilDarkhastDAO.getAll();
         mPresenter.onGetElatAdamTahvilDarkhast(models, darkhastFaktorModel, position);

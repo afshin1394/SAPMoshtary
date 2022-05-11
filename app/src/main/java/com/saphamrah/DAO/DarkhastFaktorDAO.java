@@ -74,6 +74,7 @@ public class DarkhastFaktorDAO
     {
         return new String[]
         {
+            DarkhastFaktorModel.COLUMN_Radif(),
             DarkhastFaktorModel.COLUMN_ccDarkhastFaktor(),
             DarkhastFaktorModel.COLUMN_TarikhFaktor(),
             DarkhastFaktorModel.COLUMN_ShomarehDarkhast(),
@@ -727,7 +728,7 @@ public class DarkhastFaktorDAO
             String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "insert" , "");
         }
-        return insertId;
+        return darkhastFaktorModel.getCcDarkhastFaktor();
     }
 
     public ArrayList<DarkhastFaktorModel> getAll()
@@ -929,6 +930,38 @@ public class DarkhastFaktorDAO
         return ccDarkhastFaktors == null ? "" : ccDarkhastFaktors;
     }
 
+    public Long getMaxccDarkhastFaktor()
+    {
+        long maxCcDarkhastFaktor = 0;
+        try
+        {
+            //select group_concat(ccDarkhastFaktor) from DarkhastFaktor where ccDarkhastFaktorNoeForosh =
+            String query = " SELECT ccDarkhastFaktor FROM DarkhastFaktor\n" +
+                           " ORDER BY ccDarkhastFaktor DESC\n" +
+                           " LIMIT 1 " ;
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    maxCcDarkhastFaktor = cursor.getLong(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorModel.TableName()) + "\n" + e.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorDAO" , "" , "getccDarkhastFaktorsByNoeFaktorHavale" , "");
+        }
+        Log.d("DarkhastFaktor","maxCcDarkhastFaktor:" + maxCcDarkhastFaktor + " ,++maxCcDarkhastFaktor:" + ++maxCcDarkhastFaktor);
+        return ++maxCcDarkhastFaktor;
+    }
     public String getAllccForoshandeh()
     {
         String ccForoshandehs = "-1";
@@ -1052,13 +1085,13 @@ public class DarkhastFaktorDAO
         return darkhastFaktorModels;
     }
 
-    public DarkhastFaktorModel getByccDarkhastFaktor(long ccDarkhastFaktor)
+    public DarkhastFaktorModel getByccDarkhastFaktor(long ccDarkhastFaktor, int ccMoshtary)
     {
         DarkhastFaktorModel darkhastFaktorModel = new DarkhastFaktorModel();
         try
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(DarkhastFaktorModel.TableName(), allColumns(), DarkhastFaktorModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor, null, null, null, null);
+            Cursor cursor = db.query(DarkhastFaktorModel.TableName(), allColumns(), DarkhastFaktorModel.COLUMN_ccDarkhastFaktor() + " = " + ccDarkhastFaktor + " AND " + DarkhastFaktorModel.COLUMN_ccMoshtary() + " = " + ccMoshtary , null, null, null, null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)
@@ -1853,7 +1886,7 @@ public class DarkhastFaktorDAO
 
 
 
-    public boolean updateMandehDarkhastFaktor(long ccDarkhastFaktor)
+    public boolean updateMandehDarkhastFaktor(long ccDarkhastFaktor, int ccMoshtary)
     {
         try
         {
@@ -1861,7 +1894,7 @@ public class DarkhastFaktorDAO
                     +" SET MablaghMandeh = MablaghKhalesFaktor -  ifnull((SELECT sum(Mablagh) FROM DariaftPardakhtDarkhastFaktorPPC WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + "),0),  "
                     +" ExtraProp_MablaghDariaftPardakht = MablaghKhalesFaktor - ( ifnull((SELECT sum(Mablagh) FROM DariaftPardakhtPPC WHERE CodeNoeVosol <> " + Constants.VALUE_MARJOEE() + " AND ccDarkhastFaktor = " + ccDarkhastFaktor + "),0)   "
                     +" +  ifnull((SELECT sum(Mablagh) FROM DariaftPardakhtDarkhastFaktorPPC WHERE CodeNoeVosol = " + Constants.VALUE_MARJOEE() + " AND ccDarkhastFaktor = " + ccDarkhastFaktor + "),0) )  "
-                    +" Where ccDarkhastFaktor = " + ccDarkhastFaktor ;
+                    +" Where ccDarkhastFaktor = " + ccDarkhastFaktor +" AND ccMoshtary = " + ccMoshtary;
             Log.d("mablaghMandeh" , "query : " + query);
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             db.execSQL(query);
@@ -2298,6 +2331,7 @@ public class DarkhastFaktorDAO
         {
             contentValues.put(DarkhastFaktorModel.COLUMN_ccDarkhastFaktor() , darkhastFaktorModel.getCcDarkhastFaktor());
         }
+        contentValues.put(DarkhastFaktorModel.COLUMN_Radif() , darkhastFaktorModel.getRadif());
         contentValues.put(DarkhastFaktorModel.COLUMN_TarikhFaktor() , darkhastFaktorModel.getTarikhFaktor());
         contentValues.put(DarkhastFaktorModel.COLUMN_ShomarehDarkhast() , darkhastFaktorModel.getShomarehDarkhast());
         contentValues.put(DarkhastFaktorModel.COLUMN_ShomarehFaktor() , darkhastFaktorModel.getShomarehFaktor());
@@ -2380,6 +2414,7 @@ public class DarkhastFaktorDAO
         {
             DarkhastFaktorModel darkhastFaktorModel = new DarkhastFaktorModel();
 
+            darkhastFaktorModel.setRadif(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_Radif())));
             darkhastFaktorModel.setCcDarkhastFaktor(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ccDarkhastFaktor())));
             darkhastFaktorModel.setTarikhFaktor(cursor.getString(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_TarikhFaktor())));
             darkhastFaktorModel.setShomarehDarkhast(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorModel.COLUMN_ShomarehDarkhast())));

@@ -60,6 +60,7 @@ public class FaktorDetailsActivity extends AppCompatActivity implements FaktorDe
     private View mainView;
     private boolean imagedSaved; // اگر این فیلد true باشد به این معنی است که کاربر بر روی ثبت تصویر کلیک کرده و تصویر فاکتور ثبت شده. از این فیلد برای برگشت به فرم قبلی استفاده میشود و در فرم قبلی (فرم لیست درخواست ها) چک میشود تا اگر مقدار این فیلد برابر true بود، آداپتر بروزرسانی میشود.
     private long ccDarkhastFaktor;
+    private int ccMoshtary;
     //TODO
     private ScrollView scrollMain;
 
@@ -88,16 +89,17 @@ public class FaktorDetailsActivity extends AppCompatActivity implements FaktorDe
         sourceActivity = "";
         Intent getIntent = getIntent();
         ccDarkhastFaktor = getIntent.getLongExtra("ccDarkhastFaktor" , -1);
+        ccMoshtary = getIntent.getIntExtra("ccMoshtary" , -1);
         sourceActivity = getIntent.getStringExtra("sourceActivity");
 
 
         if (sourceActivity.equalsIgnoreCase("TreasuryListActivity") || sourceActivity.equalsIgnoreCase("TreasuryListOfflineActivity"))
         {
-            mPresenter.getFaktorDetails(ccDarkhastFaktor , false);
+            mPresenter.getFaktorDetails(ccDarkhastFaktor ,ccMoshtary, false);
         }
         else
         {
-            mPresenter.getFaktorDetails(ccDarkhastFaktor , true);
+            mPresenter.getFaktorDetails(ccDarkhastFaktor , ccMoshtary,true);
         }
 
         fabTakePicture.setOnClickListener(new View.OnClickListener() {

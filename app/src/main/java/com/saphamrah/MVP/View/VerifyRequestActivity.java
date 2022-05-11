@@ -533,7 +533,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
                 }
 
                 @Override
-                public void onItemClickJayezeh(int CcKalaCode, int tedadKala, Long ccDarkhastFaktor, double mablaghForosh) {
+                public void onItemClickJayezeh(int CcKalaCode, int tedadKala, Long ccDarkhastFaktor, double mablaghForosh, int ccMoshtary) {
 
                 }
             });

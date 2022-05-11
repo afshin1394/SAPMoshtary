@@ -1,7 +1,5 @@
 package com.saphamrah.MVP.Model;
 
-import static com.saphamrah.Utils.Constants.FOROSHANDEH_GARM;
-import static com.saphamrah.Utils.Constants.FOROSHANDEH_SARD;
 import static com.saphamrah.Utils.Constants.MAMOURPAKHSH_SARD;
 import static com.saphamrah.Utils.Constants.MAMOURPAKHSH_SMART;
 import static com.saphamrah.Utils.Constants.REST;
@@ -10,8 +8,8 @@ import static com.saphamrah.Utils.Constants.gRPC;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.Message;
-import android.util.Base64;
 import android.util.Log;
 
 import com.saphamrah.Application.BaseApplication;
@@ -27,6 +25,8 @@ import com.saphamrah.DAO.DarkhastFaktorAfradForoshDAO;
 import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.DAO.DarkhastFaktorEmzaMoshtaryDAO;
 import com.saphamrah.DAO.DarkhastFaktorJayezehDAO;
+import com.saphamrah.DAO.DarkhastFaktorKalaPishnahadiDAO;
+import com.saphamrah.DAO.DarkhastFaktorRoozSortDAO;
 import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
 import com.saphamrah.DAO.DarkhastFaktorSatrTakhfifDAO;
 import com.saphamrah.DAO.DarkhastFaktorTakhfifDAO;
@@ -80,7 +80,6 @@ import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Model.SuggestModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.Network.RxNetwork.RxHttpRequest;
-import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -105,12 +104,10 @@ import com.saphamrah.WebService.ServiceResponse.CreateBarkhordForoshandehBaMosht
 import com.saphamrah.WebService.ServiceResponse.CreateDarkhastFaktorAfradForoshResult;
 import com.saphamrah.WebService.ServiceResponse.CreateDarkhastFaktorWithVosol;
 import com.saphamrah.WebService.ServiceResponse.CreateElamMarjoeeSatrPPCTedadResult;
-import com.saphamrah.WebService.ServiceResponse.CreateGpsDataMashinResult;
 import com.saphamrah.WebService.ServiceResponse.CreateGpsDataPPCResult;
 import com.saphamrah.WebService.ServiceResponse.CreateKalaMojodyWithJSONResult;
 import com.saphamrah.WebService.ServiceResponse.CreateLogPPCResult;
 import com.saphamrah.WebService.ServiceResponse.CreateMojoodiGiriResult;
-import com.saphamrah.WebService.ServiceResponse.GetImageJsonResult;
 import com.saphamrah.WebService.ServiceResponse.SuggestResult;
 import com.saphamrah.WebService.ServiceResponse.UpdateDarkhastFaktorWithJSONResult;
 import com.saphamrah.protos.InvoiceInsertControlGrpc;
@@ -124,7 +121,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -134,8 +130,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Callable;
-
-import javax.mail.internet.ParameterList;
 
 import io.grpc.ManagedChannel;
 import io.reactivex.Observable;
@@ -156,6 +150,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
     private TemporaryRequestsListMVP.RequiredPresenterOps mPresenter;
 
     private CompositeDisposable compositeDisposable;
+    private Handler handler;
 
     public TemporaryRequestsListModel(TemporaryRequestsListMVP.RequiredPresenterOps mPresenter)
     {
@@ -221,6 +216,64 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         mPresenter.onGetTemporaryNoRequests(models);
     }
 
+private void deleteAllTempRequest(long ccDarkhastFaktor, int ccMoshtary){
+
+    Message message = new Message();
+    DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
+    DarkhastFaktorSatrTakhfifDAO darkhastFaktorSatrTakhfifDAO = new DarkhastFaktorSatrTakhfifDAO(mPresenter.getAppContext());
+    DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
+    DarkhastFaktorTakhfifDAO darkhastFaktorTakhfifDAO = new DarkhastFaktorTakhfifDAO(mPresenter.getAppContext());
+    DarkhastFaktorJayezehDAO darkhastFaktorJayezehDAO =new DarkhastFaktorJayezehDAO(mPresenter.getAppContext());
+    DarkhastFaktorEmzaMoshtaryDAO darkhastFaktorEmzaMoshtaryDAO = new DarkhastFaktorEmzaMoshtaryDAO(mPresenter.getAppContext());
+    DarkhastFaktorAfradForoshDAO darkhastFaktorAfradForoshDAO = new DarkhastFaktorAfradForoshDAO(mPresenter.getAppContext());
+    DarkhastFaktorRoozSortDAO darkhastFaktorRoozSortDAO = new DarkhastFaktorRoozSortDAO(mPresenter.getAppContext());
+    ElamMarjoeePPCDAO elamMarjoeePPCDAO = new ElamMarjoeePPCDAO(mPresenter.getAppContext());
+    ElamMarjoeeSatrPPCDAO elamMarjoeeSatrPPCDAO = new ElamMarjoeeSatrPPCDAO(mPresenter.getAppContext());
+    ElamMarjoeeSatrPPCTedadDAO elamMarjoeeSatrPPCTedadDAO = new ElamMarjoeeSatrPPCTedadDAO(mPresenter.getAppContext());
+    DariaftPardakhtPPCDAO dariaftPardakhtPPCDAO = new DariaftPardakhtPPCDAO(mPresenter.getAppContext());
+    DariaftPardakhtDarkhastFaktorPPCDAO dariaftPardakhtDarkhastFaktorPPCDAO = new DariaftPardakhtDarkhastFaktorPPCDAO(mPresenter.getAppContext());
+    KalaMojodiDAO kalaMojodiDAO = new KalaMojodiDAO(mPresenter.getAppContext());
+    GPSDataPpcDAO gpsDataPpcDAO = new GPSDataPpcDAO(mPresenter.getAppContext());
+
+
+    Thread thread = new Thread() {
+        @Override
+        public void run() {
+          boolean darkhastFaktor =   darkhastFaktorDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
+          boolean darkhastFaktorSatrTakhfif =   darkhastFaktorSatrTakhfifDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
+          boolean darkhastFaktorSatr =     darkhastFaktorSatrDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
+          boolean darkhastFaktorTakhfif =     darkhastFaktorTakhfifDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
+          boolean darkhastFaktorEmzaMoshtary =     darkhastFaktorEmzaMoshtaryDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
+          boolean darkhastFaktorAfradForosh =     darkhastFaktorAfradForoshDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
+          boolean darkhastFaktorRoozSort =     darkhastFaktorRoozSortDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
+          boolean elamMarjoeePPC =     elamMarjoeePPCDAO.deleteAllByccDarkhastFaktor(ccDarkhastFaktor);
+          boolean elamMarjoeeSatrPPC =     elamMarjoeeSatrPPCDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
+          boolean elamMarjoeeSatrPPCTedad =     elamMarjoeeSatrPPCTedadDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
+          boolean dariaftPardakhtPPC =     dariaftPardakhtPPCDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
+          boolean darkhastFaktorJayezeh =     darkhastFaktorJayezehDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
+          boolean dariaftPardakhtDarkhastFaktorPPC =     dariaftPardakhtDarkhastFaktorPPCDAO.deleteByccDarkhastFaktor(ccDarkhastFaktor);
+          boolean kalaMojodi =     kalaMojodiDAO.deleteAllByccDarkhastFaktor(ccDarkhastFaktor);
+          boolean gpsDataPpc =     gpsDataPpcDAO.deleteByccDarkhastFaktorAndccMoshtary(ccDarkhastFaktor, ccMoshtary);
+
+          if(darkhastFaktor && darkhastFaktorSatrTakhfif && darkhastFaktorSatr && darkhastFaktorTakhfif && darkhastFaktorEmzaMoshtary && darkhastFaktorAfradForosh && darkhastFaktorRoozSort &&
+                  elamMarjoeePPC && elamMarjoeeSatrPPC && elamMarjoeeSatrPPCTedad && dariaftPardakhtPPC && darkhastFaktorJayezeh && dariaftPardakhtDarkhastFaktorPPC
+                  && kalaMojodi && gpsDataPpc) {
+
+              message.what = 1;
+          }
+          else
+          {
+              message.what = 0;
+          }
+            handler.sendMessage(message);
+        }
+    };
+    thread.start();
+
+
+}
+
+
 
     @Override
     public void deleteTempRequest(final int position , final CustomerDarkhastFaktorModel customerDarkhastFaktorModel)
@@ -238,15 +291,28 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                     public void onSuccess(int flag) {
                         if (flag == 0)
                         {
-                            DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-                            if(darkhastFaktorDAO.deleteByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor()))
-                            {
-                                mPresenter.onSuccessDeleteTempRequest(position);
-                            }
-                            else
-                            {
-                                mPresenter.onError(R.string.errorOperation);
-                            }
+                            deleteAllTempRequest(customerDarkhastFaktorModel.getCcDarkhastFaktor(), customerDarkhastFaktorModel.getCcMoshtary());
+                            handler = new Handler(new Handler.Callback() {
+                                @Override
+                                public boolean handleMessage(Message msg) {
+                                    if (msg.what == 1) {
+                                        mPresenter.onSuccessDeleteTempRequest(position);
+                                    } else if (msg.what == 0) {
+                                        mPresenter.onError(R.string.errorOperation);                                    }
+                                    return false;
+                                }
+                            });
+
+
+//                            DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
+//                            if(darkhastFaktorDAO.deleteByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor()))
+//                            {
+//                                mPresenter.onSuccessDeleteTempRequest(position);
+//                            }
+//                            else
+//                            {
+//                                mPresenter.onError(R.string.errorOperation);
+//                            }
                         }
                         else
                         {
@@ -413,7 +479,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
     {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor());
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor(),customerDarkhastFaktorModel.getCcMoshtary());
         DarkhastFaktorEmzaMoshtaryModel darkhastFaktorEmzaMoshtaryModel = new DarkhastFaktorEmzaMoshtaryDAO(mPresenter.getAppContext()).getByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor()).get(0);
 
         DarkhastFaktorEmzaMoshtaryDAO darkhastFaktorEmzaMoshtaryDAO = new DarkhastFaktorEmzaMoshtaryDAO(mPresenter.getAppContext());
@@ -428,12 +494,12 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
             if (receiptImageObligation && !hasReceiptImage){
                 mPresenter.onErrorSaveImage();
             }else{
-                mPresenter.onCheckSaveImage(customerDarkhastFaktorModel.getCcDarkhastFaktor(),darkhastFaktorModel.getCcDarkhastFaktorNoeForosh());
+                mPresenter.onCheckSaveImage(customerDarkhastFaktorModel.getCcDarkhastFaktor(),darkhastFaktorModel.getCcDarkhastFaktorNoeForosh(),customerDarkhastFaktorModel.getCcMoshtary());
             }
 
         }
         else
-        mPresenter.onCheckSaveImage(customerDarkhastFaktorModel.getCcDarkhastFaktor(),darkhastFaktorModel.getCcDarkhastFaktorNoeForosh());
+        mPresenter.onCheckSaveImage(customerDarkhastFaktorModel.getCcDarkhastFaktor(),darkhastFaktorModel.getCcDarkhastFaktorNoeForosh(),customerDarkhastFaktorModel.getCcMoshtary());
 
     }
 
@@ -1647,7 +1713,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         double mablaghMandehFaktor = -1 ;
         int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
         DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(BaseApplication.getContext());
-        int codeNoeVosolFaktor = darkhastFaktorDAO.getByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor()).getCodeNoeVosolAzMoshtary();
+        int codeNoeVosolFaktor = darkhastFaktorDAO.getByccDarkhastFaktor(customerDarkhastFaktorModel.getCcDarkhastFaktor(),customerDarkhastFaktorModel.getCcMoshtary()).getCodeNoeVosolAzMoshtary();
         mablaghMandehFaktor = darkhastFaktorDAO.getMablaghMandeh(customerDarkhastFaktorModel.getCcDarkhastFaktor());
 
 
@@ -1853,6 +1919,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
 
             SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
             long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor() , -1);
+            int ccMoshtary = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary() , -1);
 
             int ccMarkazForosh = foroshandehMamorPakhshModel.getCcMarkazForosh();
             if(ccMarkazForosh == 0)
@@ -1862,7 +1929,7 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
             }
 
             DarkhastFaktorDAO darkhastFaktorDAO = new DarkhastFaktorDAO(mPresenter.getAppContext());
-            final DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+            final DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
 
 			MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());					   
             MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(darkhastFaktorModel.getCcMoshtary());
@@ -1898,7 +1965,8 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
             JSONArray jsonArrayDarkhastFaktorSatr = new JSONArray();
             for (DarkhastFaktorSatrModel model : darkhastFaktorSatrs)
             {
-                if (model.getMablaghForosh() == 1)
+//                if (model.getMablaghForosh() == 1)
+                if (model.getCodeNoeKala() == 2)
                 {
                     sumTedadJayeze += model.getTedad3();
                 }
@@ -2631,6 +2699,8 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                     break;
                 case -16:
                     sendRequestResponse.onError(R.string.errorElatKasrMojodi);
+                case -17:
+                    sendRequestResponse.onError(R.string.errorMoghayeratVersion);
                 break;
                 default:
                     sendRequestResponse.onError(R.string.errorSendData);
@@ -2946,8 +3016,9 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
         String ccAnbarakAfrad = String.valueOf(anbarakAfradDAO.getAll().get(0).getCcAnbarak());
 
         long ccDarkhastFaktor = customerDarkhastFaktorModel.getCcDarkhastFaktor();
+        int  ccMoshtary = customerDarkhastFaktorModel.getCcMoshtary();
         ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels = darkhastFaktorSatrDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
-        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor);
+        DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);
         String ccSazmanForoshFaktor = String.valueOf(foroshandehMamorPakhshDAO.getIsSelect().getCcSazmanForosh());
         ArrayList<Integer> ccKalaCodesForUpdate = new ArrayList<>();
         for (DarkhastFaktorSatrModel darkhastFaktorSatrModel : darkhastFaktorSatrModels) {
@@ -3267,10 +3338,10 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                                     if (mandehMojodyMashinModel.getCcKalaCode()== darkhastFaktorSatrModel.getCcKalaCode() &&   mandehMojodyMashinModel.getMaxMojody() < hashMapSumEachGood.get(darkhastFaktorSatrModel.getCcKalaCode())) {
                                         KalaModel kalaModel = kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode());
                                         if (!allContradictions.containsKey(kalaModel.getCcKalaCode())) {
-                                            Log.i("searchForContradictions", "distinctValuesOfMandehMojodi.get(ccKalaCode).getMaxMojody() < hashMapSumEachGood.get(darkhastFaktorSatrModel.getCcKalaCode())" + mandehMojodyMashinModel.getMaxMojody() + " " + hashMapSumEachGood.get(darkhastFaktorSatrModel.getCcKalaCode()));
+                                            Log.i("checkContradicts", "distinctValuesOfMandehMojodi.get(ccKalaCode).getMaxMojody() < hashMapSumEachGood.get(darkhastFaktorSatrModel.getCcKalaCode())" + mandehMojodyMashinModel.getMaxMojody() + " " + hashMapSumEachGood.get(darkhastFaktorSatrModel.getCcKalaCode()));
 
                                             allContradictions.put(kalaModel.getCcKalaCode(), kalaModel.getNameKala());
-                                            Log.i("allContradictionssa", "checkContradicts: " + allContradictions.get(0));
+                                            Log.i("checkContradicts", "checkContradicts: " + allContradictions.get(0));
 
                                         }
                                     }
@@ -3286,9 +3357,9 @@ public class TemporaryRequestsListModel implements TemporaryRequestsListMVP.Mode
                                             KalaModel kalaModel = kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode());
 
                                             if (!allContradictions.containsKey(kalaModel.getCcKalaCode())) {
-                                                Log.i("searchForContradictions", "darkhastFaktorSatrModel.getTedad3() > mandehMojodyMashinModel.getMax_MojodyByShomarehBach()");
+                                                Log.i("checkContradicts", "darkhastFaktorSatrModel.getTedad3() > mandehMojodyMashinModel.getMax_MojodyByShomarehBach()");
                                                 allContradictions.put(kalaModel.getCcKalaCode(), kalaModel.getNameKala());
-                                                Log.i("allContradictionssa", "checkContradicts: " + allContradictions.get(0));
+                                                Log.i("checkContradicts", "checkContradicts: " + allContradictions.get(0));
                                             }
 //                                            allContradictions[0] += kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode()).getNameKala() + " ";
 
