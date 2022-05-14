@@ -326,8 +326,9 @@ public class RptDarkhastFaktorVazeiatPPCDAO
         ArrayList<RptDarkhastFaktorVazeiatPPCModel> darkhastFaktorVazeiatPPCModels = new ArrayList<>();
         try
         {
+            String query = "SELECT * FROM Rpt_DarkhastFaktorVazeiatPPC ORDER BY TarikhDarkhast ASC";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor cursor = db.query(RptDarkhastFaktorVazeiatPPCModel.TableName(), allColumns(), null, null, null, null, RptDarkhastFaktorVazeiatPPCModel.COLUMN_TarikhFaktor() + " ASC ");
+            Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)
             {
                 if (cursor.getCount() > 0)

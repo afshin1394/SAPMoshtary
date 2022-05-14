@@ -9,6 +9,8 @@ import static com.saphamrah.Utils.Constants.gRPC;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.VerifyRequestMVP;
 import com.saphamrah.DAO.DariaftPardakhtDarkhastFaktorPPCDAO;
@@ -106,7 +108,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
@@ -2976,6 +2983,9 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                     if (mablaghTakhfif > 0)
                     {
                         insertFaktorTakhfifNaghdi(darkhastFaktorModel.getCcDarkhastFaktor() , takhfifNaghdy.getCcTakhfifNaghdy(), takhfifNaghdy.getSharhTakhfif(), darsadTakhfif, mablaghTakhfif);
+                        DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
+                        ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels = darkhastFaktorSatrDAO.getByccDarkhastFaktorAndccForoshandeh(darkhastFaktorModel.getCcDarkhastFaktor(), darkhastFaktorModel.getCcForoshandeh(),false);
+                        calculateMablaghVahedTakhfifNaghdiDarkhastFaktorSatr(mablaghTakhfif,darkhastFaktorSatrModels);
                     }
                 }
             }
@@ -4061,6 +4071,52 @@ public class VerifyRequestModel implements VerifyRequestMVP.ModelOps
                 mPresenter.onErrorOperations(R.string.errorOperation);
             }
         }
+
+    }
+
+    private void calculateMablaghVahedTakhfifNaghdiDarkhastFaktorSatr (double mablaghTakhfif ,ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels){
+        Observable.just(darkhastFaktorSatrModels)
+                .map(models -> {
+                    double sumMablagh = 0;
+                    for (DarkhastFaktorSatrModel darkhastFaktorSatrModel : darkhastFaktorSatrModels) {
+                       sumMablagh += darkhastFaktorSatrModel.getMablaghForosh() * darkhastFaktorSatrModel.getTedad3();
+                    }
+                    double zaribTakhfif = mablaghTakhfif/sumMablagh;
+                    DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
+                    for (DarkhastFaktorSatrModel darkhastFaktorSatrModel : darkhastFaktorSatrModels) {
+                       double mablaghTakhfifNaghdyVahed = (zaribTakhfif * darkhastFaktorSatrModel.getMablaghForosh()) + darkhastFaktorSatrModel.getMablaghTakhfifNaghdiVahed();
+                       boolean updateMablaghTakhfifNaghdyVahed = darkhastFaktorSatrDAO.updateMablaghTakhfifNaghdyVahed(darkhastFaktorSatrModel.getCcDarkhastFaktorSatr(),mablaghTakhfifNaghdyVahed);
+                       if (updateMablaghTakhfifNaghdyVahed){
+                           return false;
+                       }
+                    }
+                    return true;
+                })
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+                compositeDisposable.add(d);
+            }
+
+            @Override
+            public void onNext(@NonNull Boolean updateMablaghTakhfifNaghdyVahed) {
+               if (!updateMablaghTakhfifNaghdyVahed)
+                   onError(new Throwable());
+
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                mPresenter.onErrorCalculateDiscount(R.string.errorUpdateMablaghTakhfifVahed);
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
 
     }
 

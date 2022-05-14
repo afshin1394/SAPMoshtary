@@ -21,26 +21,29 @@
             android:layout_marginRight="5dp">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/imgSelect"
-                android:src="@drawable/circle_tick_gray"
-                android:layout_centerVertical="true"/>
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/circle_tick_gray" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:orientation="vertical"
                 android:layout_toLeftOf="@+id/imgSelect"
                 android:layout_marginRight="10dp">
+
                 <TextView
+                    android:id="@+id/lblNameKala"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/lblNameKala"
-                    android:textColor="@color/colorTextPrimary"
-                    android:textSize="@dimen/FontSize14"
+                    android:gravity="center_vertical|right"
                     android:padding="10dp"
-                    android:gravity="center_vertical|right" />
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="@dimen/FontSize14" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -49,14 +52,15 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1.5"
                         android:gravity="center">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/lblShomareBach"
                             android:textColor="@color/colorTextPrimary"
-                            android:textSize="@dimen/FontSize12"
+                            android:textSize="@dimen/_8ssp"
+                            android:text="@string/updateKalaInfoWarning"
                             android:gravity="center"
                             android:paddingTop="5dp"
                             android:paddingBottom="5dp"
@@ -64,19 +68,21 @@
                             android:paddingLeft="15dp"
                             android:layout_marginRight="10dp"
                             android:layout_marginLeft="10dp"
+                            android:maxLines="2"
                             android:background="@drawable/rect_round_orange"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="1.5"
                         android:gravity="center">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/lblGheymat"
                             android:textColor="@color/colorTextPrimary"
-                            android:textSize="@dimen/FontSize12"
+                            android:textSize="@dimen/_8ssp"
+                            android:text="@string/tarikhMoarefiMoshtary"
                             android:gravity="center"
                             android:paddingTop="5dp"
                             android:paddingBottom="5dp"
@@ -84,13 +90,14 @@
                             android:paddingLeft="15dp"
                             android:layout_marginRight="10dp"
                             android:layout_marginLeft="10dp"
+                            android:maxLines="2"
                             android:background="@drawable/rect_round_blue"/>
                     </LinearLayout>
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="1.5"
                         android:gravity="center">
                         <com.saphamrah.CustomView.CustomTextInputLayout
                             android:layout_width="match_parent"

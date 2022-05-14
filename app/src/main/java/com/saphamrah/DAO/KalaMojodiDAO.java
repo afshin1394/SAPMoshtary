@@ -6,11 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.saphamrah.MVP.View.DarkhastKalaActivity;
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.KalaMojodiModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
+import com.saphamrah.UIModel.KalaMojodiZaribModel;
 import com.saphamrah.Utils.Constants;
 
 import java.util.ArrayList;
@@ -415,6 +417,7 @@ public class KalaMojodiDAO
         }
         return kalaMojodiModels;
     }
+
 
     public String getKalaAdamForosh()
     {

@@ -399,6 +399,39 @@ public class DarkhastFaktorSatrDAO
         return darkhastFaktorSatrModels;
     }
 
+    public ArrayList<DarkhastFaktorSatrModel> getByccDarkhastFaktorAndccForoshandeh(long ccDarkhastFaktor, int ccForoshandeh, boolean MashmolMaliat)
+    {
+        ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrs = new ArrayList<>();
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query = " SELECT DFS.* \n" +
+                    "FROM DarkhastFaktorSatr DFS\n" +
+                    "     LEFT JOIN Kala K ON K.ccKalaCode = DFS.ccKalaCode AND K.ShomarehBach = DFS.ShomarehBach AND K.MablaghForosh= DFS.GheymatForoshAsli AND \n" +
+                    "                                          K.MablaghMasrafKonandeh = DFS.GheymatMasrafKonandehAsli AND\n" +
+                    "                                          K.TarikhTolid = DFS.TarikhTolid AND K.TarikhEngheza = DFS.TarikhEngheza AND K.ccTaminKonandeh = DFS.ccTaminKonandeh" +
+                    "WHERE ccDarkhastFaktor = "+ ccDarkhastFaktor + " AND ccAfrad = " + ccForoshandeh;
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    darkhastFaktorSatrs = cursorToModel(cursor);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "getByDarkhastFaktorForMohasebehJayezehTedadi" , "");
+        }
+        return darkhastFaktorSatrs;
+    }
+
     public ArrayList<DarkhastFaktorSatrModel> getByccKalaCodeAndCcDarkhastFaktor(int ccKalaCode , long ccDarkhastFaktor)
     {
         ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels = new ArrayList<>();
@@ -2453,6 +2486,27 @@ public class DarkhastFaktorSatrDAO
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorUpdate , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "updateMablaghForoshKhalesKalaMaliatAvarez" , "");
+            return false;
+        }
+    }
+
+    public boolean updateMablaghTakhfifNaghdyVahed(int ccDarkhastFaktorSatr , double mablaghTakhfifNaghdyVahed) {
+        String query = "UPDATE " + DarkhastFaktorSatrModel.TableName()
+                + " SET " + DarkhastFaktorSatrModel.COLUMN_MablaghTakhfifNaghdiVahed() + " = " + mablaghTakhfifNaghdyVahed +
+                " where " + DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktorSatr() + " = " + ccDarkhastFaktorSatr;
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorUpdate , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "updateMablaghTakhfifNaghdyVahed" , "");
             return false;
         }
     }

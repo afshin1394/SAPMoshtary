@@ -3050,22 +3050,22 @@ private void deleteAllTempRequest(long ccDarkhastFaktor, int ccMoshtary){
                                 @Override
                                 public void onNext( Response<GetMandehMojodyMashinResponse> getMandehMojodyMashinResponseResponse) {
 
-                                    final Set<String> allContradictions = new HashSet<>();
+                                    final Set<KalaModel> allContradictions = new HashSet<>();
                                     if(getMandehMojodyMashinResponseResponse.body()!=null) {
-                                        checkContradicts(getMandehMojodyMashinResponseResponse.body().getMandehMojodyMashinModels(), darkhastFaktorSatrModels, new Observer<HashMap<Integer, String>>() {
+                                        checkContradicts(getMandehMojodyMashinResponseResponse.body().getMandehMojodyMashinModels(), darkhastFaktorSatrModels, new Observer<HashMap<Integer, KalaModel>>() {
                                             @Override
                                             public void onSubscribe(@NonNull Disposable d) {
                                                 mPresenter.bindDisposable(d);
                                             }
 
                                             @Override
-                                            public void onNext(@NonNull HashMap<Integer, String> contradicts) {
+                                            public void onNext(@NonNull HashMap<Integer, KalaModel> contradicts) {
 
 
                                                 if (contradicts != null)
                                                     if (contradicts.size() > 0)
                                                         for (Integer key : contradicts.keySet()) {
-
+                                                            if (!allContradictions.contains(key))
                                                             allContradictions.add(contradicts.get(key));
                                                         }
                                                 Log.i("contradicts", "onNext: " + contradicts);
@@ -3088,8 +3088,13 @@ private void deleteAllTempRequest(long ccDarkhastFaktor, int ccMoshtary){
                                                         break;
                                                     default:
                                                         String name = "";
-                                                        for (String nameKala : allContradictions) {
-                                                            name += " - " + nameKala;
+                                                        int counter =  0;
+                                                        for (KalaModel kalaModel : allContradictions) {
+                                                            if (counter  != allContradictions.size()-1)
+                                                                name +=  kalaModel.getCodeKala() + " - "+ kalaModel.getNameKala() + ",";
+                                                            else
+                                                                name +=  kalaModel.getCodeKala() + " - "+ kalaModel.getNameKala();
+                                                            counter ++;
                                                         }
                                                         mPresenter.onErrorSendRequest(R.string.errormoghayeratdarmojodiKala, name);
                                                         break;
@@ -3120,9 +3125,9 @@ private void deleteAllTempRequest(long ccDarkhastFaktor, int ccMoshtary){
                         @Override
                         public void onSuccess(ArrayList arrayListData) {
                              ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels = new ArrayList<>(arrayListData);
-                            final Set<String> allContradictions = new HashSet<>();
+                            final Set<KalaModel> allContradictions = new HashSet<>();
 
-                            checkContradicts(mandehMojodyMashinModels, darkhastFaktorSatrModels, new Observer<HashMap<Integer,String>>() {
+                            checkContradicts(mandehMojodyMashinModels, darkhastFaktorSatrModels, new Observer<HashMap<Integer,KalaModel>>() {
                                 @Override
                                 public void onSubscribe(@NonNull Disposable d)
                                 {
@@ -3130,15 +3135,15 @@ private void deleteAllTempRequest(long ccDarkhastFaktor, int ccMoshtary){
                                 }
 
                                 @Override
-                                public void onNext(@NonNull HashMap<Integer,String> contradicts)
+                                public void onNext(@NonNull HashMap<Integer,KalaModel> contradicts)
                                 {
 
 
                                     if (contradicts != null)
                                         if (contradicts.size() > 0)
                                             for (Integer key : contradicts.keySet()) {
-
-                                                allContradictions.add( contradicts.get(key));
+                                                if (!allContradictions.contains(key))
+                                                    allContradictions.add(contradicts.get(key));
                                             }
 
 
@@ -3162,11 +3167,17 @@ private void deleteAllTempRequest(long ccDarkhastFaktor, int ccMoshtary){
                                             sendTempFaktor(customerDarkhastFaktorModel, position);
                                             break;
                                         default:
-                                            String name="";
-                                            for(String nameKala : allContradictions){
-                                                name += " - " + nameKala ;
+                                            String name = "";
+                                            int counter =  0;
+                                            for (KalaModel kalaModel : allContradictions) {
+                                                if (counter  != allContradictions.size()-1)
+                                                name +=  kalaModel.getCodeKala() + " - "+ kalaModel.getNameKala() + ",";
+                                                else
+                                                    name +=  kalaModel.getCodeKala() + " - "+ kalaModel.getNameKala();
+                                                counter ++;
                                             }
                                             mPresenter.onErrorSendRequest(R.string.errormoghayeratdarmojodiKala, name);
+
                                             break;
                                     }
                                 }
@@ -3318,7 +3329,7 @@ private void deleteAllTempRequest(long ccDarkhastFaktor, int ccMoshtary){
         HashMap<Integer, Integer> hashMapSumEachGood = populateSumTedadEachCcKalaHash(darkhastFaktorSatrModels);
         KalaDAO kalaDAO = new KalaDAO(mPresenter.getAppContext());
 
-        HashMap<Integer, String> allContradictions = new HashMap<>();
+        HashMap<Integer, KalaModel> allContradictions = new HashMap<>();
         Observable.fromIterable(mandehMojodyMashinModels)
 
                 .flatMap(mandehMojodyMashinModel -> Observable.fromIterable(darkhastFaktorSatrModels)
@@ -3329,7 +3340,7 @@ private void deleteAllTempRequest(long ccDarkhastFaktor, int ccMoshtary){
                                         KalaModel kalaModel = kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode());
                                         if (!allContradictions.containsKey(darkhastFaktorSatrModel.getCcKalaCode())) {
 //                                            Log.i("searchForContradictions", "!hashMapMandehMojodi.containsKey( darkhastFaktorSatrModel.getCcKalaCode())");
-                                            allContradictions.put(kalaModel.getCcKalaCode(), kalaModel.getNameKala());
+                                            allContradictions.put(kalaModel.getCcKalaCode(), kalaModel);
 //                                            Log.i("allContradictionssa", "checkContradicts: " + allContradictions.get(0));
 //
                                         }
@@ -3340,7 +3351,7 @@ private void deleteAllTempRequest(long ccDarkhastFaktor, int ccMoshtary){
                                         if (!allContradictions.containsKey(kalaModel.getCcKalaCode())) {
                                             Log.i("checkContradicts", "distinctValuesOfMandehMojodi.get(ccKalaCode).getMaxMojody() < hashMapSumEachGood.get(darkhastFaktorSatrModel.getCcKalaCode())" + mandehMojodyMashinModel.getMaxMojody() + " " + hashMapSumEachGood.get(darkhastFaktorSatrModel.getCcKalaCode()));
 
-                                            allContradictions.put(kalaModel.getCcKalaCode(), kalaModel.getNameKala());
+                                            allContradictions.put(kalaModel.getCcKalaCode(), kalaModel);
                                             Log.i("checkContradicts", "checkContradicts: " + allContradictions.get(0));
 
                                         }
@@ -3358,7 +3369,7 @@ private void deleteAllTempRequest(long ccDarkhastFaktor, int ccMoshtary){
 
                                             if (!allContradictions.containsKey(kalaModel.getCcKalaCode())) {
                                                 Log.i("checkContradicts", "darkhastFaktorSatrModel.getTedad3() > mandehMojodyMashinModel.getMax_MojodyByShomarehBach()");
-                                                allContradictions.put(kalaModel.getCcKalaCode(), kalaModel.getNameKala());
+                                                allContradictions.put(kalaModel.getCcKalaCode(), kalaModel);
                                                 Log.i("checkContradicts", "checkContradicts: " + allContradictions.get(0));
                                             }
 //                                            allContradictions[0] += kalaDAO.getByccKalaCode(darkhastFaktorSatrModel.getCcKalaCode()).getNameKala() + " ";

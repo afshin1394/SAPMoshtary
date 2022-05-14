@@ -4,10 +4,12 @@ import android.content.Context;
 import android.util.Log;
 
 import com.saphamrah.BaseMVP.GetProgramMVP;
+import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.DAO.SystemConfigTabletDAO;
 import com.saphamrah.MVP.Model.GetProgramGrpcModel;
 import com.saphamrah.MVP.Model.GetProgramModel;
 import com.saphamrah.MVP.Model.GetProgramModelRx;
+import com.saphamrah.MVP.View.GetProgramActivity;
 import com.saphamrah.Model.ForoshandehMamorPakhshModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
@@ -314,9 +316,16 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
          PubFunc.ConcurrencyUtils.getInstance().runOnUiThread(new PubFunc.ConcurrencyEvents() {
             @Override
             public void uiThreadIsReady() {
+
                 mView.get().updateStatusOfFailedItem(Constants.GET_PROGRAM_FULL() , itemIndex , error);
                 Logger logger  = new Logger();
-                logger.insertLogToDB(getAppContext(),Constants.LOG_EXCEPTION(),error,"GetProgramPresenter","GetProgramActivity","onFailedGetProgram","");
+                if (itemIndex == -100){
+                 ParameterChildDAO parameterChildDAO = new ParameterChildDAO(getAppContext());
+                 String parameter = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_Can_Edit_Darkhast_For_Movaze());
+                 logger.insertLogToDB(getAppContext(),Constants.LOG_EXCEPTION(),parameter,"GetProgramPresenter","GetProgramActivity","onFailedGetProgram","");
+                }else {
+                    logger.insertLogToDB(getAppContext(), Constants.LOG_EXCEPTION(), error, "GetProgramPresenter", "GetProgramActivity", "onFailedGetProgram", "");
+                }
             }
         });
 
@@ -485,6 +494,12 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
         String message = String.format("%1$s : %2$s %3$s \n %4$s : %5$s %6$s",getAppContext().getString(R.string.timeDiffGetProgram),elapseTime,getAppContext().getString(R.string.second), getAppContext().getString(R.string.DataCapacityGetProgram),responseSize , getAppContext().getString(R.string.kiloByte));
 
         mView.get().showGetProgramDetails(message);
+    }
+
+    @Override
+    public void onError(boolean closeActivity,int resId) {
+
+        mView.get().showErrorAlert(closeActivity, R.string.getProgram, getAppContext().getResources().getString(resId), Constants.FAILED_MESSAGE(), R.string.apply);
     }
 
 }

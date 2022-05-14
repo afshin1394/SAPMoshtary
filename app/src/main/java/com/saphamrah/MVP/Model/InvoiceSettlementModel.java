@@ -93,10 +93,10 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
         int ccMoshtary = -1;
         if (ccDarkhastFaktor == -1) {
             ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(), -1);
-            ccMoshtary = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary(), -1);
-            Log.i("invoice", "ccMoshtary : " + ccMoshtary + " ,ccDarkhastFaktor:" + ccDarkhastFaktor);
 
+            Log.i("invoice", "ccMoshtary : " + ccMoshtary + " ,ccDarkhastFaktor:" + ccDarkhastFaktor);
         }
+        ccMoshtary = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary(), -1);
 
         if (ccDarkhastFaktor != -1) {
             DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);

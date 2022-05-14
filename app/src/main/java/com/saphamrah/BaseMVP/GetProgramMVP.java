@@ -82,6 +82,10 @@ public interface GetProgramMVP
         void notFoundServerIP();
 
         void showGetProgramDetails(long elapseTime,long responseSize);
+
+        void onError(boolean closeActivity,int resId);
+        void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
+
     }
 
 

@@ -246,6 +246,67 @@ public class KalaMojodiZaribForoshDAO
         }
         return kalaMojodiZaribModels;
     }
+
+    public ArrayList<KalaMojodiZaribModel> getForInsertGheymatKharid(int ccKalaCode, String shomarehBatch, String tarikhTolid, String tarikhEngheza, double gheymatForosh, double gheymatMasrafKonandeh, int ccTaminKonandeh)
+    {
+        Log.i("DarkhastKalaModel", "getForInsertGheymatKharid ccKalaCode:" + ccKalaCode + " ,shomarehBatch: "+shomarehBatch +" ,tarikhTolid:"+tarikhTolid + " ,tarikhEngheza:"+ tarikhEngheza + " ,gheymatForosh:"+gheymatForosh + " ,gheymatMasrafKonandeh:" + gheymatMasrafKonandeh +  " ,ccTaminKonandeh:" + ccTaminKonandeh );
+
+        String query = null;
+        ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = new ArrayList<>();
+
+
+        query = " SELECT KalaMojodi.ccKalaCode,CodeKala,BarCode,NameBrand,NameKala,KalaMojodi.CcTaminKonandeh,TedadDarKarton,TedadDarBasteh,Adad,TedadMojodyGhabelForosh,\n" +
+                " VaznKhales,VaznKarton,NameVahedVazn,NameVahedSize,Tol,Arz,Ertefa,MashmolMaliatAvarez,\n" +
+                " GheymatForoshAsli,GheymatMasrafKonandehAsli,\n" +
+                " KalaMojodi.CcKalaMojodi,KalaMojodi.Tedad,\n" +
+                " KalaMojodi.GheymatForosh,KalaMojodi.GheymatKharid,KalaMojodi.GheymatMasrafKonandeh MablaghMasrafKonandeh,1 ZaribForosh,KalaMojodi.ShomarehBach,KalaMojodi.TarikhTolid," +
+                " KalaMojodi.TarikhEngheza,ccGorohKala,1 Olaviat, \n" +
+                " SUM(Tedad) AS sumTedad, SUM(Max_MojodyByShomarehBach) AS Max_MojodyByShomarehBach, KM.Max_Mojody \n" +
+                " FROM KalaMojodi \n" +
+                " LEFT JOIN (SELECT ccKalaCode,ShomarehBach,TarikhTolid,TarikhEngheza, GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh,  SUM(DISTINCT Max_Mojody) Max_Mojody \n" +
+                " FROM KalaMojodi \n" +
+                " WHERE IsAdamForosh=0 \n" +
+                " GROUP BY ccKalaCode,ShomarehBach,TarikhTolid,TarikhEngheza, GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh) KM ON KM.ccKalaCode=KalaMojodi.ccKalaCode AND KM.ShomarehBach = KalaMojodi.ShomarehBach AND \n" +
+                " KM.TarikhTolid = KalaMojodi.TarikhTolid AND KM.TarikhEngheza = KalaMojodi.TarikhEngheza AND \n" +
+                " KM.GheymatForosh = KalaMojodi.GheymatForosh AND KM.GheymatMasrafKonandeh = KalaMojodi.GheymatMasrafKonandeh AND KM.ccTaminKonandeh = KalaMojodi.ccTaminKonandeh \n" +
+                " LEFT JOIN (SELECT * FROM Kala ) K ON K.ccKalaCode=KalaMojodi.ccKalaCode AND K.ShomarehBach = KalaMojodi.ShomarehBach AND \n" +
+                " K.TarikhTolid = KalaMojodi.TarikhTolid AND K.TarikhEngheza = KalaMojodi.TarikhEngheza AND \n" +
+                " K.MablaghForosh = KalaMojodi.GheymatForosh AND K.MablaghMasrafKonandeh = KalaMojodi.GheymatMasrafKonandeh AND K.ccTaminKonandeh = KalaMojodi.ccTaminKonandeh \n"+
+                " WHERE KalaMojodi.ccKalaCode = " + ccKalaCode + " AND KalaMojodi.ShomarehBach = '" + shomarehBatch + "' AND KalaMojodi.TarikhTolid ='" + tarikhTolid +
+                "' AND KalaMojodi.TarikhEngheza = '" + tarikhEngheza + "' AND \n" +
+                " KalaMojodi.GheymatForosh =" + gheymatForosh + " AND KalaMojodi.GheymatMasrafKonandeh=" + gheymatMasrafKonandeh +" AND KalaMojodi.ccTaminKonandeh=" + ccTaminKonandeh + " AND IsAdamForosh=0 \n" +
+                " GROUP BY KalaMojodi.ccKalaCode, ccForoshandeh, KalaMojodi.ShomarehBach, KalaMojodi.TarikhTolid,KalaMojodi.TarikhEngheza,KalaMojodi.ccTaminKonandeh,KalaMojodi.GheymatForosh,KalaMojodi.GheymatMasrafKonandeh,GheymatKharid,KalaMojodi.ccTaminKonandeh \n" +
+                " HAVING SUM(Tedad) > 0 \n" +
+                " ORDER BY GheymatKharid";
+
+
+
+        try
+        {
+
+            Log.d("DarkhastKalaModel","getForInsertGheymatKharid query: " + query);
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    //TODO
+                    kalaMojodiZaribModels = cursorToModel(cursor, DarkhastKalaActivity.AddItemType.NONE);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , "KalaMojodi,KalaZaribForosh,Kala") + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "BankDAO" , "" , "getAllByccMoshtary" , "");
+        }
+        return kalaMojodiZaribModels;
+    }
 //TODO
     private ArrayList<KalaMojodiZaribModel> cursorToModel(Cursor cursor,DarkhastKalaActivity.AddItemType type)
     {
@@ -255,13 +316,13 @@ public class KalaMojodiZaribForoshDAO
         while (!cursor.isAfterLast())
         {
             KalaMojodiZaribModel kalaMojodiZaribModel = new KalaMojodiZaribModel();
-            Log.d("check1 curserdao" ,
-                    String.valueOf(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccKalaCode())))+","+
-                    String.valueOf(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatForosh())))+","+
-                    String.valueOf(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatKharid())))+","+
-                    String.valueOf(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_MablaghMasrafKonandeh())))+","+
-                    String.valueOf(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_GheymatForoshAsli())))+","+
-                    String.valueOf(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_GheymatMasrafKonandehAsli()))));
+//            Log.d("check1 curserdao" ,
+//                    String.valueOf(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccKalaCode())))+","+
+//                    String.valueOf(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatForosh())))+","+
+//                    String.valueOf(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatKharid())))+","+
+//                    String.valueOf(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_MablaghMasrafKonandeh())))+","+
+//                    String.valueOf(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_GheymatForoshAsli())))+","+
+//                    String.valueOf(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_GheymatMasrafKonandehAsli()))));
             //Kala
             kalaMojodiZaribModel.setCcKalaCode(cursor.getInt(cursor.getColumnIndex(KalaModel.COLUMN_ccKalaCode())));
             kalaMojodiZaribModel.setCodeKala(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_CodeKala())));

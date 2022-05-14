@@ -254,28 +254,56 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
                     Log.d("DarkhastKalaModel","In While Before If sumSelectedNew:" +  sumSelectedNew + ", tedadDarkhasti:" + tedadDarkhasti + ",loopCounter:" + loopCounter );
                     if (kalaMojodiZaribModels.get(loopCounter).getTedad() >= tedadDarkhasti)
                     {
-
-                        if (insertNewDarkhastFaktorSatr(darkhastFaktorSatrDAO, ccDarkhastFaktor, kalaMojodiZaribModels.get(loopCounter), tedadDarkhasti))
+                        ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModelWithGheymatKharids = kalaMojodiZaribForoshDAO.getForInsertGheymatKharid(kalaMojodiZaribModels.get(loopCounter).getCcKalaCode(),kalaMojodiZaribModels.get(loopCounter).getShomarehBach(),kalaMojodiZaribModels.get(loopCounter).getTarikhTolid(),kalaMojodiZaribModels.get(loopCounter).getTarikhEngheza(),kalaMojodiZaribModels.get(loopCounter).getGheymatForoshAsli(),kalaMojodiZaribModels.get(loopCounter).getGheymatMasrafKonandehAsli(),kalaMojodiZaribModels.get(loopCounter).getCcTaminKonandeh());
+                        int insertedKala = 0;
+                        int tedadDarkhastiCount = tedadDarkhasti;
+                        for (KalaMojodiZaribModel kalaMojody : kalaMojodiZaribModelWithGheymatKharids)
                         {
-                            Log.d("DarkhastKalaModel" , "tedadDarkhasti : " + tedadDarkhasti);
-                            Log.d("DarkhastKalaModel","kalaMojodiZaribModels.get("+loopCounter+"):"+kalaMojodiZaribModels.get(loopCounter).toString());
-                            insertNewKalaMojodi(kalaMojodiZaribModels.get(loopCounter).getCcKalaCode(), ccDarkhastFaktor, kalaMojodiZaribModels.get(loopCounter).getTarikhTolid(),kalaMojodiZaribModels.get(loopCounter).getTarikhEngheza(), kalaMojodiZaribModels.get(loopCounter).getShomarehBach(), kalaMojodiZaribModels.get(loopCounter).getCcTaminKonandeh(), (tedadDarkhasti*-1) , kalaMojodiZaribModels.get(loopCounter).getGheymatForoshAsli(), kalaMojodiZaribModels.get(loopCounter).getGheymatMasrafKonandehAsli(), kalaMojodiZaribModels.get(loopCounter).getGheymatKharid());
-                            sumSelectedNew = tedadDarkhasti;
-                            tedadDarkhasti = 0;
-                            Log.d("DarkhastKalaModel","In While after If  sumSelectedNew:" +  sumSelectedNew + ", tedadDarkhasti:" + tedadDarkhasti + ",loopCounter:" + loopCounter + ",kalaMojodiZaribModels.size():" + kalaMojodiZaribModels.size());
+
+                            if (insertedKala < tedadDarkhasti)
+                            {
+                                int countNew = (kalaMojody.getTedad() >= tedadDarkhastiCount) ? tedadDarkhastiCount : kalaMojody.getTedad();
+                                Log.d("DarkhastKalaModel" , "In While after If  count new : " + countNew + " , kala.getTedad() : " + kalaMojody.getTedad() + " , tedadDarkhasti : " + tedadDarkhasti );
+                                Log.d("DarkhastKalaModel" , "In While after If  kalaMojody model " + kalaMojody.toString());
+                                if (insertNewDarkhastFaktorSatr(darkhastFaktorSatrDAO, ccDarkhastFaktor, kalaMojody, countNew))
+                                {
+                                    Log.d("DarkhastKalaModel" , "In While after If  tedadDarkhasti : " + tedadDarkhasti);
+                                    Log.d("DarkhastKalaModel","In While after If  kalaMojodiZaribModels.get("+loopCounter+"):"+kalaMojodiZaribModels.get(loopCounter).toString());
+                                    insertNewKalaMojodi(kalaMojody.getCcKalaCode(), ccDarkhastFaktor, kalaMojody.getTarikhTolid(),kalaMojody.getTarikhEngheza(), kalaMojody.getShomarehBach(), kalaMojody.getCcTaminKonandeh(), (countNew*-1) , kalaMojody.getGheymatForoshAsli(), kalaMojody.getGheymatMasrafKonandehAsli(), kalaMojody.getGheymatKharid());
+                                    sumSelectedNew += countNew;
+                                    tedadDarkhastiCount -= countNew;
+                                    insertedKala += countNew;
+                                    Log.d("DarkhastKalaModel","In While after If  sumSelectedNew:" +  sumSelectedNew + ", tedadDarkhasti:" + tedadDarkhasti + ",loopCounter:" + loopCounter + ",kalaMojodiZaribModels.size():" + kalaMojodiZaribModels.size());
+
+                                }
+                            }
+                            Log.d("Jayezeh" , "end FOR insertedKala : " + insertedKala + " , sumSelectedNew : " + sumSelectedNew + " ,tedadDarkhasti:" + tedadDarkhasti + " ,tedadDarkhastiCount:" + tedadDarkhastiCount);
 
                         }
+                        tedadDarkhasti = 0;
                     }
                     else
                     {
-                        Log.d("DarkhastKalaModel" , "In While else kalaMojodiZaribModels.get("+loopCounter+") : " + kalaMojodiZaribModels.get(loopCounter).toString());
-                        if (insertNewDarkhastFaktorSatr(darkhastFaktorSatrDAO, ccDarkhastFaktor, kalaMojodiZaribModels.get(loopCounter), kalaMojodiZaribModels.get(loopCounter).getTedad()))
-                        {
-                            insertNewKalaMojodi(kalaMojodiZaribModels.get(loopCounter).getCcKalaCode(), ccDarkhastFaktor, kalaMojodiZaribModels.get(loopCounter).getTarikhTolid(),kalaMojodiZaribModels.get(loopCounter).getTarikhEngheza(), kalaMojodiZaribModels.get(loopCounter).getShomarehBach(), kalaMojodiZaribModels.get(loopCounter).getCcTaminKonandeh(), (kalaMojodiZaribModels.get(loopCounter).getTedad()*-1),kalaMojodiZaribModels.get(loopCounter).getGheymatForoshAsli(), kalaMojodiZaribModels.get(loopCounter).getGheymatMasrafKonandehAsli(), kalaMojodiZaribModels.get(loopCounter).getGheymatKharid());
-                            sumSelectedNew += kalaMojodiZaribModels.get(loopCounter).getTedad();
-                            //tedadDarkhasti = tedadDarkhasti - kalaMojodiZaribModels.get(loopCounter).getTedad();
-                            Log.d("DarkhastKalaModel","In While after else  sumSelectedNew:" +  sumSelectedNew + ", tedadDarkhasti:" + tedadDarkhasti + ",loopCounter:" + loopCounter + ",kalaMojodiZaribModels.size():" + kalaMojodiZaribModels.size());
+                        ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModelWithGheymatKharids = kalaMojodiZaribForoshDAO.getForInsertGheymatKharid(kalaMojodiZaribModels.get(loopCounter).getCcKalaCode(),kalaMojodiZaribModels.get(loopCounter).getShomarehBach(),kalaMojodiZaribModels.get(loopCounter).getTarikhTolid(),kalaMojodiZaribModels.get(loopCounter).getTarikhEngheza(),kalaMojodiZaribModels.get(loopCounter).getGheymatForoshAsli(),kalaMojodiZaribModels.get(loopCounter).getGheymatMasrafKonandehAsli(),kalaMojodiZaribModels.get(loopCounter).getCcTaminKonandeh());
+                        int insertedKala = 0;
+                        int tedadDarkhastiCount = tedadDarkhasti;
+                        for (KalaMojodiZaribModel kalaMojody : kalaMojodiZaribModelWithGheymatKharids) {
 
+                            if (insertedKala < tedadDarkhasti) {
+                                int countNew = (kalaMojody.getTedad() >= tedadDarkhastiCount) ? tedadDarkhastiCount : kalaMojody.getTedad();
+                                Log.d("DarkhastKalaModel", "In While after else count new : " + countNew + " , kala.getTedad() : " + kalaMojody.getTedad() + " , tedadDarkhasti : " + tedadDarkhasti);
+                                Log.d("DarkhastKalaModel", "In While after else kalaMojody model " + kalaMojody.toString());
+
+                                if (insertNewDarkhastFaktorSatr(darkhastFaktorSatrDAO, ccDarkhastFaktor, kalaMojodiZaribModels.get(loopCounter), kalaMojodiZaribModels.get(loopCounter).getTedad())) {
+                                    Log.d("DarkhastKalaModel" , "In While after If  tedadDarkhasti : " + tedadDarkhasti);
+                                    insertNewKalaMojodi(kalaMojodiZaribModels.get(loopCounter).getCcKalaCode(), ccDarkhastFaktor, kalaMojodiZaribModels.get(loopCounter).getTarikhTolid(), kalaMojodiZaribModels.get(loopCounter).getTarikhEngheza(), kalaMojodiZaribModels.get(loopCounter).getShomarehBach(), kalaMojodiZaribModels.get(loopCounter).getCcTaminKonandeh(), (kalaMojodiZaribModels.get(loopCounter).getTedad() * -1), kalaMojodiZaribModels.get(loopCounter).getGheymatForoshAsli(), kalaMojodiZaribModels.get(loopCounter).getGheymatMasrafKonandehAsli(), kalaMojodiZaribModels.get(loopCounter).getGheymatKharid());
+                                    sumSelectedNew += kalaMojodiZaribModels.get(loopCounter).getTedad();
+                                    tedadDarkhastiCount -= countNew;
+                                    insertedKala += countNew;
+                                    Log.d("DarkhastKalaModel","In While after else  sumSelectedNew:" +  sumSelectedNew + ", tedadDarkhasti:" + tedadDarkhasti + ",loopCounter:" + loopCounter + ",kalaMojodiZaribModels.size():" + kalaMojodiZaribModels.size());
+
+                                }
+                            }
                         }
                     }
                     loopCounter++;
@@ -756,24 +784,65 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
         }
         Log.d("DarkhastKalaModel","kalaMojodiZaribModel2:" + kalaMojodiZaribModel.toString());
         Log.d("DarkhastKalaModel","requestedCount:" + requestedCount);
-        if (insertNewDarkhastFaktorSatr(darkhastFaktorSatrDAO, ccDarkhastFaktor, kalaMojodiZaribModel, requestedCount))
-        {
-            if (insertNewKalaMojodi(kalaMojodiZaribModel.getCcKalaCode(), ccDarkhastFaktor, kalaMojodiZaribModel.getTarikhTolid(),kalaMojodiZaribModel.getTarikhEngheza(), kalaMojodiZaribModel.getShomarehBach(), kalaMojodiZaribModel.getCcTaminKonandeh(), (requestedCount*-1),kalaMojodiZaribModel.getGheymatForoshAsli(),kalaMojodiZaribModel.getGheymatMasrafKonandehAsli(),kalaMojodiZaribModel.getGheymatKharid()))
-            {
-                kalaMojodiZaribModel.setTedad(kalaMojodiZaribModel.getTedad() - requestedCount);
+
+
+        KalaMojodiZaribForoshDAO kalaMojodiZaribForoshDAO = new KalaMojodiZaribForoshDAO(mPresenter.getAppContext());
+        ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModelWithGheymatKharids = kalaMojodiZaribForoshDAO.getForInsertGheymatKharid(kalaMojodiZaribModel.getCcKalaCode(),kalaMojodiZaribModel.getShomarehBach(),kalaMojodiZaribModel.getTarikhTolid(),kalaMojodiZaribModel.getTarikhEngheza(),kalaMojodiZaribModel.getGheymatForoshAsli(),kalaMojodiZaribModel.getGheymatMasrafKonandehAsli(),kalaMojodiZaribModel.getCcTaminKonandeh());
+        Log.d("DarkhastKalaModel", "1 kalaMojodiZaribModelWithGheymatKharids : " + kalaMojodiZaribModelWithGheymatKharids );
+
+        int insertedKala = 0;
+        int tedadDarkhastiCount = requestedCount;
+        for (KalaMojodiZaribModel kalaMojody : kalaMojodiZaribModelWithGheymatKharids) {
+
+            if (insertedKala < requestedCount) {
+                int countNew = (kalaMojody.getTedad() >= tedadDarkhastiCount) ? tedadDarkhastiCount : kalaMojody.getTedad();
+                Log.d("DarkhastKalaModel", "In While after else count new : " + countNew + " , kala.getTedad() : " + kalaMojody.getTedad() );
+                Log.d("DarkhastKalaModel", "In While after else kalaMojody model " + kalaMojody.toString());
+
+                if (insertNewDarkhastFaktorSatr(darkhastFaktorSatrDAO, ccDarkhastFaktor, kalaMojody, countNew)) {
+                    Log.d("DarkhastKalaModel", "In  If  requestedCount : " + requestedCount);
+                    insertNewKalaMojodi(kalaMojody.getCcKalaCode(), ccDarkhastFaktor, kalaMojody.getTarikhTolid(), kalaMojody.getTarikhEngheza(), kalaMojody.getShomarehBach(), kalaMojody.getCcTaminKonandeh(), (countNew * -1), kalaMojody.getGheymatForoshAsli(), kalaMojody.getGheymatMasrafKonandehAsli(), kalaMojody.getGheymatKharid());
+                    tedadDarkhastiCount -= countNew;
+                    insertedKala += countNew;
+                    Log.d("DarkhastKalaModel", "In While after else  tedadDarkhastiCount:" + tedadDarkhastiCount + " , insertedKala:" + insertedKala);
+//                    sparseIntArray.put(kalaMojodiZaribModel.getCcKalaCode(), kalaMojodiZaribModel.getTedad());
+                    if (position != -1)
+                    {
+                        mPresenter.onSuccessInsertFaktor(position , kalaMojodiZaribModel.getTedad());
+                        getAllRequestedGoods();
+                    }
+                    sparseIntArray.put(kalaMojody.getCcKalaCode(), kalaMojody.getTedad());
+
+                }
+                else
+                    {
+                        mPresenter.onErrorInsertFaktor(R.string.errorOperation);
+                        sparseIntArray.put(-1,-1);
+                    }
             }
-			if (position != -1)
-            {
-                mPresenter.onSuccessInsertFaktor(position , kalaMojodiZaribModel.getTedad());
-                getAllRequestedGoods();
-            }
-            sparseIntArray.put(kalaMojodiZaribModel.getCcKalaCode(), kalaMojodiZaribModel.getTedad());
         }
-        else
-        {
-            mPresenter.onErrorInsertFaktor(R.string.errorOperation);
-			sparseIntArray.put(-1,-1);
-        }
+
+
+
+
+//        if (insertNewDarkhastFaktorSatr(darkhastFaktorSatrDAO, ccDarkhastFaktor, kalaMojodiZaribModel, requestedCount))
+//        {
+//            if (insertNewKalaMojodi(kalaMojodiZaribModel.getCcKalaCode(), ccDarkhastFaktor, kalaMojodiZaribModel.getTarikhTolid(),kalaMojodiZaribModel.getTarikhEngheza(), kalaMojodiZaribModel.getShomarehBach(), kalaMojodiZaribModel.getCcTaminKonandeh(), (requestedCount*-1),kalaMojodiZaribModel.getGheymatForoshAsli(),kalaMojodiZaribModel.getGheymatMasrafKonandehAsli(),kalaMojodiZaribModel.getGheymatKharid()))
+//            {
+//                kalaMojodiZaribModel.setTedad(kalaMojodiZaribModel.getTedad() - requestedCount);
+//            }
+//			if (position != -1)
+//            {
+//                mPresenter.onSuccessInsertFaktor(position , kalaMojodiZaribModel.getTedad());
+//                getAllRequestedGoods();
+//            }
+//            sparseIntArray.put(kalaMojodiZaribModel.getCcKalaCode(), kalaMojodiZaribModel.getTedad());
+//        }
+//        else
+//        {
+//            mPresenter.onErrorInsertFaktor(R.string.errorOperation);
+//			sparseIntArray.put(-1,-1);
+//        }
 		return sparseIntArray;																													  
         //mojoodiGiriDAO.UpdateTedadPishnehady(SelectFaktor.getccMoshtary(), kala.getccKalaCode(), kala.getTedadPishnahady());
         //-------------------

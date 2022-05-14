@@ -12,6 +12,7 @@ import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
 import com.saphamrah.DAO.JayezehEntekhabiMojodiDAO;
 import com.saphamrah.DAO.KalaDAO;
 import com.saphamrah.DAO.KalaMojodiDAO;
+import com.saphamrah.DAO.KalaMojodiZaribForoshDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.DAO.TakhfifNaghdyDAO;
 import com.saphamrah.Model.DarkhastFaktorJayezehModel;
@@ -23,6 +24,7 @@ import com.saphamrah.R;
 import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.UIModel.DarkhastFaktorJayezehTakhfifModel;
 import com.saphamrah.UIModel.JayezehEntekhabiMojodiModel;
+import com.saphamrah.UIModel.KalaMojodiZaribModel;
 import com.saphamrah.Utils.Constants;
 
 import java.text.DecimalFormat;
@@ -205,56 +207,74 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
                 darkhastFaktorJayezehModel.setExtraProp_CodeNoeJayezeh(DarkhastFaktorJayezehModel.CodeNoeJayezehAuto());
                 darkhastFaktorJayezehModel.setExtraProp_ccJayezehTakhfif(selectedccTakhfif);
                 if (darkhastFaktorJayezehDAO.insert(darkhastFaktorJayezehModel)) {
-                    String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
-                    KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
-                    kalaMojodiModel.setCcTaminKonandeh(model.getCcTaminKonandeh());
-                    kalaMojodiModel.setTedad(-1 * model.getSelectedCount());
-                    kalaMojodiModel.setTarikhDarkhast(currentDate);
-                    kalaMojodiModel.setTarikhTolid(model.getTarikhTolid());
-                    kalaMojodiModel.setTarikhEngheza(model.getTarikhEngheza());
-                    kalaMojodiModel.setZamaneSabt(model.getZamaneSabt());
-                    kalaMojodiModel.setShomarehBach(model.getShomarehBach());
-                    kalaMojodiModel.setGheymatMasrafKonandeh(model.getGheymatMasrafKonandeh());
-                    kalaMojodiModel.setGheymatForosh(model.getGheymatForosh());
-                    kalaMojodiModel.setGheymatKharid(model.getGheymatKharid());
-                    kalaMojodiModel.setCcKalaCode(model.getCcKalaCode());
-                    kalaMojodiModel.setCcForoshandeh(selectFaktorShared.getInt(selectFaktorShared.getCcForoshandeh(), model.getCcForoshandeh()));
-                    kalaMojodiModel.setCcDarkhastFaktor(ccDarkhastFaktor);
-                    kalaMojodiModel.setForJayezeh(1);
-                    kalaMojodiModel.setZamaneSabt(currentDate);
-                    kalaMojodiModel.setMax_Mojody(-1 * model.getSelectedCount());
-                    kalaMojodiModel.setMax_MojodyByShomarehBach(-1 * model.getSelectedCount());
-                    kalaMojodiModel.setCcAfrad(FinalCCAfrad);
-                    if (kalaMojodiDAO.insert(kalaMojodiModel)) {
-                        SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
-                        int ccForoshandeh = shared.getInt(shared.getCcForoshandeh(), -1);
-                        Log.d("bonus", "model.getGheymatForosh() : " + model.getGheymatForosh() + " ,ccForoshandeh=" + ccForoshandeh);
-                        DarkhastFaktorSatrModel darkhastFaktorSatrModel = new DarkhastFaktorSatrModel();
-                        darkhastFaktorSatrModel.setCcDarkhastFaktor(ccDarkhastFaktor);
-                        darkhastFaktorSatrModel.setCcTaminKonandeh(model.getCcTaminKonandeh());
-                        darkhastFaktorSatrModel.setCcKala(model.getCcKalaCode());
-                        darkhastFaktorSatrModel.setCcKalaCode(model.getCcKalaCode());
-                        darkhastFaktorSatrModel.setTedad3(model.getSelectedCount());
-                        darkhastFaktorSatrModel.setCodeNoeKala(2);
-                        darkhastFaktorSatrModel.setShomarehBach(model.getShomarehBach());
-                        darkhastFaktorSatrModel.setTarikhTolid(model.getTarikhTolid());
-                        darkhastFaktorSatrModel.setTarikhEngheza(model.getTarikhEngheza());
-                        darkhastFaktorSatrModel.setMablaghForosh(1);
-                        darkhastFaktorSatrModel.setMablaghForoshKhalesKala((double)model.getGheymatForosh());
-                        Log.d("bonus", "model.setMablaghForoshKhalesKala() : " + darkhastFaktorSatrModel.getMablaghForoshKhalesKala());
-                        darkhastFaktorSatrModel.setMablaghTakhfifNaghdiVahed(0);
-                        darkhastFaktorSatrModel.setMaliat(0);
-                        darkhastFaktorSatrModel.setAvarez(0);
-                        darkhastFaktorSatrModel.setCcAfrad(ccForoshandeh);
-                        darkhastFaktorSatrModel.setExtraProp_IsOld(false);
-                        darkhastFaktorSatrModel.setGheymatMasrafKonandeh((double)model.getGheymatMasrafKonandeh());
-                        darkhastFaktorSatrModel.setGheymatForoshAsli(model.getGheymatForosh());
-                        darkhastFaktorSatrModel.setGheymatMasrafKonandehAsli(model.getGheymatMasrafKonandeh());
-                        darkhastFaktorSatrModel.setGheymatKharid(model.getGheymatKharid());
-                        if (darkhastFaktorSatrDAO.insert(darkhastFaktorSatrModel)) {
-                            insertedCount++;
+
+                    KalaMojodiZaribForoshDAO kalaMojodiZaribForoshDAO = new KalaMojodiZaribForoshDAO(mPresenter.getAppContext());
+                    ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModelWithGheymatKharids = kalaMojodiZaribForoshDAO.getForInsertGheymatKharid(model.getCcKalaCode(),model.getShomarehBach(),model.getTarikhTolid(),model.getTarikhEngheza(),model.getGheymatForosh(),model.getGheymatMasrafKonandeh(),model.getCcTaminKonandeh());
+                    Log.d("bonus", "jayezeh kalaMojodiZaribModelWithGheymatKharids : " + kalaMojodiZaribModelWithGheymatKharids );
+
+                    int insertedKala = 0;
+                    int tedadDarkhastiCount = model.getSelectedCount();
+                    for (KalaMojodiZaribModel kalaMojody : kalaMojodiZaribModelWithGheymatKharids) {
+                        if (insertedKala < model.getSelectedCount()) {
+                            int countNew = (kalaMojody.getTedad() >= tedadDarkhastiCount) ? tedadDarkhastiCount : kalaMojody.getTedad();
+                            Log.d("bonus", "jayezeh In While after else count new : " + countNew + " , kala.getTedad() : " + kalaMojody.getTedad());
+                            Log.d("bonus", "jayezeh In While after else kalaMojody model " + kalaMojody.toString());
+
+                            String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
+                            KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
+                            kalaMojodiModel.setCcTaminKonandeh(kalaMojody.getCcTaminKonandeh());
+                            kalaMojodiModel.setTedad(-1 * countNew);
+                            kalaMojodiModel.setTarikhDarkhast(currentDate);
+                            kalaMojodiModel.setTarikhTolid(kalaMojody.getTarikhTolid());
+                            kalaMojodiModel.setTarikhEngheza(kalaMojody.getTarikhEngheza());
+                            kalaMojodiModel.setZamaneSabt(model.getZamaneSabt());
+                            kalaMojodiModel.setShomarehBach(kalaMojody.getShomarehBach());
+                            kalaMojodiModel.setGheymatMasrafKonandeh(kalaMojody.getGheymatMasrafKonandehAsli());
+                            kalaMojodiModel.setGheymatForosh(kalaMojody.getGheymatForoshAsli());
+                            kalaMojodiModel.setGheymatKharid(kalaMojody.getGheymatKharid());
+                            kalaMojodiModel.setCcKalaCode(kalaMojody.getCcKalaCode());
+                            kalaMojodiModel.setCcForoshandeh(selectFaktorShared.getInt(selectFaktorShared.getCcForoshandeh(), model.getCcForoshandeh()));
+                            kalaMojodiModel.setCcDarkhastFaktor(ccDarkhastFaktor);
+                            kalaMojodiModel.setForJayezeh(1);
+                            kalaMojodiModel.setZamaneSabt(currentDate);
+                            kalaMojodiModel.setMax_Mojody(-1 * countNew);
+                            kalaMojodiModel.setMax_MojodyByShomarehBach(-1 * countNew);
+                            kalaMojodiModel.setCcAfrad(FinalCCAfrad);
+                            if (kalaMojodiDAO.insert(kalaMojodiModel)) {
+                                SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
+                                int ccForoshandeh = shared.getInt(shared.getCcForoshandeh(), -1);
+                                Log.d("bonus", "model.getGheymatForosh() : " + model.getGheymatForosh() + " ,ccForoshandeh=" + ccForoshandeh);
+                                DarkhastFaktorSatrModel darkhastFaktorSatrModel = new DarkhastFaktorSatrModel();
+                                darkhastFaktorSatrModel.setCcDarkhastFaktor(ccDarkhastFaktor);
+                                darkhastFaktorSatrModel.setCcTaminKonandeh(kalaMojody.getCcTaminKonandeh());
+                                darkhastFaktorSatrModel.setCcKala(kalaMojody.getCcKalaCode());
+                                darkhastFaktorSatrModel.setCcKalaCode(kalaMojody.getCcKalaCode());
+                                darkhastFaktorSatrModel.setTedad3(countNew);
+                                darkhastFaktorSatrModel.setCodeNoeKala(2);
+                                darkhastFaktorSatrModel.setShomarehBach(kalaMojody.getShomarehBach());
+                                darkhastFaktorSatrModel.setTarikhTolid(kalaMojody.getTarikhTolid());
+                                darkhastFaktorSatrModel.setTarikhEngheza(kalaMojody.getTarikhEngheza());
+                                darkhastFaktorSatrModel.setMablaghForosh(1);
+                                darkhastFaktorSatrModel.setMablaghForoshKhalesKala((double) kalaMojody.getGheymatForosh());
+                                Log.d("bonus", "model.setMablaghForoshKhalesKala() : " + darkhastFaktorSatrModel.getMablaghForoshKhalesKala());
+                                darkhastFaktorSatrModel.setMablaghTakhfifNaghdiVahed(0);
+                                darkhastFaktorSatrModel.setMaliat(0);
+                                darkhastFaktorSatrModel.setAvarez(0);
+                                darkhastFaktorSatrModel.setCcAfrad(ccForoshandeh);
+                                darkhastFaktorSatrModel.setExtraProp_IsOld(false);
+                                darkhastFaktorSatrModel.setGheymatMasrafKonandeh((double) kalaMojody.getMablaghMasrafKonandeh());
+                                darkhastFaktorSatrModel.setGheymatForoshAsli(kalaMojody.getGheymatForoshAsli());
+                                darkhastFaktorSatrModel.setGheymatMasrafKonandehAsli(kalaMojody.getGheymatMasrafKonandehAsli());
+                                darkhastFaktorSatrModel.setGheymatKharid(kalaMojody.getGheymatKharid());
+                                if (darkhastFaktorSatrDAO.insert(darkhastFaktorSatrModel)) {
+                                    tedadDarkhastiCount -= countNew;
+                                    insertedKala += countNew;
+                                }
+                            }
                         }
                     }
+                    if(tedadDarkhastiCount==0)
+                        insertedCount++;
                 }
             }
             else if (model.getSelectedCount() == 0 ){

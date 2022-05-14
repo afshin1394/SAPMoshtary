@@ -42,6 +42,7 @@ import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.DateUtils;
 import com.saphamrah.PubFunc.DeviceInfo;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
+import com.saphamrah.PubFunc.Logger;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.GetProgramShared;
@@ -73,7 +74,7 @@ import io.reactivex.disposables.Disposable;
 
 public class GetProgramModel implements GetProgramMVP.ModelOps {
     private GetProgramMVP.RequiredPresenterOps mPresenter;
-
+    private boolean canEditDarkhastForMovaze;
     private ForoshandehMamorPakhshModel foroshandehMamorPakhshModel;
     private int ccForoshandeh = 0;
     private int ccMamorPakhsh = 0;
@@ -229,6 +230,19 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                 return false;
             }
         });
+
+
+
+
+        try {
+            canEditDarkhastForMovaze =Integer.parseInt(new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Can_Edit_Darkhast_For_Movaze())) == 0;
+        }catch (Exception exception){
+            exception.printStackTrace();
+            sendThreadMessage(Constants.BULK_INSERT_FAILED(), -100);
+            mPresenter.onError(false,R.string.errorReopenProgram);
+
+        }
+
 
         try {
             String[] sepratedDate = date.split("/");
@@ -4457,13 +4471,12 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                             //getParameter(getProgramType);
                             if (noeMasouliat == 4 || noeMasouliat == 5)
                             {
-                                ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
-                                boolean canEditDarkhastForMovaze = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_Can_Edit_Darkhast_For_Movaze()).trim().equals("0");
-                                if (canEditDarkhastForMovaze)
-                                    getDarkhastFaktorTakhfif(getProgramType);
-                                else {
-                                    clearDarkhastFaktorjayezehTakhfif(getProgramType);
-                                }
+                                    if (canEditDarkhastForMovaze)
+                                        getDarkhastFaktorTakhfif(getProgramType);
+                                    else {
+                                        clearDarkhastFaktorjayezehTakhfif(getProgramType);
+                                    }
+
                             }
                             else {
                                 clearDarkhastFaktorjayezehTakhfif(getProgramType);

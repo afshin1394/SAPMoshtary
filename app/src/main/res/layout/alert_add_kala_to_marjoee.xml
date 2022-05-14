@@ -30,18 +30,17 @@
     </com.saphamrah.CustomView.CustomTextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recyclerView"
-        android:scrollbars="vertical"
-        android:layoutDirection="rtl"
-        android:paddingTop="10dp"
-        android:paddingBottom="20dp"
-        android:paddingRight="5dp"
-        android:paddingLeft="5dp"
         android:layout_above="@+id/crdviewInfo"
-        android:layout_below="@+id/txtinputSearchKalaName">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_below="@+id/txtinputSearchKalaName"
+        android:layoutDirection="rtl"
+        android:paddingLeft="5dp"
+        android:paddingTop="10dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="20dp"
+        android:scrollbars="vertical"></androidx.recyclerview.widget.RecyclerView>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

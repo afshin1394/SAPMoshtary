@@ -1028,7 +1028,7 @@
     <string name="confirm">ثبت</string>
     <string name="invalidIdentityCode">کد ملی وارد شده در سیستم تعریف نشده است و لطفا با واحد پشتیبانی تماس بگیرید</string>
     <string name="invalidIdentityCodeLength">تعداد ارقام کد ملی ثبت شده صحیح نمی باشد</string>
-    <string name="errormoghayeratdarmojodiKala">مغایرت در موجودی کالاهای:</string>
+    <string name="errormoghayeratdarmojodiKala">   مغایرت موجودی مرکز با درخواست در کالاهای:\n</string>
     <string name="errormoghayeratdarmojodiNoMojodi">عدم موجودی برای کالاهای:</string>
     <string name="errorCheckMoghayerat">خطا در بررسی مغایرت ها</string>
     <string name="ChooseSortTreasuryList">در صورت تمایل می توانید نوع مرتب سازی لیست وصول خود را انتخاب نمایید</string>
@@ -1214,4 +1214,6 @@
     <string name="MablaghMarjoee">مبلغ مرجوعی</string>
     <string name="MablaghForosh">مبلغ فروش</string>
     <string name="inquiryPichakCheck">استعلام پیچک</string>
+    <string name="errorUpdateMablaghTakhfifVahed">خطا در بروز رسانی مبلغ تخفیف واحد</string>
+    <string name="errorReopenProgram">لطفا برنامه را به طور کامل بسته و دوباره اجرا نمایید.</string>
 </resources>
