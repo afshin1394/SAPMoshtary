@@ -406,11 +406,15 @@ public class DarkhastFaktorSatrDAO
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             String query = " SELECT DFS.* \n" +
-                    "FROM DarkhastFaktorSatr DFS\n" +
+                    " FROM DarkhastFaktorSatr DFS\n" +
                     "     LEFT JOIN Kala K ON K.ccKalaCode = DFS.ccKalaCode AND K.ShomarehBach = DFS.ShomarehBach AND K.MablaghForosh= DFS.GheymatForoshAsli AND \n" +
                     "                                          K.MablaghMasrafKonandeh = DFS.GheymatMasrafKonandehAsli AND\n" +
-                    "                                          K.TarikhTolid = DFS.TarikhTolid AND K.TarikhEngheza = DFS.TarikhEngheza AND K.ccTaminKonandeh = DFS.ccTaminKonandeh" +
-                    "WHERE ccDarkhastFaktor = "+ ccDarkhastFaktor + " AND ccAfrad = " + ccForoshandeh;
+                    "                                          K.TarikhTolid = DFS.TarikhTolid AND K.TarikhEngheza = DFS.TarikhEngheza AND K.ccTaminKonandeh = DFS.ccTaminKonandeh \n" +
+                    " WHERE ccDarkhastFaktor = "+ ccDarkhastFaktor + " AND ccAfrad = " + ccForoshandeh;
+                    if(MashmolMaliat) {
+                        query += " AND MashmolMaliatAvarez = 1" ;
+                    }
+            Log.d("VerifyRequest" , "getByccDarkhastFaktorAndccForoshandeh query : " + query);
             Cursor cursor = db.rawQuery(query, null);
             if (cursor != null)
             {
@@ -2668,6 +2672,30 @@ public class DarkhastFaktorSatrDAO
             exception.printStackTrace();
             PubFunc.Logger logger = new PubFunc().new Logger();
             String message = context.getResources().getString(R.string.errorDelete , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString() + " ,ccDarkhastFaktor: " + ccDarkhastFaktor;
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "deleteJayezehForccDarkhastFaktor" , "");
+            return false;
+        }
+    }
+
+    public boolean updateMablaghTakhfifNaghdiByccDarkhastFaktorSatr(String ccDarkhastfaktorSatr)
+    {
+        Log.i("DarkhastFaktorSatrDAO", "updateMablaghTakhfifNaghdiByccDarkhastFaktorSatr:" +ccDarkhastfaktorSatr );
+        String query = " UPDATE DarkhastFaktorSatr \n" +
+                       " SET MablaghTakhfifNaghdiVahed=0 \n" +
+                       " WHERE ccDarkhastFaktorSatr IN ("+ ccDarkhastfaktorSatr +") ";
+        Log.i("DarkhastFaktorSatrDAO", "updateMablaghTakhfifNaghdiByccDarkhastFaktorSatr query:" +ccDarkhastfaktorSatr );
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDelete , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString() ;
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "deleteJayezehForccDarkhastFaktor" , "");
             return false;
         }

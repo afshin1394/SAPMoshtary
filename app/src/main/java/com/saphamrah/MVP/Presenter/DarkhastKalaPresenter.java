@@ -6,6 +6,7 @@ import android.util.Log;
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.DarkhastKalaMVP;
 import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
+import com.saphamrah.DAO.KalaMojodiDAO;
 import com.saphamrah.DAO.KalaOlaviatGheymatDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.MVP.Model.DarkhastKalaModel;
@@ -125,6 +126,12 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
     public void checkAddKala(int ccMoshtary , int position , KalaMojodiZaribModel kalaMojodiZaribModel, String cartonCount, String basteCount, String adadCount)
     {
         boolean validData = true;
+
+        KalaMojodiDAO kalaMojodiDAO = new KalaMojodiDAO(getAppContext());
+        int firstMojodi = kalaMojodiDAO.getCountPositiveByccKalaCode(kalaMojodiZaribModel);
+
+//        kalaMojodiZaribModel.setTedad( firstMojodi);
+        Log.i("firstMojody", "checkAddKala: "+ firstMojodi );
         try
         {
             SelectFaktorShared shared = new SelectFaktorShared(getAppContext());
@@ -143,7 +150,7 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
             Log.d("DarkhastKala","requestCountSum:"+requestCountSum);
             Log.d("DarkhastKala","kalaMojodiZaribModel.getTedad():"+kalaMojodiZaribModel.getTedad()+" ,kalaMojodiZaribModel.getMax_MojodyByShomarehBach():"+kalaMojodiZaribModel.getMax_MojodyByShomarehBach());
 
-            if (requestCountSum > kalaMojodiZaribModel.getTedad())
+            if (requestCountSum > firstMojodi)
             {
                 mView.get().onErrorAddNewRequestedKala(R.string.errorBiggerThanMojodi);
                 validData = false;

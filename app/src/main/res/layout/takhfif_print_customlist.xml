@@ -13,7 +13,7 @@
         android:layout_weight="3"
         android:id="@+id/lblSharhTakhfif"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/FontSize20"
+        android:textSize="@dimen/_14ssp"
         android:gravity="center"
         android:background="@drawable/table_content_cell_bg" />
 
@@ -23,7 +23,7 @@
         android:layout_weight="1"
         android:id="@+id/lblDarsadTakhfif"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/FontSize20"
+        android:textSize="@dimen/_14ssp"
         android:gravity="center"
         android:background="@drawable/table_content_cell_bg" />
 
@@ -33,7 +33,7 @@
         android:layout_weight="1"
         android:id="@+id/lblMablaghTakhfif"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/FontSize20"
+        android:textSize="@dimen/_14ssp"
         android:gravity="center"
         android:background="@drawable/table_content_cell_bg" />
 

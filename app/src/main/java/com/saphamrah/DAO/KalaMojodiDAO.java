@@ -182,6 +182,44 @@ public class KalaMojodiDAO
         return count;
     }
 
+    public int getCountPositiveByccKalaCode(KalaMojodiZaribModel kalaMojodiZaribModel)
+    {
+        int count = 0;
+        try
+        {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            //select sum(Tedad) from KalaMojodi where ccKalaCode =
+            String query = "select sum(" + KalaMojodiModel.COLUMN_Tedad() + ") from " + KalaMojodiModel.TableName() + " where " + KalaMojodiModel.COLUMN_ccKalaCode() + " = " + kalaMojodiZaribModel.getCcKalaCode() +
+                     " and "+ KalaMojodiModel.COLUMN_Tedad() +" > 0" ;
+//                     " and "+ KalaMojodiModel.COLUMN_ShomarehBach() +" = "+kalaMojodiZaribModel.getShomarehBach() +
+//                     " and "+ KalaMojodiModel.COLUMN_GheymatForosh() +" = "+kalaMojodiZaribModel.getGheymatForosh()+
+//                     " and "+ KalaMojodiModel.COLUMN_TarikhEngheza() +" = '"+kalaMojodiZaribModel.getTarikhEngheza()+"'"+
+//                     " and "+ KalaMojodiModel.COLUMN_TarikhTolid() +" = '"+kalaMojodiZaribModel.getTarikhTolid()+"'"+
+//                     " and "+ KalaMojodiModel.COLUMN_GheymatKharid() +" = "+kalaMojodiZaribModel.getGheymatKharid()+
+//                     " and "+ KalaMojodiModel.COLUMN_ccTaminKonandeh() +" = "+kalaMojodiZaribModel.getCcTaminKonandeh();
+            Log.d("KalaMojodiDAO" , "jayezeh getCountByccKalaCode Query : " + query);
+
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    count = cursor.getInt(0);
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , KalaMojodiModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaMojodiDAO" , "" , "getAll" , "");
+        }
+        return count;
+    }
 
     public int getMaxMojodyByccKalaCode(int ccKalaCode)
     {

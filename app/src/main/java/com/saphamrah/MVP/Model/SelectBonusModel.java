@@ -2,6 +2,8 @@ package com.saphamrah.MVP.Model;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.SelectBonusMVP;
 import com.saphamrah.DAO.DarkhastFaktorJayezehDAO;
@@ -34,12 +36,20 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class SelectBonusModel implements SelectBonusMVP.ModelOps {
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
+public class SelectBonusModel implements SelectBonusMVP.ModelOps {
+    CompositeDisposable compositeDisposable;
     private SelectBonusMVP.RequiredPresenterOps mPresenter;
 
     public SelectBonusModel(SelectBonusMVP.RequiredPresenterOps mPresenter) {
         this.mPresenter = mPresenter;
+        compositeDisposable=new CompositeDisposable();
     }
 
     @Override
@@ -146,6 +156,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
 
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(), -1);
+        int  ccForoshandeh = selectFaktorShared.getInt(selectFaktorShared.getCcForoshandeh(), -1);
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         int FinalCCAfrad = foroshandehMamorPakhshDAO.getIsSelect().getCcAfrad();
         Log.d("bonus", "Jayezeh takhfifNaghdi : " + insertTakhfifNaghdi);
@@ -183,6 +194,19 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
                 insertDarkhastFaktorTakhfifModel.setExtraProp_IsTakhfifMazad(1);
             }
             darkhastFaktorTakhfifDAO.insert(insertDarkhastFaktorTakhfifModel);
+
+            if(insertDarkhastFaktorTakhfifModel.getExtraProp_IsTakhfifMazad()==4){
+                DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
+                ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels = darkhastFaktorSatrDAO.getByccDarkhastFaktorAndccForoshandeh(ccDarkhastFaktor, ccForoshandeh,true);
+                calculateMablaghVahedTakhfifNaghdiDarkhastFaktorSatr(Math.round(mandeh),darkhastFaktorSatrModels);
+            }
+            else {
+                DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
+                ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels = darkhastFaktorSatrDAO.getByccDarkhastFaktorAndccForoshandeh(ccDarkhastFaktor, ccForoshandeh,false);
+                calculateMablaghVahedTakhfifNaghdiDarkhastFaktorSatr(Math.round(mandeh),darkhastFaktorSatrModels);
+
+            }
+
         }
         DarkhastFaktorJayezehDAO darkhastFaktorJayezehDAO = new DarkhastFaktorJayezehDAO(mPresenter.getAppContext());
         KalaMojodiDAO kalaMojodiDAO = new KalaMojodiDAO(mPresenter.getAppContext());
@@ -242,7 +266,6 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
                             kalaMojodiModel.setCcAfrad(FinalCCAfrad);
                             if (kalaMojodiDAO.insert(kalaMojodiModel)) {
                                 SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
-                                int ccForoshandeh = shared.getInt(shared.getCcForoshandeh(), -1);
                                 Log.d("bonus", "model.getGheymatForosh() : " + model.getGheymatForosh() + " ,ccForoshandeh=" + ccForoshandeh);
                                 DarkhastFaktorSatrModel darkhastFaktorSatrModel = new DarkhastFaktorSatrModel();
                                 darkhastFaktorSatrModel.setCcDarkhastFaktor(ccDarkhastFaktor);
@@ -320,7 +343,59 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
     }
 
 
+    private void calculateMablaghVahedTakhfifNaghdiDarkhastFaktorSatr (double mablaghTakhfif ,ArrayList<DarkhastFaktorSatrModel> darkhastFaktorSatrModels){
+        Observable.just(darkhastFaktorSatrModels)
+                .map(models -> {
+                    double sumMablagh = 0;
 
+                    for (DarkhastFaktorSatrModel darkhastFaktorSatrModel : darkhastFaktorSatrModels) {
+                        sumMablagh += darkhastFaktorSatrModel.getMablaghForosh() * darkhastFaktorSatrModel.getTedad3();
+                        Log.d("VerifyRequest","calculateMablaghVahedTakhfifNaghdiDarkhastFaktorSatr darkhastFaktorSatrModel:" + darkhastFaktorSatrModel);
+
+                    }
+                    Log.d("VerifyRequest","calculateMablaghVahedTakhfifNaghdiDarkhastFaktorSatr sumMablagh:" + sumMablagh );
+                    double zaribTakhfif = mablaghTakhfif/sumMablagh;
+                    Log.d("VerifyRequest","calculateMablaghVahedTakhfifNaghdiDarkhastFaktorSatr mablaghTakhfif:" + mablaghTakhfif + " ,sumMablagh: " + sumMablagh);
+                    DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(mPresenter.getAppContext());
+                    for (DarkhastFaktorSatrModel darkhastFaktorSatrModel : darkhastFaktorSatrModels) {
+                        double mablaghTakhfifNaghdyVahed = (zaribTakhfif * darkhastFaktorSatrModel.getMablaghForosh()) + darkhastFaktorSatrModel.getMablaghTakhfifNaghdiVahed();
+                        Log.d("VerifyRequest","calculateMablaghVahedTakhfifNaghdiDarkhastFaktorSatr zaribTakhfif:" + zaribTakhfif + " ,MablaghForosh: " + darkhastFaktorSatrModel.getMablaghForosh());
+                        Log.d("VerifyRequest","calculateMablaghVahedTakhfifNaghdiDarkhastFaktorSatr MablaghTakhfifNaghdiVahedsatr:" + darkhastFaktorSatrModel.getMablaghTakhfifNaghdiVahed());
+                        Log.d("VerifyRequest","calculateMablaghVahedTakhfifNaghdiDarkhastFaktorSatr mablaghTakhfifNaghdyVahed:" + mablaghTakhfifNaghdyVahed);
+                        boolean updateMablaghTakhfifNaghdyVahed = darkhastFaktorSatrDAO.updateMablaghTakhfifNaghdyVahed(darkhastFaktorSatrModel.getCcDarkhastFaktorSatr(),mablaghTakhfifNaghdyVahed);
+                        if (!updateMablaghTakhfifNaghdyVahed){
+                            return false;
+                        }
+                    }
+                    return true;
+                })
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Boolean updateMablaghTakhfifNaghdyVahed) {
+                        if (!updateMablaghTakhfifNaghdyVahed)
+                            onError(new Throwable());
+
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        mPresenter.onErrorCalculateDiscount(R.string.errorUpdateMablaghTakhfifVahed);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
 
     private boolean removeTakhfif(SelectFaktorShared selectFaktorShared, int selectedccTakhfif) {
         try {

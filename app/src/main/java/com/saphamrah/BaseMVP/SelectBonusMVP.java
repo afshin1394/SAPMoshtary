@@ -64,7 +64,7 @@ public interface SelectBonusMVP
         void onFailedInsert();
 
         void onSuccess(int resId);
-
+        void onErrorCalculateDiscount(int resId);
 //        void onInsertJayezehNaghdyArzeshAfzoodeh(float fltMandeh);
 //
 //        void onSuccessUpdateLockArzeshAfzoodeh();

@@ -780,6 +780,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
             if (insertNewKalaMojodi(kalaMojodiZaribModel.getCcKalaCode(), ccDarkhastFaktor, kalaMojodiZaribModel.getTarikhTolid(),kalaMojodiZaribModel.getTarikhEngheza(), kalaMojodiZaribModel.getShomarehBach(), kalaMojodiZaribModel.getCcTaminKonandeh(), tedad , kalaMojodiZaribModel.getGheymatForoshAsli(), kalaMojodiZaribModel.getGheymatMasrafKonandehAsli(), kalaMojodiZaribModel.getGheymatKharid()))
             {
                 kalaMojodiZaribModel.setTedad(kalaMojodiZaribModel.getTedad() + tedad);
+                Log.i("tedadd", "insertNewFaktorSatr:"+tedad);
             }
         }
         Log.d("DarkhastKalaModel","kalaMojodiZaribModel2:" + kalaMojodiZaribModel.toString());
@@ -808,7 +809,9 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
 //                    sparseIntArray.put(kalaMojodiZaribModel.getCcKalaCode(), kalaMojodiZaribModel.getTedad());
                     if (position != -1)
                     {
+                        kalaMojodiZaribModel.setTedad(kalaMojodiZaribModel.getTedad() - countNew);
                         mPresenter.onSuccessInsertFaktor(position , kalaMojodiZaribModel.getTedad());
+                        Log.i("insertKalaMojodi", String.valueOf(kalaMojodiZaribModel.getTedad() - countNew));
                         getAllRequestedGoods();
                     }
                     sparseIntArray.put(kalaMojody.getCcKalaCode(), kalaMojody.getTedad());

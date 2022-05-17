@@ -5,8 +5,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                     android:drawingCacheQuality="low" />
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:gravity="center|center_vertical|center_horizontal"
@@ -61,8 +61,9 @@
                     android:id="@+id/txtMarkaz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
                     android:textColor="@color/colorBlack"/>
 
                 <TextView
@@ -71,7 +72,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
                     android:text="مرکز توزیع : "
-                    android:textSize="@dimen/FontSize20"
+
+                    android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
                     android:textColor="@color/colorBlack"/>
 
@@ -85,7 +87,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold"
+
                     android:textColor="@color/colorBlack"/>
 
                 <TextView
@@ -94,7 +98,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
                     android:text="سازمان : "
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
                     android:textColor="@color/colorBlack"/>
             </LinearLayout>
@@ -111,7 +115,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold"
+
                     android:textColor="@color/colorBlack"/>
 
                 <TextView
@@ -120,7 +126,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
                     android:text="تاریخ : "
-                    android:textSize="@dimen/FontSize20"
+
+                    android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
                     android:textColor="@color/colorBlack"/>
 
@@ -134,7 +141,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold"
                     android:textColor="@color/colorBlack"/>
 
                 <TextView
@@ -143,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
                     android:text="شماره : "
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
                     android:textColor="@color/colorBlack"/>
             </LinearLayout>
@@ -160,14 +168,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold"
                     android:textColor="@color/colorBlack"/>
                 <TextView
                     android:id="@+id/lblNameForoshandeh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
                     android:text="نام فروشنده : "
                     android:textColor="@color/colorBlack"/>
@@ -185,14 +194,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold"
+
                     android:textColor="@color/colorBlack"/>
                 <TextView
                     android:id="@+id/lblCodeMoshtary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
                     android:text="کد مشتری : "
                     android:textColor="@color/colorBlack"/>
@@ -211,7 +222,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold"
                     android:textColor="@color/colorBlack"/>
 
                 <TextView
@@ -220,7 +232,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
                     android:text="نام مشتری : "
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
                     android:textColor="@color/colorBlack"/>
 
@@ -238,21 +250,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold"
                     android:textColor="@color/colorBlack"/>
                 <TextView
                     android:id="@+id/lblNameTablo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
                     android:text="نام فروشگاه : "
                     android:textColor="@color/colorBlack"/>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:gravity="end|center_vertical"
@@ -260,10 +273,11 @@
 
                 <TextView
                     android:id="@+id/txtAddress"
-                    android:layout_width="500dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right|center_horizontal|center_vertical"
                     android:lines="2"
+                    android:textStyle="bold"
                     android:textSize="@dimen/FontSize16"
                     android:textColor="@color/colorBlack"/>
 
@@ -273,7 +287,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="end|center_horizontal|center_vertical"
                     android:text="آدرس : "
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
                     android:textColor="@color/colorBlack"/>
 
@@ -291,14 +305,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold"
                     android:textColor="@color/colorBlack"/>
                 <TextView
                     android:id="@+id/lblCodePosty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
                     android:text="کدپستی : "
                     android:textColor="@color/colorBlack"/>
@@ -313,14 +328,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold"
                     android:textColor="@color/colorBlack"/>
                 <TextView
                     android:id="@+id/lblTel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
                     android:text="تلفن : "
                     android:textColor="@color/colorBlack"/>
@@ -333,7 +349,7 @@
                 android:gravity="center"
                 android:orientation="vertical" >
                 <View
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="1dp"
                     android:background="@color/colorBlack"/>
                 <TextView
@@ -341,12 +357,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="38dp"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
                     android:text="اقلام درخواست"
                     android:textColor="@color/colorBlack"/>
                 <View
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="1dp"
                     android:background="@color/colorBlack"/>
             </LinearLayout>
@@ -379,7 +395,7 @@
                     android:orientation="vertical"
                     android:layout_below="@+id/layKalaPartOne">
                     <View
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:background="@color/colorBlack"/>
                     <include
@@ -387,7 +403,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                     <View
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:background="@color/colorBlack"
                         android:layout_marginBottom="10dp"/>
@@ -409,7 +425,7 @@
                     android:orientation="vertical" >
 
                     <View
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:background="@color/colorBlack" />
 
@@ -419,12 +435,12 @@
                         android:layout_height="38dp"
                         android:gravity="center|center_horizontal|center_vertical"
                         android:text="تخفیفات فروش"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
                         android:textColor="@color/colorBlack"/>
 
                     <View
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:background="@color/colorBlack" />
                 </LinearLayout>
@@ -443,7 +459,7 @@
                     </androidx.recyclerview.widget.RecyclerView>
 
                     <View
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:layout_marginBottom="10dp"
                         android:background="@color/colorBlack" />
@@ -466,7 +482,7 @@
                     android:orientation="vertical" >
 
                     <View
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:background="@color/colorBlack" />
 
@@ -476,12 +492,12 @@
                         android:layout_height="38dp"
                         android:gravity="center|center_horizontal|center_vertical"
                         android:text="@string/marjoee"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
                         android:textColor="@color/colorBlack"/>
 
                     <View
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:background="@color/colorBlack" />
                 </LinearLayout>
@@ -498,7 +514,7 @@
                         android:scrollbars="vertical">
                     </androidx.recyclerview.widget.RecyclerView>
                     <View
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:layout_marginBottom="10dp"
                         android:background="@color/colorBlack" />
@@ -521,7 +537,7 @@
                     android:orientation="vertical" >
 
                     <View
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:background="@color/colorBlack" />
 
@@ -531,12 +547,12 @@
                         android:layout_height="38dp"
                         android:gravity="center|center_horizontal|center_vertical"
                         android:text="جایزه"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
                         android:textColor="@color/colorBlack"/>
 
                     <View
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:background="@color/colorBlack" />
                 </LinearLayout>
@@ -553,7 +569,7 @@
                         android:scrollbars="vertical">
                     </androidx.recyclerview.widget.RecyclerView>
                     <View
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:layout_marginBottom="10dp"
                         android:background="@color/colorBlack" />
@@ -577,8 +593,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:layout_marginEnd="5dp"
+                        android:textStyle="bold"
+
                         android:text="ریال"
                         android:textColor="@color/colorBlack"/>
                     <TextView
@@ -586,14 +604,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
+                        android:textStyle="bold"
+
                         android:textColor="@color/colorBlack"/>
                     <TextView
                         android:id="@+id/lblMablaghNakhalesFaktor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
                         android:text="جمع درخواست : "
                         android:textColor="@color/colorBlack"/>
@@ -609,7 +629,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:layout_marginEnd="5dp"
                         android:text="ریال"
                         android:textColor="@color/colorBlack"/>
@@ -618,14 +638,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
+                        android:textStyle="bold"
+
                         android:textColor="@color/colorBlack"/>
                     <TextView
                         android:id="@+id/lblMablaghTakhfif"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
                         android:text="مبلغ تخفیف درخواست : "
                         android:textColor="@color/colorBlack"/>
@@ -641,7 +663,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:layout_marginEnd="5dp"
                         android:text="ریال"
                         android:textColor="@color/colorBlack"/>
@@ -650,14 +672,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
+                        android:textStyle="bold"
+
                         android:textColor="@color/colorBlack"/>
                     <TextView
                         android:id="@+id/lblMablaghMarjoee"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
                         android:text="مبلغ مرجوعی درخواست : "
                         android:textColor="@color/colorBlack"/>
@@ -674,8 +698,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:layout_marginEnd="5dp"
+                        android:textStyle="bold"
+
                         android:text="ریال"
                         android:textColor="@color/colorBlack"/>
                     <TextView
@@ -683,14 +709,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textColor="@color/colorBlack"/>
                     <TextView
                         android:id="@+id/lblMablaghArzeshAfzoode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
                         android:text="مبلغ مالیات ارزش افزوده درخواست : "
                         android:textColor="@color/colorBlack"/>
@@ -706,7 +732,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:layout_marginEnd="5dp"
                         android:text="ریال"
                         android:textColor="@color/colorBlack"/>
@@ -715,7 +741,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
                         android:textColor="@color/colorBlack"/>
                     <TextView
@@ -723,7 +749,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
                         android:text="مبلغ قابل پرداخت : "
                         android:textColor="@color/colorBlack"/>
@@ -739,7 +765,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:layout_marginEnd="5dp"
                         android:text="ریال"
                         android:textColor="@color/colorBlack"/>
@@ -748,14 +774,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textColor="@color/colorBlack"/>
                     <TextView
                         android:id="@+id/lblMablaghPardakht"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
                         android:text="مبلغ پرداخت شده : "
                         android:textColor="@color/colorBlack"/>
@@ -771,7 +797,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:layout_marginEnd="5dp"
                         android:text="ریال"
                         android:textColor="@color/colorBlack"/>
@@ -780,14 +806,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textColor="@color/colorBlack"/>
                     <TextView
                         android:id="@+id/lblMablaghMandehFaktor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
                         android:text="مبلغ مانده درخواست : "
                         android:textColor="@color/colorBlack"/>
@@ -803,7 +829,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:layout_marginEnd="5dp"
                         android:text="ریال"
                         android:textColor="@color/colorBlack"/>
@@ -812,20 +838,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textColor="@color/colorBlack"/>
                     <TextView
                         android:id="@+id/lblMablaghMandehKol"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize20"
+                        android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
                         android:text="مبلغ کل مانده : "
                         android:textColor="@color/colorBlack"/>
                 </LinearLayout>
                 <View
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="1dp"
                     android:background="@color/colorBlack"/>
             </LinearLayout>
@@ -840,7 +866,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:textSize="@dimen/FontSize20"
+                    android:textSize="@dimen/_18ssp"
                     android:layout_margin="5dp"
                     android:textColor="@color/colorBlack"/>
 
@@ -854,7 +880,7 @@
                     android:drawingCacheQuality="low" />
             </LinearLayout>
             <View
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="1dp"
                 android:background="@color/colorBlack"/>
 
@@ -986,7 +1012,7 @@
 
                 </LinearLayout>
                 <View
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="1dp"
                     android:layout_margin="25dp"/>
             </LinearLayout>

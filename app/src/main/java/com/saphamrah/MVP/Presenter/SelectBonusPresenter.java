@@ -362,16 +362,11 @@ public class SelectBonusPresenter implements SelectBonusMVP.PresenterOps , Selec
     public void onSuccess(int resId) {
         mView.get().showToast(resId, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
     }
+    @Override
+    public void onErrorCalculateDiscount(int resId)
+    {
+        mView.get().onFailedInsert();
+        mView.get().showToast(R.string.errorUpdateMablaghTakhfifVahed, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+    }
 
-//    @Override
-//    public void onInsertJayezehNaghdyArzeshAfzoodeh(float fltMandeh) {
-//        mView.get().closeArzeshAfzoodehDialog();
-//        mView.get().onInsertJayezehNaghdyArzeshAfzoodeh(fltMandeh);
-//
-//    }
-//
-//    @Override
-//    public void onSuccessUpdateLockArzeshAfzoodeh() {
-//        mView.get().onSuccessInsert();
-//    }
 }
