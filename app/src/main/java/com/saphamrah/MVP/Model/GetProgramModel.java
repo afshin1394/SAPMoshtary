@@ -112,6 +112,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
     public static long responseSize = 0;
 
     private String ccdpBargashty = "-1,";
+    private int checkMojody = 0;
 
     public GetProgramModel(GetProgramMVP.RequiredPresenterOps mPresenter) {
         this.mPresenter = mPresenter;
@@ -130,58 +131,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
         }
         mPresenter.onGetAllForoshandehMamorPakhsh(foroshandehMamorPakhshModels);
 
-        /*final Handler handler = new Handler();
-        new Thread(new Runnable() {
-            @Override
-            public void run()
-            {
-                final ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-                final ArrayList<ForoshandehMamorPakhshModel> foroshandehMamorPakhshModels = foroshandehMamorPakhshDAO.getAll();
-                final ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
-                PubFunc.ForoshandehMamorPakhsh foroshandehMamorPakhshUtil = new PubFunc().new ForoshandehMamorPakhsh();
-                for (int i=0 ; i < foroshandehMamorPakhshModels.size() ; i++)
-                {
-                    int resId = foroshandehMamorPakhshUtil.getNoeForoshandehMamorPakhsh(foroshandehMamorPakhshModels.get(i));
-                    foroshandehMamorPakhshModels.get(i).setNameNoeForoshandehMamorPakhsh(mPresenter.getAppContext().getResources().getString(resId));
-                }
-
-                File storageDir = new File(Environment.getExternalStorageDirectory() + "/SapHamrah/Pictures/Profile/");
-                if (storageDir.exists())
-                {
-                    if (storageDir.listFiles().length > 0)
-                    {
-                        storageDir = new File(Environment.getExternalStorageDirectory() + "/SapHamrah/Pictures/Profile/profile-" + foroshandehMamorPakhshModel.getCcAfrad() + ".jpg");
-                        Bitmap profile = BitmapFactory.decodeFile(storageDir.getAbsolutePath());
-                        final byte[] profileBytes = new PubFunc().new ImageUtils().convertBitmapToByteArray(mPresenter.getAppContext() , profile , Constants.BITMAP_TO_BYTE_QUALITY());
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mPresenter.onGetAllForoshandehMamorPakhsh(foroshandehMamorPakhshModels , profileBytes, foroshandehMamorPakhshModel.getCcAfrad());
-                            }
-                        });
-                    }
-                    else
-                    {
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mPresenter.onGetAllForoshandehMamorPakhsh(foroshandehMamorPakhshModels , new byte[]{}, foroshandehMamorPakhshModel.getCcAfrad());
-                            }
-                        });
-                    }
-                }
-                else
-                {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mPresenter.onGetAllForoshandehMamorPakhsh(foroshandehMamorPakhshModels , new byte[]{}, foroshandehMamorPakhshModel.getCcAfrad());
-                        }
-                    });
-                }
-            }
-        }).start();*/
-    }
+        }
 
     @Override
     public void getProgram(int getProgramType, String date, ForoshandehMamorPakhshModel foroshandehMamorPakhshModel) {
@@ -199,6 +149,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
         ccMarkazSazmanForoshSakhtarForosh = foroshandehMamorPakhshModel.getCcMarkazSazmanForoshSakhtarForosh();
         ccMarkazSazmanForosh = foroshandehMamorPakhshModel.getCcMarkazSazmanForosh();
         ccSazmanForosh = foroshandehMamorPakhshModel.getCcSazmanForosh();
+        checkMojody = foroshandehMamorPakhshModel.getCheckMojody();
         ccMasirs = "-1";
         ccMoshtarys = "-1,";
         ccGorohs = "347";
@@ -2373,7 +2324,10 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
                         kalaMojodiModel.setCcKalaCode(mandehMojodyMashinModel.getCcKalaCode());
                         kalaMojodiModel.setCcForoshandeh(ccForoshandeh);
-                        kalaMojodiModel.setTedad(mandehMojodyMashinModel.getMojody());
+                        if(checkMojody==1)
+                            kalaMojodiModel.setTedad(mandehMojodyMashinModel.getMojody());
+                        else
+                            kalaMojodiModel.setTedad(99999999);
                         kalaMojodiModel.setCcDarkhastFaktor(0);
                         kalaMojodiModel.setTarikhDarkhast(currentDate);
                         kalaMojodiModel.setShomarehBach(mandehMojodyMashinModel.getShomarehBach());

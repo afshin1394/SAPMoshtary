@@ -62,6 +62,7 @@ public class ForoshandehMamorPakhshModel
 	private static final String COLUMN_CodeAnbarMarjoee= "CodeNoeAnbarMarjoee";
     private static final String COLUMN_Version= "Version";
     private static final String COLUMN_IsKasrMojodi= "IsKasrMojodi";
+    private static final String COLUMN_CheckMojody= "CheckMojody";
 
 
     public static String TableName() {
@@ -221,6 +222,9 @@ public class ForoshandehMamorPakhshModel
     }
     public static String COLUMN_IsKasrMojodi() {
         return COLUMN_IsKasrMojodi;
+    }
+    public static String COLUMN_CheckMojody() {
+        return COLUMN_CheckMojody;
     }
 
 
@@ -386,6 +390,10 @@ public class ForoshandehMamorPakhshModel
     @SerializedName("IsKasrMojodi")
     @Expose
     private int IsKasrMojodi;
+
+    @SerializedName("CheckMojody")
+    @Expose
+    private int CheckMojody;
 
 
     public Integer getCcAfrad() {
@@ -808,6 +816,23 @@ public class ForoshandehMamorPakhshModel
         this.version = version;
     }
 
+    public int getIsKasrMojodi() {
+        return IsKasrMojodi;
+    }
+
+    public void setIsKasrMojodi(int isKasrMojodi) {
+        IsKasrMojodi = isKasrMojodi;
+    }
+
+    public int getCheckMojody() {
+        return CheckMojody;
+    }
+
+    public void setCheckMojody(int checkMojody) {
+
+        CheckMojody = checkMojody;
+    }
+
     private View.OnClickListener btnGetProgramClickListener;
     public View.OnClickListener getBtnGetProgramClickListener() {
         return btnGetProgramClickListener;
@@ -879,13 +904,7 @@ public class ForoshandehMamorPakhshModel
         this.btnUpdateParametersClickListener = btnUpdateParametersClickListener;
     }
 
-    public int getIsKasrMojodi() {
-        return IsKasrMojodi;
-    }
 
-    public void setIsKasrMojodi(int isKasrMojodi) {
-        IsKasrMojodi = isKasrMojodi;
-    }
 
     @Override
     public String toString() {
