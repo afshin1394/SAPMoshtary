@@ -410,7 +410,7 @@ public class DarkhastFaktorSatrDAO
                     "     LEFT JOIN Kala K ON K.ccKalaCode = DFS.ccKalaCode AND K.ShomarehBach = DFS.ShomarehBach AND K.MablaghForosh= DFS.GheymatForoshAsli AND \n" +
                     "                                          K.MablaghMasrafKonandeh = DFS.GheymatMasrafKonandehAsli AND\n" +
                     "                                          K.TarikhTolid = DFS.TarikhTolid AND K.TarikhEngheza = DFS.TarikhEngheza AND K.ccTaminKonandeh = DFS.ccTaminKonandeh \n" +
-                    " WHERE ccDarkhastFaktor = "+ ccDarkhastFaktor + " AND ccAfrad = " + ccForoshandeh;
+                    " WHERE CodeNoeKala = 1 AND  ccDarkhastFaktor = "+ ccDarkhastFaktor + " AND ccAfrad = " + ccForoshandeh;
                     if(MashmolMaliat) {
                         query += " AND MashmolMaliatAvarez = 1" ;
                     }
