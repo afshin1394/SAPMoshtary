@@ -1784,6 +1784,8 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
     private void updateKalaMojodiTable(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels,int ccForoshandeh,int ccAfrad,Handler handler) {
         String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
+        int checkMojody = foroshandehMamorPakhshDAO.getIsSelect().getCheckMojody();
         ArrayList<KalaMojodiModel> kalaMojodiModels = new ArrayList<>();
         Observable.fromIterable(mandehMojodyMashinModels)
                 .map(mandehMojodyMashinModel -> {
@@ -1792,7 +1794,6 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
 
                             kalaMojodiModel.setCcKalaCode(mandehMojodyMashinModel.getCcKalaCode());
                             kalaMojodiModel.setCcForoshandeh( ccForoshandeh);
-                            kalaMojodiModel.setTedad(mandehMojodyMashinModel.getMojody());
                             kalaMojodiModel.setCcDarkhastFaktor(0);
                             kalaMojodiModel.setTarikhDarkhast(currentDate);
                             kalaMojodiModel.setShomarehBach(mandehMojodyMashinModel.getShomarehBach());
@@ -1804,9 +1805,20 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                             kalaMojodiModel.setCcTaminKonandeh(mandehMojodyMashinModel.getCcTaminKonandeh());
                             kalaMojodiModel.setZamaneSabt(currentDate);
                             kalaMojodiModel.setIsAdamForosh(mandehMojodyMashinModel.getIsAdamForosh());
-                            kalaMojodiModel.setMax_Mojody(mandehMojodyMashinModel.getMaxMojody());
-                            kalaMojodiModel.setMax_MojodyByShomarehBach(mandehMojodyMashinModel.getMax_MojodyByShomarehBach());
                             kalaMojodiModel.setCcAfrad(ccAfrad);
+                            if(checkMojody==1)
+                            {
+                                kalaMojodiModel.setTedad(mandehMojodyMashinModel.getMojody());
+                                kalaMojodiModel.setMax_Mojody(mandehMojodyMashinModel.getMaxMojody());
+                                kalaMojodiModel.setMax_MojodyByShomarehBach(mandehMojodyMashinModel.getMax_MojodyByShomarehBach());
+                            }
+
+                            else
+                            {
+                                kalaMojodiModel.setTedad(99999999);
+                                kalaMojodiModel.setMax_Mojody(99999999);
+                                kalaMojodiModel.setMax_MojodyByShomarehBach(99999999);
+                            }
                             return kalaMojodiModel;
                         }
 
@@ -2206,6 +2218,7 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
             //------------------Zanjirei--------------------
             shared.putInt(shared.getMoshtaryGharardadccSazmanForosh(), MoshtaryGharardadccSazmanForosh);
             shared.putInt(shared.getCcMoshtaryGharardad(), ccMoshtaryGharardad);
+            shared.putInt(shared.getCheckMojody(), foroshandehMamorPakhshModel.getCheckMojody());
 
             mPresenter.onSuccessSetDarkhastFaktorShared(ccDarkhastFaktor , ccMoshtary);
         }

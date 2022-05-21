@@ -143,6 +143,7 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
             long ccDarkhastFaktor = shared.getLong(shared.getCcDarkhastFaktor() , 0);
             int isKalaOlaviatMablagh = shared.getInt(shared.getIsKalaOlaviatMablagh() , 0);
             int isKalaOlaviatSabt = shared.getInt(shared.getIsKalaOlaviatSabt() , 0);
+            int checkMojody = shared.getInt(shared.getCheckMojody(),0);
             final int ccNoeSenfMoshtary_NemoonehKala = 345;
             Log.d("DarkhastKala","requestCountCarton:"+requestCountCarton);
             Log.d("DarkhastKala","requestCountBaste:"+requestCountBaste);
@@ -150,7 +151,8 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
             Log.d("DarkhastKala","requestCountSum:"+requestCountSum);
             Log.d("DarkhastKala","kalaMojodiZaribModel.getTedad():"+kalaMojodiZaribModel.getTedad()+" ,kalaMojodiZaribModel.getMax_MojodyByShomarehBach():"+kalaMojodiZaribModel.getMax_MojodyByShomarehBach());
 
-            if (requestCountSum > firstMojodi)
+
+            if (requestCountSum > firstMojodi && checkMojody==1)
             {
                 mView.get().onErrorAddNewRequestedKala(R.string.errorBiggerThanMojodi);
                 validData = false;

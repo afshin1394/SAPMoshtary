@@ -56,7 +56,7 @@ public interface InvoiceSettlementMVP
         void onConfigurationChanged(InvoiceSettlementMVP.RequiredViewOps view);
 		void getConfig();				 
         void checkBottomBarClick(int position);
-        void getInfo(long ccDarkhastFaktor, int from);
+        void getInfo(long ccDarkhastFaktor,int ccMoshtary, int from);
         void getVosols(long ccDarkhastFaktor, int ccMoshtary);
         void getNoeVosols(long ccDarkhastFaktor , boolean getNoeVosolFromShared , int from , int ccMoshtary);
         void checkSelectedNoeVosol(String codeNoeVosol , int ccMoshtary , long ccDarkhastFaktor , double mablaghMandeh);
@@ -108,7 +108,7 @@ public interface InvoiceSettlementMVP
     interface ModelOps
     {
 		void getConfig();				 
-        void getInfo(long ccDarkhastFaktor , int from);
+        void getInfo(long ccDarkhastFaktor, int ccMoshtary , int from);
         void getVosols(long ccDarkhastFaktor, int ccMoshtary);
         void getNoeVosols(long ccDarkhastFaktor , boolean getNoeVosolFromShared , int from , int ccMoshtary);
         void getPosShomareHesab(int codeNoevosol);

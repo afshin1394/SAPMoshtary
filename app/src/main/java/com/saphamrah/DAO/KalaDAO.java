@@ -8,6 +8,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.saphamrah.Model.BarkhordForoshandehBaMoshtaryModel;
 import com.saphamrah.Model.KalaModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.ServerIpModel;
@@ -882,6 +883,26 @@ public class KalaDAO
             logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaDAO" , "" , "getSumTedadMojodyKala" , "");
         }
         return tedad;
+    }
+
+    public boolean updateAllMojody()
+    {
+        String query = "update " + KalaModel.TableName() + " set " + KalaModel.COLUMN_TedadMojodyGhabelForosh() + " = 99999999 ";
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDeleteAll , BarkhordForoshandehBaMoshtaryModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaDAO" , "" , "updateAllMojody" , "");
+            return false;
+        }
     }
 
     public boolean deleteAll()

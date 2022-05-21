@@ -88,15 +88,16 @@ public class InvoiceSettlementModel implements InvoiceSettlementMVP.ModelOps {
      * FROM_CHECK_BARGASHTI = 3
      */
     @Override
-    public void getInfo(long ccDarkhastFaktor, int from) {
+    public void getInfo(long ccDarkhastFaktor, int ccMoshtary, int from) {
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
-        int ccMoshtary = -1;
+
         if (ccDarkhastFaktor == -1) {
             ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(), -1);
 
             Log.i("invoice", "ccMoshtary : " + ccMoshtary + " ,ccDarkhastFaktor:" + ccDarkhastFaktor);
         }
-        ccMoshtary = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary(), -1);
+        //todo ccMoshtary
+        //ccMoshtary = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary(), -1);
 
         if (ccDarkhastFaktor != -1) {
             DarkhastFaktorModel darkhastFaktorModel = darkhastFaktorDAO.getByccDarkhastFaktor(ccDarkhastFaktor,ccMoshtary);

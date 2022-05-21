@@ -2238,6 +2238,8 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                         for (KalaModel kala : (ArrayList<KalaModel>) arrayListData)
                             Log.d("getProgram", "KalaModel = " + kala.toString());
                         if (deleteResult && insertResult) {
+                            if(checkMojody==0)
+                                kalaDAO.updateAllMojody();
                             sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                             if (anbarakAfrad.trim().equals("-1")) {
                                 //if go to this way, then getkalaolaviat and getAnbarakMojodi didn't call but we show to user that this two items selected in list
@@ -2324,10 +2326,6 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
                         kalaMojodiModel.setCcKalaCode(mandehMojodyMashinModel.getCcKalaCode());
                         kalaMojodiModel.setCcForoshandeh(ccForoshandeh);
-                        if(checkMojody==1)
-                            kalaMojodiModel.setTedad(mandehMojodyMashinModel.getMojody());
-                        else
-                            kalaMojodiModel.setTedad(99999999);
                         kalaMojodiModel.setCcDarkhastFaktor(0);
                         kalaMojodiModel.setTarikhDarkhast(currentDate);
                         kalaMojodiModel.setShomarehBach(mandehMojodyMashinModel.getShomarehBach());
@@ -2342,6 +2340,20 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                         kalaMojodiModel.setMax_Mojody(mandehMojodyMashinModel.getMaxMojody());
                         kalaMojodiModel.setMax_MojodyByShomarehBach(mandehMojodyMashinModel.getMax_MojodyByShomarehBach());
                         kalaMojodiModel.setCcAfrad(ccAfrad);
+                        if(checkMojody==1)
+                        {
+                            kalaMojodiModel.setTedad(mandehMojodyMashinModel.getMojody());
+                            kalaMojodiModel.setMax_Mojody(mandehMojodyMashinModel.getMaxMojody());
+                            kalaMojodiModel.setMax_MojodyByShomarehBach(mandehMojodyMashinModel.getMax_MojodyByShomarehBach());
+                        }
+
+                        else
+                        {
+                            kalaMojodiModel.setTedad(99999999);
+                            kalaMojodiModel.setMax_Mojody(99999999);
+                            kalaMojodiModel.setMax_MojodyByShomarehBach(99999999);
+                        }
+
                         Log.d("GetProgramModel", "ccAfrad:" + ccAfrad);
 
                         kalaMojodiModels.add(kalaMojodiModel);

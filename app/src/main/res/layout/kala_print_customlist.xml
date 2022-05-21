@@ -12,10 +12,10 @@
         android:layout_weight="1"
         android:id="@+id/lblRadif"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_18ssp"
+        android:textSize="@dimen/_14ssp"
         android:textStyle="bold"
         android:gravity="center"
-        android:background="@drawable/table_content_cell_bg" />
+        android:background="@drawable/table_content_black_cell_bg" />
 
     <TextView
         android:layout_width="0dp"
@@ -24,9 +24,9 @@
         android:id="@+id/lblNameKala"
         android:textStyle="bold"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_18ssp"
+        android:textSize="@dimen/_14ssp"
         android:gravity="center"
-        android:background="@drawable/table_content_cell_bg" />
+        android:background="@drawable/table_content_black_cell_bg" />
 
     <TextView
         android:layout_width="0dp"
@@ -35,9 +35,9 @@
         android:id="@+id/lblMablagh"
         android:textStyle="bold"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_18ssp"
+        android:textSize="@dimen/_14ssp"
         android:gravity="center"
-        android:background="@drawable/table_content_cell_bg" />
+        android:background="@drawable/table_content_black_cell_bg" />
 
     <TextView
         android:layout_width="0dp"
@@ -46,9 +46,9 @@
         android:textStyle="bold"
         android:id="@+id/lblCarton"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_18ssp"
+        android:textSize="@dimen/_14ssp"
         android:gravity="center"
-        android:background="@drawable/table_content_cell_bg" />
+        android:background="@drawable/table_content_black_cell_bg" />
 
     <TextView
         android:layout_width="0dp"
@@ -57,9 +57,9 @@
         android:textStyle="bold"
         android:id="@+id/lblBasteh"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_18ssp"
+        android:textSize="@dimen/_14ssp"
         android:gravity="center"
-        android:background="@drawable/table_content_cell_bg" />
+        android:background="@drawable/table_content_black_cell_bg" />
 
     <TextView
         android:layout_width="0dp"
@@ -68,9 +68,9 @@
         android:textStyle="bold"
         android:id="@+id/lblAdad"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_18ssp"
+        android:textSize="@dimen/_14ssp"
         android:gravity="center"
-        android:background="@drawable/table_content_cell_bg" />
+        android:background="@drawable/table_content_black_cell_bg" />
 
     <TextView
         android:layout_width="0dp"
@@ -79,8 +79,8 @@
         android:textStyle="bold"
         android:id="@+id/lblMablaghKol"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_18ssp"
+        android:textSize="@dimen/_14ssp"
         android:gravity="center"
-        android:background="@drawable/table_content_cell_bg" />
+        android:background="@drawable/table_content_black_cell_bg" />
 
 </LinearLayout>

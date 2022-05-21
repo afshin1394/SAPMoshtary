@@ -78,12 +78,12 @@ public class JayezehPrintAdapter extends RecyclerView.Adapter<JayezehPrintAdapte
             lblTedad.setTypeface(font);
             lblSoodeJayezeh.setTypeface(font);
 
-            if (noePrintFaktor == 2)
-            {
-                lblSharh.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.FontSize30));
-                lblTedad.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.FontSize30));
-                lblSoodeJayezeh.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.FontSize30));
-            }
+//            if (noePrintFaktor == 2)
+//            {
+//                lblSharh.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.FontSize30));
+//                lblTedad.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.FontSize30));
+//                lblSoodeJayezeh.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.FontSize30));
+//            }
         }
     }
 

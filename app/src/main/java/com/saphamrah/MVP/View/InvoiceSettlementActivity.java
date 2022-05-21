@@ -329,7 +329,7 @@ public class InvoiceSettlementActivity extends AppCompatActivity implements Invo
             setRecyclerCheckBargashtyAndTreasuryList();
         }
 
-        mPresenter.getInfo(ccDarkhastFaktor, from);
+        mPresenter.getInfo(ccDarkhastFaktor, ccMoshtary, from);
         mPresenter.getNoeVosols(ccDarkhastFaktor, getFromShared, from, ccMoshtary);
         if (from == Constants.FROM_TREASURYLIST || from == Constants.FROM_CHECK_BARGASHTI || from == -1) {
             mPresenter.getVosols(ccDarkhastFaktor, ccMoshtary);

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layoutDirection="rtl"
-    android:background="@drawable/table_content_cell_bg_black">
+    android:background="@drawable/table_content_black_cell_bg">
 
     <LinearLayout
         android:layout_width="1dp"
@@ -46,9 +46,10 @@
         android:layout_weight="4"
         android:id="@+id/lblNameKala"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_16ssp"
-        android:gravity="center"
-        android:background="@drawable/table_content_cell_bg"/>
+        android:textSize="@dimen/_14ssp"
+        android:textDirection="rtl"
+        android:gravity="end"
+        android:background="@drawable/table_content_black_cell_bg"/>
 </LinearLayout>
 
 <LinearLayout
@@ -61,9 +62,9 @@ android:orientation="horizontal">
         android:layout_weight="1"
         android:id="@+id/lblShomarehBach"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_16ssp"
+        android:textSize="@dimen/_14ssp"
         android:gravity="center"
-        android:background="@drawable/table_content_cell_bg"/>
+        android:background="@drawable/table_content_black_cell_bg"/>
 
     <TextView
         android:layout_width="0dp"
@@ -71,9 +72,9 @@ android:orientation="horizontal">
         android:layout_weight="1"
         android:id="@+id/lblTedad"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_16ssp"
+        android:textSize="@dimen/_14ssp"
         android:gravity="center"
-        android:background="@drawable/table_content_cell_bg"/>
+        android:background="@drawable/table_content_black_cell_bg"/>
 
     <TextView
         android:layout_width="0dp"
@@ -81,9 +82,9 @@ android:orientation="horizontal">
         android:layout_weight="1"
         android:id="@+id/lblFee"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_16ssp"
+        android:textSize="@dimen/_14ssp"
         android:gravity="center"
-        android:background="@drawable/table_content_cell_bg"/>
+        android:background="@drawable/table_content_black_cell_bg"/>
 </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

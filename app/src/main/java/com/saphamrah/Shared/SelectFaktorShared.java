@@ -98,6 +98,7 @@ public class SelectFaktorShared
     private String mablaghHavaleh = "XfdHExEa"; // مبلغ حواله مشتری جهت محاسبه اعتبار مامورپخش
     private String isMorajehShodeh = "XfdHExFd"; // برای مشتری عدم سفارش و عدم درخواست صبت شده است
     private String minModatHozor = "XfdRgxFd";// پارامتر حداقل مدت حضور در مغازه مشتری جهت ثبت عدم
+    private String checkMojody = "EfdRgwsd";// پارامتر چک کردن تعداد موجودی در ثبت درخواست
 
 
     public SelectFaktorShared(Context context)
@@ -394,6 +395,7 @@ public class SelectFaktorShared
             editor.remove(mablaghHavaleh);
             editor.remove(isMorajehShodeh);
             editor.remove(minModatHozor);
+            editor.remove(checkMojody);
             editor.remove(ccMoshtaryGharardad);
             editor.remove(moshtaryGharardadccSazmanForosh);
             editor.remove(iskalaOlaviatMablagh);
@@ -464,6 +466,7 @@ public class SelectFaktorShared
         putLong(getMablaghHavaleh(), 0);
         putBoolean(getIsMorajehShodeh() , false);
         putInt(getMinModatHozor() , 0);
+        putInt(getCheckMojody() , 0);
         putInt(getCcMoshtaryGharardad() , 0);
         putInt(getMoshtaryGharardadccSazmanForosh() , 0);
         putInt(getIsKalaOlaviatMablagh() , 0);
@@ -725,6 +728,9 @@ public class SelectFaktorShared
     }
     public String getMinModatHozor() {
         return minModatHozor;
+    }
+    public String getCheckMojody() {
+        return checkMojody;
     }
     //TODO
     public String getMoshtaryGharardadccSazmanForosh() {

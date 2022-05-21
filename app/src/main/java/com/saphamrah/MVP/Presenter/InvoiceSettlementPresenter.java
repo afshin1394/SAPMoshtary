@@ -66,9 +66,9 @@ public class InvoiceSettlementPresenter implements InvoiceSettlementMVP.Presente
     }
 
     @Override
-    public void getInfo(long ccDarkhastFaktor , int from)
+    public void getInfo(long ccDarkhastFaktor, int ccMoshtary, int from)
     {
-        mModel.getInfo(ccDarkhastFaktor , from);
+        mModel.getInfo(ccDarkhastFaktor, ccMoshtary , from);
     }
 
     @Override

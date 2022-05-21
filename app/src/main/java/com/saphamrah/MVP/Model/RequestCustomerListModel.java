@@ -1854,6 +1854,8 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
         private void updateKalaMojodiTable(ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels,int ccForoshandeh,int ccAfrad) {
             @SuppressLint("SimpleDateFormat") String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
+            ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(weakReferenceContext.get());
+            int checkMojody = foroshandehMamorPakhshDAO.getIsSelect().getCheckMojody();
             ArrayList<KalaMojodiModel> kalaMojodiModels = new ArrayList<>();
             Observable.fromIterable(mandehMojodyMashinModels)
                     .subscribeOn(Schedulers.io())
@@ -1863,7 +1865,6 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
                                 kalaMojodiModel.setCcKalaCode(mandehMojodyMashinModel.getCcKalaCode());
                                 kalaMojodiModel.setCcForoshandeh( ccForoshandeh);
-                                kalaMojodiModel.setTedad(mandehMojodyMashinModel.getMojody());
                                 kalaMojodiModel.setCcDarkhastFaktor(0);
                                 kalaMojodiModel.setTarikhDarkhast(currentDate);
                                 kalaMojodiModel.setShomarehBach(mandehMojodyMashinModel.getShomarehBach());
@@ -1875,9 +1876,21 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                                 kalaMojodiModel.setCcTaminKonandeh(mandehMojodyMashinModel.getCcTaminKonandeh());
                                 kalaMojodiModel.setZamaneSabt(currentDate);
                                 kalaMojodiModel.setIsAdamForosh(mandehMojodyMashinModel.getIsAdamForosh());
-                                kalaMojodiModel.setMax_Mojody(mandehMojodyMashinModel.getMaxMojody());
-                                kalaMojodiModel.setMax_MojodyByShomarehBach(mandehMojodyMashinModel.getMax_MojodyByShomarehBach());
                                 kalaMojodiModel.setCcAfrad(ccAfrad);
+                                if(checkMojody==1)
+                                {
+                                    kalaMojodiModel.setTedad(mandehMojodyMashinModel.getMojody());
+                                    kalaMojodiModel.setMax_Mojody(mandehMojodyMashinModel.getMaxMojody());
+                                    kalaMojodiModel.setMax_MojodyByShomarehBach(mandehMojodyMashinModel.getMax_MojodyByShomarehBach());
+                                }
+
+                                else
+                                {
+                                    kalaMojodiModel.setTedad(mandehMojodyMashinModel.getMojody());
+                                    //kalaMojodiModel.setTedad(99999999);
+                                    kalaMojodiModel.setMax_Mojody(99999999);
+                                    kalaMojodiModel.setMax_MojodyByShomarehBach(99999999);
+                                }
                                 return kalaMojodiModel;
                             }
 
@@ -2308,6 +2321,8 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 }
                 shared.putBoolean(shared.getVerifiedMarjoee() , false);
                 shared.putString(shared.getCcKalaCodesOfKalaAsasi(), "");
+                shared.putInt(shared.getCcSazmanForosh(),foroshandehMamorPakhshModel.getCcSazmanForosh());
+                shared.putInt(shared.getCheckMojody(),foroshandehMamorPakhshModel.getCheckMojody());
 
                 //-----------------
                 return true;

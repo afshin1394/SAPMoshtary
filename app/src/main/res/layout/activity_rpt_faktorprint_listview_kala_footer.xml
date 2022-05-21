@@ -6,11 +6,11 @@
     android:gravity="right|center_vertical|center_horizontal">
     <TextView  
         android:gravity="center"
-        android:textSize="@dimen/FontSize14"
+        android:textSize="@dimen/_14ssp"
 		android:layout_width="0dp"
-		android:layout_height="30dp"
+		android:layout_height="wrap_content"
 		android:layout_weight="2"
-		android:background="@drawable/table_content_cell_bg"
+		android:background="@drawable/table_content_black_cell_bg"
 		android:textColor="@color/colorBlack">
     </TextView >
 	<View
@@ -20,11 +20,11 @@
     <TextView  
         android:id="@+id/txtSumAdad"
         android:gravity="center"
-        android:textSize="@dimen/FontSize14"
+        android:textSize="@dimen/_14ssp"
 		android:layout_width="0dp"
-		android:layout_height="30dp"
+		android:layout_height="wrap_content"
 		android:layout_weight="1"
-		android:background="@drawable/table_content_cell_bg"
+		android:background="@drawable/table_content_black_cell_bg"
 		android:textColor="@color/colorBlack">
 	</TextView >
 	<View
@@ -34,11 +34,11 @@
 	    <TextView  
 			android:id="@+id/txtSumBasteh"
 			android:gravity="center"
-			android:textSize="@dimen/FontSize14"
+			android:textSize="@dimen/_14ssp"
 			android:layout_width="0dp"
-			android:layout_height="30dp"
+			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:background="@drawable/table_content_cell_bg"
+			android:background="@drawable/table_content_black_cell_bg"
 			android:textColor="@color/colorBlack">
 		</TextView>
 	<View
@@ -48,11 +48,11 @@
 	    <TextView  
 	     android:id="@+id/txtSumKarton"
         android:gravity="center"
-        android:textSize="@dimen/FontSize14"
+        android:textSize="@dimen/_14ssp"
        	android:layout_width="0dp"
-       	android:layout_height="30dp"
+       	android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:background="@drawable/table_content_cell_bg"
+			android:background="@drawable/table_content_black_cell_bg"
 			android:textColor="@color/colorBlack">
 	</TextView >
 	<View
@@ -63,12 +63,12 @@
 	<TextView  
 	    android:id="@+id/txtTitleSarjam"
         android:gravity="center"
-        android:textSize="@dimen/FontSize14"
+        android:textSize="@dimen/_14ssp"
        	android:layout_width="0dp"
-       	android:layout_height="30dp"
+       	android:layout_height="wrap_content"
        	android:layout_weight="5"
        	android:text="سرجمع"
-		android:background="@drawable/table_content_cell_bg"
+		android:background="@drawable/table_content_black_cell_bg"
 		android:textColor="@color/colorBlack">
     </TextView >
 	<View

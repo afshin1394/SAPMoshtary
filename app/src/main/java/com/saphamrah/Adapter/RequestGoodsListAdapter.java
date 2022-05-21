@@ -39,6 +39,7 @@ public class RequestGoodsListAdapter extends RecyclerSwipeAdapter<RequestGoodsLi
     private static int lastSelectedItem; // todo Add Static
     private SelectFaktorShared shared = new SelectFaktorShared(BaseApplication.getContext());
     private  int ccNoeMoshtary = 0;
+    private  int checkMojody = 0;
     private  int zangireiParam;
 
     public RequestGoodsListAdapter(Context context , ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels , boolean showSwipe,int zangireiParam, OnItemClickListener listener)
@@ -57,6 +58,7 @@ public class RequestGoodsListAdapter extends RecyclerSwipeAdapter<RequestGoodsLi
     {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.request_goods_list_customlist, parent, false);
         ccNoeMoshtary = shared.getInt(shared.getCcGorohNoeMoshtary(), -1);
+        checkMojody = shared.getInt(shared.getCheckMojody(), 0);
         return new MyViewHolder(itemView);
     }
 
@@ -121,6 +123,15 @@ public class RequestGoodsListAdapter extends RecyclerSwipeAdapter<RequestGoodsLi
         {
             holder.layRoot.setBackgroundColor(Color.WHITE);
         }
+
+
+//        if (checkMojody == 1){
+//            holder.layTedad.setVisibility(View.VISIBLE);
+//
+//        } else {
+//            holder.layTedad.setVisibility(View.GONE);
+//
+//        }
         holder.bind(kalaMojodiZaribModels.get(position), position, listener);
     }
 
@@ -145,6 +156,7 @@ public class RequestGoodsListAdapter extends RecyclerSwipeAdapter<RequestGoodsLi
         private TextView lblAdadCount;
         private ImageView imgStatusKala;
         private LinearLayout laySelected;
+        private LinearLayout layTedad;
 
         private MyViewHolder(View view)
         {
@@ -161,6 +173,7 @@ public class RequestGoodsListAdapter extends RecyclerSwipeAdapter<RequestGoodsLi
             lblAdadCount = view.findViewById(R.id.lblAdad);
             imgStatusKala = view.findViewById(R.id.imgKalaAsasi);
             laySelected = view.findViewById(R.id.laySelected);
+            layTedad = view.findViewById(R.id.layTedad);
 
             lblCodeNameKala.setTypeface(font);
             lblShomareBach.setTypeface(font);

@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -481,8 +482,8 @@ public class PrintNoe2Activity extends AppCompatActivity
             sumMablaghDarkhast = new DarkhastFaktorSatrDAO(PrintNoe2Activity.this).getSumMablaghFaktorByccDarkhast(ccDarkhastFaktor);
             Log.d("print" , "sumMablaghDarkhast : " + sumMablaghDarkhast);
 
-            if (noeFaktorPrint == 1)
-            {
+//            if (noeFaktorPrint == 1)
+//            {
                 txtTitleSarjam = findViewById(R.id.txtTitleSarjam);
                 txtSumKarton = findViewById(R.id.txtSumKarton);
                 txtSumBasteh = findViewById(R.id.txtSumBasteh);
@@ -490,7 +491,7 @@ public class PrintNoe2Activity extends AppCompatActivity
                 txtSumKarton.setText(nf.format(SumKarton));
                 txtSumBasteh.setText(nf.format(SumBasteh));
                 txtSumAdad.setText(nf.format(SumAdd));
-            }
+//            }
             txtMablaghNakhalesFaktor.setText(formatter.format(sumMablaghDarkhast));
 
             //PubFuncs.ListViewNoHeight(lstKalaInfo);
