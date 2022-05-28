@@ -311,6 +311,7 @@ public class MarjoeeKoliModel implements MarjoeekoliMVP.ModelOps
 
             dariaftPardakhtDarkhastFaktorPPCDAO.insert(dariaftPardakhtDarkhastFaktorPPC);
 
+            getMarjoee(ccDarkhastFaktor);
 
             //TODO ::
 //            SetMablaghMandehFaktor(context, ccDarkhastFaktor);

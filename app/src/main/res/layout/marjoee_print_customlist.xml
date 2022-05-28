@@ -12,10 +12,10 @@
         android:layout_weight="4"
         android:id="@+id/lblNameKala"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_14ssp"
+        android:textSize="@dimen/_17ssp"
         android:textStyle="bold"
         android:textDirection="rtl"
-        android:gravity="end"
+        android:gravity="start"
         android:background="@drawable/table_content_black_cell_bg" />
 
     <TextView
@@ -25,7 +25,7 @@
         android:textStyle="bold"
         android:id="@+id/lblShomarehBach"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_14ssp"
+        android:textSize="@dimen/_17ssp"
         android:gravity="center"
         android:background="@drawable/table_content_black_cell_bg" />
 
@@ -36,7 +36,7 @@
         android:textStyle="bold"
         android:id="@+id/lblTedad"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_14ssp"
+        android:textSize="@dimen/_17ssp"
         android:gravity="center"
         android:background="@drawable/table_content_black_cell_bg" />
 
@@ -47,7 +47,7 @@
         android:id="@+id/lblFee"
         android:textStyle="bold"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_14ssp"
+        android:textSize="@dimen/_17ssp"
         android:gravity="center"
         android:background="@drawable/table_content_black_cell_bg" />
 

@@ -61,11 +61,15 @@ public class KalaDarkhastFaktorSatrModel
     private float VaznKhales;
     private float VaznKarton;
     private String BarCode;
+    private String CodeKalaOld;
+    private String NameKalaMarjoeeKol;
+    private String NameElat;
+    private String TedadMarjoee;
 
     //UI
     private boolean kalaAsasi;
 
-
+    public static final String COLUMN_TedadMarjoee = "TedadMarjoee";
 
     public Long getCcDarkhastFaktor() {
         return ccDarkhastFaktor;
@@ -509,6 +513,37 @@ public class KalaDarkhastFaktorSatrModel
         GheymatMasrafKonandehAsli = gheymatMasrafKonandehAsli;
     }
 
+    public String getCodeKalaOld() {
+        return CodeKalaOld;
+    }
+
+    public void setCodeKalaOld(String codeKalaOld) {
+        CodeKalaOld = codeKalaOld;
+    }
+
+    public String getNameKalaMarjoeeKol() {
+        return NameKalaMarjoeeKol;
+    }
+
+    public void setNameKalaMarjoeeKol(String nameKalaMarjoeeKol) {
+        NameKalaMarjoeeKol = nameKalaMarjoeeKol;
+    }
+
+    public String getNameElat() {
+        return NameElat;
+    }
+
+    public void setNameElat(String nameElat) {
+        NameElat = nameElat;
+    }
+
+    public String getTedadMarjoee() {
+        return TedadMarjoee;
+    }
+
+    public void setTedadMarjoee(String tedadMarjoee) {
+        TedadMarjoee = tedadMarjoee;
+    }
 
     @Override
     public String toString() {
@@ -568,6 +603,8 @@ public class KalaDarkhastFaktorSatrModel
                 ", VaznKarton=" + VaznKarton +
                 ", BarCode='" + BarCode + '\'' +
                 ", kalaAsasi=" + kalaAsasi +
+                ", CodeKalaOld=" + CodeKalaOld +
+                ", NameKalaMarjoeeKol=" + NameKalaMarjoeeKol +
                 '}';
     }
 }

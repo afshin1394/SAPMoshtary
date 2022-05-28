@@ -46,6 +46,9 @@ public class DarkhastFaktorSatrModel
     private static final String COLUMN_Vazn = "Vazn";
     private static final String COLUMN_ExtraProp_Maliat = "ExtraProp_Maliat";
     private static final String COLUMN_ExtraProp_Avarez = "ExtraProp_Avarez";
+    private static final String COLUMN_CodeKalaOld = "CodeKalaOld";
+    private static final String COLUMN_NameKala = "NameKala";
+
 
 
 
@@ -131,6 +134,12 @@ public class DarkhastFaktorSatrModel
     }
     public static String COLUMN_ExtraProp_Avarez() {
         return COLUMN_ExtraProp_Avarez;
+    }
+    public static String COLUMN_NameKala() {
+        return COLUMN_NameKala;
+    }
+    public static String COLUMN_CodeKalaOld() {
+        return COLUMN_CodeKalaOld;
     }
 
 
@@ -262,6 +271,13 @@ public class DarkhastFaktorSatrModel
     @SerializedName("darkhastFaktorSatrTakhfifs")
     @Expose
     private String darkhastFaktorSatrTakhfifs;
+    @SerializedName("NameKala")
+    @Expose
+    private String NameKala;
+    @SerializedName("CodeKalaOld")
+    @Expose
+    private String CodeKalaOld;
+
 
 
 
@@ -540,6 +556,22 @@ public class DarkhastFaktorSatrModel
     }
     public void setExtraProp_Avarez(double extraProp_Avarez) {
         ExtraProp_Avarez = extraProp_Avarez;
+    }
+
+    public String getNameKala() {
+        return NameKala;
+    }
+
+    public void setNameKala(String nameKala) {
+        NameKala = nameKala;
+    }
+
+    public String getCodeKalaOld() {
+        return CodeKalaOld;
+    }
+
+    public void setCodeKalaOld(String codeKalaOld) {
+        CodeKalaOld = codeKalaOld;
     }
 
     public JSONObject toJsonObject(Context context)

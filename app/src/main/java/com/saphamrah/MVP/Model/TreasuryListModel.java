@@ -634,10 +634,10 @@ public class TreasuryListModel implements TreasuryListMVP.ModelOps
                     tarikhSanad = sdf.parse(dateUtils.persianWithSlashToGregorianSlash(dariaftPardakhtDarkhastFaktorPPCs.get(i).getTarikhSanadShamsi()));
                     Log.d("treasury","tarikhSanad:" + tarikhSanad.getTime() + ", dateTarikhSarResidForCheck:" + dateTarikhSarResidForCheck + ", tedadRoozForRotbeh:" + tedadRoozForRotbeh + ", tedadRoozMazad:" +tedadRoozMazad );
                     Log.d("treasury","addday:" +  dateUtils.addDay(dateTarikhSarResidForCheck, tedadRoozForRotbeh + tedadRoozMazad).getTime());
-                    if (tarikhSanad.getTime() > dateUtils.addDay(dateTarikhSarResidForCheck, tedadRoozForRotbeh + tedadRoozMazad).getTime()) {
-                        mPresenter.onErrorSendRasGiri(BaseApplication.getContext().getResources().getString(R.string.ErrorSendRasGiri) + " \n " + BaseApplication.getContext().getResources().getString(R.string.shomarehCheck) + " : " + dariaftPardakhtDarkhastFaktorPPCs.get(i).getShomarehSanad());
-                        return;
-                    }
+//                    if (tarikhSanad.getTime() > dateUtils.addDay(dateTarikhSarResidForCheck, tedadRoozForRotbeh + tedadRoozMazad).getTime()) {
+//                        mPresenter.onErrorSendRasGiri(BaseApplication.getContext().getResources().getString(R.string.ErrorSendRasGiri) + " \n " + BaseApplication.getContext().getResources().getString(R.string.shomarehCheck) + " : " + dariaftPardakhtDarkhastFaktorPPCs.get(i).getShomarehSanad());
+//                        return;
+//                    }
                 }
             } catch (ParseException e) {
                 mPresenter.onErrorSendRasGiri(BaseApplication.getContext().getResources().getString(R.string.ErrorSendRasGiri));

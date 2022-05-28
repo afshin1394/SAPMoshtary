@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.saphamrah.Model.DarkhastFaktorSatrModel;
 import com.saphamrah.Model.KalaModel;
+import com.saphamrah.Model.KardexSatrModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -176,11 +177,15 @@ public class KalaDarkhastFaktorSatrDAO
         ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels = new ArrayList<>();
         try
         {
-            String query = " SELECT fs.*, k.CodeKala, k.BarCode, k.Adad, k.TedadDarKarton, k.TedadDarBasteh, k.ccGorohKala, k.NameKala, k.Tol, k.Arz, k.Ertefa, \n" +
-                    " k.NameVahedShomaresh, k.NameBrand, k.NameVahedSize, k.NameVahedVazn, k.VaznKarton, k.VaznKhales \n" +
-                    " FROM DarkhastFaktorSatr fs \n" +
-                    " LEFT JOIN (SELECT Distinct ccKalaCode, CodeKala, BarCode, Adad, TedadDarKarton, TedadDarBasteh, ccGorohKala, NameKala, Tol, Arz, Ertefa, NameVahedShomaresh, NameBrand, NameVahedSize, NameVahedVazn, VaznKarton, VaznKhales  FROM Kala ) k on k.ccKalaCode = fs.ccKalaCode \n" +
-                    " WHERE  ccDarkhastFaktor = " + ccDarkhastFaktor;
+//            String query = " SELECT fs.*, k.CodeKala, k.BarCode, k.Adad, k.TedadDarKarton, k.TedadDarBasteh, k.ccGorohKala, k.NameKala, k.Tol, k.Arz, k.Ertefa, \n" +
+//                    " k.NameVahedShomaresh, k.NameBrand, k.NameVahedSize, k.NameVahedVazn, k.VaznKarton, k.VaznKhales \n" +
+//                    " FROM DarkhastFaktorSatr fs \n" +
+//                    " LEFT JOIN (SELECT Distinct ccKalaCode, CodeKala, BarCode, Adad, TedadDarKarton, TedadDarBasteh, ccGorohKala, NameKala, Tol, Arz, Ertefa, NameVahedShomaresh, NameBrand, NameVahedSize, NameVahedVazn, VaznKarton, VaznKhales  FROM Kala ) k on k.ccKalaCode = fs.ccKalaCode \n" +
+//                    " WHERE  ccDarkhastFaktor = " + ccDarkhastFaktor;
+
+            String query = "select ds.*, df.ccMoshtary, IFNULL(ks.NameElat,'') AS NameElat, IFNULL(ks.Tedad3,0) AS TedadMarjoee  from DarkhastFaktorSatr ds\n" +
+                    "LEFT JOIN DarkhastFaktor df ON df.ccDarkhastFaktor = ds.ccDarkhastFaktor\n" +
+                    "LEFT JOIN KardexSatr ks ON ks.ccMoshtary = df.ccMoshtary AND ds.ccKalaCode = ks.ccKalaCode AND ds.ShomarehBach = ks.ShomarehBach AND ds.MablaghForosh = ks.GheymatForosh AND ds.ccTaminKonandeh = ks.ccTaminKonandeh WHERE ds.ccDarkhastFaktor =  " + ccDarkhastFaktor;
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Log.d("KalaDarkhastFakto", "getByccDarkhastMarjoeeKoli query :" +query );
             Cursor cursor = db.rawQuery(query , null);
@@ -188,7 +193,7 @@ public class KalaDarkhastFaktorSatrDAO
             {
                 if (cursor.getCount() > 0)
                 {
-                    kalaDarkhastFaktorSatrModels = cursorToModel(cursor);
+                    kalaDarkhastFaktorSatrModels = cursorToModelMarjoeeKol(cursor);
                 }
                 cursor.close();
             }
@@ -298,6 +303,9 @@ public class KalaDarkhastFaktorSatrDAO
             kalaDarkhastFaktorSatrModel.setGheymatMasrafKonandehAsli(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli())));
             kalaDarkhastFaktorSatrModel.setGheymatForoshAsli(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli())));
             kalaDarkhastFaktorSatrModel.setExtraProp_IsOld(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ExtraProp_IsOld())) > 0);
+            kalaDarkhastFaktorSatrModel.setNameKala(cursor.getString(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_NameKala())));
+            kalaDarkhastFaktorSatrModel.setCodeKalaOld(cursor.getString(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_CodeKalaOld())));
+            kalaDarkhastFaktorSatrModel.setNameKalaMarjoeeKol(cursor.getString(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_NameKala())));
 
             // Kala
             kalaDarkhastFaktorSatrModel.setCodeKala(cursor.getString(cursor.getColumnIndex(KalaModel.COLUMN_CodeKala())));
@@ -317,6 +325,48 @@ public class KalaDarkhastFaktorSatrDAO
             kalaDarkhastFaktorSatrModel.setVaznKhales(cursor.getFloat(cursor.getColumnIndex(KalaModel.COLUMN_VaznKhales())));
 
 
+            kalaDarkhastFaktorSatrModels.add(kalaDarkhastFaktorSatrModel);
+            cursor.moveToNext();
+        }
+        return kalaDarkhastFaktorSatrModels;
+    }
+
+    private ArrayList<KalaDarkhastFaktorSatrModel> cursorToModelMarjoeeKol(Cursor cursor)
+    {
+        ArrayList<KalaDarkhastFaktorSatrModel> kalaDarkhastFaktorSatrModels = new ArrayList<>();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast())
+        {
+            KalaDarkhastFaktorSatrModel kalaDarkhastFaktorSatrModel = new KalaDarkhastFaktorSatrModel();
+
+            kalaDarkhastFaktorSatrModel.setCcDarkhastFaktorSatr(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktorSatr())));
+            kalaDarkhastFaktorSatrModel.setCcDarkhastFaktor(cursor.getLong(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ccDarkhastFaktor())));
+            kalaDarkhastFaktorSatrModel.setCcTaminKonandeh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ccTaminKonandeh())));
+            kalaDarkhastFaktorSatrModel.setCcKala(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ccKala())));
+            kalaDarkhastFaktorSatrModel.setCcKalaCode(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ccKalaCode())));
+            kalaDarkhastFaktorSatrModel.setTedad3(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_Tedad3())));
+            kalaDarkhastFaktorSatrModel.setCodeNoeKala(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_CodeNoeKala())));
+            kalaDarkhastFaktorSatrModel.setShomarehBach(cursor.getString(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ShomarehBach())));
+            kalaDarkhastFaktorSatrModel.setTarikhTolid(cursor.getString(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_TarikhTolid())));
+            kalaDarkhastFaktorSatrModel.setMablaghForosh(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_MablaghForosh())));
+            kalaDarkhastFaktorSatrModel.setMablaghForoshKhalesKala(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_MablaghForoshKhalesKala())));
+            kalaDarkhastFaktorSatrModel.setMablaghTakhfifNaghdiVahed(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_MablaghTakhfifNaghdiVahed())));
+            kalaDarkhastFaktorSatrModel.setMaliat(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_Maliat())));
+            kalaDarkhastFaktorSatrModel.setAvarez(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_Avarez())));
+            kalaDarkhastFaktorSatrModel.setCcAfrad(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ccAfrad())));
+            kalaDarkhastFaktorSatrModel.setExtraProp_IsOld(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ExtraProp_IsOld())) > 0);
+            kalaDarkhastFaktorSatrModel.setTarikhEngheza(cursor.getString(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_TarikhEngheza())));
+            kalaDarkhastFaktorSatrModel.setCcAnbarMarjoee(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ccAnbarMarjoee())));
+            kalaDarkhastFaktorSatrModel.setCcAnbarGhesmat(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ccAnbarGhesmat())));
+            kalaDarkhastFaktorSatrModel.setMablaghKharid(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatKharid())));
+            kalaDarkhastFaktorSatrModel.setGheymatMasrafKonandeh(cursor.getInt(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandeh())));
+            kalaDarkhastFaktorSatrModel.setGheymatForoshAsli(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatForoshAsli())));
+            kalaDarkhastFaktorSatrModel.setGheymatMasrafKonandehAsli(cursor.getFloat(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli())));
+            kalaDarkhastFaktorSatrModel.setNameKalaMarjoeeKol(cursor.getString(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_NameKala())));
+            kalaDarkhastFaktorSatrModel.setCodeKalaOld(cursor.getString(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_CodeKalaOld())));
+            kalaDarkhastFaktorSatrModel.setTedadMarjoee(cursor.getString(cursor.getColumnIndex(KalaDarkhastFaktorSatrModel.COLUMN_TedadMarjoee)));
+            kalaDarkhastFaktorSatrModel.setNameElat(cursor.getString(cursor.getColumnIndex(KardexSatrModel.COLUMN_NameElat())));
             kalaDarkhastFaktorSatrModels.add(kalaDarkhastFaktorSatrModel);
             cursor.moveToNext();
         }

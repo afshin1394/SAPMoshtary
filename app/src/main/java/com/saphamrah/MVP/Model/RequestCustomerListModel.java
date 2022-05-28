@@ -2000,26 +2000,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 float accuracy = 0.0F;
                 float bearing = 0.0F;
                 float speed = 0.0F;
-                try
-                {
-                    latitude = (float) location.getLatitude();
-                    longitude = (float) location.getLongitude();
-                    altitude = (float) location.getAltitude();
-                    accuracy = location.getAccuracy();
-                    bearing = location.getBearing();
-                    speed = location.getSpeed();
-                }
-                catch (Exception exception)
-                {
-                    exception.printStackTrace();
-                    return false;
-                }
-                shared.putString(shared.getLatitude(), String.valueOf(latitude));
-                shared.putString(shared.getLongitude(), String.valueOf(longitude));
-                shared.putString(shared.getAltitude(), String.valueOf(altitude));
-                shared.putFloat(shared.getAccurancy(), accuracy);
-                shared.putFloat(shared.getBearing(), bearing);
-                shared.putFloat(shared.getSpeed(), speed);
+
 
 
                 shared.putInt(shared.getCcMarkazSazmanForosh() , foroshandehMamorPakhshModel.getCcMarkazSazmanForosh());
@@ -2324,6 +2305,27 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 shared.putInt(shared.getCcSazmanForosh(),foroshandehMamorPakhshModel.getCcSazmanForosh());
                 shared.putInt(shared.getCheckMojody(),foroshandehMamorPakhshModel.getCheckMojody());
 
+
+                try
+                {
+                    latitude = (float) location.getLatitude();
+                    longitude = (float) location.getLongitude();
+                    altitude = (float) location.getAltitude();
+                    accuracy = location.getAccuracy();
+                    bearing = location.getBearing();
+                    speed = location.getSpeed();
+                }
+                catch (Exception exception)
+                {
+                    exception.printStackTrace();
+                    return false;
+                }
+                shared.putString(shared.getLatitude(), String.valueOf(latitude));
+                shared.putString(shared.getLongitude(), String.valueOf(longitude));
+                shared.putString(shared.getAltitude(), String.valueOf(altitude));
+                shared.putFloat(shared.getAccurancy(), accuracy);
+                shared.putFloat(shared.getBearing(), bearing);
+                shared.putFloat(shared.getSpeed(), speed);
                 //-----------------
                 return true;
             }

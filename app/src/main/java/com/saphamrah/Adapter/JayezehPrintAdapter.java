@@ -41,15 +41,22 @@ public class JayezehPrintAdapter extends RecyclerView.Adapter<JayezehPrintAdapte
     @Override
     public void onBindViewHolder(@NonNull JayezehPrintAdapter.ViewHolder holder, int position)
     {
-        holder.lblSharh.setText(models.get(position).getSharh());
-        holder.lblTedad.setText(String.valueOf(models.get(position).getTedad()));
+
+
+//        holder.lblSharh.setText(models.get(position).getSharh());
+//        holder.lblTedad.setText(String.valueOf(models.get(position).getTedad()));
         if (noePrintFaktor == -1)
         {
-            holder.lblSoodeJayezeh.setVisibility(View.GONE);
+               String sood= String.valueOf(models.get(position).getTedad() * models.get(position).getMablaghMasrafKonandeh());
+
+               holder.lblSharh.setText(String.format("%1$s - %2$s - %3$s" , models.get(position).getSharh() , models.get(position).getTedad(),sood ));
+
+//            holder.lblSoodeJayezeh.setVisibility(View.GONE);
         }
         else
         {
-            holder.lblSoodeJayezeh.setText(String.valueOf(models.get(position).getTedad() * models.get(position).getMablaghMasrafKonandeh()));
+            holder.lblSharh.setText(String.format("%1$s - %2$s " , models.get(position).getSharh() , models.get(position).getTedad()) );
+
         }
     }
 
@@ -70,13 +77,14 @@ public class JayezehPrintAdapter extends RecyclerView.Adapter<JayezehPrintAdapte
             super(itemView);
             Typeface font = Typeface.createFromAsset(context.getAssets() , context.getResources().getString(R.string.fontPath));
 
+
+//            lblTedad = itemView.findViewById(R.id.lblTedad);
+//            lblSoodeJayezeh = itemView.findViewById(R.id.lblSoodeJayezeh);
             lblSharh = itemView.findViewById(R.id.lblSharh);
-            lblTedad = itemView.findViewById(R.id.lblTedad);
-            lblSoodeJayezeh = itemView.findViewById(R.id.lblSoodeJayezeh);
 
             lblSharh.setTypeface(font);
-            lblTedad.setTypeface(font);
-            lblSoodeJayezeh.setTypeface(font);
+//            lblTedad.setTypeface(font);
+//            lblSoodeJayezeh.setTypeface(font);
 
 //            if (noePrintFaktor == 2)
 //            {

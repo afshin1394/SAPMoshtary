@@ -571,7 +571,6 @@
                     <View
                         android:layout_width="wrap_content"
                         android:layout_height="1dp"
-                        android:layout_marginBottom="10dp"
                         android:background="@color/colorBlack" />
                 </LinearLayout>
             </LinearLayout>
@@ -857,27 +856,29 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_150sdp"
                 android:gravity="center"
+                android:weightSum="2"
                 android:orientation="vertical"
-                android:layout_margin="1dp">
+                >
                 <TextView
                     android:id="@+id/txtEmza"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="right"
-                    android:textSize="@dimen/_18ssp"
-                    android:layout_margin="5dp"
+                    android:textSize="@dimen/_14ssp"
                     android:textColor="@color/colorBlack"/>
 
                 <ImageView
                     android:id="@+id/imgEmza"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:contentDescription="امضا مشتری"
-                    android:drawingCacheQuality="low" />
+                     />
             </LinearLayout>
             <View
                 android:layout_width="wrap_content"
@@ -887,7 +888,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal" >
 

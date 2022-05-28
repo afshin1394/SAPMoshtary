@@ -13,7 +13,6 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-
         android:id="@+id/lblSharh"
         android:textColor="@color/colorBlack"
         android:textSize="@dimen/_14ssp"
@@ -22,25 +21,27 @@
         android:background="@drawable/table_content_black_cell_bg"/>
 
     <TextView
+        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
 
         android:id="@+id/lblTedad"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_14ssp"
+        android:textSize="@dimen/_18ssp"
         android:gravity="center"
         android:textStyle="bold"
         android:background="@drawable/table_content_black_cell_bg"/>
 
     <TextView
+        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:textStyle="bold"
         android:id="@+id/lblSoodeJayezeh"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_14ssp"
+        android:textSize="@dimen/_18ssp"
         android:gravity="center"
         android:background="@drawable/table_content_black_cell_bg"/>
 

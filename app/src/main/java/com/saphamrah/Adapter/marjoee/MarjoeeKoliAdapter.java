@@ -53,13 +53,13 @@ public class MarjoeeKoliAdapter extends RecyclerSwipeAdapter<MarjoeeKoliAdapter.
         setAnimation(holder.itemView, position);
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         String mablaghForosh = formatter.format((int)kalaDarkhastFaktorSatrModels.get(position).getMablaghForosh());
-        holder.lblCodeNameKala.setText(String.format("%1$s - %2$s", kalaDarkhastFaktorSatrModels.get(position).getCodeKala(), kalaDarkhastFaktorSatrModels.get(position).getNameKala()));
+        holder.lblCodeNameKala.setText(String.format("%1$s - %2$s", kalaDarkhastFaktorSatrModels.get(position).getCodeKalaOld(), kalaDarkhastFaktorSatrModels.get(position).getNameKalaMarjoeeKol()));
         holder.lblMablaghForosh.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.mablaghForoshUnitRial), mablaghForosh));
         holder.lblShomareBach.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.shomareBach), kalaDarkhastFaktorSatrModels.get(position).getShomarehBach()));
-        int[] counts = new PubFunc().new ConvertUnit().tedadToCartonBasteAdad(kalaDarkhastFaktorSatrModels.get(position).getTedad3(), kalaDarkhastFaktorSatrModels.get(position).getTedadDarKarton(), kalaDarkhastFaktorSatrModels.get(position).getTedadDarBasteh(), kalaDarkhastFaktorSatrModels.get(position).getAdad());
-        holder.lblCartonCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.carton), String.valueOf(counts[0])));
-        holder.lblBasteCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.basteh), String.valueOf(counts[1])));
-        holder.lblAdadCount.setText(String.format("%1$s: %2$s", context.getResources().getString(R.string.adad), String.valueOf(counts[2])));
+        holder.lblTedadAghlamMarjoee.setText(String.format("%1$s" , kalaDarkhastFaktorSatrModels.get(position).getTedadMarjoee()));
+        holder.lblTedadAghlam.setText(String.format("%1$s" , kalaDarkhastFaktorSatrModels.get(position).getTedad3()));
+        holder.lblNameElat.setText(String.format("%1$s" , kalaDarkhastFaktorSatrModels.get(position).getNameElat()));
+
 
         //set kala status asasi
         if (kalaDarkhastFaktorSatrModels.get(position).getKalaAsasi())
@@ -103,9 +103,9 @@ public class MarjoeeKoliAdapter extends RecyclerSwipeAdapter<MarjoeeKoliAdapter.
         private TextView lblCodeNameKala;
         private TextView lblShomareBach;
         private TextView lblMablaghForosh;
-        private TextView lblCartonCount;
-        private TextView lblBasteCount;
-        private TextView lblAdadCount;
+        private TextView lblNameElat;
+        private TextView lblTedadAghlam;
+        private TextView lblTedadAghlamMarjoee;
         private ImageView imgStatusKala;
         private ImageView imgDelete;
         private LinearLayout layDelete;
@@ -120,9 +120,9 @@ public class MarjoeeKoliAdapter extends RecyclerSwipeAdapter<MarjoeeKoliAdapter.
             lblCodeNameKala = view.findViewById(R.id.lblCodeNameKala);
             lblShomareBach = view.findViewById(R.id.lblShomareBach);
             lblMablaghForosh = view.findViewById(R.id.lblMablaghForosh);
-            lblCartonCount = view.findViewById(R.id.lblCarton);
-            lblBasteCount = view.findViewById(R.id.lblBasteh);
-            lblAdadCount = view.findViewById(R.id.lblAdad);
+            lblNameElat = view.findViewById(R.id.lblNameElat);
+            lblTedadAghlam = view.findViewById(R.id.lblTedadAghlam);
+            lblTedadAghlamMarjoee = view.findViewById(R.id.lblTedadAghlamMarjoee);
             imgStatusKala = view.findViewById(R.id.imgKalaAsasi);
             imgDelete = view.findViewById(R.id.imgDelete);
             layDelete = view.findViewById(R.id.layDelete);
@@ -131,9 +131,9 @@ public class MarjoeeKoliAdapter extends RecyclerSwipeAdapter<MarjoeeKoliAdapter.
             lblCodeNameKala.setTypeface(font);
             lblShomareBach.setTypeface(font);
             lblMablaghForosh.setTypeface(font);
-            lblCartonCount.setTypeface(font);
-            lblBasteCount.setTypeface(font);
-            lblAdadCount.setTypeface(font);
+            lblNameElat.setTypeface(font);
+            lblTedadAghlam.setTypeface(font);
+            lblTedadAghlamMarjoee.setTypeface(font);
         }
 
         public void bind(final KalaDarkhastFaktorSatrModel kalaDarkhastFaktorSatrModels , final int position , final OnItemClickListener listener)

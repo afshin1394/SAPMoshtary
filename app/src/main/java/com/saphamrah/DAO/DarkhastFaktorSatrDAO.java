@@ -97,7 +97,9 @@ public class DarkhastFaktorSatrDAO
                         DarkhastFaktorSatrModel.COLUMN_GheymatMasrafKonandehAsli(),
                         DarkhastFaktorSatrModel.COLUMN_GheymatKharid(),
                         DarkhastFaktorSatrModel.COLUMN_ExtraProp_Maliat(),
-                        DarkhastFaktorSatrModel.COLUMN_ExtraProp_Avarez()
+                        DarkhastFaktorSatrModel.COLUMN_ExtraProp_Avarez(),
+                        DarkhastFaktorSatrModel.COLUMN_NameKala(),
+                        DarkhastFaktorSatrModel.COLUMN_CodeKalaOld()
 
                 };
     }
@@ -2733,6 +2735,8 @@ public class DarkhastFaktorSatrDAO
         contentValues.put(DarkhastFaktorSatrModel.COLUMN_GheymatKharid(), darkhastFaktorSatrModel.getGheymatKharid());
         contentValues.put(DarkhastFaktorSatrModel.COLUMN_ExtraProp_Maliat(), darkhastFaktorSatrModel.getExtraProp_Maliat());
         contentValues.put(DarkhastFaktorSatrModel.COLUMN_ExtraProp_Avarez(), darkhastFaktorSatrModel.getExtraProp_Avarez());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_NameKala(), darkhastFaktorSatrModel.getNameKala());
+        contentValues.put(DarkhastFaktorSatrModel.COLUMN_CodeKalaOld(), darkhastFaktorSatrModel.getCodeKalaOld());
         return contentValues;
     }
 
@@ -2771,6 +2775,8 @@ public class DarkhastFaktorSatrDAO
             darkhastFaktorSatrModel.setGheymatKharid(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_GheymatKharid())));
             darkhastFaktorSatrModel.setExtraProp_Maliat(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ExtraProp_Maliat())));
             darkhastFaktorSatrModel.setExtraProp_Avarez(cursor.getDouble(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_ExtraProp_Avarez())));
+            darkhastFaktorSatrModel.setNameKala(cursor.getString(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_NameKala())));
+            darkhastFaktorSatrModel.setCodeKalaOld(cursor.getString(cursor.getColumnIndex(DarkhastFaktorSatrModel.COLUMN_CodeKalaOld())));
             darkhastFaktorSatrModels.add(darkhastFaktorSatrModel);
             cursor.moveToNext();
         }
