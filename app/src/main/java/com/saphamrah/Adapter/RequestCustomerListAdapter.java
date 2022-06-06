@@ -332,6 +332,9 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
 
         public View_Holder_Zangirei(@NonNull View itemView) {
             super(itemView);
+            laySecondCustomer = itemView.findViewById(R.id.lay_second_customer_zangirei_customlist);
+            lay_expand_btn = itemView.findViewById(R.id.lay_expand_btn);
+
             swipeLayout = itemView.findViewById(R.id.swipe);
             layStatusRight = itemView.findViewById(R.id.layStatusRight);
             layStatusLeft = itemView.findViewById(R.id.layStatusLeft);
@@ -351,7 +354,7 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
             txtShomarehGharardad =itemView.findViewById(R.id.txtShomareGharardad);
             txtNameSazmanForosh=itemView.findViewById(R.id.txtNameSazmanForosh);
             lblNameTablo=itemView.findViewById(R.id.lblNameTablo);
-            txtNameSazmanForosh=itemView.findViewById(R.id.lblTelephone);
+            lblPhoneNumber=itemView.findViewById(R.id.lblTelephone);
 
 
         }

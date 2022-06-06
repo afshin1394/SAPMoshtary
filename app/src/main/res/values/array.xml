@@ -406,6 +406,7 @@
         <item>{\"title\":\"Bixolon\" , \"value\":\"0\"}</item>
         <item>{\"title\":\"Woosim\" , \"value\":\"1\"}</item>
         <item>{\"title\":\"Urovo\" , \"value\":\"2\"}</item>
+        <item>{\"title\":\"Pax\" , \"value\":\"3\"}</item>
     </string-array>
 
     <string-array name="printTypeItems">

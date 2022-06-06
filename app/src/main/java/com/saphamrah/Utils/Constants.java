@@ -1454,11 +1454,18 @@ public class Constants
     public static final int RETURN_SEPARATION_STATUS = 100;
     public static final int BIXOLON = 0;
     public static final int UROVO = 2;
+    public static final int PAX_GL = 3;
 
 
 
     public static final int BA_MABNA = 1;
     public static final int BI_MABNA = 0;
+
+  public enum EnPrinterStatus {
+      Ready,
+      Error,
+      PaperError, NotFound, Busy;
+  }
 
 
 }

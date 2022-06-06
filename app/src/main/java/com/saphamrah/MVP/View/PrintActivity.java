@@ -78,6 +78,7 @@ import com.saphamrah.UIModel.KalaElamMarjoeeModel;
 import com.saphamrah.Utils.BixolonPrinter;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
+import com.saphamrah.Utils.PaxGlPrinter;
 import com.saphamrah.Utils.Printer;
 import com.saphamrah.Utils.UrovoPrinter;
 
@@ -752,6 +753,11 @@ public class PrintActivity extends AppCompatActivity
                 printer = new UrovoPrinter(PrintActivity.this , ccDarkhastFaktor);
                 String printerStatus = printer.getPrinterStateMessage();
                 customAlertDialog.showToast(PrintActivity.this, printerStatus, Constants.INFO_MESSAGE(), Constants.DURATION_LONG());
+            }
+            else if (systemConfigTabletModels.get(0).getNamePrinter() == 3)
+            {
+                printer = new PaxGlPrinter(PrintActivity.this , ccDarkhastFaktor);
+
             }
         }
     }

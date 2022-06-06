@@ -517,14 +517,16 @@ private void deleteAllTempRequest(long ccDarkhastFaktor, int ccMoshtary){
 
                     @Override
                     public void onSuccess(int flag) {
-                        if (flag == 1)
-                        {
-                            mPresenter.onCheckPrint(customerDarkhastFaktorModel);
-                        }
-                        else
-                        {
-                            mPresenter.onError(R.string.errorNotSendedToSQL);
-                        }
+                        mPresenter.onCheckPrint(customerDarkhastFaktorModel);
+
+//                        if (flag == 1)
+//                        {
+//                            mPresenter.onCheckPrint(customerDarkhastFaktorModel);
+//                        }
+//                        else
+//                        {
+//                            mPresenter.onError(R.string.errorNotSendedToSQL);
+//                        }
                     }
                 });
                 break;

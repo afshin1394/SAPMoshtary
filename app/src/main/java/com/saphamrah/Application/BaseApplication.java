@@ -42,7 +42,7 @@ public class BaseApplication extends ExceptionHandlerApplication {
         initBaseExceptionAlerts();
 
        SystemConfigTabletDAO systemconfig_tabletDAO = new SystemConfigTabletDAO(getContext());
-       systemconfig_tabletDAO.updatePrinterType(PrinterUtils.checkUrovo((Activity) getCurrentActivity()));
+       systemconfig_tabletDAO.updatePrinterType(PrinterUtils.checkPrinters((Activity) getCurrentActivity()));
        int noeFaktorPrint = systemconfig_tabletDAO.getAll().get(0).getNoeFaktorPrint();
        Log.i(TAG, "onCreate: printerType "+noeFaktorPrint);
     }

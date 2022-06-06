@@ -186,10 +186,10 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
 
 
         try {
-            canEditDarkhastForMovaze =Integer.parseInt(new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Can_Edit_Darkhast_For_Movaze())) == 0;
+            canEditDarkhastForMovaze = Integer.parseInt(new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_Can_Edit_Darkhast_For_Movaze())) == 0;
         }catch (Exception exception){
             exception.printStackTrace();
-            sendThreadMessage(Constants.BULK_INSERT_FAILED(), -100);
+            sendThreadMessage(Constants.BULK_INSERT_FAILED(), 2000);
             mPresenter.onError(false,R.string.errorReopenProgram);
 
         }

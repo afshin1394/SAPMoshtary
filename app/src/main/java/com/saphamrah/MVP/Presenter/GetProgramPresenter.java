@@ -317,13 +317,14 @@ public class GetProgramPresenter implements GetProgramMVP.PresenterOps , GetProg
             @Override
             public void uiThreadIsReady() {
 
-                mView.get().updateStatusOfFailedItem(Constants.GET_PROGRAM_FULL() , itemIndex , error);
                 Logger logger  = new Logger();
-                if (itemIndex == -100){
+                if (itemIndex == 2000){
+                 mView.get().updateStatusOfFailedItem(Constants.GET_PROGRAM_FULL() , 0 , error);
                  ParameterChildDAO parameterChildDAO = new ParameterChildDAO(getAppContext());
                  String parameter = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_Can_Edit_Darkhast_For_Movaze());
                  logger.insertLogToDB(getAppContext(),Constants.LOG_EXCEPTION(),parameter,"GetProgramPresenter","GetProgramActivity","onFailedGetProgram","");
                 }else {
+                    mView.get().updateStatusOfFailedItem(Constants.GET_PROGRAM_FULL() , itemIndex , error);
                     logger.insertLogToDB(getAppContext(), Constants.LOG_EXCEPTION(), error, "GetProgramPresenter", "GetProgramActivity", "onFailedGetProgram", "");
                 }
             }

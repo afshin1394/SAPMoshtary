@@ -70,8 +70,8 @@ public class TemporaryRequestsAdapter extends RecyclerSwipeAdapter<TemporaryRequ
         holder.layDelete.setVisibility(View.VISIBLE);
 
 
-        holder.imgPrint.setVisibility(View.GONE);
-        holder.layPrint.setVisibility(View.GONE);
+//        holder.imgPrint.setVisibility(View.GONE);
+//        holder.layPrint.setVisibility(View.GONE);
 
         if(noeForoshandeh == 4 || noeForoshandeh == 5)
         {
@@ -111,8 +111,8 @@ public class TemporaryRequestsAdapter extends RecyclerSwipeAdapter<TemporaryRequ
                 holder.imgDelete.setVisibility(View.GONE);
                 holder.layDelete.setVisibility(View.GONE);
 
-                holder.imgPrint.setVisibility(View.VISIBLE);
-                holder.layPrint.setVisibility(View.VISIBLE);
+//                holder.imgPrint.setVisibility(View.VISIBLE);
+//                holder.layPrint.setVisibility(View.VISIBLE);
 
                 holder.imgSend.setVisibility(View.GONE);
                 holder.laySend.setVisibility(View.GONE);

@@ -1,6 +1,7 @@
 package com.saphamrah.PubFunc;
 
 import static com.saphamrah.Utils.Constants.BIXOLON;
+import static com.saphamrah.Utils.Constants.PAX_GL;
 import static com.saphamrah.Utils.Constants.UROVO;
 
 import android.app.Activity;
@@ -14,6 +15,7 @@ import com.saphamrah.MVP.View.PrintAndShareActivity;
 import com.saphamrah.Model.SystemConfigTabletModel;
 import com.saphamrah.Utils.BixolonPrinter;
 import com.saphamrah.Utils.Constants;
+import com.saphamrah.Utils.PaxGlPrinter;
 import com.saphamrah.Utils.Printer;
 import com.saphamrah.Utils.UrovoPrinter;
 
@@ -22,12 +24,15 @@ import java.util.ArrayList;
 public class PrinterUtils {
 
 
-    public static int checkUrovo(Activity activity){
+    public static int checkPrinters(Activity activity){
         UrovoPrinter urovoPrinter = new UrovoPrinter(activity,0);
+        PaxGlPrinter paxGlPrinter = new PaxGlPrinter(activity,0);
 
 
         if (urovoPrinter.checkIsAvailable()){
             return UROVO;
+        }else if (paxGlPrinter.checkIsAvailable()){
+            return PAX_GL;
         }else{
             return BIXOLON;
         }
