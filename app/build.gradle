@@ -149,6 +149,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation project(path: ':folding-cell')
+    implementation files('libs\\apache-httpcomponents-httpclient.jar')
+    implementation files('libs\\GLPage_V1.03.00_20181030.jar')
+    implementation files('libs\\httpcore-4.0-alpha5.jar')
+    implementation files('libs\\NeptuneLiteApi_V2.03.00_20180208.jar')
 
     // test
     testImplementation 'org.mockito:mockito-core:3.3.3'

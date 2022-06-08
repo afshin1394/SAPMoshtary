@@ -389,7 +389,7 @@ public class RequestCustomerListAdapter extends RecyclerSwipeAdapter<RecyclerVie
             lblPhoneNumber.setText(moshtaryAddressModels.get(position).getTelephone());
 
             //TODO
-            layChangeLocation.setVisibility(moshtaryAddressModel.isExtraProp_HasLocation()==1?View.VISIBLE:View.GONE);
+            layChangeLocation.setVisibility(moshtaryAddressModel.isExtraProp_HasLocation()==0?View.VISIBLE:View.GONE);
 
 
 
