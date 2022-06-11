@@ -401,7 +401,7 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
                     "			0 AS Tabdil_NaghdBeFish, 0 AS ccTafkikJoze, 0 AS NaghlAzGhabl,0 AS IsForTasviehTakhir, ZamaneTakhsiseFaktorShamsi," +
                     "			0 AS ExtraProp_IsDirkard, 0 AS ExtraProp_ccKardexSatr," +
                     "			0 ExtraProp_IsBestankari_ForTasviehTakhir, ExtraProp_IsSend, 0 AS ExtraProp_CanDelete, 0 AS ExtraProp_IsTajil, 0 as ExtraProp_ccDarkhastFaktorServer, 0 as ccMarkazForosh, 0 as ccMarkazSazmanForoshSakhtarForosh , 0 as  ExtraProp_ccDaryaftPardakhtCheckBargashty , 0 IsTaeedShodeh, " +
-                    "           ExtraProp_ccMoshtary"    +
+                    "           0 ExtraProp_ccMoshtary "    +
                     " 	FROM DariaftPardakhtDarkhastFaktorPPC " +
                     " 	WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeVosol = " + Constants.VALUE_MARJOEE() + " AND "+DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_Mablagh() + " <> 0  AND "+ DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_MablaghDariaftPardakht() + " <> 0 "+
                     " 	GROUP BY CodeNoeVosol, NameNoeVosol, TarikhSanadShamsi, ccDarkhastFaktor" + " ) A" +
@@ -473,6 +473,7 @@ public class DariaftPardakhtDarkhastFaktorPPCDAO
                     "			0 AS Tabdil_NaghdBeFish, 0 AS ccTafkikJoze, 0 AS NaghlAzGhabl,0 AS IsForTasviehTakhir, ZamaneTakhsiseFaktorShamsi," +
                     "			0 AS ExtraProp_IsDirkard, 0 AS ExtraProp_ccKardexSatr," +
                     "			0 ExtraProp_IsBestankari_ForTasviehTakhir, ExtraProp_IsSend, 0 AS ExtraProp_CanDelete, 0 AS ExtraProp_IsTajil, 0 as ExtraProp_ccDarkhastFaktorServer, 0 as ccMarkazForosh, 0 as ccMarkazSazmanForoshSakhtarForosh , 0 as  ExtraProp_ccDaryaftPardakhtCheckBargashty , 0 IsTaeedShodeh " +
+                    "           0 ExtraProp_ccMoshtary " +
                     " 	FROM DariaftPardakhtDarkhastFaktorPPC " +
                     " 	WHERE ccDarkhastFaktor = " + ccDarkhastFaktor + " AND CodeNoeVosol = " + Constants.VALUE_MARJOEE() + " AND "+DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_Mablagh() + " <> 0  AND "+ DariaftPardakhtDarkhastFaktorPPCModel.COLUMN_MablaghDariaftPardakht() + " <> 0 "+
                     " 	GROUP BY CodeNoeVosol, NameNoeVosol, TarikhSanadShamsi, ccDarkhastFaktor" + " ) A" +

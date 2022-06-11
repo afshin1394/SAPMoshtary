@@ -86,6 +86,26 @@
                             android:layout_marginLeft="10dp"
                             android:background="@drawable/rect_round_blue"/>
                     </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lblTarikh"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/FontSize12"
+                            android:gravity="center"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="15dp"
+                            android:paddingLeft="15dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:background="@drawable/rect_round_green"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 

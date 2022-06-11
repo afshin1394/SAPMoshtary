@@ -1,9 +1,12 @@
 package com.saphamrah.Adapter;
 
+import static com.saphamrah.Application.BaseApplication.TAG;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +22,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.saphamrah.CustomView.CustomTextInputLayout;
 import com.saphamrah.Model.ListKalaForMarjoeeModel;
+import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class KalaForMarjoeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
@@ -34,6 +40,8 @@ public class KalaForMarjoeeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private int lastSelectedItem;
     private int mabnaType;
     private boolean canEditPrice;
+    private SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
+    private PubFunc.DateUtils dateUtils = new PubFunc().new DateUtils();
 
     public KalaForMarjoeeAdapter(int mabnaType,Context context, ArrayList<ListKalaForMarjoeeModel> listKalaForMarjoeeModel ,boolean canEditPrice, OnItemClickListener listener)
     {
@@ -215,6 +223,7 @@ public class KalaForMarjoeeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         LinearLayout layRoot;
         private TextView lblNameKala;
         private TextView lblShomareBach;
+        private TextView lblTarikh;
         private TextView lblCost;
 
         private ImageView imgSelect;
@@ -228,6 +237,7 @@ public class KalaForMarjoeeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             layRoot = view.findViewById(R.id.layRoot);
             lblNameKala = view.findViewById(R.id.lblNameKala);
             lblShomareBach = view.findViewById(R.id.lblShomareBach);
+            lblTarikh = view.findViewById(R.id.lblTarikh);
             lblCost = view.findViewById(R.id.lblGheymat);
             imgSelect = view.findViewById(R.id.imgSelect);
             crdviewRoot = view.findViewById(R.id.crdviewRoot);
@@ -235,6 +245,7 @@ public class KalaForMarjoeeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             lblNameKala.setTypeface(font);
             lblShomareBach.setTypeface(font);
             lblCost.setTypeface(font);
+            lblTarikh.setTypeface(font);
         }
 
         void bind(final ListKalaForMarjoeeModel listKalaForMarjoeeModel , final int position , final OnItemClickListener listener)
@@ -244,6 +255,15 @@ public class KalaForMarjoeeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             lblNameKala.setText(listKalaForMarjoeeModel.getNameKala());
             lblShomareBach.setText(String.format("%1$s \n %2$s", context.getResources().getString(R.string.shomareBach), listKalaForMarjoeeModel.getShomarehBach()));
             lblCost.setText(String.format("%1$s \n %2$s", context.getResources().getString(R.string.mablaghForosh), formatter.format((int)listKalaForMarjoeeModel.getMablaghForosh())));
+
+            try {
+                Date date = sdf.parse(listKalaForMarjoeeModel.getTarikh());
+                String tarikh = (String) DateFormat.format(Constants.DATE_SHORT_FORMAT_WITH_SLASH(), date);
+                lblTarikh.setText(String.format("%1$s \n %2$s", context.getResources().getString(R.string.tarikhForosh), dateUtils.gregorianWithSlashToPersianSlash(tarikh)));
+            } catch (Exception e){
+                Log.i(TAG, "bind: " + e.getMessage() );
+            }
+
             if (position == lastSelectedItem)
             {
                 imgSelect.setImageResource(R.drawable.ic_success);

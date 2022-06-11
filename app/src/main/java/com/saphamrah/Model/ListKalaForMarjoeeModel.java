@@ -21,6 +21,7 @@ public class ListKalaForMarjoeeModel
     private static final String COLUMN_MablaghKharid = "MablaghKharid";
     private static final String COLUMN_IsKalaZayeatTolid = "IsKalaZayeatTolid";
     private static final String COLUMN_IsMabna = "IsMabna";
+    private static final String COLUMN_Tarikh = "Tarikh";
 
 
     public static String TableName() {
@@ -67,6 +68,9 @@ public class ListKalaForMarjoeeModel
     }
     public static String COLUMN_IsMabna() {
         return COLUMN_IsMabna;
+    }
+    public static String COLUMN_Tarikh() {
+        return COLUMN_Tarikh;
     }
 
 
@@ -118,6 +122,10 @@ public class ListKalaForMarjoeeModel
     @SerializedName("IsMabna")
     @Expose
     private int isMabna;
+
+    @SerializedName("Tarikh")
+    @Expose
+    private String Tarikh;
 
     private double modifiedPrice;
 
@@ -260,6 +268,14 @@ public class ListKalaForMarjoeeModel
         this.modifiedPrice = modifiedPrice;
     }
 
+    public String getTarikh() {
+        return Tarikh;
+    }
+
+    public void setTarikh(String tarikh) {
+        this.Tarikh = tarikh;
+    }
+
     @Override
     public String toString() {
         return "ListKalaForMarjoeeModel{" +
@@ -279,6 +295,7 @@ public class ListKalaForMarjoeeModel
                 ", id=" + id +
                 ", isKalaZayeatTolid=" + isKalaZayeatTolid +
                 ", isMabna=" + isMabna +
+                ", tarikh=" + Tarikh +
                 '}';
     }
 }

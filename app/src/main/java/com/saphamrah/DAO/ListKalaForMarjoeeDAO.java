@@ -76,7 +76,8 @@ public class ListKalaForMarjoeeDAO
             ListKalaForMarjoeeModel.COLUMN_MablaghForosh(),
             ListKalaForMarjoeeModel.COLUMN_MablaghMasrafKonandeh(),
             ListKalaForMarjoeeModel.COLUMN_MablaghKharid(),
-            ListKalaForMarjoeeModel.COLUMN_IsKalaZayeatTolid()
+            ListKalaForMarjoeeModel.COLUMN_IsKalaZayeatTolid(),
+            ListKalaForMarjoeeModel.COLUMN_Tarikh()
         };
     }
 
@@ -355,6 +356,7 @@ public class ListKalaForMarjoeeDAO
         contentValues.put(ListKalaForMarjoeeModel.COLUMN_MablaghMasrafKonandeh() , listKalaForMarjoeeModel.getMablaghMasrafKonandeh());
         contentValues.put(ListKalaForMarjoeeModel.COLUMN_MablaghKharid() , listKalaForMarjoeeModel.getMablaghKharid());
         contentValues.put(ListKalaForMarjoeeModel.COLUMN_IsKalaZayeatTolid() , listKalaForMarjoeeModel.getIsKalaZayeatTolid());
+        contentValues.put(ListKalaForMarjoeeModel.COLUMN_Tarikh() , listKalaForMarjoeeModel.getTarikh());
 
         return contentValues;
     }
@@ -381,6 +383,7 @@ public class ListKalaForMarjoeeDAO
             listKalaForMarjoeeModel.setMablaghMasrafKonandeh(cursor.getDouble(cursor.getColumnIndex(ListKalaForMarjoeeModel.COLUMN_MablaghMasrafKonandeh())));
             listKalaForMarjoeeModel.setMablaghKharid(cursor.getDouble(cursor.getColumnIndex(ListKalaForMarjoeeModel.COLUMN_MablaghKharid())));
             listKalaForMarjoeeModel.setIsKalaZayeatTolid(cursor.getInt(cursor.getColumnIndex(ListKalaForMarjoeeModel.COLUMN_IsKalaZayeatTolid())));
+            listKalaForMarjoeeModel.setTarikh(cursor.getString(cursor.getColumnIndex(ListKalaForMarjoeeModel.COLUMN_Tarikh())));
 
             listKalaForMarjoeeModels.add(listKalaForMarjoeeModel);
             cursor.moveToNext();

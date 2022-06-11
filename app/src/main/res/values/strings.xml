@@ -486,6 +486,7 @@
     <string name="mablaghMarjoee">مبلغ فاکتور مرجوعی(ریال)</string>
     <string name="countMarjoee">تعداد مرجوعی</string>
     <string name="mablaghForosh">مبلغ فروش</string>
+    <string name="tarikhForosh">تاریخ فاکتور</string>
     <string name="baseMablaghForosh">مبلغ فروش مبنا</string>
     <string name="mablaghForoshUnitRial">مبلغ فروش(ریال)</string>
     <string name="countForosh">تعداد فروش</string>
