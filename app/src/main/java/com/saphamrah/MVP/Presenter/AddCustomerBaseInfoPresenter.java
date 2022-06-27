@@ -41,9 +41,9 @@ public class AddCustomerBaseInfoPresenter implements AddCustomerBaseInfoMVP.Pres
 
 	
 	@Override
-    public void getConfig()
+    public void getConfig(AddCustomerInfoModel addCustomerInfoModel)
     {
-        mModel.getConfig();
+        mModel.getConfig(addCustomerInfoModel);
     }
 
     @Override
@@ -249,13 +249,24 @@ public class AddCustomerBaseInfoPresenter implements AddCustomerBaseInfoMVP.Pres
     }
 
 	@Override
-    public void onGetConfig(boolean requireCodeMeli, boolean requireMobile, boolean requireMasahat,boolean requireBirthDate)
+    public void onGetConfig(boolean requireCode, boolean isMeliOrShenase, boolean requireMobile, boolean requireMasahat, boolean requireBirthDate)
     {
-        mView.get().onGetConfig(requireCodeMeli, requireMobile, requireMasahat);
-        int resIdHintCodeMeli = requireCodeMeli ? R.string.nationalCodeWithStar : R.string.nationalCode;
+        mView.get().onGetConfig(requireCode, requireMobile, requireMasahat);
+//        int resIdHintCodeMeli = requireCodeMeli ? R.string.nationalCodeWithStar : R.string.nationalCode;
+        int resIdHintCodeMeli;
+        int resIdHintBirthDate;
+
+        if (isMeliOrShenase){
+            resIdHintCodeMeli = requireCode ?  R.string.nationalCodeWithStar : R.string.nationalCode;
+            resIdHintBirthDate = requireBirthDate ? R.string.birthDateWithSlash : R.string.birthDate;
+        }
+        else {
+            resIdHintCodeMeli = requireCode ?  R.string.shenaseCodeWithStar : R.string.shenaseCode;
+            resIdHintBirthDate = requireBirthDate ? R.string.tasiswithstar : R.string.tasis;
+        }
         int resIdHintMobile = requireMobile ? R.string.mobileWithStar : R.string.mobile;
         int resIdHintMasahat = requireMasahat ? R.string.masahateMaghazaehWithStar : R.string.masahateMaghazaeh;
-        int resIdHintBirthDate = requireBirthDate ? R.string.birthDateWithSlash : R.string.birthDate;
+
         mView.get().showCodeMeliHint(resIdHintCodeMeli);
         mView.get().showMobileHint(resIdHintMobile);
         mView.get().showMasahateMaghazeHint(resIdHintMasahat);

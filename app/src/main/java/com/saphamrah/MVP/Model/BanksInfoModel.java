@@ -49,7 +49,7 @@ public class BanksInfoModel implements BanksInfoMVP.ModelOps
         else
         {
             APIServiceGet apiServiceGet = ApiClientGlobal.getInstance().getClientServiceGet(serverIpModel);
-            Call<GetBankByMamorPakhshPositionResult> call = apiServiceGet.getBankByMamorPakhshPosition(noeBank, lat, lng);
+            Call<GetBankByMamorPakhshPositionResult> call = apiServiceGet.getBankPosition(noeBank, lat, lng);
             call.enqueue(new Callback<GetBankByMamorPakhshPositionResult>()
             {
                 @Override

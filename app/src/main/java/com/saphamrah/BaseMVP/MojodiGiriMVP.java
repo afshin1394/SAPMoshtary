@@ -16,6 +16,7 @@ public interface MojodiGiriMVP
     {
         Context getAppContext();
 		void hideNoRequestButton();
+        void hideSabtAmvalButton();
         void openDarkhastActivity();
         void openBarkhordAvalieActivity();
         void onGetKala(ArrayList<KalaModel> kalaModels);

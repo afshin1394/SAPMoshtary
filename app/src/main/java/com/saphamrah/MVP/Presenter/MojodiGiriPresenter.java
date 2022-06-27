@@ -1,10 +1,14 @@
 package com.saphamrah.MVP.Presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.saphamrah.BaseMVP.MojodiGiriMVP;
 
+import com.saphamrah.DAO.AmvalDAO;
 import com.saphamrah.DAO.MojoodiGiriDAO;
+import com.saphamrah.DAO.MoshtaryDAO;
+import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.MVP.Model.MojodiGiriModel;
 											 
 import com.saphamrah.Model.ElatAdamDarkhastModel;
@@ -57,8 +61,7 @@ public class MojodiGiriPresenter implements MojodiGiriMVP.PresenterOps , MojodiG
     }
 	
     @Override
-    public void checkBottomBarClick(int position)
-    {
+    public void checkBottomBarClick(int position) {
         PubFunc.RequestBottomBarConfig bottomBarConfig = new PubFunc().new RequestBottomBarConfig();
         bottomBarConfig.getConfig(getAppContext());
 
@@ -77,12 +80,28 @@ public class MojodiGiriPresenter implements MojodiGiriMVP.PresenterOps , MojodiG
         {
             SelectFaktorShared shared = new SelectFaktorShared(getAppContext());
             MojoodiGiriDAO mojoodiGiriDAO = new MojoodiGiriDAO(getAppContext());
+            AmvalDAO amvalDAO = new AmvalDAO(getAppContext());
+            MoshtaryDAO moshtaryDAO = new MoshtaryDAO(getAppContext());
+
             int ccMoshtary = shared.getInt(shared.getCcMoshtary() , -1);
             int count = mojoodiGiriDAO.getCountMojodiGiriByMoshtaryForCheck(ccMoshtary, true);
             boolean haveMojoodiGiri = count != 0;
 
-            if(bottomBarConfig.getForceMojoodiGiri() && !haveMojoodiGiri)
+
+            ParameterChildDAO parameterChildDAO = new ParameterChildDAO(getAppContext());
+            boolean requireCheckAmvalMoshtary = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_CheckAmvalMoshtary).trim().equals("1");
+
+            boolean hasAmval = moshtaryDAO.getHasAmval(ccMoshtary);
+            boolean CheckSabtAmval = amvalDAO.getCheckAllSabtAmvallByccMoshtary(ccMoshtary);
+
+            Log.d("MojodiGiriPresenter", "requireCheckAmvalMoshtary:" + requireCheckAmvalMoshtary + " ,hasAmval:" + hasAmval + " , CheckSabtAmval:"+ CheckSabtAmval);
+            if (bottomBarConfig.getForceMojoodiGiri() && !haveMojoodiGiri)
                 mView.get().showToast(R.string.forceMojodigiri, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+            else if (requireCheckAmvalMoshtary && hasAmval)
+                if (!CheckSabtAmval)
+                    mView.get().showToast(R.string.forceSabtAmval, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
+                else
+                    mView.get().openDarkhastActivity();
             else
                 mView.get().openDarkhastActivity();
         }
@@ -269,9 +288,9 @@ public class MojodiGiriPresenter implements MojodiGiriMVP.PresenterOps , MojodiG
 	@Override
     public void onGetNoeMasouliat(int noeMasouliat)
     {
-        if (noeMasouliat != 1 && noeMasouliat != 2 && noeMasouliat != 3 && noeMasouliat != 6 && noeMasouliat != 8)
-        {
+        if (noeMasouliat != 1 && noeMasouliat != 2 && noeMasouliat != 3 && noeMasouliat != 6 && noeMasouliat != 8) {
             mView.get().hideNoRequestButton();
+            mView.get().hideSabtAmvalButton();
         }
     }
 	

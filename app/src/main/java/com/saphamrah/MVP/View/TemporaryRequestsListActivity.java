@@ -298,6 +298,21 @@ public class TemporaryRequestsListActivity extends AppCompatActivity implements 
     }
 
     @Override
+    public void onGetImageAdamDarkhast(byte[] image) {
+        customAlertDialog.showImage(TemporaryRequestsListActivity.this, image, false, new CustomAlertDialogResponse() {
+            @Override
+            public void setOnCancelClick() {
+
+            }
+
+            @Override
+            public void setOnApplyClick() {
+
+            }
+        });
+    }
+
+    @Override
     public void onSuccessSendRequest(int position , long ccDarkhastFaktorNew)
     {
         //customLoadingDialog.closeLoadingDialog(TemporaryRequestsListActivity.this);

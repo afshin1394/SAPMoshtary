@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MVP.View.SabtAmvalActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/sabtamval_Recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fabMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        fab:menu_animationDelayPerItem="50"
+        fab:menu_backgroundColor="@android:color/transparent"
+        fab:menu_buttonSpacing="0dp"
+        fab:menu_colorNormal="@color/colorFabMenu"
+        fab:menu_colorPressed="@color/colorFabMenuClick"
+        fab:menu_colorRipple="#99FFFFFF"
+        fab:menu_fab_size="normal"
+        fab:menu_icon="@drawable/ic_menu"
+        fab:menu_labels_colorNormal="@color/colorWhite"
+        fab:menu_labels_colorPressed="@color/colorWhite"
+        fab:menu_labels_colorRipple="@color/colorWhite"
+        fab:menu_labels_customFont="@string/fontPath"
+        fab:menu_labels_ellipsize="none"
+        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        fab:menu_labels_margin="0dp"
+        fab:menu_labels_maxLines="-1"
+        fab:menu_labels_paddingBottom="4dp"
+        fab:menu_labels_paddingLeft="8dp"
+        fab:menu_labels_paddingRight="8dp"
+        fab:menu_labels_paddingTop="4dp"
+        fab:menu_labels_position="right"
+        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+        fab:menu_labels_singleLine="false"
+        fab:menu_labels_textColor="@color/colorTextPrimary"
+        fab:menu_labels_textSize="14sp"
+        fab:menu_openDirection="up"
+        fab:menu_shadowColor="#66000000"
+        fab:menu_shadowRadius="4dp"
+        fab:menu_shadowXOffset="1dp"
+        fab:menu_shadowYOffset="3dp"
+        fab:menu_showShadow="true">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabupdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:src="@drawable/ic_refresh"
+            fab:fab_colorNormal="@color/colorFabRefresh"
+            fab:fab_colorPressed="@color/colorFabRefreshClick"
+            fab:fab_label="@string/update"
+            fab:fab_size="normal" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabSabtAmval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:src="@drawable/ic_barcode"
+            fab:fab_colorNormal="@color/colorFabUpdateGallery"
+            fab:fab_colorPressed="@color/colorFabPrint"
+            fab:fab_label="@string/barcode"
+            fab:fab_size="normal" />
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

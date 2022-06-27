@@ -49,6 +49,7 @@
     <string name="errorGetDateTimeData">خطا در دریافت تاریخ و زمان</string>
     <string name="errorGetDataTitle">خطا در دریافت اطلاعات</string>
     <string name="errorGetData">خطا در دریافت اطلاعات، لطفا دوباره تلاش کنید.</string>
+    <string name="loadData">درحال بارگذاری اطلاعلات، لطفا صبر کنید.</string>
     <string name="errorGetDataChart">اطلاعات موجود نمی باشد.</string>
     <string name="errorGetDataEmpty">اطلاعات موجود نمی باشد.</string>
     <string name="errorGetDataAndGetProgram">خطا در دریافت اطلاعات، لطفا دریافت برنامه نمایید.</string>
@@ -256,8 +257,10 @@
     <string name="tabloNameWithStar">نام تابلو*</string>
     <string name="tabloName">نام تابلو</string>
     <string name="errorTabloName">لطفا نام تابلو را وارد نمایید.</string>
-    <string name="nationalCode">کد ملی / شناسه ملی</string>
-    <string name="nationalCodeWithStar">کد ملی / شناسه ملی*</string>
+    <string name="nationalCode">کد ملی </string>
+    <string name="nationalCodeWithStar">کد ملی* </string>
+    <string name="shenaseCode">شناسه ملی </string>
+    <string name="shenaseCodeWithStar">شناسه ملی* </string>
     <string name="natCode">کدملی</string>
     <string name="birthDate">تاریخ تولد</string>
     <string name="nationalId">شناسه ملی</string>
@@ -283,6 +286,8 @@
     <string name="masahateMaghazaeh">مساحت مغازه (مترمربع)</string>
     <string name="masahateMaghazaehWithStar">مساحت مغازه (مترمربع)*</string>
     <string name="birthDateWithSlash">تاریخ تولد*</string>
+    <string name="tasiswithstar">تاریخ تاسیس*</string>
+    <string name="tasis">تاریخ تاسیس</string>
     <string name="errorInputMasahateMaghaze">مساحت مغازه باید فقط شامل عدد و بزرگتر از صفر باشد.</string>
     <string name="noeShakhsiatWithStar">هویت*</string>
     <string name="noeShakhsiat">هویت</string>
@@ -511,7 +516,7 @@
     <string name="errorSelectElatMarjooeZayeatTolid">امکان ثبت علت انتخاب شده برای این کالا وجود ندارد.</string>
     <string name="notFoundccMarjoee">شناسه مرجوعی یافت نشد.</string>
     <string name="errorInputCountMarjoee">لطفا تعداد مرجوعی را صحیح وارد نمایید.</string>
-    <string name="errorMoreCountMarjoee">تعداد مرجوعی وارده بیشتر از تعداد مرجوعی است.</string>
+    <string name="errorMoreCountMarjoee">تعداد مرجوعی وارده بیشتر از تعداد مجاز است.</string>
     <string name="invalidRangeForEditMarjoee">تعداد وارد شده باید بزرگتر از صفر و کمتر از تعداد مشخص شده باشد.</string>
     <string name="errorZeroCount">تعداد وارد شده باید بزرگتر از صفر باشد.</string>
     <string name="invalidInputCount">تعداد وارد شده نامعتبر می باشد.</string>
@@ -529,6 +534,7 @@
     <string name="mojodiGiri">موجودی گیری</string>
     <string name="cantMultipleMojodigiri">امکان موجودی گیری ندارید و یا فقط یک بار می توانستید موجودی گیری نمایید.</string>
     <string name="forceMojodigiri">لطفا ابتدا موجودگیری را ثبت نمایید.</string>
+    <string name="forceSabtAmval">لطفا ابتدا اموال مشتری را ثبت نمایید.</string>
     <string name="errorMultipleMojodiGiri">فقط یکبار امکان موجودی گیری را دارید.</string>
     <string name="mojodi">موجودی</string>
     <string name="mojodiKol">موجودی کل</string>
@@ -562,6 +568,10 @@
     <string name="errorBiggerThanMaxMojodi">تعداد وارد شده برای کالاهای زیر بیشتر از موجودی می باشد.</string>
     <string name="errorZaribForosh">ضریب فروش رعایت نشده است.</string>
     <string name="warningDuplicateRequestForCustomer">برای این مشتری درخواست ثبت شده است. \n برای ثبت درخواست جدید مطمئن هستید؟</string>
+    <string name="confirmMessageForBarcode">بارکد مورد نظر با موفقیت اسکن شد. \n آیا فرآیند اسکن را ادامه می دهید؟</string>
+    <string name="confirmMessageForUpdate">درصورت به روز رسانی اطلاعات قبل پاک می شوند\n آیا مطممئن هستید؟</string>
+    <string name="warnMessageForBarcode">بارکد اسکن شده مطابقت ندارد. \n آیا فرآیند اسکن را ادامه می دهید؟</string>
+    <string name="warnMessageForRepeatedBarcode">بارکد اسکن شده قبلا وارد شده است. \n آیا فرآیند اسکن را ادامه می دهید؟</string>
     <string name="warningOneRequestForCustomer">برای این مشتری درخواست ثبت شده است. \n امکان ثبت دوباره درخواست وجود ندارد.</string>
     <string name="errorcustomerHaveCheckBargashty">مشتری دارای چک برگشتی می باشد.</string>
     <string name="errorMaxCheckBargashtyCost">مبلغ چک برگشتی فروشنده بیش از حداکثر مبلغ چک برگشتی نوع مشتری است.</string>
@@ -1217,4 +1227,5 @@
     <string name="inquiryPichakCheck">استعلام پیچک</string>
     <string name="errorUpdateMablaghTakhfifVahed">خطا در بروز رسانی مبلغ تخفیف واحد</string>
     <string name="errorReopenProgram">لطفا برنامه را به طور کامل بسته و دوباره اجرا نمایید.</string>
+    <string name="sabtAmval">اموال مشتری</string>
 </resources>

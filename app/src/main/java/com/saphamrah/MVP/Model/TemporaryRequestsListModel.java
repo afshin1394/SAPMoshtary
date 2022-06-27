@@ -592,7 +592,7 @@ private void deleteAllTempRequest(long ccDarkhastFaktor, int ccMoshtary){
         {
             //final APIServicePost apiServicePost = ApiClient.getClient(serverIP , serverPort).create(APIServicePost.class);
             final APIServicePost apiServicePost = ApiClientGlobal.getInstance().getClientServicePost(serverIpModel);
-            Call<CreateAdamDarkhastResult> call = apiServicePost.createAdamDarkhast(jsonString);
+            Call<CreateAdamDarkhastResult> call = apiServicePost.CreateAdamDarkhastJSON(jsonString);
             call.enqueue(new Callback<CreateAdamDarkhastResult>()
             {
                 @Override
@@ -645,6 +645,17 @@ private void deleteAllTempRequest(long ccDarkhastFaktor, int ccMoshtary){
                 }
             });
         }
+    }
+
+    @Override
+    public void showImageNoRequest(CustomerAdamDarkhastModel customerAdamDarkhastModel) {
+        final AdamDarkhastDAO adamDarkhastDAO = new AdamDarkhastDAO(mPresenter.getAppContext());
+        final AdamDarkhastModel adamDarkhastModel = adamDarkhastDAO.getByccAdamDarkhast(customerAdamDarkhastModel.getCcAdamDarkhast()).get(0);
+
+//        String jsonString = adamDarkhastModel.toJsonString(0 , 2);
+//        Log.i("AdamDarkhast", "sendTempNoRequest: "+jsonString);
+        mPresenter.onGetImageAdamDarkhast(adamDarkhastModel.getAdamDarkhastImage());
+
     }
 
 
@@ -1515,7 +1526,7 @@ private void deleteAllTempRequest(long ccDarkhastFaktor, int ccMoshtary){
         for (final AdamDarkhastModel model : adamDarkhastModels)
         {
             String jsonString = model.toJsonString(0 , ccMarkazForosh);
-            Call<CreateAdamDarkhastResult> call = apiServicePost.createAdamDarkhast(jsonString);
+            Call<CreateAdamDarkhastResult> call = apiServicePost.CreateAdamDarkhastJSON(jsonString);
             call.enqueue(new Callback<CreateAdamDarkhastResult>()
             {
                 @Override

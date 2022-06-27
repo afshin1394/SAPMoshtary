@@ -15,12 +15,14 @@ import com.saphamrah.DAO.JayezehEntekhabiMojodiDAO;
 import com.saphamrah.DAO.KalaDAO;
 import com.saphamrah.DAO.KalaMojodiDAO;
 import com.saphamrah.DAO.KalaMojodiZaribForoshDAO;
+import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
 import com.saphamrah.DAO.TakhfifNaghdyDAO;
 import com.saphamrah.Model.DarkhastFaktorJayezehModel;
 import com.saphamrah.Model.DarkhastFaktorSatrModel;
 import com.saphamrah.Model.DarkhastFaktorTakhfifModel;
 import com.saphamrah.Model.KalaMojodiModel;
+import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Shared.SelectFaktorShared;
@@ -157,8 +159,19 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
         SelectFaktorShared selectFaktorShared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = selectFaktorShared.getLong(selectFaktorShared.getCcDarkhastFaktor(), -1);
         int  ccForoshandeh = selectFaktorShared.getInt(selectFaktorShared.getCcForoshandeh(), -1);
+        int  ccMoshtary = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtary(), -1);
+
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
         int FinalCCAfrad = foroshandehMamorPakhshDAO.getIsSelect().getCcAfrad();
+        int moshtaryGharardadccSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getMoshtaryGharardadccSazmanForosh(), -1);
+        int ccMoshtaryGharardad = selectFaktorShared.getInt(selectFaktorShared.getCcMoshtaryGharardad(), -1);
+
+        final MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
+        final MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
+
+        int noeMoshtary = moshtaryModel.getCcNoeMoshtary();
+        int zangireiParam = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE()));
+
         Log.d("bonus", "Jayezeh takhfifNaghdi : " + insertTakhfifNaghdi);
         Log.d("bonus", "Jayezeh noeJayezehTakhfif : " + noeJayezehTakhfif);
         Log.d("bonus", "Jayezeh ccDarkhastFaktor : " + ccDarkhastFaktor);
@@ -233,7 +246,7 @@ public class SelectBonusModel implements SelectBonusMVP.ModelOps {
                 if (darkhastFaktorJayezehDAO.insert(darkhastFaktorJayezehModel)) {
 
                     KalaMojodiZaribForoshDAO kalaMojodiZaribForoshDAO = new KalaMojodiZaribForoshDAO(mPresenter.getAppContext());
-                    ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModelWithGheymatKharids = kalaMojodiZaribForoshDAO.getForInsertGheymatKharid(model.getCcKalaCode(),model.getShomarehBach(),model.getTarikhTolid(),model.getTarikhEngheza(),model.getGheymatForosh(),model.getGheymatMasrafKonandeh(),model.getCcTaminKonandeh());
+                    ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModelWithGheymatKharids = kalaMojodiZaribForoshDAO.getForInsertGheymatKharid(model.getCcKalaCode(),model.getShomarehBach(),model.getTarikhTolid(),model.getTarikhEngheza(),model.getGheymatForosh(),model.getGheymatMasrafKonandeh(),model.getCcTaminKonandeh(),noeMoshtary,zangireiParam,ccMoshtaryGharardad,moshtaryGharardadccSazmanForosh);
                     Log.d("bonus", "jayezeh kalaMojodiZaribModelWithGheymatKharids : " + kalaMojodiZaribModelWithGheymatKharids );
 
                     int insertedKala = 0;

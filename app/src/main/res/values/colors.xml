@@ -27,6 +27,12 @@
     <color name="colorPolyline">#1565C0</color>
     <color name="colorDarkhast">#ECEFF1</color>
 
+    <color name="orange_vf">#FF8000</color>
+    <color name="yellow_vf">#FFFF00</color>
+    <color name="green_vf">#00FF00</color>
+    <color name="green_vf_2">#008500</color>
+    <color name="gray_vf">#CCCCCC</color>
+
 
     <color name="mdtp_accent_color">#1f3a93</color>
     <color name="mdtp_accent_color_dark">#152763</color>

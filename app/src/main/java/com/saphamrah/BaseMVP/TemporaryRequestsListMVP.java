@@ -25,6 +25,7 @@ public interface TemporaryRequestsListMVP
         void onSuccessDeleteNoRequest(int position);
         void showDeleteNoRequestAlert(int position , CustomerAdamDarkhastModel customerAdamDarkhastModel);
         void onSuccessSendNoRequest(int position);
+        void onGetImageAdamDarkhast(byte[] image);
         void onSuccessSendRequest(int position , long ccDarkhastFaktorNew);
         void onErrorSendRequest(int errorId,String message);
         void showToast(int resId, int messageType , int duration);
@@ -72,6 +73,7 @@ public interface TemporaryRequestsListMVP
         void onErrorFindServer();
         void onNetworkError(int errorId);
         void onErrorSendRequest(int errorId,String message);
+        void onGetImageAdamDarkhast(byte[] image);
         void onErrorSendOtherDataOfFaktor();
         void onError(int resId);
         void onSuccessDeleteNoRequest(int position);
@@ -97,6 +99,7 @@ public interface TemporaryRequestsListMVP
         void printTempRequest(int position , CustomerDarkhastFaktorModel customerDarkhastFaktorModel);
         void deleteTempNoRequest(int position , CustomerAdamDarkhastModel customerAdamDarkhastModel);
         void sendTempNoRequest(int position , CustomerAdamDarkhastModel customerAdamDarkhastModel);
+        void showImageNoRequest( CustomerAdamDarkhastModel customerAdamDarkhastModel);
         void setLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy();
 

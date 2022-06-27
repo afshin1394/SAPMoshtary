@@ -106,7 +106,7 @@ public class RptThreeMonthPurchaseModel implements RptThreeMonthMVP.ModelOps
         ServerIpModel serverIpModel = new PubFunc().new NetworkUtils().getServerFromShared(mPresenter.getAppContext());
         switch (serverIpModel.getWebServiceType()){
             case REST:
-                rptThreeMonthPurchaseDAO.fetchRptThreeMonthPurchas(BaseApplication.getContext(), activityNameForLog , foroshandehMamorPakhshDAO.getAll().get(0).getCcForoshandeh() , new RetrofitResponse() {
+                rptThreeMonthPurchaseDAO.fetchRptThreeMonthPurchas(BaseApplication.getContext(), activityNameForLog , foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh() , new RetrofitResponse() {
                     @Override
                     public void onSuccess(ArrayList arrayListData) {
                         Thread thread = new Thread()
@@ -140,7 +140,7 @@ public class RptThreeMonthPurchaseModel implements RptThreeMonthMVP.ModelOps
                 });
                    break;
             case gRPC:
-                rptThreeMonthPurchaseDAO.fetchRptThreeMonthPurchaseGrpc(BaseApplication.getContext(), activityNameForLog , foroshandehMamorPakhshDAO.getAll().get(0).getCcForoshandeh() , new RetrofitResponse() {
+                rptThreeMonthPurchaseDAO.fetchRptThreeMonthPurchaseGrpc(BaseApplication.getContext(), activityNameForLog , foroshandehMamorPakhshDAO.getIsSelect().getCcForoshandeh() , new RetrofitResponse() {
                     @Override
                     public void onSuccess(ArrayList arrayListData) {
                         Thread thread = new Thread()

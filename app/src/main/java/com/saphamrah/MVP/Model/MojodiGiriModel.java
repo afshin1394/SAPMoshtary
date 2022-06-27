@@ -211,6 +211,21 @@ public class MojodiGiriModel implements MojodiGiriMVP.ModelOps
             AdamDarkhastDAO adamDarkhastDAO = new AdamDarkhastDAO(mPresenter.getAppContext());
             AdamDarkhastModel adamDarkhastModel = new AdamDarkhastModel();
 
+        Date saatVorud = null;
+
+
+        String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
+        String saateVorodBeMaghaze = shared.getString(shared.getSaatVorodBeMaghazeh() , currentDate);
+
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
+        try {
+            saatVorud = sdf.parse(saateVorodBeMaghaze);
+        } catch (Exception e) {
+
+        }
+
+        Log.i("MojodiGiriModel", "insertAdamDarkhast: " + saatVorud);
+
             adamDarkhastModel.setCcElatAdamDarkhast(ccElatAdamDarkhast);
             adamDarkhastModel.setCodeMoshtaryTekrari(codeMoshtaryTekrari);
             adamDarkhastModel.setAdamDarkhastImage(imageAdamDarkhast);
@@ -220,6 +235,7 @@ public class MojodiGiriModel implements MojodiGiriMVP.ModelOps
             adamDarkhastModel.setLongitude((float) googleLocationProvider.getLongitude());
             adamDarkhastModel.setLatitude((float) googleLocationProvider.getLatitude());
             adamDarkhastModel.setIsSentToServer(false);
+            adamDarkhastModel.setSaatVorod(saatVorud);
 
             if (adamDarkhastDAO.insert(adamDarkhastModel))
             {

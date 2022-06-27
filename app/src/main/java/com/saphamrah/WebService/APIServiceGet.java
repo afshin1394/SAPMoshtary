@@ -52,8 +52,8 @@ public interface APIServiceGet
     @GET("Api/ApiSales/Getrpt_ListBargashtyForoshandeh")
     Call<GetListBargashtyForoshandehResult> getListBargashtyForoshandeh(@Query("ccForoshandeh") String ccForoshandeh);
 
-	@GET("Api/ApiTablet/GetBankByMamorPakhshPosition")
-    Call<GetBankByMamorPakhshPositionResult> getBankByMamorPakhshPosition(@Query("NoeBank") String NoeBank, @Query("Lat_y_MamorPakhshPakhsh") String lat, @Query("Lng_x_MamorPakhshPakhsh") String lng);																																															
+	@GET("Api/ApiTablet/getBankPosition")
+    Call<GetBankByMamorPakhshPositionResult> getBankPosition(@Query("NoeBank") String NoeBank, @Query("Lat") String lat, @Query("Lng") String lng);
 
     //C
 
@@ -309,6 +309,9 @@ public interface APIServiceGet
 
     @GET("Api/ApiGlobal/GetAllvMarkaz")
     Call<GetAllvMarkazResult> getAllvMarkaz(@Query("ccMarkaz") String ccMarkaz);
+
+    @GET("Api/ApiSales/GetMoshtaryAmval")
+    Call<GetMoshtaryAmvalResult> GetMoshtaryAmval(@Query("ccMoshtary") int ccMoshtary,@Query("ccSazmanForosh") int ccSazmanForosh);
 
     @GET("Api/ApiGlobal/GetAllvMarkazForosh")
     Call<GetAllvMarkazResult> getAllvMarkazForosh();

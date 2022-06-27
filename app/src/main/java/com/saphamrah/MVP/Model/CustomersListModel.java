@@ -112,7 +112,7 @@ public class CustomersListModel implements CustomersListMVP.ModelOps {
         MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(allMoshtaryForoshandehModel.getCcMoshtary());*/
         //----------------------- Foroshandeh --------------------------------
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
-        ArrayList<ForoshandehMamorPakhshModel> foroshandehMamorPakhshModels = foroshandehMamorPakhshDAO.getAll();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
 
         final int sumOfItems = mPresenter.getAppContext().getResources().getStringArray(R.array.getCustomerInfo).length;
         itemCounter = 0;
@@ -123,15 +123,13 @@ public class CustomersListModel implements CustomersListMVP.ModelOps {
         ccSazmanForosh = 0;
         ccGorohs = "";
         ccGorohs = new MoshtaryDAO(mPresenter.getAppContext()).getAllccNoeSenf();
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshModel();
-        if (foroshandehMamorPakhshModels.size() > 0) {
-            foroshandehMamorPakhshModel = foroshandehMamorPakhshModels.get(0);
+
             //ccForoshandeh = foroshandehMamorPakhshModel.getCcForoshandeh();
             ccMarkazForosh = foroshandehMamorPakhshModel.getCcMarkazForosh();
             ccMarkazSazmanForoshSakhtarForosh = foroshandehMamorPakhshModel.getCcMarkazSazmanForoshSakhtarForosh();
             ccMarkazSazmanForosh = foroshandehMamorPakhshModel.getCcMarkazSazmanForosh();
             ccSazmanForosh = foroshandehMamorPakhshModel.getCcSazmanForosh();
-        }
+
 
         handler = new Handler(new Handler.Callback() {
             @Override

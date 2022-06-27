@@ -48,9 +48,10 @@ public class TemporaryNoRequestsAdapter extends RecyclerSwipeAdapter<TemporaryNo
     public void onBindViewHolder(ViewHolder holder, int position)
     {
         holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
-        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left , holder.itemView.findViewById(R.id.layLeft));
-        holder.lblRadif.setText(String.valueOf(position+1));
-        holder.lblCustomerNameFamily.setText(String.format("%1$s - %2$s" , models.get(position).getCodeMoshtary() , models.get(position).getFullNameMoshtary()));
+        if (models.get(position).getAdamDarkhastImage() != null)
+            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.itemView.findViewById(R.id.layLeft));
+        holder.lblRadif.setText(String.valueOf(position + 1));
+        holder.lblCustomerNameFamily.setText(String.format("%1$s - %2$s", models.get(position).getCodeMoshtary(), models.get(position).getFullNameMoshtary()));
         holder.lblElatAdamDarkhast.setText(models.get(position).getNameElatAdamDarkhast());
         if (models.get(position).isSentToServer())
         {

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -50,6 +51,7 @@ public class RptForoshandehVisitActivity extends AppCompatActivity implements Rp
 
         final FloatingActionMenu fabMenu = findViewById(R.id.fabMenu);
         FloatingActionButton fabRefresh = findViewById(R.id.fabRefresh);
+        FloatingActionButton fabShow = findViewById(R.id.fabShow);
 
         customAlertDialog = new CustomAlertDialog(RptForoshandehVisitActivity.this);
         layFooter = findViewById(R.id.layTableFooter);
@@ -65,6 +67,11 @@ public class RptForoshandehVisitActivity extends AppCompatActivity implements Rp
                 fabMenu.close(true);
                 mPresenter.updateReport();
             }
+        });
+
+        fabShow.setOnClickListener(view -> {
+            startActivity(new Intent(this, RptVisitForoshandehActivity.class));
+            this.finish();
         });
 
     }

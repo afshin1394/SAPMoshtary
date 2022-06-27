@@ -3,6 +3,7 @@ package com.saphamrah.Model;
 
 import android.util.Base64;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -25,6 +26,8 @@ public class AdamDarkhastModel
     private static final String COLUMN_IsSentToServer = "IsSentToServer";
     private static final String COLUMN_AdamDarkhastImage = "AdamDarkhastImage";
     private static final String COLUMN_CodeMoshtaryTekrari = "CodeMoshtaryTekrari";
+    private static final String COLUMN_SaatVorod = "SaatVorod";
+
 
     public static String TableName() {
         return TABLE_NAME;
@@ -59,6 +62,9 @@ public class AdamDarkhastModel
     public static String COLUMN_CodeMoshtaryTekrari() {
         return COLUMN_CodeMoshtaryTekrari;
     }
+    public static String COLUMN_SaatVorod() {
+        return COLUMN_SaatVorod;
+    }
 
 
 
@@ -67,6 +73,7 @@ public class AdamDarkhastModel
     private int ccMoshtary;
     private int ccElatAdamDarkhast;
     private Date dateAdamDarkhast;
+    private Date saatVorod;
     private float Latitude;
     private float Longitude;
     private boolean IsSentToServer;
@@ -135,7 +142,12 @@ public class AdamDarkhastModel
     public void setCodeMoshtaryTekrari(String codeMoshtaryTekrari) {
         CodeMoshtaryTekrari = codeMoshtaryTekrari;
     }
-
+    public Date getSaatVorod() {
+        return saatVorod;
+    }
+    public void setSaatVorod(Date saatVorod) {
+        this.saatVorod = saatVorod;
+    }
 
 
 
@@ -153,15 +165,19 @@ public class AdamDarkhastModel
         jsonObject.addProperty("Longitude" , Longitude);
         jsonObject.addProperty("ccMarkazForosh" , ccMarkazForosh);
         jsonObject.addProperty("CodeMoshtaryTekrari" , CodeMoshtaryTekrari);
+        jsonObject.addProperty("SaatVorod" , new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(saatVorod));
+        String image ="";
         if (AdamDarkhastImage != null)
         {
-            String image = Base64.encodeToString(AdamDarkhastImage , Base64.DEFAULT);
-            jsonObject.addProperty("Image" , image);
+            image = Base64.encodeToString(AdamDarkhastImage , Base64.DEFAULT);
         }
-        return jsonObject.toString();
+        jsonObject.addProperty("Image" , image);
+        JsonArray jsonArray = new JsonArray();
+        jsonArray.add(jsonObject);
+
+        JsonObject object = new JsonObject();
+        object .add("AdamDarkhast", jsonArray);
+
+        return object.toString();
     }
-
-
-
-
 }

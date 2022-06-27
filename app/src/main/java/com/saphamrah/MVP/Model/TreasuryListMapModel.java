@@ -517,7 +517,7 @@ public class TreasuryListMapModel implements TreasuryListMapMVP.ModelOps
         }
         else
         {
-            int ccAnbarakActive = foroshandehMamorPakhshDAO.getAll().get(0).getCcAnbarak();
+            int ccAnbarakActive = foroshandehMamorPakhshDAO.getIsSelect().getCcAnbarak();
             AnbarakAfradDAO anbarakafradDAO = new AnbarakAfradDAO(mPresenter.getAppContext());
             int ccAnbarakFeli = anbarakafradDAO.getAll().get(0).getCcAnbarak();
 

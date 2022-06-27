@@ -103,6 +103,10 @@ public class TemporaryRequestsListPresenter implements TemporaryRequestsListMVP.
             {
                 mView.get().showDeleteNoRequestAlert(position , customerAdamDarkhastModel);
             }
+            else if (action == Constants.SHOW_IMAGE())
+            {
+                mModel.showImageNoRequest( customerAdamDarkhastModel);
+            }
         }
         else
         {
@@ -237,7 +241,12 @@ public class TemporaryRequestsListPresenter implements TemporaryRequestsListMVP.
         mView.get().onErrorSendRequest(errorId,message);
     }
 
-	@Override
+    @Override
+    public void onGetImageAdamDarkhast(byte[] image) {
+        mView.get().onGetImageAdamDarkhast(image);
+    }
+
+    @Override
     public void onErrorSendOtherDataOfFaktor()
     {
         mView.get().showToast(R.string.errorSendOtherData, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());

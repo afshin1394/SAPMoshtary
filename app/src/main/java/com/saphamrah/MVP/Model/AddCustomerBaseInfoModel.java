@@ -31,14 +31,32 @@ public class AddCustomerBaseInfoModel implements AddCustomerBaseInfoMVP.ModelOps
     }
 
 	@Override
-    public void getConfig()
+    public void getConfig(AddCustomerInfoModel addCustomerInfoModel)
     {
         ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
-        boolean requireCodeMeli = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_REQUIER_CODE_MELI).trim().equals("1");
+
+        boolean requireCode = false;
+        boolean isCodeMeli = false;
+
+        if (addCustomerInfoModel.getNoeShakhsiatId() != null && addCustomerInfoModel.getNoeShakhsiatId().trim().equals("1") ) // haghighi = 1
+        {
+            requireCode = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_REQUIER_CODE_MELI).trim().equals("1");
+
+            isCodeMeli = true;
+
+        }
+        else  // hoghoghi = 2
+        {
+            requireCode = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_RequireShenasehMeli()).trim().equals("1");
+
+            isCodeMeli = false;
+
+        }
+
         boolean requireMobile = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_REQUIER_MOBILE).trim().equals("1");
         boolean requireMasahat = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_REQUIER_MASAHAT).trim().equals("1");
         boolean requireBirthDate = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_Require_Tarikh_Tavalod()).trim().equals("1");
-        mPresenter.onGetConfig(requireCodeMeli, requireMobile, requireMasahat, requireBirthDate);
+        mPresenter.onGetConfig(requireCode,isCodeMeli, requireMobile, requireMasahat, requireBirthDate);
     }
 	
     @Override

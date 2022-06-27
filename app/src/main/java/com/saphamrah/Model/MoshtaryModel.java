@@ -54,6 +54,7 @@ public class MoshtaryModel
     private static final String COLUMN_TarikhMoarefiMoshtary = "TarikhMoarefiMoshtary";
     private static final String COLUMN_KharejAzMahal = "KharejAzMahal";
     private static final String COLUMN_CodeEghtesady = "CodeEghtesady";
+    private static final String COLUMN_HasAmval = "HasAmval";
 
 
 
@@ -217,6 +218,10 @@ public class MoshtaryModel
     {
         return COLUMN_CodeEghtesady;
     }
+    public static String COLUMN_HasAmval()
+    {
+        return COLUMN_HasAmval;
+    }
 
 
     @SerializedName("ccMoshtary")
@@ -298,7 +303,13 @@ public class MoshtaryModel
     @Expose
     private String CodeEghtesady;
 
-	
+    @SerializedName("HasAmval")
+    @Expose
+    private int hasAmval;
+
+
+
+
     private int Olaviat;
     private String Address;
     private String Mobile;
@@ -667,6 +678,14 @@ public class MoshtaryModel
         HasAdamDarkhastOption = hasAdamDarkhastOption;
     }
 
+    public int getHasAmval() {
+        return hasAmval;
+    }
+
+    public void setHasAmval(int hasAmval) {
+        this.hasAmval = hasAmval;
+    }
+
     /**
      * @deprecated
      * @param moshtaryAddressModels
@@ -707,6 +726,7 @@ public class MoshtaryModel
             jsonObject.put(COLUMN_CodeNoeVosolAzMoshtary() , CodeNoeVosolAzMoshtary);
             jsonObject.put(COLUMN_CodeNoeShakhsiat() , CodeNoeShakhsiat);
             jsonObject.put(COLUMN_CodeNoeHaml() , CodeNoeHaml);
+            jsonObject.put(COLUMN_HasAmval() , hasAmval);
         }
         catch (Exception e)
         {
@@ -775,6 +795,7 @@ public class MoshtaryModel
             jsonObject.put("ccForoshandeh" , ccForoshandeh);
             jsonObject.put("olaviat" , Olaviat);
             jsonObject.put("CodeEghtesady" , CodeEghtesady);
+            jsonObject.put("HasAmval" , hasAmval);
         }
         catch (Exception e)
         {
@@ -826,6 +847,7 @@ public class MoshtaryModel
                 ", ExtraProp_Olaviat=" + ExtraProp_Olaviat +
                 ", CodeEghtesady=" + CodeEghtesady +
                 ", DateOfMasir='" + DateOfMasir + '\'' +
+                ", HasAmval='" + hasAmval + '\'' +
                 '}';
     }
 }

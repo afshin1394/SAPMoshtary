@@ -29,6 +29,18 @@ public class BarcodeScannerActivity extends AppCompatActivity implements ZXingSc
 
         List<BarcodeFormat> barcodeFormats = new ArrayList<>();
         barcodeFormats.add(BarcodeFormat.QR_CODE);
+        barcodeFormats.add(BarcodeFormat.UPC_A);
+        barcodeFormats.add(BarcodeFormat.UPC_E);
+        barcodeFormats.add(BarcodeFormat.EAN_13);
+        barcodeFormats.add(BarcodeFormat.EAN_8);
+        barcodeFormats.add(BarcodeFormat.RSS_14);
+        barcodeFormats.add(BarcodeFormat.CODE_39);
+        barcodeFormats.add(BarcodeFormat.CODE_93);
+        barcodeFormats.add(BarcodeFormat.CODE_128);
+        barcodeFormats.add(BarcodeFormat.ITF);
+        barcodeFormats.add(BarcodeFormat.CODABAR);
+        barcodeFormats.add(BarcodeFormat.DATA_MATRIX);
+        barcodeFormats.add(BarcodeFormat.PDF_417);
 
         scannerView = new ZXingScannerView(this);
         scannerView.setFormats(barcodeFormats);

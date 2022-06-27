@@ -65,6 +65,10 @@
         <activity android:name=".MVP.View.marjoee.DarkhastFaktorMarjoeeActivity" />
         <activity android:name=".MVP.View.RptMoshtaryGharardad" />
         <activity
+            android:name=".MVP.View.RptVisitForoshandehActivity"
+            android:screenOrientation="sensorPortrait" />
+
+        <activity
             android:name=".MVP.View.RptForoshandehVisitActivity"
             android:screenOrientation="sensorLandscape" />
         <activity
@@ -185,7 +189,8 @@
             android:name=".MVP.View.RptKalaZaribForoshActivity"
             android:exported="false" />
         <activity android:name=".MVP.View.MandehdarZangireiActivity" />
-
+        <activity
+            android:name=".MVP.View.SabtAmvalActivity"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.saphamrah.imagefileprovider"

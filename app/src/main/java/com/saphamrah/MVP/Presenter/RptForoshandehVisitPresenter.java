@@ -17,6 +17,7 @@ public class RptForoshandehVisitPresenter implements RptForoshandehVisitMVP.Pres
 
     private WeakReference<RptForoshandehVisitMVP.RequiredViewOps> mView;
     private RptForoshandehVisitMVP.ModelOps mModel;
+    private ArrayList<RptVisitForoshandehMoshtaryModel> rptVisitForoshandehMoshtaryModels;
     private boolean mIsChangingConfig;
 
     public RptForoshandehVisitPresenter(RptForoshandehVisitMVP.RequiredViewOps viewOps)
@@ -48,6 +49,11 @@ public class RptForoshandehVisitPresenter implements RptForoshandehVisitMVP.Pres
     }
 
     @Override
+    public void updateOffline() {
+        updateRecordOffline();
+    }
+
+    @Override
     public void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild)
     {
         if (!message.trim().equals("") || !logClass.trim().equals("") || !logActivity.trim().equals("") || !functionParent.trim().equals("") || !functionChild.trim().equals(""))
@@ -75,6 +81,7 @@ public class RptForoshandehVisitPresenter implements RptForoshandehVisitMVP.Pres
     @Override
     public void onGetVisitList(ArrayList<RptVisitForoshandehMoshtaryModel> rptVisitForoshandehMoshtaryModels)
     {
+        this.rptVisitForoshandehMoshtaryModels = rptVisitForoshandehMoshtaryModels;
         //at least has one record for sum
         if (rptVisitForoshandehMoshtaryModels.size() > 1)
         {
@@ -101,5 +108,9 @@ public class RptForoshandehVisitPresenter implements RptForoshandehVisitMVP.Pres
         mView.get().showToast(R.string.failedOps, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
     }
 
+    public void updateRecordOffline(){
+        RptVisitForoshandehMoshtaryModel rptVisitForoshandehMoshtarySum = rptVisitForoshandehMoshtaryModels.get(rptVisitForoshandehMoshtaryModels.size() - 1);
+        mView.get().setAdapter(rptVisitForoshandehMoshtaryModels , rptVisitForoshandehMoshtarySum);
+    }
 
 }

@@ -43,8 +43,8 @@ public interface APIServicePost
 
     //A
     @FormUrlEncoded
-    @POST("api/apiSales/CreateAdamDarkhast")
-    Call<CreateAdamDarkhastResult> createAdamDarkhast(@Field("") String adamDarkhastData);
+    @POST("api/apiSales/CreateAdamDarkhastJSON")
+    Call<CreateAdamDarkhastResult> CreateAdamDarkhastJSON(@Field("") String adamDarkhastData);
 
     @FormUrlEncoded
     @POST("api/apiGlobal/CreateAddress")

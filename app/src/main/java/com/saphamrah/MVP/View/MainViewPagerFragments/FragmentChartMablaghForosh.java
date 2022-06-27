@@ -47,10 +47,6 @@ import me.anwarshahriar.calligrapher.Calligrapher;
  */
 public class FragmentChartMablaghForosh extends Fragment implements MablaghTedadForoshFragmentsBaseMVP.RequiredViewOps {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private static final String TAG =  FragmentChartMablaghForosh.class.getClass().getSimpleName();
     private View view;
     private BarChart barChartMablaghForosh;
@@ -59,21 +55,9 @@ public class FragmentChartMablaghForosh extends Fragment implements MablaghTedad
 
     MablaghTedadForoshFragmentsBaseMVP.PresenterOps mPresenter;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public FragmentChartMablaghForosh() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-
-     * @return A new instance of fragment FragmentChartMablaghForosh.
-     */
-
 
     private static FragmentChartMablaghForosh instance=null;
     public static FragmentChartMablaghForosh getInstance(){
@@ -93,10 +77,7 @@ public class FragmentChartMablaghForosh extends Fragment implements MablaghTedad
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
@@ -157,7 +138,7 @@ public class FragmentChartMablaghForosh extends Fragment implements MablaghTedad
         setNoDataText(barChartMablaghForosh,font);
     }
     private void setNoDataText(BarChart barChart ,Typeface font){
-        barChart.setNoDataText(context.getResources().getString(R.string.errorGetData));
+        barChart.setNoDataText(context.getResources().getString(R.string.loadData));
         barChart.setNoDataTextColor(Color.RED);
         barChart.setNoDataTextTypeface(font);
     }

@@ -57,7 +57,7 @@ public class KalaMojodiZaribForoshDAO
 
        if ( ccNoeMoshtary ==  zangireiParam)
        {
-           query = " SELECT km.*,mgk.mablaghforosh GheymatForosh,mgk.MablaghMasrafKonandeh, mgk.GheymatKharid,mgk.ControlMablagh, \n" +
+           query = " SELECT km.*,mgk.mablaghforosh GheymatForosh,mgk.MablaghMasrafKonandeh, km.GheymatKharid,mgk.ControlMablagh, \n" +
                    "        (SELECT  IFNULL(ZaribForosh,1)ZaribForosh  \n" +
                    "         FROM KalaZaribForosh z \n" +
                    "         WHERE z.ccGorohMoshtary IN (0," + ccNoeMoshtary + ")  AND z.ccKalaCode =km.ccKalaCode AND z.Darajeh IN (0," + ccDarajeh + ") \n" +
@@ -169,7 +169,7 @@ public class KalaMojodiZaribForoshDAO
         if (ccNoeMoshtary == zangireiParam)
         {
 
-            query = " SELECT km.*,mgk.mablaghforosh GheymatForosh, mgk.GheymatKharid,mgk.MablaghMasrafKonandeh,mgk.ControlMablagh, ZaribForosh , Darajeh, o.Olaviat FROM \n" +
+            query = " SELECT km.*,mgk.mablaghforosh GheymatForosh, km.GheymatKharid,mgk.MablaghMasrafKonandeh,mgk.ControlMablagh, ZaribForosh , Darajeh, o.Olaviat FROM \n" +
                     "(SELECT k.ccKalaCode, k.CodeKala, k.NameKala, k.ccTaminKonandeh, k.TedadDarKarton, k.TedadDarBasteh, k.Adad, k.MashmolMaliatAvarez, k.ccGorohKala, k.ccBrand, \n" +
                     " k.MablaghKharid, k.Tol, k.Arz, k.Ertefa, k.ccVahedSize, k.VaznKhales, k.VaznNakhales, VaznKarton, k.ccVahedVazn, k.BarCode, k.TarikhTolid, k.TarikhEngheza, \n" +
                     " k.NameVahedVazn, k.NameBrand, k.TedadMojodyGhabelForosh, k.NameVahedSize, k.ccVahedShomaresh,k.NameVahedShomaresh, k.ShomarehBach, k.GheymatForoshAsli,k.GheymatMasrafKonandehAsli , k.MablaghForosh MablaghForoshKala, m.GheymatKharid,  \n" +
@@ -247,39 +247,72 @@ public class KalaMojodiZaribForoshDAO
         return kalaMojodiZaribModels;
     }
 
-    public ArrayList<KalaMojodiZaribModel> getForInsertGheymatKharid(int ccKalaCode, String shomarehBatch, String tarikhTolid, String tarikhEngheza, double gheymatForosh, double gheymatMasrafKonandeh, int ccTaminKonandeh)
+    public ArrayList<KalaMojodiZaribModel> getForInsertGheymatKharid(int ccKalaCode, String shomarehBatch, String tarikhTolid, String tarikhEngheza, double gheymatForosh, double gheymatMasrafKonandeh, int ccTaminKonandeh, int ccNoeMoshtary, int zangireiParam, int ccMoshtaryGharardad, int moshtaryGharardadccSazmanForosh)
     {
         Log.i("DarkhastKalaModel", "getForInsertGheymatKharid ccKalaCode:" + ccKalaCode + " ,shomarehBatch: "+shomarehBatch +" ,tarikhTolid:"+tarikhTolid + " ,tarikhEngheza:"+ tarikhEngheza + " ,gheymatForosh:"+gheymatForosh + " ,gheymatMasrafKonandeh:" + gheymatMasrafKonandeh +  " ,ccTaminKonandeh:" + ccTaminKonandeh );
 
-        String query = null;
+        String query = "";
         ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = new ArrayList<>();
 
+        if (ccNoeMoshtary == zangireiParam)
+        {
+            query = " SELECT KalaMojodi.ccKalaCode,CodeKala,BarCode,NameBrand,NameKala,KalaMojodi.CcTaminKonandeh,TedadDarKarton,TedadDarBasteh,Adad,TedadMojodyGhabelForosh,\n" +
+                    " VaznKhales,VaznKarton,NameVahedVazn,NameVahedSize,Tol,Arz,Ertefa,MashmolMaliatAvarez,\n" +
+                    " GheymatForoshAsli,GheymatMasrafKonandehAsli,\n" +
+                    " KalaMojodi.CcKalaMojodi,KalaMojodi.Tedad,\n" +
+                    " mgk.MablaghForosh GheymatForosh,KalaMojodi.GheymatKharid,KalaMojodi.GheymatMasrafKonandeh MablaghMasrafKonandeh,1 ZaribForosh,KalaMojodi.ShomarehBach,KalaMojodi.TarikhTolid," +
+                    " KalaMojodi.TarikhEngheza,ccGorohKala,1 Olaviat, \n" +
+                    " SUM(Tedad) AS sumTedad, SUM(Max_MojodyByShomarehBach) AS Max_MojodyByShomarehBach, KM.Max_Mojody \n" +
+                    " FROM KalaMojodi \n" +
+                    " LEFT JOIN (SELECT ccKalaCode,ShomarehBach,TarikhTolid,TarikhEngheza, GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh,  SUM(DISTINCT Max_Mojody) Max_Mojody \n" +
+                    " FROM KalaMojodi \n" +
+                    " WHERE IsAdamForosh=0 \n" +
+                    " GROUP BY ccKalaCode,ShomarehBach,TarikhTolid,TarikhEngheza, GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh) KM ON KM.ccKalaCode=KalaMojodi.ccKalaCode AND KM.ShomarehBach = KalaMojodi.ShomarehBach AND \n" +
+                    " KM.TarikhTolid = KalaMojodi.TarikhTolid AND KM.TarikhEngheza = KalaMojodi.TarikhEngheza AND \n" +
+                    " KM.GheymatForosh = KalaMojodi.GheymatForosh AND KM.GheymatMasrafKonandeh = KalaMojodi.GheymatMasrafKonandeh AND KM.ccTaminKonandeh = KalaMojodi.ccTaminKonandeh \n" +
+                    " LEFT JOIN (SELECT * FROM Kala ) K ON K.ccKalaCode=KalaMojodi.ccKalaCode AND K.ShomarehBach = KalaMojodi.ShomarehBach AND \n" +
+                    " K.TarikhTolid = KalaMojodi.TarikhTolid AND K.TarikhEngheza = KalaMojodi.TarikhEngheza AND \n" +
+                    " K.MablaghForosh = KalaMojodi.GheymatForosh AND K.MablaghMasrafKonandeh = KalaMojodi.GheymatMasrafKonandeh AND K.ccTaminKonandeh = KalaMojodi.ccTaminKonandeh \n" +
+                    " LEFT JOIN (SELECT * FROM MoshtaryGharardadKala WHERE ccMoshtaryGharardad = " + ccMoshtaryGharardad + " AND ExtraPropCcSazmanForosh =  " + moshtaryGharardadccSazmanForosh + ") mgk \n" +
+                    "    ON mgk.ccKalaCode= km.ccKalaCode AND \n" +
+                    "                 (CASE WHEN mgk.ControlMablagh = 1 AND KalaMojodi.GheymatForosh = mgk.mablaghforosh AND KalaMojodi.GheymatMasrafKonandeh = mgk.MablaghMasrafKonandeh \n" +
+                    "            THEN 1=1 \n" +
+                    "            WHEN    mgk.ControlMablagh = 0 \n" +
+                    "            THEN 1=1 \n" +
+                    "       END) \n" +
+                    " WHERE KalaMojodi.ccKalaCode = " + ccKalaCode + " AND KalaMojodi.ShomarehBach = '" + shomarehBatch + "' AND KalaMojodi.TarikhTolid ='" + tarikhTolid +
+                    "' AND KalaMojodi.TarikhEngheza = '" + tarikhEngheza + "' AND \n" +
+                    " KalaMojodi.GheymatForosh =" + gheymatForosh + " AND KalaMojodi.GheymatMasrafKonandeh=" + gheymatMasrafKonandeh + " AND KalaMojodi.ccTaminKonandeh=" + ccTaminKonandeh + " AND IsAdamForosh=0 \n" +
+                    " GROUP BY KalaMojodi.ccKalaCode, ccForoshandeh, KalaMojodi.ShomarehBach, KalaMojodi.TarikhTolid,KalaMojodi.TarikhEngheza,KalaMojodi.ccTaminKonandeh,KalaMojodi.GheymatForosh,KalaMojodi.GheymatMasrafKonandeh,GheymatKharid,KalaMojodi.ccTaminKonandeh \n" +
+                    " HAVING SUM(Tedad) > 0 \n" +
+                    " ORDER BY GheymatKharid";
+        }
+        else {
+            query = " SELECT KalaMojodi.ccKalaCode,CodeKala,BarCode,NameBrand,NameKala,KalaMojodi.CcTaminKonandeh,TedadDarKarton,TedadDarBasteh,Adad,TedadMojodyGhabelForosh,\n" +
+                    " VaznKhales,VaznKarton,NameVahedVazn,NameVahedSize,Tol,Arz,Ertefa,MashmolMaliatAvarez,\n" +
+                    " GheymatForoshAsli,GheymatMasrafKonandehAsli,\n" +
+                    " KalaMojodi.CcKalaMojodi,KalaMojodi.Tedad,\n" +
+                    " KalaMojodi.GheymatForosh,KalaMojodi.GheymatKharid,KalaMojodi.GheymatMasrafKonandeh MablaghMasrafKonandeh,1 ZaribForosh,KalaMojodi.ShomarehBach,KalaMojodi.TarikhTolid," +
+                    " KalaMojodi.TarikhEngheza,ccGorohKala,1 Olaviat, \n" +
+                    " SUM(Tedad) AS sumTedad, SUM(Max_MojodyByShomarehBach) AS Max_MojodyByShomarehBach, KM.Max_Mojody \n" +
+                    " FROM KalaMojodi \n" +
+                    " LEFT JOIN (SELECT ccKalaCode,ShomarehBach,TarikhTolid,TarikhEngheza, GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh,  SUM(DISTINCT Max_Mojody) Max_Mojody \n" +
+                    " FROM KalaMojodi \n" +
+                    " WHERE IsAdamForosh=0 \n" +
+                    " GROUP BY ccKalaCode,ShomarehBach,TarikhTolid,TarikhEngheza, GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh) KM ON KM.ccKalaCode=KalaMojodi.ccKalaCode AND KM.ShomarehBach = KalaMojodi.ShomarehBach AND \n" +
+                    " KM.TarikhTolid = KalaMojodi.TarikhTolid AND KM.TarikhEngheza = KalaMojodi.TarikhEngheza AND \n" +
+                    " KM.GheymatForosh = KalaMojodi.GheymatForosh AND KM.GheymatMasrafKonandeh = KalaMojodi.GheymatMasrafKonandeh AND KM.ccTaminKonandeh = KalaMojodi.ccTaminKonandeh \n" +
+                    " LEFT JOIN (SELECT * FROM Kala ) K ON K.ccKalaCode=KalaMojodi.ccKalaCode AND K.ShomarehBach = KalaMojodi.ShomarehBach AND \n" +
+                    " K.TarikhTolid = KalaMojodi.TarikhTolid AND K.TarikhEngheza = KalaMojodi.TarikhEngheza AND \n" +
+                    " K.MablaghForosh = KalaMojodi.GheymatForosh AND K.MablaghMasrafKonandeh = KalaMojodi.GheymatMasrafKonandeh AND K.ccTaminKonandeh = KalaMojodi.ccTaminKonandeh \n" +
+                    " WHERE KalaMojodi.ccKalaCode = " + ccKalaCode + " AND KalaMojodi.ShomarehBach = '" + shomarehBatch + "' AND KalaMojodi.TarikhTolid ='" + tarikhTolid +
+                    "' AND KalaMojodi.TarikhEngheza = '" + tarikhEngheza + "' AND \n" +
+                    " KalaMojodi.GheymatForosh =" + gheymatForosh + " AND KalaMojodi.GheymatMasrafKonandeh=" + gheymatMasrafKonandeh + " AND KalaMojodi.ccTaminKonandeh=" + ccTaminKonandeh + " AND IsAdamForosh=0 \n" +
+                    " GROUP BY KalaMojodi.ccKalaCode, ccForoshandeh, KalaMojodi.ShomarehBach, KalaMojodi.TarikhTolid,KalaMojodi.TarikhEngheza,KalaMojodi.ccTaminKonandeh,KalaMojodi.GheymatForosh,KalaMojodi.GheymatMasrafKonandeh,GheymatKharid,KalaMojodi.ccTaminKonandeh \n" +
+                    " HAVING SUM(Tedad) > 0 \n" +
+                    " ORDER BY GheymatKharid";
 
-        query = " SELECT KalaMojodi.ccKalaCode,CodeKala,BarCode,NameBrand,NameKala,KalaMojodi.CcTaminKonandeh,TedadDarKarton,TedadDarBasteh,Adad,TedadMojodyGhabelForosh,\n" +
-                " VaznKhales,VaznKarton,NameVahedVazn,NameVahedSize,Tol,Arz,Ertefa,MashmolMaliatAvarez,\n" +
-                " GheymatForoshAsli,GheymatMasrafKonandehAsli,\n" +
-                " KalaMojodi.CcKalaMojodi,KalaMojodi.Tedad,\n" +
-                " KalaMojodi.GheymatForosh,KalaMojodi.GheymatKharid,KalaMojodi.GheymatMasrafKonandeh MablaghMasrafKonandeh,1 ZaribForosh,KalaMojodi.ShomarehBach,KalaMojodi.TarikhTolid," +
-                " KalaMojodi.TarikhEngheza,ccGorohKala,1 Olaviat, \n" +
-                " SUM(Tedad) AS sumTedad, SUM(Max_MojodyByShomarehBach) AS Max_MojodyByShomarehBach, KM.Max_Mojody \n" +
-                " FROM KalaMojodi \n" +
-                " LEFT JOIN (SELECT ccKalaCode,ShomarehBach,TarikhTolid,TarikhEngheza, GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh,  SUM(DISTINCT Max_Mojody) Max_Mojody \n" +
-                " FROM KalaMojodi \n" +
-                " WHERE IsAdamForosh=0 \n" +
-                " GROUP BY ccKalaCode,ShomarehBach,TarikhTolid,TarikhEngheza, GheymatForosh,GheymatMasrafKonandeh,ccTaminKonandeh) KM ON KM.ccKalaCode=KalaMojodi.ccKalaCode AND KM.ShomarehBach = KalaMojodi.ShomarehBach AND \n" +
-                " KM.TarikhTolid = KalaMojodi.TarikhTolid AND KM.TarikhEngheza = KalaMojodi.TarikhEngheza AND \n" +
-                " KM.GheymatForosh = KalaMojodi.GheymatForosh AND KM.GheymatMasrafKonandeh = KalaMojodi.GheymatMasrafKonandeh AND KM.ccTaminKonandeh = KalaMojodi.ccTaminKonandeh \n" +
-                " LEFT JOIN (SELECT * FROM Kala ) K ON K.ccKalaCode=KalaMojodi.ccKalaCode AND K.ShomarehBach = KalaMojodi.ShomarehBach AND \n" +
-                " K.TarikhTolid = KalaMojodi.TarikhTolid AND K.TarikhEngheza = KalaMojodi.TarikhEngheza AND \n" +
-                " K.MablaghForosh = KalaMojodi.GheymatForosh AND K.MablaghMasrafKonandeh = KalaMojodi.GheymatMasrafKonandeh AND K.ccTaminKonandeh = KalaMojodi.ccTaminKonandeh \n"+
-                " WHERE KalaMojodi.ccKalaCode = " + ccKalaCode + " AND KalaMojodi.ShomarehBach = '" + shomarehBatch + "' AND KalaMojodi.TarikhTolid ='" + tarikhTolid +
-                "' AND KalaMojodi.TarikhEngheza = '" + tarikhEngheza + "' AND \n" +
-                " KalaMojodi.GheymatForosh =" + gheymatForosh + " AND KalaMojodi.GheymatMasrafKonandeh=" + gheymatMasrafKonandeh +" AND KalaMojodi.ccTaminKonandeh=" + ccTaminKonandeh + " AND IsAdamForosh=0 \n" +
-                " GROUP BY KalaMojodi.ccKalaCode, ccForoshandeh, KalaMojodi.ShomarehBach, KalaMojodi.TarikhTolid,KalaMojodi.TarikhEngheza,KalaMojodi.ccTaminKonandeh,KalaMojodi.GheymatForosh,KalaMojodi.GheymatMasrafKonandeh,GheymatKharid,KalaMojodi.ccTaminKonandeh \n" +
-                " HAVING SUM(Tedad) > 0 \n" +
-                " ORDER BY GheymatKharid";
-
-
+        }
 
         try
         {

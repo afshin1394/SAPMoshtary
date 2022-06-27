@@ -326,7 +326,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             @Override
             public void onSuccess()
             {
-               // getBottomBarStatus(ccMoshtary,moshtaryGharardadccSazmanForosh);
+                getBottomBarStatus(ccMoshtary,moshtaryGharardadccSazmanForosh);
             }
 
             @Override
@@ -796,6 +796,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
         adamDarkhastModel.setLongitude((float) googleLocationProvider.getLongitude());
         adamDarkhastModel.setLatitude((float) googleLocationProvider.getLatitude());
         adamDarkhastModel.setIsSentToServer(false);
+        adamDarkhastModel.setSaatVorod(getCurrentDate());
 
         if (adamDarkhastDAO.insert(adamDarkhastModel))
         {
@@ -1174,7 +1175,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                     setLogToDB(LogPPCModel.LOG_EXCEPTION, e.toString(), "", "", "", "");
                 }
 
-                int ccAnbarakActive = foroshandehMamorPakhshDAO.getAll().get(0).getCcAnbarak();
+                int ccAnbarakActive = foroshandehMamorPakhshDAO.getIsSelect().getCcAnbarak();
                 ArrayList<AnbarakAfradModel> anbarakAfradModels = anbarakafradDAO.getAll();
 				String customerMobile = moshtaryModel.getMobile();
                 customerMobile = customerMobile == null ? "" : customerMobile;

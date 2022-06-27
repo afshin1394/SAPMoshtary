@@ -9,10 +9,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.saphamrah.Model.DarkhastFaktorSatrTakhfifModel;
 import com.saphamrah.Model.ForoshandehMoshtaryModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.MasirModel;
+import com.saphamrah.Model.AmvalModel;
 import com.saphamrah.Model.MoshtaryModel;
 import com.saphamrah.Model.MoshtaryParentModel;
 import com.saphamrah.Model.ServerIpModel;
@@ -27,7 +27,6 @@ import com.saphamrah.WebService.ApiClientGlobal;
 import com.saphamrah.WebService.GrpcService.GrpcChannel;
 import com.saphamrah.WebService.ServiceResponse.GetAllMoshtaryByccMasirResult;
 import com.saphamrah.WebService.ServiceResponse.GetMoshtaryPakhshResult;
-import com.saphamrah.WebService.ServiceResponse.GetMoshtarysFirstParentPPCResult;
 import com.saphamrah.protos.CustomerByRouteIDGrpc;
 import com.saphamrah.protos.CustomerByRouteIDReply;
 import com.saphamrah.protos.CustomerByRouteIDReplyList;
@@ -113,7 +112,8 @@ public class MoshtaryDAO
             MoshtaryModel.COLUMN_ModateNaghd(),
             MoshtaryModel.COLUMN_TarikhMoarefiMoshtary(),
             MoshtaryModel.COLUMN_KharejAzMahal(),
-            MoshtaryModel.COLUMN_CodeEghtesady()
+            MoshtaryModel.COLUMN_CodeEghtesady(),
+            MoshtaryModel.COLUMN_HasAmval()
 
         };
     }
@@ -1197,6 +1197,38 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
 
     }
 
+    public boolean getHasAmval(int ccMoshtary) {
+        AmvalModel model = new AmvalModel();
+        //0 for wrong; 1 for success ; 2 for repeated
+        boolean flag = false;
+
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query = "select * from " + MoshtaryModel.TableName() + " where " + MoshtaryModel.COLUMN_ccMoshtary() + " = " + ccMoshtary;
+            Cursor cursor = db.rawQuery(query, null);
+
+            if (cursor != null) {
+                if (cursor.getCount() > 0) {
+                    if (cursorToModel(cursor).get(0).getHasAmval() == 1)
+                        flag = true;
+                    cursor.close();
+
+                }
+            }
+            db.close();
+
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+
+
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll, AmvalModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "AmvalDAO", "", "getByParent", "");
+        }
+        return flag;
+    }
+
     public boolean deleteAll()
     {
         try
@@ -1347,6 +1379,7 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
         contentValues.put(MoshtaryModel.COLUMN_TarikhMoarefiMoshtary(), moshtaryModel.getTarikhMoarefiMoshtary());
         contentValues.put(MoshtaryModel.COLUMN_KharejAzMahal(), moshtaryModel.getKharejAzMahal());
         contentValues.put(MoshtaryModel.COLUMN_CodeEghtesady(), moshtaryModel.getCodeEghtesady());
+        contentValues.put(MoshtaryModel.COLUMN_HasAmval(), moshtaryModel.getHasAmval());
 
 
         return contentValues;
@@ -1400,6 +1433,8 @@ Call<GetMoshtaryPakhshResult> call = apiServiceGet.getMoshtaryPakhsh(ccMoshtaryP
             moshtaryModel.setTarikhMoarefiMoshtary(cursor.getString(cursor.getColumnIndex(MoshtaryModel.COLUMN_TarikhMoarefiMoshtary())));
             moshtaryModel.setKharejAzMahal(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_KharejAzMahal())));
             moshtaryModel.setCodeEghtesady(cursor.getString(cursor.getColumnIndex(MoshtaryModel.COLUMN_CodeEghtesady())));
+            moshtaryModel.setHasAmval(cursor.getInt(cursor.getColumnIndex(MoshtaryModel.COLUMN_HasAmval())));
+
 
 
             moshtaryModels.add(moshtaryModel);

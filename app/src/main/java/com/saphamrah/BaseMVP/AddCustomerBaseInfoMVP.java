@@ -49,7 +49,7 @@ public interface AddCustomerBaseInfoMVP
     interface PresenterOps
     {
         void onConfigurationChanged(AddCustomerBaseInfoMVP.RequiredViewOps view);
-        void getConfig();
+        void getConfig(AddCustomerInfoModel addCustomerInfoModel);
         void getAnbar();
         void getRotbe();
         void getNoeShakhsiat();
@@ -67,7 +67,7 @@ public interface AddCustomerBaseInfoMVP
     interface RequiredPresenterOps
     {
         Context getAppContext();
-        void onGetConfig(boolean requireCodeMeli, boolean requireMobile, boolean requireMasahat , boolean requireBirthDate);
+        void onGetConfig(boolean requireCode,boolean isCodeOrShenase, boolean requireMobile, boolean requireMasahat , boolean requireBirthDate);
         void onGetAnbarItems(ArrayList<Integer> itemIds , ArrayList<String> itemTitles);
         void onGetRotbeItems(ArrayList<Integer> itemsId , ArrayList<String> itemTitle);
         void onGetNoeShakhsiatItems(ArrayList<Integer> itemIds , ArrayList<String> itemTitles);
@@ -84,7 +84,7 @@ public interface AddCustomerBaseInfoMVP
 
     interface ModelOps
     {
-        void getConfig();
+        void getConfig(AddCustomerInfoModel addCustomerInfoModel);
         void getAnbarItems();
         void getRotbeItems();
         void getNoeShakhsiatItems();

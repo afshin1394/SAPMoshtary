@@ -61,13 +61,13 @@ public class RptMojodiAnbarakModel implements RptMojodiAnbrakMVP.ModelOps {
     @Override
     public void updateMojodiAnbar(int sortHavalehFaktor, boolean viewAsTable) {
         ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(BaseApplication.getContext());
-        ArrayList<ForoshandehMamorPakhshModel> foroshandehMamorPakhshModels = foroshandehMamorPakhshDAO.getAll();
-        int ccMamorPakhsh = foroshandehMamorPakhshModels.get(0).getCcMamorPakhsh();
-        int ccForoshandeh = foroshandehMamorPakhshModels.get(0).getCcForoshandeh();
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
+        int ccMamorPakhsh = foroshandehMamorPakhshModel.getCcMamorPakhsh();
+        int ccForoshandeh = foroshandehMamorPakhshModel.getCcForoshandeh();
 
         // get noeMasoliat
         ForoshandehMamorPakhshUtils foroshandehMamorPakhshUtils = new ForoshandehMamorPakhshUtils();
-        int noeMasouliat = foroshandehMamorPakhshUtils.getNoeMasouliat(foroshandehMamorPakhshModels.get(0));
+        int noeMasouliat = foroshandehMamorPakhshUtils.getNoeMasouliat(foroshandehMamorPakhshModel);
 
         AnbarakAfradDAO anbarakAfradDAO = new AnbarakAfradDAO(mPresenter.getAppContext());
         ArrayList<AnbarakAfradModel> anbarakAfradModels = anbarakAfradDAO.getAll();

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        app:cardCornerRadius="10dp">
+
+        <LinearLayout
+            android:id="@+id/root_layview_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="9dp">
+
+                <LinearLayout
+                    android:id="@+id/layTableTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:layoutDirection="rtl"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                android:id="@+id/lblCustomerCode"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:background="@color/colorWhite"
+                                android:drawableStart="@drawable/ic_name"
+                                android:gravity="start|center"
+                                android:paddingStart="10dp"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/FontSize14" />
+
+                            <!--                        <TextView-->
+                            <!--                            android:id="@+id/lblCustomerName"-->
+                            <!--                            android:layout_width="0dp"-->
+                            <!--                            android:layout_height="match_parent"-->
+                            <!--                            android:layout_weight="2"-->
+                            <!--                            android:background="@color/colorWhite"-->
+                            <!--                            android:gravity="start|center"-->
+                            <!--                            android:textColor="@color/colorTextPrimary"-->
+                            <!--                            android:textSize="@dimen/FontSize12" />-->
+
+                            <TextView
+                                android:id="@+id/lblOlaviat"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:background="@color/colorWhite"
+                                android:drawableStart="@drawable/ic_name"
+                                android:gravity="start|center"
+                                android:paddingStart="7dp"
+                                android:lines="3"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/FontSize14" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="-12dp">
+
+                            <TextView
+                                android:id="@+id/lblSaateVorod"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:background="@color/colorWhite"
+                                android:drawableStart="@drawable/ic_time_in_destination"
+                                android:gravity="start|center"
+                                android:padding="7dp"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/FontSize14" />
+
+                            <TextView
+                                android:id="@+id/lblSaateKhoroj"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:background="@color/colorWhite"
+                                android:drawableStart="@drawable/ic_time_in_destination"
+                                android:gravity="start|center"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/FontSize14" />
+
+                            <TextView
+                                android:id="@+id/lblZamanDarMaghaze"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:background="@color/colorWhite"
+                                android:drawableStart="@drawable/ic_time"
+                                android:gravity="start|center"
+                                android:padding="5dp"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/FontSize14" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <!--                <ImageView-->
+                    <!--                    android:id="@+id/expand_btn"-->
+                    <!--                    android:layout_width="wrap_content"-->
+                    <!--                    android:layout_height="match_parent"-->
+                    <!--                    android:layout_gravity="center"-->
+                    <!--                    android:background="@color/colorWhite"-->
+                    <!--                    android:padding="30dp"-->
+                    <!--                    android:rotation="180"-->
+
+                    <!--                    android:src="@drawable/ic_arrow_up"-->
+                    <!--                    android:visibility="visible" />-->
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/visit_forosh_linear_second"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/adadarkhast_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/lblDalilDarkhastManfi"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="4"
+                            android:background="@color/colorWhite"
+                            android:drawableStart="@drawable/ic_adamdarkhast"
+                            android:gravity="start|center"
+                            android:padding="5dp"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/FontSize14" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/kharid_detail_ll"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/lblTedadAghlam"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/colorWhite"
+                            android:drawableStart="@drawable/ic_porseshname"
+                            android:gravity="start|center"
+                            android:padding="5dp"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/FontSize14" />
+
+                        <TextView
+                            android:id="@+id/lblRialKharid"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:background="@color/colorWhite"
+                            android:drawableStart="@drawable/ic_funds_small"
+                            android:gravity="start|center"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/FontSize14" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</LinearLayout>

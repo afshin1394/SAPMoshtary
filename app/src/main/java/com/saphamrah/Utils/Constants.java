@@ -7,7 +7,7 @@ public class Constants
 {
 
     ///////////////////////////// VERSION TYPE /////////////////////////////
-    private static final int CURRENT_VERSION_TYPE =4 ; // 0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest 8-Pegah-grpc 9-Badr
+    private static final int CURRENT_VERSION_TYPE =0 ; // 0- main  1- Learn  2- Test 4-pegah 5-pegahLearn 6-Demo 7-PegahTest 8-Pegah-grpc 9-Badr
 
     public static int CURRENT_VERSION_TYPE(){return CURRENT_VERSION_TYPE;}
 
@@ -712,7 +712,10 @@ public class Constants
     public static final int CC_CHILD_Can_Decrease_Bonus_Select = 201;
     public static final int CC_CHILD_CHANGE_AMOUNT_MARJOEE = 202;
     public static final int CC_CHILD_START_ROOZ_PISHBINITAHVIL = 204;
-
+    public static final int CC_CHILD_CHECK_ETEBAR_FOROSHANDEH = 205;
+    public static final int CC_CHILD_CHECK_ETEBAR_MOSHTARY = 206;
+    public static final int CC_CHILD_RequireShenasehMeli = 207;
+    public static final int CC_CHILD_CheckAmvalMoshtary = 208;
 
 
 
@@ -1245,6 +1248,22 @@ public class Constants
     public static int CC_CHILD_START_ROOZ_PISHBINITAHVIL()
     {
         return CC_CHILD_START_ROOZ_PISHBINITAHVIL;
+    }
+    public static int CC_CHILD_CHECK_ETEBAR_FOROSHANDEH()
+    {
+        return CC_CHILD_CHECK_ETEBAR_FOROSHANDEH;
+    }
+    public static int CC_CHILD_CHECK_ETEBAR_MOSHTARY()
+    {
+        return CC_CHILD_CHECK_ETEBAR_MOSHTARY;
+    }
+    public static int CC_CHILD_RequireShenasehMeli()
+    {
+        return CC_CHILD_RequireShenasehMeli;
+    }
+    public static int CC_CHILD_CheckAmvalMoshtary()
+    {
+        return CC_CHILD_CheckAmvalMoshtary;
     }
 
 

@@ -1,5 +1,6 @@
 package com.saphamrah.PubFunc;
 
+import static com.saphamrah.Adapter.RequestedGridGoodAdapter.TAG;
 import static com.saphamrah.Utils.Constants.REST;
 import static com.saphamrah.Utils.Constants.gRPC;
 
@@ -18,6 +19,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
@@ -2667,7 +2669,132 @@ get mac address in android 10
             }
         }
 
+        public void drawSingleFourBarChart(Context context, BarChart barChart, float firstBarValue, float secondBarValue, float thirdBarChart, float fourthBarChart, ArrayList<String> xAxisLabels, Float limitLineValue, int limitSize) {
+            Typeface font = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fontPath));
 
+            if (firstBarValue == 0 && secondBarValue == 0) {
+                setNoDataText(context, barChart, font);
+                Log.i("inSetNoData", "drawPercentageBarChart: ");
+            } else {
+                firstBarValue = (int) firstBarValue;
+                secondBarValue = (int) secondBarValue;
+                thirdBarChart = (int) thirdBarChart;
+                fourthBarChart = (int) fourthBarChart;
+
+                //barChartCountFaktor.setOnChartValueSelectedListener(this);
+                barChart.setDrawBarShadow(false);
+                barChart.setDrawValueAboveBar(true);
+                barChart.getDescription().setEnabled(false);
+                barChart.setNoDataText(context.getResources().getString(R.string.errorGetDataChart));
+                // if more than 60 entries are displayed in the chart, no values will be
+                // drawn
+                barChart.setMaxVisibleValueCount(60);
+                // scaling can now only be done on x- and y-axis separately
+                barChart.setPinchZoom(false);
+                barChart.setDrawGridBackground(false);
+
+
+                // chart.setDrawYLabels(false);
+
+
+                XAxis xAxis = barChart.getXAxis();
+                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                xAxis.setTypeface(font);
+                xAxis.setDrawGridLines(false);
+                xAxis.setTextSize(12f);
+
+                xAxis.setAxisMinimum(0);
+                xAxis.setGranularity(1f); // only intervals of 1 day
+
+
+                xAxis.setValueFormatter(new ValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value) {
+                        if (value == 1) {
+                            return xAxisLabels.get(0);
+                        } else if (value == 2) {
+                            return xAxisLabels.get(1);
+                        } else if (value == 3) {
+                            return xAxisLabels.get(2);
+                        } else if (value == 4) {
+                            return xAxisLabels.get(3);
+                        }else if (value == 5) {
+                            return xAxisLabels.get(4);
+                        } else {
+                            return "";
+                        }
+                    }
+                });
+
+
+                YAxis leftAxis = barChart.getAxisLeft();
+                leftAxis.setTypeface(font);
+                leftAxis.setLabelCount(5, false);
+                //leftAxis.setValueFormatter(custom);
+                leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+                leftAxis.setSpaceTop(20f);
+
+                Log.i(TAG, "drawSingleFourBarChart: " + limitSize);
+                leftAxis.setAxisMaximum(limitSize + 5f);
+                leftAxis.setAxisMinimum(0f);
+//            leftAxis.setAxisMaximum(100f);// this replaces setStartAtZero(true)
+
+                YAxis rightAxis = barChart.getAxisRight();
+                rightAxis.setDrawGridLines(false);
+                rightAxis.setTypeface(font);
+                rightAxis.setLabelCount(5, false);
+                Log.i("darsadMahDarsadRooz", "drawPercentageBarChart: " + firstBarValue + " " + secondBarValue);
+                rightAxis.setAxisMaximum(limitSize + 5f);
+//            rightAxis.setAxisMaximum(100f);
+                //rightAxis.setValueFormatter(custom);
+                rightAxis.setSpaceTop(20f);
+                rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+                barChart.setFitBars(true);
+                barChart.animateY(2500);
+
+                Legend legend = barChart.getLegend();
+                legend.setForm(Legend.LegendForm.EMPTY);
+
+                ArrayList<BarEntry> values = new ArrayList<>();
+                BarEntry adamDarkhastEntery = new BarEntry(4f, firstBarValue);
+                BarEntry kharidKardehEntery = new BarEntry(2f, secondBarValue);
+                BarEntry adamSefaresh = new BarEntry(3f, thirdBarChart);
+                BarEntry morajeNakardeh = new BarEntry(5f, fourthBarChart);
+                BarEntry kolEntery = new BarEntry(1f, limitSize);
+                values.add(kolEntery);
+                values.add(kharidKardehEntery);
+                values.add(adamDarkhastEntery);
+                values.add(adamSefaresh);
+                values.add(morajeNakardeh);
+
+                BarDataSet datasetAmarForosh = new BarDataSet(values, "");
+                datasetAmarForosh.setDrawIcons(false);
+                datasetAmarForosh.setColors(context.getResources().getColor(R.color.green_vf_2), context.getResources().getColor(R.color.green_vf),
+                        context.getResources().getColor(R.color.yellow_vf), context.getResources().getColor(R.color.orange_vf), context.getResources().getColor(R.color.gray_vf));
+
+                ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+                dataSets.add(datasetAmarForosh);
+
+
+                BarData data = new BarData(dataSets);
+
+//        data.setV alueFormatter(new LargeValueFormatter());
+                data.setValueFormatter(new ValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value) {
+                        value = Float.valueOf(String.format("%.1f", value));
+
+                        return new PubFunc().new ChartUtils().convertEnglishNumbersToPersian(String.valueOf(value));
+                    }
+                });
+                data.setValueTextSize(15f);
+                data.setBarWidth(0.9f);
+                data.setValueTypeface(font);
+                barChart.setData(data);
+                barChart.setTouchEnabled(false);
+                barChart.setScaleEnabled(false);
+            }
+        }
 
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void drawGroupBarBarChart(Context context, BarChart barChart, int firstSetFirstValue, int firstSetSecondValue, int secondSetFirstValue, int secondSetSecondValue, String titleName, ArrayList<String> xAxisLables, ArrayList<String> legendLabels, float limitLineValue) {
@@ -2877,6 +3004,16 @@ get mac address in android 10
             };
             mainHandler.post(runnable);
         }
+    }
+
+    public Bitmap rotateBitmapByDegree(Bitmap bitmap, int degree){
+        Matrix matrix = new Matrix();
+
+        matrix.postRotate(degree);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+
+        return  rotatedBitmap;
     }
 
     public interface ConcurrencyEvents {

@@ -76,7 +76,8 @@ public class RptVisitForoshandehMoshtaryDAO
             RptVisitForoshandehMoshtaryModel.COLUMN_VazeiatDarkhast(),
             RptVisitForoshandehMoshtaryModel.COLUMN_DalilDarkhastManfi(),
             RptVisitForoshandehMoshtaryModel.COLUMN_Tedad_AghlamFaktor(),
-            RptVisitForoshandehMoshtaryModel.COLUMN_IsMorajeh()
+            RptVisitForoshandehMoshtaryModel.COLUMN_IsMorajeh(),
+            RptVisitForoshandehMoshtaryModel.COLUMN_CodeNoeAdamDarkhast()
         };
     }
 
@@ -119,6 +120,7 @@ public class RptVisitForoshandehMoshtaryDAO
                                 model.setVazeiatMorajeh(reply.getReferralStatus());
                                 model.setZamanDarMaghazeh(reply.getTimePeriodInShop());
                                 model.setRialKharid(reply.getPurchaseRial());
+//                                model.setcodeNoeAdamDarkhast(reply.getCodeNoeAdamDarkhast());
 
 
                                 models.add(model);
@@ -333,7 +335,7 @@ public class RptVisitForoshandehMoshtaryDAO
             String query = "SELECT * FROM( \n" +
                     " Select 0 AS id, Radif, Olaviat, CodeMoshtary, NameMoshtary, Telephone, RialKharid, \n" +
                     " SaatVorodBeMaghazeh, SaatKhorojAzMaghazeh, ZamanDarMaghazeh, VazeiatMorajeh, \n" +
-                    " VazeiatDarkhast, DalilDarkhastManfi, Tedad_AghlamFaktor, IsMorajeh \n" +
+                    " CodeNoeAdamDarkhast, DalilDarkhastManfi, Tedad_AghlamFaktor, IsMorajeh   \n" +
                     " FROM   Rpt_VisitForoshandeh_Moshtary \n" +
                     " UNION ALL \n" +
                     " Select 1 AS id, 0, 0, '', '', '', SUM(RialKharid) AS RialKharid, '', '', '', '', '', '', \n" +
@@ -400,6 +402,7 @@ public class RptVisitForoshandehMoshtaryDAO
         contentValues.put(RptVisitForoshandehMoshtaryModel.COLUMN_DalilDarkhastManfi() , rptVisitForoshandehMoshtaryModel.getDalilDarkhastManfi());
         contentValues.put(RptVisitForoshandehMoshtaryModel.COLUMN_Tedad_AghlamFaktor() , rptVisitForoshandehMoshtaryModel.getTedad_AghlamFaktor());
         contentValues.put(RptVisitForoshandehMoshtaryModel.COLUMN_IsMorajeh() , rptVisitForoshandehMoshtaryModel.getIsMorajeh());
+        contentValues.put(RptVisitForoshandehMoshtaryModel.COLUMN_CodeNoeAdamDarkhast() , rptVisitForoshandehMoshtaryModel.getCodeNoeAdamDarkhast());
 
         return contentValues;
     }
@@ -424,10 +427,12 @@ public class RptVisitForoshandehMoshtaryDAO
             rptVisitForoshandehMoshtaryModel.setSaatKhorojAzMaghazeh(cursor.getString(cursor.getColumnIndex(RptVisitForoshandehMoshtaryModel.COLUMN_SaatKhorojAzMaghazeh())));
             rptVisitForoshandehMoshtaryModel.setZamanDarMaghazeh(cursor.getString(cursor.getColumnIndex(RptVisitForoshandehMoshtaryModel.COLUMN_ZamanDarMaghazeh())));
             rptVisitForoshandehMoshtaryModel.setVazeiatMorajeh(cursor.getString(cursor.getColumnIndex(RptVisitForoshandehMoshtaryModel.COLUMN_VazeiatMorajeh())));
-            rptVisitForoshandehMoshtaryModel.setVazeiatDarkhast(cursor.getString(cursor.getColumnIndex(RptVisitForoshandehMoshtaryModel.COLUMN_VazeiatDarkhast())));
+//            rptVisitForoshandehMoshtaryModel.setVazeiatDarkhast(cursor.getString(cursor.getColumnIndex(RptVisitForoshandehMoshtaryModel.COLUMN_VazeiatDarkhast())));
             rptVisitForoshandehMoshtaryModel.setDalilDarkhastManfi(cursor.getString(cursor.getColumnIndex(RptVisitForoshandehMoshtaryModel.COLUMN_DalilDarkhastManfi())));
             rptVisitForoshandehMoshtaryModel.setTedad_AghlamFaktor(cursor.getInt(cursor.getColumnIndex(RptVisitForoshandehMoshtaryModel.COLUMN_Tedad_AghlamFaktor())));
             rptVisitForoshandehMoshtaryModel.setIsMorajeh(cursor.getInt(cursor.getColumnIndex(RptVisitForoshandehMoshtaryModel.COLUMN_IsMorajeh())));
+            rptVisitForoshandehMoshtaryModel.setcodeNoeAdamDarkhast(cursor.getInt(cursor.getColumnIndex(RptVisitForoshandehMoshtaryModel.COLUMN_CodeNoeAdamDarkhast())));
+
 
             rptVisitForoshandehMoshtaryModels.add(rptVisitForoshandehMoshtaryModel);
             cursor.moveToNext();

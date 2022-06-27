@@ -325,7 +325,7 @@
                             <ImageView
 
                                 android:id="@+id/expand_btn"
-                                android:layout_width="@dimen/_30sdp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:padding="8dp"
                                 android:rotation="180"

@@ -1,6 +1,9 @@
 package com.saphamrah.MVP.Presenter.MainFragmentViewPagerPresenter;
 
+import static com.saphamrah.Adapter.RequestedGridGoodAdapter.TAG;
+
 import android.content.Context;
+import android.util.Log;
 
 import com.saphamrah.BaseMVP.MainViewPagerMVP.HadafForoshTedadyFragmentMVP;
 import com.saphamrah.Model.HadafForosh.BaseHadafForoshModel;
@@ -11,15 +14,21 @@ import java.lang.ref.WeakReference;
 public class HadafForoshTedadyFragmentsPresenter implements HadafForoshTedadyFragmentMVP.PresenterOps, HadafForoshTedadyFragmentMVP.RequiredPresenterOps {
     private WeakReference<HadafForoshTedadyFragmentMVP.RequiredViewOps> mView;
     private HadafForoshTedadyFragmentMVP.ModelOps mModel;
+    private BaseHadafForoshModel baseHadafForoshModel;
+
     public HadafForoshTedadyFragmentsPresenter(HadafForoshTedadyFragmentMVP.RequiredViewOps viewOps) {
-        this.mView = new WeakReference<>(viewOps);
-        mModel = new HadafForoshTedadyFragmentModel(this);
+
+        if (mModel == null) {
+            Log.i(TAG, "HadafForoshTedadyFragmentsPresenter: ");
+            this.mView = new WeakReference<>(viewOps);
+            mModel = new HadafForoshTedadyFragmentModel(this);
+        }
 
     }
+
     @Override
     public void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild) {
-        if (!message.trim().equals("") || !logClass.trim().equals("") || !logActivity.trim().equals("") || !functionParent.trim().equals("") || !functionChild.trim().equals(""))
-        {
+        if (!message.trim().equals("") || !logClass.trim().equals("") || !logActivity.trim().equals("") || !functionParent.trim().equals("") || !functionChild.trim().equals("")) {
             mModel.setLogToDB(logType, message, logClass, logActivity, functionParent, functionChild);
         }
     }
@@ -36,12 +45,18 @@ public class HadafForoshTedadyFragmentsPresenter implements HadafForoshTedadyFra
 
     @Override
     public void onGetHadafForoshTedadyKole(BaseHadafForoshModel baseHadafForoshModel) {
+        this.baseHadafForoshModel = baseHadafForoshModel;
         mView.get().onGetHadafForoshTedady(baseHadafForoshModel);
     }
 
     @Override
     public void getHadafForoshTedady() {
-        mModel.getHadafForoshTedadyKole();
+        if (this.baseHadafForoshModel == null) {
+            mModel.getHadafForoshTedadyKole();
+        } else {
+            Log.i(TAG, "onGetHadafForoshTedady: getHadafForoshTedady");
+            mView.get().onGetHadafForoshTedady(this.baseHadafForoshModel);
+        }
     }
 
     @Override

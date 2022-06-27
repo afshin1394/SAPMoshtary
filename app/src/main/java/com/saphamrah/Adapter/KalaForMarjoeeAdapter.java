@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -135,6 +136,8 @@ public class KalaForMarjoeeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             editableCost = view.findViewById(R.id.lblEditableGheymat);
             customTextInputLayout = view.findViewById(R.id.txtinputEditableGheymat);
             editableCost.addTextChangedListener(textWatcher);
+
+            editableCost.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
             editableCost.setTypeface(font);
             lblNameKala.setTypeface(font);

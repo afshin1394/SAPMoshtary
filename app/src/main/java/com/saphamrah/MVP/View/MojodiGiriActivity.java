@@ -90,6 +90,7 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
     private ElatAdamDarkhastModel elatAdamDarkhastModel;
 
     private FloatingActionButton fabAdamDarkhast;
+    private FloatingActionButton fabSabtAmval;
     private View alertView;
     private AlertDialog show;
     private ArrayList<KalaFilterUiModel> kalaFilterUiModels = new ArrayList<>();
@@ -108,6 +109,8 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
         final FloatingActionMenu fabMenu = findViewById(R.id.fabMenu);
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
         FloatingActionButton fabSearch = findViewById(R.id.fabSearch);
+
+        fabSabtAmval = findViewById(R.id.fabSabtAmval);
         FloatingActionButton fabShowCustomerInfo = findViewById(R.id.fabShowCustomerInfo);
         fabAdamDarkhast = findViewById(R.id.fabAdamDarkhast);
         FloatingActionButton fabMoshtaryChidman = findViewById(R.id.fabMoshtaryChidman);
@@ -139,7 +142,6 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
         mPresenter.getKala(ccMoshtary);
         mPresenter.getKalaFilter();
 
-        mPresenter.getNoeMasouliat();
 
 
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
@@ -223,6 +225,15 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
             }
         });
 
+        fabSabtAmval.setOnClickListener(v->{
+            Intent intent = new Intent(MojodiGiriActivity.this , SabtAmvalActivity.class);
+            intent.putExtra(CustomerInfoActivity.CCMOSHTARY_KEY , ccMoshtary);
+
+
+            intent.putExtra(CustomerInfoActivity.CCSAZMANFOROSH_KEY , ccSazmanForosh);
+            startActivity(intent);
+        });
+
 
         fabShowCustomerInfo.setOnClickListener(new View.OnClickListener()
         {
@@ -290,6 +301,11 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
     {
         isMamorPakhsh = true;
         fabAdamDarkhast.setVisibility(View.GONE);
+    }
+    @Override
+    public void hideSabtAmvalButton()
+    {
+        fabSabtAmval.setVisibility(View.GONE);
     }
 	
     @Override
@@ -581,8 +597,11 @@ public class MojodiGiriActivity extends AppCompatActivity implements MojodiGiriM
             {
                 try
                 {
-                    bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
-                    mPresenter.checkAdamDarkhastForInsert(ccMoshtary, elatAdamDarkhastModel, new PubFunc().new ImageUtils().convertBitmapToByteArray(MojodiGiriActivity.this, bitmap, 50), "");
+                    Bitmap firstBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+                    PubFunc pubFunc = new PubFunc();
+                    bitmap = pubFunc.rotateBitmapByDegree(firstBitmap,90);
+
+                    mPresenter.checkAdamDarkhastForInsert(ccMoshtary, elatAdamDarkhastModel, pubFunc.new ImageUtils().convertBitmapToByteArray(MojodiGiriActivity.this, bitmap, 50), "");
                 }
                 catch (Exception e)
                 {

@@ -20,6 +20,10 @@ public class RptVisitForoshandehMoshtaryModel
     private static final String COLUMN_DalilDarkhastManfi = "DalilDarkhastManfi";
     private static final String COLUMN_Tedad_AghlamFaktor = "Tedad_AghlamFaktor";
     private static final String COLUMN_IsMorajeh = "IsMorajeh";
+    private static final String COLUMN_CodeNoeAdamDarkhast = "CodeNoeAdamDarkhast";
+
+    private int ExtraProp_OpenView = 0;
+
 
 
     public static String TableName() {
@@ -67,6 +71,10 @@ public class RptVisitForoshandehMoshtaryModel
     public static String COLUMN_IsMorajeh() {
         return COLUMN_IsMorajeh;
     }
+    public static String COLUMN_CodeNoeAdamDarkhast() {
+         return COLUMN_CodeNoeAdamDarkhast;
+    }
+
 
 
 
@@ -77,6 +85,15 @@ public class RptVisitForoshandehMoshtaryModel
     }
     public void setRadif(int radif) {
         Radif = radif;
+    }
+
+
+    private int CodeNoeAdamDarkhast;
+    public int getCodeNoeAdamDarkhast() {
+        return CodeNoeAdamDarkhast;
+    }
+    public void setcodeNoeAdamDarkhast(int CodeNoeAdamDarkhast) {
+        this.CodeNoeAdamDarkhast = CodeNoeAdamDarkhast;
     }
 
 
@@ -196,6 +213,13 @@ public class RptVisitForoshandehMoshtaryModel
         IsMorajeh = isMorajeh;
     }
 
+    public int getExtraProp_OpenView() {
+        return ExtraProp_OpenView;
+    }
+
+    public void setExtraProp_OpenView(int extraProp_OpenView) {
+        ExtraProp_OpenView = extraProp_OpenView;
+    }
 
     @NonNull
     @Override
@@ -214,7 +238,8 @@ public class RptVisitForoshandehMoshtaryModel
                 ", VazeiatDarkhast='" + VazeiatDarkhast + '\'' +
                 ", DalilDarkhastManfi='" + DalilDarkhastManfi + '\'' +
                 ", Tedad_AghlamFaktor=" + Tedad_AghlamFaktor +
-                ", IsMorajeh=" + IsMorajeh;
+                ", IsMorajeh=" + IsMorajeh +
+                ", CodeNoeAdamDarkhast=" + CodeNoeAdamDarkhast;
     }
 
 

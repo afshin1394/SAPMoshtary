@@ -12,13 +12,15 @@ import com.saphamrah.MVP.View.MainViewPagerFragments.FragmentChartHadafForoshDar
 import com.saphamrah.MVP.View.MainViewPagerFragments.FragmentChartHadafForoshTedad;
 import com.saphamrah.MVP.View.MainViewPagerFragments.FragmentChartMablaghForosh;
 import com.saphamrah.MVP.View.MainViewPagerFragments.FragmentChartTedadFactorForosh;
+import com.saphamrah.MVP.View.MainViewPagerFragments.FragmentChartVisitForoshandeh;
 
 public class SliderPagerMainFrag extends FragmentStatePagerAdapter {
-    private final int MAX_FRAGMENT = 4;
-    private final int FRAGMENT_CHART_HADAF_FOROSH_DARSAD = 1;
-    private final int FRAGMENT_CHART_HADAF_FOROSH_TEDAD = 2;
-    private final int FRAGMENT_CHART_MABLAGH_FOROSH = 3;
-    private final int FRAGMENT_CHART_FACTOR_FOROSH = 4;
+    private final int MAX_FRAGMENT = 5;
+    private final int FRAGMENT_CHART_HADAF_FOROSH_DARSAD = 2;
+    private final int FRAGMENT_CHART_HADAF_FOROSH_TEDAD = 3;
+    private final int FRAGMENT_CHART_MABLAGH_FOROSH = 4;
+    private final int FRAGMENT_CHART_FACTOR_FOROSH = 5;
+    private final int FRAGMENT_CHART_VISIT_FOROSHANDEH = 1;
 
     public SliderPagerMainFrag(FragmentManager fm) {
         super(fm);
@@ -40,6 +42,11 @@ public class SliderPagerMainFrag extends FragmentStatePagerAdapter {
             case FRAGMENT_CHART_HADAF_FOROSH_DARSAD:
                 FragmentChartHadafForoshDarsad fragmentChartHadafForoshDarsad = new FragmentChartHadafForoshDarsad();
                 return fragmentChartHadafForoshDarsad;
+
+            case FRAGMENT_CHART_VISIT_FOROSHANDEH:
+                FragmentChartVisitForoshandeh fragmentChartVisitForoshandeh = new FragmentChartVisitForoshandeh();
+                return fragmentChartVisitForoshandeh;
+
             case FRAGMENT_CHART_HADAF_FOROSH_TEDAD:
                 FragmentChartHadafForoshTedad fragmentChartHadafForoshTedad = new FragmentChartHadafForoshTedad();
                 return fragmentChartHadafForoshTedad;

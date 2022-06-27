@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.saphamrah.Model.AdamDarkhastModel;
+import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
 import com.saphamrah.Utils.Constants;
@@ -48,7 +49,8 @@ public class AdamDarkhastDAO
             AdamDarkhastModel.COLUMN_Longitude(),
             AdamDarkhastModel.COLUMN_IsSentToServer(),
             AdamDarkhastModel.COLUMN_AdamDarkhastImage(),
-            AdamDarkhastModel.COLUMN_CodeMoshtaryTekrari()
+            AdamDarkhastModel.COLUMN_CodeMoshtaryTekrari(),
+            AdamDarkhastModel.COLUMN_SaatVorod()
         };
     }
 
@@ -294,6 +296,7 @@ public class AdamDarkhastDAO
         contentValues.put(AdamDarkhastModel.COLUMN_IsSentToServer() , adamDarkhastModel.getIsSentToServer());
         contentValues.put(AdamDarkhastModel.COLUMN_AdamDarkhastImage() , adamDarkhastModel.getAdamDarkhastImage());
         contentValues.put(AdamDarkhastModel.COLUMN_CodeMoshtaryTekrari() , adamDarkhastModel.getCodeMoshtaryTekrari());
+        contentValues.put(AdamDarkhastModel.COLUMN_SaatVorod() , simpleDateFormat.format(adamDarkhastModel.getSaatVorod()));
 
         return contentValues;
     }
@@ -308,9 +311,11 @@ public class AdamDarkhastDAO
         {
             AdamDarkhastModel adamDarkhastModel = new AdamDarkhastModel();
             Date dateAdamDarkhast = new Date();
+            Date dateVorod = new Date();
             try
             {
                 SimpleDateFormat formatter = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
+                dateVorod = formatter.parse(cursor.getString(cursor.getColumnIndex(AdamDarkhastModel.COLUMN_SaatVorod())));
                 dateAdamDarkhast = formatter.parse(cursor.getString(cursor.getColumnIndex(AdamDarkhastModel.COLUMN_TarikhAdamDarkhast())));
             }
             catch (Exception e)
@@ -329,6 +334,7 @@ public class AdamDarkhastDAO
             adamDarkhastModel.setIsSentToServer(cursor.getInt(cursor.getColumnIndex(AdamDarkhastModel.COLUMN_IsSentToServer())) > 0);
             adamDarkhastModel.setAdamDarkhastImage(cursor.getBlob(cursor.getColumnIndex(AdamDarkhastModel.COLUMN_AdamDarkhastImage())));
             adamDarkhastModel.setCodeMoshtaryTekrari(cursor.getString(cursor.getColumnIndex(AdamDarkhastModel.COLUMN_CodeMoshtaryTekrari())));
+            adamDarkhastModel.setSaatVorod(dateVorod);
 
             adamDarkhastModels.add(adamDarkhastModel);
             cursor.moveToNext();

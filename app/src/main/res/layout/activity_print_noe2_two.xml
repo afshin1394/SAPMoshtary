@@ -708,7 +708,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/_14ssp"
                         android:textStyle="bold"
-                        android:text="مبلغ مالیات ارزش افزوده درخواست : "
+                        android:text="مبلغ ارزش افزوده درخواست : "
                         android:textColor="@color/colorBlack"/>
                 </LinearLayout>
 

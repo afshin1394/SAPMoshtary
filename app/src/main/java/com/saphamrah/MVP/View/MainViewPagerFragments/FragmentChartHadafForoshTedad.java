@@ -36,18 +36,12 @@ import me.anwarshahriar.calligrapher.Calligrapher;
  * Use the {@link FragmentChartHadafForoshTedad#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentChartHadafForoshTedad extends Fragment implements HadafForoshTedadyFragmentMVP.RequiredViewOps{
+public class FragmentChartHadafForoshTedad extends Fragment implements HadafForoshTedadyFragmentMVP.RequiredViewOps {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private static final String TAG = FragmentChartHadafForoshTedad.class.getClass().getSimpleName();
     float limitLineNumerical = 0.85f;
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     View view;
     private BarChart barChartHadafForoshTedady;
     Context context;
@@ -57,22 +51,17 @@ public class FragmentChartHadafForoshTedad extends Fragment implements HadafForo
     public FragmentChartHadafForoshTedad() {
         // Required empty public constructor
     }
-    private static FragmentChartHadafForoshTedad instance=null;
-    public static FragmentChartHadafForoshTedad getInstance(){
-        if (instance==null)
-            instance=new FragmentChartHadafForoshTedad();
+
+    private static FragmentChartHadafForoshTedad instance = null;
+
+    public static FragmentChartHadafForoshTedad getInstance() {
+        if (instance == null)
+            instance = new FragmentChartHadafForoshTedad();
 
         return instance;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-
-     * @return A new instance of fragment FragmentChartHadafForoshTedad.
-     */
-    // TODO: Rename and change types and number of parameters
-    public  FragmentChartHadafForoshTedad newInstance() {
+    public FragmentChartHadafForoshTedad newInstance() {
         FragmentChartHadafForoshTedad fragment = new FragmentChartHadafForoshTedad();
 
         return fragment;
@@ -82,10 +71,9 @@ public class FragmentChartHadafForoshTedad extends Fragment implements HadafForo
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        Log.i(TAG, "onGetHadafForoshTedady: oncreate");
+
     }
 
     @Override
@@ -93,8 +81,11 @@ public class FragmentChartHadafForoshTedad extends Fragment implements HadafForo
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        view=inflater.inflate(R.layout.fragment_chart_hadaf_forosh_tedad, container, false);
+        view = inflater.inflate(R.layout.fragment_chart_hadaf_forosh_tedad, container, false);
         findViews(view);
+
+        Log.i(TAG, "onGetHadafForoshTedady: oncreateView");
+
 //        EventBus.getDefault().register(FragmentChartHadafForoshTedad.this);
 
 
@@ -103,39 +94,36 @@ public class FragmentChartHadafForoshTedad extends Fragment implements HadafForo
     }
 
 
-
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //        EventBus.getDefault().register(this);
-        stateMaintainer = new StateMaintainer(getChildFragmentManager() , TAG , context);
+        if (stateMaintainer == null)
+            stateMaintainer = new StateMaintainer(getChildFragmentManager(), TAG, context);
+
+        Log.i(TAG, "onGetHadafForoshTedady: onviewcreated");
 
 //        startMVPOps();
 //
 //
-        mPresenter=new HadafForoshTedadyFragmentsPresenter(this);
+        if (mPresenter == null)
+            mPresenter = new HadafForoshTedadyFragmentsPresenter(this);
 //        mPresenter.getHadafForoshTedady();
     }
 
 
     @Override
     public void onAttach(@NonNull Context context) {
-        Log.i(TAG, "onAttach: ");
         super.onAttach(context);
-        this.context=context;
+        this.context = context;
     }
 
 
-
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser)
-    {
+    public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser)
-        {
-            if (getView() != null)
-            {
+        if (isVisibleToUser) {
+            if (getView() != null) {
                 mPresenter.getHadafForoshTedady();
             }
         }
@@ -156,17 +144,16 @@ public class FragmentChartHadafForoshTedad extends Fragment implements HadafForo
     }
 
 
-
-
     private void findViews(View view) {
         Calligrapher calligrapher = new Calligrapher(context);
-        calligrapher.setFont(view , context.getResources().getString(R.string.fontPath));
-        Typeface font = Typeface.createFromAsset(context.getAssets() , context.getResources().getString(R.string.fontPath));
+        calligrapher.setFont(view, context.getResources().getString(R.string.fontPath));
+        Typeface font = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fontPath));
         barChartHadafForoshTedady = view.findViewById(R.id.barChartHadafForoshTedad);
-        setNoDataText(barChartHadafForoshTedady,font);
+        setNoDataText(barChartHadafForoshTedady, font);
     }
-    private void setNoDataText(BarChart barChart ,Typeface font){
-        barChart.setNoDataText(context.getResources().getString(R.string.errorGetData));
+
+    private void setNoDataText(BarChart barChart, Typeface font) {
+        barChart.setNoDataText(context.getResources().getString(R.string.loadData));
         barChart.setNoDataTextColor(Color.RED);
         barChart.setNoDataTextTypeface(font);
     }
@@ -179,7 +166,7 @@ public class FragmentChartHadafForoshTedad extends Fragment implements HadafForo
                 reinitialize(this);
             }
         } catch (Exception exception) {
-            Log.i("messageee", "startMVPOps: "+exception.getLocalizedMessage());
+            Log.i("messageee", "startMVPOps: " + exception.getLocalizedMessage());
             exception.printStackTrace();
             mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "MainFragment", "startMVPOps", "");
         }
@@ -188,9 +175,11 @@ public class FragmentChartHadafForoshTedad extends Fragment implements HadafForo
 
     private void initialize(HadafForoshTedadyFragmentMVP.RequiredViewOps view) {
         try {
+            if (mPresenter == null)
+                mPresenter = new HadafForoshTedadyFragmentsPresenter(view);
 
-            mPresenter = new HadafForoshTedadyFragmentsPresenter(view);
             stateMaintainer.put(HadafForoshTedadyFragmentMVP.PresenterOps.class.getSimpleName(), mPresenter);
+
         } catch (Exception exception) {
             mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "HadafForoshDarsadFragment", "initialize", "");
         }
@@ -221,12 +210,12 @@ public class FragmentChartHadafForoshTedad extends Fragment implements HadafForo
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onGetHadafForoshTedady(BaseHadafForoshModel baseHadafForoshModel) {
-        String legendLabel1,legendLabel2;
+        String legendLabel1, legendLabel2;
 
-        legendLabel1=getString(R.string.saleLegendLable);
-        legendLabel2=getString(R.string.goalLegendLabel);
-        ArrayList<String> xAxisLables=new ArrayList<>();
-        ArrayList<String> legendLables=new ArrayList<>();
+        legendLabel1 = getString(R.string.saleLegendLable);
+        legendLabel2 = getString(R.string.goalLegendLabel);
+        ArrayList<String> xAxisLables = new ArrayList<>();
+        ArrayList<String> legendLables = new ArrayList<>();
 
         xAxisLables.add(getResources().getString(R.string.untilToday));
         xAxisLables.add(getResources().getString(R.string.today));
@@ -234,16 +223,16 @@ public class FragmentChartHadafForoshTedad extends Fragment implements HadafForo
         legendLables.add(legendLabel1);
         legendLables.add(legendLabel2);
 
-        new PubFunc().new ChartUtils().drawGroupBarBarChart(context,barChartHadafForoshTedady,baseHadafForoshModel.getTedadForoshMah(),baseHadafForoshModel.getTedadHadafMah(),baseHadafForoshModel.getTedadForoshRooz(),baseHadafForoshModel.getTedadHadafRooz(),baseHadafForoshModel.getNameBrand(),xAxisLables,legendLables,limitLineNumerical);
+        Log.i(TAG, "onGetHadafForoshTedady: ongethadafforosh");
+
+        new PubFunc().new ChartUtils().drawGroupBarBarChart(context, barChartHadafForoshTedady, baseHadafForoshModel.getTedadForoshMah(), baseHadafForoshModel.getTedadHadafMah(), baseHadafForoshModel.getTedadForoshRooz(), baseHadafForoshModel.getTedadHadafRooz(), baseHadafForoshModel.getNameBrand(), xAxisLables, legendLables, limitLineNumerical);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        view=null;
+        view = null;
 //        getChildFragmentManager().beginTransaction().remove(FragmentChartHadafForoshTedad.this).commit();
 
     }
-
-
 }

@@ -23,6 +23,7 @@ public interface RptForoshandehVisitMVP
     {
         void getVisitList();
         void updateReport();
+        void updateOffline();
         void onConfigurationChanged(RptForoshandehVisitMVP.RequiredViewOps view);
         void checkInsertLogToDB(int logType, String message, String logClass, String logActivity, String functionParent, String functionChild);
         void onDestroy(boolean isChangingConfig);

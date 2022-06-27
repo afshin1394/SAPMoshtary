@@ -108,14 +108,6 @@
         android:layout_below="@+id/appbarlayout" />-->
 
 
-    <androidx.viewpager.widget.ViewPager
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/viewpager"
-        android:layoutDirection="rtl" />
-
-
     <!--<it.sephiroth.android.library.bottomnavigation.BottomNavigation
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -127,6 +119,13 @@
         app:bbn_badgeProvider="@string/bbn_badgeProvider"
         app:layout_behavior="@string/bbn_tablet_view_behavior" />-->
 
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layoutDirection="rtl" />
 
     <devlight.io.library.ntb.NavigationTabBar
         android:layout_width="match_parent"

@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    tools:context=".MVP.View.RptVisitForoshandehActivity">
+
+    <RelativeLayout
+        android:id="@+id/layTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary"
+        android:elevation="@dimen/elevationActivityTitle"
+        android:layoutDirection="rtl"
+        android:padding="@dimen/paddingTitle">
+
+        <TextView
+            android:id="@+id/lblActivityTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="گزارش ویزیت مشتریان"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/lblActivityTitle" />
+
+        <!-- Must be last for right layering display -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layoutDirection="ltr">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layoutDirection="ltr" />
+
+            <com.miguelcatalan.materialsearchview.MaterialSearchView
+                android:id="@+id/searchView"
+                style="@style/MaterialSearchViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:hint="@string/nameKala"
+                android:layoutDirection="ltr" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layTableTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layTitle"
+        android:layout_marginBottom="7dp"
+        android:layout_marginTop="7dp"
+        android:background="#ffffff"
+        android:layoutDirection="rtl"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_corner"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lblkharidee"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:drawableTop="@drawable/ic_sefaresh"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="خرید کرده"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/FontSize18" />
+
+            <TextView
+                android:id="@+id/lblkharid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/rounded_corner_bottom"
+                android:backgroundTint="@color/green_vf"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="0"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/FontSize14" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_corner"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lbladamsefareshee"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:layout_weight="3"
+                android:drawableTop="@drawable/ic_adamsefaresh"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="عدم سفارش"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/FontSize18" />
+
+            <TextView
+                android:id="@+id/lbladamsefaresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/rounded_corner_bottom"
+                android:backgroundTint="@color/orange_vf"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="0"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/FontSize14" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_corner"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lbladamdarkhastee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:drawableTop="@drawable/ic_adamdarkhast"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="عدم درخواست"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/FontSize18" />
+
+            <TextView
+                android:id="@+id/lbladamdarkhast"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/rounded_corner_bottom"
+                android:backgroundTint="@color/yellow_vf"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="0"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/FontSize14" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_corner"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lbladammorajehee"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:drawableTop="@drawable/ic_adammorajeh"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="مراجعه نکرده"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/FontSize18" />
+
+            <TextView
+                android:id="@+id/lbladammorajeh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="4dp"
+
+                android:background="@drawable/rounded_corner_bottom"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="0"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/FontSize14" />
+
+        </LinearLayout>
+
+        <!--        <androidx.cardview.widget.CardView-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            fab:cardCornerRadius="35dp"-->
+        <!--            android:layout_weight="3">-->
+        <!--            -->
+        <!--            <LinearLayout-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="match_parent">-->
+
+
+        <!--            </LinearLayout>-->
+        <!--            -->
+        <!--        </androidx.cardview.widget.CardView>-->
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_visit_forosh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/layTableFooter"
+        android:layout_below="@+id/layTableTitle"
+        android:layout_marginBottom="10dp"
+        android:layoutDirection="rtl"
+        android:scrollbars="vertical" />
+
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fabMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="30dp"
+        fab:menu_animationDelayPerItem="50"
+        fab:menu_backgroundColor="@android:color/transparent"
+        fab:menu_buttonSpacing="0dp"
+        fab:menu_colorNormal="@color/colorFabMenu"
+        fab:menu_colorPressed="@color/colorFabMenuClick"
+        fab:menu_colorRipple="#99FFFFFF"
+        fab:menu_fab_size="normal"
+        fab:menu_icon="@drawable/ic_menu"
+        fab:menu_labels_colorNormal="@color/colorWhite"
+        fab:menu_labels_colorPressed="@color/colorWhite"
+        fab:menu_labels_colorRipple="@color/colorWhite"
+        fab:menu_labels_customFont="@string/fontPath"
+        fab:menu_labels_ellipsize="none"
+        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        fab:menu_labels_margin="0dp"
+        fab:menu_labels_maxLines="-1"
+        fab:menu_labels_paddingBottom="4dp"
+        fab:menu_labels_paddingLeft="8dp"
+        fab:menu_labels_paddingRight="8dp"
+        fab:menu_labels_paddingTop="4dp"
+        fab:menu_labels_position="right"
+        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+        fab:menu_labels_singleLine="false"
+        fab:menu_labels_textColor="@color/colorTextPrimary"
+        fab:menu_labels_textSize="14sp"
+        fab:menu_openDirection="up"
+        fab:menu_shadowColor="#66000000"
+        fab:menu_shadowRadius="4dp"
+        fab:menu_shadowXOffset="1dp"
+        fab:menu_shadowYOffset="3dp"
+        fab:menu_showShadow="true">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_refresh"
+            fab:fab_colorNormal="@color/colorFabRefresh"
+            fab:fab_colorPressed="@color/colorFabRefreshClick"
+            fab:fab_label="@string/refresh"
+            fab:fab_size="normal" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabShowAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_refresh"
+            fab:fab_colorNormal="@color/colorFabRefresh"
+            fab:fab_colorPressed="@color/colorFabRefreshClick"
+            fab:fab_label="نمایش همه"
+            fab:fab_size="normal" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabShowTable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_table_list"
+            fab:fab_colorNormal="@color/colorFabList"
+            fab:fab_colorPressed="@color/colorFabListClick"
+            fab:fab_label="نمایش جدولی"
+            fab:fab_size="normal" />
+    </com.github.clans.fab.FloatingActionMenu>
+
+
+
+
+</RelativeLayout>

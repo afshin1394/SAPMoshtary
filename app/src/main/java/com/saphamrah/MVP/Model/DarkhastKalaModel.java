@@ -254,7 +254,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
                     Log.d("DarkhastKalaModel","In While Before If sumSelectedNew:" +  sumSelectedNew + ", tedadDarkhasti:" + tedadDarkhasti + ",loopCounter:" + loopCounter );
                     if (kalaMojodiZaribModels.get(loopCounter).getTedad() >= tedadDarkhasti)
                     {
-                        ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModelWithGheymatKharids = kalaMojodiZaribForoshDAO.getForInsertGheymatKharid(kalaMojodiZaribModels.get(loopCounter).getCcKalaCode(),kalaMojodiZaribModels.get(loopCounter).getShomarehBach(),kalaMojodiZaribModels.get(loopCounter).getTarikhTolid(),kalaMojodiZaribModels.get(loopCounter).getTarikhEngheza(),kalaMojodiZaribModels.get(loopCounter).getGheymatForoshAsli(),kalaMojodiZaribModels.get(loopCounter).getGheymatMasrafKonandehAsli(),kalaMojodiZaribModels.get(loopCounter).getCcTaminKonandeh());
+                        ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModelWithGheymatKharids = kalaMojodiZaribForoshDAO.getForInsertGheymatKharid(kalaMojodiZaribModels.get(loopCounter).getCcKalaCode(),kalaMojodiZaribModels.get(loopCounter).getShomarehBach(),kalaMojodiZaribModels.get(loopCounter).getTarikhTolid(),kalaMojodiZaribModels.get(loopCounter).getTarikhEngheza(),kalaMojodiZaribModels.get(loopCounter).getGheymatForoshAsli(),kalaMojodiZaribModels.get(loopCounter).getGheymatMasrafKonandehAsli(),kalaMojodiZaribModels.get(loopCounter).getCcTaminKonandeh(),noeMoshtary,zangireiParam,ccMoshtaryGharardad,moshtaryGharardadccSazmanForosh);
                         int insertedKala = 0;
                         int tedadDarkhastiCount = tedadDarkhasti;
                         for (KalaMojodiZaribModel kalaMojody : kalaMojodiZaribModelWithGheymatKharids)
@@ -284,7 +284,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
                     }
                     else
                     {
-                        ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModelWithGheymatKharids = kalaMojodiZaribForoshDAO.getForInsertGheymatKharid(kalaMojodiZaribModels.get(loopCounter).getCcKalaCode(),kalaMojodiZaribModels.get(loopCounter).getShomarehBach(),kalaMojodiZaribModels.get(loopCounter).getTarikhTolid(),kalaMojodiZaribModels.get(loopCounter).getTarikhEngheza(),kalaMojodiZaribModels.get(loopCounter).getGheymatForoshAsli(),kalaMojodiZaribModels.get(loopCounter).getGheymatMasrafKonandehAsli(),kalaMojodiZaribModels.get(loopCounter).getCcTaminKonandeh());
+                        ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModelWithGheymatKharids = kalaMojodiZaribForoshDAO.getForInsertGheymatKharid(kalaMojodiZaribModels.get(loopCounter).getCcKalaCode(),kalaMojodiZaribModels.get(loopCounter).getShomarehBach(),kalaMojodiZaribModels.get(loopCounter).getTarikhTolid(),kalaMojodiZaribModels.get(loopCounter).getTarikhEngheza(),kalaMojodiZaribModels.get(loopCounter).getGheymatForoshAsli(),kalaMojodiZaribModels.get(loopCounter).getGheymatMasrafKonandehAsli(),kalaMojodiZaribModels.get(loopCounter).getCcTaminKonandeh(),noeMoshtary,zangireiParam,ccMoshtaryGharardad,moshtaryGharardadccSazmanForosh);
                         int insertedKala = 0;
                         int tedadDarkhastiCount = tedadDarkhasti;
                         for (KalaMojodiZaribModel kalaMojody : kalaMojodiZaribModelWithGheymatKharids) {
@@ -751,6 +751,18 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
 		SparseIntArray sparseIntArray = new SparseIntArray();																			   
         SelectFaktorShared shared = new SelectFaktorShared(mPresenter.getAppContext());
         long ccDarkhastFaktor = shared.getLong(shared.getCcDarkhastFaktor() , 0L);
+        int moshtaryGharardadccSazmanForosh = shared.getInt(shared.getMoshtaryGharardadccSazmanForosh(), -1);
+        int ccMoshtaryGharardad = shared.getInt(shared.getCcMoshtaryGharardad(), -1);
+
+        final MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
+        final MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
+
+        int noeMoshtary = moshtaryModel.getCcNoeMoshtary();
+        int zangireiParam = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE()));
+
+        Log.d("DarkhastKalaModel","moshtaryGharardadccSazmanForosh:" +moshtaryGharardadccSazmanForosh + " , ccMoshtaryGharardad:"+ccMoshtaryGharardad);
+        Log.d("DarkhastKalaModel","noeMoshtary:" + noeMoshtary + ",zangireiParam:" + zangireiParam);
+
         if (ccDarkhastFaktor == 0)
         {
             PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
@@ -788,7 +800,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
 
 
         KalaMojodiZaribForoshDAO kalaMojodiZaribForoshDAO = new KalaMojodiZaribForoshDAO(mPresenter.getAppContext());
-        ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModelWithGheymatKharids = kalaMojodiZaribForoshDAO.getForInsertGheymatKharid(kalaMojodiZaribModel.getCcKalaCode(),kalaMojodiZaribModel.getShomarehBach(),kalaMojodiZaribModel.getTarikhTolid(),kalaMojodiZaribModel.getTarikhEngheza(),kalaMojodiZaribModel.getGheymatForoshAsli(),kalaMojodiZaribModel.getGheymatMasrafKonandehAsli(),kalaMojodiZaribModel.getCcTaminKonandeh());
+        ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModelWithGheymatKharids = kalaMojodiZaribForoshDAO.getForInsertGheymatKharid(kalaMojodiZaribModel.getCcKalaCode(),kalaMojodiZaribModel.getShomarehBach(),kalaMojodiZaribModel.getTarikhTolid(),kalaMojodiZaribModel.getTarikhEngheza(),kalaMojodiZaribModel.getGheymatForoshAsli(),kalaMojodiZaribModel.getGheymatMasrafKonandehAsli(),kalaMojodiZaribModel.getCcTaminKonandeh(),noeMoshtary,zangireiParam,ccMoshtaryGharardad,moshtaryGharardadccSazmanForosh);
         Log.d("DarkhastKalaModel", "1 kalaMojodiZaribModelWithGheymatKharids : " + kalaMojodiZaribModelWithGheymatKharids );
 
         int insertedKala = 0;
@@ -1072,13 +1084,22 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
         AdamDarkhastModel adamDarkhastModel = new AdamDarkhastModel();
 
         PubFunc.LocationProvider googleLocationProvider = new PubFunc().new LocationProvider();
-        /*if (!googleLocationProvider.getHasAccess())
-        {
-            mPresenter.onFailedInsertAdamDarkhast(R.string.errorAccessToLocation);
+
+        Date saatVorud = null;
+
+
+        String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
+        String saateVorodBeMaghaze = shared.getString(shared.getSaatVorodBeMaghazeh() , currentDate);
+
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
+        try {
+            saatVorud = sdf.parse(saateVorodBeMaghaze);
+        } catch (Exception e) {
+
         }
-        else
-        {*/
-            float longitude = (float) googleLocationProvider.getLongitude();
+        Log.i("DarkhastKalaModel", "insertAdamDarkhast: " + saatVorud);
+
+        float longitude = (float) googleLocationProvider.getLongitude();
             float latitude = (float) googleLocationProvider.getLatitude();
 
             adamDarkhastModel.setCcElatAdamDarkhast(ccElatAdamSefaresh);
@@ -1090,6 +1111,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
             adamDarkhastModel.setLongitude(longitude);
             adamDarkhastModel.setLatitude(latitude);
             adamDarkhastModel.setIsSentToServer(false);
+            adamDarkhastModel.setSaatVorod(saatVorud);
 
             if (adamDarkhastDAO.insert(adamDarkhastModel))
             {

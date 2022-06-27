@@ -70,8 +70,6 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
     private TextView lblTemperature;
     private TextView lblCurrentDate;
 
-
-
     private final String TAG = this.getClass().getSimpleName();
     StateMaintainer stateMaintainer;
     MainFirstFragmentMVP.PresenterOps mPresenter;
@@ -88,7 +86,7 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
     ConstraintLayout parentConstraintP;
     ConstraintLayout parentConstraintL;
     ConstraintLayout child1Constraint;
-    ConstraintLayout child2Constraint;
+//    ConstraintLayout child2Constraint;
     NestedScrollView nestedScrollView;
     private ViewPager viewPagerMainFrag;
     ArrayList<Fragment> fragList = new ArrayList<>();
@@ -99,8 +97,6 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
     private Handler handler;
     int screenHeight;
     boolean isLongClick = false;
-
-
 
 
     @Override
@@ -154,7 +150,7 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
             int appBarSize = getActionBarSize();
             parentConstraintP.getLayoutParams().height = (int) convertPixelsToDp(screenHeight, context);
             screenHeight = screenHeight - appBarSize - navigationBarSize - getStatusBarHeight();
-            child2Constraint.getLayoutParams().height = screenHeight / 2;
+//            child2Constraint.getLayoutParams().height = screenHeight / 2;
             child1Constraint.getLayoutParams().height = screenHeight / 2;
         }
         return view;
@@ -543,7 +539,7 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
         parentConstraintP = view.findViewById(R.id.mainConstraint);
         parentConstraintL = view.findViewById(R.id.mainConstraintLandScape);
         child1Constraint = view.findViewById(R.id.constraint1MainFrag);
-        child2Constraint = view.findViewById(R.id.constraint2MainFrag);
+//        child2Constraint = view.findViewById(R.id.constraint2MainFrag);
         nestedScrollView = view.findViewById(R.id.nestedScrollViewMainFragment);
 
     }
@@ -642,9 +638,6 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
         viewPagerMainFrag.setPageTransformer(false, new ZoomOutPageTransformer());
         viewPagerMainFrag.setCurrentItem(Integer.MAX_VALUE/2);
         viewPagerMainFrag.setOnTouchListener(onTouchListener);
-
-
-
     }
 
     private int getActionBarSize(){
@@ -686,7 +679,7 @@ public class MainFragment extends Fragment implements MainFirstFragmentMVP.Requi
             int appBarSize = getActionBarSize();
             Log.i(TAG, "onConfigurationChanged: " + screenHeight);
             screenHeight=screenHeight-navigationBarSize-appBarSize-getStatusBarHeight();
-            child2Constraint.getLayoutParams().height = screenHeight / 2;
+//            child2Constraint.getLayoutParams().height = screenHeight / 2;
             child1Constraint.getLayoutParams().height = screenHeight / 2;
 
         }

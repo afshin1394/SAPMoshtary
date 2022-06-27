@@ -164,7 +164,6 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
 
         this.listener = (onVisiblePersonalInformationListener)context;
 
-		mPresenter.getConfig();
 
 		edttxtinputBirthDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -461,6 +460,12 @@ public class AddCustomerBaseInfoFragment extends Fragment implements AddCustomer
                 {
                     edttxtinputNoeShakhsiat.setText(itemTitles.get(selectedIndex));
                     noeShakhsiatId = itemIds.get(selectedIndex).toString();
+
+//                    edttxtinputBirthDate.setHint();
+                    addCustomerInfoModel.setNationalCode(edttxtinputNationalCode.getText().toString().trim());
+                    addCustomerInfoModel.setNoeShakhsiatId(noeShakhsiatId);
+                    addCustomerInfoModel.setNoeShakhsiatTitle(edttxtinputNoeShakhsiat.getText().toString().trim());
+                    mPresenter.getConfig(addCustomerInfoModel);
                 }
             }
 
