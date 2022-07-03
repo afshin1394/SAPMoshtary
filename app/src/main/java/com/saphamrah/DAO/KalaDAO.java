@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 
 import com.saphamrah.Model.BarkhordForoshandehBaMoshtaryModel;
 import com.saphamrah.Model.KalaModel;
+import com.saphamrah.Model.KalaMojodiModel;
 import com.saphamrah.Model.LogPPCModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
@@ -786,6 +787,8 @@ public class KalaDAO
 
         return kalaModels;
     }
+
+
 
     public KalaModel getByccKalaCode(int ccKalaCode)
     {

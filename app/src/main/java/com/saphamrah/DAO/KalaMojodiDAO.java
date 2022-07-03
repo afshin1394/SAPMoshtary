@@ -148,9 +148,71 @@ public class KalaMojodiDAO
         }
         return kalaMojodiModels;
     }
-	
-	
-	public int getCountByccKalaCode(int ccKalaCode)
+
+    public ArrayList<KalaMojodiModel> getAllForInsertByKala(int ccForoshandeh, String currentDate, int ccAfrad){
+        ArrayList<KalaMojodiModel> kalaMojodiModels = new ArrayList<>();
+
+        try
+        {
+
+            String query = "  SELECT ccKalaCode, 0 As  ccDarkhastFaktor, ShomarehBach, Tarikhtolid, TarikhEngheza, ccTaminKonandeh,\n" +
+                            "        MablaghMasrafKonandeh AS GheymatMasrafKonandeh,MablaghForosh AS  GheymatForosh,MablaghKharid AS GheymatKharid,\n" +
+                            "        0 AS IsAdamForosh, 9999999*TedadDarKarton AS Max_Mojody, 9999999*TedadDarKarton AS Max_MojodyByShomarehBach, 9999999*TedadDarKarton AS Tedad \n" +
+                            " FROM Kala  ";
+            Log.d("KalaMojodiDAO","getKalaMojodi query: " + query);
+
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query , null);
+            if (cursor != null)
+            {
+                if (cursor.getCount() > 0)
+                {
+                    cursor.moveToFirst();
+                    while(!cursor.isAfterLast())
+                    {
+                        KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
+
+                        kalaMojodiModel.setCcKalaCode(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_ccKalaCode())));
+                        kalaMojodiModel.setCcForoshandeh(ccForoshandeh);
+                        kalaMojodiModel.setCcDarkhastFaktor(0);
+                        kalaMojodiModel.setTarikhDarkhast(currentDate);
+                        kalaMojodiModel.setShomarehBach(cursor.getString(cursor.getColumnIndex(KalaMojodiModel.COLUMN_ShomarehBach())));
+                        kalaMojodiModel.setTarikhTolid(cursor.getString(cursor.getColumnIndex(KalaMojodiModel.COLUMN_TarikhTolid())));
+                        kalaMojodiModel.setTarikhEngheza(cursor.getString(cursor.getColumnIndex(KalaMojodiModel.COLUMN_TarikhEngheza())));
+                        kalaMojodiModel.setGheymatMasrafKonandeh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatMasrafKonandeh())));
+                        kalaMojodiModel.setGheymatForosh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatForosh())));
+                        kalaMojodiModel.setGheymatKharid(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_GheymatKharid())));
+                        kalaMojodiModel.setCcTaminKonandeh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_ccTaminKonandeh())));
+                        kalaMojodiModel.setZamaneSabt(currentDate);
+                        kalaMojodiModel.setIsAdamForosh(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_IsAdamForosh())));
+                        kalaMojodiModel.setMax_Mojody(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_Max_Mojody())));
+                        kalaMojodiModel.setMax_MojodyByShomarehBach(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_Max_MojodyByShomarehBach())));
+                        kalaMojodiModel.setTedad(cursor.getInt(cursor.getColumnIndex(KalaMojodiModel.COLUMN_Tedad())));
+                        kalaMojodiModel.setCcAfrad(ccAfrad);
+
+
+                        kalaMojodiModels.add(kalaMojodiModel);
+                        cursor.moveToNext();
+                    }
+                }
+                cursor.close();
+            }
+            db.close();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorSelectAll , KalaMojodiModel.TableName()) + "\n" + exception.toString();
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "KalaMojodiDAO" , "" , "getMaxShomarehBach" , "");
+        }
+
+        return kalaMojodiModels;
+    }
+
+
+
+    public int getCountByccKalaCode(int ccKalaCode)
     {
         int count = 0;
         try
@@ -598,6 +660,7 @@ public class KalaMojodiDAO
 
         return kalaMojodiModels;
     }
+
     public boolean deleteAll()
     {
         try

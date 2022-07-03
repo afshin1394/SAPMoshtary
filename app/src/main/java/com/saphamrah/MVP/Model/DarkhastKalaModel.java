@@ -390,6 +390,8 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
 
     private ArrayList<KalaMojodiZaribModel> getAllKalaWithMojodiZaribFunc(final int ccMoshtary, final boolean calculateKalaPishnahadi, final boolean calculateKalaAsasi, boolean getAllRequestedGoods, DarkhastKalaActivity.AddItemType type) {
         KalaMojodiZaribForoshDAO kalaMojodiZaribForoshDAO = new KalaMojodiZaribForoshDAO(mPresenter.getAppContext());
+        ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext());
+        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
         final MoshtaryDAO moshtaryDAO = new MoshtaryDAO(mPresenter.getAppContext());
         final MoshtaryModel moshtaryModel = moshtaryDAO.getByccMoshtary(ccMoshtary);
 
@@ -404,6 +406,7 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
         int noeSenf = moshtaryModel.getCcNoeSenf();
         int ccMarkazForosh = selectFaktorShared.getInt(selectFaktorShared.getCcMarkazForosh(),-1);
         int ccSazmanForosh = selectFaktorShared.getInt(selectFaktorShared.getCcSazmanForosh(),-1);
+        int checkMojody = foroshandehMamorPakhshModel.getCheckMojody();
         //TODO
         int zangireiParam = Integer.parseInt( new ParameterChildDAO(mPresenter.getAppContext()).getValueByccChildParameter(Constants.CC_CHILD_GOROH_MOSHTARY_ZANJIRE()));
         final ArrayList<KalaMojodiZaribModel> kalaMojodiZaribModels = kalaMojodiZaribForoshDAO.getAllByMoshtary(daraje, noeMoshtary, noeSenf, ccMarkazForosh,ccSazmanForosh, moshtaryGharardadccSazmanForosh  , ccMoshtaryGharardad,zangireiParam,type);
@@ -414,7 +417,6 @@ public class DarkhastKalaModel implements DarkhastKalaMVP.ModelOps {
 
         ParameterChildDAO parameterChildDAO = new ParameterChildDAO(mPresenter.getAppContext());
         ForoshandehMamorPakhshUtils foroshandehMamorPakhshUtils = new ForoshandehMamorPakhshUtils();
-        ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = new ForoshandehMamorPakhshDAO(mPresenter.getAppContext()).getIsSelect();
         int noeMasouliat = foroshandehMamorPakhshUtils.getNoeMasouliat(foroshandehMamorPakhshModel);
         String enablePishnahadKala = parameterChildDAO.getValueByccChildParameter(Constants.CC_CHILD_PISHNAHAD_KALA);
         Log.d("darkhastKala", "calculateKalaPishnahadi : " + calculateKalaPishnahadi + " , noeMasouliat : " + noeMasouliat + " , enablePishnahadKala : " + enablePishnahadKala);

@@ -2304,6 +2304,7 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
         String ccSazmanForosh = String.valueOf(foroshandehMamorPakhshModel.getCcSazmanForosh());
         String ccKalaCode = "-1";
 
+        mandehMojodyMashinDAO.deleteAll();
         sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
         getKalaMojodi(getProgramType);
     }
@@ -2319,8 +2320,11 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                 ArrayList<MandehMojodyMashinModel> mandehMojodyMashinModels = mandehMojodyMashinDAO.getAll();
                 kalamojodiDAO.deleteAll();
                 ArrayList<KalaMojodiModel> kalaMojodiModels = new ArrayList<>();
-                if (mandehMojodyMashinModels.size() > 0) {
-                    String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
+                String currentDate = new SimpleDateFormat(Constants.DATE_TIME_FORMAT()).format(new Date());
+                Log.d("GetProgramModel", "getKalaMojodi size:" + mandehMojodyMashinModels.size());
+
+                if (mandehMojodyMashinModels.size() > 0 && checkMojody==1) {
+                    Log.d("GetProgramModel", "getKalaMojodi checkMojody:1 - " + mandehMojodyMashinModels.size());
                     for (MandehMojodyMashinModel mandehMojodyMashinModel : mandehMojodyMashinModels) {
                         KalaMojodiModel kalaMojodiModel = new KalaMojodiModel();
 
@@ -2340,19 +2344,8 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                         kalaMojodiModel.setMax_Mojody(mandehMojodyMashinModel.getMaxMojody());
                         kalaMojodiModel.setMax_MojodyByShomarehBach(mandehMojodyMashinModel.getMax_MojodyByShomarehBach());
                         kalaMojodiModel.setCcAfrad(ccAfrad);
-                        if(checkMojody==1)
-                        {
-                            kalaMojodiModel.setTedad(mandehMojodyMashinModel.getMojody());
-                            kalaMojodiModel.setMax_Mojody(mandehMojodyMashinModel.getMaxMojody());
-                            kalaMojodiModel.setMax_MojodyByShomarehBach(mandehMojodyMashinModel.getMax_MojodyByShomarehBach());
-                        }
+                        kalaMojodiModel.setTedad(mandehMojodyMashinModel.getMojody());
 
-                        else
-                        {
-                            kalaMojodiModel.setTedad(99999999);
-                            kalaMojodiModel.setMax_Mojody(99999999);
-                            kalaMojodiModel.setMax_MojodyByShomarehBach(99999999);
-                        }
 
                         Log.d("GetProgramModel", "ccAfrad:" + ccAfrad);
 
@@ -2365,7 +2358,21 @@ public class GetProgramModel implements GetProgramMVP.ModelOps {
                     } else {
                         sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
                     }
-                } else {
+                }
+                else if (mandehMojodyMashinModels.size() == 0 && checkMojody==0){
+                    Log.d("GetProgramModel", "getKalaMojodi checkMojody:0 - " + mandehMojodyMashinModels.size());
+                    kalaMojodiModels = kalamojodiDAO.getAllForInsertByKala(ccForoshandeh,currentDate,ccAfrad);
+                    Log.d("GetProgramModel", "getKalaMojodi kalaMojodiModels:"+ kalaMojodiModels.size());
+                    boolean insertResult = kalamojodiDAO.insertGroup(kalaMojodiModels);
+                    if (insertResult) {
+                        sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
+                        getKalaGoroh(getProgramType);
+                    } else {
+                        sendThreadMessage(Constants.BULK_INSERT_FAILED(), ++itemCounter);
+                    }
+                }
+                else {
+                    Log.d("GetProgramModel", "getKalaMojodi else");
                     sendThreadMessage(Constants.BULK_INSERT_SUCCESSFUL(), ++itemCounter);
                     getKalaGoroh(getProgramType);
                 }

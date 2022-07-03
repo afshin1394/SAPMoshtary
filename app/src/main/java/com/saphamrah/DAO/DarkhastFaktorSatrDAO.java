@@ -1607,7 +1607,7 @@ public class DarkhastFaktorSatrDAO
         ArrayList<DataTableModel> kalaBrandAndMablagh = new ArrayList<>();
         try
         {
-            String query = "select k.ccBrand, dfs.ccDarkhastFaktorSatr, dfs.Tedad3,dfs.MablaghForosh from  DarkhastFaktorSatr dfs \n" +
+            String query = "select k.ccBrand, dfs.ccDarkhastFaktorSatr, dfs.Tedad3,CAST(dfs.MablaghForosh AS INT) MablaghForosh from  DarkhastFaktorSatr dfs \n" +
                     " LEFT JOIN (SELECT DISTINCT ccKalaCode,ccBrand FROM Kala) k \n" +
                     " ON k.ccKalaCode = dfs.ccKalaCode where dfs.ccDarkhastFaktor = " + ccDarkhastFaktor;
             Log.d("darkhastfaktorsatr", "Brand query : " + query);

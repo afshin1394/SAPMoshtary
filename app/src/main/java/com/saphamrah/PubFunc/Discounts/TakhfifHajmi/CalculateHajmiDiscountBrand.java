@@ -126,7 +126,8 @@ public class CalculateHajmiDiscountBrand extends DiscountCalculation
                             j++;
                             if (kalaBrand.getFiled1() != null && kalaBrand.getFiled1().trim().equals(String.valueOf(ccBrandMohasebeh)))
                             {
-                                long mablaghTakhfifSatr = calculateMablaghTakhfifSatr(Integer.valueOf(kalaBrand.getFiled3()), mablaghVahed, takhfifHajmiSatrModel.getDarsadTakhfif());
+//                                long mablaghTakhfifSatr = calculateMablaghTakhfifSatr(Integer.valueOf(kalaBrand.getFiled3()), mablaghVahed, takhfifHajmiSatrModel.getDarsadTakhfif());
+                                long mablaghTakhfifSatr = calculateMablaghTakhfifSatr(Integer.valueOf(kalaBrand.getFiled3()), Integer.valueOf(kalaBrand.getFiled4()), takhfifHajmiSatrModel.getDarsadTakhfif());
                                 if (mablaghTakhfifSatr > 0)
                                 {
                                     Log.d("takhfif" , "takhfifHajmiBrand 1.5 sumMablaghTakhfifSatr : " + mablaghTakhfifSatr + " , " + Math.round(mablaghTakhfifSatr)+ " , mablaghTakhfif: " +mablaghTakhfif + " , sumMablaghTalkhfifSatr: "+sumMablaghTalkhfifSatr );

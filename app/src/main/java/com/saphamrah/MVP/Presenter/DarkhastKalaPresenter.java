@@ -209,7 +209,7 @@ public class DarkhastKalaPresenter implements DarkhastKalaMVP.PresenterOps, Dark
 
             if (validData)
             {
-                Log.d("check1 insertsatr", kalaMojodiZaribModel.toString());
+                Log.d("DarkhastKala","check1 insertsatr:" + kalaMojodiZaribModel.toString());
                 mModel.insertNewFaktorSatr(ccMoshtary , position , kalaMojodiZaribModel , requestCountSum);
             }
         }
