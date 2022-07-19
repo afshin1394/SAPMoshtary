@@ -46,6 +46,7 @@ import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.CustomAlertDialog;
 import com.saphamrah.Utils.CustomAlertDialogResponse;
 import com.saphamrah.Utils.CustomLoadingDialog;
+import com.saphamrah.Utils.PaxGlPrinter;
 import com.saphamrah.Utils.Printer;
 import com.saphamrah.Utils.UrovoPrinter;
 
@@ -238,7 +239,11 @@ public class PrintAndShareActivity extends AppCompatActivity implements PrintAnd
             } else if (systemConfigTabletModels.get(0).getNamePrinter() == 2) {
                 printer = new UrovoPrinter(PrintAndShareActivity.this, 0);
                 String printerStatus = printer.getPrinterStateMessage();
-                customAlertDialog.showToast(PrintAndShareActivity.this, printerStatus, Constants.INFO_MESSAGE(), Constants.DURATION_LONG());
+                customAlertDialog.showToast(PrintAndShareActivity.this, printerStatus, Constants.INFO_MESSAGE(), Constants.DURATION_SHORT());
+            }else if (systemConfigTabletModels.get(0).getNamePrinter() == 3) {
+                printer = new PaxGlPrinter(PrintAndShareActivity.this, 0);
+                String printerStatus = printer.getPrinterStateMessage();
+                customAlertDialog.showToast(PrintAndShareActivity.this, printerStatus, Constants.INFO_MESSAGE(), Constants.DURATION_SHORT());
             }
         } else {
             return false;

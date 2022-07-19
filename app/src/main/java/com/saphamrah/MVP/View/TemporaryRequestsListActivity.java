@@ -26,7 +26,6 @@ import com.saphamrah.Adapter.TemporaryNoRequestsAdapter;
 import com.saphamrah.Adapter.TemporaryRequestsAdapter;
 import com.saphamrah.BaseMVP.TemporaryRequestsListMVP;
 import com.saphamrah.MVP.Presenter.TemporaryRequestsListPresenter;
-import com.saphamrah.MVP.printNoe2.PrintNoe2Activity;
 import com.saphamrah.PubFunc.ImageUtils;
 import com.saphamrah.PubFunc.PubFunc;
 import com.saphamrah.R;
@@ -241,6 +240,7 @@ public class TemporaryRequestsListActivity extends AppCompatActivity implements 
         Intent intent = new Intent(TemporaryRequestsListActivity.this , PrintActivity.class);
         intent.putExtra("ccDarkhastFaktor" , ccDarkhastFaktor);
         intent.putExtra("ccMoshtary" , ccMoshtary);
+        intent.setAction("Print");
         startActivity(intent);
         overridePendingTransition(R.anim.right_to_center, R.anim.center_to_left);
     }
@@ -253,7 +253,9 @@ public class TemporaryRequestsListActivity extends AppCompatActivity implements 
             intent = new Intent(TemporaryRequestsListActivity.this , FaktorDetailsActivity.class);
         }
         else if(type == Constants.ccNoeFaktor) {
-           intent = new Intent(TemporaryRequestsListActivity.this , PrintNoe2Activity.class);
+
+           intent = new Intent(TemporaryRequestsListActivity.this , PrintActivity.class);
+           intent.setAction("SaveImage");
         }
         intent.putExtra("ccDarkhastFaktor" , ccDarkhastFaktor);
         intent.putExtra("ccMoshtary" , ccMoshtary);

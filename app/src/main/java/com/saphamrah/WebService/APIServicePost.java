@@ -34,6 +34,7 @@ import com.saphamrah.WebService.ServiceResponse.VarizBeBankResult;
 import com.saphamrah.WebService.ServiceResponse.SuggestResult;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
@@ -80,18 +81,27 @@ public interface APIServicePost
     @POST("api/apiSales/CreateDarkhastFaktorWithVosol")
     Call<CreateDarkhastFaktorWithVosol> createDarkhastFaktorWithVosol(@Field("") String darkhastFaktorData);
 
-    @FormUrlEncoded
+//    @FormUrlEncoded
+//    @POST("api/apiSales/CreateDarkhastFaktorWithJson")
+//    Call<CreateDarkhastFaktorWithVosol> createDarkhastFaktorWithJson(@Field("") String darkhastFaktorData);
+
+    //Guide :baray multi field bayad pojo object b onvane vorudi dade shavad
     @POST("api/apiSales/CreateDarkhastFaktorWithJson")
-    Call<CreateDarkhastFaktorWithVosol> createDarkhastFaktorWithJson(@Field("") String darkhastFaktorData);
+    Call<CreateDarkhastFaktorWithVosol> createDarkhastFaktorWithJson(@Body String darkhastFaktorData);
+
 
     @FormUrlEncoded
     @POST("api/apiSales/UpdateDarkhastFaktorWithJSON")
     Call<UpdateDarkhastFaktorWithJSONResult> updateDarkhastFaktorWithJSON(@Field("") String darkhastFaktorData);
 
 
-    @FormUrlEncoded
+//    @FormUrlEncoded
+//    @POST("api/apiSales/CreateDarkhastHavalehWithJson")
+//    Call<CreateDarkhastFaktorWithVosol> createDarkhastFaktorWithVosolSard(@Field("") String darkhastFaktorSardData);
+
+
     @POST("api/apiSales/CreateDarkhastHavalehWithJson")
-    Call<CreateDarkhastFaktorWithVosol> createDarkhastFaktorWithVosolSard(@Field("") String darkhastFaktorSardData);
+    Call<CreateDarkhastFaktorWithVosol> createDarkhastFaktorWithVosolSard(@Body String darkhastFaktorSardData);
 
     @FormUrlEncoded
     @POST("api/apiSales/CreateDarkhastFaktorAfradForosh")

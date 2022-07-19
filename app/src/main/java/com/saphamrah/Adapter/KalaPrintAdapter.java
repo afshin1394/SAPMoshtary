@@ -21,8 +21,8 @@ public class KalaPrintAdapter extends RecyclerView.Adapter<KalaPrintAdapter.Base
 
     private Context context;
     private ArrayList<KalaDarkhastFaktorSatrModel> models;
-    private int noePrintFaktor; // این متغییر برای تعیین لی اوت مورد نظر برای نوع نمایش لیست کالا در فرم چاپ مورداستفاده قرار می گیرد.
-
+    private int noePrintFaktor;// این متغییر برای تعیین لی اوت مورد نظر برای نوع نمایش لیست کالا در فرم چاپ مورداستفاده قرار می گیرد.
+    private int mode = 0;
     public KalaPrintAdapter(Context context, ArrayList<KalaDarkhastFaktorSatrModel> models, int noePrintFaktor)
     {
         this.context = context;
@@ -54,7 +54,7 @@ public class KalaPrintAdapter extends RecyclerView.Adapter<KalaPrintAdapter.Base
     {
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         int[] counts = new PubFunc().new ConvertUnit().tedadToCartonBasteAdad(models.get(position).getTedad3(), models.get(position).getTedadDarKarton(), models.get(position).getTedadDarBasteh(), models.get(position).getAdad());
-        holder.setData(counts , formatter , position);
+        holder.setData(counts , formatter , position ,mode);
     }
 
 
@@ -96,7 +96,7 @@ public class KalaPrintAdapter extends RecyclerView.Adapter<KalaPrintAdapter.Base
             lblMablaghKol.setTypeface(font);
         }
 
-        abstract void setData(int[] counts , DecimalFormat formatter , int position);
+        abstract void setData(int[] counts , DecimalFormat formatter , int position,int mode);
 
     }
 
@@ -109,16 +109,24 @@ public class KalaPrintAdapter extends RecyclerView.Adapter<KalaPrintAdapter.Base
         }
 
         @Override
-        void setData(int[] counts , DecimalFormat formatter , int position)
+        void setData(int[] counts , DecimalFormat formatter , int position,int mode)
         {
             lblRadif.setText(String.valueOf(position+1));
             lblNameKala.setText(models.get(position).getNameKala());
             lblMablagh.setText(formatter.format((int)models.get(position).getMablaghForosh()));
-            lblCarton.setText(String.valueOf(counts[0]));
-            lblBasteh.setText(String.valueOf(counts[1]));
-            lblAdad.setText(String.valueOf(counts[2]));
+//            lblCarton.setText(String.valueOf(counts[0]));
+//            lblBasteh.setText(String.valueOf(counts[1]));
+            lblAdad.setText(String.valueOf( models.get(position).getTedad3()));
             double sumMablagh = models.get(position).getTedad3() * models.get(position).getMablaghForosh();
             lblMablaghKol.setText(formatter.format(sumMablagh));
+
+            lblRadif.setTextSize(24);
+            lblNameKala.setTextSize(24);
+            lblAdad.setTextSize(24);
+            lblMablagh.setTextSize(24);
+            lblMablaghKol.setTextSize(24);
+
+
         }
     }
 
@@ -147,11 +155,13 @@ public class KalaPrintAdapter extends RecyclerView.Adapter<KalaPrintAdapter.Base
             lblBastehTitle.setTypeface(font);
             lblAdadTitle.setTypeface(font);
             lblMablaghKolTitle.setTypeface(font);
+
+
         }
 
 
         @Override
-        void setData(int[] counts , DecimalFormat formatter , int position)
+        void setData(int[] counts , DecimalFormat formatter , int position,int mode)
         {
             lblRadif.setText(String.valueOf(position+1));
             lblNameKala.setText(models.get(position).getNameKala());
@@ -161,9 +171,16 @@ public class KalaPrintAdapter extends RecyclerView.Adapter<KalaPrintAdapter.Base
             lblAdad.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.adad), String.valueOf(counts[2])));
             double sumMablagh = models.get(position).getTedad3() * models.get(position).getMablaghForosh();
             lblMablaghKol.setText(String.format("%1$s : %2$s", context.getResources().getString(R.string.sumCost), formatter.format(sumMablagh)));
+
+
         }
 
-    }
 
+
+    }
+    public void setMode(int mode){
+        this.mode = mode;
+        notifyDataSetChanged();
+    }
 
 }

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/_80sdp"
     android:layoutDirection="rtl">
 
 
@@ -13,7 +13,7 @@
         android:layout_weight="3"
         android:id="@+id/lblSharhTakhfif"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_17ssp"
+        style="@style/txt_print"
         android:gravity="center"
         android:background="@drawable/table_content_black_cell_bg" />
 
@@ -23,7 +23,7 @@
         android:layout_weight="1"
         android:id="@+id/lblDarsadTakhfif"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_17ssp"
+        style="@style/txt_print"
         android:gravity="center"
         android:background="@drawable/table_content_black_cell_bg" />
 
@@ -33,7 +33,7 @@
         android:layout_weight="1"
         android:id="@+id/lblMablaghTakhfif"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_17ssp"
+        style="@style/txt_print"
         android:gravity="center"
         android:background="@drawable/table_content_black_cell_bg" />
 

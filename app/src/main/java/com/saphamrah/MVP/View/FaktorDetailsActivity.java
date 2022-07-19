@@ -394,11 +394,12 @@ public class FaktorDetailsActivity extends AppCompatActivity implements FaktorDe
 
             File imageFile = new File(mPath);
             FileOutputStream outputStream = new FileOutputStream(imageFile);
-            int quality = 70;
+            int quality = 100;
             bmpDarkhastImage.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
             outputStream.flush();
             outputStream.close();
             bmpDarkhastImage.recycle();
+
         }
         catch (Throwable e)
         {

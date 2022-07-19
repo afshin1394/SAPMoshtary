@@ -25,7 +25,6 @@ import com.saphamrah.DAO.DarkhastFaktorAfradForoshDAO;
 import com.saphamrah.DAO.DarkhastFaktorDAO;
 import com.saphamrah.DAO.DarkhastFaktorEmzaMoshtaryDAO;
 import com.saphamrah.DAO.DarkhastFaktorJayezehDAO;
-import com.saphamrah.DAO.DarkhastFaktorKalaPishnahadiDAO;
 import com.saphamrah.DAO.DarkhastFaktorRoozSortDAO;
 import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
 import com.saphamrah.DAO.DarkhastFaktorSatrTakhfifDAO;

@@ -63,7 +63,7 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     private final String TAG = this.getClass().getSimpleName();
     private StateMaintainer stateMaintainer = new StateMaintainer(this.getSupportFragmentManager() , TAG , VerifyRequestActivity.this);
     private VerifyRequestMVP.PresenterOps mPresenter;
-
+    private View activity;
     public static boolean SuccessGetBonus;
 
     private CustomAlertDialog customAlertDialog;
@@ -130,6 +130,8 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
         SuccessGetBonus = false;
         Calligrapher calligrapher = new Calligrapher(this);
         calligrapher.setFont(this, getResources().getString(R.string.fontPath), true);
+
+        activity = findViewById(R.id.main);
 
         customLoadingDialog = new CustomLoadingDialog();
         customAlertDialog = new CustomAlertDialog(VerifyRequestActivity.this);
@@ -442,7 +444,10 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
             noeVosol = Integer.parseInt(childParameterModelsVosols.get(childParameterModelsVosols.size()-1).getValue());
             nameNoeVosol = childParameterModelsVosols.get(childParameterModelsVosols.size()-1).getTxt();
             modatRoozRaasgiri = modatVosol;
-            alertDialog = customLoadingDialog.showLoadingDialog(VerifyRequestActivity.this);
+            if(!(VerifyRequestActivity.this.isFinishing()))
+            {
+                alertDialog = customLoadingDialog.showLoadingDialog(VerifyRequestActivity.this);
+            }
             mPresenter.getModatRoozRaasgiri(noeVosol);
         }
     }
@@ -549,27 +554,33 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     @Override
     public void onGetMarjoeeList(ArrayList<KalaElamMarjoeeModel> kalaElamMarjoeeModels)
     {
-        if (kalaElamMarjoeeModels.size() == 0)
-        {
-            lblMarjoeeTitle.setVisibility(View.GONE);
-            recyclerViewMarjoee.setVisibility(View.GONE);
-        }
-        else
-        {
-            lblMarjoeeTitle.setVisibility(View.VISIBLE);
-            recyclerViewMarjoee.setVisibility(View.VISIBLE);
-            MarjoeeAdapter adapter = new MarjoeeAdapter(VerifyRequestActivity.this, kalaElamMarjoeeModels, false, new MarjoeeAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(int operation, KalaElamMarjoeeModel kalaElamMarjoeeModel, int position) {
-
+        activity.post(new Runnable() {
+            @Override
+            public void run() {
+                if (kalaElamMarjoeeModels.size() == 0)
+                {
+                    lblMarjoeeTitle.setVisibility(View.GONE);
+                    recyclerViewMarjoee.setVisibility(View.GONE);
                 }
-            });
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(VerifyRequestActivity.this);
-            recyclerViewMarjoee.setLayoutManager(mLayoutManager);
-            recyclerViewMarjoee.setItemAnimator(new DefaultItemAnimator());
-            recyclerViewMarjoee.addItemDecoration(new DividerItemDecoration(VerifyRequestActivity.this , 0));
-            recyclerViewMarjoee.setAdapter(adapter);
-        }
+                else
+                {
+                    lblMarjoeeTitle.setVisibility(View.VISIBLE);
+                    recyclerViewMarjoee.setVisibility(View.VISIBLE);
+                    MarjoeeAdapter adapter = new MarjoeeAdapter(VerifyRequestActivity.this, kalaElamMarjoeeModels, false, new MarjoeeAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(int operation, KalaElamMarjoeeModel kalaElamMarjoeeModel, int position) {
+
+                        }
+                    });
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(VerifyRequestActivity.this);
+                    recyclerViewMarjoee.setLayoutManager(mLayoutManager);
+                    recyclerViewMarjoee.setItemAnimator(new DefaultItemAnimator());
+                    recyclerViewMarjoee.addItemDecoration(new DividerItemDecoration(VerifyRequestActivity.this , 0));
+                    recyclerViewMarjoee.setAdapter(adapter);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -656,7 +667,14 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     {
         //closeLoading();
         this.haveBonus = haveBonus;
-        showToast(R.string.successfullyCalculateDiscount, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
+        activity.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!VerifyRequestActivity.this.isFinishing()) {
+                    showToast(R.string.successfullyCalculateDiscount, Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
+                }
+            }
+        });
 
         //closeLoading();
         /*if (fabAddMarjoee.getVisibility() == View.GONE && fabSelectBonus.getVisibility() == View.GONE)
@@ -734,35 +752,78 @@ public class VerifyRequestActivity extends AppCompatActivity implements VerifyRe
     @Override
     public void showToast(int resId, int messageType, int duration)
     {
-        customAlertDialog.showToast(VerifyRequestActivity.this, getResources().getString(resId), messageType, duration);
+        activity.post(new Runnable() {
+            @Override
+            public void run() {
+        if (!VerifyRequestActivity.this.isFinishing()) {
+            customAlertDialog.showToast(VerifyRequestActivity.this, getResources().getString(resId), messageType, duration);
+        }
+            }
+        });
     }
 
     @Override
     public void showToast(int resId, String param, int messageType, int duration)
     {
-        customAlertDialog.showToast(VerifyRequestActivity.this, getResources().getString(resId, param), messageType, duration);
+        activity.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!VerifyRequestActivity.this.isFinishing()) {
+                    customAlertDialog.showToast(VerifyRequestActivity.this, getResources().getString(resId, param), messageType, duration);
+                }
+            }
+        });
+
     }
 
     @Override
     public void showToast(int resId, String paramOne , String paramTwo, int messageType, int duration)
     {
-        customAlertDialog.showToast(VerifyRequestActivity.this, getResources().getString(resId, paramOne , paramTwo), messageType, duration);
+        activity.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!VerifyRequestActivity.this.isFinishing()) {
+                    customAlertDialog.showToast(VerifyRequestActivity.this, getResources().getString(resId, paramOne, paramTwo), messageType, duration);
+                }
+            }
+        });
+
     }
 
 	@Override
     public void showAlertDialog(int resId, boolean closeActivity, int messageType)
     {
-        customAlertDialog.showMessageAlert(VerifyRequestActivity.this, closeActivity, "", getString(resId), messageType, getString(R.string.apply));
+        activity.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!VerifyRequestActivity.this.isFinishing()) {
+                    customAlertDialog.showMessageAlert(VerifyRequestActivity.this, closeActivity, "", getString(resId), messageType, getString(R.string.apply));
+                }
+            }
+        });
+
     }
 	
     @Override																										   
     public void showLoading()
     {
-        Log.d("loading" , "show Loading");
-        if (alertDialog == null)
-        {
-            alertDialog = customLoadingDialog.showLoadingDialog(VerifyRequestActivity.this);
-        }
+        activity.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("loading" , "show Loading");
+
+                if(!(VerifyRequestActivity.this.isFinishing()))
+                {
+                    //show dialog
+                    if (alertDialog == null)
+                    {
+                        alertDialog = customLoadingDialog.showLoadingDialog(VerifyRequestActivity.this);
+                    }
+                }
+            }
+        });
+
+
     }
 
     @Override

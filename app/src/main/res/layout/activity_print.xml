@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<FrameLayout
     xmlns:fab="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,7 +46,7 @@
                         android:textColor="@color/colorBlack"
                         android:textStyle="bold"
                         android:text="درخواست کالا"
-                        android:textSize="@dimen/FontSize24" />
+                        style="@style/txt_print_header_main" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -126,7 +127,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
                     android:text="تاریخ : "
-
                     android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
                     android:textColor="@color/colorBlack"/>
@@ -265,32 +265,33 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layoutDirection="rtl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:gravity="end|center_vertical"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:id="@+id/txtAddress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right|center_horizontal|center_vertical"
-                    android:lines="2"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/FontSize16"
-                    android:textColor="@color/colorBlack"/>
-
+                android:gravity="right"
+                android:layout_gravity="right"
+                android:orientation="vertical" >
                 <TextView
                     android:id="@+id/lblAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="end|center_horizontal|center_vertical"
                     android:text="آدرس : "
+                    android:gravity="right"
+                    android:layout_gravity="right"
                     android:textSize="@dimen/_18ssp"
                     android:textStyle="bold"
                     android:textColor="@color/colorBlack"/>
-
+                <TextView
+                    android:id="@+id/txtAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="2"
+                    android:gravity="right"
+                    android:layout_gravity="right"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/FontSize16"
+                    android:textColor="@color/colorBlack"/>
             </LinearLayout>
 
             <LinearLayout
@@ -344,50 +345,52 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:orientation="vertical" >
+                android:orientation="vertical">
+
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
-                    android:background="@color/colorBlack"/>
+                    android:background="@color/colorBlack" />
+
                 <TextView
                     android:id="@+id/lblAghlamFaktor"
                     android:layout_width="wrap_content"
                     android:layout_height="38dp"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:textSize="@dimen/_18ssp"
-                    android:textStyle="bold"
                     android:text="اقلام درخواست"
-                    android:textColor="@color/colorBlack"/>
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold" />
+
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
-                    android:background="@color/colorBlack"/>
+                    android:background="@color/colorBlack" />
             </LinearLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|center_vertical|center_horizontal"
-                android:orientation="vertical">
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="center|center_vertical|center_horizontal"-->
+<!--                android:orientation="vertical">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:id="@+id/layKalaPartOne">
-                    <include
-                        layout="@layout/activity_rpt_faktorprint_listview_kala_header"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:id="@+id/layKalaPartOne">-->
+<!--                    <include-->
+<!--                        layout="@layout/activity_rpt_faktorprint_listview_kala_header"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content" />-->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/lstKalaInfo"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scrollbars="vertical">
-                    </androidx.recyclerview.widget.RecyclerView>
-                </LinearLayout>
+                        android:layout_height="wrap_content"
+                        />
+<!--                </LinearLayout>-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -396,7 +399,7 @@
                     android:layout_below="@+id/layKalaPartOne">
                     <View
                         android:layout_width="wrap_content"
-                        android:layout_height="1dp"
+                        android:layout_height="@dimen/_1sdp"
                         android:background="@color/colorBlack"/>
                     <include
                         layout="@layout/activity_rpt_faktorprint_listview_kala_footer"
@@ -404,11 +407,11 @@
                         android:layout_height="wrap_content"/>
                     <View
                         android:layout_width="wrap_content"
-                        android:layout_height="1dp"
+                        android:layout_height="@dimen/_1sdp"
                         android:background="@color/colorBlack"
                         android:layout_marginBottom="10dp"/>
                 </LinearLayout>
-            </RelativeLayout>
+<!--            </RelativeLayout>-->
             <LinearLayout
                 android:id="@+id/lyTakhfif"
                 android:layout_width="match_parent"
@@ -417,12 +420,12 @@
                 android:gravity="center"
                 android:orientation="vertical" >
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_margin="1dp"
-                    android:gravity="center"
-                    android:orientation="vertical" >
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="40dp"-->
+<!--                    android:layout_margin="1dp"-->
+<!--                    android:gravity="center"-->
+<!--                    android:orientation="vertical" >-->
 
                     <View
                         android:layout_width="wrap_content"
@@ -443,27 +446,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:background="@color/colorBlack" />
-                </LinearLayout>
+<!--                </LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center|center_vertical|center_horizontal"
-                    android:orientation="vertical" >
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:gravity="center|center_vertical|center_horizontal"-->
+<!--                    android:orientation="vertical" >-->
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/lstTakhfif"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scrollbars="vertical">
-                    </androidx.recyclerview.widget.RecyclerView>
+                        android:layout_height="wrap_content"
+                        />
 
                     <View
                         android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:layout_marginBottom="10dp"
                         android:background="@color/colorBlack" />
-                </LinearLayout>
+<!--                </LinearLayout>-->
             </LinearLayout>
 
             <LinearLayout
@@ -504,15 +506,14 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center|center_vertical|center_horizontal"
                     android:orientation="vertical" >
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/lstKalaMarjoee"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scrollbars="vertical">
-                    </androidx.recyclerview.widget.RecyclerView>
+                        android:layout_height="wrap_content"
+                       />
                     <View
                         android:layout_width="wrap_content"
                         android:layout_height="1dp"
@@ -557,27 +558,26 @@
                         android:background="@color/colorBlack" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center|center_vertical|center_horizontal"
-                    android:orientation="vertical" >
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:gravity="center|center_vertical|center_horizontal"-->
+<!--                    android:orientation="vertical" >-->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/lstKalaJayezeh"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scrollbars="vertical">
-                    </androidx.recyclerview.widget.RecyclerView>
+                        android:layout_height="wrap_content"
+                       />
                     <View
                         android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:background="@color/colorBlack" />
-                </LinearLayout>
+<!--                </LinearLayout>-->
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_400sdp"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:layout_margin="1dp">
@@ -592,8 +592,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/_18ssp"
-                        android:layout_marginEnd="5dp"
+                        style="@style/txt_print"                        android:layout_marginEnd="5dp"
                         android:textStyle="bold"
 
                         android:text="ریال"
@@ -627,7 +626,6 @@
                         android:id="@+id/RialMablaghTakhfif"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center|center_horizontal|center_vertical"
                         android:textSize="@dimen/_18ssp"
                         android:layout_marginEnd="5dp"
                         android:text="ریال"
@@ -636,7 +634,6 @@
                         android:id="@+id/txtMablaghTakhfif"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center|center_horizontal|center_vertical"
                         android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
 
@@ -645,7 +642,6 @@
                         android:id="@+id/lblMablaghTakhfif"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center|center_horizontal|center_vertical"
                         android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
                         android:text="مبلغ تخفیف درخواست : "
@@ -661,7 +657,6 @@
                         android:id="@+id/RialMablaghMarjoee"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center|center_horizontal|center_vertical"
                         android:textSize="@dimen/_18ssp"
                         android:layout_marginEnd="5dp"
                         android:text="ریال"
@@ -670,7 +665,6 @@
                         android:id="@+id/txtMablaghMarjoee"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center|center_horizontal|center_vertical"
                         android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
 
@@ -679,7 +673,6 @@
                         android:id="@+id/lblMablaghMarjoee"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center|center_horizontal|center_vertical"
                         android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
                         android:text="مبلغ مرجوعی درخواست : "
@@ -696,25 +689,20 @@
                         android:id="@+id/RialMablaghArzeshAfzoode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/_18ssp"
-                        android:layout_marginEnd="5dp"
+                        style="@style/txt_print"                        android:layout_marginEnd="5dp"
                         android:textStyle="bold"
-
                         android:text="ریال"
                         android:textColor="@color/colorBlack"/>
                     <TextView
                         android:id="@+id/txtMablaghArzeshAfzoode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center|center_horizontal|center_vertical"
                         android:textSize="@dimen/_18ssp"
                         android:textColor="@color/colorBlack"/>
                     <TextView
                         android:id="@+id/lblMablaghArzeshAfzoode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center|center_horizontal|center_vertical"
                         android:textSize="@dimen/_18ssp"
                         android:textStyle="bold"
                         android:text="مبلغ ارزش افزوده درخواست : "
@@ -974,116 +962,125 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_1sdp"
                 android:orientation="vertical"
-                android:layout_margin="1dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
+                >
+
+
+
+
+                <TextView
+                    android:id="@+id/lblTimePrint"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:orientation="horizontal"
-                    android:layout_margin="10dp">
+                    android:textSize="@dimen/FontSize16"
+                    android:textStyle="bold"
+                    android:text="زمان چاپ : "
+                    android:textColor="@color/colorBlack"/>
+                <TextView
+                    android:id="@+id/txtTimePrint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:textSize="@dimen/FontSize16"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:textColor="@color/colorBlack"/>
+                <TextView
+                    android:id="@+id/lblWebsite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:text="@string/websiteAddress"
+                    android:textSize="@dimen/FontSize16"
+                    android:textColor="@color/colorBlack"/>
 
-                    <TextView
-                        android:id="@+id/lblWebsite"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="40dp"
-                        android:gravity="center|center_horizontal|center_vertical"
-                        android:text="@string/websiteAddress"
-                        android:textSize="@dimen/FontSize16"
-                        android:textColor="@color/colorBlack"/>
-
-                    <TextView
-                        android:id="@+id/txtTimePrint"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize16"
-                        android:textColor="@color/colorBlack"/>
-                    <TextView
-                        android:id="@+id/lblTimePrint"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center|center_horizontal|center_vertical"
-                        android:textSize="@dimen/FontSize16"
-                        android:textStyle="bold"
-                        android:text="زمان چاپ : "
-                        android:textColor="@color/colorBlack"/>
-
-                </LinearLayout>
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
                     android:layout_margin="25dp"/>
             </LinearLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="@dimen/_100sdp"
+                />
         </LinearLayout>
-    </ScrollView>
 
+    </androidx.core.widget.NestedScrollView>
+<com.github.clans.fab.FloatingActionMenu
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:id="@+id/fabMenu"
+android:layout_gravity="bottom"
+android:layout_alignParentBottom="true"
+android:layout_alignParentLeft="true"
+android:layout_marginRight="10dp"
+android:layout_marginBottom="10dp"
+android:layout_marginLeft="10dp"
+fab:menu_fab_size="normal"
+fab:menu_showShadow="true"
+fab:menu_shadowColor="#66000000"
+fab:menu_shadowRadius="4dp"
+fab:menu_shadowXOffset="1dp"
+fab:menu_shadowYOffset="3dp"
+fab:menu_colorNormal="@color/colorFabMenu"
+fab:menu_colorPressed="@color/colorFabMenuClick"
+fab:menu_colorRipple="#99FFFFFF"
+fab:menu_animationDelayPerItem="50"
+fab:menu_icon="@drawable/ic_menu"
+fab:menu_buttonSpacing="0dp"
+fab:menu_labels_margin="0dp"
+fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+fab:menu_labels_paddingTop="4dp"
+fab:menu_labels_paddingRight="8dp"
+fab:menu_labels_paddingBottom="4dp"
+fab:menu_labels_paddingLeft="8dp"
+fab:menu_labels_padding="8dp"
+fab:menu_labels_textColor="@color/colorTextPrimary"
+fab:menu_labels_textSize="14sp"
+fab:menu_labels_colorNormal="@color/colorWhite"
+fab:menu_labels_colorPressed="@color/colorWhite"
+fab:menu_labels_colorRipple="@color/colorWhite"
+fab:menu_labels_singleLine="false"
+fab:menu_labels_ellipsize="none"
+fab:menu_labels_maxLines="-1"
+fab:menu_labels_position="right"
+fab:menu_openDirection="up"
+fab:menu_labels_customFont="@string/fontPath"
+fab:menu_backgroundColor="@android:color/transparent">
 
-    <com.github.clans.fab.FloatingActionMenu
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/fabMenu"
-        android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        fab:menu_fab_size="normal"
-        fab:menu_showShadow="true"
-        fab:menu_shadowColor="#66000000"
-        fab:menu_shadowRadius="4dp"
-        fab:menu_shadowXOffset="1dp"
-        fab:menu_shadowYOffset="3dp"
-        fab:menu_colorNormal="@color/colorFabMenu"
-        fab:menu_colorPressed="@color/colorFabMenuClick"
-        fab:menu_colorRipple="#99FFFFFF"
-        fab:menu_animationDelayPerItem="50"
-        fab:menu_icon="@drawable/ic_menu"
-        fab:menu_buttonSpacing="0dp"
-        fab:menu_labels_margin="0dp"
-        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
-        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
-        fab:menu_labels_paddingTop="4dp"
-        fab:menu_labels_paddingRight="8dp"
-        fab:menu_labels_paddingBottom="4dp"
-        fab:menu_labels_paddingLeft="8dp"
-        fab:menu_labels_padding="8dp"
-        fab:menu_labels_textColor="@color/colorTextPrimary"
-        fab:menu_labels_textSize="14sp"
-        fab:menu_labels_colorNormal="@color/colorWhite"
-        fab:menu_labels_colorPressed="@color/colorWhite"
-        fab:menu_labels_colorRipple="@color/colorWhite"
-        fab:menu_labels_singleLine="false"
-        fab:menu_labels_ellipsize="none"
-        fab:menu_labels_maxLines="-1"
-        fab:menu_labels_position="right"
-        fab:menu_openDirection="up"
-        fab:menu_labels_customFont="@string/fontPath"
-        fab:menu_backgroundColor="@android:color/transparent">
+<com.github.clans.fab.FloatingActionButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/fabPrint"
+    android:src="@drawable/ic_print"
+    fab:fab_size="normal"
+    fab:fab_label="@string/print"
+    fab:fab_colorNormal="@color/colorFabPrint"
+    fab:fab_colorPressed="@color/colorFabPrint"/>
 
-        <com.github.clans.fab.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fabPrint"
-            android:src="@drawable/ic_print"
-            fab:fab_size="normal"
-            fab:fab_label="@string/print"
-            fab:fab_colorNormal="@color/colorFabPrint"
-            fab:fab_colorPressed="@color/colorFabPrint"/>
+<com.github.clans.fab.FloatingActionButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/fabSearch"
+    android:src="@drawable/ic_bluetooth"
+    fab:fab_size="normal"
+    fab:fab_label="@string/searchPrinter"
+    fab:fab_colorNormal="@color/colorFabSearchPrinter"
+    fab:fab_colorPressed="@color/colorFabSearchPrinter"/>
+<com.github.clans.fab.FloatingActionButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/fabScreenShot"
+    android:src="@drawable/ic_photo_camera"
+    fab:fab_size="normal"
+    fab:fab_label="@string/takeScreenshot"
+    fab:fab_colorNormal="@color/colorFabSearchPrinter"
+    fab:fab_colorPressed="@color/colorFabSearchPrinter"/>
+</com.github.clans.fab.FloatingActionMenu>
 
-        <com.github.clans.fab.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fabSearch"
-            android:src="@drawable/ic_bluetooth"
-            fab:fab_size="normal"
-            fab:fab_label="@string/searchPrinter"
-            fab:fab_colorNormal="@color/colorFabSearchPrinter"
-            fab:fab_colorPressed="@color/colorFabSearchPrinter"/>
+</FrameLayout>
 
-    </com.github.clans.fab.FloatingActionMenu>
-
-</RelativeLayout>

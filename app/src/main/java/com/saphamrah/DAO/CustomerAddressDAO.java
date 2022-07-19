@@ -44,7 +44,7 @@ public class CustomerAddressDAO
         ArrayList<CustomerAddressModel> customerAddressModels = new ArrayList<>();
         try
         {
-            String strQry = " select m.*,MA.*,IFNULL(NoeMorajeh,0) AS NoeMorajeh from (SELECT * FROM( SELECT * FROM Moshtary\n" +
+            String strQry = " select m.*,MA.*,IFNULL((select NoeMorajeh from MoshtaryMorajehShodeh_Rooz WHERE ccMoshtary = m.ccMoshtary ORDER BY NoeMorajeh DESC LIMIT 1 ),0)  AS NoeMorajeh from (SELECT * FROM( SELECT * FROM Moshtary\n" +
                     "left join MoshtaryGharardad mg on Moshtary.ccMoshtaryParent = mg.ccMoshtary\n" +
                     "                     WHERE (ExtraProp_IsOld = 1 OR ExtraProp_IsMoshtaryAmargar = 1) and ccMasir in (select ccMasir from Masir) \n" +
                     "                     AND CodeVazeiat > 0 \n" +
@@ -52,8 +52,8 @@ public class CustomerAddressDAO
                     "left join MoshtaryGharardad mg on Moshtary.ccMoshtaryParent = mg.ccMoshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY Olaviat ) AS M \n" +
                     "                     LEFT JOIN (SELECT * FROM MoshtaryAddress \n" +
                     "                     WHERE ccNoeAddress IN (1,2) GROUP BY ccMoshtary ORDER BY ccNoeAddress DESC) AS MA on MA.ccMoshtary = M.ccMoshtary \n" +
-                    "                     LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
-                    "                     on MSR.ccMoshtary = M.ccMoshtary      \n" +
+//                    "                     LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
+//                    "                     on MSR.ccMoshtary = M.ccMoshtary      \n" +
                     "      \n ";
 
             Log.d("CustomerAddressDAO","strQry getByMasirWithoutMoshtaryJadid:"+ strQry);
@@ -94,7 +94,7 @@ public class CustomerAddressDAO
         ArrayList<CustomerAddressModel> customerAddressModels = new ArrayList<>();
         try
         {
-            String strQry="select m.*,MA.*,IFNULL(NoeMorajeh,0) AS NoeMorajeh from (SELECT * FROM( SELECT * FROM Moshtary\n" +
+            String strQry="select m.*,MA.*,IFNULL((select NoeMorajeh from MoshtaryMorajehShodeh_Rooz WHERE ccMoshtary = m.ccMoshtary ORDER BY NoeMorajeh DESC LIMIT 1 ),0)  AS NoeMorajeh from (SELECT * FROM( SELECT * FROM Moshtary\n" +
                     "left join MoshtaryGharardad mg on Moshtary.ccMoshtaryParent = mg.ccMoshtary\n" +
                     "\n" +
                     "                     WHERE (ExtraProp_IsOld = 1 OR ExtraProp_IsMoshtaryAmargar = 1) and ccMasir in (select ccMasir from Masir) \n" +
@@ -102,9 +102,10 @@ public class CustomerAddressDAO
                     "                     SELECT * FROM Moshtary\n" +
                     "left join MoshtaryGharardad mg on Moshtary.ccMoshtaryParent = mg.ccMoshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY Olaviat ) AS M \n" +
                     "                     LEFT JOIN (SELECT * FROM MoshtaryAddress \n" +
-                    "                     WHERE ccNoeAddress IN (1,2) GROUP BY ccMoshtary ORDER BY ccNoeAddress DESC) AS MA on MA.ccMoshtary = M.ccMoshtary \n" +
-                    "                     LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
-                    "                     on MSR.ccMoshtary = M.ccMoshtary\n";
+                    "                     WHERE ccNoeAddress IN (1,2) GROUP BY ccMoshtary ORDER BY ccNoeAddress DESC) AS MA on MA.ccMoshtary = M.ccMoshtary \n" ;
+//                    "                     LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
+//                    "                     on MSR.ccMoshtary = M.ccMoshtary\n " +
+//                    " ORDER BY CodeMoshtary";
 //            String query = "select m.*,MA.*,IFNULL(NoeMorajeh,0) AS NoeMorajeh from (SELECT * FROM( SELECT * FROM Moshtary \n" +
 //                    " WHERE (ExtraProp_IsOld = 1 OR ExtraProp_IsMoshtaryAmargar = 1) and ccMasir in (select ccMasir from Masir) \n" +
 //                    " UNION SELECT * FROM Moshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY ExtraProp_Olaviat ) AS M \n" +
@@ -140,13 +141,13 @@ public class CustomerAddressDAO
         ArrayList<CustomerAddressModel> customerAddressModels = new ArrayList<>();
         try
         {
-            String query = "select m.*,MA.*,IFNULL(NoeMorajeh,0) AS NoeMorajeh from (SELECT * FROM( SELECT * FROM Moshtary \n" +
+            String query = "select m.*,MA.*,IFNULL((select NoeMorajeh from MoshtaryMorajehShodeh_Rooz WHERE ccMoshtary = m.ccMoshtary ORDER BY NoeMorajeh DESC LIMIT 1 ),0)  AS NoeMorajeh from (SELECT * FROM( SELECT * FROM Moshtary \n" +
                     " WHERE (ExtraProp_IsOld = 1 OR ExtraProp_IsMoshtaryAmargar = 1) and ccMasir in (select ccMasir from Masir) \n" +
                     " UNION SELECT * FROM Moshtary WHERE ExtraProp_MoshtaryMojazKharejAzMasir = 1 ) AS A ORDER BY Olaviat ) AS M \n" +
                     " LEFT JOIN (SELECT * FROM MoshtaryAddress \n" +
-                    " WHERE ccNoeAddress IN (1,2) GROUP BY ccMoshtary ORDER BY ccNoeAddress DESC) AS MA on MA.ccMoshtary = M.ccMoshtary \n" +
-                    " LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
-                    " on MSR.ccMoshtary = M.ccMoshtary";
+                    " WHERE ccNoeAddress IN (1,2) GROUP BY ccMoshtary ORDER BY ccNoeAddress DESC) AS MA on MA.ccMoshtary = M.ccMoshtary \n" ;
+//                    " LEFT JOIN (select distinct(ccMoshtary),NoeMorajeh from MoshtaryMorajehShodeh_Rooz ) MSR \n" +
+//                    " on MSR.ccMoshtary = M.ccMoshtary";
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             Cursor cursor = db.rawQuery(query , null);
             if (cursor != null)

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/_80ssp"
     android:layoutDirection="rtl">
 
     <TextView
@@ -12,7 +12,7 @@
         android:layout_weight="4"
         android:id="@+id/lblNameKala"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_17ssp"
+        style="@style/txt_print"
         android:textStyle="bold"
         android:textDirection="rtl"
         android:gravity="start"
@@ -25,7 +25,7 @@
         android:textStyle="bold"
         android:id="@+id/lblShomarehBach"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_17ssp"
+        style="@style/txt_print"
         android:gravity="center"
         android:background="@drawable/table_content_black_cell_bg" />
 
@@ -36,7 +36,7 @@
         android:textStyle="bold"
         android:id="@+id/lblTedad"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_17ssp"
+        style="@style/txt_print"
         android:gravity="center"
         android:background="@drawable/table_content_black_cell_bg" />
 
@@ -47,7 +47,7 @@
         android:id="@+id/lblFee"
         android:textStyle="bold"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_17ssp"
+        style="@style/txt_print"
         android:gravity="center"
         android:background="@drawable/table_content_black_cell_bg" />
 

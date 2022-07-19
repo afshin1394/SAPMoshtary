@@ -2672,10 +2672,7 @@ get mac address in android 10
         public void drawSingleFourBarChart(Context context, BarChart barChart, float firstBarValue, float secondBarValue, float thirdBarChart, float fourthBarChart, ArrayList<String> xAxisLabels, Float limitLineValue, int limitSize) {
             Typeface font = Typeface.createFromAsset(context.getAssets(), context.getResources().getString(R.string.fontPath));
 
-            if (firstBarValue == 0 && secondBarValue == 0) {
-                setNoDataText(context, barChart, font);
-                Log.i("inSetNoData", "drawPercentageBarChart: ");
-            } else {
+
                 firstBarValue = (int) firstBarValue;
                 secondBarValue = (int) secondBarValue;
                 thirdBarChart = (int) thirdBarChart;
@@ -2701,7 +2698,7 @@ get mac address in android 10
                 xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
                 xAxis.setTypeface(font);
                 xAxis.setDrawGridLines(false);
-                xAxis.setTextSize(12f);
+                xAxis.setTextSize(8f);
 
                 xAxis.setAxisMinimum(0);
                 xAxis.setGranularity(1f); // only intervals of 1 day
@@ -2793,7 +2790,7 @@ get mac address in android 10
                 barChart.setData(data);
                 barChart.setTouchEnabled(false);
                 barChart.setScaleEnabled(false);
-            }
+
         }
 
         @RequiresApi(api = Build.VERSION_CODES.M)

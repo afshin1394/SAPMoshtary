@@ -34,8 +34,13 @@ public class JayezehPrintAdapter extends RecyclerView.Adapter<JayezehPrintAdapte
     @Override
     public JayezehPrintAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        View view = LayoutInflater.from(context).inflate(R.layout.jayezeh_print_customlist, parent , false);
-        return new JayezehPrintAdapter.ViewHolder(view);
+        if (noePrintFaktor == 1) {
+            View view = LayoutInflater.from(context).inflate(R.layout.jayezeh_print_customlist, parent, false);
+            return new JayezehPrintAdapter.ViewHolder(view);
+        }else{
+            View view = LayoutInflater.from(context).inflate(R.layout.jayezeh_print_customlist_two, parent, false);
+            return new JayezehPrintAdapter.ViewHolder(view);
+        }
     }
 
     @Override

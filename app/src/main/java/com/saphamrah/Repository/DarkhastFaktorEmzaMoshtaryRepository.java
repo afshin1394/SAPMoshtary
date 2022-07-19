@@ -5,9 +5,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.saphamrah.DAO.DarkhastFaktorEmzaMoshtaryDAO;
-import com.saphamrah.MVP.printNoe2.PrintNoe2Activity;
 import com.saphamrah.Model.DarkhastFaktorEmzaMoshtaryModel;
-import com.saphamrah.Model.RptJashnvarehForoshModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RxNetwork.RxHttpRequest;
 import com.saphamrah.PubFunc.PubFunc;
@@ -16,14 +14,12 @@ import com.saphamrah.Utils.RxUtils.RxAsync;
 import com.saphamrah.Utils.RxUtils.RxHttpErrorHandler;
 import com.saphamrah.WebService.RxService.APIServiceRxjava;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
 public class DarkhastFaktorEmzaMoshtaryRepository {

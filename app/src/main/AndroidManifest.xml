@@ -55,7 +55,6 @@
         <activity android:name=".MVP.View.MessageDetailActivity" />
         <activity android:name=".MVP.View.MessageBoxActivity" />
         <activity android:name=".MVP.View.PrintMarjoeeActivity" />
-        <activity android:name=".MVP.printNoe2.PrintNoe2Activity" />
         <activity android:name=".MVP.View.RptMarjoeeActivity" />
         <activity android:name=".MVP.View.RptThreeMonthPurchase.RptThreeMonthPurchaseActivity" />
         <activity android:name=".MVP.View.RptCustomersListByDistanceActivity" />

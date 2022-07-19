@@ -326,13 +326,18 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             @Override
             public void onSuccess()
             {
-                getBottomBarStatus(ccMoshtary,moshtaryGharardadccSazmanForosh);
+               // getBottomBarStatus(ccMoshtary,moshtaryGharardadccSazmanForosh);
             }
 
             @Override
             public void onSuccessUpdateMandehMojodiMashin()
             {
                 mPresenter.onSuccessUpdateMandeMojodi();
+                getBottomBarStatus(ccMoshtary,moshtaryGharardadccSazmanForosh);
+            }
+
+            @Override
+            public void onSkipUpdateMandehMojodiMashin() {
                 getBottomBarStatus(ccMoshtary,moshtaryGharardadccSazmanForosh);
             }
 
@@ -842,6 +847,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
         void onWarning(int resId);
         void onSuccess();
         void onSuccessUpdateMandehMojodiMashin();
+        void onSkipUpdateMandehMojodiMashin();
         void onFailedUpdateMandehMojodiMashin();
     }
 
@@ -924,6 +930,8 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             ForoshandehMamorPakhshModel foroshandehMamorPakhshModel = foroshandehMamorPakhshDAO.getIsSelect();
             int noeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(foroshandehMamorPakhshModel);
             boolean isMojazForDarkhast = foroshandehMamorPakhshModel.getIsMojazForSabtDarkhast() == 1;
+            if(foroshandehMamorPakhshModel.getCheckMojody()==0)
+                updateMandeMojodi = false;
 
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_TIME_FORMAT());
@@ -944,6 +952,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             Log.i("selectCustomer" ,"checkTarikhMasir :" + checkTarikhMasir);
             Log.i("selectCustomer" , "needCheckKharejAzMahal :" + needCheckKharejAzMahal);
             Log.i("selectCustomer" , "checkPriority :" + checkPriority);
+            Log.i("selectCustomer" , "updateMandeMojodi :" + updateMandeMojodi);
 
 
 
@@ -1003,10 +1012,10 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 {
                     checkDistance = model.getValue().trim().equals("1");
                 }
-                else if (model.getCcParameterChild() == Constants.UPDATE_MANDE_MOJODI_MASIR_ROOZ())
-                {
-                    updateMandeMojodi = model.getValue().trim().equals("1");
-                }
+//                else if (model.getCcParameterChild() == Constants.UPDATE_MANDE_MOJODI_MASIR_ROOZ())
+//                {
+//                    updateMandeMojodi = model.getValue().trim().equals("1");
+//                }
             }
 			checkMobile = childParameterDAO.getValueByccChildParameter(Constants.CC_CHILD_REQUIER_MOBILE).trim().equals("1");
 
@@ -1283,6 +1292,10 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                             {
                                 updateMandehMojodi(noeMasouliat, String.valueOf(foroshandehMamorPakhshModel.getCcMamorPakhsh()), String.valueOf(foroshandehMamorPakhshModel.getCcForoshandeh()), String.valueOf(foroshandehMamorPakhshModel.getCcAfrad()),String.valueOf(foroshandehMamorPakhshModel.getCcSazmanForosh()));
                             }
+                            else{
+                                publishProgress(2);
+                            }
+
                         }
                         if(checkMoshtaryForoshande && moshtaryForoshandehFlag)
                         {
@@ -2372,6 +2385,9 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
                 else if (values[0] == 1)
                 {
                     listener.onSuccessUpdateMandehMojodiMashin();
+                }else if (values[0] == 2)
+                {
+                    listener.onSkipUpdateMandehMojodiMashin();
                 }
             }
         }

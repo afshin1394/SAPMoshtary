@@ -6,26 +6,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MVP.View.VerifyRequestActivity"
+    android:id="@+id/main"
     android:layoutDirection="rtl">
 
     <RelativeLayout
+        android:id="@+id/layTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/layTitle"
-        android:layoutDirection="rtl"
+        android:layout_alignParentTop="true"
         android:background="@color/colorPrimary"
-        android:padding="@dimen/paddingTitle"
         android:elevation="@dimen/elevationActivityTitle"
-        android:layout_alignParentTop="true">
+        android:layoutDirection="rtl"
+        android:padding="@dimen/paddingTitle">
+
         <TextView
+            android:id="@+id/lblActivityTitle"
             android:layout_width="wrap_content"
             android:layout_height="?android:attr/actionBarSize"
-            android:id="@+id/lblActivityTitle"
+            android:layout_centerInParent="true"
+            android:gravity="center"
             android:text="@string/taeedDarkhast"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/lblActivityTitle"
-            android:layout_centerInParent="true"
-            android:gravity="center"/>
+            android:textSize="@dimen/lblActivityTitle" />
     </RelativeLayout>
 
 

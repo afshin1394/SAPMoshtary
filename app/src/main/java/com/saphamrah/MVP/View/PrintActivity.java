@@ -10,10 +10,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -30,10 +33,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.saphamrah.Adapter.JayezehPrintAdapter;
 import com.saphamrah.Adapter.KalaPrintAdapter;
 import com.saphamrah.Adapter.MarjoeePrintAdapter;
 import com.saphamrah.Adapter.TakhfifPrintAdatper;
+import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.DAO.CodeTypeDAO;
 import com.saphamrah.DAO.CompanyDAO;
 import com.saphamrah.DAO.DariaftPardakhtDarkhastFaktorPPCDAO;
@@ -51,8 +59,8 @@ import com.saphamrah.DAO.KalaElamMarjoeeDAO;
 import com.saphamrah.DAO.MoshtaryAddressDAO;
 import com.saphamrah.DAO.MoshtaryDAO;
 import com.saphamrah.DAO.ParameterChildDAO;
+import com.saphamrah.DAO.RptJashnvarehDAO;
 import com.saphamrah.DAO.SystemConfigTabletDAO;
-import com.saphamrah.MVP.printNoe2.PrintNoe2Activity;
 import com.saphamrah.Model.CodeTypeModel;
 import com.saphamrah.Model.DariaftPardakhtDarkhastFaktorPPCModel;
 import com.saphamrah.Model.DariaftPardakhtPPCModel;
@@ -165,7 +173,6 @@ public class PrintActivity extends AppCompatActivity
 
     LinearLayout layArzeshAfoozde;
     private FloatingActionMenu fabMenu;
-    private View MainView;
 
     long ccDarkhastFaktor;
     int ccMoshtary;
@@ -176,6 +183,10 @@ public class PrintActivity extends AppCompatActivity
     DecimalFormat formatter = new DecimalFormat("#,###,###");
     Bitmap DarkhastImage;
     int NoeMasouliat = 0;
+
+    //Todo PrintNoe2
+    private boolean imagedSaved; // اگر این فیلد true باشد به این معنی است که کاربر بر روی ثبت تصویر کلیک کرده و تصویر فاکتور ثبت شده. از این فیلد برای برگشت به فرم قبلی استفاده میشود و در فرم قبلی (فرم لیست درخواست ها) چک میشود تا اگر مقدار این فیلد برابر true بود، آداپتر بروزرسانی میشود.
+    private boolean haveImage = false;
 
     //-------------------bluetooth----------------------------
     private static BluetoothPrintService mPrintService = null;
@@ -192,10 +203,15 @@ public class PrintActivity extends AppCompatActivity
     private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
     private static final int REQUEST_ENABLE_BT = 3;
     private SystemConfigTabletDAO systemconfig_tabletDAO;// = new SystemConfigTabletDAO(this);
-
+    DarkhastFaktorEmzaMoshtaryDAO darkhastFaktorEmzaMoshtaryDAO = new DarkhastFaktorEmzaMoshtaryDAO(BaseApplication.getContext());
     private CustomAlertDialog customAlertDialog;
     Printer printer;
 
+    //Todo PrintNoe2
+    private View mainView;
+
+
+    KalaPrintAdapter kalaPrintAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -213,12 +229,35 @@ public class PrintActivity extends AppCompatActivity
         }
 
 
+        //Todo PrintNoe2
+        imagedSaved = false;
+        mainView = findViewById(R.id.Main);
+
         Calligrapher calligrapher = new Calligrapher(this);
         calligrapher.setFont(this, getResources().getString(R.string.fontPath), true);
 
         fabMenu = findViewById(R.id.fabMenu);
         FloatingActionButton fabSearch = findViewById(R.id.fabSearch);
         FloatingActionButton fabPrint = findViewById(R.id.fabPrint);
+        FloatingActionButton fabScreenShot = findViewById(R.id.fabScreenShot);
+
+
+        //checkAction
+        switch (getIntent().getAction()){
+            case "SaveImage":
+                fabSearch.setVisibility(View.GONE);
+                fabPrint.setVisibility(View.GONE);
+                fabScreenShot.setVisibility(View.VISIBLE);
+                break;
+
+            case "Print":
+                fabSearch.setVisibility(View.VISIBLE);
+                fabPrint.setVisibility(View.VISIBLE);
+                fabScreenShot.setVisibility(View.GONE);
+                break;
+        }
+
+
         layArzeshAfoozde = findViewById(R.id.layArzeshAfzoode);
 
         customAlertDialog = new CustomAlertDialog(PrintActivity.this);
@@ -254,9 +293,10 @@ public class PrintActivity extends AppCompatActivity
         NoeMasouliat = new ForoshandehMamorPakhshUtils().getNoeMasouliat(new ForoshandehMamorPakhshDAO(PrintActivity.this).getIsSelect());
 
         setPrinter();
+
         try
         {
-            MainView = findViewById(R.id.Main);
+
             imgLogoPrint = findViewById(R.id.imgLogoPrint);
             txtTitr = findViewById(R.id.txtTitr);
             txtSazman = findViewById(R.id.txtSazman);
@@ -321,13 +361,20 @@ public class PrintActivity extends AppCompatActivity
             ccDarkhastFaktor = intent.getLongExtra("ccDarkhastFaktor", 0);
             ccMoshtary = intent.getIntExtra("ccMoshtary", 0);
 
+            //Todo PrintNoe2
+            if (getIntent().getAction().equals("SaveImage")) {
+                haveImage = darkhastFaktorEmzaMoshtaryDAO.haveImage(ccDarkhastFaktor);
+                if (haveImage) {
+//                    fabMenu.setVisibility(View.GONE);
+                }
+            }
             //---------------------------Company--------------------------
 
             if (Constants.CURRENT_VERSION_TYPE() == 6)
             {
                 imgLogoPrint.setImageResource(R.drawable.logo_print);
             }
-            else if (Constants.CURRENT_VERSION_TYPE() == 0 || Constants.CURRENT_VERSION_TYPE() == 1 || Constants.CURRENT_VERSION_TYPE() == 2)
+            else if (Constants.CURRENT_VERSION_TYPE() == 0 || Constants.CURRENT_VERSION_TYPE() == 1 )
             {
                 CompanyDAO companyDAO = new CompanyDAO(PrintActivity.this);
                 byte[] bitmapdata = null;
@@ -342,6 +389,15 @@ public class PrintActivity extends AppCompatActivity
                 byte[] bitmapdata = null;
 
                 bitmapdata = companyDAO.getByccCompany(2).getLogoPhotoPrint();//mihan
+                Bitmap bmpLogoPrint = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+                imgLogoPrint.setImageBitmap(bmpLogoPrint);
+            }
+            else if(Constants.CURRENT_VERSION_TYPE() == 2 || Constants.CURRENT_VERSION_TYPE() == 9)
+            {
+                CompanyDAO companyDAO = new CompanyDAO(PrintActivity.this);
+                byte[] bitmapdata = null;
+
+                bitmapdata = companyDAO.getByccCompany(3).getLogoPhotoPrint();//Lina
                 Bitmap bmpLogoPrint = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
                 imgLogoPrint.setImageBitmap(bmpLogoPrint);
             }
@@ -445,17 +501,25 @@ public class PrintActivity extends AppCompatActivity
             txtTel.setText(moshtaryAddress.getTelephone());
 
             //--------------------------KalaFaktor -----------------------------
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
 
+                }
+            });
             lstKalaInfo = findViewById(R.id.lstKalaInfo);
+            lstKalaInfo.setNestedScrollingEnabled(false);
+
             //todo majid
             ArrayList<KalaDarkhastFaktorSatrModel> items = new KalaDarkhastFaktorSatrDAO(PrintActivity.this).getByccDarkhast(darkhastfaktor.getCcDarkhastFaktor());
             Log.d("Check1 print",darkhastfaktor.getCcDarkhastFaktor() + "," + darkhastfaktor.getCcNoeMoshtary() + "," + darkhastfaktor.getCcMoshtaryGhardad());
             //ArrayList<KalaDarkhastFaktorSatrModel> items = new KalaDarkhastFaktorSatrDAO(PrintActivity.this).getByccDarkhastForDarkhastKala(darkhastfaktor.getCcDarkhastFaktor(),darkhastfaktor.getCcNoeMoshtary(),darkhastfaktor.getCcMoshtaryGhardad());
-            KalaPrintAdapter adapter = new KalaPrintAdapter(PrintActivity.this, items, noeFaktorPrint);
-            lstKalaInfo.setLayoutManager(new LinearLayoutManager(PrintActivity.this));
+            kalaPrintAdapter = new KalaPrintAdapter(PrintActivity.this, items, noeFaktorPrint);
+            lstKalaInfo.setLayoutManager(new LinearLayoutManager(PrintActivity.this,RecyclerView.VERTICAL,false));
             lstKalaInfo.setItemAnimator(new DefaultItemAnimator());
             lstKalaInfo.addItemDecoration(new DividerItemDecoration(PrintActivity.this, 0));
-            lstKalaInfo.setAdapter(adapter);
+            lstKalaInfo.setAdapter(kalaPrintAdapter);
+
 
             int size = items.size();
             int TedadKarton = 0, TedadBasteh = 0, TedadAdd = 0;
@@ -483,7 +547,7 @@ public class PrintActivity extends AppCompatActivity
                 }
 
                 TedadAdd = MandehTedad;
-                SumAdd += TedadAdd;
+                SumAdd += items.get(i).getTedad3();
                 //sumMablaghDarkhast += items.get(i).getMablaghForosh() * items.get(i).getTedad3();
             }
             sumMablaghDarkhast = new DarkhastFaktorSatrDAO(PrintActivity.this).getSumMablaghFaktorByccDarkhast(ccDarkhastFaktor);
@@ -543,7 +607,8 @@ public class PrintActivity extends AppCompatActivity
             if (kalaElamMarjoeeModels.size() != 0)
             {
                 MarjoeePrintAdapter marjoeeAdapter = new MarjoeePrintAdapter(PrintActivity.this, kalaElamMarjoeeModels, noeFaktorPrint);
-                lstKalaMarjoee.setLayoutManager(new LinearLayoutManager(PrintActivity.this));
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PrintActivity.this,RecyclerView.VERTICAL,false);
+                lstKalaMarjoee.setLayoutManager(linearLayoutManager);
                 lstKalaMarjoee.setItemAnimator(new DefaultItemAnimator());
                 lstKalaMarjoee.addItemDecoration(new DividerItemDecoration(PrintActivity.this, 0));
                 lstKalaMarjoee.setAdapter(marjoeeAdapter);
@@ -675,6 +740,18 @@ public class PrintActivity extends AppCompatActivity
             //txtEmza.setTypeface(font);
             txtEmza.setText(txtMatn);
 
+            //PrintNoe2
+            //---------------------------------Jashnvareh-------------------------
+            TextView txtJashnvareh = findViewById(R.id.txtJashnvareh);
+            String txtMatnJashnvareh = "";
+            Double EmtiazMoshtary =0.0;
+            RptJashnvarehDAO rptJashnvarehDAO = new RptJashnvarehDAO(PrintActivity.this);
+            EmtiazMoshtary = rptJashnvarehDAO.getEmtiazJashnvarehByccMoshtary(moshtary.getCcMoshtary());
+            if(EmtiazMoshtary>0) {
+                txtMatnJashnvareh = "تعداد کد قرعه کشی اخذ شده شما تا قبل از این فاکتور " + Math.round(EmtiazMoshtary) + " می باشد.";
+                txtJashnvareh.setText(txtMatnJashnvareh);
+            }
+
 
             //------------------------------------------------------------------------------------------------------
             Date currentLocalTime = Calendar.getInstance().getTime();
@@ -691,8 +768,8 @@ public class PrintActivity extends AppCompatActivity
                 LinearLayout layTelBazresi = findViewById(R.id.layTelBazresi);
                 layTelBazresi.setVisibility(View.GONE);
             }
-
-            takeScreenshotOfFaktor(darkhastfaktor.getCcDarkhastFaktor());
+            if (getIntent().getAction().equals("Print"))
+             takeScreenshotOfFaktor(darkhastfaktor.getCcDarkhastFaktor());
         }
         catch (Exception e)
         {
@@ -730,11 +807,52 @@ public class PrintActivity extends AppCompatActivity
                 }
             }
         });
+        //Todo PrintNoe2
+        fabScreenShot.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                fabMenu.close(true);
+                Bitmap bmp = getPicture();
+
+                saveScreenshotOfFaktor(ccDarkhastFaktor , bmp);
+                byte[] bytes = new PubFunc().new ImageUtils().convertBitmapToByteArray(PrintActivity.this , bmp , 70);
+                if (bytes.length > 0 && ccDarkhastFaktor > 0)
+                {
+                    if (darkhastFaktorEmzaMoshtaryDAO.updateDarkhastFaktorImage(bytes, ccDarkhastFaktor))
+                    {
+//                        fabMenu.setVisibility(View.GONE);
+                        imagedSaved = true;
+                        customAlertDialog.showToast(PrintActivity.this, getResources().getString(R.string.successGetScreenShot), Constants.SUCCESS_MESSAGE(), Constants.DURATION_LONG());
+                    }
+                    else
+                    {
+                        customAlertDialog.showToast(PrintActivity.this, getResources().getString(R.string.errorGetScreenShot), Constants.INFO_MESSAGE(), Constants.DURATION_LONG());
+                    }
+                }
+                else
+                {
+                    customAlertDialog.showToast(PrintActivity.this, getResources().getString(R.string.errorGetScreenShot), Constants.INFO_MESSAGE(), Constants.DURATION_LONG());
+
+                }
+
+                bmp.recycle();
+            }
+        });
 
         Log.d("print", "ccDarkhastFaktor : " + ccDarkhastFaktor);
     }
-
-
+    //Todo PrintNoe2
+    private Bitmap getPicture()
+    {
+        mainView.setDrawingCacheEnabled(true);
+//        mainView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+//        mainView.layout(0, 0, mainView.getMeasuredWidth(), mainView.getMeasuredHeight());
+        Bitmap bmpDarkhastImage = getBitmapFromView(mainView, mainView.getHeight(), mainView.getWidth());
+        mainView.setDrawingCacheEnabled(false);
+        return bmpDarkhastImage;
+    }
     private void setPrinter()
     {
         ArrayList<SystemConfigTabletModel> systemConfigTabletModels = systemconfig_tabletDAO.getAll();
@@ -759,6 +877,41 @@ public class PrintActivity extends AppCompatActivity
                 printer = new PaxGlPrinter(PrintActivity.this , ccDarkhastFaktor);
 
             }
+        }
+    }
+
+    //Todo PrintNoe2
+    public void saveScreenshotOfFaktor(long ccDarkhastFaktor , Bitmap bmpDarkhastImage)
+    {
+        try
+        {
+            String mPath = Environment.getExternalStorageDirectory() +  "/SapHamrah/Print";
+
+
+            File tempdir = new File(mPath);
+            if (!tempdir.exists())
+            {
+                tempdir.mkdirs();
+            }
+            mPath = mPath + "/" + ccDarkhastFaktor + ".jpg";
+            mainView.setDrawingCacheEnabled(true);
+//            mainView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+//            mainView.layout(0, 0, mainView.getMeasuredWidth(), mainView.getMeasuredHeight());
+            bmpDarkhastImage = getBitmapFromView(mainView,mainView.getHeight(),mainView.getWidth());
+            mainView.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(mPath);
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+
+            int quality = 70;
+            bmpDarkhastImage.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+            bmpDarkhastImage.recycle();
+        }
+        catch (Throwable e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -846,15 +999,15 @@ public class PrintActivity extends AppCompatActivity
 
             mPath = mPath + "/Print-" + ccDarkhastFaktor + ".jpg";
 
-            MainView.setDrawingCacheEnabled(true);
+            mainView.setDrawingCacheEnabled(true);
 
-            MainView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+            mainView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
-            MainView.layout(0, 0, MainView.getMeasuredWidth(), MainView.getMeasuredHeight());
+            mainView.layout(0, 0, mainView.getMeasuredWidth(), mainView.getMeasuredHeight());
 
-            DarkhastImage = getBitmapFromView(MainView, MainView.getHeight(), MainView.getWidth());
-            MainView.setDrawingCacheEnabled(false);
+            DarkhastImage = getBitmapFromView(mainView, mainView.getHeight(), mainView.getWidth());
+            mainView.setDrawingCacheEnabled(false);
 
             File imageFile = new File(mPath);
 
@@ -895,7 +1048,10 @@ public class PrintActivity extends AppCompatActivity
         String mPath = Environment.getExternalStorageDirectory() + "/SapHamrah/Print";
         mPath = mPath + "/Print-" + ccDarkhastFaktor + ".jpg";
         //-----------------resize-------------------------
-        Bitmap tmp = BitmapFactory.decodeFile(mPath);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+      //  options.inSampleSize = 8;
+
+        Bitmap tmp = BitmapFactory.decodeFile(mPath,options);
         int printerSize = systemconfig_tabletDAO.getAll().get(0).getSizePrint();
         if (printerSize == 384)
         {
@@ -1012,7 +1168,18 @@ public class PrintActivity extends AppCompatActivity
     public void onBackPressed()
     {
         super.onBackPressed();
-        PrintActivity.this.finish();
+
+
+        //PrintNoe2
+        if (getIntent().getAction().equals("SaveImage")) {
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("imagedSaved", imagedSaved);
+            resultIntent.putExtra("ccDarkhastFaktor", ccDarkhastFaktor);
+            setResult(RESULT_OK, resultIntent);
+            finish();
+        }else{
+            PrintActivity.this.finish();
+        }
     }
 
     @SuppressLint("MissingSuperCall")
@@ -1047,6 +1214,26 @@ public class PrintActivity extends AppCompatActivity
     {
         PubFunc.Logger logger = new PubFunc().new Logger();
         logger.insertLogToDB(PrintActivity.this, logType, message, "", "PrintActivity", functionParent, functionChild);
+    }
+
+    private Bitmap encodeAsBitmap(@NonNull String str) throws WriterException {
+        int WIDTH = 400;
+        int HEIGHT = 400;
+        QRCodeWriter writer = new QRCodeWriter();
+        BitMatrix bitMatrix = writer.encode(str, BarcodeFormat.QR_CODE, WIDTH, HEIGHT);
+
+        int w = bitMatrix.getWidth();
+        int h = bitMatrix.getHeight();
+        int[] pixels = new int[w * h];
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                pixels[y * w + x] = bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE;
+            }
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, w, 0, 0, w, h);
+        return bitmap;
     }
 
 }

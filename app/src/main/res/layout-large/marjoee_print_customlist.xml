@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--TODO-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_60sdp"
+    android:layoutDirection="rtl">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:id="@+id/lblNameKala"
+        android:textColor="@color/colorBlack"
+        style="@style/txt_print_large"
+        android:textStyle="bold"
+        android:textDirection="rtl"
+        android:gravity="start"
+        android:background="@drawable/table_content_black_cell_bg" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:textStyle="bold"
+        android:id="@+id/lblShomarehBach"
+        android:textColor="@color/colorBlack"
+        style="@style/txt_print_large"
+        android:gravity="center"
+        android:background="@drawable/table_content_black_cell_bg" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textStyle="bold"
+        android:id="@+id/lblTedad"
+        android:textColor="@color/colorBlack"
+        style="@style/txt_print_large"
+        android:gravity="center"
+        android:background="@drawable/table_content_black_cell_bg" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:id="@+id/lblFee"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        style="@style/txt_print_large"
+        android:gravity="center"
+        android:background="@drawable/table_content_black_cell_bg" />
+
+</LinearLayout>
