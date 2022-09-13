@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import com.saphamrah.Model.DarkhastFaktorModel;
 import com.saphamrah.Model.KalaDarkhastFaktorModel;
 import com.saphamrah.Model.LogPPCModel;
+import com.saphamrah.Model.MoshtaryModel;
+import com.saphamrah.Model.RptTafkikMovazeDataModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.PubFunc.PubFunc;

@@ -360,6 +360,8 @@
     <string name="tedadPishnahadi">تعداد پیشنهادی</string>
     <string name="mablaghArzeshAfzoode">مبلغ ارزش افزوده</string>
     <string name="faktorVazn">وزن فاکتور (کیلوگرم)</string>
+    <string name="Vazn">وزن</string>
+    <string name="Hajm">حجم</string>
     <string name="tedadAghlam">تعداد اقلام</string>
     <string name="mablaghKhales">مبلغ خالص</string>
     <string name="mablaghKhalesBaArzeshAfzoode">مبلغ خالص با ارزش افزوده</string>
@@ -667,6 +669,7 @@
     <string name="errorFirstSendAdamAndPorseshname">لطفا ابتدا عدم فعال یا پرسشنامه را ارسال نمایید.</string>
     <string name="errorFindDarkhastFaktor">درخواست یافت نشد.</string>
     <string name="reportDarkhastFaktor">گزارش ارسال درخواست</string>
+    <string name="reportTafkikMovaze">گزارش تفکیک موزع</string>
     <string name="reportFaktorMoavagh">گزارش فاکتورهای مانده دار</string>
     <string name="reportForoshKala">گزارش فروش کالا</string>
     <string name="reportListVosol">گزارش لیست وصول</string>
