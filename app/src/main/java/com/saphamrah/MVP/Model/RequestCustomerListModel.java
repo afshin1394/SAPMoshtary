@@ -14,8 +14,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.saphamrah.Application.BaseApplication;
 import com.saphamrah.BaseMVP.RequestCustomerListMVP;
 import com.saphamrah.DAO.AdamDarkhastDAO;
@@ -23,11 +21,11 @@ import com.saphamrah.DAO.AnbarakAfradDAO;
 import com.saphamrah.DAO.BargashtyDAO;
 import com.saphamrah.DAO.CustomerAddressDAO;
 import com.saphamrah.DAO.DarkhastFaktorDAO;
+import com.saphamrah.DAO.DarkhastFaktorSatrDAO;
 import com.saphamrah.DAO.ElatAdamDarkhastDAO;
 import com.saphamrah.DAO.ForoshandehAmoozeshiDeviceNumberDAO;
 import com.saphamrah.DAO.ForoshandehEtebarDAO;
 import com.saphamrah.DAO.ForoshandehMamorPakhshDAO;
-import com.saphamrah.DAO.KalaMojodiDAO;
 import com.saphamrah.DAO.MandehMojodyMashinDAO;
 import com.saphamrah.DAO.MasirDAO;
 import com.saphamrah.DAO.MasirVaznHajmMashinDAO;
@@ -65,7 +63,6 @@ import com.saphamrah.Model.MoshtaryAfradModel;
 import com.saphamrah.Model.MoshtaryEtebarSazmanForoshModel;
 import com.saphamrah.Model.MoshtaryGharardadModel;
 import com.saphamrah.Model.MoshtaryModel;
-import com.saphamrah.Model.MoshtaryMorajehShodehRoozModel;
 import com.saphamrah.Model.ParameterChildModel;
 import com.saphamrah.Model.RptForoshModel;
 import com.saphamrah.Model.RptMandehdarModel;
@@ -73,7 +70,6 @@ import com.saphamrah.Model.RptSanadModel;
 import com.saphamrah.Model.ServerIpModel;
 import com.saphamrah.Network.RetrofitResponse;
 import com.saphamrah.Network.RxNetwork.RxHttpRequest;
-import com.saphamrah.Network.RxNetwork.RxResponseHandler;
 import com.saphamrah.PubFunc.DateUtils;
 import com.saphamrah.PubFunc.FakeLocation;
 import com.saphamrah.PubFunc.ForoshandehMamorPakhshUtils;
@@ -86,13 +82,11 @@ import com.saphamrah.Shared.LastOlaviatMoshtaryShared;
 import com.saphamrah.Shared.SelectFaktorShared;
 import com.saphamrah.Shared.UserTypeShared;
 import com.saphamrah.UIModel.CustomerAddressModel;
-import com.saphamrah.UIModel.KalaMojodiGiriModel;
 import com.saphamrah.UIModel.OlaviatMorajehModel;
 import com.saphamrah.Utils.Constants;
 import com.saphamrah.Utils.RxUtils.RxHttpErrorHandler;
 import com.saphamrah.WebService.RxService.APIServiceRxjava;
 import com.saphamrah.WebService.RxService.Response.DataResponse.GetMandehMojodyMashinResponse;
-import com.saphamrah.WebService.ServiceResponse.GetMojodyAnbarResult;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -102,8 +96,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import javax.mail.internet.ParameterList;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -878,6 +870,7 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
             ***** new object Doa
              */
             DarkhastFaktorDAO darkhastfaktorDAO = new DarkhastFaktorDAO(weakReferenceContext.get());
+            DarkhastFaktorSatrDAO darkhastFaktorSatrDAO = new DarkhastFaktorSatrDAO(weakReferenceContext.get());
             ForoshandehMamorPakhshDAO foroshandehMamorPakhshDAO = new ForoshandehMamorPakhshDAO(weakReferenceContext.get());
             MoshtaryModel moshtaryModel = new MoshtaryDAO(weakReferenceContext.get()).getByccMoshtary(ccMoshtary);
             MoshtaryMorajehShodehRoozDAO moshtaryMorajehShodehRoozDAO = new MoshtaryMorajehShodehRoozDAO(weakReferenceContext.get());
@@ -892,8 +885,10 @@ public class RequestCustomerListModel implements RequestCustomerListMVP.ModelOps
 
             //updateEtebarForoshandeh();
 
-            darkhastfaktorDAO.deleteAllFaktorTaeedNashode();
-
+            if (darkhastFaktorSatrDAO.deleteAllFakorsTaeedNashode())
+                darkhastfaktorDAO.deleteAllFaktorTaeedNashode();
+            else
+                setLogToDB(LogPPCModel.LOG_EXCEPTION,weakReferenceContext.get().getResources().getString(R.string.errorTaeedNashode), CLASS_NAME, "", "AsyncTaskCheckSelectCustomer", "doInBackground");
 
             // if value of this variable equal to false, then ignore checks
             boolean checkMojazForDarkhast = true;

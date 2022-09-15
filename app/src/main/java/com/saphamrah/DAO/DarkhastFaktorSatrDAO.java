@@ -2679,6 +2679,28 @@ public class DarkhastFaktorSatrDAO
         }
     }
 
+    public boolean deleteAllFakorsTaeedNashode()
+    {
+        String query = " DELETE From DarkhastFaktorSatr " +
+                "WHERE ccDarkhastFaktor IN  ( SELECT ccDarkhastFaktor FROM darkhastfaktor WHERE CodeVazeiat<2 );";
+
+        try
+        {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+            return true;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            PubFunc.Logger logger = new PubFunc().new Logger();
+            String message = context.getResources().getString(R.string.errorDelete , DarkhastFaktorSatrModel.TableName()) + "\n" + exception.toString() ;
+            logger.insertLogToDB(context, Constants.LOG_EXCEPTION(), message, "DarkhastFaktorSatrDAO" , "" , "deleteByDaarkhastFaktor" , "");
+            return false;
+        }
+    }
+
     public boolean updateMablaghTakhfifNaghdiByccDarkhastFaktorSatr(String ccDarkhastfaktorSatr)
     {
         Log.i("DarkhastFaktorSatrDAO", "updateMablaghTakhfifNaghdiByccDarkhastFaktorSatr:" +ccDarkhastfaktorSatr );
