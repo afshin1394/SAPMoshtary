@@ -510,6 +510,7 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
     @Override
     public void onSuccessAddNewRequestedKala(boolean isTedadKalaAsasi, boolean isTedadKalaAsasiWithTedad) {
 
+
         if (isTedadKalaAsasi) {
             tedadKalaAsasi++;
         }
@@ -734,6 +735,8 @@ public class DarkhastKalaActivity extends AppCompatActivity implements DarkhastK
                     edttxtCountCarton.setText("");
                     edttxtCountBaste.setText("");
                     edttxtCountAdad.setText("");
+                    edttxtCountAdad.requestFocus();
+
                     if (kalaMojodiZaribModel.getTedadPishnahadi() > 0) {
                         edttxtCountAdad.setText(String.valueOf(kalaMojodiZaribModel.getTedadPishnahadi()));
                     }
