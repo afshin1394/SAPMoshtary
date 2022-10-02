@@ -2,7 +2,7 @@ package com.saphamrah.PubFunc;
 
 import android.content.Context;
 
-import com.saphamrah.R;
+import com.saphamrah.customer.R;
 import com.saphamrah.Utils.Constants;
 
 import org.junit.Before;

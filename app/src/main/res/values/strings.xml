@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">SAP Hamrah</string>
-    <string name="app_name_fa">ساپ همراه</string>
+    <string name="app_name">SAP Moshtarian</string>
+    <string name="app_name_fa">ساپ مشتریان</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">close</string>
+
+
     <string name="fontPath">font/IRANSans.ttf</string>
     <string name="crispURL">https://go.crisp.chat/chat/embed/?website_id=</string>
     <string name="Learning">آموزشی</string>
@@ -957,7 +961,7 @@
     <string name="etebarTedadBargashti">اعتبار تعداد اسناد برگشتی</string>
     <string name="etebarModatBargashti">اعتبار مدت اسناد برگشتی</string>
     <string name="etebarMoshtary">اعتبار مشتری</string>
-	<string name="rptSanadTilte">گزارش اسناد</string>
+    <string name="rptSanadTilte">گزارش اسناد</string>
     <string name="activityTitle">Activity Title</string>
     <string name="offlineView">نسخه آفلاین</string>
     <string name="offlineEditVosol">در نسخه آفلاین امکان ویرایش درخواست وجود ندارد.</string>
@@ -1212,10 +1216,10 @@
     <string name="cantEnterTitle">اخطار</string>
     <string name="cantEnterProgram">امکان ورود در حال حاضر برای شما وجود ندارد. \n لطفا چند لحظه دیگر بررسی نمایید.</string>
     <string name="errorUpdateReceiptImage">خطا در بروز رسانی عکس رسید</string>
-    <string name="errorGetImageWithUniqID" >خطا در یافتن پرینت فاکتور</string>
-    <string name="errorGetPrintFaktorFromServer" >خطا در دریافت تصویر فاکتور</string>
-    <string name="errorupdateImage" >خطا در بروز رسانی عکس فاکتور</string>
-    <string name="errorCheckPrintFaktorExist" >خطا در بررسی وجود عکس فاکتور</string>
+    <string name="errorGetImageWithUniqID">خطا در یافتن پرینت فاکتور</string>
+    <string name="errorGetPrintFaktorFromServer">خطا در دریافت تصویر فاکتور</string>
+    <string name="errorupdateImage">خطا در بروز رسانی عکس فاکتور</string>
+    <string name="errorCheckPrintFaktorExist">خطا در بررسی وجود عکس فاکتور</string>
     <string name="FaktorImageNotAvailable">تصویر فاکتور موجود نیست</string>
     <string name="errorSendDataElatAdamTahvil">"خطا در ثبت اطلاعات عدم تحویل فاکتور موقع ارسال به سرور"</string>
     <string name="errorSendElatAdamTahvilFailure">"خطا از سمت سرور "</string>
@@ -1232,4 +1236,6 @@
     <string name="errorUpdateMablaghTakhfifVahed">خطا در بروز رسانی مبلغ تخفیف واحد</string>
     <string name="errorReopenProgram">لطفا برنامه را به طور کامل بسته و دوباره اجرا نمایید.</string>
     <string name="sabtAmval">اموال مشتری</string>
+
+
 </resources>

@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1f3a93</color>
-    <color name="colorPrimaryDark">#152763</color>
-    <color name="colorAccent">#29f1c3</color>
+<!--    <color name="colorPrimary">#189AB4</color>-->
+<!--    <color name="colorPrimaryDark">#05445E</color>-->
+<!--    <color name="colorAccent">#D4F1F4</color>-->
+<!--    <color name="transp">#80000000</color>-->
+<color name="colorPrimary">#2D0045</color>
+    <color name="colorPrimaryDark">#4B0073</color>
+    <color name="colorAccent">#D4F1F4</color>
+    <color name="transp">#80000000</color>
+
+
     <color name="colorTextPrimary">#4d5a6a</color>
     <color name="colorTextSecondary">#757575</color>
     <color name="colorIcons">#2C3E50</color>
@@ -32,6 +39,8 @@
     <color name="green_vf">#00FF00</color>
     <color name="green_vf_2">#008500</color>
     <color name="gray_vf">#CCCCCC</color>
+
+    <color name="bg_view">#9930CF</color>
 
 
     <color name="mdtp_accent_color">#1f3a93</color>
