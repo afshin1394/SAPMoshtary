@@ -13,14 +13,14 @@ public abstract class BaseActivity<T extends BasePresenterOps> extends AppCompat
 
     protected T presenter;
 
-    abstract void onPermission(ArrayList<BasePermissionModel> basePermissionModels);
+    public abstract void onPermission(ArrayList<BasePermissionModel> basePermissionModels);
 
     public void setActivityPresenter(T presenter) {
         this.presenter = presenter;
 
     }
 
-    void checkPermissions(String[] permissions) {
+    public void checkPermissions(String[] permissions) {
         ArrayList<BasePermissionModel> permissionArray = new ArrayList<>();
 
         for (String permission : permissions) {
