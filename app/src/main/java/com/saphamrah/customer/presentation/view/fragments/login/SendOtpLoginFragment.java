@@ -1,14 +1,26 @@
 package com.saphamrah.customer.presentation.view.fragments.login;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.hardware.biometrics.BiometricPrompt;
+import android.os.Build;
+import android.os.CancellationSignal;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
@@ -16,9 +28,12 @@ import com.saphamrah.customer.base.BasePermissionModel;
 import com.saphamrah.customer.presentation.interactors.SendOtpLoginInteracts;
 import com.saphamrah.customer.presentation.presenters.SendOtpLoginPresenter;
 import com.saphamrah.customer.presentation.view.activities.MainActivity;
+import com.saphamrah.customer.presentation.view.customView.ShowSnackBar;
 import com.saphamrah.customer.utils.RxTextWatcher;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observer;
@@ -32,6 +47,7 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter> im
         super(R.layout.fragment_send_otp_login);
     }
 
+
     private EditText etPhone;
 
     private Button btnSendNumber;
@@ -42,6 +58,7 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter> im
 
     private RxTextWatcher rxTextWatcher;
 
+
     @Override
     protected void setPresenter() {
         presenter = new SendOtpLoginPresenter(this);
@@ -51,11 +68,10 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter> im
     protected void initViews() {
 
         etPhone = view.findViewById(R.id.et_phone);
-        btnSendNumber =  view.findViewById(R.id.btn_send_number);
+        btnSendNumber = view.findViewById(R.id.btn_send_number);
 
         rxTextWatcher = new RxTextWatcher();
         compositeDisposable = new CompositeDisposable();
-
 
         phoneNumberTextWatcher();
 
@@ -66,8 +82,6 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter> im
 
     @SuppressLint("AutoDispose")
     private void phoneNumberTextWatcher() {
-
-
         rxTextWatcher.onTextChanged(etPhone)
                 .debounce(700, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -124,13 +138,13 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter> im
     private void checkLogin() {
         try {
 
-                phoneNumber = etPhone.getText().toString();
+            phoneNumber = etPhone.getText().toString();
 
-                if (phoneNumber.length() == 9) {
-                    presenter.sendMobile("09" + phoneNumber);
+            if (phoneNumber.length() == 9) {
+                presenter.sendMobile("09" + phoneNumber);
 
-                } else {
-                    onError(getString(R.string.pleaseEnterPhoneNumberCorrectly));
+            } else {
+                onError(getString(R.string.pleaseEnterPhoneNumberCorrectly));
 
 
             }
@@ -152,6 +166,7 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter> im
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
     }
+
 
     @Override
     protected void onPermission(ArrayList<BasePermissionModel> basePermissionModels) {
@@ -185,15 +200,55 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter> im
 
     @Override
     public void onSendMobile() {
-        navigate(R.id.action_SendOtpLoginFragment_to_VerifyOtpLoginFragment);
 
-        /*if (!prefs.isLogin) {
+        navigate(R.id.action_SendOtpLoginFragment_to_VerifyOtpLoginFragment);
+/*
+        if (!prefs.isLogin) {
             navigate(R.id.action_SendOtpLoginFragment_to_VerifyOtpLoginFragment)
 
         } else {
 
-             *//*startActivity(new Intent(this, MainActivity.class));
+            *//* startActivity(new Intent(this, MainActivity.class));
              finish()*//*
         }*/
     }
+
+   /* // it checks whether the app the app has fingerprint permission
+    @RequiresApi(Build.VERSION_CODES.M)
+    private Boolean checkBiometricSupport() {
+        KeyguardManager keyguardManager =
+                (KeyguardManager) requireActivity().getSystemService(Context.KEYGUARD_SERVICE);
+        if (!keyguardManager.isDeviceSecure()) {
+            notifyUser(getString(R.string.fingerprintAuthenticationHasNotBeenEnabledInSettings));
+            return false;
+        }
+        if (
+            ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.USE_BIOMETRIC
+                            )!= PackageManager.PERMISSION_GRANTED)
+         {
+            notifyUser(getString(R.string.fingerprintAuthenticationPermissionIsNotEnabled));
+            return false;
+        }
+
+        if (requireContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_FINGERPRINT))
+           return true;
+         else
+             return true;
+    }*/
+
+   /* private CancellationSignal getCancellationSignal() {
+        cancellationSignal = new CancellationSignal();
+        cancellationSignal.setOnCancelListener(() -> notifyUser(getString(R.string.authenticationWasCancelledByTheUser)));
+        return cancellationSignal;
+    }*/
+
+
+   /* private void notifyUser(String message) {
+        LayoutInflater mInflater = LayoutInflater.from(view.getContext());
+        View snackView = mInflater.inflate(R.layout.snackbar_view, null);
+        ShowSnackBar.showSnack(snackView, message, 1).show();
+    }*/
+
 }

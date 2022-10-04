@@ -11,14 +11,14 @@ import java.util.HashMap;
 import java.util.Objects;
 
 
-public class PreferencesImpl implements BasePreferences {
+public class PreferencesImplementation implements BasePreferences {
 
     private File file;
     private Type mapType;
 
     private String name;
 
-    public PreferencesImpl(String name) {
+    public PreferencesImplementation(String name) {
         this.name = name;
         try {
             this.file = new File(name).getCanonicalFile();
