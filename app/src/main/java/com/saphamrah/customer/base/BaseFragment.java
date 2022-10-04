@@ -10,11 +10,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public abstract class BaseFragment <T extends BasePresenterOps> extends Fragment implements BaseView {
+public abstract class BaseFragment<T extends BasePresenterOps> extends Fragment implements BaseView {
 
     private final Integer PERMISSION_REQUEST_CODE = 9824;
 
@@ -24,7 +28,7 @@ public abstract class BaseFragment <T extends BasePresenterOps> extends Fragment
         this.layout = layout;
     }
 
-    private View v;
+    protected View view;
     protected T presenter;
 
 
@@ -32,32 +36,35 @@ public abstract class BaseFragment <T extends BasePresenterOps> extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (getView() == null) {
-            v = inflater.inflate(layout, container, false);
+            view = inflater.inflate(layout, container, false);
             setPresenter();
             initViews();
         }
-        return v;
+        return view;
     }
 
     protected abstract void initViews();
 
     protected abstract void setPresenter();
 
-    protected abstract void onPermission(ArrayList<BasePermissionModel> basePermissionModels);
+    protected void onPermission(ArrayList<BasePermissionModel> basePermissionModels) {
+    }
 
-     void checkPermissions(String[] permissions) {
+    ;
+
+    void checkPermissions(String[] permissions) {
         ArrayList<BasePermissionModel> permissionArray = new ArrayList<>();
 
-         for (String permission : permissions) {
-             permissionArray.add(new BasePermissionModel(permission, true));
-         }
+        for (String permission : permissions) {
+            permissionArray.add(new BasePermissionModel(permission, true));
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(permissions, PERMISSION_REQUEST_CODE);
 
         }
-         onPermission(permissionArray);
-     }
+        onPermission(permissionArray);
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -65,7 +72,7 @@ public abstract class BaseFragment <T extends BasePresenterOps> extends Fragment
 
             ArrayList<BasePermissionModel> permissionResults = new ArrayList<>();
 
-            for (int i=0 ; i<permissions.length ; i++) {
+            for (int i = 0; i < permissions.length; i++) {
                 permissionResults.add(
                         new BasePermissionModel(
                                 permissions[i], grantResults[i] == PackageManager.PERMISSION_GRANTED
@@ -79,4 +86,23 @@ public abstract class BaseFragment <T extends BasePresenterOps> extends Fragment
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
+
+
+    public void navigate(Integer action) {
+
+        Navigation.findNavController(requireView()).navigate(action);
+    }
+
+    public void navigate(Integer action, Bundle bundle) {
+
+        Navigation.findNavController(requireView()).navigate(action, bundle);
+    }
+
+    public void navigate(NavDirections action) {
+
+        Navigation.findNavController(requireView()).navigate(action);
+    }
 }
+
+
+

@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 android {
-    compileSdkVersion 29
+    compileSdkVersion 31
     defaultConfig {
         applicationId "com.saphamrah.customer"
         minSdkVersion 19
-        targetSdkVersion 29
+        targetSdkVersion 31
         versionCode 1
         versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -30,11 +30,8 @@ android {
             }
         }
     }
-    dataBinding {
-        enabled = true;
-    }
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding true
     }
     testOptions {
         unitTests {
@@ -53,6 +50,9 @@ android {
 }
 
 dependencies {
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.annotation:annotation:1.4.0'
 
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
@@ -147,6 +147,8 @@ dependencies {
     implementation files('libs\\GLPage_V1.03.00_20181030.jar')
     implementation files('libs\\httpcore-4.0-alpha5.jar')
     implementation files('libs\\NeptuneLiteApi_V2.03.00_20180208.jar')
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
 
     // test
     testImplementation 'org.mockito:mockito-core:3.3.3'
@@ -235,6 +237,9 @@ dependencies {
 
     //cardView
     implementation 'androidx.cardview:cardview:1.0.0'
+
+    implementation 'androidx.navigation:navigation-fragment:2.5.1'
+    implementation 'androidx.navigation:navigation-ui:2.5.1'
 
 }
 ///**Protobuf dependencies**/

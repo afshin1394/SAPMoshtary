@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/SendOtpLoginFragment">
+
+    <fragment
+        android:id="@+id/SendOtpLoginFragment"
+        android:name="com.saphamrah.customer.presentation.view.fragments.login.SendOtpLoginFragment"
+        tools:layout="@layout/fragment_send_otp_login">
+
+        <action
+            android:id="@+id/action_SendOtpLoginFragment_to_VerifyOtpLoginFragment"
+            app:destination="@id/VerifyOtpLoginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/VerifyOtpLoginFragment"
+        android:name="com.saphamrah.customer.presentation.view.fragments.login.VerifyOtpLoginFragment"
+        tools:layout="@layout/fragment_verify_login">
+
+        <action
+            android:id="@+id/action_VerifyOtpLoginFragment_to_SendOtpLoginFragment"
+            app:destination="@id/SendOtpLoginFragment" />
+    </fragment>
+</navigation>

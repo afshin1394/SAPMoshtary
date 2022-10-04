@@ -9,13 +9,11 @@ import android.provider.Telephony;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import com.saphamrah.customer.base.BaseApplication;
+import com.saphamrah.customer.Application;
 import com.saphamrah.customer.listeners.SmsListener;
 import com.saphamrah.customer.utils.SmsHandle;
 
 import java.util.Objects;
-
-import kotlin.Suppress;
 
 public class SmsReceiver extends BroadcastReceiver {
 
@@ -33,7 +31,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
         try {
 
-            smsListener = ((BaseApplication)context.getApplicationContext()).getSmsListener();
+            smsListener = ((Application)context.getApplicationContext()).getSmsListener();
             smsHandle = new SmsHandle();
 
         } catch (Exception ex) {

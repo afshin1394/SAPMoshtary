@@ -24,7 +24,7 @@
     <uses-feature android:name="android.hardware.fingerprint" android:required="true" />
 
     <application
-        android:name="com.saphamrah.customer.base.BaseApplication"
+        android:name="com.saphamrah.customer.Application"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher_icon"
@@ -37,11 +37,11 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
         <activity
-            android:name=".mvp.view.login.LoginActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:name=".presentation.view.activities.MainActivity"
             android:exported="true" />
         <activity
-            android:name="com.saphamrah.customer.mvp.view.activity.MainActivity"
+            android:name=".presentation.view.activities.LoginActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
