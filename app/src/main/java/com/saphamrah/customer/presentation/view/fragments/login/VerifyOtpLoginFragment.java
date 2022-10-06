@@ -3,16 +3,20 @@ package com.saphamrah.customer.presentation.view.fragments.login;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.CountDownTimer;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.base.BasePermissionModel;
+import com.saphamrah.customer.databinding.FragmentVerifyLoginBinding;
 import com.saphamrah.customer.presentation.interactors.VerifyOtpLoginInteracts;
 import com.saphamrah.customer.listeners.VerifyValidCode;
 import com.saphamrah.customer.presentation.presenters.VerifyOtpLoginPresenter;
@@ -22,17 +26,12 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter> implements VerifyOtpLoginInteracts.RequiredViewOps,
+public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter, FragmentVerifyLoginBinding> implements VerifyOtpLoginInteracts.RequiredViewOps,
         VerifyValidCode {
 
     public VerifyOtpLoginFragment() {
         super(R.layout.fragment_verify_login);
     }
-
-    private EditText etCode1;
-    private EditText etCode2;
-    private EditText etCode3;
-    private EditText etCode4;
 
     private Button btnSendCode;
     private Button btnResendCode;
@@ -51,23 +50,19 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
     }
 
     @Override
+    protected FragmentVerifyLoginBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {
+        return FragmentVerifyLoginBinding.inflate(inflater, container, false);
+    }
+
+    @Override
     protected void initViews() {
 
-        etCode1 = view.findViewById(R.id.et_code1);
-        etCode2 = view.findViewById(R.id.et_code2);
-        etCode3 = view.findViewById(R.id.et_code3);
-        etCode4 = view.findViewById(R.id.et_code4);
+        EditText[] edit = {viewBinding.etCode1, viewBinding.etCode2, viewBinding.etCode3, viewBinding.etCode4};
 
-        btnSendCode = view.findViewById(R.id.btn_send_code);
-        btnResendCode = view.findViewById(R.id.btn_resend_code);
-        btnEditNumber = view.findViewById(R.id.btn_edit_number);
-
-        EditText[] edit = {etCode1, etCode2, etCode3, etCode4};
-
-        etCode1.addTextChangedListener(new VerifyCodeTextWatcher(etCode1, edit, this));
-        etCode2.addTextChangedListener(new VerifyCodeTextWatcher(etCode2, edit, this));
-        etCode3.addTextChangedListener(new VerifyCodeTextWatcher(etCode3, edit, this));
-        etCode4.addTextChangedListener(new VerifyCodeTextWatcher(etCode4, edit, this));
+        viewBinding.etCode1.addTextChangedListener(new VerifyCodeTextWatcher(viewBinding.etCode1, edit, this));
+        viewBinding.etCode2.addTextChangedListener(new VerifyCodeTextWatcher(viewBinding.etCode2, edit, this));
+        viewBinding.etCode3.addTextChangedListener(new VerifyCodeTextWatcher(viewBinding.etCode3, edit, this));
+        viewBinding.etCode4.addTextChangedListener(new VerifyCodeTextWatcher(viewBinding.etCode4, edit, this));
 
         btnClickListeners();
 
@@ -79,10 +74,10 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
 
     private void btnClickListeners() {
 
-        String codeNumber1 = etCode1.getText().toString();
-        String codeNumber2 = etCode2.getText().toString();
-        String codeNumber3 = etCode3.getText().toString();
-        String codeNumber4 = etCode4.getText().toString();
+        String codeNumber1 = viewBinding.etCode1.getText().toString();
+        String codeNumber2 = viewBinding.etCode2.getText().toString();
+        String codeNumber3 = viewBinding.etCode3.getText().toString();
+        String codeNumber4 = viewBinding.etCode4.getText().toString();
 
         btnSendCode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,10 +182,10 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
     }
 
     void setTextForEtCode(String messageText) {
-        etCode1.setText(messageText.substring(0,1));
-        etCode2.setText(messageText.substring(1,2));
-        etCode3.setText(messageText.substring(2,3));
-        etCode4.setText(messageText.substring(3,4));
+        viewBinding.etCode1.setText(messageText.substring(0,1));
+        viewBinding.etCode2.setText(messageText.substring(1,2));
+        viewBinding.etCode3.setText(messageText.substring(2,3));
+        viewBinding.etCode4.setText(messageText.substring(3,4));
     }
 
     @Override
@@ -230,10 +225,10 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
 
     @Override
     public void onVerifyValidCode() {
-        String codeNumber1 = etCode1.getText().toString();
-        String codeNumber2 = etCode2.getText().toString();
-        String codeNumber3 = etCode3.getText().toString();
-        String codeNumber4 = etCode4.getText().toString();
+        String codeNumber1 = viewBinding.etCode1.getText().toString();
+        String codeNumber2 = viewBinding.etCode2.getText().toString();
+        String codeNumber3 = viewBinding.etCode3.getText().toString();
+        String codeNumber4 = viewBinding.etCode4.getText().toString();
 
         presenter.verifyOtp(phoneNumber, codeNumber1 + codeNumber2 + codeNumber3 + codeNumber4);
     }

@@ -22,6 +22,7 @@ import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseActivity;
 import com.saphamrah.customer.Application;
 import com.saphamrah.customer.base.BasePermissionModel;
+import com.saphamrah.customer.databinding.ActivityLoginBinding;
 import com.saphamrah.customer.listeners.SmsListener;
 import com.saphamrah.customer.presentation.interactors.LoginInteracts;
 import com.saphamrah.customer.presentation.presenters.LoginPresenter;
@@ -30,14 +31,16 @@ import com.saphamrah.customer.presentation.view.customView.ShowSnackBar;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
-public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps> implements LoginInteracts.RequiredViewOps, SmsListener {
+public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, ActivityLoginBinding> implements LoginInteracts.RequiredViewOps, SmsListener {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+    protected ActivityLoginBinding inflateBiding(LayoutInflater inflater) {
+        return ActivityLoginBinding.inflate(inflater);
+    }
 
+    @Override
+    protected void initViews() {
         setActivityPresenter(new LoginPresenter(this));
 
         checkPermissions(new String[]{Manifest.permission.RECEIVE_SMS});
@@ -51,7 +54,6 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps> imp
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             checkFingerPrintLogin();
         }
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
@@ -178,6 +180,8 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps> imp
     public Context getAppContext() {
         return LoginActivity.this;
     }
+
+
 
     @Override
     public void onPermission(ArrayList<BasePermissionModel> basePermissionModels) {

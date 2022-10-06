@@ -13,12 +13,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.viewbinding.ViewBinding;
+
+import com.saphamrah.customer.databinding.FragmentSendOtpLoginBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class BaseFragment<T extends BasePresenterOps> extends Fragment implements BaseView {
+public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBinding> extends Fragment implements BaseView {
 
     private final Integer PERMISSION_REQUEST_CODE = 9824;
 
@@ -28,24 +31,31 @@ public abstract class BaseFragment<T extends BasePresenterOps> extends Fragment 
         this.layout = layout;
     }
 
-    protected View view;
     protected T presenter;
+    protected S viewBinding;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (getView() == null) {
-            view = inflater.inflate(layout, container, false);
-            setPresenter();
-            initViews();
-        }
-        return view;
+        viewBinding = inflateBiding(inflater, container);
+        return viewBinding.getRoot();
+
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setPresenter();
+        initViews();
+
     }
 
     protected abstract void initViews();
 
     protected abstract void setPresenter();
+
+    protected abstract S inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container);
 
     protected void onPermission(ArrayList<BasePermissionModel> basePermissionModels) {
     }
@@ -101,6 +111,12 @@ public abstract class BaseFragment<T extends BasePresenterOps> extends Fragment 
     public void navigate(NavDirections action) {
 
         Navigation.findNavController(requireView()).navigate(action);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        viewBinding = null;
     }
 }
 

@@ -2,16 +2,38 @@ package com.saphamrah.customer.base;
 
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewbinding.ViewBinding;
 
 import java.util.ArrayList;
 
-public abstract class BaseActivity<T extends BasePresenterOps> extends AppCompatActivity implements BaseView {
+public abstract class BaseActivity<T extends BasePresenterOps, S extends ViewBinding> extends AppCompatActivity implements BaseView {
     private final Integer PERMISSION_REQUEST_CODE = 9824;
 
     protected T presenter;
+    protected S viewBinding;
+
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewBinding = inflateBiding(getLayoutInflater());
+        setContentView(viewBinding.getRoot());
+        initViews();
+
+    }
+
+    protected abstract void initViews();
+
+    protected abstract S inflateBiding(LayoutInflater inflater);
+
 
     public abstract void onPermission(ArrayList<BasePermissionModel> basePermissionModels);
 
