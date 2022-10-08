@@ -17,6 +17,7 @@ import com.saphamrah.customer.base.BasePermissionModel;
 import com.saphamrah.customer.databinding.FragmentSendOtpLoginBinding;
 import com.saphamrah.customer.presentation.interactors.SendOtpLoginInteracts;
 import com.saphamrah.customer.presentation.presenters.SendOtpLoginPresenter;
+import com.saphamrah.customer.presentation.view.customView.ShowSnackBar;
 import com.saphamrah.customer.utils.RxTextWatcher;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
     private CompositeDisposable compositeDisposable;
 
     private RxTextWatcher rxTextWatcher;
+
 
 
     @Override
@@ -160,7 +162,7 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
 
     @Override
     public void onError(String error) {
-
+        notifyUser(error);
     }
 
     @Override
@@ -196,6 +198,12 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
             *//* startActivity(new Intent(this, MainActivity.class));
              finish()*//*
         }*/
+    }
+
+    private void notifyUser(String message) {
+       /* LayoutInflater mInflater = LayoutInflater.from(requireView().getContext());
+        View snackView = mInflater.inflate(R.layout.snackbar_view, null);
+        ShowSnackBar.showSnack(snackView, message, 1).show();*/
     }
 
 }

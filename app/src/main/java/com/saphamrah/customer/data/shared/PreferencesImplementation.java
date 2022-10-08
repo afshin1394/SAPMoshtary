@@ -1,5 +1,7 @@
+/*
 package com.saphamrah.customer.data.shared;
 
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.saphamrah.customer.base.BasePreferences;
 import com.saphamrah.customer.utils.FileManager;
@@ -32,27 +34,55 @@ public class PreferencesImplementation implements BasePreferences {
 
     @Override
     public void putString(String key, String value) {
-       /* HashMap<String, String> data = new HashMap<String, String>();
+        HashMap<String, String> data = new HashMap<String, String>();
         String readed = FileManager.readFileContent(file);
         if (Objects.equals(readed, "")) {
             data.put(key, value);
 
         } else {
-            data = readed.fromJson(mapType);
-            data.get(key) = value;
+            data = (HashMap<String, String>) fromJson(readed, mapType);
+            data.put(key, value);
         }
 
-        FileManager.writeToFile(file, data.toJson());*/
+        FileManager.writeToFile(file, toJson(data));
     }
 
     @Override
     public String getString(String key, String value) {
-        return null;
+
+        String readed = FileManager.readFileContent(this.file);
+        HashMap data;
+
+        String var5;
+        try {
+
+            data = (HashMap)this.fromJson(readed, mapType);
+            String var10000 = (String)data.get(key);
+            if (var10000 == null) {
+                var10000 = value;
+            }
+
+            var5 = var10000;
+        } catch (Exception var7) {
+            var5 = value;
+        }
+
+        return var5;
     }
 
     @Override
+
     public void clear() {
         FileManager.writeToFile(file, "");
 
     }
+
+    private Object fromJson(String fromJson, Type type) {
+        return (new Gson()).fromJson(fromJson, type);
+    }
+
+    private String toJson(Object toJson) {
+        return (new Gson()).toJson(toJson);
+    }
 }
+*/

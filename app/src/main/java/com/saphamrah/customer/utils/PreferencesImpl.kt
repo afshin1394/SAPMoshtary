@@ -44,17 +44,43 @@ class PreferencesImpl(name: String) : BasePreferences {
 
     }
 
+    override fun putInt(key: String, value: Int) {
+        val data: HashMap<String, Int>
+        val readed = FileManager.readFileContent(file)
+        if (readed == "") {
+            data = hashMapOf(
+                Pair(key, value)
+            )
+        } else {
+            data = readed.fromJson(mapType)
+            data[key] = value
+        }
+
+        FileManager.writeToFile(file, data.toJson())
+    }
+
+    override fun getInt(key: String, value: Int): Int {
+        val readed = FileManager.readFileContent(file)
+        val data: HashMap<String, Int>
+        return try {
+            data = readed.fromJson(mapType)
+            data[key] ?: value
+        } catch (ex: Exception) {
+            value
+        }
+    }
+
     override fun clear() {
 
         FileManager.writeToFile(file, "")
 
     }
 
-    private fun <T> String.fromJson(type: Type): T {
+     private fun <T> String.fromJson(type: Type): T {
         return Gson().fromJson(this, type)
     }
 
-    private fun Any.toJson(): String {
+     private fun Any.toJson(): String {
         return Gson().toJson(this)
     }
 }
