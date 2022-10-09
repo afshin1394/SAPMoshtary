@@ -1,4 +1,4 @@
-package com.saphamrah.customer.presentation.view.adapter.pagerAdapter;
+package com.saphamrah.customer.presentation.view.adapter.recycler.pagerAdapter;
 
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;

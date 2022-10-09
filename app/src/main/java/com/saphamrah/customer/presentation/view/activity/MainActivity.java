@@ -11,14 +11,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
-import com.saphamrah.customer.presentation.view.adapter.pagerAdapter.SliderPagerMainFrag;
+import com.saphamrah.customer.presentation.view.adapter.recycler.pagerAdapter.SliderPagerMainFrag;
 import com.saphamrah.customer.presentation.view.adapter.recycler.DialogMenuAdapter;
 import com.saphamrah.customer.data.network.model.MenuModel;
 import com.saphamrah.customer.presentation.view.customView.ZoomOutPageTransformer;
@@ -34,11 +36,14 @@ public class MainActivity extends AppCompatActivity {
 
     public DrawerLayout drawerLayout;
     private NavigationView drawerView;
+
     public ActionBarDrawerToggle actionBarDrawerToggle;
 
     private ConstraintLayout mBottomSheetLayout;
     private BottomSheetBehavior sheetBehavior;
     private View header_Arrow_Image;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
         viewPagerMainFrag = findViewById(R.id.view_pager_mainFrag);
         initFragments();
-
         drawerLayout = findViewById(R.id.drawer_layout_main);
         drawerView = findViewById(R.id.drawer_main);
         mBottomSheetLayout = findViewById(R.id.bottom_sheet_layout);
@@ -55,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
         header_Arrow_Image = findViewById(R.id.arrow_down_bottom_sheet);
         RecyclerView recyclerView = findViewById(R.id.recycler_view_bottom_sheet);
         ImageView menuImg = findViewById(R.id.menu_drawer_main);
+
+
+
+
+
+
 
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
@@ -65,8 +75,13 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
 
         drawerView.addHeaderView(getLayoutInflater().inflate(R.layout.layout_drawer_header, null));
-
-
+        drawerView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Log.i("itemsss", "onNavigationItemSelected: "+item.getItemId());
+                return false;
+            }
+        });
 
 //        mBottomSheetLayout.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
