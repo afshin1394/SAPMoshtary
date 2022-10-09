@@ -25,12 +25,15 @@
         <entry key="..\:/Projects/Android/SAPGit/app/src/main/res/layout/rpt_etebar_list_item.xml" value="0.13069908814589665" />
         <entry key="..\:/Projects/Android/SAPGit/app/src/main/res/layout/rpt_sanad_list_item.xml" value="0.32213740458015266" />
         <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/drawable/bg_gradient.xml" value="0.1455" />
-        <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/drawable/shape_curve.xml" value="0.1455" />
-        <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/layout-v21/fragment_bottom_sheet_dialog_layout.xml" value="0.7" />
-        <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/layout/activity_main.xml" value="0.47" />
+        <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/drawable/shape_curve.xml" value="0.22" />
+        <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/layout-sw600dp/adapter_sheet_menu_light.xml" value="0.51171875" />
+        <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/layout-v21/adapter_sheet_menu_light.xml" value="0.655" />
+        <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/layout-v21/fragment_bottom_sheet_dialog_layout.xml" value="0.5" />
+        <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/layout/activity_main.xml" value="0.54375" />
         <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/layout/adapter_sheet_menu.xml" value="0.655" />
+        <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/layout/adapter_sheet_menu_light.xml" value="0.655" />
         <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/layout/bottom_sheet_dialog_layout.xml" value="0.655" />
-        <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/layout/fragment_bottom_sheet_dialog_layout.xml" value="0.655" />
+        <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/layout/fragment_bottom_sheet_dialog_layout.xml" value="0.5" />
         <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/layout/fragment_shopping_list.xml" value="0.51171875" />
         <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/layout/fragment_welcome.xml" value="0.51171875" />
         <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/layout/layout_drawer_header.xml" value="0.655" />

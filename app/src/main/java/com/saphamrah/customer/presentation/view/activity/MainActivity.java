@@ -1,4 +1,4 @@
-package com.saphamrah.customer.mvp.view.activity;
+package com.saphamrah.customer.presentation.view.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -14,14 +14,18 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
-import com.saphamrah.customer.adapter.pagerAdapter.SliderPagerMainFrag;
-import com.saphamrah.customer.adapter.recycler.DialogMenuAdapter;
+import com.saphamrah.customer.presentation.view.adapter.pagerAdapter.SliderPagerMainFrag;
+import com.saphamrah.customer.presentation.view.adapter.recycler.DialogMenuAdapter;
 import com.saphamrah.customer.data.network.model.MenuModel;
-import com.saphamrah.customer.mvp.view.customView.ZoomOutPageTransformer;
+import com.saphamrah.customer.presentation.view.customView.ZoomOutPageTransformer;
 import com.saphamrah.customer.R;
+import com.saphamrah.customer.utils.CheckTabletOrPhone;
+import com.saphamrah.customer.utils.SnapToBlock;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout = findViewById(R.id.drawer_layout_main);
         drawerView = findViewById(R.id.drawer_main);
+        mBottomSheetLayout = findViewById(R.id.bottom_sheet_layout);
+        sheetBehavior = BottomSheetBehavior.from(mBottomSheetLayout);
+        header_Arrow_Image = findViewById(R.id.arrow_down_bottom_sheet);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view_bottom_sheet);
+        ImageView menuImg = findViewById(R.id.menu_drawer_main);
+
+
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
 
         // pass the Open and Close toggle for the drawer layout listener
@@ -55,11 +66,9 @@ public class MainActivity extends AppCompatActivity {
 
         drawerView.addHeaderView(getLayoutInflater().inflate(R.layout.layout_drawer_header, null));
 
-        mBottomSheetLayout = findViewById(R.id.bottom_sheet_layout);
-        sheetBehavior = BottomSheetBehavior.from(mBottomSheetLayout);
 
-        header_Arrow_Image = findViewById(R.id.arrow_down_bottom_sheet);
 
+//        mBottomSheetLayout.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         header_Arrow_Image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,17 +92,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        showBottomSheetDialog();
-        // to make the Navigation drawer icon always appear on the action bar
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        ImageView menuImg = findViewById(R.id.menu_drawer_main);
 
         menuImg.setOnClickListener(view -> {
             if(drawerLayout.isDrawerOpen(drawerView))
@@ -103,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view_bottom_sheet);
 
         ArrayList<MenuModel> menuModels = new ArrayList<>();
         menuModels.add(new MenuModel("سفارش"));
@@ -116,12 +114,39 @@ public class MainActivity extends AppCompatActivity {
         menuModels.add(new MenuModel("سفارش"));
         menuModels.add(new MenuModel("سفارش"));
         menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("سفارش"));
+
+//        SnapHelper snapHelper = new LinearSnapHelper();
+//        snapHelper.attachToRecyclerView(recyclerView);
+
 
 
         DialogMenuAdapter adapter = new DialogMenuAdapter(this, menuModels);
-        GridLayoutManager mLayoutManager = new GridLayoutManager(this,5);
-
+//        GridLayoutManager mLayoutManager = new GridLayoutManager(this,5);
+        GridLayoutManager mLayoutManager = setConfigForDifferentScreens();
         recyclerView.setLayoutManager(mLayoutManager);
+
+        SnapToBlock snapToBlock = new SnapToBlock(2);
+        snapToBlock.attachToRecyclerView(recyclerView);
+
+
+
 //        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this , DividerItemDecoration.VERTICAL));
         recyclerView.addItemDecoration(new DividerItemDecoration(this , DividerItemDecoration.HORIZONTAL));
@@ -148,5 +173,20 @@ public class MainActivity extends AppCompatActivity {
 
         bottomSheetDialog.show();
 
+    }
+
+    private GridLayoutManager setConfigForDifferentScreens(){
+        GridLayoutManager mLayoutManager;
+        CheckTabletOrPhone checkTabletOrPhone = new CheckTabletOrPhone(this);
+
+
+        if (checkTabletOrPhone.isTablet()) {
+            mLayoutManager = new GridLayoutManager(this, 5);
+        }
+        else {
+            mLayoutManager = new GridLayoutManager(this, 3);
+        }
+
+        return mLayoutManager;
     }
 }

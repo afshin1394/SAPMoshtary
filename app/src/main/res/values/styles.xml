@@ -6,11 +6,15 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:windowDisablePreview">true</item>
     </style>
 
-    <style name="roundedImageView" parent="">
+    <style name="roundedMenuSheet" parent="">
         <item name="cornerFamilyTopRight">rounded</item>
-        <item name="cornerSizeTopRight">30dp</item>
+        <item name="cornerSizeTopRight">140dp</item>
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerSizeTopLeft">140dp</item>
     </style>
 
 

@@ -1,12 +1,12 @@
-package com.saphamrah.customer.adapter.pagerAdapter;
+package com.saphamrah.customer.presentation.view.adapter.pagerAdapter;
 
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
-import com.saphamrah.customer.mvp.view.fragment.ShoppingListFragment;
-import com.saphamrah.customer.mvp.view.fragment.WelcomeFragment;
+import com.saphamrah.customer.presentation.view.fragment.ShoppingListFragment;
+import com.saphamrah.customer.presentation.view.fragment.WelcomeFragment;
 
 public class SliderPagerMainFrag extends FragmentStatePagerAdapter {
     private final int MAX_FRAGMENT = 2;

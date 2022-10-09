@@ -1,4 +1,4 @@
-package com.saphamrah.customer.mvp.view.fragment;
+package com.saphamrah.customer.presentation.view.customView;
 
 import android.os.Bundle;
 
@@ -11,26 +11,24 @@ import android.view.ViewGroup;
 import com.saphamrah.customer.R;
 
 
-public class WelcomeFragment extends Fragment {
+public class BottomSheetDialogLayoutFragment extends Fragment {
 
 
-    public WelcomeFragment() {
+
+    public BottomSheetDialogLayoutFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_welcome, container, false);
-
-
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_bottom_sheet_dialog_layout, container, false);
     }
 }

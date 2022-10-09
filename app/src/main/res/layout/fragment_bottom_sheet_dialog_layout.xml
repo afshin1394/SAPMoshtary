@@ -6,37 +6,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="148dp"
-    android:maxHeight="295dp"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    tools:context=".customer.mvp.view.customView.BottomSheetDialogLayoutFragment">
+    app:behavior_peekHeight="202dp"
+    android:maxHeight="370dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/bg_view">
-
-            <View
-                android:layout_height="40dp"
+            <ImageView
+                android:id="@+id/shapeableimg"
+                android:layout_height="113dp"
                 android:layout_width="match_parent"
                 android:background="@drawable/shape_curve"
+                android:layout_marginTop="20dp"
+                app:shapeAppearanceOverlay="@style/roundedMenuSheet"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-            />
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/arrow_down_bottom_sheet"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_arrow_up"
+                android:elevation="7dp"
                 app:civ_circle_background_color="@color/colorDivider"
                 app:civ_border_color="@color/colorDivider"
                 app:civ_border_width="2dp"
@@ -44,18 +34,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_bottom_sheet"
                 android:layout_width="match_parent"
-                android:layout_height="290dp"
+                android:layout_height="277dp"
+                android:background="@color/bg_view"
+                android:paddingBottom="25dp"
+                android:layout_marginTop="35dp"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/arrow_down_bottom_sheet" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

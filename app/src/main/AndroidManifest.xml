@@ -34,7 +34,7 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
         <activity
-            android:name="com.saphamrah.customer.mvp.view.activity.MainActivity"
+            android:name="com.saphamrah.customer.presentation.view.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

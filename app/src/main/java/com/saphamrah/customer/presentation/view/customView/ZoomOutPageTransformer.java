@@ -1,4 +1,4 @@
-package com.saphamrah.customer.mvp.view.customView;
+package com.saphamrah.customer.presentation.view.customView;
 
 import android.view.View;
 

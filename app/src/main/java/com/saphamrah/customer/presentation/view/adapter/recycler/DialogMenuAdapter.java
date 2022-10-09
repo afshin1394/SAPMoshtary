@@ -1,4 +1,4 @@
-package com.saphamrah.customer.adapter.recycler;
+package com.saphamrah.customer.presentation.view.adapter.recycler;
 
 
 import android.content.Context;
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.data.network.model.MenuModel;
+import com.saphamrah.customer.utils.CheckTabletOrPhone;
 
 import java.util.ArrayList;
 
@@ -33,7 +34,13 @@ public class DialogMenuAdapter extends RecyclerView.Adapter<DialogMenuAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_sheet_menu , parent , false);
+        CheckTabletOrPhone checkTabletOrPhone = new CheckTabletOrPhone(context);
+        View view;
+
+        if (checkTabletOrPhone.isTablet())
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_sheet_menu , parent , false);
+        else
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_sheet_menu_light , parent , false);
         return new ViewHolder(view);
     }
 

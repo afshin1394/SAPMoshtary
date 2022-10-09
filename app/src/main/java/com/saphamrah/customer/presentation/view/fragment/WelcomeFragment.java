@@ -1,4 +1,4 @@
-package com.saphamrah.customer.mvp.view.fragment;
+package com.saphamrah.customer.presentation.view.fragment;
 
 import android.os.Bundle;
 
@@ -10,13 +10,13 @@ import android.view.ViewGroup;
 
 import com.saphamrah.customer.R;
 
-public class ShoppingListFragment extends Fragment {
+
+public class WelcomeFragment extends Fragment {
 
 
-    public ShoppingListFragment() {
-
+    public WelcomeFragment() {
+        // Required empty public constructor
     }
-
 
 
     @Override
@@ -29,6 +29,8 @@ public class ShoppingListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        return inflater.inflate(R.layout.fragment_welcome, container, false);
+
+
     }
 }
