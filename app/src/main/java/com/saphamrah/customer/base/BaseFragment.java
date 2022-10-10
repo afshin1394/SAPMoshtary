@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+
 public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBinding> extends Fragment implements BaseView {
 
     private final Integer PERMISSION_REQUEST_CODE = 9824;
@@ -30,6 +33,8 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     public BaseFragment(Integer layout) {
         this.layout = layout;
     }
+
+    protected CompositeDisposable compositeDisposable;
 
     protected T presenter;
     protected S viewBinding;
@@ -47,6 +52,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setPresenter();
+        compositeDisposable = new CompositeDisposable();
         initViews();
 
     }
@@ -56,6 +62,10 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     protected abstract void setPresenter();
 
     protected abstract S inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container);
+
+    void addDisposable(Disposable disposable) {
+        compositeDisposable.add(disposable);
+    }
 
     protected void onPermission(ArrayList<BasePermissionModel> basePermissionModels) {
     }
@@ -116,6 +126,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        compositeDisposable.clear();
         viewBinding = null;
     }
 }

@@ -22,8 +22,8 @@ public interface SendOtpLoginInteracts {
 
     }
 
-    interface ModelOps extends BaseModel {
-        void sendMobile(String mobile);
+    abstract class ModelOps extends BaseModel {
+        protected abstract void sendMobile(String mobile);
 
     }
 

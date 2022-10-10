@@ -2,7 +2,7 @@ package com.saphamrah.customer.presentation.models;
 
 import com.saphamrah.customer.presentation.interactors.SendOtpLoginInteracts;
 
-public class SendOtpLoginModel implements SendOtpLoginInteracts.ModelOps{
+public class SendOtpLoginModel extends SendOtpLoginInteracts.ModelOps {
 
     private SendOtpLoginInteracts.RequiredPresenterOps sendOtpLoginRequiredPresenterOps;
 

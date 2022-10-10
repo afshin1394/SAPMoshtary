@@ -21,7 +21,7 @@ public interface VerifyOtpLoginInteracts {
 
     }
 
-    interface ModelOps extends BaseModel {
+    abstract class ModelOps extends BaseModel {
 
     }
 

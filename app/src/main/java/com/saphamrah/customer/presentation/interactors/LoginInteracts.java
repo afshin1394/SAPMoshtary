@@ -19,7 +19,7 @@ public interface LoginInteracts {
 
     }
 
-    interface ModelOps extends BaseModel {
+    abstract class ModelOps extends BaseModel {
 
     }
 

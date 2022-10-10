@@ -2,7 +2,7 @@ package com.saphamrah.customer.presentation.models;
 
 import com.saphamrah.customer.presentation.interactors.LoginInteracts;
 
-public class LoginModel implements LoginInteracts.ModelOps {
+public class LoginModel extends LoginInteracts.ModelOps {
 
     private LoginInteracts.RequiredPresenterOps loginRequiredPresenterOps;
 

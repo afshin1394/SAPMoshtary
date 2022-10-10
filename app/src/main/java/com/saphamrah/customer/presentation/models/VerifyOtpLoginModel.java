@@ -2,7 +2,7 @@ package com.saphamrah.customer.presentation.models;
 
 import com.saphamrah.customer.presentation.interactors.VerifyOtpLoginInteracts;
 
-public class VerifyOtpLoginModel implements VerifyOtpLoginInteracts.ModelOps{
+public class VerifyOtpLoginModel extends VerifyOtpLoginInteracts.ModelOps {
 
     private VerifyOtpLoginInteracts.RequiredPresenterOps verifyOtpLoginRequiredPresenterOps;
 

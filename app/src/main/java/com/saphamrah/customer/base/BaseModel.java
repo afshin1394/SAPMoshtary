@@ -1,8 +1,17 @@
 package com.saphamrah.customer.base;
 
-public interface BaseModel {
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
-    void setLogToDB(
+public abstract class BaseModel {
+
+    protected CompositeDisposable compositeDisposable;
+
+    public void addDisposable(Disposable disposable) {
+        compositeDisposable.add(disposable);
+    }
+
+    public abstract void setLogToDB(
             Integer logType,
             String message,
             String logClass,
@@ -11,5 +20,5 @@ public interface BaseModel {
             String functionChild
     );
 
-    void onDestroy();
+    public abstract void onDestroy();
 }
