@@ -37,8 +37,6 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
 
     private String phoneNumber = "";
 
-    private CompositeDisposable compositeDisposable;
-
     private RxTextWatcher rxTextWatcher;
 
 
@@ -75,7 +73,7 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
                 .subscribe(new Observer<String>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
+                        addDisposable(d);
                     }
 
                     @Override
@@ -106,7 +104,7 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
 
                     @Override
                     public void onComplete() {
-                        compositeDisposable.clear();
+
                     }
                 });
 

@@ -63,7 +63,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
 
     protected abstract S inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container);
 
-    void addDisposable(Disposable disposable) {
+    public void addDisposable(Disposable disposable) {
         compositeDisposable.add(disposable);
     }
 
