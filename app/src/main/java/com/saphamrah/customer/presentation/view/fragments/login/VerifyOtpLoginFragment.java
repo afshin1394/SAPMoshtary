@@ -33,9 +33,6 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
         super(R.layout.fragment_verify_login);
     }
 
-    private Button btnSendCode;
-    private Button btnResendCode;
-    private Button btnEditNumber;
 
     private CountDownTimer countDown;
 
@@ -79,7 +76,7 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
         String codeNumber3 = viewBinding.etCode3.getText().toString();
         String codeNumber4 = viewBinding.etCode4.getText().toString();
 
-        btnSendCode.setOnClickListener(new View.OnClickListener() {
+        viewBinding.btnSendCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (codeNumber1.length() +
@@ -96,7 +93,7 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
             }
         });
 
-        btnEditNumber.setOnClickListener(new View.OnClickListener() {
+        viewBinding.btnEditNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navigate(R.id.action_VerifyOtpLoginFragment_to_SendOtpLoginFragment);
@@ -125,7 +122,7 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
             @SuppressLint("SetTextI18n")
             @Override
             public void onTick(long millisUntilFinished) {
-                btnResendCode.setOnClickListener(new View.OnClickListener() {
+                viewBinding.btnResendCode.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         countDown.cancel();
@@ -133,7 +130,7 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
                     }
                 });
 
-                btnResendCode.setBackground( ContextCompat.getDrawable(
+                viewBinding.btnResendCode.setBackground( ContextCompat.getDrawable(
                         requireContext(),
                         R.drawable.button_selector
                 ));
@@ -141,14 +138,14 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
                 if ((millisUntilFinished / 1000) % 60 < 10) {
 
 
-                    btnResendCode.setText(getString(R.string.string_resendcodeuntil) + " " + String.format(getString(
+                    viewBinding.btnResendCode.setText(getString(R.string.string_resendcodeuntil) + " " + String.format(getString(
                                     R.string.string_time_format_zero
                             ),
                             TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
                             TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
                                     TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
                 } else {
-                    btnResendCode.setText(getString(R.string.string_resendcodeuntil) + " " + String.format(getString(
+                    viewBinding.btnResendCode.setText(getString(R.string.string_resendcodeuntil) + " " + String.format(getString(
                                     R.string.string_time_format
                             ),
                             TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
@@ -160,15 +157,15 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
 
             @Override
             public void onFinish() {
-                btnResendCode.setText(getString(R.string.string_resend_code));
+                viewBinding.btnResendCode.setText(getString(R.string.string_resend_code));
 
-                btnResendCode.setBackground(
+                viewBinding.btnResendCode.setBackground(
                     ContextCompat.getDrawable(
                             requireActivity(),
                             R.drawable.button_selector_blue
                     ));
 
-                btnResendCode.setOnClickListener(new View.OnClickListener() {
+                viewBinding.btnResendCode.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (countDown != null) {
