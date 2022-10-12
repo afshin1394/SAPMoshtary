@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:background="@drawable/bg_gradient"
-    tools:context="com.saphamrah.customer.presentation.view.fragment.WelcomeFragment">
+    tools:context=".presentation.view.fragments.main.WelcomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

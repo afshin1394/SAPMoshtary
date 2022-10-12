@@ -1,4 +1,4 @@
-package com.saphamrah.customer.presentation.view.fragment;
+package com.saphamrah.customer.presentation.view.fragments.main;
 
 import android.os.Bundle;
 

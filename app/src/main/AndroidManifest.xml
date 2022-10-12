@@ -19,9 +19,12 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-feature android:name="android.hardware.fingerprint" android:required="true" />
 
     <application
-        android:name="com.saphamrah.customer.base.BaseApplication"
+        android:name="com.saphamrah.customer.Application"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher_icon"
@@ -34,7 +37,7 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
         <activity
-            android:name="com.saphamrah.customer.presentation.view.activity.MainActivity"
+            android:name="com.saphamrah.customer.presentation.view.activites.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -43,6 +46,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".receivers.SmsReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

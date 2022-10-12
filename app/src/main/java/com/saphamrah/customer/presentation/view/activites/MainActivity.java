@@ -1,4 +1,4 @@
-package com.saphamrah.customer.presentation.view.activity;
+package com.saphamrah.customer.presentation.view.activites;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
