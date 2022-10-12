@@ -1263,5 +1263,11 @@
     <string name="subtitle">عنوان فرعی</string>
     <string name="usesFingerPrint">اثر انگشت</string>
     <string name="sendCode">ارسال کد</string>
+    <string name="register">ثبت نام</string>
+    <string name="province">استان</string>
+    <string name="city">شهر</string>
+    <string name="plaque">پلاک</string>
+    <string name="mainStreet">خیابان اصلی</string>
+    <string name="mainAlley">کوچه اصلی</string>
 
 </resources>

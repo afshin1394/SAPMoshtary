@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/activity_login"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/backrepeat"
     android:layoutDirection="rtl">
 
@@ -14,32 +13,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3"
-        />
+        app:layout_constraintGuide_percent="0.3" />
 
     <LinearLayout
         android:id="@+id/layout_logo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline"
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline">
 
         <ImageView
-            android:layout_margin="5dp"
             android:id="@+id/img_logo"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_margin="5dp"
             android:src="@drawable/ic_launcher_icon" />
 
         <TextView
-            android:layout_margin="5dp"
             android:id="@+id/txt_appname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_margin="5dp"
             android:fontFamily="@font/iransans"
+            android:gravity="center"
             android:text="@string/app_name"
             android:textColor="@color/colorWhite"
             android:textSize="32sp" />
@@ -48,34 +46,34 @@
 
     <TextView
 
-        app:layout_constraintTop_toBottomOf="@id/layout_logo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/frame_input"
-        android:layout_marginTop="15dp"
         android:id="@+id/txt_terms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
         android:fontFamily="@font/iransans"
         android:gravity="center"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:text="@string/enter"
         android:textColor="@color/colorWhite"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/frame_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_logo" />
 
     <FrameLayout
         android:id="@+id/frame_input"
-        app:layout_constraintTop_toBottomOf="@id/txt_terms"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        app:layout_constraintBottom_toTopOf="@id/frame_buttom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_terms"
         app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintBottom_toTopOf="@id/frame_buttom"
-        android:layout_marginTop="17dp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content" >
+        app:layout_constraintWidth_percent="0.8">
 
         <com.google.android.material.textfield.TextInputLayout
 
@@ -92,35 +90,34 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/iransans"
                 android:inputType="number"
-                android:visibility="visible"
                 android:maxLength="9"
                 android:padding="10dp"
                 android:textColor="@color/colorWhite"
-                android:textDirection="ltr" />
+                android:textDirection="ltr"
+                android:visibility="visible" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
-
         <com.google.android.material.textfield.TextInputLayout
 
-            android:layout_marginTop="7dp"
             android:id="@+id/til_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="7dp"
             android:gravity="center"
             android:textColorHint="@color/colorWhite"
             android:visibility="gone">
 
             <EditText
-                android:padding="10dp"
                 android:id="@+id/et_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/enterCode"
                 android:inputType="number"
                 android:maxLength="4"
+                android:padding="10dp"
                 android:textColor="@color/colorWhite"
                 android:textDirection="ltr" />
 
@@ -130,22 +127,22 @@
 
     <FrameLayout
         android:id="@+id/frame_buttom"
-        app:layout_constraintTop_toBottomOf="@id/frame_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@id/layout_resend"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frame_input"
         app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintBottom_toTopOf="@id/layout_resend"
-        android:layout_marginTop="10dp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content">
+        app:layout_constraintWidth_percent="0.8">
 
         <Button
-            android:layout_marginTop="10dp"
             android:id="@+id/btn_send_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="10dp"
             android:background="@drawable/button_selector"
             android:fontFamily="@font/iransans"
             android:shadowColor="@color/colorWhite"
@@ -154,5 +151,23 @@
             android:textSize="12sp" />
 
     </FrameLayout>
+
+
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_selector"
+        android:fontFamily="@font/iransans"
+        android:shadowColor="@color/colorWhite"
+        android:text="@string/register"
+        android:textColor="@color/colorWhite"
+        android:textSize="12sp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -111,6 +111,13 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
 
     private void btnClickListeners() {
 
+        viewBinding.btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigate(R.id.action_SendOtpLoginFragment_to_RegisterFragment);
+            }
+        });
+
         viewBinding.btnSendNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

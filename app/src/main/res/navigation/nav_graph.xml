@@ -13,7 +13,23 @@
         <action
             android:id="@+id/action_SendOtpLoginFragment_to_VerifyOtpLoginFragment"
             app:destination="@id/VerifyOtpLoginFragment" />
+
+        <action
+            android:id="@+id/action_SendOtpLoginFragment_to_RegisterFragment"
+            app:destination="@id/RegisterFragment" />
+
     </fragment>
+
+    <fragment
+        android:id="@+id/RegisterFragment"
+        android:name="com.saphamrah.customer.presentation.view.fragments.login.RegisterFragment"
+        tools:layout="@layout/fragment_register">
+
+        <action
+            android:id="@+id/action_RegisterFragment_to_VerifyOtpLoginFragment"
+            app:destination="@id/VerifyOtpLoginFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/VerifyOtpLoginFragment"
         android:name="com.saphamrah.customer.presentation.view.fragments.login.VerifyOtpLoginFragment"
