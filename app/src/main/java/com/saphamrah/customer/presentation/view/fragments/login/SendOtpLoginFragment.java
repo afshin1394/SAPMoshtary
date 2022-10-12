@@ -53,7 +53,6 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
     @Override
     protected void initViews() {
 
-
         rxTextWatcher = new RxTextWatcher();
         compositeDisposable = new CompositeDisposable();
 
@@ -158,11 +157,6 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
         requireActivity().getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
     }
 
-
-    @Override
-    protected void onPermission(ArrayList<BasePermissionModel> basePermissionModels) {
-
-    }
 
     @Override
     public void onError(String error) {

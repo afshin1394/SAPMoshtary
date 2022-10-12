@@ -7,7 +7,7 @@ import com.saphamrah.customer.presentation.models.LoginModel;
 
 public class LoginPresenter implements LoginInteracts.PresenterOps, LoginInteracts.RequiredPresenterOps {
 
-    private LoginInteracts.RequiredViewOps view;
+    private final LoginInteracts.RequiredViewOps view;
     private final LoginModel model;
 
     public LoginPresenter(LoginInteracts.RequiredViewOps view) {

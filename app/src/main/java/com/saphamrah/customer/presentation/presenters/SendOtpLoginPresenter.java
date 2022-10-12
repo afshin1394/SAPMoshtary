@@ -7,7 +7,7 @@ import com.saphamrah.customer.presentation.models.SendOtpLoginModel;
 
 public class SendOtpLoginPresenter implements SendOtpLoginInteracts.PresenterOps, SendOtpLoginInteracts.RequiredPresenterOps{
 
-    private SendOtpLoginInteracts.RequiredViewOps view;
+    private final SendOtpLoginInteracts.RequiredViewOps view;
     private final SendOtpLoginModel model;
 
     public SendOtpLoginPresenter(SendOtpLoginInteracts.RequiredViewOps view) {

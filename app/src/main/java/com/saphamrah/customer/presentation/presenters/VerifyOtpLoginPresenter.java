@@ -7,7 +7,7 @@ import com.saphamrah.customer.presentation.models.VerifyOtpLoginModel;
 
 public class VerifyOtpLoginPresenter implements VerifyOtpLoginInteracts.PresenterOps, VerifyOtpLoginInteracts.RequiredPresenterOps{
 
-    private VerifyOtpLoginInteracts.RequiredViewOps view;
+    private final VerifyOtpLoginInteracts.RequiredViewOps view;
     private final VerifyOtpLoginModel model;
 
     public VerifyOtpLoginPresenter(VerifyOtpLoginInteracts.RequiredViewOps view) {
