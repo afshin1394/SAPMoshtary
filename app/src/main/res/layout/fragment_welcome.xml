@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center|top"
     android:background="@drawable/bg_gradient"
-    android:orientation="vertical"
     tools:context=".presentation.view.fragments.main.WelcomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/moshtary_name_cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="25dp"
@@ -48,17 +48,37 @@
     </androidx.cardview.widget.CardView>
 
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpager"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/ads_cardview"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="290dp"
+        app:cardCornerRadius="25dp"
+        android:layout_below="@+id/moshtary_name_cardview"
+        android:background="@null"
+        android:elevation="15dp"
+        android:layout_margin="15dp">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_below="@+id/moshtary_name_cardview" />
+
+
+    </androidx.cardview.widget.CardView>
+
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabTextColor="@color/colorWhite"
+        android:layout_height="30dp"
+        android:layout_below="@+id/ads_cardview"
+        android:layout_marginTop="-50dp"
+        android:elevation="17dp"
+        android:scaleX="2"
+        android:scaleY="2"
         app:tabIndicatorColor="@color/colorPrimary"
         app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/colorPrimary" />
-</LinearLayout>
+        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabTextColor="@color/colorWhite" />
+</RelativeLayout>

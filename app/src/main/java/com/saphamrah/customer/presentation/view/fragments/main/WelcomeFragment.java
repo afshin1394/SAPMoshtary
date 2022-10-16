@@ -12,18 +12,21 @@ import android.view.ViewGroup;
 import com.google.android.material.tabs.TabLayout;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.data.local.AdvertiseModel;
-import com.saphamrah.customer.presentation.view.adapter.pagerAdapter.main.AdvertiseStatePager;
+import com.saphamrah.customer.base.BaseStatePager;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class WelcomeFragment extends Fragment {
 
-    private AdvertiseStatePager adapter;
+    private BaseStatePager adapter;
     private ViewPager viewPager;
     private TabLayout tabLayout;
-    private ArrayList<AdvertiseModel> advertiseList = new ArrayList<>();
+    private ArrayList<AdvertiseModel> advertiseList;
+
+    public WelcomeFragment(ArrayList<AdvertiseModel> advertiseList){
+        this.advertiseList = advertiseList;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,34 +39,22 @@ public class WelcomeFragment extends Fragment {
     }
 
     private void setViewPager() {
-        adapter = new AdvertiseStatePager(getChildFragmentManager());
+        adapter = new BaseStatePager(getChildFragmentManager());
         viewPager.setAdapter(adapter);
 
-        AdvertiseModel advertiseModel = new AdvertiseModel();
-        for (int i = 0; i <= 2; i++) {
-            advertiseModel.setImageUrl("@drawable/advertising");
-            advertiseList.add(advertiseModel);
-//            advertiseList.add(advertiseModel);
-            if (i == 0) {
-                addPages(advertiseModel, "ads3");
-            }
-            if (i == 1) {
-                addPages(advertiseModel, "ads2");
-            }
-            if (i == 2) {
-                addPages(advertiseModel, "ads1");
-            }
+        for (AdvertiseModel aModel: advertiseList){
+            addPages(aModel);
         }
 
         viewPager.setCurrentItem(advertiseList.size()-1);
     }
 
-    public void addPages(AdvertiseModel advertiseModel, String title) {
+    public void addPages(AdvertiseModel advertiseModel) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("data", advertiseModel);
         AdvertiseFragment fragmentChild = new AdvertiseFragment();
         fragmentChild.setArguments(bundle);
-        adapter.addFragment(fragmentChild, advertiseModel, title);
+        adapter.addFragment(fragmentChild, advertiseModel, advertiseModel.getTitle());
         if (adapter.getCount() > 0) {
             tabLayout.setupWithViewPager(viewPager);
         }

@@ -1,4 +1,4 @@
-package com.saphamrah.customer.presentation.view.adapter.pagerAdapter.main;
+package com.saphamrah.customer.base;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,12 +11,12 @@ import com.saphamrah.customer.data.local.AdvertiseModel;
 import java.util.ArrayList;
 
 
-public class AdvertiseStatePager extends FragmentStatePagerAdapter {
+public class BaseStatePager extends FragmentStatePagerAdapter {
     private ArrayList<Fragment> fragmentList = new ArrayList<>();
     private ArrayList<String> stringList = new ArrayList<>();
     private ArrayList<AdvertiseModel> advertiseList = new ArrayList<>();
 
-    public AdvertiseStatePager(FragmentManager fm) {
+    public BaseStatePager(FragmentManager fm) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
     }
 

@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
+import com.saphamrah.customer.data.local.AdvertiseModel;
 import com.saphamrah.customer.presentation.view.adapter.pagerAdapter.main.MainStatePager;
 import com.saphamrah.customer.presentation.view.adapter.recycler.DialogMenuAdapter;
 import com.saphamrah.customer.data.network.model.MenuModel;
@@ -155,8 +156,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void initFragments() {
+        ArrayList<AdvertiseModel> advertiseModels = new ArrayList<>();
 
-        viewPagerAdapter = new MainStatePager(getSupportFragmentManager());
+        advertiseModels.add(new AdvertiseModel("@drawable/advertising", "", "."));
+        advertiseModels.add(new AdvertiseModel("@drawable/advertising", "", "."));
+        advertiseModels.add(new AdvertiseModel("@drawable/advertising", "", "."));
+        advertiseModels.add(new AdvertiseModel("@drawable/advertising", "", "."));
+        advertiseModels.add(new AdvertiseModel("@drawable/advertising", "", "."));
+
+        viewPagerAdapter = new MainStatePager(getSupportFragmentManager(), advertiseModels);
 
         viewPagerMainFrag.setAdapter(viewPagerAdapter);
         viewPagerMainFrag.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
