@@ -12,13 +12,14 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
-import com.saphamrah.customer.presentation.view.adapter.pagerAdapter.SliderPagerMainFrag;
+import com.saphamrah.customer.presentation.view.adapter.pagerAdapter.main.MainStatePager;
 import com.saphamrah.customer.presentation.view.adapter.recycler.DialogMenuAdapter;
 import com.saphamrah.customer.data.network.model.MenuModel;
 import com.saphamrah.customer.presentation.view.customView.ZoomOutPageTransformer;
@@ -28,9 +29,9 @@ import com.saphamrah.customer.utils.SnapToBlock;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ViewPager viewPagerMainFrag;
-    private SliderPagerMainFrag viewPagerAdapter;
+    private MainStatePager viewPagerAdapter;
 
     public DrawerLayout drawerLayout;
     private NavigationView drawerView;
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         drawerView.addHeaderView(getLayoutInflater().inflate(R.layout.layout_drawer_header, null));
 
-
+        drawerView.setNavigationItemSelectedListener(this);
 
 //        mBottomSheetLayout.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
@@ -155,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void initFragments() {
 
-        viewPagerAdapter = new SliderPagerMainFrag(getSupportFragmentManager());
+        viewPagerAdapter = new MainStatePager(getSupportFragmentManager());
 
         viewPagerMainFrag.setAdapter(viewPagerAdapter);
         viewPagerMainFrag.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
@@ -188,5 +189,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return mLayoutManager;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+//        int id = item.getItemId();
+
+//        if (id == R.id.nav_account) {
+//        }
+        return true;
     }
 }
