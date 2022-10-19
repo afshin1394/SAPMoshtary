@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -70,7 +71,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     protected void onPermission(ArrayList<BasePermissionModel> basePermissionModels) {
     }
 
-    ;
+
 
     void checkPermissions(String[] permissions) {
         ArrayList<BasePermissionModel> permissionArray = new ArrayList<>();

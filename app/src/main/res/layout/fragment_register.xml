@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl"
+    tools:context=".presentation.view.activities.LoginActivity">
+
+    <RelativeLayout
     android:id="@+id/layFormContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -185,7 +192,10 @@
                     android:layout_weight="5"
                     android:layoutDirection="rtl"
                     android:textColorHint="@color/colorDivider"
-                    android:textDirection="rtl">
+                    android:textDirection="rtl"
+                    android:clickable="true"
+                    >
+
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtInputProvince"
@@ -197,9 +207,17 @@
                         android:fontFamily="@font/iransans"
                         android:hint="@string/province"
                         android:inputType="text"
+                        android:clickable="true"
+                        android:focusable="false"
                         android:maxLines="1"
                         android:textColor="@color/colorTextPrimary"
-                        android:textSize="@dimen/FontSize16" />
+                        android:textSize="@dimen/FontSize16"
+                        />
+
+
+
+
+
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -393,3 +411,7 @@
         android:textSize="@dimen/btnFontMain" />
 
 </RelativeLayout>
+
+    <include layout="@layout/bottom_sheet_search"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

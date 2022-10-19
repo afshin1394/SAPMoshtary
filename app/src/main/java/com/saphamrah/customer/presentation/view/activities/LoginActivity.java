@@ -196,6 +196,7 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, Act
     }
 
     private void notifyUser(String message) {
+
        /* LayoutInflater mInflater = LayoutInflater.from(this);
         View snackView = mInflater.inflate(R.layout.snackbar_view, null);
         ShowSnackBar.showSnack(snackView, message, 1).show();*/

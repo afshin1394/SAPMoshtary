@@ -4,7 +4,6 @@
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backrepeat"
     android:layoutDirection="rtl">
 
 
@@ -39,7 +38,7 @@
             android:fontFamily="@font/iransans"
             android:gravity="center"
             android:text="@string/app_name"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/colorTextPrimary"
             android:textSize="32sp" />
 
     </LinearLayout>
@@ -56,7 +55,7 @@
         android:fontFamily="@font/iransans"
         android:gravity="center"
         android:text="@string/enter"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@id/frame_input"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textColorHint="@color/colorWhite">
+            android:textColorHint="@color/colorTextPrimary">
 
             <com.saphamrah.customer.presentation.view.customView.PrefixPhoneNumberCustomEditText
                 android:id="@+id/et_phone"
@@ -92,7 +91,7 @@
                 android:inputType="number"
                 android:maxLength="9"
                 android:padding="10dp"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/colorTextPrimary"
                 android:textDirection="ltr"
                 android:visibility="visible" />
 
