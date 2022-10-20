@@ -1270,5 +1270,6 @@
     <string name="mainStreet">خیابان اصلی</string>
     <string name="mainAlley">کوچه اصلی</string>
     <string name="searchProvince">جستجو استان</string>
+    <string name="searchCity">جستجو شهر</string>
 
 </resources>

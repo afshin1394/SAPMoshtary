@@ -20,12 +20,15 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
+import com.saphamrah.customer.data.CityDbModel;
 import com.saphamrah.customer.data.ProvinceDbModel;
 import com.saphamrah.customer.data.network.model.RegisterNetworkModel;
 import com.saphamrah.customer.databinding.FragmentRegisterBinding;
+import com.saphamrah.customer.listeners.CityListener;
 import com.saphamrah.customer.listeners.ProvinceListener;
 import com.saphamrah.customer.presentation.interactors.RegisterInteracts;
 import com.saphamrah.customer.presentation.presenters.RegisterPresenter;
+import com.saphamrah.customer.presentation.view.adapter.recycler.SearchCityAdapter;
 import com.saphamrah.customer.presentation.view.adapter.recycler.SearchProvinceAdapter;
 import com.saphamrah.customer.utils.RxTextWatcher;
 
@@ -42,13 +45,16 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
     private RegisterNetworkModel registerNetworkModel;
     private ArrayList<ProvinceDbModel> provinceDbModels;
+    private ArrayList<CityDbModel> cityDbModels;
     private RxTextWatcher rxTextWatcher;
     private SearchProvinceAdapter searchProvinceAdapter;
+    private SearchCityAdapter searchCityAdapter;
     private LinearLayoutManager linearLayoutManager;
     private BottomSheetBehavior bottomSheetBehavior;
     private MaterialSearchView searchView;
     private RecyclerView recyclerViewSearchResult;
-    private ArrayList<ProvinceDbModel> filteredList;
+    private ArrayList<ProvinceDbModel> filteredListProvinceDbModel;
+    private ArrayList<CityDbModel> filteredListCityDbModel;
 
 
     public RegisterFragment() {
@@ -75,11 +81,17 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
         rxTextWatcher = new RxTextWatcher();
         provinceDbModels = new ArrayList<>();
+        cityDbModels = new ArrayList<>();
 
         provinceDbModels.add(new ProvinceDbModel("tehran"));
         provinceDbModels.add(new ProvinceDbModel("tehran1"));
         provinceDbModels.add(new ProvinceDbModel("tabriz"));
         provinceDbModels.add(new ProvinceDbModel("tabriz1"));
+
+        cityDbModels.add(new CityDbModel("tehran"));
+        cityDbModels.add(new CityDbModel("tehran1"));
+        cityDbModels.add(new CityDbModel("tabriz"));
+        cityDbModels.add(new CityDbModel("tabriz1"));
 
         recyclerViewSearchResult = getView().findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -92,27 +104,60 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
     }
 
-    private void filter(String query) {
-        filteredList = new ArrayList<>();
+    private void filterCity(String query) {
+        filteredListCityDbModel = new ArrayList<>();
+
+        for (int i = 0; i < cityDbModels.size(); i++) {
+
+            final String text = cityDbModels.get(i).getName().toLowerCase();
+            if (text.contains(query)) {
+
+                filteredListCityDbModel.add(cityDbModels.get(i));
+            }
+        }
+
+        Log.d("RegisterFragment", "filteredList: " + filteredListCityDbModel);
+
+        searchCityAdapter = new SearchCityAdapter(getContext(), filteredListCityDbModel, new CityListener() {
+            @Override
+            public void onClick(CityDbModel cityDbModel) {
+                viewBinding.edtInputCity.setText(cityDbModel.getName());
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                searchView.closeSearch();
+                filteredListCityDbModel.clear();
+                recyclerViewSearchResult.setVisibility(View.GONE);
+                recyclerViewSearchResult.removeAllViews();
+                searchCityAdapter.notifyDataSetChanged();
+            }
+        });
+        recyclerViewSearchResult.setAdapter(searchCityAdapter);
+
+        recyclerViewSearchResult.removeAllViews();
+        searchCityAdapter.notifyDataSetChanged();  // data set changed
+
+    }
+
+    private void filterProvince(String query) {
+        filteredListProvinceDbModel = new ArrayList<>();
 
         for (int i = 0; i < provinceDbModels.size(); i++) {
 
             final String text = provinceDbModels.get(i).getName().toLowerCase();
             if (text.contains(query)) {
 
-                filteredList.add(provinceDbModels.get(i));
+                filteredListProvinceDbModel.add(provinceDbModels.get(i));
             }
         }
 
-        Log.d("RegisterFragment", "filteredList: " + filteredList);
+        Log.d("RegisterFragment", "filteredList: " + filteredListProvinceDbModel);
 
-        searchProvinceAdapter = new SearchProvinceAdapter(getContext(), filteredList, new ProvinceListener() {
+        searchProvinceAdapter = new SearchProvinceAdapter(getContext(), filteredListProvinceDbModel, new ProvinceListener() {
             @Override
             public void onClick(ProvinceDbModel provinceDbModel) {
                 viewBinding.edtInputProvince.setText(provinceDbModel.getName());
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 searchView.closeSearch();
-                filteredList.clear();
+                filteredListProvinceDbModel.clear();
                 recyclerViewSearchResult.setVisibility(View.GONE);
                 recyclerViewSearchResult.removeAllViews();
                 searchProvinceAdapter.notifyDataSetChanged();
@@ -128,13 +173,16 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
     private void clickListeners() {
         viewBinding.btnApply.setOnClickListener(v -> checkValidityOfRegisterData());
         viewBinding.edtInputProvince.setOnClickListener(v -> handleSearchProvince());
+        viewBinding.edtInputCity.setOnClickListener(v -> handleSearchCity());
         getView().findViewById(com.miguelcatalan.materialsearchview.R.id.action_empty_btn).setOnClickListener(v -> {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             searchView.closeSearch();
-            filteredList.clear();
+           /* filteredListProvinceDbModel.clear();
+            filteredListCityDbModel.clear();*/
             recyclerViewSearchResult.setVisibility(View.GONE);
             recyclerViewSearchResult.removeAllViews();
-            searchProvinceAdapter.notifyDataSetChanged();  // data set changed
+           /* searchProvinceAdapter.notifyDataSetChanged();
+            searchCityAdapter.notifyDataSetChanged();*/// data set changed
 
         });
 
@@ -158,6 +206,49 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
         navigate(R.id.action_RegisterFragment_to_VerifyOtpLoginFragment);
     }
+
+
+    private void handleSearchCity() {
+        searchCityAdapter = new SearchCityAdapter(getContext(), cityDbModels, new CityListener() {
+            @Override
+            public void onClick(CityDbModel cityDbModel) {
+                viewBinding.edtInputCity.setText(cityDbModel.getName());
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                searchView.closeSearch();
+                recyclerViewSearchResult.setVisibility(View.GONE);
+                recyclerViewSearchResult.removeAllViews();
+                searchCityAdapter.notifyDataSetChanged();
+
+            }
+        });
+        recyclerViewSearchResult.setAdapter(searchCityAdapter);
+
+        recyclerViewSearchResult.setVisibility(View.VISIBLE);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetBehavior.setPeekHeight(getView().getMeasuredHeight()/3);
+        searchView.showSearch(true);
+        searchView.setHint(getResources().getString(R.string.searchCity));
+
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String searchWord = query.trim();
+                filterCity(searchWord);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.trim().length() > 0) {
+                    filterCity(newText);
+                } else {
+                    visibleCloseSearchIcon();
+                }
+                return false;
+            }
+        });
+    }
+
 
     private void handleSearchProvince() {
         searchProvinceAdapter = new SearchProvinceAdapter(getContext(), provinceDbModels, new ProvinceListener() {
@@ -184,16 +275,14 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
             @Override
             public boolean onQueryTextSubmit(String query) {
                 String searchWord = query.trim();
-                filter(searchWord);
-//                mPresenter.searchCustomer(searchWord , darkhastFaktorMoshtaryForoshandeModels, moshtaryAddressModels);
+                filterProvince(searchWord);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.trim().length() > 0) {
-                    filter(newText);
-//                    mPresenter.searchCustomer(newText , darkhastFaktorMoshtaryForoshandeModels, moshtaryAddressModels);
+                    filterProvince(newText);
                 } else {
                     visibleCloseSearchIcon();
                 }
