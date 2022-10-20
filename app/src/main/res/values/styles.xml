@@ -1,13 +1,16 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
+        <item name="android:fontFamily">@font/iransans</item>
         <item name="android:windowDisablePreview">true</item>
+        <item name="backgroundColor">@color/colorBrown50</item>
+        <item name="background">@color/colorBrown50</item>
+
     </style>
 
     <style name="roundedMenuSheet" parent="">
@@ -36,8 +39,13 @@
         <item name="android:textColor">@color/colorTextPrimary</item>
     </style>
 
+    <style name="RoundedCornersDialog">
+        <item name="dialogCornerRadius">16dp</item>
+    </style>
 
     <style name="MaterialSearchViewStyle">
+        android:background="@color/colorGray"
+        <item name="background">@drawable/filter_cardview</item>
         <!-- Background for the search bar-->
         <item name="searchBackground">@color/colorListHeaderBackground</item>
         <!-- Change voice icon-->
@@ -56,6 +64,8 @@
         <item name="android:textColorHint">@color/colorTextPrimary</item>
         <!-- Hint for edit text-->
         <item name="android:hint">@string/search_hint</item>
+
+        <item name="android:layoutDirection">rtl</item>
     </style>
 
 
@@ -69,6 +79,11 @@
         <!-- colorAccent is used as the default value for colorControlActivated,
              which is used to tint widgets -->
         <item name="colorAccent">@color/colorAmber200</item>
+    </style>
+
+    <style name="MyDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/enter_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/exit_to_bottom</item>
     </style>
 
     <!--print styles-->
@@ -118,4 +133,106 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+
+    <style name="filter_view_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/_16ssp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/mdtp_white</item>
+    </style>
+
+    <style name="filter_item_choice_style_txt">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/_8ssp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">@dimen/_6sdp</item>
+    </style>
+    <style name="filter_item_choice_style_img">
+        <item name="android:layout_width">@dimen/_8sdp</item>
+        <item name="android:layout_height">@dimen/_8sdp</item>
+        <item name="android:layout_marginTop">@dimen/_9ssp</item>
+        <item name="android:src">@drawable/green_circle</item>
+    </style>
+
+    <style name="text_view_title_center">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:padding">@dimen/_4sdp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">@dimen/_12sdp</item>
+    </style>
+    <style name="text_view_subtitle_right">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:padding">@dimen/_4sdp</item>
+        <item name="android:gravity">right</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:textSize">@dimen/_8sdp</item>
+    </style>
+
+    <style name="text_view_title_right">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:padding">@dimen/_4sdp</item>
+        <item name="android:gravity">right</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:textSize">@dimen/_10sdp</item>
+    </style>
+    <style name="confirm_Btn_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">@dimen/_4sdp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">@dimen/_8sdp</item>
+    </style>
+
+
+    <style name="text_view_normal">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:layout_margin">@dimen/_4sdp</item>
+        <item name="android:padding">@dimen/_4sdp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">@dimen/_10sdp</item>
+    </style>
+
+    <style name="text_view_normal2">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:layout_margin">@dimen/_4sdp</item>
+        <item name="android:padding">@dimen/_4sdp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">@dimen/_10sdp</item>
+    </style>
+    <style name="devider_gray">
+        <item name="android:layout_width">@dimen/_265sdp</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/devider_gray</item>
+    </style>
+    <style name="tooltip" parent="Widget.MaterialComponents.Tooltip">
+        <item name="shapeAppearanceOverlay">@style/tooltipShOverylay</item>
+        <item name="backgroundTint">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="tooltipShOverylay">
+        <item name="cornerSize">50%</item>
+    </style>
+<!--    <style name="MyMaterialTheme" parent="Theme.MaterialComponents.Light.NoActionBar">-->
+<!--        &lt;!&ndash; Add attributes here &ndash;&gt;-->
+<!--        <item name="colorPrimary">@color/colorPrimaryDark</item>-->
+<!--    </style>-->
 </resources>

@@ -5,8 +5,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
-import com.saphamrah.customer.presentation.view.fragment.ShoppingListFragment;
-import com.saphamrah.customer.presentation.view.fragment.WelcomeFragment;
+
+import com.saphamrah.customer.presentation.view.fragments.main.WelcomeFragment;
+import com.saphamrah.customer.presentation.view.fragments.main.ShoppingListFragment;
 
 public class SliderPagerMainFrag extends FragmentStatePagerAdapter {
     private final int MAX_FRAGMENT = 2;

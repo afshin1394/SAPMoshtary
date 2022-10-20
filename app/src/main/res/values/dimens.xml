@@ -46,7 +46,7 @@
     <!--<dimen name="altdlgMargin">25dp</dimen>-->
     <dimen name="btnCornerRadius">15dp</dimen>
     <dimen name="btnSecondaryCornerRadius">10dp</dimen>
-    <dimen name="altdlgCorner">15dp</dimen>
+    <dimen name="altdlgCorner">45dp</dimen>
     <dimen name="altdlgStrokeWidth">2dp</dimen>
     <dimen name="altdlgImageviewDimen">30dp</dimen>
     <dimen name="altdlgImageviewMarginTop">10dp</dimen>

@@ -31,8 +31,16 @@
         android:roundIcon="@drawable/ic_launcher_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:windowSoftInputMode="adjustResize"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
+        <activity
+            android:name=".createRequest.view.activity.CreateRequestActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name="com.saphamrah.customer.presentation.view.activity.MainActivity"
             android:exported="true">

@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
+import com.saphamrah.customer.createRequest.view.activity.CreateRequestActivity;
 import com.saphamrah.customer.presentation.view.adapter.recycler.pagerAdapter.SliderPagerMainFrag;
 import com.saphamrah.customer.presentation.view.adapter.recycler.DialogMenuAdapter;
 import com.saphamrah.customer.data.network.model.MenuModel;
@@ -30,7 +31,7 @@ import com.saphamrah.customer.utils.SnapToBlock;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ViewPager viewPagerMainFrag;
     private SliderPagerMainFrag viewPagerAdapter;
 
@@ -62,11 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
 
         // pass the Open and Close toggle for the drawer layout listener
@@ -75,13 +71,8 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
 
         drawerView.addHeaderView(getLayoutInflater().inflate(R.layout.layout_drawer_header, null));
-        drawerView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Log.i("itemsss", "onNavigationItemSelected: "+item.getItemId());
-                return false;
-            }
-        });
+
+        drawerView.setNavigationItemSelectedListener(this);
 
 //        mBottomSheetLayout.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
@@ -115,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
             else
                 drawerLayout.openDrawer(Gravity.RIGHT);
         });
+
 
 
 
@@ -168,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+
+
     public void initFragments() {
 
         viewPagerAdapter = new SliderPagerMainFrag(getSupportFragmentManager());
@@ -203,5 +197,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return mLayoutManager;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.nav_request) {
+            startActivity(new Intent(MainActivity.this, CreateRequestActivity.class));
+
+        }
+        return true;
     }
 }

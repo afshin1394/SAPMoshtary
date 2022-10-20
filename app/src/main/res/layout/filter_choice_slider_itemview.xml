@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/text_view_subtitle_right"
+        android:id="@+id/TV_slider_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/gheymatMasrafKonande" />
+
+    <com.saphamrah.customer.utils.customViews.PersianRangeSlider
+        android:id="@+id/Slider_range_identifier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:stepSize="100.0"
+        android:valueFrom="100"
+        android:valueTo="10000000"
+        app:thumbColor="@color/colorPrimaryDark"
+        />
+</LinearLayout>

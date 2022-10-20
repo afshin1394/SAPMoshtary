@@ -5,7 +5,7 @@
     tools:ignore="HardcodedText">
 
     <item
-        android:id="@+id/nav_account"
+        android:id="@+id/nav_request"
         android:title="ثبت درخواست"
         android:icon="@drawable/ic_launcher_icon"/>
 

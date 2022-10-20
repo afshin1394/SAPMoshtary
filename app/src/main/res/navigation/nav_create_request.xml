@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_create_request"
+    app:startDestination="@id/productRequestFragment">
+    <fragment
+        android:id="@+id/productRequestFragment"
+        android:name="com.saphamrah.customer.createRequest.view.fragment.ProductRequestFragment"
+        android:label="ProductRequestFragment" >
+        <action
+            android:id="@+id/action_productRequestFragment_to_addItemToCartFragment"
+            app:destination="@id/addItemToCartFragment" />
+        <action
+            android:id="@+id/action_productRequestFragment_to_filterFragment"
+            app:destination="@id/filterFragment"
+            app:enterAnim="@anim/enter_from_bottom"
+            app:exitAnim="@anim/exit_to_bottom"
+            app:popEnterAnim="@anim/enter_from_bottom"
+            app:popExitAnim="@anim/exit_to_bottom" />
+        <argument
+            android:name="filters"
+            app:argType="com.saphamrah.customer.data.local.temp.FilterSortModel[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/addItemToCartFragment"
+        android:name="com.saphamrah.customer.createRequest.view.fragment.AddItemToCartFragment"
+        android:label="fragment_add_item_to_cart"
+        tools:layout="@layout/fragment_add_item_to_cart" >
+        <argument
+            android:name="product"
+            app:argType="com.saphamrah.customer.data.local.temp.ProductModel" />
+    </fragment>
+    <dialog
+        android:id="@+id/filterFragment"
+        tools:layout="@layout/fragment_filter"
+        android:name="com.saphamrah.customer.createRequest.view.fragment.FilterFragment"
+        android:label="FilterFragment" >
+        <argument
+            android:name="FilterSortType"
+            app:argType="integer"
+            android:defaultValue="1" />
+        <action
+            android:id="@+id/action_filterFragment_to_productRequestFragment"
+            app:destination="@id/productRequestFragment"
+            app:enterAnim="@anim/enter_from_bottom"
+            app:exitAnim="@anim/exit_to_bottom"
+            app:popEnterAnim="@anim/enter_from_bottom"
+            app:popExitAnim="@anim/exit_to_bottom" />
+    </dialog>
+</navigation>

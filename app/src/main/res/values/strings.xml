@@ -92,6 +92,8 @@
     <string name="help">راهنما</string>
     <string name="search">جستجو</string>
     <string name="filter">فیلتر</string>
+    <string name="filterBaseOn">فیلتر بر اساس</string>
+
     <string name="removeFilter">حذف فیلتر</string>
     <string name="searchKalaName">جستجو نام کالا</string>
     <string name="searchCustomerName">جستجو نام مشتری</string>
@@ -1236,6 +1238,33 @@
     <string name="errorUpdateMablaghTakhfifVahed">خطا در بروز رسانی مبلغ تخفیف واحد</string>
     <string name="errorReopenProgram">لطفا برنامه را به طور کامل بسته و دوباره اجرا نمایید.</string>
     <string name="sabtAmval">اموال مشتری</string>
+    <string name="sort">مرتب سازی</string>
 
+
+    <string name="enter">ورود</string>
+    <string name="string_resendcodeuntil"> ارسال مجدد کد تا </string>
+    <string name="string_time_format_zero"> %d:0%d </string>
+    <string name="string_time_format">%d:%d</string>
+    <string name="string_resend_code">درخواست مجدد کد</string>
+    <string name="retry">تلاش مجدد</string>
+    <string name="pleaseCheckYourConnection">لطفا اتصال اینترنت خود را بررسی کنید</string>
+    <string name="pleaseEnterPhoneNumberCorrectly">لطفا شماره موبایل را به درستی وارد نمایید</string>
+    <string name="pleaseEnterCodeCorrectly">لطفا کد را به درستی وارد نمایید</string>
+    <string name="phoneNumber">شماره موبایل</string>
+    <string name="enterCode">کد را وارد نمایید</string>
+    <string name="signUp">عضویت</string>
+    <string name="editPhoneNumber">اصلاح شماره</string>
+    <string name="requestCodeAgain">درخواست مجدد کد</string>
+    <string name="agreeToTheTermsOfService">با شرایط سرویس موافقم</string>
+    <string name="authenticationSucceeded">احراز هویت با موفقیت انجام شد</string>
+    <string name="authenticationCancelled">احراز هویت لغو شد</string>
+    <string name="authenticationWasCancelledByTheUser">احراز هویت توسط کاربر لغو شد</string>
+    <string name="fingerprintAuthenticationHasNotBeenEnabledInSettings">احراز هویت اثر انگشت در تنظیمات فعال نشده است</string>
+    <string name="fingerprintAuthenticationPermissionIsNotEnabled">مجوز احراز هویت اثر انگشت فعال نیست</string>
+    <string name="titleOfPrompt">عنوان اعلان</string>
+    <string name="subtitle">عنوان فرعی</string>
+    <string name="usesFingerPrint">اثر انگشت</string>
+    <string name="sendCode">ارسال کد</string>
+    <string name="minPrice">0ریال</string>
 
 </resources>
