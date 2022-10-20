@@ -23,6 +23,7 @@ import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.ProvinceDbModel;
 import com.saphamrah.customer.data.network.model.RegisterNetworkModel;
 import com.saphamrah.customer.databinding.FragmentRegisterBinding;
+import com.saphamrah.customer.listeners.ProvinceListener;
 import com.saphamrah.customer.presentation.interactors.RegisterInteracts;
 import com.saphamrah.customer.presentation.presenters.RegisterPresenter;
 import com.saphamrah.customer.presentation.view.adapter.recycler.SearchProvinceAdapter;
@@ -105,7 +106,18 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
         Log.d("RegisterFragment", "filteredList: " + filteredList);
 
-        searchProvinceAdapter = new SearchProvinceAdapter(getContext(), filteredList);
+        searchProvinceAdapter = new SearchProvinceAdapter(getContext(), filteredList, new ProvinceListener() {
+            @Override
+            public void onClick(ProvinceDbModel provinceDbModel) {
+                viewBinding.edtInputProvince.setText(provinceDbModel.getName());
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                searchView.closeSearch();
+                filteredList.clear();
+                recyclerViewSearchResult.setVisibility(View.GONE);
+                recyclerViewSearchResult.removeAllViews();
+                searchProvinceAdapter.notifyDataSetChanged();
+            }
+        });
         recyclerViewSearchResult.setAdapter(searchProvinceAdapter);
 
         recyclerViewSearchResult.removeAllViews();
@@ -148,14 +160,25 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
     }
 
     private void handleSearchProvince() {
-        searchProvinceAdapter = new SearchProvinceAdapter(getContext(), provinceDbModels);
+        searchProvinceAdapter = new SearchProvinceAdapter(getContext(), provinceDbModels, new ProvinceListener() {
+            @Override
+            public void onClick(ProvinceDbModel provinceDbModel) {
+                viewBinding.edtInputProvince.setText(provinceDbModel.getName());
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                searchView.closeSearch();
+                recyclerViewSearchResult.setVisibility(View.GONE);
+                recyclerViewSearchResult.removeAllViews();
+                searchProvinceAdapter.notifyDataSetChanged();
+
+            }
+        });
         recyclerViewSearchResult.setAdapter(searchProvinceAdapter);
 
         recyclerViewSearchResult.setVisibility(View.VISIBLE);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         bottomSheetBehavior.setPeekHeight(getView().getMeasuredHeight()/3);
         searchView.showSearch(true);
-        searchView.setHint(getResources().getString(R.string.searchCustomerName));
+        searchView.setHint(getResources().getString(R.string.searchProvince));
 
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override

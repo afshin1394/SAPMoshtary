@@ -2,6 +2,7 @@ package com.saphamrah.customer.presentation.view.adapter.recycler;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.saphamrah.customer.data.ProvinceDbModel;
 import com.saphamrah.customer.databinding.ItemSearchProvinceBinding;
+import com.saphamrah.customer.listeners.ProvinceListener;
 
 import java.util.ArrayList;
 
@@ -16,10 +18,12 @@ public class SearchProvinceAdapter extends RecyclerView.Adapter<SearchProvinceAd
 
     private Context context;
     private ArrayList<ProvinceDbModel> provinceDbModels;
+    private ProvinceListener provinceListener;
 
-    public SearchProvinceAdapter(Context context, ArrayList<ProvinceDbModel> provinceDbModels) {
+    public SearchProvinceAdapter(Context context, ArrayList<ProvinceDbModel> provinceDbModels, ProvinceListener provinceListener) {
         this.context = context;
         this.provinceDbModels = provinceDbModels;
+        this.provinceListener = provinceListener;
     }
 
     @NonNull
@@ -52,6 +56,7 @@ public class SearchProvinceAdapter extends RecyclerView.Adapter<SearchProvinceAd
 
         public void bind(ProvinceDbModel provinceDbModel) {
             binding.txtSearchProvince.setText(provinceDbModel.getName());
+            binding.getRoot().setOnClickListener(v -> provinceListener.onClick(provinceDbModel));
         }
     }
 }

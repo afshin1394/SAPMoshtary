@@ -1269,5 +1269,6 @@
     <string name="plaque">پلاک</string>
     <string name="mainStreet">خیابان اصلی</string>
     <string name="mainAlley">کوچه اصلی</string>
+    <string name="searchProvince">جستجو استان</string>
 
 </resources>
