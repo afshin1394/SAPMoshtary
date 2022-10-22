@@ -12,8 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.data.LocationDbModel;
-import com.saphamrah.customer.presentation.view.adapter.recycler.BaseSearchAdapter;
-import com.saphamrah.customer.presentation.view.adapter.recycler.SearchListAdapter;
+import com.saphamrah.customer.presentation.view.adapter.recycler.AsyncSearchListAdapter;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class BottomSheetSearch {
     private BottomSheetBehavior bottomSheetBehavior;
     private MaterialSearchView searchView;
     private RecyclerView recyclerViewSearchResult;
-    private SearchListAdapter recyclerViewAdapter;
+    private AsyncSearchListAdapter recyclerViewAdapter;
     private ArrayList<LocationDbModel> filteredListBaseSearchDbModel;
     private AdapterItemListener<LocationDbModel> adapterItemListener;
 
@@ -47,13 +46,12 @@ public class BottomSheetSearch {
         linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         recyclerViewSearchResult.setLayoutManager(linearLayoutManager);
 
-        recyclerViewAdapter = new SearchListAdapter((model, position, action) -> {
+        recyclerViewAdapter = new AsyncSearchListAdapter((model, position, action) -> {
             adapterItemListener.onItemSelect(model, position, action);
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             searchView.closeSearch();
             recyclerViewSearchResult.setVisibility(View.GONE);
-//            recyclerViewSearchResult.removeAllViews();
-//            recyclerViewAdapter.notifyDataSetChanged();
+
         });
 
         recyclerViewSearchResult.setAdapter(recyclerViewAdapter);
@@ -69,9 +67,7 @@ public class BottomSheetSearch {
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-               /* String searchWord = query.trim();
-                if (searchWord.length() > 0)
-                filter(searchWord, items);*/
+
                 return false;
             }
 
@@ -93,7 +89,6 @@ public class BottomSheetSearch {
             recyclerViewSearchResult.setVisibility(View.GONE);
             recyclerViewSearchResult.removeAllViews();
 
-
         });
 
     }
@@ -113,19 +108,12 @@ public class BottomSheetSearch {
 
         Log.d("BottomSheetSearch", "filteredList: " + filteredListBaseSearchDbModel.size());
 
-         recyclerViewAdapter = new SearchListAdapter((model, position, action) -> {
+         recyclerViewAdapter = new AsyncSearchListAdapter((model, position, action) -> {
             adapterItemListener.onItemSelect(model, position, action);
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            searchView.closeSearch();
-            filteredListBaseSearchDbModel.clear();
-            recyclerViewSearchResult.setVisibility(View.GONE);
-            recyclerViewSearchResult.removeAllViews();
         });
         recyclerViewSearchResult.setAdapter(recyclerViewAdapter);
         recyclerViewAdapter.submitList(filteredListBaseSearchDbModel);
 
-//        recyclerViewSearchResult.removeAllViews();
-//        recyclerViewAdapter.notifyDataSetChanged();  // data set changed
     }
 
     private void visibleCloseSearchIcon(View view) {
