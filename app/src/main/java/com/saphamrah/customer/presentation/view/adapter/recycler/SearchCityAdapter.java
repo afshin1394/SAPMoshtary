@@ -9,17 +9,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.saphamrah.customer.data.CityDbModel;
 import com.saphamrah.customer.databinding.ItemSearchCityBinding;
-import com.saphamrah.customer.listeners.CityListener;
+import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
+import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 
 import java.util.ArrayList;
 
-public class SearchCityAdapter extends RecyclerView.Adapter<SearchCityAdapter.ViewHolder> {
+public class SearchCityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     private ArrayList<CityDbModel> cityDbModels;
-    private CityListener cityListener;
+    private AdapterItemListener<CityDbModel> cityListener;
 
-    public SearchCityAdapter(Context context, ArrayList<CityDbModel> cityDbModels, CityListener cityListener) {
+    public SearchCityAdapter(Context context, ArrayList<CityDbModel> cityDbModels, AdapterItemListener<CityDbModel> cityListener) {
         this.context = context;
         this.cityDbModels = cityDbModels;
         this.cityListener = cityListener;
@@ -34,8 +35,8 @@ public class SearchCityAdapter extends RecyclerView.Adapter<SearchCityAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchCityAdapter.ViewHolder holder, int position) {
-        holder.bind(cityDbModels.get(position));
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        ((ViewHolder)holder).bind(cityDbModels.get(position));
     }
 
     @Override
@@ -52,7 +53,8 @@ public class SearchCityAdapter extends RecyclerView.Adapter<SearchCityAdapter.Vi
 
         public void bind(CityDbModel cityDbModel) {
             binding.txtSearchCity.setText(cityDbModel.getName());
-            binding.getRoot().setOnClickListener(v -> cityListener.onClick(cityDbModel));
+            binding.getRoot().setOnClickListener(v ->
+                    cityListener.onItemSelect(cityDbModel, getAdapterPosition(), AdapterAction.SELECT));
         }
     }
 }

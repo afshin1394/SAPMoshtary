@@ -1,17 +1,13 @@
 package com.saphamrah.customer.presentation.view.fragments.login;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,22 +20,15 @@ import com.saphamrah.customer.data.CityDbModel;
 import com.saphamrah.customer.data.ProvinceDbModel;
 import com.saphamrah.customer.data.network.model.RegisterNetworkModel;
 import com.saphamrah.customer.databinding.FragmentRegisterBinding;
-import com.saphamrah.customer.listeners.CityListener;
-import com.saphamrah.customer.listeners.ProvinceListener;
 import com.saphamrah.customer.presentation.interactors.RegisterInteracts;
 import com.saphamrah.customer.presentation.presenters.RegisterPresenter;
 import com.saphamrah.customer.presentation.view.adapter.recycler.SearchCityAdapter;
 import com.saphamrah.customer.presentation.view.adapter.recycler.SearchProvinceAdapter;
+import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
+import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.RxTextWatcher;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 
 public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRegisterBinding> implements RegisterInteracts.RequiredViewOps {
 
@@ -118,9 +107,9 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
         Log.d("RegisterFragment", "filteredList: " + filteredListCityDbModel);
 
-        searchCityAdapter = new SearchCityAdapter(getContext(), filteredListCityDbModel, new CityListener() {
+        searchCityAdapter = new SearchCityAdapter(getContext(), filteredListCityDbModel, new AdapterItemListener<CityDbModel>() {
             @Override
-            public void onClick(CityDbModel cityDbModel) {
+            public void onItemSelect(CityDbModel cityDbModel, int position, AdapterAction Action) {
                 viewBinding.edtInputCity.setText(cityDbModel.getName());
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 searchView.closeSearch();
@@ -129,6 +118,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
                 recyclerViewSearchResult.removeAllViews();
                 searchCityAdapter.notifyDataSetChanged();
             }
+
         });
         recyclerViewSearchResult.setAdapter(searchCityAdapter);
 
@@ -151,9 +141,9 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
         Log.d("RegisterFragment", "filteredList: " + filteredListProvinceDbModel);
 
-        searchProvinceAdapter = new SearchProvinceAdapter(getContext(), filteredListProvinceDbModel, new ProvinceListener() {
+        searchProvinceAdapter = new SearchProvinceAdapter(getContext(), filteredListProvinceDbModel, new AdapterItemListener<ProvinceDbModel>() {
             @Override
-            public void onClick(ProvinceDbModel provinceDbModel) {
+            public void onItemSelect(ProvinceDbModel provinceDbModel, int position, AdapterAction Action) {
                 viewBinding.edtInputProvince.setText(provinceDbModel.getName());
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 searchView.closeSearch();
@@ -209,9 +199,9 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
 
     private void handleSearchCity() {
-        searchCityAdapter = new SearchCityAdapter(getContext(), cityDbModels, new CityListener() {
+        searchCityAdapter = new SearchCityAdapter(getContext(), cityDbModels, new AdapterItemListener<CityDbModel>() {
             @Override
-            public void onClick(CityDbModel cityDbModel) {
+            public void onItemSelect(CityDbModel cityDbModel, int position, AdapterAction Action) {
                 viewBinding.edtInputCity.setText(cityDbModel.getName());
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 searchView.closeSearch();
@@ -220,6 +210,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
                 searchCityAdapter.notifyDataSetChanged();
 
             }
+
         });
         recyclerViewSearchResult.setAdapter(searchCityAdapter);
 
@@ -251,9 +242,9 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
 
     private void handleSearchProvince() {
-        searchProvinceAdapter = new SearchProvinceAdapter(getContext(), provinceDbModels, new ProvinceListener() {
+        searchProvinceAdapter = new SearchProvinceAdapter(getContext(), provinceDbModels, new AdapterItemListener<ProvinceDbModel>() {
             @Override
-            public void onClick(ProvinceDbModel provinceDbModel) {
+            public void onItemSelect(ProvinceDbModel provinceDbModel, int position, AdapterAction Action) {
                 viewBinding.edtInputProvince.setText(provinceDbModel.getName());
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 searchView.closeSearch();
@@ -262,6 +253,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
                 searchProvinceAdapter.notifyDataSetChanged();
 
             }
+
         });
         recyclerViewSearchResult.setAdapter(searchProvinceAdapter);
 

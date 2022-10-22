@@ -2,7 +2,6 @@ package com.saphamrah.customer.presentation.view.adapter.recycler;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -10,17 +9,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.saphamrah.customer.data.ProvinceDbModel;
 import com.saphamrah.customer.databinding.ItemSearchProvinceBinding;
-import com.saphamrah.customer.listeners.ProvinceListener;
+import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
+import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 
 import java.util.ArrayList;
 
-public class SearchProvinceAdapter extends RecyclerView.Adapter<SearchProvinceAdapter.ViewHolder> {
+public class SearchProvinceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     private ArrayList<ProvinceDbModel> provinceDbModels;
-    private ProvinceListener provinceListener;
+    private AdapterItemListener<ProvinceDbModel> provinceListener;
 
-    public SearchProvinceAdapter(Context context, ArrayList<ProvinceDbModel> provinceDbModels, ProvinceListener provinceListener) {
+    public SearchProvinceAdapter(Context context, ArrayList<ProvinceDbModel> provinceDbModels, AdapterItemListener<ProvinceDbModel> provinceListener) {
         this.context = context;
         this.provinceDbModels = provinceDbModels;
         this.provinceListener = provinceListener;
@@ -35,10 +35,11 @@ public class SearchProvinceAdapter extends RecyclerView.Adapter<SearchProvinceAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchProvinceAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        ((ViewHolder)holder).bind(provinceDbModels.get(position));
 
-        holder.bind(provinceDbModels.get(position));
     }
+
 
     @Override
     public int getItemCount() {
@@ -56,7 +57,8 @@ public class SearchProvinceAdapter extends RecyclerView.Adapter<SearchProvinceAd
 
         public void bind(ProvinceDbModel provinceDbModel) {
             binding.txtSearchProvince.setText(provinceDbModel.getName());
-            binding.getRoot().setOnClickListener(v -> provinceListener.onClick(provinceDbModel));
+            binding.getRoot().setOnClickListener(v ->
+                    provinceListener.onItemSelect(provinceDbModel, getAdapterPosition(), AdapterAction.SELECT));
         }
     }
 }
