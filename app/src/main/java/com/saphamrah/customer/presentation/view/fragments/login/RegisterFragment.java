@@ -1,7 +1,9 @@
 package com.saphamrah.customer.presentation.view.fragments.login;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
@@ -17,7 +19,17 @@ import com.saphamrah.customer.presentation.presenters.RegisterPresenter;
 import com.saphamrah.customer.presentation.view.customView.BottomSheetSearch;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
+import com.saphamrah.customer.utils.GoogleLocationProvider;
+import com.saphamrah.customer.utils.GpsTracker;
+import com.saphamrah.customer.utils.LocationProvider;
 import com.saphamrah.customer.utils.RxTextWatcher;
+
+import org.osmdroid.api.IMapController;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapController;
+import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
 
@@ -52,11 +64,6 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         baseSearchProvinceDbModels = new ArrayList<>();
         baseSearchCityDbModels = new ArrayList<>();
 
-        /*provinceDbModels.add(new ProvinceDbModel("tehran"));
-        provinceDbModels.add(new ProvinceDbModel("tehran1"));
-        provinceDbModels.add(new ProvinceDbModel("tabriz"));
-        provinceDbModels.add(new ProvinceDbModel("tabriz1"));*/
-
 
         baseSearchProvinceDbModels.add(new LocationDbModel("tehran", "province"));
         baseSearchProvinceDbModels.add(new LocationDbModel("tehran1", "province"));
@@ -68,20 +75,34 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         baseSearchCityDbModels.add(new LocationDbModel("tabriz", "city"));
         baseSearchCityDbModels.add(new LocationDbModel("tabriz1", "city"));
 
-
-
-       /* cityDbModels.add(new CityDbModel("tehran"));
-        cityDbModels.add(new CityDbModel("tehran1"));
-        cityDbModels.add(new CityDbModel("tabriz"));
-        cityDbModels.add(new CityDbModel("tabriz1"));*/
-
     }
 
     private void clickListeners() {
         viewBinding.btnApply.setOnClickListener(v -> checkValidityOfRegisterData());
         viewBinding.edtInputProvince.setOnClickListener(v -> handleSearchProvince());
         viewBinding.edtInputCity.setOnClickListener(v -> handleSearchCity());
+        viewBinding.edtInputLocation.setOnClickListener(v -> handleGetLocation());
+    }
 
+    private void handleGetLocation() {
+       /* viewBinding.mapView.setVisibility(View.VISIBLE);
+
+        Configuration.getInstance().load(getContext(), PreferenceManager.getDefaultSharedPreferences(getContext()));
+
+        viewBinding.mapView.setTileSource(TileSourceFactory.MAPNIK);
+        viewBinding.mapView.setMultiTouchControls(true);
+
+        GoogleLocationProvider googleLocationProvider = new GoogleLocationProvider(getContext());
+
+        IMapController mapController = new MapController(viewBinding.mapView);
+        mapController.setCenter(new GeoPoint(googleLocationProvider.getLatitude() , googleLocationProvider.getLongitude()));
+        mapController.setZoom(17.0);
+
+        Marker marker = new Marker(viewBinding.mapView);
+        marker.setPosition(new GeoPoint(googleLocationProvider.getLatitude() , googleLocationProvider.getLongitude()));
+        marker.setTitle(getResources().getString(R.string.yourLocation));
+        marker.setIcon(getResources().getDrawable(R.drawable.ic_user_marker));
+        viewBinding.mapView.getOverlays().add(marker);*/
     }
 
     private void checkValidityOfRegisterData() {
@@ -105,13 +126,20 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
 
     private void handleSearchCity() {
-        bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(getContext(), getView(), baseSearchCityDbModels);
+        bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(getContext(),
+                getView(),
+                baseSearchCityDbModels,
+                getContext().getResources().getString(R.string.searchCity));
 
     }
 
 
     private void handleSearchProvince() {
-        bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(getContext(), getView(), baseSearchProvinceDbModels);
+        bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(
+                getContext(),
+                getView(),
+                baseSearchProvinceDbModels,
+                getContext().getResources().getString(R.string.searchProvince));
 
     }
 

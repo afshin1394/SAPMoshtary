@@ -374,6 +374,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
+                    android:clickable="true"
                     android:layoutDirection="rtl"
                     android:textColorHint="@color/colorDivider"
                     android:textDirection="rtl">
@@ -382,8 +383,10 @@
                         android:id="@+id/edtInputLocation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:clickable="true"
                         android:drawableRight="@drawable/ic_location"
                         android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                        android:focusable="false"
                         android:fontFamily="@font/iransans"
                         android:hint="@string/location"
                         android:inputType="none"
@@ -395,6 +398,16 @@
             </LinearLayout>
 
         </ScrollView>
+
+        <org.osmdroid.views.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="225dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:visibility="gone" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnApply"
