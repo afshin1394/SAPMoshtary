@@ -1,18 +1,9 @@
 package com.saphamrah.customer.data;
 
-public class ProvinceDbModel {
-    private String name;
+public class ProvinceDbModel extends LocationDbModel {
 
-    public ProvinceDbModel(String name) {
-        this.name = name;
+
+    public ProvinceDbModel(String name, String type) {
+        super(name, type);
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
 }

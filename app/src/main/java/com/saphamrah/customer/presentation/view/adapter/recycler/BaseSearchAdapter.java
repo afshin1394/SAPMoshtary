@@ -7,10 +7,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.saphamrah.customer.data.BaseSearchDbModel;
-import com.saphamrah.customer.data.CityDbModel;
+import com.saphamrah.customer.data.LocationDbModel;
 import com.saphamrah.customer.databinding.ItemBaseSearchBinding;
-import com.saphamrah.customer.databinding.ItemSearchCityBinding;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 
@@ -19,10 +17,10 @@ import java.util.ArrayList;
 public class BaseSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private ArrayList<BaseSearchDbModel> items;
-    private AdapterItemListener<BaseSearchDbModel> adapterItemListener;
+    private ArrayList<LocationDbModel> items;
+    private AdapterItemListener<LocationDbModel> adapterItemListener;
 
-    public BaseSearchAdapter(Context context, ArrayList<BaseSearchDbModel> items, AdapterItemListener<BaseSearchDbModel> adapterItemListener) {
+    public BaseSearchAdapter(Context context, ArrayList<LocationDbModel> items, AdapterItemListener<LocationDbModel> adapterItemListener) {
         this.context = context;
         this.items = items;
         this.adapterItemListener = adapterItemListener;
@@ -53,7 +51,7 @@ public class BaseSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             this.binding = binding;
         }
 
-        public void bind(BaseSearchDbModel baseSearchDbModel) {
+        public void bind(LocationDbModel baseSearchDbModel) {
             binding.txtSearch.setText(baseSearchDbModel.getName());
             binding.getRoot().setOnClickListener(v ->
                     adapterItemListener.onItemSelect(baseSearchDbModel, getAdapterPosition(), AdapterAction.SELECT));

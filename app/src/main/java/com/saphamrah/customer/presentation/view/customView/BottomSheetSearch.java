@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.saphamrah.customer.R;
-import com.saphamrah.customer.data.BaseSearchDbModel;
+import com.saphamrah.customer.data.LocationDbModel;
 import com.saphamrah.customer.presentation.view.adapter.recycler.BaseSearchAdapter;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 
@@ -23,16 +23,16 @@ public class BottomSheetSearch {
     private MaterialSearchView searchView;
     private RecyclerView recyclerViewSearchResult;
     private BaseSearchAdapter recyclerViewAdapter;
-    private ArrayList<BaseSearchDbModel> filteredListBaseSearchDbModel;
-    private AdapterItemListener<BaseSearchDbModel> adapterItemListener;
+    private ArrayList<LocationDbModel> filteredListBaseSearchDbModel;
+    private AdapterItemListener<LocationDbModel> adapterItemListener;
 
-    public BottomSheetSearch(AdapterItemListener<BaseSearchDbModel> adapterItemListener) {
+    public BottomSheetSearch(AdapterItemListener<LocationDbModel> adapterItemListener) {
         this.adapterItemListener = adapterItemListener;
     }
 
-    void bottomSheetWithSearchAndRecyclerView(Context context,
+    public void bottomSheetWithSearchAndRecyclerView(Context context,
                                               View view,
-                                              ArrayList<BaseSearchDbModel> items
+                                              ArrayList<LocationDbModel> items
     ) {
         LinearLayout lnrlayBottomsheet = view.findViewById(R.id.linBottomSheet);
         searchView = view.findViewById(R.id.searchView);
@@ -45,7 +45,8 @@ public class BottomSheetSearch {
         linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         recyclerViewSearchResult.setLayoutManager(linearLayoutManager);
 
-        recyclerViewAdapter = new BaseSearchAdapter(context, items, (model, position, Action) -> {
+        recyclerViewAdapter = new BaseSearchAdapter(context, items, (model, position, action) -> {
+            adapterItemListener.onItemSelect(model, position, action);
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             searchView.closeSearch();
             recyclerViewSearchResult.setVisibility(View.GONE);
@@ -92,7 +93,7 @@ public class BottomSheetSearch {
 
     private void filter(Context context,
                         String query,
-                        ArrayList<BaseSearchDbModel> items) {
+                        ArrayList<LocationDbModel> items) {
         filteredListBaseSearchDbModel = new ArrayList<>();
 
         for (int i = 0; i < items.size(); i++) {
@@ -104,9 +105,9 @@ public class BottomSheetSearch {
             }
         }
 
-        Log.d("BottomSheetSearch", "filteredList: " + filteredListBaseSearchDbModel);
+        Log.d("BottomSheetSearch", "filteredList: " + filteredListBaseSearchDbModel.size());
 
-        BaseSearchAdapter recyclerViewAdapter = new BaseSearchAdapter(context, items, (model, position, action) -> {
+         recyclerViewAdapter = new BaseSearchAdapter(context, filteredListBaseSearchDbModel, (model, position, action) -> {
             adapterItemListener.onItemSelect(model, position, action);
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             searchView.closeSearch();
