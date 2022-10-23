@@ -15,9 +15,10 @@ public class ProductModel implements Parcelable {
     private String productionDate;
     private String expirationDate;
     private List<Integer> imageResource;
+    private boolean isAd;
 
 
-    public ProductModel(int id, String nameProduct, long consumerPrice, long sellPrice,String bachNumber, long inventory,String productionDate,String expirationDate,List<Integer> imageResource) {
+    public ProductModel(int id, String nameProduct, long consumerPrice, long sellPrice,String bachNumber, long inventory,String productionDate,String expirationDate,List<Integer> imageResource,boolean isAd) {
         this.id = id;
         this.nameProduct = nameProduct;
         this.consumerPrice = consumerPrice;
@@ -25,7 +26,9 @@ public class ProductModel implements Parcelable {
         this.bachNumber = bachNumber;
         this.inventory = inventory;
         this.imageResource = imageResource;
+        this.isAd = isAd;
     }
+
 
     protected ProductModel(Parcel in) {
         id = in.readInt();
@@ -36,6 +39,7 @@ public class ProductModel implements Parcelable {
         inventory = in.readLong();
         productionDate = in.readString();
         expirationDate = in.readString();
+        isAd = in.readByte() != 0;
     }
 
     public static final Creator<ProductModel> CREATOR = new Creator<ProductModel>() {
@@ -122,6 +126,14 @@ public class ProductModel implements Parcelable {
         this.expirationDate = expirationDate;
     }
 
+    public boolean isAd() {
+        return isAd;
+    }
+
+    public void setAd(boolean ad) {
+        isAd = ad;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -137,6 +149,6 @@ public class ProductModel implements Parcelable {
         parcel.writeLong(inventory);
         parcel.writeString(productionDate);
         parcel.writeString(expirationDate);
-
+        parcel.writeByte((byte) (isAd ? 1 : 0));
     }
 }

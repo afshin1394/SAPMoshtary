@@ -1,5 +1,7 @@
 package com.saphamrah.customer.base;
 
+import java.util.List;
+
 public interface BasePreferences {
 
     void putString(String key, String value);

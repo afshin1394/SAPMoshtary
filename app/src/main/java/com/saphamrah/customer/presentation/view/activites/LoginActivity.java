@@ -36,6 +36,11 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, Act
     }
 
     @Override
+    protected void onKeyBoardVisibilityChange(boolean visible) {
+
+    }
+
+    @Override
     protected void initViews() {
         setActivityPresenter(new LoginPresenter(this));
 

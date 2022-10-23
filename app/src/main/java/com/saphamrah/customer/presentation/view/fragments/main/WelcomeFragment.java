@@ -41,7 +41,7 @@ public class WelcomeFragment extends Fragment {
 
         AdvertiseModel advertiseModel = new AdvertiseModel();
         for (int i = 0; i <= 2; i++) {
-            advertiseModel.setImageUrl("@drawable/advertising");
+            advertiseModel.setImageUrl("@drawable/advertisement");
             advertiseList.add(advertiseModel);
 //            advertiseList.add(advertiseModel);
             if (i == 0) {

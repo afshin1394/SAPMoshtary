@@ -1,5 +1,8 @@
 package com.saphamrah.customer.createRequest.view.adapter;
 
+import static com.saphamrah.customer.utils.Constants.ADVERTISEMENT;
+import static com.saphamrah.customer.utils.Constants.SELL;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.saphamrah.customer.R;
@@ -16,13 +20,12 @@ import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 
 import java.util.ArrayList;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder>{
+public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final String TAG = ProductAdapter.class.getSimpleName();
     private Context context;
     private ArrayList<ProductModel> models;
     private AdapterItemListener<ProductModel> listener;
-    private int heightOfRecycler;
-    private int widthOfRecycler;
+
 
 
     public ProductAdapter(Context context, ArrayList<ProductModel> models, AdapterItemListener<ProductModel> listener)
@@ -34,20 +37,49 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @NonNull
     @Override
-    public ProductAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.products_itemview , parent , false);
-        return new ProductAdapter.ViewHolder(view);
+        switch (viewType){
+            case ADVERTISEMENT:
+                View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_advertisement_list_itemview, parent , false);
+                return new ViewHolderAdvertisement(view1);
+
+            case SELL:
+                View view2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.products_sell_itemview, parent , false);
+                return new ViewHolderSell(view2);
+        }
+
+        return null;
     }
 
 
     @Override
-    public void onBindViewHolder(@NonNull ProductAdapter.ViewHolder holder, int position)
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position)
     {
-        ProductModel kalaModel = models.get(position);
-        holder.bind(position,kalaModel);
+        ProductModel productModel = models.get(position);
+
+        switch (holder.getItemViewType()){
+            case ADVERTISEMENT:
+                ((ViewHolderAdvertisement) holder).bind(position);
+                break;
+
+            case SELL:
+                ((ViewHolderSell) holder).bind(position,productModel);
+
+                break;
+        }
+
     }
 
+
+    @Override
+    public int getItemViewType(int position) {
+        if (models.get(position).isAd()){
+            return ADVERTISEMENT;
+        }else{
+            return SELL;
+        }
+    }
 
     @Override
     public int getItemCount()
@@ -55,24 +87,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         return models.size();
     }
 
-    public void setMeasurements(int heightOfRecycler, int widthOfRecycler) {
-        this.heightOfRecycler = heightOfRecycler;
-        this.widthOfRecycler = widthOfRecycler;
-    }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolderSell extends RecyclerView.ViewHolder {
         private TextView nameProduct;
         private TextView consumerPrice;
         private RecyclerView img_product;
         private TextView inventory;
 
-        public ViewHolder(View view) {
+        public ViewHolderSell(View view) {
             super(view);
 
-            nameProduct = view.findViewById(R.id.txt_nameKala);
-            inventory = view.findViewById(R.id.txt_inventory);
-            consumerPrice = view.findViewById(R.id.txt_consumerPrice);
+            nameProduct = view.findViewById(R.id.tv_title);
+            inventory = view.findViewById(R.id.tv_inventory);
+            consumerPrice = view.findViewById(R.id.tv_consumerPrice);
             itemView.setOnClickListener(view1 -> listener.onItemSelect(models.get(getAdapterPosition()),getAdapterPosition(),AdapterAction.SELECT));
 
         }
@@ -86,6 +114,27 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 //            bachNumber.setText(String.format("%1$s:%2$s",context.getString(R.string.shomareBach),kalaModel.getBachNumber()));
 
 //            linChoice.setOnClickListener(view -> listener.onItemSelect(kalaModel,position, AdapterAction.SELECT));
+        }
+    }
+    public class ViewHolderAdvertisement extends RecyclerView.ViewHolder {
+        private RecyclerView recyclerView;
+        private LinearLayoutManager linearLayoutManager;
+        private AdsAdapter adsAdapter;
+
+        public ViewHolderAdvertisement(View view) {
+            super(view);
+            linearLayoutManager = new LinearLayoutManager(context,RecyclerView.HORIZONTAL,false);
+            recyclerView = view.findViewById(R.id.RV_ads);
+            recyclerView.setLayoutManager(linearLayoutManager);
+
+
+
+        }
+
+        public void bind(int position)
+        {
+         adsAdapter = new AdsAdapter(context,models,listener);
+         recyclerView.setAdapter(adsAdapter);
         }
     }
 }

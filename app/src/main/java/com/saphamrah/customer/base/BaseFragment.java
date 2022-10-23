@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.navigation.NavDirections;
@@ -24,6 +25,11 @@ import androidx.viewbinding.ViewBinding;
 import com.saphamrah.customer.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -32,7 +38,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
 
     private final Integer PERMISSION_REQUEST_CODE = 9824;
     public static final String TAG = BaseFragment.class.getSimpleName();
-
+    public static Map<String,Object> safeArgKeys = new HashMap<>();
     private Integer layout;
 
     public BaseFragment(Integer layout) {
@@ -63,7 +69,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
             public void handleOnBackPressed() {
                 // Handle the back button event
                 onBackPressed();
-                Navigation.findNavController(viewBinding.getRoot()).navigateUp();
+                NavHostFragment.findNavController(BaseFragment.this).navigateUp();
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
@@ -92,9 +98,16 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
 
     }
 
-    public void getFragmentResult(String key,Observer<Object> observer) {
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void getFragmentResult(String key, Observer<Object> observer) {
         Log.i(TAG, "getFragmentResult: "+viewBinding);
-        NavHostFragment.findNavController(this).getCurrentBackStackEntry().getSavedStateHandle().getLiveData(key).observe(getViewLifecycleOwner(),observer);
+        safeArgKeys.forEach(new BiConsumer<String, Object>() {
+            @Override
+            public void accept(String key, Object o) {
+                NavHostFragment.findNavController(BaseFragment.this).getCurrentBackStackEntry().getSavedStateHandle().get(key);
+            }
+        });
+
     }
 
 
@@ -121,6 +134,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     }
 
     public void setFragmentResult(String key, Object value) {
+        safeArgKeys.put(key,value);
         Navigation.findNavController(viewBinding.getRoot()).getPreviousBackStackEntry().getSavedStateHandle().set(key, value);
     }
 

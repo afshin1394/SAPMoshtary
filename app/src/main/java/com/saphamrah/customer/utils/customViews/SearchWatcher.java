@@ -3,6 +3,7 @@ package com.saphamrah.customer.utils.customViews;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
@@ -10,8 +11,10 @@ import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+import com.saphamrah.customer.R;
 import com.saphamrah.customer.utils.RxUtils.Watcher;
 
+import java.security.cert.Certificate;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -85,15 +88,14 @@ public class SearchWatcher extends SearchView implements SearchView.OnQueryTextL
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        androidx.appcompat.widget.SearchView searchView = new androidx.appcompat.widget.SearchView(context);
         View xIcon = ((ViewGroup) this.getChildAt(0)).getChildAt(2);
         xIcon.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        LinearLayout linearLayout1 = (LinearLayout) searchView.getChildAt(0);
+        LinearLayout linearLayout1 = (LinearLayout) this.getChildAt(0);
         LinearLayout linearLayout2 = (LinearLayout) linearLayout1.getChildAt(2);
         LinearLayout linearLayout3 = (LinearLayout) linearLayout2.getChildAt(1);
         AutoCompleteTextView autoComplete = (AutoCompleteTextView) linearLayout3.getChildAt(0);
-        autoComplete.setTextSize(12);
-        autoComplete.setText("");
+        autoComplete.setTextSize(14);
+        autoComplete.setGravity(Gravity.RIGHT);
     }
 
     @Override
