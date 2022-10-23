@@ -1,45 +1,35 @@
 package com.saphamrah.customer.presentation.view.fragments.login;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
+import android.os.Build;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.Nullable;
 
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
+import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
 import com.saphamrah.customer.data.LocationDbModel;
 import com.saphamrah.customer.data.CityDbModel;
 import com.saphamrah.customer.data.ProvinceDbModel;
 import com.saphamrah.customer.databinding.FragmentRegisterBinding;
 import com.saphamrah.customer.presentation.interactors.RegisterInteracts;
 import com.saphamrah.customer.presentation.presenters.RegisterPresenter;
-import com.saphamrah.customer.presentation.view.customView.BottomSheetSearch;
+import com.saphamrah.customer.presentation.view.customView.BottomSheetWithRecyclerView;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
-import com.saphamrah.customer.utils.GoogleLocationProvider;
-import com.saphamrah.customer.utils.GpsTracker;
-import com.saphamrah.customer.utils.LocationProvider;
 import com.saphamrah.customer.utils.RxTextWatcher;
-
-import org.osmdroid.api.IMapController;
-import org.osmdroid.config.Configuration;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapController;
-import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
 
-public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRegisterBinding> implements RegisterInteracts.RequiredViewOps, AdapterItemListener<LocationDbModel> {
+public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRegisterBinding> implements RegisterInteracts.RequiredViewOps, AdapterItemListener<BaseBottomSheetRecyclerModel> {
 
 
-    private ArrayList<ProvinceDbModel> provinceDbModels;
-    private ArrayList<CityDbModel> cityDbModels;
-    private RxTextWatcher rxTextWatcher;
-    private BottomSheetSearch bottomSheetSearch;
+    private BottomSheetWithRecyclerView bottomSheetSearch;
     private ArrayList<LocationDbModel> baseSearchProvinceDbModels;
     private ArrayList<LocationDbModel> baseSearchCityDbModels;
 
@@ -55,15 +45,12 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
     @Override
     protected void initViews() {
-        bottomSheetSearch = new BottomSheetSearch(this);
+        bottomSheetSearch = new BottomSheetWithRecyclerView(this);
+
         clickListeners();
 
-        rxTextWatcher = new RxTextWatcher();
-        provinceDbModels = new ArrayList<>();
-        cityDbModels = new ArrayList<>();
         baseSearchProvinceDbModels = new ArrayList<>();
         baseSearchCityDbModels = new ArrayList<>();
-
 
         baseSearchProvinceDbModels.add(new LocationDbModel("tehran", "province"));
         baseSearchProvinceDbModels.add(new LocationDbModel("tehran1", "province"));
@@ -82,6 +69,12 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         viewBinding.edtInputProvince.setOnClickListener(v -> handleSearchProvince());
         viewBinding.edtInputCity.setOnClickListener(v -> handleSearchCity());
         viewBinding.edtInputLocation.setOnClickListener(v -> handleGetLocation());
+        viewBinding.edtInputIdentity.setOnClickListener(v -> handleGetIdentityType());
+        viewBinding.edtInputIdentity.setOnFocusChangeListener((v, hasFocus) -> handleGetIdentityType());
+    }
+
+    private void handleGetIdentityType() {
+        presenter.getIdentities();
     }
 
     private void handleGetLocation() {
@@ -129,7 +122,8 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(getContext(),
                 getView(),
                 baseSearchCityDbModels,
-                getContext().getResources().getString(R.string.searchCity));
+                getContext().getResources().getString(R.string.searchCity),
+                true);
 
     }
 
@@ -139,7 +133,8 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
                 getContext(),
                 getView(),
                 baseSearchProvinceDbModels,
-                getContext().getResources().getString(R.string.searchProvince));
+                getContext().getResources().getString(R.string.searchProvince),
+                true);
 
     }
 
@@ -174,8 +169,12 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
     }
 
     @Override
-    public void onGetIdentities() {
-
+    public void onGetIdentities(ArrayList<BaseBottomSheetRecyclerModel> itemTitles) {
+        bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(getContext(),
+                getView(),
+                itemTitles,
+                getContext().getResources().getString(R.string.searchCity),
+                false);
     }
 
     @Override
@@ -212,10 +211,16 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
     }
 
     @Override
-    public void onItemSelect(LocationDbModel model, int position, AdapterAction Action) {
-        if (model.getType().equals("province"))
-            viewBinding.edtInputProvince.setText(model.getName());
-        else if (model.getType().equals("city"))
-            viewBinding.edtInputCity.setText(model.getName());
+    public void onItemSelect(BaseBottomSheetRecyclerModel model, int position, AdapterAction Action) {
+
+        if (model.getType() == null) {
+            viewBinding.edtInputIdentity.setText(model.getName());
+        } else {
+            if (model.getType().equals("province"))
+                viewBinding.edtInputProvince.setText(model.getName());
+            else if (model.getType().equals("city"))
+                viewBinding.edtInputCity.setText(model.getName());
+        }
+
     }
 }

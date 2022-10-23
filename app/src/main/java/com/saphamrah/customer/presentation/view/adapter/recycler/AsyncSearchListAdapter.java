@@ -1,13 +1,16 @@
 package com.saphamrah.customer.presentation.view.adapter.recycler;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
 
+import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
 import com.saphamrah.customer.data.LocationDbModel;
 import com.saphamrah.customer.databinding.ItemBaseSearchBinding;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
@@ -15,23 +18,24 @@ import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 
 import java.util.List;
 
-public class AsyncSearchListAdapter extends ListAdapter<LocationDbModel, AsyncSearchListAdapter.ViewHolder> {
-    private final AsyncListDiffer<LocationDbModel> mDiffer = new AsyncListDiffer(this, new SearchListAdapterDiffUtil());
+public class AsyncSearchListAdapter<T extends BaseBottomSheetRecyclerModel> extends ListAdapter<T, AsyncSearchListAdapter<T>.ViewHolder> {
+    private final AsyncListDiffer<T> mDiffer = new AsyncListDiffer<T>(this, new SearchListAdapterDiffUtil<T>());
 
-    private AdapterItemListener<LocationDbModel> adapterItemListener;
+    private AdapterItemListener<T> adapterItemListener;
 
 
-    public AsyncSearchListAdapter(AdapterItemListener<LocationDbModel> adapterItemListener) {
-        super(new SearchListAdapterDiffUtil());
+    public AsyncSearchListAdapter(AdapterItemListener<T> adapterItemListener) {
+
+        super(new SearchListAdapterDiffUtil<T>());
         this.adapterItemListener = adapterItemListener;
     }
 
     @NonNull
     @Override
-    public AsyncSearchListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AsyncSearchListAdapter<T>.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemBaseSearchBinding itemBaseSearchBinding =
                 ItemBaseSearchBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new AsyncSearchListAdapter.ViewHolder(itemBaseSearchBinding);
+        return new AsyncSearchListAdapter<T>.ViewHolder(itemBaseSearchBinding);
     }
 
     @Override
@@ -47,7 +51,7 @@ public class AsyncSearchListAdapter extends ListAdapter<LocationDbModel, AsyncSe
     }
 
     @Override
-    public void submitList(List<LocationDbModel> list) {
+    public void submitList(List<T> list) {
         mDiffer.submitList(list);
     }
 
@@ -60,7 +64,7 @@ public class AsyncSearchListAdapter extends ListAdapter<LocationDbModel, AsyncSe
 
         }
 
-        public void bind(LocationDbModel baseSearchDbModel) {
+        public void bind(T baseSearchDbModel) {
             binding.txtSearch.setText(baseSearchDbModel.getName());
             binding.getRoot().setOnClickListener(v ->
                     adapterItemListener.onItemSelect(baseSearchDbModel, getAdapterPosition(), AdapterAction.SELECT));

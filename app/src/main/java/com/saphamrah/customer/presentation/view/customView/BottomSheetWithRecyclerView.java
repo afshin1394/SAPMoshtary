@@ -11,29 +11,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.saphamrah.customer.R;
+import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
 import com.saphamrah.customer.data.LocationDbModel;
 import com.saphamrah.customer.presentation.view.adapter.recycler.AsyncSearchListAdapter;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 
 import java.util.ArrayList;
 
-public class BottomSheetSearch {
+public class BottomSheetWithRecyclerView<T extends BaseBottomSheetRecyclerModel> {
     private LinearLayoutManager linearLayoutManager;
     private BottomSheetBehavior bottomSheetBehavior;
     private MaterialSearchView searchView;
     private RecyclerView recyclerViewSearchResult;
     private AsyncSearchListAdapter recyclerViewAdapter;
-    private ArrayList<LocationDbModel> filteredListBaseSearchDbModel;
-    private AdapterItemListener<LocationDbModel> adapterItemListener;
+    private ArrayList<T> filteredListBaseSearchDbModel;
+    private AdapterItemListener<T> adapterItemListener;
 
-    public BottomSheetSearch(AdapterItemListener<LocationDbModel> adapterItemListener) {
+    public BottomSheetWithRecyclerView(AdapterItemListener<T> adapterItemListener) {
         this.adapterItemListener = adapterItemListener;
     }
 
     public void bottomSheetWithSearchAndRecyclerView(Context context,
                                               View view,
-                                              ArrayList<LocationDbModel> items,
-                                              String searchHint
+                                              ArrayList<T> items,
+                                              String searchHint,
+                                              boolean hasSearch
     ) {
         LinearLayout lnrlayBottomsheet = view.findViewById(R.id.linBottomSheet);
         searchView = view.findViewById(R.id.searchView);
@@ -42,11 +44,17 @@ public class BottomSheetSearch {
         searchView.setVoiceSearch(false);
         searchView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
 
+        if (!hasSearch) {
+            searchView.setVisibility(View.GONE);
+        } else {
+            searchView.setVisibility(View.VISIBLE);
+        }
+
         recyclerViewSearchResult = view.findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         recyclerViewSearchResult.setLayoutManager(linearLayoutManager);
 
-        recyclerViewAdapter = new AsyncSearchListAdapter((model, position, action) -> {
+        recyclerViewAdapter = new AsyncSearchListAdapter<T>((model, position, action) -> {
             adapterItemListener.onItemSelect(model, position, action);
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             searchView.closeSearch();
@@ -94,7 +102,7 @@ public class BottomSheetSearch {
     }
 
     private void filter(String query,
-                        ArrayList<LocationDbModel> items) {
+                        ArrayList<T> items) {
         filteredListBaseSearchDbModel = new ArrayList<>();
 
         for (int i = 0; i < items.size(); i++) {
@@ -108,7 +116,7 @@ public class BottomSheetSearch {
 
         Log.d("BottomSheetSearch", "filteredList: " + filteredListBaseSearchDbModel.size());
 
-         recyclerViewAdapter = new AsyncSearchListAdapter((model, position, action) -> {
+         recyclerViewAdapter = new AsyncSearchListAdapter<T>((model, position, action) -> {
             adapterItemListener.onItemSelect(model, position, action);
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             searchView.closeSearch();

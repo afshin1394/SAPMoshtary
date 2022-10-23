@@ -1,7 +1,10 @@
 package com.saphamrah.customer.presentation.models;
 
+import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
 import com.saphamrah.customer.data.network.model.RegisterNetworkModel;
 import com.saphamrah.customer.presentation.interactors.RegisterInteracts;
+
+import java.util.ArrayList;
 
 public class RegisterModel extends RegisterInteracts.ModelOps {
 
@@ -24,10 +27,23 @@ public class RegisterModel extends RegisterInteracts.ModelOps {
     @Override
     public void getIdentities() {
 
+
+        BaseBottomSheetRecyclerModel baseBottomSheetRecyclerModel = new BaseBottomSheetRecyclerModel();
+        BaseBottomSheetRecyclerModel baseBottomSheetRecyclerModel1 = new BaseBottomSheetRecyclerModel();
+        ArrayList<BaseBottomSheetRecyclerModel> itemTitles = new ArrayList<>();
+
+        baseBottomSheetRecyclerModel.setName("حقیقی");
+        itemTitles.add(baseBottomSheetRecyclerModel);
+
+        baseBottomSheetRecyclerModel1.setName("حقوقی");
+        itemTitles.add(baseBottomSheetRecyclerModel1);
+
+        registerRequiredPresenterOps.onGetIdentities(itemTitles);
     }
 
     @Override
     public void getProvinces() {
+
 
     }
 

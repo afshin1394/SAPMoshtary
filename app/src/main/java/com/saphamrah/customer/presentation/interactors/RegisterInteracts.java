@@ -4,12 +4,15 @@ import com.saphamrah.customer.base.BaseModel;
 import com.saphamrah.customer.base.BasePresenterOps;
 import com.saphamrah.customer.base.BaseRequiredPresenterOps;
 import com.saphamrah.customer.base.BaseView;
+import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
 import com.saphamrah.customer.data.network.model.RegisterNetworkModel;
+
+import java.util.ArrayList;
 
 public interface RegisterInteracts {
 
     interface RequiredViewOps extends BaseView {
-        void onGetIdentities();
+        void onGetIdentities(ArrayList<BaseBottomSheetRecyclerModel> itemTitles);
         void onGetProvinces();
         void onGetCities();
         void onSendRegisterData();
@@ -26,7 +29,7 @@ public interface RegisterInteracts {
     }
 
     interface RequiredPresenterOps extends BaseRequiredPresenterOps {
-        void onGetIdentities();
+        void onGetIdentities(ArrayList<BaseBottomSheetRecyclerModel> itemTitles);
         void onGetProvinces();
         void onGetCities();
         void onSendRegisterData();

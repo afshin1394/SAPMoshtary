@@ -1,14 +1,10 @@
 package com.saphamrah.customer.data;
 
-public class LocationDbModel extends BaseBottomSheetRecyclerModel {
+public class BaseBottomSheetRecyclerModel {
 
     private String name;
     private String type;
 
-    public LocationDbModel(String name, String type) {
-        this.name = name;
-        this.type = type;
-    }
 
     public String getType() {
         return type;

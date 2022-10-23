@@ -2,9 +2,12 @@ package com.saphamrah.customer.presentation.presenters;
 
 import android.content.Context;
 
+import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
 import com.saphamrah.customer.data.network.model.RegisterNetworkModel;
 import com.saphamrah.customer.presentation.interactors.RegisterInteracts;
 import com.saphamrah.customer.presentation.models.RegisterModel;
+
+import java.util.ArrayList;
 
 public class RegisterPresenter implements RegisterInteracts.PresenterOps, RegisterInteracts.RequiredPresenterOps {
 
@@ -66,8 +69,8 @@ public class RegisterPresenter implements RegisterInteracts.PresenterOps, Regist
     }
 
     @Override
-    public void onGetIdentities() {
-        view.onGetIdentities();
+    public void onGetIdentities(ArrayList<BaseBottomSheetRecyclerModel> itemTitles) {
+        view.onGetIdentities(itemTitles);
     }
 
     @Override
