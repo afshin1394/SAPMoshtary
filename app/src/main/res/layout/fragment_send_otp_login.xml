@@ -93,7 +93,7 @@
                 android:padding="10dp"
                 android:textColor="@color/colorTextPrimary"
                 android:textDirection="ltr"
-                android:visibility="visible" />
+                 />
 
         </com.google.android.material.textfield.TextInputLayout>
 

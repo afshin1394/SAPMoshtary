@@ -1,18 +1,14 @@
-package com.saphamrah.customer.presentation.view.customView;
+package com.saphamrah.customer.utils.customViews;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.saphamrah.customer.utils.RxUtils.Watcher;
 
 import java.util.concurrent.TimeUnit;
@@ -21,48 +17,31 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
-@SuppressLint("AppCompatCustomView")
-public class PrefixPhoneNumberCustomEditText extends TextInputEditText implements TextWatcher {
-
-    private static final String TAG = PrefixPhoneNumberCustomEditText.class.getSimpleName();
+public class EditTextWatcher extends AppCompatEditText implements TextWatcher {
     private final PublishSubject<String> querySubject = PublishSubject.create();
+    public EditTextWatcher(@NonNull Context context) {
+        super(context);
+        this.addTextChangedListener(this);
+    }
 
-    private String mPrefix = "09"; // can be hardcoded for demo purposes
-    private Rect mPrefixRect = new Rect(); // actual prefix size
-
-    public PrefixPhoneNumberCustomEditText(Context context, AttributeSet attrs) {
+    public EditTextWatcher(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.addTextChangedListener(this);
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        getPaint().getTextBounds(mPrefix, 0, mPrefix.length(), mPrefixRect);
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    public EditTextWatcher(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        this.addTextChangedListener(this);
     }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-
-        canvas.drawText(mPrefix, super.getCompoundPaddingLeft(), getBaseline(), getPaint());
-    }
-
-    @Override
-    public int getCompoundPaddingLeft() {
-        return super.getCompoundPaddingLeft() + mPrefixRect.width();
-    }
-
 
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
     }
 
     @Override
@@ -95,7 +74,7 @@ public class PrefixPhoneNumberCustomEditText extends TextInputEditText implement
 
                     @Override
                     public void onError(Throwable e) {
-//                        Log.i(TAG, "onError: "+e.getMessage());
+
                     }
 
                     @Override
@@ -104,5 +83,4 @@ public class PrefixPhoneNumberCustomEditText extends TextInputEditText implement
                     }
                 });
     }
-
 }

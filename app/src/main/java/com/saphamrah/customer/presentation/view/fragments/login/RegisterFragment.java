@@ -1,12 +1,8 @@
 package com.saphamrah.customer.presentation.view.fragments.login;
 
 import android.content.Context;
-import android.os.Build;
-import android.text.InputType;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.Nullable;
 
@@ -14,15 +10,12 @@ import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
 import com.saphamrah.customer.data.LocationDbModel;
-import com.saphamrah.customer.data.CityDbModel;
-import com.saphamrah.customer.data.ProvinceDbModel;
 import com.saphamrah.customer.databinding.FragmentRegisterBinding;
 import com.saphamrah.customer.presentation.interactors.RegisterInteracts;
 import com.saphamrah.customer.presentation.presenters.RegisterPresenter;
 import com.saphamrah.customer.presentation.view.customView.BottomSheetWithRecyclerView;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
-import com.saphamrah.customer.utils.RxTextWatcher;
 
 import java.util.ArrayList;
 
@@ -61,6 +54,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         baseSearchCityDbModels.add(new LocationDbModel("tehran1", "city"));
         baseSearchCityDbModels.add(new LocationDbModel("tabriz", "city"));
         baseSearchCityDbModels.add(new LocationDbModel("tabriz1", "city"));
+
 
     }
 

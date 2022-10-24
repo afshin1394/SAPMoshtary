@@ -13,20 +13,15 @@ import androidx.core.content.ContextCompat;
 
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
-import com.saphamrah.customer.base.BasePermissionModel;
 import com.saphamrah.customer.databinding.FragmentSendOtpLoginBinding;
 import com.saphamrah.customer.presentation.interactors.SendOtpLoginInteracts;
 import com.saphamrah.customer.presentation.presenters.SendOtpLoginPresenter;
-import com.saphamrah.customer.utils.RxTextWatcher;
+import com.saphamrah.customer.utils.RxUtils.Watcher;
+import com.saphamrah.customer.utils.customViews.EditTextWatcher;
 
-import java.util.ArrayList;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 
 public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, FragmentSendOtpLoginBinding> implements SendOtpLoginInteracts.RequiredViewOps {
 
@@ -35,10 +30,6 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
     }
 
     private String phoneNumber = "";
-
-    private RxTextWatcher rxTextWatcher;
-
-
 
     @Override
     protected void setPresenter() {
@@ -53,9 +44,6 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
     @Override
     protected void initViews() {
 
-        rxTextWatcher = new RxTextWatcher();
-        compositeDisposable = new CompositeDisposable();
-
         phoneNumberTextWatcher();
 
         btnClickListeners();
@@ -65,46 +53,27 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
 
     @SuppressLint("AutoDispose")
     private void phoneNumberTextWatcher() {
-        rxTextWatcher.onTextChanged(viewBinding.etPhone)
-                .debounce(700, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        addDisposable(d);
+        viewBinding.etPhone.addTextWatcher(new Watcher() {
+            @Override
+            public void onTextChange(String s) {
+                if (s != null) {
+                    viewBinding.btnSendNumber.setEnabled(true);
+                    // change btn color
+                    if (viewBinding.etPhone.getText().length() == 9) {
+                        checkLogin();
+
+                    } else {
+
+                        viewBinding.btnSendNumber.setBackground(
+                                ContextCompat.getDrawable(
+                                        requireActivity(),
+                                        R.drawable.button_selector
+                                )
+                        );
                     }
-
-                    @Override
-                    public void onNext(String s) {
-                        if (s != null) {
-                            viewBinding.btnSendNumber.setEnabled(true);
-
-                            // change btn color
-                            if (viewBinding.etPhone.getText().length() == 9) {
-                                checkLogin();
-
-                            } else {
-
-                                viewBinding.btnSendNumber.setBackground(
-                                        ContextCompat.getDrawable(
-                                                requireActivity(),
-                                                R.drawable.button_selector
-                                        )
-                                );
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+                }
+            }
+        }, 500);
 
     }
 
