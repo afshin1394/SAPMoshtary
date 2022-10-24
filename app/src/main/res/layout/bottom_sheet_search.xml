@@ -13,7 +13,7 @@
 
 
 
-        <com.miguelcatalan.materialsearchview.MaterialSearchView
+        <com.saphamrah.customer.utils.customViews.MaterialSearchWatcher
             android:id="@+id/searchView"
             style="@style/MaterialSearchViewStyle"
             android:layout_width="match_parent"

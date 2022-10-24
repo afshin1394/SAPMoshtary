@@ -15,13 +15,15 @@ import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
 import com.saphamrah.customer.data.LocationDbModel;
 import com.saphamrah.customer.presentation.view.adapter.recycler.AsyncSearchListAdapter;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
+import com.saphamrah.customer.utils.RxUtils.Watcher;
+import com.saphamrah.customer.utils.customViews.MaterialSearchWatcher;
 
 import java.util.ArrayList;
 
 public class BottomSheetWithRecyclerView<T extends BaseBottomSheetRecyclerModel> {
     private LinearLayoutManager linearLayoutManager;
     private BottomSheetBehavior bottomSheetBehavior;
-    private MaterialSearchView searchView;
+    private MaterialSearchWatcher searchView;
     private RecyclerView recyclerViewSearchResult;
     private AsyncSearchListAdapter recyclerViewAdapter;
     private ArrayList<T> filteredListBaseSearchDbModel;
@@ -46,6 +48,7 @@ public class BottomSheetWithRecyclerView<T extends BaseBottomSheetRecyclerModel>
 
         if (!hasSearch) {
             searchView.setVisibility(View.GONE);
+            searchView.hideKeyboard(view);
         } else {
             searchView.setVisibility(View.VISIBLE);
         }
@@ -72,7 +75,16 @@ public class BottomSheetWithRecyclerView<T extends BaseBottomSheetRecyclerModel>
         searchView.showSearch(true);
         searchView.setHint(searchHint);
 
-        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+        searchView.addTextWatcher(s -> {
+            if (s.trim().length() > 0) {
+                filter(s, items);
+            } else {
+                visibleCloseSearchIcon(view);
+                recyclerViewAdapter.submitList(items);
+            }
+        }, 400);
+
+      /*  searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -88,7 +100,7 @@ public class BottomSheetWithRecyclerView<T extends BaseBottomSheetRecyclerModel>
                 }
                 return false;
             }
-        });
+        });*/
 
         view.findViewById(com.miguelcatalan.materialsearchview.R.id.action_empty_btn).setOnClickListener(v -> {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);

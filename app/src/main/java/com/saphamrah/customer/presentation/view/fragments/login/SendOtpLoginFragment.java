@@ -53,24 +53,21 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
 
     @SuppressLint("AutoDispose")
     private void phoneNumberTextWatcher() {
-        viewBinding.etPhone.addTextWatcher(new Watcher() {
-            @Override
-            public void onTextChange(String s) {
-                if (s != null) {
-                    viewBinding.btnSendNumber.setEnabled(true);
-                    // change btn color
-                    if (viewBinding.etPhone.getText().length() == 9) {
-                        checkLogin();
+        viewBinding.etPhone.addTextWatcher(s -> {
+            if (s != null) {
+                viewBinding.btnSendNumber.setEnabled(true);
+                // change btn color
+                if (viewBinding.etPhone.getText().length() == 9) {
+                    checkLogin();
 
-                    } else {
+                } else {
 
-                        viewBinding.btnSendNumber.setBackground(
-                                ContextCompat.getDrawable(
-                                        requireActivity(),
-                                        R.drawable.button_selector
-                                )
-                        );
-                    }
+                    viewBinding.btnSendNumber.setBackground(
+                            ContextCompat.getDrawable(
+                                    requireActivity(),
+                                    R.drawable.button_selector
+                            )
+                    );
                 }
             }
         }, 500);
