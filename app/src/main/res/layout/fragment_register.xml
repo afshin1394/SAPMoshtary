@@ -23,6 +23,25 @@
                 android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layoutDirection="rtl"
+                    android:textColorHint="@color/colorDivider"
+                    android:textDirection="rtl">
+
+                <EditText
+                    android:id="@+id/edtTest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Test"
+                    android:focusable="false"
+                    />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/txtInputFname"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -129,7 +148,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:clickable="true"
                     android:layoutDirection="rtl"
                     android:textColorHint="@color/colorDivider"
                     android:textDirection="rtl">
@@ -141,11 +159,9 @@
                         android:drawableLeft="@drawable/ic_arrow_down"
                         android:drawableRight="@drawable/ic_identity"
                         android:drawablePadding="@dimen/drawableRightEditTextPadding"
-                        android:editable="false"
                         android:fontFamily="@font/iransans"
                         android:hint="@string/noeShakhsiat"
-                        android:inputType="none"
-                        android:maxLines="1"
+                        android:focusable="false"
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="@dimen/FontSize16" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -425,5 +441,8 @@
     </RelativeLayout>
 
     <include layout="@layout/bottom_sheet_search" />
+    <include layout="@layout/bottom_sheet_recycler" />
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

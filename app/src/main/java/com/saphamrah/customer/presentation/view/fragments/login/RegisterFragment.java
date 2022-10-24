@@ -13,7 +13,8 @@ import com.saphamrah.customer.data.LocationDbModel;
 import com.saphamrah.customer.databinding.FragmentRegisterBinding;
 import com.saphamrah.customer.presentation.interactors.RegisterInteracts;
 import com.saphamrah.customer.presentation.presenters.RegisterPresenter;
-import com.saphamrah.customer.presentation.view.customView.BottomSheetWithRecyclerView;
+import com.saphamrah.customer.presentation.view.customView.BottomSheetRecyclerView;
+import com.saphamrah.customer.presentation.view.customView.BottomSheetSearchRecyclerView;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 
@@ -22,7 +23,8 @@ import java.util.ArrayList;
 public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRegisterBinding> implements RegisterInteracts.RequiredViewOps, AdapterItemListener<BaseBottomSheetRecyclerModel> {
 
 
-    private BottomSheetWithRecyclerView bottomSheetSearch;
+    private BottomSheetSearchRecyclerView bottomSheetSearch;
+    private BottomSheetRecyclerView bottomSheetRecyclerView;
     private ArrayList<LocationDbModel> baseSearchProvinceDbModels;
     private ArrayList<LocationDbModel> baseSearchCityDbModels;
 
@@ -38,7 +40,8 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
     @Override
     protected void initViews() {
-        bottomSheetSearch = new BottomSheetWithRecyclerView(this);
+        bottomSheetSearch = new BottomSheetSearchRecyclerView(this);
+        bottomSheetRecyclerView = new BottomSheetRecyclerView(this);
 
         clickListeners();
 
@@ -65,6 +68,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         viewBinding.edtInputLocation.setOnClickListener(v -> handleGetLocation());
         viewBinding.edtInputIdentity.setOnClickListener(v -> handleGetIdentityType());
         viewBinding.edtInputIdentity.setOnFocusChangeListener((v, hasFocus) -> handleGetIdentityType());
+
     }
 
     private void handleGetIdentityType() {
@@ -116,8 +120,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(getContext(),
                 getView(),
                 baseSearchCityDbModels,
-                getContext().getResources().getString(R.string.searchCity),
-                true);
+                getContext().getResources().getString(R.string.searchCity));
 
     }
 
@@ -127,8 +130,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
                 getContext(),
                 getView(),
                 baseSearchProvinceDbModels,
-                getContext().getResources().getString(R.string.searchProvince),
-                true);
+                getContext().getResources().getString(R.string.searchProvince));
 
     }
 
@@ -164,11 +166,10 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
     @Override
     public void onGetIdentities(ArrayList<BaseBottomSheetRecyclerModel> itemTitles) {
-        bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(getContext(),
+        bottomSheetRecyclerView.bottomSheetWithSearchAndRecyclerView(getContext(),
                 getView(),
-                itemTitles,
-                getContext().getResources().getString(R.string.searchCity),
-                false);
+                itemTitles);
+
     }
 
     @Override

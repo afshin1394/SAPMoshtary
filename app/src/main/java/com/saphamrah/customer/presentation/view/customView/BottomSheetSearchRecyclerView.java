@@ -20,7 +20,7 @@ import com.saphamrah.customer.utils.customViews.MaterialSearchWatcher;
 
 import java.util.ArrayList;
 
-public class BottomSheetWithRecyclerView<T extends BaseBottomSheetRecyclerModel> {
+public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerModel> {
     private LinearLayoutManager linearLayoutManager;
     private BottomSheetBehavior bottomSheetBehavior;
     private MaterialSearchWatcher searchView;
@@ -29,31 +29,23 @@ public class BottomSheetWithRecyclerView<T extends BaseBottomSheetRecyclerModel>
     private ArrayList<T> filteredListBaseSearchDbModel;
     private AdapterItemListener<T> adapterItemListener;
 
-    public BottomSheetWithRecyclerView(AdapterItemListener<T> adapterItemListener) {
+    public BottomSheetSearchRecyclerView(AdapterItemListener<T> adapterItemListener) {
         this.adapterItemListener = adapterItemListener;
     }
 
     public void bottomSheetWithSearchAndRecyclerView(Context context,
                                               View view,
                                               ArrayList<T> items,
-                                              String searchHint,
-                                              boolean hasSearch
+                                              String searchHint
     ) {
-        LinearLayout lnrlayBottomsheet = view.findViewById(R.id.linBottomSheet);
+        LinearLayout lnrlayBottomsheet = view.findViewById(R.id.linBottomSheetSearch);
         searchView = view.findViewById(R.id.searchView);
         bottomSheetBehavior = BottomSheetBehavior.from(lnrlayBottomsheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         searchView.setVoiceSearch(false);
         searchView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
 
-        if (!hasSearch) {
-            searchView.setVisibility(View.GONE);
-            searchView.hideKeyboard(view);
-        } else {
-            searchView.setVisibility(View.VISIBLE);
-        }
-
-        recyclerViewSearchResult = view.findViewById(R.id.recyclerView);
+        recyclerViewSearchResult = view.findViewById(R.id.recyclerViewSearch);
         linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         recyclerViewSearchResult.setLayoutManager(linearLayoutManager);
 
