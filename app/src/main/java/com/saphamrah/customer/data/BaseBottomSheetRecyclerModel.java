@@ -4,7 +4,7 @@ public class BaseBottomSheetRecyclerModel {
 
     private String name;
     private String type;
-
+    private boolean isSelected = false;
 
     public String getType() {
         return type;
@@ -20,5 +20,13 @@ public class BaseBottomSheetRecyclerModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

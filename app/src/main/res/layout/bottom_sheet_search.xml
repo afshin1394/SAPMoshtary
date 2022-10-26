@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/linBottomSheetSearch"
+    android:id="@+id/cardViewBottomSheetSearch"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="top"
@@ -9,25 +9,33 @@
     android:orientation="vertical"
     app:behavior_hideable="true"
     app:behavior_peekHeight="0dp"
+    app:cardElevation="@dimen/_8sdp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
+    <com.saphamrah.customer.utils.customViews.MaterialSearchWatcher
+        android:id="@+id/searchView"
+        style="@style/MaterialSearchViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layoutDirection="ltr"
+        />
 
-        <com.saphamrah.customer.utils.customViews.MaterialSearchWatcher
-            android:id="@+id/searchView"
-            style="@style/MaterialSearchViewStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layoutDirection="ltr"
-            />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewSearch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBrown50"
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewSearch"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorBrown50"
-
-            />
-
+        />
 
 </LinearLayout>
+
+
+
+
+</androidx.cardview.widget.CardView>

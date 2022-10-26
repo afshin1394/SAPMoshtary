@@ -1,8 +1,11 @@
 package com.saphamrah.customer.presentation.view.adapter.recycler;
 
+import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.AsyncListDiffer;
@@ -16,18 +19,20 @@ import com.saphamrah.customer.databinding.ItemBaseSearchBinding;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AsyncSearchListAdapter<T extends BaseBottomSheetRecyclerModel> extends ListAdapter<T, AsyncSearchListAdapter<T>.ViewHolder> {
-    private final AsyncListDiffer<T> mDiffer = new AsyncListDiffer<T>(this, new SearchListAdapterDiffUtil<T>());
 
-    private AdapterItemListener<T> adapterItemListener;
+    private final AsyncListDiffer<T> mDiffer = new AsyncListDiffer<T>(this, new SearchListAdapterDiffUtil<T>());
+    private final AdapterItemListener<T> adapterItemListener;
 
 
     public AsyncSearchListAdapter(AdapterItemListener<T> adapterItemListener) {
 
         super(new SearchListAdapterDiffUtil<T>());
         this.adapterItemListener = adapterItemListener;
+
     }
 
     @NonNull
@@ -66,8 +71,71 @@ public class AsyncSearchListAdapter<T extends BaseBottomSheetRecyclerModel> exte
 
         public void bind(T baseSearchDbModel) {
             binding.txtSearch.setText(baseSearchDbModel.getName());
-            binding.getRoot().setOnClickListener(v ->
-                    adapterItemListener.onItemSelect(baseSearchDbModel, getAdapterPosition(), AdapterAction.SELECT));
+
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    adapterItemListener.onItemSelect(baseSearchDbModel, getAdapterPosition(), AdapterAction.SELECT);
+                    toggleSelection(baseSearchDbModel, binding);
+                }
+            });
+
         }
+    }
+
+    boolean isSelected(int position) {
+        return mDiffer.getCurrentList().get(position).isSelected();
+    }
+
+    public void toggleSelection(T baseSearchDbModel, ItemBaseSearchBinding binding) {
+        if (!baseSearchDbModel.isSelected()) {
+            baseSearchDbModel.setSelected(true);
+            binding.checkboxSearch.setChecked(true);
+
+        } else {
+            baseSearchDbModel.setSelected(false);
+            binding.checkboxSearch.setChecked(false);
+
+        }
+
+    }
+
+    public void selectAll() {
+        for (int i=0; i<mDiffer.getCurrentList().size(); i++) {
+            mDiffer.getCurrentList().get(i).setSelected(true);
+
+        }
+    }
+
+    public void clearSelections() {
+        for (int i=0; i<mDiffer.getCurrentList().size(); i++) {
+            mDiffer.getCurrentList().get(i).setSelected(false);
+
+        }
+
+    }
+
+    public int getSelectedItemCount() {
+        int count = 0;
+
+        for (int i=0; i<mDiffer.getCurrentList().size(); i++) {
+            if (mDiffer.getCurrentList().get(i).isSelected())
+                count++;
+
+        }
+
+        return count;
+    }
+
+    public ArrayList<T> getSelectedItems() {
+        ArrayList<T> mDifferTemp = new ArrayList<>();
+
+        for (int i=0; i<mDiffer.getCurrentList().size(); i++) {
+            if (mDiffer.getCurrentList().get(i).isSelected())
+                mDifferTemp.add(mDiffer.getCurrentList().get(i));
+
+        }
+        return mDifferTemp;
+
     }
 }

@@ -1,6 +1,8 @@
 package com.saphamrah.customer.presentation.view.fragments.login;
 
 import android.content.Context;
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -17,6 +19,7 @@ import com.saphamrah.customer.presentation.view.customView.BottomSheetRecyclerVi
 import com.saphamrah.customer.presentation.view.customView.BottomSheetSearchRecyclerView;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
+import com.saphamrah.customer.utils.KeyboardStateHandler;
 
 import java.util.ArrayList;
 
@@ -65,9 +68,20 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         viewBinding.btnApply.setOnClickListener(v -> checkValidityOfRegisterData());
         viewBinding.edtInputProvince.setOnClickListener(v -> handleSearchProvince());
         viewBinding.edtInputCity.setOnClickListener(v -> handleSearchCity());
-        viewBinding.edtInputLocation.setOnClickListener(v -> handleGetLocation());
+//        viewBinding.edtInputLocation.setOnClickListener(v -> handleGetLocation());
         viewBinding.edtInputIdentity.setOnClickListener(v -> handleGetIdentityType());
         viewBinding.edtInputIdentity.setOnFocusChangeListener((v, hasFocus) -> handleGetIdentityType());
+        viewBinding.edtInputFname.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
+        viewBinding.edtInputLname.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
+        viewBinding.edtInputMobile.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
+        viewBinding.edtInputBoardName.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
+        viewBinding.edtInputNationalCode.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
+        viewBinding.edtInputMainStreet.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
+        viewBinding.edtInputMainAlley.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
+        viewBinding.edtInputPlaque.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
+        viewBinding.edtInputPostalCode.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
+        viewBinding.edtInputLocation.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
+
 
     }
 
@@ -117,6 +131,10 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
 
     private void handleSearchCity() {
+
+        clearFocusEditTextsWithoutBtmSheet();
+        handleBottomSheetBehaviorState();
+
         bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(getContext(),
                 getView(),
                 baseSearchCityDbModels,
@@ -126,12 +144,35 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
 
     private void handleSearchProvince() {
+
+        clearFocusEditTextsWithoutBtmSheet();
+        handleBottomSheetBehaviorState();
+
         bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(
                 getContext(),
                 getView(),
                 baseSearchProvinceDbModels,
                 getContext().getResources().getString(R.string.searchProvince));
 
+    }
+
+    private void clearFocusEditTextsWithoutBtmSheet() {
+        viewBinding.edtInputFname.clearFocus();
+        viewBinding.edtInputLname.clearFocus();
+        viewBinding.edtInputMobile.clearFocus();
+        viewBinding.edtInputBoardName.clearFocus();
+        viewBinding.edtInputNationalCode.clearFocus();
+        viewBinding.edtInputMainStreet.clearFocus();
+        viewBinding.edtInputMainAlley.clearFocus();
+        viewBinding.edtInputPlaque.clearFocus();
+        viewBinding.edtInputPostalCode.clearFocus();
+        viewBinding.edtInputLocation.clearFocus();
+
+    }
+
+    private void handleBottomSheetBehaviorState() {
+        bottomSheetSearch.bottomSheetBehaviorStateHandler();
+        bottomSheetRecyclerView.bottomSheetBehaviorStateHandler();
     }
 
     @Override
@@ -166,6 +207,11 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
     @Override
     public void onGetIdentities(ArrayList<BaseBottomSheetRecyclerModel> itemTitles) {
+
+        KeyboardStateHandler.hideKeyboard(getContext(), getView());
+        clearFocusEditTextsWithoutBtmSheet();
+        bottomSheetSearch.bottomSheetBehaviorStateHandler();
+
         bottomSheetRecyclerView.bottomSheetWithSearchAndRecyclerView(getContext(),
                 getView(),
                 itemTitles);
@@ -207,6 +253,9 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
     @Override
     public void onItemSelect(BaseBottomSheetRecyclerModel model, int position, AdapterAction Action) {
+
+        Log.d("RegisterFragment", "isSelected: " + model.isSelected());
+        handleBottomSheetBehaviorState();
 
         if (model.getType() == null) {
             viewBinding.edtInputIdentity.setText(model.getName());

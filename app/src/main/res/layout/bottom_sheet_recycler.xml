@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/linBottomSheet"
+    android:id="@+id/cardViewBottomSheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="top"
@@ -9,16 +9,33 @@
     android:orientation="vertical"
     app:behavior_hideable="true"
     app:behavior_peekHeight="0dp"
+    app:cardElevation="@dimen/_8sdp"
+    app:cardBackgroundColor="@color/colorBrown50"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorBrown50"
 
-        />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnApply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:padding="@dimen/btnPaddingMain"
+            android:text="@string/apply"
+            android:fontFamily="@font/iransans"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/btnFontMain"
+            android:layout_gravity="bottom"
+            />
 
 
-</LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

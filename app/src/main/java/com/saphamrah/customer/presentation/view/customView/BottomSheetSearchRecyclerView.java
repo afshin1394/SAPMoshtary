@@ -3,19 +3,18 @@ package com.saphamrah.customer.presentation.view.customView;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
-import com.saphamrah.customer.data.LocationDbModel;
 import com.saphamrah.customer.presentation.view.adapter.recycler.AsyncSearchListAdapter;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
-import com.saphamrah.customer.utils.RxUtils.Watcher;
 import com.saphamrah.customer.utils.customViews.MaterialSearchWatcher;
 
 import java.util.ArrayList;
@@ -34,20 +33,28 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
     }
 
     public void bottomSheetWithSearchAndRecyclerView(Context context,
-                                              View view,
-                                              ArrayList<T> items,
-                                              String searchHint
+                                                     View view,
+                                                     ArrayList<T> items,
+                                                     String searchHint
     ) {
-        LinearLayout lnrlayBottomsheet = view.findViewById(R.id.linBottomSheetSearch);
+        CardView cardViewBottomSheet = view.findViewById(R.id.cardViewBottomSheetSearch);
         searchView = view.findViewById(R.id.searchView);
-        bottomSheetBehavior = BottomSheetBehavior.from(lnrlayBottomsheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(cardViewBottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         searchView.setVoiceSearch(false);
         searchView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
 
         recyclerViewSearchResult = view.findViewById(R.id.recyclerViewSearch);
         linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        DividerItemDecoration divider =
+                new DividerItemDecoration(context,
+                        DividerItemDecoration.VERTICAL);
         recyclerViewSearchResult.setLayoutManager(linearLayoutManager);
+
+        divider.setDrawable(ContextCompat.getDrawable(context,
+                R.drawable.layer_line_divider));
+
+        recyclerViewSearchResult.addItemDecoration(divider);
 
         recyclerViewAdapter = new AsyncSearchListAdapter<T>((model, position, action) -> {
             adapterItemListener.onItemSelect(model, position, action);
@@ -66,40 +73,23 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
         bottomSheetBehavior.setPeekHeight(view.getMeasuredHeight() / 3);
         searchView.showSearch(true);
         searchView.setHint(searchHint);
+        view.findViewById(com.miguelcatalan.materialsearchview.R.id.action_empty_btn).setVisibility(View.VISIBLE);
+        view.findViewById(com.miguelcatalan.materialsearchview.R.id.action_up_btn).setVisibility(View.GONE);
 
         searchView.addTextWatcher(s -> {
             if (s.trim().length() > 0) {
                 filter(s, items);
             } else {
-                visibleCloseSearchIcon(view);
+//                visibleCloseSearchIcon(view);
                 recyclerViewAdapter.submitList(items);
             }
         }, 400);
-
-      /*  searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (newText.trim().length() > 0) {
-                    filter(newText, items);
-                } else {
-                    visibleCloseSearchIcon(view);
-                    recyclerViewAdapter.submitList(items);
-                }
-                return false;
-            }
-        });*/
 
         view.findViewById(com.miguelcatalan.materialsearchview.R.id.action_empty_btn).setOnClickListener(v -> {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             searchView.closeSearch();
             recyclerViewSearchResult.setVisibility(View.GONE);
             recyclerViewSearchResult.removeAllViews();
-
 
         });
 
@@ -120,7 +110,7 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
 
         Log.d("BottomSheetSearch", "filteredList: " + filteredListBaseSearchDbModel.size());
 
-         recyclerViewAdapter = new AsyncSearchListAdapter<T>((model, position, action) -> {
+        recyclerViewAdapter = new AsyncSearchListAdapter<T>((model, position, action) -> {
             adapterItemListener.onItemSelect(model, position, action);
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             searchView.closeSearch();
@@ -133,8 +123,16 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
 
     }
 
-    private void visibleCloseSearchIcon(View view) {
+/*    private void visibleCloseSearchIcon(View view) {
         view.findViewById(com.miguelcatalan.materialsearchview.R.id.action_empty_btn).setVisibility(View.VISIBLE);
 
+    }*/
+
+    public void bottomSheetBehaviorStateHandler() {
+        if (bottomSheetBehavior != null) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            bottomSheetBehavior.setPeekHeight(0);
+
+        }
     }
 }

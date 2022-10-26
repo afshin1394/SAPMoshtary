@@ -25,16 +25,19 @@
         <entry key="..\:/Projects/Android/SAPGit/app/src/main/res/layout/rpt_etebar_list_item.xml" value="0.13069908814589665" />
         <entry key="..\:/Projects/Android/SAPGit/app/src/main/res/layout/rpt_sanad_list_item.xml" value="0.32213740458015266" />
         <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/drawable/backrepeat.xml" value="0.1" />
+        <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/drawable/bg_shadow_bottom_sheet.xml" value="0.1" />
         <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/drawable/button_selector.xml" value="0.1" />
+        <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/drawable/layer_line_divider.xml" value="0.1" />
+        <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/drawable/line_divider.xml" value="0.1" />
         <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/bottom_sheet_recycler.xml" value="0.1" />
         <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/bottom_sheet_search.xml" value="0.203125" />
         <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/bottom_sheet_search_test.xml" value="0.1" />
-        <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/fragment_register.xml" value="0.18" />
+        <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/fragment_register.xml" value="0.15964912280701754" />
         <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/fragment_send_otp_login.xml" value="0.25" />
         <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/fragment_verify_login.xml" value="0.1" />
-        <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/item_base_search.xml" value="0.1" />
+        <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/item_base_search.xml" value="0.15" />
         <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/item_search_city.xml" value="0.1" />
         <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/item_search_province.xml" value="0.1" />
         <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/snackbar_view.xml" value="0.1" />

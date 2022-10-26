@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,13 +33,21 @@ public class BottomSheetRecyclerView<T extends BaseBottomSheetRecyclerModel> {
     public void bottomSheetWithSearchAndRecyclerView(Context context,
                                                      View view,
                                                      ArrayList<T> items) {
-        LinearLayout lnrlayBottomsheet = view.findViewById(R.id.linBottomSheet);
-        bottomSheetBehavior = BottomSheetBehavior.from(lnrlayBottomsheet);
+        CardView cardViewBottomSheet = view.findViewById(R.id.cardViewBottomSheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(cardViewBottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
         recyclerViewSearchResult = view.findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        DividerItemDecoration divider =
+                new DividerItemDecoration(context,
+                        DividerItemDecoration.VERTICAL);
         recyclerViewSearchResult.setLayoutManager(linearLayoutManager);
+
+        divider.setDrawable(ContextCompat.getDrawable(context,
+                R.drawable.layer_line_divider));
+
+        recyclerViewSearchResult.addItemDecoration(divider);
 
         recyclerViewAdapter = new AsyncSearchListAdapter<T>((model, position, action) -> {
             adapterItemListener.onItemSelect(model, position, action);
@@ -54,6 +65,14 @@ public class BottomSheetRecyclerView<T extends BaseBottomSheetRecyclerModel> {
         bottomSheetBehavior.setPeekHeight(view.getMeasuredHeight() / 3);
 
 
+    }
+
+    public void bottomSheetBehaviorStateHandler() {
+        if (bottomSheetBehavior != null) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            bottomSheetBehavior.setPeekHeight(0);
+
+        }
     }
 
 }
