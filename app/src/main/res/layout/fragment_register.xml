@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layoutDirection="rtl"
     tools:context=".presentation.view.activities.LoginActivity">
 
@@ -22,6 +22,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/txtInputFname"
@@ -141,9 +142,9 @@
                         android:drawableLeft="@drawable/ic_arrow_down"
                         android:drawableRight="@drawable/ic_identity"
                         android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                        android:focusable="false"
                         android:fontFamily="@font/iransans"
                         android:hint="@string/noeShakhsiat"
-                        android:focusable="false"
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="@dimen/FontSize16" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -201,9 +202,9 @@
                             android:drawableLeft="@drawable/ic_arrow_down"
                             android:drawableRight="@drawable/ic_mailbox"
                             android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                            android:focusable="false"
                             android:fontFamily="@font/iransans"
                             android:hint="@string/province"
-                            android:focusable="false"
                             android:textColor="@color/colorTextPrimary"
                             android:textSize="@dimen/FontSize16" />
 
@@ -406,17 +407,16 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/colorAccent"
+            android:fontFamily="@font/iransans"
             android:gravity="center"
             android:padding="@dimen/btnPaddingMain"
             android:text="@string/apply"
-            android:fontFamily="@font/iransans"
             android:textColor="@color/colorTextSecondary"
             android:textSize="@dimen/btnFontMain" />
 
     </RelativeLayout>
 
     <include layout="@layout/bottom_sheet_search" />
-    <include layout="@layout/bottom_sheet_recycler" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
