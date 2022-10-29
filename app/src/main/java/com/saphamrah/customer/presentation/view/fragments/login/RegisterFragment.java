@@ -19,11 +19,12 @@ import com.saphamrah.customer.presentation.view.customView.BottomSheetRecyclerVi
 import com.saphamrah.customer.presentation.view.customView.BottomSheetSearchRecyclerView;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
+import com.saphamrah.customer.utils.AdapterUtil.AdapterItemMultiSelectListener;
 import com.saphamrah.customer.utils.KeyboardStateHandler;
 
 import java.util.ArrayList;
 
-public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRegisterBinding> implements RegisterInteracts.RequiredViewOps, AdapterItemListener<BaseBottomSheetRecyclerModel> {
+public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRegisterBinding> implements RegisterInteracts.RequiredViewOps, AdapterItemListener<BaseBottomSheetRecyclerModel>, AdapterItemMultiSelectListener<BaseBottomSheetRecyclerModel> {
 
 
     private BottomSheetSearchRecyclerView bottomSheetSearch;
@@ -44,7 +45,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
     @Override
     protected void initViews() {
         bottomSheetSearch = new BottomSheetSearchRecyclerView(this);
-        bottomSheetRecyclerView = new BottomSheetRecyclerView(this);
+        bottomSheetRecyclerView = new BottomSheetRecyclerView(this, this);
 
         clickListeners();
 
@@ -138,7 +139,8 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(getContext(),
                 getView(),
                 baseSearchCityDbModels,
-                getContext().getResources().getString(R.string.searchCity));
+                getContext().getResources().getString(R.string.searchCity),
+                false);
 
     }
 
@@ -152,7 +154,8 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
                 getContext(),
                 getView(),
                 baseSearchProvinceDbModels,
-                getContext().getResources().getString(R.string.searchProvince));
+                getContext().getResources().getString(R.string.searchProvince),
+                false);
 
     }
 
@@ -212,9 +215,10 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         clearFocusEditTextsWithoutBtmSheet();
         bottomSheetSearch.bottomSheetBehaviorStateHandler();
 
-        bottomSheetRecyclerView.bottomSheetWithSearchAndRecyclerView(getContext(),
+        bottomSheetRecyclerView.bottomSheetWithRecyclerView(getContext(),
                 getView(),
-                itemTitles);
+                itemTitles,
+                true);
 
     }
 
@@ -267,4 +271,11 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         }
 
     }
+
+    @Override
+    public void onItemMultiSelect(ArrayList<BaseBottomSheetRecyclerModel> models, AdapterAction action) {
+        Log.d("RegisterFragment", "models: " + models.size());
+
+    }
+
 }
