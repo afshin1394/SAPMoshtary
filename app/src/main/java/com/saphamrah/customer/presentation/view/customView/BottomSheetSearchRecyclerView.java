@@ -95,9 +95,8 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
 
         view.findViewById(com.miguelcatalan.materialsearchview.R.id.action_empty_btn).setOnClickListener(v -> {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            bottomSheetBehavior.setPeekHeight(0);
             searchView.closeSearch();
-            recyclerViewSearchResult.setVisibility(View.GONE);
-            recyclerViewSearchResult.removeAllViews();
 
         });
 
