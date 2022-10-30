@@ -4,7 +4,8 @@
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="rtl">
+    android:layoutDirection="rtl"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -136,23 +137,22 @@
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintWidth_percent="0.8">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_send_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:background="@drawable/button_selector"
-            android:fontFamily="@font/iransans"
-            android:shadowColor="@color/colorWhite"
             android:text="@string/confirm"
+            android:backgroundTint="@color/colorPrimary"
+            style="@style/MyButton"
             android:textColor="@color/colorWhite"
-            android:textSize="12sp" />
+            android:textSize="@dimen/_12sdp" />
 
     </FrameLayout>
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -160,13 +160,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/button_selector"
-        android:fontFamily="@font/iransans"
-        android:shadowColor="@color/colorWhite"
+        android:layout_margin="16dp"
         android:text="@string/register"
         android:textColor="@color/colorWhite"
-        android:textSize="12sp" />
+        android:backgroundTint="@color/colorPrimary"
+        style="@style/MyButton"
+        android:textSize="@dimen/_12sdp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
