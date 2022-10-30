@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
+    tools:context=".presentation.view.fragments.profile.FirstLastNameFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="19dp"
+        android:textColor="@color/colorGrey800"
+        android:fontFamily="@font/iransans"
+        android:text="@string/enter_name"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="15dp"
+        android:textDirection="rtl"
+        android:layout_gravity="end"
+        />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/first_name_layout_profile"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:hint="@string/firstname"
+        android:textColorHint="@color/timestamp">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/first_name_edittext_profile"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:fontFamily="@font/iransans"
+        android:text="علی"
+        android:textDirection="rtl"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/last_name_layout_profile"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:hint="@string/lastname"
+        android:textColorHint="@color/timestamp">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/last_name_edittext_profile"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:fontFamily="@font/iransans"
+        android:text="ولی پور"
+        android:textDirection="rtl"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/confirm_info_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/confirm_info"
+        android:fontFamily="@font/iransans"
+        android:backgroundTint="@color/colorBlue200"
+        android:textColor="@color/colorBlack"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_gravity="bottom"/>
+
+</LinearLayout>

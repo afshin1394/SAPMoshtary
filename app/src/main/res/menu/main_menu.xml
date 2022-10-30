@@ -9,13 +9,13 @@
         android:icon="@drawable/ic_launcher_icon"/>
 
     <item
-        android:id="@+id/nav_settings"
-        android:title="خرید"
+        android:id="@+id/nav_profile"
+        android:title="پروفایل کاربر"
         />
 
     <item
-        android:id="@+id/nav_logout"
-        android:title="پشتیبانس"
+        android:id="@+id/nav_main"
+        android:title="صفحه اصلی"
         />
 
 </menu>

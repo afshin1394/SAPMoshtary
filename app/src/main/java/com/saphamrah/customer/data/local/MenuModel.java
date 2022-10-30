@@ -1,4 +1,4 @@
-package com.saphamrah.customer.data.network.model;
+package com.saphamrah.customer.data.local;
 
 public class MenuModel {
     private String title;

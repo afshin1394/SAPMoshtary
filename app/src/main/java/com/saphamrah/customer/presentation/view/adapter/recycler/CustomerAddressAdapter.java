@@ -11,19 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.saphamrah.customer.R;
-import com.saphamrah.customer.data.local.MenuModel;
-import com.saphamrah.customer.utils.CheckTabletOrPhone;
+import com.saphamrah.customer.data.local.AddressMoshtaryModel;
 
 import java.util.ArrayList;
 
-public class DialogMenuAdapter extends RecyclerView.Adapter<DialogMenuAdapter.ViewHolder>
+public class CustomerAddressAdapter extends RecyclerView.Adapter<CustomerAddressAdapter.ViewHolder>
 {
 
     private Context context;
 //    private final OnItemClickListener listener;
-    private ArrayList<MenuModel> models;
+    private ArrayList<AddressMoshtaryModel> models;
 
-    public DialogMenuAdapter(Context context, ArrayList<MenuModel> models )
+    public CustomerAddressAdapter(Context context, ArrayList<AddressMoshtaryModel> models )
     {
         this.context = context;
 //        this.listener = listener;
@@ -34,13 +33,9 @@ public class DialogMenuAdapter extends RecyclerView.Adapter<DialogMenuAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        CheckTabletOrPhone checkTabletOrPhone = new CheckTabletOrPhone(context);
         View view;
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_address_moshtary , parent , false);
 
-        if (checkTabletOrPhone.isTablet())
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_sheet_menu , parent , false);
-        else
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_sheet_menu_light , parent , false);
         return new ViewHolder(view);
     }
 
@@ -48,7 +43,10 @@ public class DialogMenuAdapter extends RecyclerView.Adapter<DialogMenuAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
-        holder.title.setText(models.get(0).getTitle());
+        holder.address.setText(models.get(position).getAddress());
+        holder.noeDarkhast.setText(models.get(position).getNoeDarkhast());
+        holder.codePosti.setText(models.get(position).getCodePosti());
+        holder.phone.setText(models.get(position).getPhone());
     }
 
 
@@ -63,15 +61,20 @@ public class DialogMenuAdapter extends RecyclerView.Adapter<DialogMenuAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        private TextView title;
+        private TextView address;
+        private TextView noeDarkhast;
+        private TextView codePosti;
+        private TextView phone;
 
         public ViewHolder(View view)
         {
             super(view);
 //            Typeface font = Typeface.createFromAsset(context.getAssets() , context.getResources().getString(R.string.fontPath));
 
-            title = view.findViewById(R.id.text_sheet_menu);
-
+            address = view.findViewById(R.id.address_tv);
+            noeDarkhast = view.findViewById(R.id.noe_darkhast_tv);
+            codePosti = view.findViewById(R.id.code_posti_tv);
+            phone = view.findViewById(R.id.phone_tv);
         }
 
 //        void bind(final KalaElamMarjoeeModel kalaElamMarjoeeModel , final int position , final OnItemClickListener listener)
