@@ -193,7 +193,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
     @Override
     public void onError(String error) {
-        CustomSnackBar.showSimpleSnack(getView(), error, Snackbar.LENGTH_SHORT).show();
+        CustomSnackBar.showSnack(requireContext(), getView(), error, Snackbar.LENGTH_SHORT, "").show();
     }
 
     @Override

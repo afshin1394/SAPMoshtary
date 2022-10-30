@@ -22,6 +22,7 @@ import com.saphamrah.customer.presentation.presenters.VerifyOtpLoginPresenter;
 import com.saphamrah.customer.presentation.view.customView.CustomSnackBar;
 import com.saphamrah.customer.presentation.view.customView.VerifyCodeTextWatcher;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter, FragmentVerifyLoginBinding> implements VerifyOtpLoginInteracts.RequiredViewOps,
@@ -185,7 +186,8 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
 
     @Override
     public void onError(String error) {
-        CustomSnackBar.showSimpleSnack(getView(), error, Snackbar.LENGTH_SHORT).show();
+        CustomSnackBar.showSnack(requireContext(), getView(), error, Snackbar.LENGTH_SHORT, "retry")
+                .show();
     }
 
     @Override
