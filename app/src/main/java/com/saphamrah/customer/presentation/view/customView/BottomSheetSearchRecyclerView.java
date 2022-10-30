@@ -24,6 +24,7 @@ import com.saphamrah.customer.presentation.view.adapter.recycler.AsyncSearchList
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemMultiSelectListener;
+import com.saphamrah.customer.utils.customViews.SearchWatcher;
 
 import java.util.ArrayList;
 
@@ -36,7 +37,7 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
 
     private LinearLayoutManager linearLayoutManager;
     private BottomSheetBehavior bottomSheetBehavior;
-    private MaterialSearchView searchView;
+    private SearchWatcher searchView;
     private RecyclerView recyclerViewSearchResult;
     private Button btnApply;
     private AsyncSearchListAdapter recyclerViewAdapter;
