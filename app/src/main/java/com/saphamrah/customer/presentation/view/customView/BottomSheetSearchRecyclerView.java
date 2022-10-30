@@ -77,8 +77,6 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
             btnApply.setVisibility(View.VISIBLE);
 
 
-        ((LinearLayout) ((LinearLayout) searchView.getChildAt(0)).getChildAt(2)).getChildAt(1).setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-
         bottomSheetBehavior = BottomSheetBehavior.from(cardViewBottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
