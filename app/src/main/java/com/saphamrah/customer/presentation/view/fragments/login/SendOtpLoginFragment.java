@@ -11,11 +11,13 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.databinding.FragmentSendOtpLoginBinding;
 import com.saphamrah.customer.presentation.interactors.SendOtpLoginInteracts;
 import com.saphamrah.customer.presentation.presenters.SendOtpLoginPresenter;
+import com.saphamrah.customer.presentation.view.customView.CustomSnackBar;
 import com.saphamrah.customer.utils.RxUtils.Watcher;
 import com.saphamrah.customer.utils.customViews.EditTextWatcher;
 
@@ -126,7 +128,7 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
 
     @Override
     public void onError(String error) {
-        notifyUser(getString(R.string.pleaseEnterPhoneNumberCorrectly));
+        CustomSnackBar.showSimpleSnack(getView(), error, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -164,10 +166,5 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
         }*/
     }
 
-    private void notifyUser(String message) {
-      /*  LayoutInflater mInflater = LayoutInflater.from(requireView().getContext());
-        View snackView = mInflater.inflate(R.layout.snackbar_view, null);
-        ExtensionsKt.showSnack(snackView, message, 1).show();*/
-    }
 
 }

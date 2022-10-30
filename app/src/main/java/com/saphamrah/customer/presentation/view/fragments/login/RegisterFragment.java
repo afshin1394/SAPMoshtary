@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
@@ -15,6 +16,7 @@ import com.saphamrah.customer.databinding.FragmentRegisterBinding;
 import com.saphamrah.customer.presentation.interactors.RegisterInteracts;
 import com.saphamrah.customer.presentation.presenters.RegisterPresenter;
 import com.saphamrah.customer.presentation.view.customView.BottomSheetSearchRecyclerView;
+import com.saphamrah.customer.presentation.view.customView.CustomSnackBar;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemMultiSelectListener;
@@ -40,6 +42,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
     @Override
     protected void initViews() {
+
         bottomSheetSearch = new BottomSheetSearchRecyclerView(this, this);
 
         clickListeners();
@@ -190,7 +193,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
     @Override
     public void onError(String error) {
-
+        CustomSnackBar.showSimpleSnack(getView(), error, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

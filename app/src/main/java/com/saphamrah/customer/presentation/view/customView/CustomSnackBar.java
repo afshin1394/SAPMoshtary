@@ -7,10 +7,8 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.saphamrah.customer.R;
 
-
-public class ShowSnackBar {
-
-    public static Snackbar showSnack(View view, String message, Integer duration) {
+public  class CustomSnackBar {
+     public static Snackbar showSimpleSnack(View view, String message, Integer duration) {
 
         // Create the Snackbar
         Snackbar snackbar = Snackbar.make(view, "", duration);
@@ -35,4 +33,5 @@ public class ShowSnackBar {
 
         return snackbar;
     }
+
 }

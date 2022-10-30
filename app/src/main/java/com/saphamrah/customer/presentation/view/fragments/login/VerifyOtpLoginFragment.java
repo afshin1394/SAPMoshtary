@@ -6,24 +6,22 @@ import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
-import com.saphamrah.customer.base.BasePermissionModel;
 import com.saphamrah.customer.databinding.FragmentVerifyLoginBinding;
 import com.saphamrah.customer.presentation.interactors.VerifyOtpLoginInteracts;
 import com.saphamrah.customer.listeners.VerifyValidCode;
 import com.saphamrah.customer.presentation.presenters.VerifyOtpLoginPresenter;
+import com.saphamrah.customer.presentation.view.customView.CustomSnackBar;
 import com.saphamrah.customer.presentation.view.customView.VerifyCodeTextWatcher;
 
-import java.util.ArrayList;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter, FragmentVerifyLoginBinding> implements VerifyOtpLoginInteracts.RequiredViewOps,
@@ -187,7 +185,7 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
 
     @Override
     public void onError(String error) {
-
+        CustomSnackBar.showSimpleSnack(getView(), error, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

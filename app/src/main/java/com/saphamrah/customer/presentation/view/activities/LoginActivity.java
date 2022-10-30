@@ -7,14 +7,11 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.hardware.biometrics.BiometricPrompt;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.WindowManager;
 
 import androidx.annotation.RequiresApi;
-import androidx.biometric.BiometricManager;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -26,7 +23,6 @@ import com.saphamrah.customer.databinding.ActivityLoginBinding;
 import com.saphamrah.customer.listeners.SmsListener;
 import com.saphamrah.customer.presentation.interactors.LoginInteracts;
 import com.saphamrah.customer.presentation.presenters.LoginPresenter;
-import com.saphamrah.customer.presentation.view.customView.ShowSnackBar;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
