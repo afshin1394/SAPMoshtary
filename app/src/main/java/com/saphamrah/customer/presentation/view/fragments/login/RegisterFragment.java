@@ -3,11 +3,9 @@ package com.saphamrah.customer.presentation.view.fragments.login;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
-import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.saphamrah.customer.R;
@@ -22,14 +20,6 @@ import com.saphamrah.customer.presentation.view.customView.CustomSnackBar;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemMultiSelectListener;
-import com.saphamrah.customer.utils.GoogleLocationProvider;
-
-import org.osmdroid.api.IMapController;
-import org.osmdroid.config.Configuration;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapController;
-import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
 

@@ -61,12 +61,12 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
 
                 } else {
 
-                    viewBinding.btnSendNumber.setBackground(
+                    /*viewBinding.btnSendNumber.setBackground(
                             ContextCompat.getDrawable(
                                     requireActivity(),
                                     R.drawable.button_selector
                             )
-                    );
+                    );*/
                 }
             }
         }, 500);
@@ -150,7 +150,6 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
 
     @Override
     public void onSendMobile() {
-
         navigate(R.id.action_SendOtpLoginFragment_to_VerifyOtpLoginFragment);
 /*
         if (!prefs.isLogin) {

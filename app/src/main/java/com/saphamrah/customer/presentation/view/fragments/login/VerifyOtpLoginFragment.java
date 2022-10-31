@@ -2,6 +2,7 @@ package com.saphamrah.customer.presentation.view.fragments.login;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.saphamrah.customer.R;
@@ -104,6 +106,8 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
                 if (countDown != null) {
                     countDown.cancel();
                 }
+                navigate(R.id.action_VerifyOtpLoginFragment_to_SendOtpLoginFragment);
+
             }
 
 

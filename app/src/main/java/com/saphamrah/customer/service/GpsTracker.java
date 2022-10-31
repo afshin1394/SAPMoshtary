@@ -1,4 +1,4 @@
-package com.saphamrah.customer.utils;
+package com.saphamrah.customer.service;
 
 import android.Manifest;
 import android.app.Activity;
