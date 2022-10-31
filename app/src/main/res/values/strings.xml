@@ -1271,7 +1271,7 @@
     <string name="mainAlley">کوچه اصلی</string>
     <string name="searchProvince">جستجو استان</string>
     <string name="searchCity">جستجو شهر</string>
-    <string name="dismiss">رد کردن</string>
+    <string name="dismiss">بستن</string>
     <string name="undo">لغو کردن</string>
 
 </resources>

@@ -29,12 +29,6 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
 
     private final Integer PERMISSION_REQUEST_CODE = 9824;
 
-    private Integer layout;
-
-    public BaseFragment(Integer layout) {
-        this.layout = layout;
-    }
-
     protected CompositeDisposable compositeDisposable;
 
     protected T presenter;

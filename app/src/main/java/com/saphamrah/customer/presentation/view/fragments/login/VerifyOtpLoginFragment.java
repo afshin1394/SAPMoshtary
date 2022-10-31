@@ -28,11 +28,6 @@ import java.util.concurrent.TimeUnit;
 public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter, FragmentVerifyLoginBinding> implements VerifyOtpLoginInteracts.RequiredViewOps,
         VerifyValidCode {
 
-    public VerifyOtpLoginFragment() {
-        super(R.layout.fragment_verify_login);
-    }
-
-
     private CountDownTimer countDown;
 
     private Long millisInFuture = 120000L;

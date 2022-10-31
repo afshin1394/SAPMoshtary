@@ -27,9 +27,6 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, FragmentSendOtpLoginBinding> implements SendOtpLoginInteracts.RequiredViewOps {
 
-    public SendOtpLoginFragment() {
-        super(R.layout.fragment_send_otp_login);
-    }
 
     private String phoneNumber = "";
 
@@ -128,7 +125,7 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
 
     @Override
     public void onError(String error) {
-        CustomSnackBar.showSnack(requireContext(), getView(), error, Snackbar.LENGTH_SHORT, "retry").show();
+        CustomSnackBar.showSnack(requireContext(), getView(), error, Snackbar.LENGTH_INDEFINITE, "dismiss").show();
     }
 
     @Override

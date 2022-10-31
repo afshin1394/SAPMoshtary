@@ -3,9 +3,11 @@ package com.saphamrah.customer.presentation.view.fragments.login;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.saphamrah.customer.R;
@@ -20,6 +22,14 @@ import com.saphamrah.customer.presentation.view.customView.CustomSnackBar;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemMultiSelectListener;
+import com.saphamrah.customer.utils.GoogleLocationProvider;
+
+import org.osmdroid.api.IMapController;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapController;
+import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
 
@@ -31,9 +41,6 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
     private ArrayList<LocationDbModel> baseSearchCityDbModels;
 
 
-    public RegisterFragment() {
-        super(R.layout.fragment_register);
-    }
 
     @Override
     protected void setPresenter() {
@@ -76,7 +83,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         viewBinding.btnApply.setOnClickListener(v -> checkValidityOfRegisterData());
         viewBinding.edtInputProvince.setOnClickListener(v -> handleSearchProvince());
         viewBinding.edtInputCity.setOnClickListener(v -> handleSearchCity());
-//        viewBinding.edtInputLocation.setOnClickListener(v -> handleGetLocation());
+        viewBinding.edtInputLocation.setOnClickListener(v -> handleGetLocation());
         viewBinding.edtInputIdentity.setOnClickListener(v -> handleGetIdentityType());
         viewBinding.edtInputIdentity.setOnFocusChangeListener((v, hasFocus) -> handleGetIdentityType());
         viewBinding.edtInputFname.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
@@ -98,7 +105,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
     }
 
     private void handleGetLocation() {
-       /* viewBinding.mapView.setVisibility(View.VISIBLE);
+      /*  viewBinding.mapView.setVisibility(View.VISIBLE);
 
         Configuration.getInstance().load(getContext(), PreferenceManager.getDefaultSharedPreferences(getContext()));
 
