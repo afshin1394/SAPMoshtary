@@ -43,7 +43,7 @@
             android:name=".presentation.view.activities.MainActivity"
             android:exported="true" />
         <activity
-            android:name=".presentation.view.activities.LoginActivity"
+            android:name=".presentation.login.LoginActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:exported="true">
             <intent-filter>

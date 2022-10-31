@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/SendOtpLoginFragment"
-        android:name="com.saphamrah.customer.presentation.view.fragments.login.SendOtpLoginFragment"
+        android:name="com.saphamrah.customer.presentation.login.sendOtp.view.SendOtpLoginFragment"
         tools:layout="@layout/fragment_send_otp_login">
 
         <action
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/RegisterFragment"
-        android:name="com.saphamrah.customer.presentation.view.fragments.login.RegisterFragment"
+        android:name="com.saphamrah.customer.presentation.login.register.view.RegisterFragment"
         tools:layout="@layout/fragment_register">
 
         <action
@@ -32,7 +32,7 @@
 
     <fragment
         android:id="@+id/VerifyOtpLoginFragment"
-        android:name="com.saphamrah.customer.presentation.view.fragments.login.VerifyOtpLoginFragment"
+        android:name="com.saphamrah.customer.presentation.login.verifyOtp.view.VerifyOtpLoginFragment"
         tools:layout="@layout/fragment_verify_login">
 
         <action
