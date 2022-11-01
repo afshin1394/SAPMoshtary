@@ -1,191 +1,246 @@
 package com.saphamrah.customer.service;
 
-import android.Manifest;
-import android.app.Activity;
+
+import android.annotation.SuppressLint;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-public class GpsTracker  extends Service implements LocationListener {
-    private final Context mContext;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.saphamrah.customer.Constants;
 
-    // flag for GPS status
-    boolean isGPSEnabled = false;
 
-    // flag for network status
-    boolean isNetworkEnabled = false;
+public class GpsTracker extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener
+{
 
-    // flag for GPS status
-    boolean canGetLocation = false;
+    private LocationRequest mLocationRequest;
+    private GoogleApiClient googleApiClient;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private int MIN_DISTANCE_CHANGE_FOR_UPDATES = Constants.MIN_DISTANCE_CHANGE_FOR_UPDATE();
+    private int INTERVAL = Constants.INTERVAL_VALUE();
+    private int FASTEST_INTERVAL = Constants.FASTEST_INTERVAL_VALUE();
+    private int MAX_ACCURACY = Constants.MAX_ACCURACY_VALUE();
+    /*private int ccForoshandeh;
+    private int ccMamorPakhsh;
+    private int ccMasir;*/
 
-    Location location; // location
-    double latitude; // latitude
-    double longitude; // longitude
 
-    // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
-
-    // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
-
-    // Declaring a Location Manager
-    protected LocationManager locationManager;
-
-    public GpsTracker(Context context) {
-        this.mContext = context;
-        getLocation();
+    public GpsTracker()
+    {
     }
 
-    public Location getLocation() {
-        try {
-            locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
 
-            // getting GPS status
-            isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    @Override
+    public void onCreate()
+    {
+        super.onCreate();
+        buildGoogleApiClient();
 
-            // getting network status
-            isNetworkEnabled = locationManager
-                    .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        initializeNotification();
+    }
 
-            if (!isGPSEnabled && !isNetworkEnabled) {
-                // no network provider is enabled
-            } else {
-                this.canGetLocation = true;
-                // First get location from Network Provider
-                if (isNetworkEnabled) {
-                    //check the network permission
-                    if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions((Activity) mContext, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
-                    }
-                    locationManager.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+    protected synchronized void buildGoogleApiClient()
+    {
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addOnConnectionFailedListener(this)
+                .addConnectionCallbacks(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
 
-                    Log.d("Network", "Network");
-                    if (locationManager != null) {
-                        location = locationManager
-                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-                        if (location != null) {
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-                        }
-                    }
-                }
-
-                // if GPS Enabled get lat/long using GPS Services
-                if (isGPSEnabled) {
-                    if (location == null) {
-                        //check the network permission
-                        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions((Activity) mContext, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
-                        }
-                        locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-
-                        Log.d("GPS Enabled", "GPS Enabled");
-                        if (locationManager != null) {
-                            location = locationManager
-                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-                            if (location != null) {
-                                latitude = location.getLatitude();
-                                longitude = location.getLongitude();
-                            }
-                        }
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId)
+    {
+        if (intent != null)
+        {
+            MIN_DISTANCE_CHANGE_FOR_UPDATES = intent.getIntExtra(Constants.DISTANCE() , Constants.MIN_DISTANCE_CHANGE_FOR_UPDATE());
+            INTERVAL = intent.getIntExtra(Constants.INTERVAL() , Constants.INTERVAL_VALUE());
+            FASTEST_INTERVAL = intent.getIntExtra(Constants.FASTEST_INTERVAL() , Constants.FASTEST_INTERVAL_VALUE());
+            MAX_ACCURACY = intent.getIntExtra(Constants.ACCURACY() , Constants.MAX_ACCURACY_VALUE());
+           /* ccForoshandeh = intent.getIntExtra("ccForoshandeh" , 0);
+            ccMamorPakhsh = intent.getIntExtra("ccMamorPakhsh" , 0);
+            ccMasir = intent.getIntExtra("ccMasir" , 0);*/
         }
-
-        return location;
-    }
-
-    /**
-     * Stop using GPS listener
-     * Calling this function will stop using GPS in your app
-     * */
-
-    public void stopUsingGPS(){
-        if(locationManager != null){
-            locationManager.removeUpdates(GpsTracker.this);
+        else
+        {
+            MIN_DISTANCE_CHANGE_FOR_UPDATES = Constants.MIN_DISTANCE_CHANGE_FOR_UPDATE();
+            INTERVAL = Constants.INTERVAL_VALUE();
+            FASTEST_INTERVAL = Constants.FASTEST_INTERVAL_VALUE();
+            MAX_ACCURACY = Constants.MAX_ACCURACY_VALUE();
         }
-    }
-
-    /**
-     * Function to get latitude
-     * */
-
-    public double getLatitude(){
-        if(location != null){
-            latitude = location.getLatitude();
+        if (!googleApiClient.isConnected())
+        {
+            googleApiClient.connect();
         }
-
-        // return latitude
-        return latitude;
+        return super.onStartCommand(intent, flags, startId);
     }
-
-    /**
-     * Function to get longitude
-     * */
-
-    public double getLongitude(){
-        if(location != null){
-            longitude = location.getLongitude();
-        }
-
-        // return longitude
-        return longitude;
-    }
-
-    /**
-     * Function to check GPS/wifi enabled
-     * @return boolean
-     * */
-
-    public boolean canGetLocation() {
-        return this.canGetLocation;
-    }
-
-    /**
-     * Function to show settings alert dialog
-     * On pressing Settings button will lauch Settings Options
-     * */
 
 
     @Override
-    public void onLocationChanged(Location location) {
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
-
-    @Override
-    public IBinder onBind(Intent arg0) {
+    public IBinder onBind(Intent intent) {
         return null;
     }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle)
+    {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        @SuppressLint("MissingPermission")
+        Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
+        locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location)
+            {
+                if (location != null)
+                {
+                    broadcastData(location);
+                }
+            }
+        });
+        startLocationUpdate();
+    }
+
+
+    @SuppressLint("MissingPermission")
+    private void startLocationUpdate()
+    {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, mLocationRequest, this);
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location)
+    {
+        //Log.d("changed" , "location changed and accuracy : " + location.getAccuracy());
+        if (location.getAccuracy() <= MAX_ACCURACY)
+        {
+            //Log.d("changed" , "location changed and broadcast data");
+            broadcastData(location);
+        }
+        /*else
+        {
+            Log.d("changed" , "location changed and show test");
+            //Toast.makeText(getApplicationContext() , String.format("accuracy = %1$s and not saved" , location.getAccuracy()) , Toast.LENGTH_SHORT).show();
+        }*/
+    }
+
+
+    public void broadcastData(Location location)
+    {
+        try
+        {
+            Intent broadcastIntent = new Intent("com.sap.gpstracker");
+            broadcastIntent.putExtra(Constants.LATITUDE()  , location.getLatitude());
+            broadcastIntent.putExtra(Constants.LONGITUDE() , location.getLongitude());
+            broadcastIntent.putExtra(Constants.SPEED()     , (float) (location.getSpeed()*3.6));
+            broadcastIntent.putExtra(Constants.TIME()      , location.getTime());
+            broadcastIntent.putExtra(Constants.ALTITUDE()  , location.getAltitude());
+            broadcastIntent.putExtra(Constants.ACCURACY()  , location.getAccuracy());
+            broadcastIntent.putExtra(Constants.BEARING()   , location.getBearing());
+            broadcastIntent.putExtra(Constants.ELAPSED_REAL_TIME_NANOS() , location.getElapsedRealtimeNanos());
+            broadcastIntent.putExtra(Constants.PROVIDER()  , location.getProvider());
+            broadcastIntent.putExtra(Constants.DISTANCE()  , MIN_DISTANCE_CHANGE_FOR_UPDATES);
+            /*broadcastIntent.putExtra("ccForoshandeh"  , ccForoshandeh);
+            broadcastIntent.putExtra("ccMamorPakhsh"  , ccMamorPakhsh);
+            broadcastIntent.putExtra("ccMasir"  , ccMasir);*/
+
+            sendBroadcast(broadcastIntent);
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            //Toast.makeText(GpsTracker.this, "Location has been disabled...", Toast.LENGTH_SHORT).show();
+           /* PubFunc.Logger logger = new PubFunc().new Logger();
+            logger.insertLogToDB(getApplicationContext(), Constants.LOG_EXCEPTION(), exception.toString(), "GpsTracker", "" , "broadcastData" ,"");*/
+        }
+    }
+
+
+    @Override
+    public void onConnectionSuspended(int i)
+    {
+        //Toast.makeText(getApplicationContext(), "location connection suspended" , Toast.LENGTH_SHORT).show();
+       /* PubFunc.Logger logger = new PubFunc().new Logger();
+        logger.insertLogToDB(getApplicationContext(), Constants.LOG_EXCEPTION(), "onConnectionSuspended and input parameter = " + i, "GpsTracker", "" , "onConnectionSuspended" ,"");*/
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult)
+    {
+        //Toast.makeText(getApplicationContext(), "location connection failed" , Toast.LENGTH_SHORT).show();
+      /*  PubFunc.Logger logger = new PubFunc().new Logger();
+        logger.insertLogToDB(getApplicationContext(), Constants.LOG_EXCEPTION(), connectionResult.getErrorMessage(), "GpsTracker", "" , "onConnectionFailed" ,"");*/
+    }
+
+
+    public void initializeNotification()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+          /*  try
+            {
+                *//**
+                 * custom push-notification view
+                 *//*
+                RemoteViews contentViewLocation = new RemoteViews(getPackageName(), R.layout.custom_push_gps_tracker);
+                contentViewLocation.setTextViewText(R.id.titleNotif, getString(R.string.gpsTrackerTitle));
+                contentViewLocation.setTextViewText(R.id.textNotif,getString(R.string.gpsTrackerDescription));
+                contentViewLocation.setImageViewResource(R.id.image, R.drawable.ic_launcher_icon);
+
+
+                CharSequence name = getString(R.string.notifChannelName);
+                String description = getString(R.string.notifChannelDesc);
+                NotificationChannel channel = new NotificationChannel(GPS_CHANNEL_ID(), name,NotificationManager.IMPORTANCE_MIN);
+                channel.setDescription(description);
+                channel.setShowBadge(false);
+
+                // Register the channel with the system; you can't change the importance
+                // or other notification behaviors after this
+                NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                notificationManager.createNotificationChannel(channel);
+
+                Notification.Builder notifi = new Notification.Builder(getApplicationContext(), GPS_CHANNEL_ID());
+                notifi.setSmallIcon(R.drawable.ic_location);
+                notifi.setCustomContentView(contentViewLocation);
+
+
+                PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MapActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+                notifi.setContentIntent(contentIntent);
+                //getting notification object from notification builder.
+                Notification gpsNotification = notifi.build();
+
+                int mNotificationId = 001;
+
+                NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.notify(mNotificationId, gpsNotification);
+
+                //  starting foreground
+                startForeground(1, gpsNotification);
+
+            }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }*/
+        }
+    }
+
+
 }

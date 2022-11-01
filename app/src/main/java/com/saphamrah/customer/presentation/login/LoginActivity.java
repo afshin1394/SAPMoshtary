@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.hardware.biometrics.BiometricPrompt;
 import android.os.Build;
@@ -48,6 +49,7 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, Act
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             checkFingerPrintLogin();
         }
+
 
     }
 

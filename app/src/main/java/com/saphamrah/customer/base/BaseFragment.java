@@ -52,11 +52,11 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
 
     }
 
-    protected abstract void initViews();
+    protected abstract S inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container);
 
     protected abstract void setPresenter();
 
-    protected abstract S inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container);
+    protected abstract void initViews();
 
     public void addDisposable(Disposable disposable) {
         compositeDisposable.add(disposable);

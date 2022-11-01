@@ -1,20 +1,28 @@
 package com.saphamrah.customer.presentation.login.register.view;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.saphamrah.customer.Constants;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
 import com.saphamrah.customer.data.LocationDbModel;
+import com.saphamrah.customer.databinding.BottomSheetSearchBinding;
 import com.saphamrah.customer.databinding.FragmentRegisterBinding;
 import com.saphamrah.customer.presentation.login.register.interactor.RegisterInteractor;
 import com.saphamrah.customer.presentation.login.register.presenter.RegisterPresenter;
+import com.saphamrah.customer.receivers.LocationReceiver;
+import com.saphamrah.customer.service.GpsTracker;
 import com.saphamrah.customer.utils.customViews.BottomSheetSearchRecyclerView;
 import com.saphamrah.customer.utils.customViews.CustomSnackBar;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
@@ -30,6 +38,10 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
     private ArrayList<LocationDbModel> baseSearchProvinceDbModels;
     private ArrayList<LocationDbModel> baseSearchCityDbModels;
 
+    @Override
+    protected FragmentRegisterBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {
+        return FragmentRegisterBinding.inflate(inflater, container, false);
+    }
 
 
     @Override
@@ -95,6 +107,8 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
     }
 
     private void handleGetLocation() {
+
+
       /*  viewBinding.mapView.setVisibility(View.VISIBLE);
 
         Configuration.getInstance().load(getContext(), PreferenceManager.getDefaultSharedPreferences(getContext()));
@@ -113,6 +127,44 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         marker.setTitle(getResources().getString(R.string.yourLocation));
         marker.setIcon(getResources().getDrawable(R.drawable.ic_user_marker));
         viewBinding.mapView.getOverlays().add(marker);*/
+    }
+
+    public void startGPSService(int minDistance, int timeInterval, int fastestTimeInterval, int maxAccurancy)
+    {
+        Intent intent = new Intent(getContext(), GpsTracker.class);
+        intent.putExtra(Constants.DISTANCE() , minDistance);
+        intent.putExtra(Constants.INTERVAL() , timeInterval);
+        intent.putExtra(Constants.FASTEST_INTERVAL() , fastestTimeInterval);
+        intent.putExtra(Constants.ACCURACY() , maxAccurancy);
+       /* intent.putExtra("ccAfrad" , ccAfrad);
+        intent.putExtra("ccForoshandeh" , ccForoshandeh);
+        intent.putExtra("ccMamorPakhsh" , ccMamorPakhsh);
+        intent.putExtra("ccMasir" , ccMasir);*/
+        try
+        {
+            Log.d("locationReceiver" , "service start");
+            FragmentActivity fragmentActivity = getActivity();
+
+            if (Build.VERSION.SDK_INT >= 26)
+            {
+                LocationReceiver locationReceiver = new LocationReceiver();
+                IntentFilter filter = new IntentFilter("com.sap.gpstracker");
+
+                fragmentActivity.registerReceiver(locationReceiver , filter);
+                fragmentActivity.startForegroundService(intent);
+                //Toast.makeText(MainActivity.this, "Tracking Started..", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                fragmentActivity.startService(intent);
+                //Toast.makeText(MainActivity.this, "Tracking Started..", Toast.LENGTH_SHORT).show();
+            }
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+//            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "MainActivity", "onCreate" , "");
+        }
     }
 
     private void checkValidityOfRegisterData() {
@@ -181,11 +233,6 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
     private void handleBottomSheetBehaviorState() {
         bottomSheetSearch.bottomSheetBehaviorStateHandler();
-    }
-
-    @Override
-    protected FragmentRegisterBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {
-        return FragmentRegisterBinding.inflate(inflater, container, false);
     }
 
     @Override

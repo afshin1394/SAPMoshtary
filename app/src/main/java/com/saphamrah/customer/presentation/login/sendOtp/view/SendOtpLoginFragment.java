@@ -26,14 +26,15 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
     private String phoneNumber = "";
 
     @Override
+    protected FragmentSendOtpLoginBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {
+        return FragmentSendOtpLoginBinding.inflate(inflater, container, false);
+    }
+
+    @Override
     protected void setPresenter() {
         presenter = new SendOtpLoginPresenter(this);
     }
 
-    @Override
-    protected FragmentSendOtpLoginBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {
-        return FragmentSendOtpLoginBinding.inflate(inflater, container, false);
-    }
 
     @Override
     protected void initViews() {

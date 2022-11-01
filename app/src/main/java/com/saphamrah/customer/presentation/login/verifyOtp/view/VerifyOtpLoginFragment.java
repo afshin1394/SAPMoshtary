@@ -33,15 +33,14 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
 
     private String phoneNumber = "";
 
+    @Override
+    protected FragmentVerifyLoginBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {
+        return FragmentVerifyLoginBinding.inflate(inflater, container, false);
+    }
 
     @Override
     protected void setPresenter() {
         presenter = new VerifyOtpLoginPresenter(this);
-    }
-
-    @Override
-    protected FragmentVerifyLoginBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {
-        return FragmentVerifyLoginBinding.inflate(inflater, container, false);
     }
 
     @Override
