@@ -33,9 +33,11 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
     private int collapsedMargin; //Button margin in collapsed state
     private int buttonHeight;
     private int expandedHeight; //Height of bottom sheet in expanded state
+    private int peekHeight;
 
     private LinearLayoutManager linearLayoutManager;
     private BottomSheetBehavior bottomSheetBehavior;
+    private CardView cardViewBottomSheet;
     private SearchWatcher searchView;
     private RecyclerView recyclerViewSearchResult;
     private Button btnApply;
@@ -45,11 +47,25 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
     private AdapterItemListener<T> adapterItemListener;
     private AdapterItemMultiSelectListener<T> adapterItemMultiSelectListener;
 
+   /* // Without any select
+    public BottomSheetSearchRecyclerView() {
 
+    }*/
+
+    // Single select
+    public BottomSheetSearchRecyclerView(AdapterItemListener<T> adapterItemListener) {
+        this.adapterItemListener = adapterItemListener;
+    }
+
+    // Multiple Select
+    public BottomSheetSearchRecyclerView(AdapterItemMultiSelectListener<T> adapterItemMultiSelectListener) {
+        this.adapterItemMultiSelectListener = adapterItemMultiSelectListener;
+    }
+
+    // Both Multiple & Single Select
     public BottomSheetSearchRecyclerView(AdapterItemListener<T> adapterItemListener, AdapterItemMultiSelectListener<T> adapterItemMultiSelectListener) {
         this.adapterItemListener = adapterItemListener;
         this.adapterItemMultiSelectListener = adapterItemMultiSelectListener;
-
     }
 
     public void bottomSheetWithSearchAndRecyclerView(Context context,
@@ -60,9 +76,29 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
                                                      boolean isMultiSelect
     ) {
 
-        CardView cardViewBottomSheet = view.findViewById(R.id.cardViewBottomSheet);
-        btnApply = view.findViewById(R.id.sheet_button);
+        initBottomSheetView(context, view, isSearchEnable, isMultiSelect);
+
+
+          if (isSearchEnable) {
+            if (isMultiSelect)
+                bottomSheetDynamicListWithSearchAndMultiSelect(items, true, searchHint);
+            else
+                bottomSheetDynamicListWithSearchAndSingleSelect(items, false, searchHint);
+
+        } else {
+            if (isMultiSelect)
+                bottomSheetStaticListWithMultiSelect(items, true);
+            else
+                bottomSheetStaticListWithSingleSelect(items, false);
+
+        }
+
+    }
+
+    private void initBottomSheetView(Context context, View view, boolean isSearchEnable, boolean isMultiSelect) {
+        cardViewBottomSheet = view.findViewById(R.id.cardViewBottomSheet);
         recyclerViewSearchResult = view.findViewById(R.id.sheet_recyclerview);
+        btnApply = view.findViewById(R.id.sheet_button);
         searchView = view.findViewById(R.id.searchView);
 
         if (!isSearchEnable)
@@ -76,7 +112,6 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
         else
             btnApply.setVisibility(View.VISIBLE);
 
-
         bottomSheetBehavior = BottomSheetBehavior.from(cardViewBottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
@@ -85,13 +120,28 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
         bottomSheetLayoutParams.height = getWindowHeight(context);
 
         expandedHeight = bottomSheetLayoutParams.height;
-        int peekHeight = (int) (expandedHeight / 2.3); //Peek height to 70% of expanded height (Change based on your view)
+        peekHeight = (int) (expandedHeight / 2.3); //Peek height to 70% of expanded height (Change based on your view)
 
         //Setup bottom sheet
         cardViewBottomSheet.setLayoutParams(bottomSheetLayoutParams);
         BottomSheetBehavior.from(cardViewBottomSheet).setSkipCollapsed(false);
         BottomSheetBehavior.from(cardViewBottomSheet).setPeekHeight(peekHeight);
         BottomSheetBehavior.from(cardViewBottomSheet).setHideable(true);
+
+        linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        DividerItemDecoration divider =
+                new DividerItemDecoration(context,
+                        DividerItemDecoration.VERTICAL);
+        recyclerViewSearchResult.setLayoutManager(linearLayoutManager);
+
+        divider.setDrawable(ContextCompat.getDrawable(context,
+                R.drawable.layer_line_divider));
+
+        recyclerViewSearchResult.addItemDecoration(divider);
+
+    }
+
+    private void bottomSheetStaticListWithMultiSelect(ArrayList<T> items, boolean isMultiSelect) {
 
         //Retrieve button parameters
         buttonLayoutParams = (ConstraintLayout.LayoutParams) btnApply.getLayoutParams();
@@ -124,53 +174,90 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
             }
         });
 
-        linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-        DividerItemDecoration divider =
-                new DividerItemDecoration(context,
-                        DividerItemDecoration.VERTICAL);
-        recyclerViewSearchResult.setLayoutManager(linearLayoutManager);
+        bottomSheetRecyclerAdapter = new BottomSheetRecyclerAdapter<T>(items, isMultiSelect, new AdapterItemListener<T>() {
+            @Override
+            public void onItemSelect(T model, int position, AdapterAction action) {
+                adapterItemListener.onItemSelect(model, position, action);
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
 
-        divider.setDrawable(ContextCompat.getDrawable(context,
-                R.drawable.layer_line_divider));
+        recyclerViewSearchResult.setAdapter(bottomSheetRecyclerAdapter);
 
-        recyclerViewSearchResult.addItemDecoration(divider);
+        btnApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        if (isSearchEnable) {
-            recyclerViewAdapter = new AsyncSearchListAdapter<T>(isMultiSelect, new AdapterItemListener<T>() {
-                @Override
-                public void onItemSelect(T model, int position, AdapterAction action) {
-                    adapterItemListener.onItemSelect(model, position, action);
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                    searchView.setQuery("", false);
-                /*recyclerViewSearchResult.setVisibility(View.GONE);
-                recyclerViewSearchResult.removeAllViews();*/
+                adapterItemMultiSelectListener.onItemMultiSelect(bottomSheetRecyclerAdapter.getSelectedItems(), AdapterAction.SELECT);
 
-                }
-            });
+            }
+        });
 
-            recyclerViewSearchResult.setAdapter(recyclerViewAdapter);
-            recyclerViewAdapter.submitList(items);
-        } else {
-            bottomSheetRecyclerAdapter = new BottomSheetRecyclerAdapter<T>(items, isMultiSelect, new AdapterItemListener<T>() {
-                @Override
-                public void onItemSelect(T model, int position, AdapterAction action) {
-                    adapterItemListener.onItemSelect(model, position, action);
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                    searchView.setQuery("", false);
-                }
-            });
+    }
 
-            recyclerViewSearchResult.setAdapter(bottomSheetRecyclerAdapter);
-        }
+    private void bottomSheetStaticListWithSingleSelect(ArrayList<T> items, boolean isMultiSelect) {
+        bottomSheetRecyclerAdapter = new BottomSheetRecyclerAdapter<T>(items, isMultiSelect, new AdapterItemListener<T>() {
+            @Override
+            public void onItemSelect(T model, int position, AdapterAction action) {
+                adapterItemListener.onItemSelect(model, position, action);
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
 
+        recyclerViewSearchResult.setAdapter(bottomSheetRecyclerAdapter);
+    }
 
-        recyclerViewSearchResult.setVisibility(View.VISIBLE);
+    private void bottomSheetDynamicListWithSearchAndMultiSelect(ArrayList<T> items, boolean isMultiSelect, String searchHint) {
+
+        buttonLayoutParams = (ConstraintLayout.LayoutParams) btnApply.getLayoutParams();
+
+        //Calculate button margin from top
+        buttonHeight = btnApply.getHeight(); //How tall is the button + experimental distance from bottom (Change based on your view)
+        collapsedMargin = peekHeight - buttonHeight; //Button margin in bottom sheet collapsed state
+        buttonLayoutParams.topMargin = collapsedMargin;
+        btnApply.setLayoutParams(buttonLayoutParams);
+
+       /* //OPTIONAL - Setting up recyclerview margins
+        ConstraintLayout.LayoutParams recyclerLayoutParams = (ConstraintLayout.LayoutParams) recyclerView.getLayoutParams();
+        float k = (buttonHeight - 60) / (float) buttonHeight; //60 is amount that you want to be hidden behind button
+        recyclerLayoutParams.bottomMargin = (int) (k*buttonHeight); //Recyclerview bottom margin (from button)
+        recyclerView.setLayoutParams(recyclerLayoutParams);*/
+
+        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                if (slideOffset > 0) //Sliding happens from 0 (Collapsed) to 1 (Expanded) - if so, calculate margins
+                    buttonLayoutParams.topMargin = (int) (((expandedHeight - buttonHeight) - collapsedMargin - buttonHeight / 2) * slideOffset + collapsedMargin);
+                else //If not sliding above expanded, set initial margin
+                    buttonLayoutParams.topMargin = collapsedMargin;
+                btnApply.setLayoutParams(buttonLayoutParams); //Set layout params to button (margin from top)
+            }
+        });
+
+        recyclerViewAdapter = new AsyncSearchListAdapter<T>(isMultiSelect, new AdapterItemListener<T>() {
+            @Override
+            public void onItemSelect(T model, int position, AdapterAction action) {
+                adapterItemListener.onItemSelect(model, position, action);
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                searchView.setQuery("", false);
+
+            }
+        });
+
+        recyclerViewSearchResult.setAdapter(recyclerViewAdapter);
+        recyclerViewAdapter.submitList(items);
+
 
         searchView.setQueryHint(searchHint);
 
         searchView.addTextWatcher(s -> {
             if (s.trim().length() > 0) {
-                filter(s, items, isMultiSelect, isSearchEnable);
+                filter(s, items, isMultiSelect);
             } else {
                 recyclerViewAdapter.submitList(items);
             }
@@ -191,12 +278,51 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isSearchEnable)
-                    adapterItemMultiSelectListener.onItemMultiSelect(recyclerViewAdapter.getSelectedItems(), AdapterAction.SELECT);
-                else
-                    adapterItemMultiSelectListener.onItemMultiSelect(bottomSheetRecyclerAdapter.getSelectedItems(), AdapterAction.SELECT);
+                adapterItemMultiSelectListener.onItemMultiSelect(recyclerViewAdapter.getSelectedItems(), AdapterAction.SELECT);
+
             }
         });
+
+    }
+
+    private void bottomSheetDynamicListWithSearchAndSingleSelect(ArrayList<T> items, boolean isMultiSelect, String searchHint) {
+
+        recyclerViewAdapter = new AsyncSearchListAdapter<T>(isMultiSelect, new AdapterItemListener<T>() {
+            @Override
+            public void onItemSelect(T model, int position, AdapterAction action) {
+                adapterItemListener.onItemSelect(model, position, action);
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                searchView.setQuery("", false);
+
+            }
+        });
+
+        recyclerViewSearchResult.setAdapter(recyclerViewAdapter);
+        recyclerViewAdapter.submitList(items);
+
+
+        searchView.setQueryHint(searchHint);
+
+        searchView.addTextWatcher(s -> {
+            if (s.trim().length() > 0) {
+                filter(s, items, isMultiSelect);
+            } else {
+                recyclerViewAdapter.submitList(items);
+            }
+        }, 400);
+
+        View closeBtn = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.clearFocus();
+                searchView.setQuery("", false);
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                bottomSheetBehavior.setPeekHeight(0);
+            }
+        });
+
 
     }
 
@@ -208,8 +334,7 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
 
     private void filter(String query,
                         ArrayList<T> items,
-                        boolean isMultiSelect,
-                        boolean isSearchEnable) {
+                        boolean isMultiSelect) {
         filteredListBaseSearchDbModel = new ArrayList<>();
 
         for (int i = 0; i < items.size(); i++) {
@@ -223,39 +348,19 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
 
         Log.d("BottomSheetSearch", "filteredList: " + filteredListBaseSearchDbModel.size());
 
-        if (isSearchEnable) {
+        recyclerViewAdapter = new AsyncSearchListAdapter<T>(isMultiSelect, new AdapterItemListener<T>() {
+            @Override
+            public void onItemSelect(T model, int position, AdapterAction action) {
+                adapterItemListener.onItemSelect(model, position, action);
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                searchView.setQuery("", false);
+                filteredListBaseSearchDbModel.clear();
 
-            recyclerViewAdapter = new AsyncSearchListAdapter<T>(isMultiSelect, new AdapterItemListener<T>() {
-                @Override
-                public void onItemSelect(T model, int position, AdapterAction action) {
-                    adapterItemListener.onItemSelect(model, position, action);
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                    searchView.setQuery("", false);
-                    filteredListBaseSearchDbModel.clear();
-                /*recyclerViewSearchResult.setVisibility(View.GONE);
-                recyclerViewSearchResult.removeAllViews();*/
-                }
-            });
+            }
+        });
 
-            recyclerViewSearchResult.setAdapter(recyclerViewAdapter);
-            recyclerViewAdapter.submitList(filteredListBaseSearchDbModel);
-
-        } else {
-
-            bottomSheetRecyclerAdapter = new BottomSheetRecyclerAdapter<T>(items, isMultiSelect, new AdapterItemListener<T>() {
-                @Override
-                public void onItemSelect(T model, int position, AdapterAction action) {
-                    adapterItemListener.onItemSelect(model, position, action);
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                    searchView.setQuery("", false);
-                    filteredListBaseSearchDbModel.clear();
-                }
-            });
-
-            recyclerViewSearchResult.setAdapter(bottomSheetRecyclerAdapter);
-
-        }
-
+        recyclerViewSearchResult.setAdapter(recyclerViewAdapter);
+        recyclerViewAdapter.submitList(filteredListBaseSearchDbModel);
 
     }
 
