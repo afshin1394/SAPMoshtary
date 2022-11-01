@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
+import com.saphamrah.customer.utils.AdapterUtil.BottomSheetRecyclerAdapter;
 import com.saphamrah.customer.utils.AdapterUtil.asyncSearchAdapter.AsyncSearchListAdapter;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
@@ -39,6 +40,7 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
     private RecyclerView recyclerViewSearchResult;
     private Button btnApply;
     private AsyncSearchListAdapter recyclerViewAdapter;
+    private BottomSheetRecyclerAdapter bottomSheetRecyclerAdapter;
     private ArrayList<T> filteredListBaseSearchDbModel;
     private AdapterItemListener<T> adapterItemListener;
     private AdapterItemMultiSelectListener<T> adapterItemMultiSelectListener;
@@ -133,20 +135,34 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
 
         recyclerViewSearchResult.addItemDecoration(divider);
 
-        recyclerViewAdapter = new AsyncSearchListAdapter<T>(isMultiSelect, new AdapterItemListener<T>() {
-            @Override
-            public void onItemSelect(T model, int position, AdapterAction action) {
-                adapterItemListener.onItemSelect(model, position, action);
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                searchView.setQuery("", false);
+        if (isSearchEnable) {
+            recyclerViewAdapter = new AsyncSearchListAdapter<T>(isMultiSelect, new AdapterItemListener<T>() {
+                @Override
+                public void onItemSelect(T model, int position, AdapterAction action) {
+                    adapterItemListener.onItemSelect(model, position, action);
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    searchView.setQuery("", false);
                 /*recyclerViewSearchResult.setVisibility(View.GONE);
                 recyclerViewSearchResult.removeAllViews();*/
 
-            }
-        });
+                }
+            });
 
-        recyclerViewSearchResult.setAdapter(recyclerViewAdapter);
-        recyclerViewAdapter.submitList(items);
+            recyclerViewSearchResult.setAdapter(recyclerViewAdapter);
+            recyclerViewAdapter.submitList(items);
+        } else {
+            bottomSheetRecyclerAdapter = new BottomSheetRecyclerAdapter<T>(items, isMultiSelect, new AdapterItemListener<T>() {
+                @Override
+                public void onItemSelect(T model, int position, AdapterAction action) {
+                    adapterItemListener.onItemSelect(model, position, action);
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    searchView.setQuery("", false);
+                }
+            });
+
+            recyclerViewSearchResult.setAdapter(bottomSheetRecyclerAdapter);
+        }
+
 
         recyclerViewSearchResult.setVisibility(View.VISIBLE);
 
@@ -154,7 +170,7 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
 
         searchView.addTextWatcher(s -> {
             if (s.trim().length() > 0) {
-                filter(s, items, isMultiSelect);
+                filter(s, items, isMultiSelect, isSearchEnable);
             } else {
                 recyclerViewAdapter.submitList(items);
             }
@@ -175,7 +191,10 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapterItemMultiSelectListener.onItemMultiSelect(recyclerViewAdapter.getSelectedItems(), AdapterAction.SELECT);
+                if (isSearchEnable)
+                    adapterItemMultiSelectListener.onItemMultiSelect(recyclerViewAdapter.getSelectedItems(), AdapterAction.SELECT);
+                else
+                    adapterItemMultiSelectListener.onItemMultiSelect(bottomSheetRecyclerAdapter.getSelectedItems(), AdapterAction.SELECT);
             }
         });
 
@@ -189,7 +208,8 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
 
     private void filter(String query,
                         ArrayList<T> items,
-                        boolean isMultiSelect) {
+                        boolean isMultiSelect,
+                        boolean isSearchEnable) {
         filteredListBaseSearchDbModel = new ArrayList<>();
 
         for (int i = 0; i < items.size(); i++) {
@@ -203,20 +223,39 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
 
         Log.d("BottomSheetSearch", "filteredList: " + filteredListBaseSearchDbModel.size());
 
-        recyclerViewAdapter = new AsyncSearchListAdapter<T>(isMultiSelect, new AdapterItemListener<T>() {
-            @Override
-            public void onItemSelect(T model, int position, AdapterAction action) {
-                adapterItemListener.onItemSelect(model, position, action);
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                searchView.setQuery("", false);
-                filteredListBaseSearchDbModel.clear();
+        if (isSearchEnable) {
+
+            recyclerViewAdapter = new AsyncSearchListAdapter<T>(isMultiSelect, new AdapterItemListener<T>() {
+                @Override
+                public void onItemSelect(T model, int position, AdapterAction action) {
+                    adapterItemListener.onItemSelect(model, position, action);
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    searchView.setQuery("", false);
+                    filteredListBaseSearchDbModel.clear();
                 /*recyclerViewSearchResult.setVisibility(View.GONE);
                 recyclerViewSearchResult.removeAllViews();*/
-            }
-        });
+                }
+            });
 
-        recyclerViewSearchResult.setAdapter(recyclerViewAdapter);
-        recyclerViewAdapter.submitList(filteredListBaseSearchDbModel);
+            recyclerViewSearchResult.setAdapter(recyclerViewAdapter);
+            recyclerViewAdapter.submitList(filteredListBaseSearchDbModel);
+
+        } else {
+
+            bottomSheetRecyclerAdapter = new BottomSheetRecyclerAdapter<T>(items, isMultiSelect, new AdapterItemListener<T>() {
+                @Override
+                public void onItemSelect(T model, int position, AdapterAction action) {
+                    adapterItemListener.onItemSelect(model, position, action);
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    searchView.setQuery("", false);
+                    filteredListBaseSearchDbModel.clear();
+                }
+            });
+
+            recyclerViewSearchResult.setAdapter(bottomSheetRecyclerAdapter);
+
+        }
+
 
     }
 
