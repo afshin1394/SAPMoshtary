@@ -1273,5 +1273,6 @@
     <string name="searchCity">جستجو شهر</string>
     <string name="dismiss">بستن</string>
     <string name="undo">لغو کردن</string>
+    <string name="notLoginYet">هنوز ثبت نام نکرده اید؟</string>
 
 </resources>
