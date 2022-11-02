@@ -1,5 +1,6 @@
 package com.saphamrah.customer.data.local.db.dao;
 
+import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 
+@Dao
 public interface CompanyDao {
 
     @Query("SELECT * FROM company")
