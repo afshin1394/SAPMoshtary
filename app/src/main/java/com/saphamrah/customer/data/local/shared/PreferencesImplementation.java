@@ -1,5 +1,5 @@
 /*
-package com.saphamrah.customer.data.shared;
+package com.saphamrah.customer.data.local.shared;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

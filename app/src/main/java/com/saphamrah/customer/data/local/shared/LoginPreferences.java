@@ -1,4 +1,4 @@
-package com.saphamrah.customer.data.shared;
+package com.saphamrah.customer.data.local.shared;
 
 import com.saphamrah.customer.utils.PreferencesImpl;
 
