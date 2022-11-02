@@ -41,7 +41,7 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
     private SearchWatcher searchView;
     private RecyclerView recyclerViewSearchResult;
     private Button btnApply;
-    private AsyncSearchListAdapter recyclerViewAdapter;
+    private AsyncSearchListAdapter asyncSearchListAdapter;
     private BottomSheetRecyclerAdapter bottomSheetRecyclerAdapter;
     private ArrayList<T> filteredListBaseSearchDbModel;
     private AdapterItemListener<T> adapterItemListener;
@@ -78,13 +78,14 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
 
         initBottomSheetView(context, view, isSearchEnable, isMultiSelect);
 
-
+        //Dynamic List
           if (isSearchEnable) {
             if (isMultiSelect)
                 bottomSheetDynamicListWithSearchAndMultiSelect(items, true, searchHint);
             else
                 bottomSheetDynamicListWithSearchAndSingleSelect(items, false, searchHint);
 
+        // Static List
         } else {
             if (isMultiSelect)
                 bottomSheetStaticListWithMultiSelect(items, true);
@@ -128,6 +129,21 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
         BottomSheetBehavior.from(cardViewBottomSheet).setPeekHeight(peekHeight);
         BottomSheetBehavior.from(cardViewBottomSheet).setHideable(true);
 
+        buttonLayoutParams = (ConstraintLayout.LayoutParams) btnApply.getLayoutParams();
+
+        //Calculate button margin from top
+        buttonHeight = btnApply.getHeight(); //How tall is the button + experimental distance from bottom (Change based on your view)
+        collapsedMargin = peekHeight - buttonHeight; //Button margin in bottom sheet collapsed state
+        buttonLayoutParams.topMargin = collapsedMargin;
+        btnApply.setLayoutParams(buttonLayoutParams);
+
+       /* //OPTIONAL - Setting up recyclerview margins
+        ConstraintLayout.LayoutParams recyclerLayoutParams = (ConstraintLayout.LayoutParams) recyclerView.getLayoutParams();
+        float k = (buttonHeight - 60) / (float) buttonHeight; //60 is amount that you want to be hidden behind button
+        recyclerLayoutParams.bottomMargin = (int) (k*buttonHeight); //Recyclerview bottom margin (from button)
+        recyclerView.setLayoutParams(recyclerLayoutParams);*/
+
+
         linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         DividerItemDecoration divider =
                 new DividerItemDecoration(context,
@@ -141,23 +157,7 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
 
     }
 
-    private void bottomSheetStaticListWithMultiSelect(ArrayList<T> items, boolean isMultiSelect) {
-
-        //Retrieve button parameters
-        buttonLayoutParams = (ConstraintLayout.LayoutParams) btnApply.getLayoutParams();
-
-        //Calculate button margin from top
-        buttonHeight = btnApply.getHeight(); //How tall is the button + experimental distance from bottom (Change based on your view)
-        collapsedMargin = peekHeight - buttonHeight; //Button margin in bottom sheet collapsed state
-        buttonLayoutParams.topMargin = collapsedMargin;
-        btnApply.setLayoutParams(buttonLayoutParams);
-
-       /* //OPTIONAL - Setting up recyclerview margins
-        ConstraintLayout.LayoutParams recyclerLayoutParams = (ConstraintLayout.LayoutParams) recyclerView.getLayoutParams();
-        float k = (buttonHeight - 60) / (float) buttonHeight; //60 is amount that you want to be hidden behind button
-        recyclerLayoutParams.bottomMargin = (int) (k*buttonHeight); //Recyclerview bottom margin (from button)
-        recyclerView.setLayoutParams(recyclerLayoutParams);*/
-
+    private void initBottomSheetCallback() {
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -174,15 +174,13 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
             }
         });
 
-        bottomSheetRecyclerAdapter = new BottomSheetRecyclerAdapter<T>(items, isMultiSelect, new AdapterItemListener<T>() {
-            @Override
-            public void onItemSelect(T model, int position, AdapterAction action) {
-                adapterItemListener.onItemSelect(model, position, action);
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            }
-        });
+    }
 
-        recyclerViewSearchResult.setAdapter(bottomSheetRecyclerAdapter);
+    private void bottomSheetStaticListWithMultiSelect(ArrayList<T> items, boolean isMultiSelect) {
+
+        initBottomSheetCallback();
+
+        initStaticRecyclerViewAdapter(items, isMultiSelect);
 
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,6 +194,39 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
     }
 
     private void bottomSheetStaticListWithSingleSelect(ArrayList<T> items, boolean isMultiSelect) {
+
+        initStaticRecyclerViewAdapter(items, isMultiSelect);
+
+    }
+
+    private void bottomSheetDynamicListWithSearchAndMultiSelect(ArrayList<T> items, boolean isMultiSelect, String searchHint) {
+
+        initBottomSheetCallback();
+
+        initAsyncSearchListAdapter(items, isMultiSelect);
+
+        initSearchView(items, isMultiSelect, searchHint);
+
+        btnApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                adapterItemMultiSelectListener.onItemMultiSelect(asyncSearchListAdapter.getSelectedItems(), AdapterAction.SELECT);
+
+            }
+        });
+
+    }
+
+    private void bottomSheetDynamicListWithSearchAndSingleSelect(ArrayList<T> items, boolean isMultiSelect, String searchHint) {
+
+        initAsyncSearchListAdapter(items, isMultiSelect);
+
+        initSearchView(items, isMultiSelect, searchHint);
+
+    }
+
+    private void initStaticRecyclerViewAdapter(ArrayList<T> items, boolean isMultiSelect) {
         bottomSheetRecyclerAdapter = new BottomSheetRecyclerAdapter<T>(items, isMultiSelect, new AdapterItemListener<T>() {
             @Override
             public void onItemSelect(T model, int position, AdapterAction action) {
@@ -207,39 +238,8 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
         recyclerViewSearchResult.setAdapter(bottomSheetRecyclerAdapter);
     }
 
-    private void bottomSheetDynamicListWithSearchAndMultiSelect(ArrayList<T> items, boolean isMultiSelect, String searchHint) {
-
-        buttonLayoutParams = (ConstraintLayout.LayoutParams) btnApply.getLayoutParams();
-
-        //Calculate button margin from top
-        buttonHeight = btnApply.getHeight(); //How tall is the button + experimental distance from bottom (Change based on your view)
-        collapsedMargin = peekHeight - buttonHeight; //Button margin in bottom sheet collapsed state
-        buttonLayoutParams.topMargin = collapsedMargin;
-        btnApply.setLayoutParams(buttonLayoutParams);
-
-       /* //OPTIONAL - Setting up recyclerview margins
-        ConstraintLayout.LayoutParams recyclerLayoutParams = (ConstraintLayout.LayoutParams) recyclerView.getLayoutParams();
-        float k = (buttonHeight - 60) / (float) buttonHeight; //60 is amount that you want to be hidden behind button
-        recyclerLayoutParams.bottomMargin = (int) (k*buttonHeight); //Recyclerview bottom margin (from button)
-        recyclerView.setLayoutParams(recyclerLayoutParams);*/
-
-        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                if (slideOffset > 0) //Sliding happens from 0 (Collapsed) to 1 (Expanded) - if so, calculate margins
-                    buttonLayoutParams.topMargin = (int) (((expandedHeight - buttonHeight) - collapsedMargin - buttonHeight / 2) * slideOffset + collapsedMargin);
-                else //If not sliding above expanded, set initial margin
-                    buttonLayoutParams.topMargin = collapsedMargin;
-                btnApply.setLayoutParams(buttonLayoutParams); //Set layout params to button (margin from top)
-            }
-        });
-
-        recyclerViewAdapter = new AsyncSearchListAdapter<T>(isMultiSelect, new AdapterItemListener<T>() {
+    private void initAsyncSearchListAdapter(ArrayList<T> items, boolean isMultiSelect) {
+        asyncSearchListAdapter = new AsyncSearchListAdapter<T>(isMultiSelect, new AdapterItemListener<T>() {
             @Override
             public void onItemSelect(T model, int position, AdapterAction action) {
                 adapterItemListener.onItemSelect(model, position, action);
@@ -249,65 +249,18 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
             }
         });
 
-        recyclerViewSearchResult.setAdapter(recyclerViewAdapter);
-        recyclerViewAdapter.submitList(items);
-
-
-        searchView.setQueryHint(searchHint);
-
-        searchView.addTextWatcher(s -> {
-            if (s.trim().length() > 0) {
-                filter(s, items, isMultiSelect);
-            } else {
-                recyclerViewAdapter.submitList(items);
-            }
-        }, 400);
-
-        View closeBtn = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
-
-        closeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchView.clearFocus();
-                searchView.setQuery("", false);
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                bottomSheetBehavior.setPeekHeight(0);
-            }
-        });
-
-        btnApply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adapterItemMultiSelectListener.onItemMultiSelect(recyclerViewAdapter.getSelectedItems(), AdapterAction.SELECT);
-
-            }
-        });
-
+        asyncSearchListAdapter.submitList(items);
+        recyclerViewSearchResult.setAdapter(asyncSearchListAdapter);
     }
 
-    private void bottomSheetDynamicListWithSearchAndSingleSelect(ArrayList<T> items, boolean isMultiSelect, String searchHint) {
-
-        recyclerViewAdapter = new AsyncSearchListAdapter<T>(isMultiSelect, new AdapterItemListener<T>() {
-            @Override
-            public void onItemSelect(T model, int position, AdapterAction action) {
-                adapterItemListener.onItemSelect(model, position, action);
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                searchView.setQuery("", false);
-
-            }
-        });
-
-        recyclerViewSearchResult.setAdapter(recyclerViewAdapter);
-        recyclerViewAdapter.submitList(items);
-
-
+    private void initSearchView(ArrayList<T> items, boolean isMultiSelect, String searchHint) {
         searchView.setQueryHint(searchHint);
 
         searchView.addTextWatcher(s -> {
             if (s.trim().length() > 0) {
                 filter(s, items, isMultiSelect);
             } else {
-                recyclerViewAdapter.submitList(items);
+                asyncSearchListAdapter.submitList(items);
             }
         }, 400);
 
@@ -322,8 +275,6 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
                 bottomSheetBehavior.setPeekHeight(0);
             }
         });
-
-
     }
 
     private int getWindowHeight(Context context) {
@@ -348,7 +299,7 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
 
         Log.d("BottomSheetSearch", "filteredList: " + filteredListBaseSearchDbModel.size());
 
-        recyclerViewAdapter = new AsyncSearchListAdapter<T>(isMultiSelect, new AdapterItemListener<T>() {
+        asyncSearchListAdapter = new AsyncSearchListAdapter<T>(isMultiSelect, new AdapterItemListener<T>() {
             @Override
             public void onItemSelect(T model, int position, AdapterAction action) {
                 adapterItemListener.onItemSelect(model, position, action);
@@ -359,8 +310,8 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
             }
         });
 
-        recyclerViewSearchResult.setAdapter(recyclerViewAdapter);
-        recyclerViewAdapter.submitList(filteredListBaseSearchDbModel);
+        recyclerViewSearchResult.setAdapter(asyncSearchListAdapter);
+        asyncSearchListAdapter.submitList(filteredListBaseSearchDbModel);
 
     }
 
