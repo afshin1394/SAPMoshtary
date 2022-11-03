@@ -5,6 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.saphamrah.customer.base.BaseDao;
 import com.saphamrah.customer.data.local.db.entity.MoshtarySazmanForoshAddress;
 
 import java.util.List;
@@ -12,15 +13,9 @@ import java.util.List;
 import io.reactivex.Flowable;
 
 @Dao
-public interface MoshtarySazmanForoshAddressDao {
+public abstract class MoshtarySazmanForoshAddressDao implements BaseDao<MoshtarySazmanForoshAddress> {
 
     @Query("SELECT * FROM moshtarysazmanforoshaddress")
-    Flowable<List<MoshtarySazmanForoshAddress>> getAll();
-
-    @Insert
-    void insertAll(MoshtarySazmanForoshAddress... moshtarySazmanForoshAddresses);
-
-    @Delete
-    void delete(MoshtarySazmanForoshAddress moshtarySazmanForoshAddress);
+    abstract Flowable<List<MoshtarySazmanForoshAddress>> getAll();
 
 }

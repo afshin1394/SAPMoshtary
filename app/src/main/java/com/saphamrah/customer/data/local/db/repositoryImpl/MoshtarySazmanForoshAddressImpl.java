@@ -11,17 +11,17 @@ public class MoshtarySazmanForoshAddressImpl extends MoshtarySazmanForoshAddress
 
 
     @Override
-    protected void insertAll(List<MoshtarySazmanForoshAddress> items) {
+    public void insertAll(List<MoshtarySazmanForoshAddress> items) {
 
     }
 
     @Override
-    protected Flowable<MoshtarySazmanForoshAddress> getAll() {
+    public Flowable<MoshtarySazmanForoshAddress> getAll() {
         return null;
     }
 
     @Override
-    protected void delete(MoshtarySazmanForoshAddress moshtarySazmanForoshAddress) {
+    public void delete(MoshtarySazmanForoshAddress moshtarySazmanForoshAddress) {
 
     }
 

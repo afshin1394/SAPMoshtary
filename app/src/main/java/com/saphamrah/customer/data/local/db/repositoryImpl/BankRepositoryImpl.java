@@ -9,17 +9,17 @@ import io.reactivex.Flowable;
 
 public class BankRepositoryImpl extends BankRepository {
     @Override
-    protected void insertAll(List<Bank> items) {
+    public void insertAll(List<Bank> items) {
 
     }
 
     @Override
-    protected Flowable<Bank> getAll() {
+    public Flowable<Bank> getAll() {
         return null;
     }
 
     @Override
-    protected void delete(Bank bank) {
+    public void delete(Bank bank) {
 
     }
 }

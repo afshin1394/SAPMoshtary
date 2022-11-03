@@ -5,6 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.saphamrah.customer.base.BaseDao;
 import com.saphamrah.customer.data.local.db.entity.Bank;
 
 import java.util.List;
@@ -12,15 +13,9 @@ import java.util.List;
 import io.reactivex.Flowable;
 
 @Dao
-public interface BankDao {
+public abstract class BankDao implements BaseDao<Bank> {
 
     @Query("SELECT * FROM bank")
-    Flowable<List<Bank>> getAll();
-
-    @Insert
-    void insertAll(Bank... banks);
-
-    @Delete
-    void delete(Bank bank);
+    abstract Flowable<List<Bank>> getAll();
 
 }

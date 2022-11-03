@@ -9,17 +9,17 @@ import io.reactivex.Flowable;
 
 public class CompanyRepositoryImpl extends CompanyRepository {
     @Override
-    protected void insertAll(List<Company> items) {
+    public void insertAll(List<Company> items) {
 
     }
 
     @Override
-    protected Flowable<Company> getAll() {
+    public Flowable<Company> getAll() {
         return null;
     }
 
     @Override
-    protected void delete(Company company) {
+    public void delete(Company company) {
 
     }
 }
