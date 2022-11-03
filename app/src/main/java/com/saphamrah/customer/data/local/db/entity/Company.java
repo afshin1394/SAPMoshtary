@@ -13,6 +13,6 @@ public class Company {
     @ColumnInfo(name = "companyTitle")
     public String companyTitle;
 
-    @ColumnInfo(name = "image")
+    @ColumnInfo(name = "image", typeAffinity = ColumnInfo.BLOB)
     public byte[] image;
 }
