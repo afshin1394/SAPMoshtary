@@ -17,4 +17,5 @@ public class LoginModel extends LoginInteracts.ModelOps {
     public void onDestroy() {
 
     }
+
 }

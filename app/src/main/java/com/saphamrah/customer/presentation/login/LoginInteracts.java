@@ -4,6 +4,9 @@ import com.saphamrah.customer.base.BaseModel;
 import com.saphamrah.customer.base.BasePresenterOps;
 import com.saphamrah.customer.base.BaseRequiredPresenterOps;
 import com.saphamrah.customer.base.BaseView;
+import com.saphamrah.customer.data.local.db.entity.Bank;
+
+import java.util.List;
 
 public interface LoginInteracts {
 

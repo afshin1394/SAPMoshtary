@@ -19,9 +19,9 @@ import java.util.concurrent.Executors;
 @Database(entities = {Company.class, Bank.class, MoshtarySazmanForoshAddress.class}, version = 1)
 public abstract class SapDatabase extends RoomDatabase {
 
-    private static volatile SapDatabase INSTANCE;
+    public static volatile SapDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
-    static final ExecutorService databaseWriteExecutor =
+    public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
 
@@ -35,7 +35,7 @@ public abstract class SapDatabase extends RoomDatabase {
             synchronized (SapDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                    SapDatabase.class, "sap_moshtarian_db")
+                                    SapDatabase.class, "sap_moshtarian.db")
                             .build();
                 }
             }
