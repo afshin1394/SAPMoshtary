@@ -5,6 +5,9 @@ import android.content.Context;
 
 import com.saphamrah.customer.listeners.SmsListener;
 
+import dagger.hilt.android.HiltAndroidApp;
+
+@HiltAndroidApp
 public class Application extends android.app.Application {
     private SmsListener smsListener;
     private static Application instance;
