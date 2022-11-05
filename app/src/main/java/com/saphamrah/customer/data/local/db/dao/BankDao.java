@@ -1,8 +1,6 @@
 package com.saphamrah.customer.data.local.db.dao;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
-import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.saphamrah.customer.base.BaseDao;
@@ -16,6 +14,6 @@ import io.reactivex.Flowable;
 public abstract class BankDao implements BaseDao<Bank> {
 
     @Query("SELECT * FROM bank")
-    abstract Flowable<List<Bank>> getAll();
+    public abstract Flowable<List<Bank>> getAll();
 
 }

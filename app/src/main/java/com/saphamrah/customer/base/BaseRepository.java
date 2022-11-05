@@ -6,6 +6,6 @@ import io.reactivex.Flowable;
 
 public interface BaseRepository<T> {
     void insertAll(List<T> items);
-    Flowable<T> getAll();
+    Flowable<List<T>> getAll();
     void delete(T t);
 }
