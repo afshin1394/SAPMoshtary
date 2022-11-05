@@ -9,6 +9,7 @@ import com.saphamrah.customer.data.local.db.localDataSource.CompanyLocalDataSour
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
 
 public class CompanyLocalDataSourceImpl extends CompanyLocalDataSource {
 
@@ -25,12 +26,9 @@ public class CompanyLocalDataSourceImpl extends CompanyLocalDataSource {
     }
 
     @Override
-    public Flowable<List<Company>> getAll() {
+    public Observable<List<Company>> getAll() {
         return companyDao.getAll();
     }
 
-    @Override
-    public void delete(Company company) {
-        companyDao.delete(company);
-    }
+
 }

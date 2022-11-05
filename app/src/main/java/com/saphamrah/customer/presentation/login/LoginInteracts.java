@@ -8,6 +8,8 @@ import com.saphamrah.customer.data.local.db.entity.Bank;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+
 public interface LoginInteracts {
 
     interface RequiredViewOps extends BaseView {
@@ -23,7 +25,8 @@ public interface LoginInteracts {
     }
 
     abstract class ModelOps extends BaseModel {
-
+        /*abstract List<Bank> getAllBanks();
+        abstract void insertBanks(List<Bank> banks);*/
     }
 
 }

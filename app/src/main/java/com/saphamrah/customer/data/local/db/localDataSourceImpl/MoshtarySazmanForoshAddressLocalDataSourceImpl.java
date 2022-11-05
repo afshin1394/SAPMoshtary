@@ -9,6 +9,7 @@ import com.saphamrah.customer.data.local.db.localDataSource.MoshtarySazmanForosh
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
 
 public class MoshtarySazmanForoshAddressLocalDataSourceImpl extends MoshtarySazmanForoshAddressLocalDataSource {
 
@@ -25,13 +26,8 @@ public class MoshtarySazmanForoshAddressLocalDataSourceImpl extends MoshtarySazm
     }
 
     @Override
-    public Flowable<List<MoshtarySazmanForoshAddress>> getAll() {
+    public Observable<List<MoshtarySazmanForoshAddress>> getAll() {
         return moshtarySazmanForoshAddressDao.getAll();
-    }
-
-    @Override
-    public void delete(MoshtarySazmanForoshAddress moshtarySazmanForoshAddress) {
-        moshtarySazmanForoshAddressDao.delete(moshtarySazmanForoshAddress);
     }
 
 }

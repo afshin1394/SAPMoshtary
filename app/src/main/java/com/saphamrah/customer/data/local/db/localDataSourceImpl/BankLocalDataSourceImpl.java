@@ -9,8 +9,9 @@ import com.saphamrah.customer.data.local.db.localDataSource.BankLocalDataSource;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
 
-public class BankLocalDataSourceImpl extends BankLocalDataSource {
+public class BankLocalDataSourceImpl extends BankLocalDataSource  {
 
     private BankDao bankDao;
 
@@ -19,18 +20,16 @@ public class BankLocalDataSourceImpl extends BankLocalDataSource {
         bankDao = db.bankDao();
     }
 
+
     @Override
     public void insertAll(List<Bank> items) {
         bankDao.insert(items);
     }
 
+
     @Override
-    public Flowable<List<Bank>> getAll() {
+    public Observable<List<Bank>> getAll() {
         return bankDao.getAll();
     }
 
-    @Override
-    public void delete(Bank bank) {
-        bankDao.delete(bank);
-    }
 }

@@ -8,12 +8,12 @@ import com.saphamrah.customer.data.local.db.entity.Company;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
+import io.reactivex.Observable;
 
 @Dao
 public abstract class CompanyDao implements BaseDao<Company> {
 
     @Query("SELECT * FROM company")
-    public abstract Flowable<List<Company>> getAll();
+    public abstract Observable<List<Company>> getAll();
 
 }

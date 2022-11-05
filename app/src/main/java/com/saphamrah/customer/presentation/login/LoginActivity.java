@@ -39,6 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
 import io.reactivex.FlowableSubscriber;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -48,6 +50,8 @@ import io.reactivex.schedulers.Schedulers;
 
 public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, ActivityLoginBinding> implements LoginInteracts.RequiredViewOps, SmsListener {
 
+
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     @Override
     protected ActivityLoginBinding inflateBiding(LayoutInflater inflater) {
