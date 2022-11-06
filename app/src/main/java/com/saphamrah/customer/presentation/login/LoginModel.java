@@ -8,17 +8,19 @@ import java.util.List;
 
 import io.reactivex.CompletableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class LoginModel extends LoginInteracts.ModelOps {
 
-//    private final BankRepository bankRepository;
-    private LoginInteracts.RequiredPresenterOps loginRequiredPresenterOps;
+    private final BankRepository bankRepository;
+    private final LoginInteracts.RequiredPresenterOps loginRequiredPresenterOps;
 
     public LoginModel(LoginInteracts.RequiredPresenterOps loginRequiredPresenterOps) {
         this.loginRequiredPresenterOps = loginRequiredPresenterOps;
-//        bankRepository = new BankRepository();
+        bankRepository = new BankRepository(loginRequiredPresenterOps.getContext());
+
     }
 
 
@@ -29,16 +31,16 @@ public class LoginModel extends LoginInteracts.ModelOps {
 
     @Override
     public void onDestroy() {
-
+        compositeDisposable.clear();
     }
 
 
-  /*  @Override
+    @Override
     List<Bank> getAllBanks() {
         return bankRepository.getAllBanks();
-    }*/
+    }
 
- /*   @Override
+    @Override
     void insertBanks(List<Bank> banks) {
         bankRepository.insertAllBanks(banks)
                 .subscribeOn(Schedulers.io())
@@ -51,14 +53,14 @@ public class LoginModel extends LoginInteracts.ModelOps {
 
                     @Override
                     public void onComplete() {
-                        compositeDisposable.clear();
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        loginRequiredPresenterOps.showError(e.getMessage());
+//                        loginRequiredPresenterOps.showError(e.getMessage());
                     }
                 });
 
-    }*/
+    }
 }

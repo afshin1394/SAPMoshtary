@@ -9,6 +9,7 @@ import com.saphamrah.customer.data.local.db.entity.Bank;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.disposables.CompositeDisposable;
 
 public interface LoginInteracts {
 
@@ -17,19 +18,19 @@ public interface LoginInteracts {
     }
 
     interface PresenterOps extends BasePresenterOps {
-
-        void insertBanks(List<Bank> banks);
+//        void getAllBanks();
+//        void insertBanks(List<Bank> banks);
     }
 
     interface RequiredPresenterOps extends BaseRequiredPresenterOps {
 
-        void showError(String message);
     }
 
     abstract class ModelOps extends BaseModel {
-      /*  abstract List<Bank> getAllBanks();
 
-        abstract void insertBanks(List<Bank> banks);*/
+        abstract List<Bank> getAllBanks();
+
+        abstract void insertBanks(List<Bank> banks);
     }
 
 }

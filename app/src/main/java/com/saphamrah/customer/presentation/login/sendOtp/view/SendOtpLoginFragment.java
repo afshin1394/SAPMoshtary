@@ -46,7 +46,6 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
         handleBackPress();
     }
 
-    @SuppressLint("AutoDispose")
     private void phoneNumberTextWatcher() {
         viewBinding.etPhone.addTextWatcher(s -> {
             if (s != null) {

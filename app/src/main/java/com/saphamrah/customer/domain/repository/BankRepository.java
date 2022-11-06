@@ -11,10 +11,10 @@ import java.util.List;
 import io.reactivex.Completable;
 
 public class BankRepository {
-   /* private final BankLocalDataSource bankLocalDataSource;
+    private final BankLocalDataSource bankLocalDataSource;
 
-    public BankRepository() {
-        bankLocalDataSource = new BankLocalDataSourceImpl();
+    public BankRepository(Context context) {
+        bankLocalDataSource = new BankLocalDataSourceImpl(context);
     }
 
 
@@ -25,6 +25,6 @@ public class BankRepository {
 
     public Completable insertAllBanks(List<Bank> banks) {
         return Completable.fromAction(() -> bankLocalDataSource.insertAll(banks));
-    }*/
+    }
 
 }

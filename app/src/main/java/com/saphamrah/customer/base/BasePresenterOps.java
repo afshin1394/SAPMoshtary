@@ -11,4 +11,6 @@ public interface BasePresenterOps {
             String functionChild
     );
 
+    void onDestroy();
+
 }

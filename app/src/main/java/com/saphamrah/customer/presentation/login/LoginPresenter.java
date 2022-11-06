@@ -23,17 +23,18 @@ public class LoginPresenter implements LoginInteracts.PresenterOps, LoginInterac
     }
 
     @Override
+    public void onDestroy() {
+        model.onDestroy();
+    }
+
+    @Override
     public Context getContext() {
         return view.getAppContext();
     }
 
-    @Override
+   /* @Override
     public void insertBanks(List<Bank> banks) {
-//        model.insertBanks(banks);
-    }
+        model.insertBanks(banks);
+    }*/
 
-    @Override
-    public void showError(String message) {
-        view.onError(message);
-    }
 }

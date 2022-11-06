@@ -122,6 +122,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     public void onDestroyView() {
         super.onDestroyView();
         compositeDisposable.clear();
+        presenter.onDestroy();
         viewBinding = null;
     }
 }

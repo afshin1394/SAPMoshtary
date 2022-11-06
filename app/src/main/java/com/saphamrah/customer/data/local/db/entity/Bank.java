@@ -7,13 +7,18 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "Bank")
 public class Bank {
 
+    public Bank(int ccBank, String bankTitle) {
+        this.ccBank = ccBank;
+        this.bankTitle = bankTitle;
+    }
+
     @PrimaryKey
     @ColumnInfo(name = "ccBank")
-    int ccBank;
+    public int ccBank;
 
 
     @ColumnInfo(name = "bankTitle")
-    String bankTitle;
+    public String bankTitle;
 
     /*@JvmField
     @ColumnInfo(name = "image", typeAffinity = ColumnInfo.BLOB)

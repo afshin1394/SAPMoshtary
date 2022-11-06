@@ -1,6 +1,7 @@
 package com.saphamrah.customer.presentation.login;
 
 import static com.saphamrah.customer.data.local.db.SapDatabase.databaseWriteExecutor;
+import static com.saphamrah.customer.data.local.db.SapDatabase.getDatabase;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -64,14 +65,10 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, Act
     @Override
     protected void initViews() {
 
-        List<Bank> banks = new ArrayList<>();
-//        banks.add(new Bank(1, "melat"));
+      /*  List<Bank> banks = new ArrayList<>();
+        banks.add(new Bank(2, "tejarat"));*/
 
         setActivityPresenter(new LoginPresenter(this));
-
-        SapDatabase sapDatabase = SapDatabase.getDatabase(this);
-
-//        presenter.insertBanks(banks);
 
         checkPermissions(new String[]{Manifest.permission.RECEIVE_SMS});
 
@@ -189,7 +186,7 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, Act
 
     @Override
     public void onError(String error) {
-        Log.d(TAG, "error: " + error);
+//        Log.d(TAG, "error: " + error);
     }
 
     @Override

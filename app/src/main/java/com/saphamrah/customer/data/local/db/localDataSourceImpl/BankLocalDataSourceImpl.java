@@ -17,8 +17,8 @@ public class BankLocalDataSourceImpl extends BankLocalDataSource  {
 
     private BankDao bankDao;
 
-    public BankLocalDataSourceImpl(Application application) {
-        SapDatabase db = SapDatabase.getDatabase(application);
+    public BankLocalDataSourceImpl(Context context) {
+        SapDatabase db = SapDatabase.getDatabase(context);
         bankDao = db.bankDao();
     }
 

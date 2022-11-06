@@ -76,4 +76,10 @@ public abstract class BaseActivity<T extends BasePresenterOps, S extends ViewBin
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
 }
