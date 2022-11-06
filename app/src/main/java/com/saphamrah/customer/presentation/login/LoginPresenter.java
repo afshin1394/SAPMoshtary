@@ -32,6 +32,16 @@ public class LoginPresenter implements LoginInteracts.PresenterOps, LoginInterac
         return view.getAppContext();
     }
 
+  /*  @Override
+    public void getAllBanks() {
+        model.getAllBanks();
+    }
+
+    @Override
+    public void onGetAllBanks(List<Bank> banks) {
+        view.onGetAllBanks(banks);
+    }*/
+
    /* @Override
     public void insertBanks(List<Bank> banks) {
         model.insertBanks(banks);

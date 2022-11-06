@@ -29,7 +29,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
 
     private final Integer PERMISSION_REQUEST_CODE = 9824;
 
-    protected CompositeDisposable compositeDisposable;
+//    protected CompositeDisposable compositeDisposable;
 
     protected T presenter;
     protected S viewBinding;
@@ -47,7 +47,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setPresenter();
-        compositeDisposable = new CompositeDisposable();
+//        compositeDisposable = new CompositeDisposable();
         initViews();
 
     }
@@ -58,9 +58,9 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
 
     protected abstract void initViews();
 
-    public void addDisposable(Disposable disposable) {
-        compositeDisposable.add(disposable);
-    }
+//    public void addDisposable(Disposable disposable) {
+//        compositeDisposable.add(disposable);
+//    }
 
     protected void onPermission(ArrayList<BasePermissionModel> basePermissionModels) {
     }
@@ -121,7 +121,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        compositeDisposable.clear();
+//        compositeDisposable.clear();
         presenter.onDestroy();
         viewBinding = null;
     }

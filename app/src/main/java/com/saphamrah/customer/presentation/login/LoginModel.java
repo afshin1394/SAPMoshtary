@@ -19,7 +19,7 @@ public class LoginModel extends LoginInteracts.ModelOps {
 
     public LoginModel(LoginInteracts.RequiredPresenterOps loginRequiredPresenterOps) {
         this.loginRequiredPresenterOps = loginRequiredPresenterOps;
-        bankRepository = new BankRepository(loginRequiredPresenterOps.getContext());
+        bankRepository = new BankRepository();
 
     }
 
@@ -31,13 +31,13 @@ public class LoginModel extends LoginInteracts.ModelOps {
 
     @Override
     public void onDestroy() {
-        compositeDisposable.clear();
+//        compositeDisposable.clear();
     }
 
 
-    @Override
-    List<Bank> getAllBanks() {
-        return bankRepository.getAllBanks();
+  /*  @Override
+    void getAllBanks() {
+        loginRequiredPresenterOps.onGetAllBanks(bankRepository.getAllBanks());
     }
 
     @Override
@@ -62,5 +62,5 @@ public class LoginModel extends LoginInteracts.ModelOps {
                     }
                 });
 
-    }
+    }*/
 }

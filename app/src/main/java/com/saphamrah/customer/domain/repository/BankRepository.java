@@ -13,8 +13,8 @@ import io.reactivex.Completable;
 public class BankRepository {
     private final BankLocalDataSource bankLocalDataSource;
 
-    public BankRepository(Context context) {
-        bankLocalDataSource = new BankLocalDataSourceImpl(context);
+    public BankRepository() {
+        bankLocalDataSource = new BankLocalDataSourceImpl();
     }
 
 

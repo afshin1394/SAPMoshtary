@@ -1,14 +1,9 @@
 package com.saphamrah.customer.presentation.login;
 
-import static com.saphamrah.customer.data.local.db.SapDatabase.databaseWriteExecutor;
-import static com.saphamrah.customer.data.local.db.SapDatabase.getDatabase;
-
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.hardware.biometrics.BiometricPrompt;
 import android.os.Build;
@@ -17,40 +12,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.room.RoomDatabase;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.saphamrah.customer.Application;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseActivity;
-import com.saphamrah.customer.Application;
 import com.saphamrah.customer.base.BasePermissionModel;
-import com.saphamrah.customer.data.local.db.SapDatabase;
-import com.saphamrah.customer.data.local.db.dao.BankDao;
 import com.saphamrah.customer.data.local.db.entity.Bank;
 import com.saphamrah.customer.databinding.ActivityLoginBinding;
 import com.saphamrah.customer.listeners.SmsListener;
-import com.saphamrah.customer.utils.customViews.CustomSnackBar;
-
-import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
-
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.CompletableObserver;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableSubscriber;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.internal.subscribers.BlockingFirstSubscriber;
-import io.reactivex.schedulers.Schedulers;
 
 public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, ActivityLoginBinding> implements LoginInteracts.RequiredViewOps, SmsListener {
 
@@ -65,9 +41,6 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, Act
     @Override
     protected void initViews() {
 
-      /*  List<Bank> banks = new ArrayList<>();
-        banks.add(new Bank(2, "tejarat"));*/
-
         setActivityPresenter(new LoginPresenter(this));
 
         checkPermissions(new String[]{Manifest.permission.RECEIVE_SMS});
@@ -81,7 +54,6 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, Act
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             checkFingerPrintLogin();
         }
-
 
     }
 

@@ -1,11 +1,13 @@
 package com.saphamrah.customer.data.local.db;
 
 import android.content.Context;
+import android.os.Environment;
 
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.saphamrah.customer.Application;
 import com.saphamrah.customer.data.local.db.dao.BankDao;
 import com.saphamrah.customer.data.local.db.dao.CompanyDao;
 import com.saphamrah.customer.data.local.db.dao.MoshtarySazmanForoshAddressDao;
@@ -13,6 +15,11 @@ import com.saphamrah.customer.data.local.db.entity.Bank;
 import com.saphamrah.customer.data.local.db.entity.Company;
 import com.saphamrah.customer.data.local.db.entity.MoshtarySazmanForoshAddress;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -41,6 +48,31 @@ public abstract class SapDatabase extends RoomDatabase {
             }
         }
         return INSTANCE;
+    }
+
+    void exportDatabase(Application applicationContext){
+        File sd = Environment.getExternalStorageDirectory();
+
+        // Get the Room database storage path using SupportSQLiteOpenHelper
+        SapDatabase.getDatabase(applicationContext).getOpenHelper().getWritableDatabase().getPath();
+
+        if (sd.canWrite()) {
+            String currentDBPath = SapDatabase.getDatabase(applicationContext).getOpenHelper().getWritableDatabase().getPath();
+            String backupDBPath = "sap_db";      //you can modify the file type you need to export
+            File currentDB = new File(currentDBPath);
+            File backupDB = new File(sd, backupDBPath);
+            if (currentDB.exists()) {
+                try {
+                    FileChannel src = new FileInputStream(currentDB).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }

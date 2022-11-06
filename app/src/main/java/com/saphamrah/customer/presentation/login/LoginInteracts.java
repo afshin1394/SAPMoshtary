@@ -14,23 +14,24 @@ import io.reactivex.disposables.CompositeDisposable;
 public interface LoginInteracts {
 
     interface RequiredViewOps extends BaseView {
-
+//        void onGetAllBanks(List<Bank> banks);
     }
 
     interface PresenterOps extends BasePresenterOps {
 //        void getAllBanks();
+
 //        void insertBanks(List<Bank> banks);
     }
 
     interface RequiredPresenterOps extends BaseRequiredPresenterOps {
-
+//        void onGetAllBanks(List<Bank> banks);
     }
 
     abstract class ModelOps extends BaseModel {
 
-        abstract List<Bank> getAllBanks();
+    /*    abstract void getAllBanks();
 
-        abstract void insertBanks(List<Bank> banks);
+        abstract void insertBanks(List<Bank> banks);*/
     }
 
 }
