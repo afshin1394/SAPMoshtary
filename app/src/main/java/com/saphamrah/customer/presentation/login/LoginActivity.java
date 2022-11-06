@@ -20,6 +20,7 @@ import com.saphamrah.customer.Application;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseActivity;
 import com.saphamrah.customer.base.BasePermissionModel;
+import com.saphamrah.customer.data.local.db.SapDatabase;
 import com.saphamrah.customer.data.local.db.entity.Bank;
 import com.saphamrah.customer.databinding.ActivityLoginBinding;
 import com.saphamrah.customer.listeners.SmsListener;
@@ -41,6 +42,9 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, Act
     @Override
     protected void initViews() {
 
+       /* SapDatabase sapDatabase = SapDatabase.getDatabase(this);
+        sapDatabase.exportDatabase();
+*/
         setActivityPresenter(new LoginPresenter(this));
 
         checkPermissions(new String[]{Manifest.permission.RECEIVE_SMS});

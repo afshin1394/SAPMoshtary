@@ -50,14 +50,14 @@ public abstract class SapDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    void exportDatabase(Application applicationContext){
+    public void exportDatabase(){
         File sd = Environment.getExternalStorageDirectory();
 
         // Get the Room database storage path using SupportSQLiteOpenHelper
-        SapDatabase.getDatabase(applicationContext).getOpenHelper().getWritableDatabase().getPath();
+        SapDatabase.getDatabase(Application.getInstance()).getOpenHelper().getWritableDatabase().getPath();
 
         if (sd.canWrite()) {
-            String currentDBPath = SapDatabase.getDatabase(applicationContext).getOpenHelper().getWritableDatabase().getPath();
+            String currentDBPath = SapDatabase.getDatabase(Application.getInstance()).getOpenHelper().getWritableDatabase().getPath();
             String backupDBPath = "sap_db";      //you can modify the file type you need to export
             File currentDB = new File(currentDBPath);
             File backupDB = new File(sd, backupDBPath);
