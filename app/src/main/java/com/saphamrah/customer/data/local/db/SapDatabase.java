@@ -35,7 +35,7 @@ public abstract class SapDatabase extends RoomDatabase {
             synchronized (SapDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                    SapDatabase.class, "sap_moshtarian.db")
+                                    SapDatabase.class, "sap_db")
                             .build();
                 }
             }

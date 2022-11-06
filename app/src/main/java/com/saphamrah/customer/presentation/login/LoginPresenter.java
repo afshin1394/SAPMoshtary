@@ -2,6 +2,10 @@ package com.saphamrah.customer.presentation.login;
 
 import android.content.Context;
 
+import com.saphamrah.customer.data.local.db.entity.Bank;
+
+import java.util.List;
+
 public class LoginPresenter implements LoginInteracts.PresenterOps, LoginInteracts.RequiredPresenterOps {
 
     private final LoginInteracts.RequiredViewOps view;
@@ -21,5 +25,15 @@ public class LoginPresenter implements LoginInteracts.PresenterOps, LoginInterac
     @Override
     public Context getContext() {
         return view.getAppContext();
+    }
+
+    @Override
+    public void insertBanks(List<Bank> banks) {
+//        model.insertBanks(banks);
+    }
+
+    @Override
+    public void showError(String message) {
+        view.onError(message);
     }
 }

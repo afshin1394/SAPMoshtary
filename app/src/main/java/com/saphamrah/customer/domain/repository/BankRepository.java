@@ -1,27 +1,30 @@
 package com.saphamrah.customer.domain.repository;
 
-import com.saphamrah.customer.data.local.db.dao.BankDao;
+import android.content.Context;
+
 import com.saphamrah.customer.data.local.db.entity.Bank;
+import com.saphamrah.customer.data.local.db.localDataSource.BankLocalDataSource;
+import com.saphamrah.customer.data.local.db.localDataSourceImpl.BankLocalDataSourceImpl;
 
 import java.util.List;
 
 import io.reactivex.Completable;
 
 public class BankRepository {
-    private BankDao bankDao;
+   /* private final BankLocalDataSource bankLocalDataSource;
 
-    public BankRepository(BankDao bankDao) {
-        this.bankDao = bankDao;
+    public BankRepository() {
+        bankLocalDataSource = new BankLocalDataSourceImpl();
     }
 
 
     public List<Bank> getAllBanks() {
 
-        return bankDao.getAll().blockingFirst();
+        return bankLocalDataSource.getAll().blockingFirst();
     }
 
-    public Completable insertBanks(List<Bank> banks) {
-        return Completable.fromAction(() -> bankDao.insert(banks));
-    }
+    public Completable insertAllBanks(List<Bank> banks) {
+        return Completable.fromAction(() -> bankLocalDataSource.insertAll(banks));
+    }*/
 
 }

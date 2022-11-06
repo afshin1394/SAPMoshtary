@@ -5,9 +5,8 @@ import android.content.Context;
 
 import com.saphamrah.customer.listeners.SmsListener;
 
-import dagger.hilt.android.HiltAndroidApp;
 
-@HiltAndroidApp
+
 public class Application extends android.app.Application {
     private SmsListener smsListener;
     private static Application instance;
@@ -23,7 +22,7 @@ public class Application extends android.app.Application {
 
     /**
      * get current context anywhere in app
-     * @return just use BaseApplication.getContext
+     * @return just use Application.getContext
      */
     public static Context getContext() {
         if (currentActivity != null) {

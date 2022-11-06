@@ -1,3 +1,4 @@
+/*
 package com.saphamrah.customer.di;
 
 import androidx.room.Room;
@@ -45,3 +46,4 @@ public class DatabaseModule {
         return db.moshtarySazmanForoshAddressDao();
     }
 }
+*/

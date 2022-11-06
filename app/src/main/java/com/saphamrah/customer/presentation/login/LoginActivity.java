@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseActivity;
 import com.saphamrah.customer.Application;
@@ -32,6 +33,7 @@ import com.saphamrah.customer.data.local.db.dao.BankDao;
 import com.saphamrah.customer.data.local.db.entity.Bank;
 import com.saphamrah.customer.databinding.ActivityLoginBinding;
 import com.saphamrah.customer.listeners.SmsListener;
+import com.saphamrah.customer.utils.customViews.CustomSnackBar;
 
 import org.reactivestreams.Subscription;
 
@@ -40,6 +42,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 import io.reactivex.BackpressureStrategy;
+import io.reactivex.CompletableObserver;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableSubscriber;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -61,7 +64,14 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, Act
     @Override
     protected void initViews() {
 
+        List<Bank> banks = new ArrayList<>();
+//        banks.add(new Bank(1, "melat"));
+
         setActivityPresenter(new LoginPresenter(this));
+
+        SapDatabase sapDatabase = SapDatabase.getDatabase(this);
+
+//        presenter.insertBanks(banks);
 
         checkPermissions(new String[]{Manifest.permission.RECEIVE_SMS});
 
@@ -179,7 +189,7 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, Act
 
     @Override
     public void onError(String error) {
-
+        Log.d(TAG, "error: " + error);
     }
 
     @Override

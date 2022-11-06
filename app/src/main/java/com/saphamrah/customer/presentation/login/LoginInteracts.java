@@ -18,14 +18,17 @@ public interface LoginInteracts {
 
     interface PresenterOps extends BasePresenterOps {
 
+        void insertBanks(List<Bank> banks);
     }
 
     interface RequiredPresenterOps extends BaseRequiredPresenterOps {
 
+        void showError(String message);
     }
 
     abstract class ModelOps extends BaseModel {
-        /*abstract List<Bank> getAllBanks();
+      /*  abstract List<Bank> getAllBanks();
+
         abstract void insertBanks(List<Bank> banks);*/
     }
 
