@@ -2,6 +2,7 @@ package com.saphamrah.customer.presentation.createRequest;
 
 import androidx.annotation.RequiresApi;
 
+import android.Manifest;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseActivity;
 import com.saphamrah.customer.base.BasePermissionModel;
+import com.saphamrah.customer.data.local.db.SapDatabase;
 import com.saphamrah.customer.data.local.temp.BonusModel;
 import com.saphamrah.customer.data.local.temp.DiscountModel;
 import com.saphamrah.customer.data.local.temp.JayezehEntekhabiMojodiModel;
@@ -57,15 +59,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initViews() {
-
-        viewBinding.linCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                List<ProductModel> orderedProducts =  productModelGlobal.stream().filter(productModel -> productModel.getOrderCount() > 0).collect(Collectors.toList());
-                cartListener.onCartClick(orderedProducts);
-            }
-        });
-
+        checkPermissions(new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE});
     }
 
     @Override
@@ -76,6 +70,15 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
 
     @Override
     public void onPermission(ArrayList<BasePermissionModel> basePermissionModels) {
+        viewBinding.linCart.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                SapDatabase.getDatabase(CreateRequestActivity.this).exportDatabase(CreateRequestActivity.this);
+                List<ProductModel> orderedProducts =  productModelGlobal.stream().filter(productModel -> productModel.getOrderCount() > 0).collect(Collectors.toList());
+                cartListener.onCartClick(orderedProducts);
+            }
+        });
 
     }
 
@@ -101,7 +104,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
 
     @Override
     public Context getAppContext() {
-        return null;
+        return CreateRequestActivity.this;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
+import com.saphamrah.customer.base.BaseActivity;
+import com.saphamrah.customer.data.local.db.SapDatabase;
 import com.saphamrah.customer.presentation.createRequest.CreateRequestActivity;
 import com.saphamrah.customer.presentation.view.adapter.recycler.pagerAdapter.SliderPagerMainFrag;
 import com.saphamrah.customer.presentation.view.adapter.recycler.DialogMenuAdapter;
@@ -31,7 +33,7 @@ import com.saphamrah.customer.utils.SnapToBlock;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends  AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ViewPager viewPagerMainFrag;
     private SliderPagerMainFrag viewPagerAdapter;
 
@@ -203,11 +205,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
+        switch (id){
+            case R.id.nav_request:
+                startActivity(new Intent(MainActivity.this, CreateRequestActivity.class));
 
-        if (id == R.id.nav_request) {
-            startActivity(new Intent(MainActivity.this, CreateRequestActivity.class));
+                break;
 
         }
+
+
         return true;
     }
 }

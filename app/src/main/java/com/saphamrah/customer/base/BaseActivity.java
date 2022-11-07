@@ -83,7 +83,8 @@ public abstract class BaseActivity<T extends BasePresenterOps, S extends ViewBin
 
     }
 
-    public void checkPermissions(String[] permissions) {
+    public void checkPermissions(String[] permissions)
+    {
         ArrayList<BasePermissionModel> permissionArray = new ArrayList<>();
 
         for (String permission : permissions) {

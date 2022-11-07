@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'androidx.navigation.safeargs'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 32
     defaultConfig {
@@ -12,6 +14,15 @@ android {
         versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation":"$projectDir/schemas".toString(),
+                        "room.incremental":"true",
+                        "room.expandProjection":"true"]
+            }
+        }
 
     }
     buildTypes {
@@ -47,6 +58,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    // Allow references to generated code
+    kapt {
+        correctErrorTypes true
+    }
 
 }
 
@@ -244,6 +259,15 @@ dependencies {
 
     implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
+
+
+    implementation "androidx.room:room-runtime:2.4.3"
+    annotationProcessor "androidx.room:room-compiler:2.4.3"
+    kapt "androidx.room:room-compiler:2.4.3"
+
+    // optional - RxJava2 support for Room
+    implementation "androidx.room:room-rxjava2:2.4.3"
+
 
 
     def lottieVersion = "4.1.0"
