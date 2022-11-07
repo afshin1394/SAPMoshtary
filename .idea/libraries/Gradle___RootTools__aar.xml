@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: :RootTools:@aar">
+    <CLASSES>
+      <root url="jar://F:/.jdks/caches/transforms-3/9a86e0c2943a0d68fa75674f6756af66/transformed/jetified-RootTools/jars/classes.jar!/" />
+      <root url="file://F:/.jdks/caches/transforms-3/9a86e0c2943a0d68fa75674f6756af66/transformed/jetified-RootTools/res" />
+      <root url="file://F:/.jdks/caches/transforms-3/9a86e0c2943a0d68fa75674f6756af66/transformed/jetified-RootTools/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.whiteelephant:gifplayer:1.2.0@aar">
+    <CLASSES>
+      <root url="jar://F:/.jdks/caches/transforms-3/7994362741901bc4df720f0628c96e79/transformed/jetified-gifplayer-1.2.0/jars/classes.jar!/" />
+      <root url="file://F:/.jdks/caches/transforms-3/7994362741901bc4df720f0628c96e79/transformed/jetified-gifplayer-1.2.0/res" />
+      <root url="file://F:/.jdks/caches/transforms-3/7994362741901bc4df720f0628c96e79/transformed/jetified-gifplayer-1.2.0/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://F:/.jdks/caches/modules-2/files-2.1/com.whiteelephant/gifplayer/1.2.0/3967a813cdca4603bbfff4403ad5e27278a414fc/gifplayer-1.2.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://F:/.jdks/caches/modules-2/files-2.1/com.whiteelephant/gifplayer/1.2.0/c4245fe090b0725e8b7e7856859510335e4679e8/gifplayer-1.2.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
