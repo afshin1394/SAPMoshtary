@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: D./androidProjects/sap_customer/app/libs/NeptuneLiteApi_V2.03.00_20180208.jar">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/NeptuneLiteApi_V2.03.00_20180208.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
