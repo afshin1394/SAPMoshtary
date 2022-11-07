@@ -1,5 +1,6 @@
 package com.saphamrah.customer.data.local.rptEtebarModel;
 
+
 import java.text.DecimalFormat;
 
 public class RptEtebarRialiModel extends RptEtebarParentModel {
@@ -9,10 +10,10 @@ public class RptEtebarRialiModel extends RptEtebarParentModel {
 
     public RptEtebarRialiModel(long etebarRiali, long rialMasrafShode, RptEtebarType rptEtebarType) {
         super();
-        mEtebarType = EtebarType.Riali;
+        mtebarType = EtebarType.Riali;
         mEtebarRiali = etebarRiali;
         mRialMasrafShode = rialMasrafShode;
-        mRptEtebarType = rptEtebarType;
+        this.rptEtebarType = rptEtebarType;
     }
 
     public long getEtebarRiali() {

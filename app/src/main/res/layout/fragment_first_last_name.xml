@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
-    tools:context=".presentation.view.fragments.profile.FirstLastNameFragment">
+    tools:context=".presentation.profile.personalInfo.view.FirstLastNameFragment">
 
     <TextView
         android:layout_width="match_parent"

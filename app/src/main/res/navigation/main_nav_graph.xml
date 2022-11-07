@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.saphamrah.customer.presentation.view.fragments.main.MainFragment"
+        android:name="com.saphamrah.customer.presentation.main.welcome.view.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.saphamrah.customer.presentation.view.fragments.profile.ProfileFragment"
+        android:name="com.saphamrah.customer.presentation.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -54,7 +54,7 @@
     </fragment>
     <fragment
         android:id="@+id/personalInfoFragment"
-        android:name="com.saphamrah.customer.presentation.view.fragments.profile.PersonalInfoFragment"
+        android:name="com.saphamrah.customer.presentation.profile.personalInfo.view.PersonalInfoFragment"
         android:label="fragment_personal_info"
         tools:layout="@layout/fragment_personal_info" >
         <action
@@ -74,7 +74,7 @@
     </fragment>
     <fragment
         android:id="@+id/firstLastNameFragment"
-        android:name="com.saphamrah.customer.presentation.view.fragments.profile.FirstLastNameFragment"
+        android:name="com.saphamrah.customer.presentation.profile.personalInfo.view.FirstLastNameFragment"
         android:label="fragment_first_last_name"
         tools:layout="@layout/fragment_first_last_name" >
         <action
@@ -87,7 +87,7 @@
     </fragment>
     <fragment
         android:id="@+id/addressFragment"
-        android:name="com.saphamrah.customer.presentation.view.fragments.profile.AddressFragment"
+        android:name="com.saphamrah.customer.presentation.profile.address.view.AddressFragment"
         android:label="fragment_address"
         tools:layout="@layout/fragment_address" >
         <action
@@ -100,7 +100,7 @@
     </fragment>
     <fragment
         android:id="@+id/accountNumberFragment"
-        android:name="com.saphamrah.customer.presentation.view.fragments.profile.AccountNumberFragment"
+        android:name="com.saphamrah.customer.presentation.profile.accountNumber.view.AccountNumberFragment"
         android:label="fragment_account_number"
         tools:layout="@layout/fragment_account_number" >
         <action

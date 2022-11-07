@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.view.fragments.profile.AccountNumberFragment"
+    tools:context=".presentation.profile.accountNumber.view.AccountNumberFragment"
     android:background="@color/colorGrey100"
     android:orientation="vertical">
 

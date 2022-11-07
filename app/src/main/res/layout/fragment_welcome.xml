@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center|top"
     android:background="@drawable/bg_gradient"
-    tools:context=".presentation.view.fragments.main.WelcomeFragment">
+    tools:context=".presentation.main.welcome.view.WelcomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

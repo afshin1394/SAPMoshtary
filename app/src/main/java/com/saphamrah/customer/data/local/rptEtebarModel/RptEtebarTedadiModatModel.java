@@ -11,8 +11,8 @@ public class RptEtebarTedadiModatModel extends RptEtebarParentModel {
     private DecimalFormat formatter = new DecimalFormat("#,###,###");
 
     public RptEtebarTedadiModatModel(int etebar, int masrafShode, RptEtebarType rptEtebarType , EtebarType etebarType) {
-        mRptEtebarType = rptEtebarType;
-        mEtebarType = etebarType;
+        this.rptEtebarType = rptEtebarType;
+        mtebarType = etebarType;
         this.mEtebar = etebar;
         this.mMasrafShode = masrafShode;
 

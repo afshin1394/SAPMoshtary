@@ -1274,5 +1274,10 @@
     <string name="lastname">نام خانوادگی</string>
     <string name="firstname">نام</string>
     <string name="confirm_info">ثبت اطلاعات</string>
+    <string name="searchProvince">جستجو استان</string>
+    <string name="searchCity">جستجو شهر</string>
+    <string name="searchSazman">جستجو سازمان فروش</string>
+    <string name="dismiss">بستن</string>
+    <string name="undo">لغو کردن</string>
 
 </resources>

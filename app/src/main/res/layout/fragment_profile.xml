@@ -7,7 +7,7 @@
     android:gravity="center|top"
     android:orientation="vertical"
     android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
-    tools:context=".presentation.view.fragments.profile.ProfileFragment">
+    tools:context=".presentation.profile.ProfileFragment">
 
 <!--    <LinearLayout-->
 <!--        android:layout_width="match_parent"-->

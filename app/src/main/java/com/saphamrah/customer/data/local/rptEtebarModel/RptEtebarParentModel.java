@@ -2,15 +2,15 @@ package com.saphamrah.customer.data.local.rptEtebarModel;
 
 public abstract class RptEtebarParentModel {
     protected String mEtebarTitle;
-    protected EtebarType mEtebarType;
-    protected RptEtebarType mRptEtebarType;
+    protected EtebarType mtebarType;
+    protected RptEtebarType rptEtebarType;
 
     public EtebarType getEtebarType() {
-        return mEtebarType;
+        return mtebarType;
     }
 
     public void setEtebarType(EtebarType mEtebarType) {
-        this.mEtebarType = mEtebarType;
+        this.mtebarType = mEtebarType;
     }
 
     public abstract boolean isMandeLessThanZero();
@@ -18,7 +18,7 @@ public abstract class RptEtebarParentModel {
     public abstract String getMandeAbsuluteValue();
 
     public RptEtebarType getRptEtebarType() {
-        return mRptEtebarType;
+        return rptEtebarType;
     }
 
     //    public  String getTitleString(Context context){
