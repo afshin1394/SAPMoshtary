@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layoutDirection="rtl"
+    android:layout_margin="@dimen/_4sdp"
+    android:id="@+id/lin_itemChoice"
+    android:layout_gravity="end|top"
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:background="@drawable/black_simple_shape"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/_2sdp"
+        android:layout_gravity="center_horizontal"
+        >
+    <TextView
+        android:layout_weight="10"
+        android:id="@+id/TV_filter_title"
+        android:padding="@dimen/_2sdp"
+        android:text="@string/gorohKala"
+        style="@style/text_view_subtitle_right"
+        android:layout_gravity="center"
+        />
+
+    <ImageView
+        android:id="@+id/img_arrow"
+        android:layout_width="@dimen/_18sdp"
+        android:layout_height="@dimen/_18sdp"
+        android:padding="@dimen/_4sdp"
+        android:src="@drawable/ic_arrow_down_secondary"
+        />
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:visibility="visible"
+        android:layout_gravity="center"
+        android:id="@+id/RV_filter_list"
+        android:layoutDirection="rtl"
+        android:background="@drawable/black_simple_shape"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+
+
+
+</LinearLayout>

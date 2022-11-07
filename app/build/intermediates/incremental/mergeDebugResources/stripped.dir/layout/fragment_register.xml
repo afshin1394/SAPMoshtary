@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl"
+    tools:context=".presentation.login.LoginActivity">
+
+    <RelativeLayout
+        android:id="@+id/layFormContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btnApply">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtInputFname"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layoutDirection="rtl"
+                    android:textColorHint="@color/colorDivider"
+                    android:textDirection="rtl">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtInputFname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/ic_person_card_24"
+                        android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                        android:fontFamily="@font/iransans"
+                        android:hint="@string/firstNameWithStar"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/FontSize16" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtInputLname"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layoutDirection="rtl"
+                    android:textColorHint="@color/colorDivider"
+                    android:textDirection="rtl">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtInputLname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/ic_person_card_24"
+                        android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                        android:fontFamily="@font/iransans"
+                        android:hint="@string/lastNameWithStar"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/FontSize16" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtInputMobile"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layoutDirection="rtl"
+                    android:textColorHint="@color/colorDivider"
+                    android:textDirection="rtl">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtInputMobile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/ic_mobile"
+                        android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                        android:fontFamily="@font/iransans"
+                        android:hint="@string/mobileWithStar"
+                        android:inputType="number"
+                        android:maxLength="11"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/FontSize16" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtInputBoardName"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layoutDirection="rtl"
+                    android:textColorHint="@color/colorDivider"
+                    android:textDirection="rtl">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtInputBoardName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/ic_tablo"
+                        android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                        android:fontFamily="@font/iransans"
+                        android:hint="@string/tabloName"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/FontSize16" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtInputIdentity"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layoutDirection="rtl"
+                    android:textColorHint="@color/colorDivider"
+                    android:textDirection="rtl">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtInputIdentity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_arrow_down"
+                        android:drawableRight="@drawable/ic_identity"
+                        android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                        android:focusable="false"
+                        android:fontFamily="@font/iransans"
+                        android:hint="@string/noeShakhsiat"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/FontSize16" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtInputNationalCode"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layoutDirection="rtl"
+                    android:textColorHint="@color/colorDivider"
+                    android:textDirection="ltr">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtInputNationalCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/ic_national_card"
+                        android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                        android:fontFamily="@font/iransans"
+                        android:hint="@string/nationalCode"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:maxLines="1"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/FontSize16" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/txtInputProvince"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="5"
+                        android:layoutDirection="rtl"
+                        android:textColorHint="@color/colorDivider"
+                        android:textDirection="rtl">
+
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtInputProvince"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_arrow_down"
+                            android:drawableRight="@drawable/ic_mailbox"
+                            android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                            android:focusable="false"
+                            android:fontFamily="@font/iransans"
+                            android:hint="@string/province"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/FontSize16" />
+
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/txtInputCity"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="5"
+                        android:layoutDirection="rtl"
+                        android:textColorHint="@color/colorDivider"
+                        android:textDirection="rtl">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtInputCity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_arrow_down"
+                            android:drawableRight="@drawable/ic_mailbox"
+                            android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                            android:focusable="false"
+                            android:fontFamily="@font/iransans"
+                            android:hint="@string/city"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/FontSize16" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/txtInputMainStreet"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="5"
+                        android:layoutDirection="rtl"
+                        android:textColorHint="@color/colorDivider"
+                        android:textDirection="rtl">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtInputMainStreet"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableRight="@drawable/ic_mailbox"
+                            android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                            android:fontFamily="@font/iransans"
+                            android:hint="@string/mainStreet"
+                            android:inputType="text"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/FontSize16" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/txtInputMainAlley"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="5"
+                        android:layoutDirection="rtl"
+                        android:textColorHint="@color/colorDivider"
+                        android:textDirection="rtl">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtInputMainAlley"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableRight="@drawable/ic_mailbox"
+                            android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                            android:fontFamily="@font/iransans"
+                            android:hint="@string/mainAlley"
+                            android:inputType="text"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/FontSize16" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/txtInputPlaque"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="5"
+                        android:layoutDirection="rtl"
+                        android:textColorHint="@color/colorDivider"
+                        android:textDirection="rtl">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtInputPlaque"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableRight="@drawable/ic_mailbox"
+                            android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                            android:fontFamily="@font/iransans"
+                            android:hint="@string/plaque"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/FontSize16" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/txtInputPostalCode"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="5"
+                        android:layoutDirection="rtl"
+                        android:textColorHint="@color/colorDivider"
+                        android:textDirection="rtl">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtInputPostalCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableRight="@drawable/ic_mailbox"
+                            android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                            android:fontFamily="@font/iransans"
+                            android:hint="@string/codePosti"
+                            android:inputType="number"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/FontSize16" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtInputLocation"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:clickable="true"
+                    android:layoutDirection="rtl"
+                    android:textColorHint="@color/colorDivider"
+                    android:textDirection="rtl">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtInputLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:drawableRight="@drawable/ic_location"
+                        android:drawablePadding="@dimen/drawableRightEditTextPadding"
+                        android:focusable="false"
+                        android:fontFamily="@font/iransans"
+                        android:hint="@string/location"
+                        android:inputType="none"
+                        android:maxLines="1"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/FontSize16" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <org.osmdroid.views.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="225dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:visibility="gone" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnApply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorAccent"
+            android:fontFamily="@font/iransans"
+            android:gravity="center"
+            android:padding="@dimen/btnPaddingMain"
+            android:text="@string/apply"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/btnFontMain" />
+
+    </RelativeLayout>
+
+    <include layout="@layout/bottom_sheet_search" />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

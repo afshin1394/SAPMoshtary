@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: D./androidProjects/sap_customer/app/libs/bixolon_printer_V132.jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/bixolon_printer_V132.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,42 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layoutDirection="rtl"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/purchase_light_background"
+            android:elevation="@dimen/_12sdp"
+            android:layoutDirection="rtl"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/text_view_title_center"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/selectableBonus" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RV_bonus_list"
+            android:layout_marginBottom="@dimen/_24sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            style="@style/recycler_view"/>
+
+    </LinearLayout>
+    <include android:id="@+id/btm_sht_selectable_bonus"  layout="@layout/selectable_bonus_bottom_sheet"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:name="androidx.navigation.fragment.NavHostFragment"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_gravity="bottom"
+    tools:context=".presentation.createRequest.filter.view.fragment.FilterFragment"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <LinearLayout
+            android:background="@drawable/bottom_dialog_shape"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="rtl"
+            android:orientation="vertical">
+
+            <TextView
+
+                android:id="@+id/TV_filterAndSort_title"
+                style="@style/text_view_title_center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/filter" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/Recycler_filter_sort_choice"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_250sdp"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layoutDirection="ltr">
+
+                <TextView
+                    android:id="@+id/BTN_Cancel"
+                    style="@style/confirm_Btn_style"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel" />
+
+                <TextView
+                    android:id="@+id/BTN_Confirm"
+                    style="@style/confirm_Btn_style"
+                    android:layout_margin="@dimen/_8sdp"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/confirm" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>

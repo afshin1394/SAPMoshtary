@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".presentation.createRequest.CreateRequestActivity">
+    <include layout="@layout/toolbar_layout"/>
+ <FrameLayout
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:elevation="@dimen/_120sdp"
+     >
+    <LinearLayout
+        android:id="@+id/lin_cart"
+        android:visibility="gone"
+        android:background="@drawable/quarter_circle"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="-2dp"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/_48sdp"
+        >
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_gravity="top|center"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            app:lottie_rawRes="@raw/cart_red_anim"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            />
+
+    </LinearLayout>
+         <androidx.fragment.app.FragmentContainerView
+             android:name="androidx.navigation.fragment.NavHostFragment"
+             app:navGraph="@navigation/nav_create_request"
+             app:defaultNavHost="true"
+             android:id="@+id/nav_host_fragment"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent" />
+ </FrameLayout>
+</LinearLayout>

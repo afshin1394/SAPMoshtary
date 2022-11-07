@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: D./androidProjects/sap_customer/app/libs/urovo_sdk_v2.3.706.jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/urovo_sdk_v2.3.706.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
