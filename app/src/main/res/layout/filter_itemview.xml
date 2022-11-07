@@ -9,6 +9,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:gravity="center"
+
         android:background="@drawable/filter_cardview"
         style="@style/filter_view_style"
         >

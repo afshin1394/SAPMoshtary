@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -156,19 +156,27 @@
         <item name="android:src">@drawable/green_circle</item>
     </style>
 
+
+
     <style name="text_view_title_center">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:padding">@dimen/_4sdp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_gravity">center</item>
         <item name="android:textSize">@dimen/_12sdp</item>
     </style>
+
     <style name="text_view_subtitle_right">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:padding">@dimen/_4sdp</item>
+        <item name="android:gravity">right</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:textSize">@dimen/_8sdp</item>
+    </style>
+
+    <style name="text_view_subtitle_hint">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/_4sdp</item>
         <item name="android:gravity">right</item>
         <item name="android:layout_gravity">right</item>
@@ -207,6 +215,15 @@
         <item name="android:textSize">@dimen/_10sdp</item>
     </style>
 
+    <style name="text_view_normal_right">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:layout_margin">@dimen/_4sdp</item>
+        <item name="android:padding">@dimen/_4sdp</item>
+        <item name="android:textSize">@dimen/_10sdp</item>
+    </style>
+
     <style name="text_view_normal2">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -215,7 +232,26 @@
         <item name="android:padding">@dimen/_4sdp</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">@dimen/_9sdp</item>
+    </style>
+    <style name="text_view_normal3">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:layout_margin">@dimen/_4sdp</item>
+        <item name="android:padding">@dimen/_4sdp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
         <item name="android:textSize">@dimen/_10sdp</item>
+    </style>
+
+    <style name="text_view_tight">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:layout_margin">@dimen/_2sdp</item>
+        <item name="android:padding">@dimen/_2sdp</item>
+        <item name="android:textSize">@dimen/_9sdp</item>
     </style>
     <style name="devider_gray">
         <item name="android:layout_width">@dimen/_265sdp</item>
@@ -231,7 +267,16 @@
     <style name="tooltipShOverylay">
         <item name="cornerSize">50%</item>
     </style>
-<!--    <style name="MyMaterialTheme" parent="Theme.MaterialComponents.Light.NoActionBar">-->
+    <style name="spinner_style">
+        <item name="android:background">@drawable/spinner_background</item>
+    </style>
+
+    <style name="recycler_view">
+        <item name="android:layoutDirection">rtl</item>
+        <item name="android:padding">@dimen/_2sdp</item>
+        <item name="android:layout_margin">@dimen/_2sdp</item>
+    </style>
+    <!--    <style name="MyMaterialTheme" parent="Theme.MaterialComponents.Light.NoActionBar">-->
 <!--        &lt;!&ndash; Add attributes here &ndash;&gt;-->
 <!--        <item name="colorPrimary">@color/colorPrimaryDark</item>-->
 <!--    </style>-->

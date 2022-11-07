@@ -11,4 +11,9 @@ public class Constants {
     /*productType*/
     public static final int ADVERTISEMENT = 1;
     public static final int SELL = 2;
+
+
+    public enum PaymentStates {
+        SHOW_PRODUCTS, CALCULATE_BONUS_DISCOUNT, ADD_RETURNED, SELECTABLE_BONUS ,CONFIRM_REQUEST,SAVE_REQUEST
+    }
 }

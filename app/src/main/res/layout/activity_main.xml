@@ -62,9 +62,9 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.viewpager.widget.ViewPager
-                android:layout_height="match_parent"
+                android:id="@+id/view_pager_mainFrag"
                 android:layout_width="match_parent"
-                android:id="@+id/view_pager_mainFrag" />
+                android:layout_height="664dp" />
 
         </LinearLayout>
     </LinearLayout>

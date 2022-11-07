@@ -1,5 +1,6 @@
 package com.saphamrah.customer.base;
 
+
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Build;
@@ -13,10 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewbinding.ViewBinding;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class BaseActivity<T extends BasePresenterOps, S extends ViewBinding> extends AppCompatActivity implements BaseView {
     private final Integer PERMISSION_REQUEST_CODE = 9824;
-
+    public static Map<String,Object> results ;
     protected T presenter;
     protected S viewBinding;
     protected abstract void onKeyBoardVisibilityChange(boolean visible);
@@ -26,6 +29,7 @@ public abstract class BaseActivity<T extends BasePresenterOps, S extends ViewBin
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        results = new HashMap<>();
         viewBinding = inflateBiding(getLayoutInflater());
         setContentView(viewBinding.getRoot());
         initViews();
@@ -114,5 +118,10 @@ public abstract class BaseActivity<T extends BasePresenterOps, S extends ViewBin
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        results = null;
 
+    }
 }

@@ -1266,5 +1266,13 @@
     <string name="usesFingerPrint">اثر انگشت</string>
     <string name="sendCode">ارسال کد</string>
     <string name="minPrice">0ریال</string>
+    <string name="discount">تخفیف</string>
+    <string name="bonus">جایزه</string>
+    <string name="cart">سبد خرید</string>
+    <string name="calculateBonusDiscount">محاسبه تخفیف جایزه</string>
+    <string name="chooseSelectableBonus">انتخاب جایزه انتخابی</string>
+    <string name="selectableBonus"> جایزه انتخابی</string>
+    <string name="day">روز</string>
+    <string name="discount_percentage">درصد تخفیف</string>
 
 </resources>

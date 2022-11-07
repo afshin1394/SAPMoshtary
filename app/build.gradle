@@ -244,6 +244,10 @@ dependencies {
 
     implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
+
+
+    def lottieVersion = "4.1.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 }
 ///**Protobuf dependencies**/
 //protobuf

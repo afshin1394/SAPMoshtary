@@ -12,13 +12,14 @@ public class ProductModel implements Parcelable {
     private long sellPrice;
     private String bachNumber;
     private long inventory;
+    private long orderCount;
     private String productionDate;
     private String expirationDate;
     private List<Integer> imageResource;
     private boolean isAd;
 
 
-    public ProductModel(int id, String nameProduct, long consumerPrice, long sellPrice,String bachNumber, long inventory,String productionDate,String expirationDate,List<Integer> imageResource,boolean isAd) {
+    public ProductModel(int id, String nameProduct, long consumerPrice, long sellPrice,String bachNumber, long inventory,long orderCount,String productionDate,String expirationDate,List<Integer> imageResource,boolean isAd) {
         this.id = id;
         this.nameProduct = nameProduct;
         this.consumerPrice = consumerPrice;
@@ -26,6 +27,7 @@ public class ProductModel implements Parcelable {
         this.bachNumber = bachNumber;
         this.inventory = inventory;
         this.imageResource = imageResource;
+        this.orderCount = orderCount;
         this.isAd = isAd;
     }
 
@@ -37,6 +39,7 @@ public class ProductModel implements Parcelable {
         sellPrice = in.readLong();
         bachNumber = in.readString();
         inventory = in.readLong();
+        orderCount = in.readLong();
         productionDate = in.readString();
         expirationDate = in.readString();
         isAd = in.readByte() != 0;
@@ -134,6 +137,14 @@ public class ProductModel implements Parcelable {
         isAd = ad;
     }
 
+    public long getOrderCount() {
+        return orderCount;
+    }
+
+    public void setOrderCount(long orderCount) {
+        this.orderCount = orderCount;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -145,10 +156,28 @@ public class ProductModel implements Parcelable {
         parcel.writeString(nameProduct);
         parcel.writeLong(consumerPrice);
         parcel.writeLong(sellPrice);
+        parcel.writeLong(orderCount);
         parcel.writeString(bachNumber);
         parcel.writeLong(inventory);
         parcel.writeString(productionDate);
         parcel.writeString(expirationDate);
         parcel.writeByte((byte) (isAd ? 1 : 0));
+    }
+
+    @Override
+    public String toString() {
+        return "ProductModel{" +
+                "id=" + id +
+                ", nameProduct='" + nameProduct + '\'' +
+                ", consumerPrice=" + consumerPrice +
+                ", sellPrice=" + sellPrice +
+                ", bachNumber='" + bachNumber + '\'' +
+                ", inventory=" + inventory +
+                ", orderCount=" + orderCount +
+                ", productionDate='" + productionDate + '\'' +
+                ", expirationDate='" + expirationDate + '\'' +
+                ", imageResource=" + imageResource +
+                ", isAd=" + isAd +
+                '}';
     }
 }

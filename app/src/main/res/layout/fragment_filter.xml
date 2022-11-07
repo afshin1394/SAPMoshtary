@@ -4,7 +4,7 @@
     android:name="androidx.navigation.fragment.NavHostFragment"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="bottom"
-    tools:context=".createRequest.view.fragment.FilterFragment"
+    tools:context=".presentation.createRequest.filter.view.fragment.FilterFragment"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
         <LinearLayout

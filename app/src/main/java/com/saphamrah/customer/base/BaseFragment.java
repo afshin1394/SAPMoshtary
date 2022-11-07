@@ -1,6 +1,12 @@
 package com.saphamrah.customer.base;
 
+import static com.saphamrah.customer.base.BaseActivity.results;
+
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,7 +19,11 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentFactory;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
@@ -23,7 +33,12 @@ import androidx.viewbinding.ViewBinding;
 
 
 import com.saphamrah.customer.R;
+import com.saphamrah.customer.data.local.temp.JayezehEntekhabiMojodiModel;
+import com.saphamrah.customer.presentation.createRequest.CreateRequestActivity;
 
+import org.reactivestreams.Subscriber;
+
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +46,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import io.reactivex.Flowable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -38,7 +54,6 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
 
     private final Integer PERMISSION_REQUEST_CODE = 9824;
     public static final String TAG = BaseFragment.class.getSimpleName();
-    public static Map<String,Object> safeArgKeys = new HashMap<>();
     private Integer layout;
 
     public BaseFragment(Integer layout) {
@@ -50,6 +65,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     protected T presenter;
     protected S viewBinding;
     protected Context context;
+    protected Activity activity;
 
     protected abstract void onBackPressed();
 
@@ -58,7 +74,9 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     protected abstract void setPresenter();
 
     protected abstract S inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container);
-    
+
+
+
 
 
     @Override
@@ -69,7 +87,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
             public void handleOnBackPressed() {
                 // Handle the back button event
                 onBackPressed();
-                NavHostFragment.findNavController(BaseFragment.this).navigateUp();
+                navigateUp();
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
@@ -79,7 +97,10 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
+        this.activity = getActivity();
     }
+
+
 
     @Nullable
     @Override
@@ -94,20 +115,15 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
         setPresenter();
         compositeDisposable = new CompositeDisposable();
         initViews();
-
-
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void getFragmentResult(String key, Observer<Object> observer) {
-        Log.i(TAG, "getFragmentResult: "+viewBinding);
-        safeArgKeys.forEach(new BiConsumer<String, Object>() {
-            @Override
-            public void accept(String key, Object o) {
-                NavHostFragment.findNavController(BaseFragment.this).getCurrentBackStackEntry().getSavedStateHandle().get(key);
-            }
-        });
+    public void setFragmentResult(String key, Object value) {
+        NavHostFragment.findNavController(this).getPreviousBackStackEntry().getSavedStateHandle().set(key,value);
+        navigateUp();
+    }
 
+    public  Object getFragmentResult (String key){
+       return NavHostFragment.findNavController(this).getCurrentBackStackEntry().getSavedStateHandle().get(key);
     }
 
 
@@ -133,10 +149,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
         onPermission(permissionArray);
     }
 
-    public void setFragmentResult(String key, Object value) {
-        safeArgKeys.put(key,value);
-        Navigation.findNavController(viewBinding.getRoot()).getPreviousBackStackEntry().getSavedStateHandle().set(key, value);
-    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -168,6 +181,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
         Navigation.findNavController(requireView()).navigate(action, bundle);
     }
 
+
     public void navigate(NavDirections action) {
         NavOptions option = new NavOptions.Builder()
                 .setLaunchSingleTop(true)
@@ -176,8 +190,14 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
                 .setPopExitAnim(R.anim.fade_out)
                 .setPopEnterAnim(R.anim.fade_in)
                 .build();
-        Navigation.findNavController(requireView()).navigate(action,option);
+        Navigation.findNavController(requireView()).navigate(action, option);
     }
+
+    public void navigateUp() {
+        NavHostFragment.findNavController(this).navigateUp();
+    }
+
+
 
     @Override
     public void onDestroyView() {
@@ -185,6 +205,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
         compositeDisposable.clear();
         viewBinding = null;
     }
+
 
 
 }
