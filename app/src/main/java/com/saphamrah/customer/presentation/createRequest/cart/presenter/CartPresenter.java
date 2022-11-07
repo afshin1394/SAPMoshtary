@@ -27,6 +27,11 @@ public class CartPresenter implements CartInteractor.PresenterOps, CartInteracto
     }
 
     @Override
+    public void onDestroy() {
+        model.onDestroy();
+    }
+
+    @Override
     public Context getContext() {
         return view.get().getAppContext();
     }

@@ -13,6 +13,8 @@
 
     </style>
 
+
+
     <style name="MyButton" parent="Widget.MaterialComponents.Button">
         <item name="shapeAppearanceOverlay">@style/MyShapeAppearance</item>
     </style>
@@ -26,10 +28,10 @@
         <item name="cornerSizeBottomLeft">8dp</item>
         <item name="cornerSizeTopRight">8dp</item>
         <item name="cornerSizeBottomRight">8dp</item>
-        <item name="android:background">@color/colorPrimaryDark</item>
         <item name="fontFamily">@font/iransans</item>
         <item name="android:textSize">@dimen/_10sdp</item>
     </style>
+
 
 
 
@@ -47,11 +49,12 @@
         <item name="android:maxHeight">25dp</item>
     </style>
 
-    <style name="TextInputLayoutTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="TextInputLayoutTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorControlNormal">@color/colorDivider</item>
         <item name="colorControlActivated">@color/colorTextPrimary</item>
         <item name="colorControlHighlight">@color/colorPrimary</item>
     </style>
+
 
 
     <style name="menu_labels_style">
@@ -87,6 +90,7 @@
 
         <item name="android:layoutDirection">rtl</item>
     </style>
+
 
 
 
@@ -300,4 +304,6 @@
 <!--        &lt;!&ndash; Add attributes here &ndash;&gt;-->
 <!--        <item name="colorPrimary">@color/colorPrimaryDark</item>-->
 <!--    </style>-->
+
+
 </resources>

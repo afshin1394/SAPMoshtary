@@ -160,7 +160,7 @@ dependencies {
     implementation files('libs/xerces.jar')
     implementation files('libs/urovo_sdk_v2.3.706.jar')
     implementation 'androidx.ads:ads-identifier:1.0.0-alpha04'
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation files('libs\\apache-httpcomponents-httpclient.jar')
     implementation files('libs\\GLPage_V1.03.00_20181030.jar')
@@ -258,9 +258,7 @@ dependencies {
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
     implementation 'com.github.smarteist:autoimageslider:1.4.0-appcompat'
 
-    implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
-
+    implementation "androidx.biometric:biometric:1.1.0"
 
     implementation "androidx.room:room-runtime:2.4.3"
     annotationProcessor "androidx.room:room-compiler:2.4.3"

@@ -9,4 +9,9 @@ public class MainPresenter implements BasePresenterOps {
     public void checkInsertLogToDB(Integer logType, String message, String logClass, String logActivity, String functionParent, String functionChild) {
 
     }
+
+    @Override
+    public void onDestroy() {
+
+    }
 }

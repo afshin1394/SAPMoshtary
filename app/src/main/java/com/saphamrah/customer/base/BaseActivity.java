@@ -22,7 +22,9 @@ public abstract class BaseActivity<T extends BasePresenterOps, S extends ViewBin
     public static Map<String,Object> results ;
     protected T presenter;
     protected S viewBinding;
-    protected abstract void onKeyBoardVisibilityChange(boolean visible);
+    protected  void onKeyBoardVisibilityChange(boolean visible){
+
+    }
 
     boolean isKeyboardShowing = false;
 

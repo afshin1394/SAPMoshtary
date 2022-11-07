@@ -7,6 +7,10 @@ public abstract class BaseModel {
 
     protected CompositeDisposable compositeDisposable;
 
+    public BaseModel() {
+        compositeDisposable = new CompositeDisposable();
+    }
+
     public void addDisposable(Disposable disposable) {
         compositeDisposable.add(disposable);
     }

@@ -122,7 +122,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     }
 
     public  Object getFragmentResult (String key){
-       return NavHostFragment.findNavController(this).getCurrentBackStackEntry().getSavedStateHandle().get(key);
+        return NavHostFragment.findNavController(this).getCurrentBackStackEntry().getSavedStateHandle().get(key);
     }
 
 
@@ -201,7 +201,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        compositeDisposable.clear();
+//        presenter.onDestroy();
         viewBinding = null;
     }
 

@@ -1,0 +1,200 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "d3ef336e7140e54468a1d3ea0b8807dd",
+    "entities": [
+      {
+        "tableName": "Company",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ccCompany` INTEGER NOT NULL, `companyTitle` TEXT, `image` BLOB, PRIMARY KEY(`ccCompany`))",
+        "fields": [
+          {
+            "fieldPath": "ccCompany",
+            "columnName": "ccCompany",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "companyTitle",
+            "columnName": "companyTitle",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image",
+            "columnName": "image",
+            "affinity": "BLOB",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "ccCompany"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Bank",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ccBank` INTEGER NOT NULL, `bankTitle` TEXT, PRIMARY KEY(`ccBank`))",
+        "fields": [
+          {
+            "fieldPath": "ccBank",
+            "columnName": "ccBank",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bankTitle",
+            "columnName": "bankTitle",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "ccBank"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "MoshtarySazmanForoshAddress",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ccMoshtarySazmanForoshAddress` INTEGER NOT NULL, `ccMoshtarySazmanForosh` INTEGER NOT NULL, `ccMoshtaryAddress` INTEGER NOT NULL, `ccAddress` INTEGER NOT NULL, `codeNoeAddress` INTEGER NOT NULL, `noeAddressTitle` INTEGER NOT NULL, `ccMahal` INTEGER NOT NULL, `ccMantaghe` INTEGER NOT NULL, `address` TEXT, `khiabanAsli` TEXT, `khiabanFarei1` TEXT, `khiabanFarei2` TEXT, `koocheAsli` TEXT, `koocheFarei1` TEXT, `koocheFarei2` TEXT, `pelak` INTEGER NOT NULL, `codePosty` INTEGER NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`ccMoshtarySazmanForoshAddress`))",
+        "fields": [
+          {
+            "fieldPath": "ccMoshtarySazmanForoshAddress",
+            "columnName": "ccMoshtarySazmanForoshAddress",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ccMoshtarySazmanForosh",
+            "columnName": "ccMoshtarySazmanForosh",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ccMoshtaryAddress",
+            "columnName": "ccMoshtaryAddress",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ccAddress",
+            "columnName": "ccAddress",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "codeNoeAddress",
+            "columnName": "codeNoeAddress",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "noeAddressTitle",
+            "columnName": "noeAddressTitle",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ccMahal",
+            "columnName": "ccMahal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ccMantaghe",
+            "columnName": "ccMantaghe",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "khiabanAsli",
+            "columnName": "khiabanAsli",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "khiabanFarei1",
+            "columnName": "khiabanFarei1",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "khiabanFarei2",
+            "columnName": "khiabanFarei2",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "koocheAsli",
+            "columnName": "koocheAsli",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "koocheFarei1",
+            "columnName": "koocheFarei1",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "koocheFarei2",
+            "columnName": "koocheFarei2",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pelak",
+            "columnName": "pelak",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "codePosty",
+            "columnName": "codePosty",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "ccMoshtarySazmanForoshAddress"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd3ef336e7140e54468a1d3ea0b8807dd')"
+    ]
+  }
+}

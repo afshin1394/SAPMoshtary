@@ -92,8 +92,6 @@
     <string name="help">راهنما</string>
     <string name="search">جستجو</string>
     <string name="filter">فیلتر</string>
-    <string name="filterBaseOn">فیلتر بر اساس</string>
-
     <string name="removeFilter">حذف فیلتر</string>
     <string name="searchKalaName">جستجو نام کالا</string>
     <string name="searchCustomerName">جستجو نام مشتری</string>
@@ -1238,7 +1236,6 @@
     <string name="errorUpdateMablaghTakhfifVahed">خطا در بروز رسانی مبلغ تخفیف واحد</string>
     <string name="errorReopenProgram">لطفا برنامه را به طور کامل بسته و دوباره اجرا نمایید.</string>
     <string name="sabtAmval">اموال مشتری</string>
-    <string name="sort">مرتب سازی</string>
 
 
 
@@ -1272,17 +1269,23 @@
     <string name="plaque">پلاک</string>
     <string name="mainStreet">خیابان اصلی</string>
     <string name="mainAlley">کوچه اصلی</string>
+    <string name="searchProvince">جستجو استان</string>
+    <string name="searchCity">جستجو شهر</string>
+    <string name="dismiss">بستن</string>
+    <string name="undo">لغو کردن</string>
+    <string name="notLoginYet">هنوز ثبت نام نکرده اید؟</string>
+
+
+
     <string name="first_last_name">نام و نام خانوادگی</string>
     <string name="phone_num">شماره موبایل</string>
     <string name="enter_name">نام و نام خانوادگی خود را وارد نمایید</string>
     <string name="lastname">نام خانوادگی</string>
     <string name="firstname">نام</string>
     <string name="confirm_info">ثبت اطلاعات</string>
-    <string name="searchProvince">جستجو استان</string>
-    <string name="searchCity">جستجو شهر</string>
+
     <string name="searchSazman">جستجو سازمان فروش</string>
-    <string name="dismiss">بستن</string>
-    <string name="undo">لغو کردن</string>
+
     <string name="discount_percentage">درصد تخفیف</string>
     <string name="minPrice">0ریال</string>
     <string name="discount">تخفیف</string>
@@ -1292,4 +1295,5 @@
     <string name="chooseSelectableBonus">انتخاب جایزه انتخابی</string>
     <string name="selectableBonus"> جایزه انتخابی</string>
     <string name="day">روز</string>
+    <string name="sort">مرتب سازی</string>
 </resources>

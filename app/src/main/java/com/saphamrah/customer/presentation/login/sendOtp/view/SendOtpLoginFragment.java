@@ -25,13 +25,13 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
 
     private String phoneNumber = "";
 
-    public SendOtpLoginFragment(Integer layout) {
-        super(layout);
+    public SendOtpLoginFragment() {
+        super(R.layout.fragment_send_otp_login);
     }
 
     @Override
-    protected void onBackPressed() {
-
+    protected FragmentSendOtpLoginBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {
+        return FragmentSendOtpLoginBinding.inflate(inflater, container, false);
     }
 
     @Override
@@ -39,9 +39,10 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
         presenter = new SendOtpLoginPresenter(this);
     }
 
+
     @Override
-    protected FragmentSendOtpLoginBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {
-        return FragmentSendOtpLoginBinding.inflate(inflater, container, false);
+    protected void onBackPressed() {
+
     }
 
     @Override
@@ -54,37 +55,36 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
         handleBackPress();
     }
 
-    @SuppressLint("AutoDispose")
     private void phoneNumberTextWatcher() {
-//        viewBinding.etPhone.addTextWatcher(s -> {
-//            if (s != null) {
-//                viewBinding.btnSendNumber.setEnabled(true);
-//                // change btn color
-//                if (viewBinding.etPhone.getText().length() == 9) {
-//                    checkLogin();
-//
-//                } else {
-//
-//                    /*viewBinding.btnSendNumber.setBackground(
-//                            ContextCompat.getDrawable(
-//                                    requireActivity(),
-//                                    R.drawable.button_selector
-//                            )
-//                    );*/
-//                }
-//            }
-//        }, 500);
+        viewBinding.etPhone.addTextWatcher(s -> {
+            if (s != null) {
+                viewBinding.btnSendNumber.setEnabled(true);
+                // change btn color
+                if (viewBinding.etPhone.getText().length() == 9) {
+                    checkLogin();
+
+                } else {
+
+                    /*viewBinding.btnSendNumber.setBackground(
+                            ContextCompat.getDrawable(
+                                    requireActivity(),
+                                    R.drawable.button_selector
+                            )
+                    );*/
+                }
+            }
+        }, 500);
 
     }
 
     private void btnClickListeners() {
 
-//        viewBinding.btnRegister.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                navigate(R.id.action_SendOtpLoginFragment_to_RegisterFragment);
-//            }
-//        });
+        viewBinding.btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigate(R.id.action_SendOtpLoginFragment_to_RegisterFragment);
+            }
+        });
 
         viewBinding.btnSendNumber.setOnClickListener(new View.OnClickListener() {
             @Override

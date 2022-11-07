@@ -2,16 +2,12 @@ package com.saphamrah.customer.data.local.db;
 
 import android.content.Context;
 import android.os.Environment;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory;
 
 import com.saphamrah.customer.Application;
-import com.saphamrah.customer.R;
 import com.saphamrah.customer.data.local.db.dao.BankDao;
 import com.saphamrah.customer.data.local.db.dao.CompanyDao;
 import com.saphamrah.customer.data.local.db.dao.MoshtarySazmanForoshAddressDao;
@@ -46,8 +42,7 @@ public abstract class SapDatabase extends RoomDatabase {
             synchronized (SapDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                    SapDatabase.class, "sap-customer")
-                            .openHelperFactory(new FrameworkSQLiteOpenHelperFactory())
+                                    SapDatabase.class, "sap_db")
                             .build();
                 }
             }
@@ -55,19 +50,15 @@ public abstract class SapDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-
-
-
-    public void exportDatabase(Context context){
-        File sd = context.getExternalFilesDir(null);;
-
+    public void exportDatabase(){
+        File sd = Environment.getExternalStorageDirectory();
 
         // Get the Room database storage path using SupportSQLiteOpenHelper
         SapDatabase.getDatabase(Application.getInstance()).getOpenHelper().getWritableDatabase().getPath();
 
         if (sd.canWrite()) {
             String currentDBPath = SapDatabase.getDatabase(Application.getInstance()).getOpenHelper().getWritableDatabase().getPath();
-            String backupDBPath = "sup_customer";      //you can modify the file type you need to export
+            String backupDBPath = "sap_db";      //you can modify the file type you need to export
             File currentDB = new File(currentDBPath);
             File backupDB = new File(sd, backupDBPath);
             if (currentDB.exists()) {
@@ -79,10 +70,6 @@ public abstract class SapDatabase extends RoomDatabase {
                     dst.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
-                if (backupDB.exists()){
-                    Log.i("pathh", "exportDatabase: "+backupDB.getPath());
-                    Toast.makeText(context, R.string.confirm,Toast.LENGTH_LONG).show();
                 }
             }
         }

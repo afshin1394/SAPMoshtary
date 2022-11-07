@@ -30,6 +30,11 @@ public class SelectableBonusPresenter implements SelectableBonusInteractor.Prese
     }
 
     @Override
+    public void onDestroy() {
+        model.onDestroy();
+    }
+
+    @Override
     public Context getContext() {
         return null;
     }

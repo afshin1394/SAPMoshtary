@@ -18,6 +18,11 @@ public class ProfilePresenter implements ProfileInteracts.PresenterOps, ProfileI
     }
 
     @Override
+    public void onDestroy() {
+
+    }
+
+    @Override
     public Context getContext() {
         return null;
     }

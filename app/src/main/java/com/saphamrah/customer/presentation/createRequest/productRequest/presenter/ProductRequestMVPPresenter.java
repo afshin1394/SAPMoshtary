@@ -20,6 +20,11 @@ public class ProductRequestMVPPresenter implements ProductRequestMVPInteractor.P
     }
 
     @Override
+    public void onDestroy() {
+        model.onDestroy();
+    }
+
+    @Override
     public Context getContext() {
         return view.getAppContext();
     }

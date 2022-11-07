@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.hardware.biometrics.BiometricPrompt;
 import android.os.Build;
 import android.os.CancellationSignal;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 
@@ -15,19 +16,23 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.saphamrah.customer.R;
-
 import com.saphamrah.customer.Application;
+import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseActivity;
 import com.saphamrah.customer.base.BasePermissionModel;
+import com.saphamrah.customer.data.local.db.SapDatabase;
+import com.saphamrah.customer.data.local.db.entity.Bank;
 import com.saphamrah.customer.databinding.ActivityLoginBinding;
 import com.saphamrah.customer.listeners.SmsListener;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, ActivityLoginBinding> implements LoginInteracts.RequiredViewOps, SmsListener {
 
+
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     @Override
     protected ActivityLoginBinding inflateBiding(LayoutInflater inflater) {
@@ -35,12 +40,11 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, Act
     }
 
     @Override
-    protected void onKeyBoardVisibilityChange(boolean visible) {
-
-    }
-
-    @Override
     protected void initViews() {
+
+       /* SapDatabase sapDatabase = SapDatabase.getDatabase(this);
+        sapDatabase.exportDatabase();
+*/
         setActivityPresenter(new LoginPresenter(this));
 
         checkPermissions(new String[]{Manifest.permission.RECEIVE_SMS});
@@ -103,8 +107,7 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, Act
                 ActivityCompat.checkSelfPermission(
                         this,
                         android.Manifest.permission.USE_BIOMETRIC
-                )!= PackageManager.PERMISSION_GRANTED)
-        {
+                ) != PackageManager.PERMISSION_GRANTED) {
             notifyUser(getString(R.string.fingerprintAuthenticationPermissionIsNotEnabled));
             return false;
         }
@@ -159,7 +162,7 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, Act
 
     @Override
     public void onError(String error) {
-
+//        Log.d(TAG, "error: " + error);
     }
 
     @Override
@@ -181,7 +184,6 @@ public class LoginActivity extends BaseActivity<LoginInteracts.PresenterOps, Act
     public Context getAppContext() {
         return LoginActivity.this;
     }
-
 
 
     @Override

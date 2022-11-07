@@ -25,6 +25,11 @@ public class RegisterPresenter implements RegisterInteractor.PresenterOps, Regis
     }
 
     @Override
+    public void onDestroy() {
+        model.onDestroy();
+    }
+
+    @Override
     public Context getContext() {
         return view.getAppContext();
     }

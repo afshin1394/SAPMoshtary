@@ -20,6 +20,7 @@ import com.saphamrah.customer.presentation.login.verifyOtp.interactor.VerifyOtpL
 import com.saphamrah.customer.listeners.VerifyValidCode;
 import com.saphamrah.customer.presentation.login.verifyOtp.presenter.VerifyOtpLoginPresenter;
 import com.saphamrah.customer.utils.customViews.CustomSnackBar;
+import com.saphamrah.customer.utils.customViews.VerifyCodeTextWatcher;
 
 import java.util.concurrent.TimeUnit;
 
@@ -32,19 +33,8 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
 
     private String phoneNumber = "";
 
-    public VerifyOtpLoginFragment(Integer layout) {
-        super(layout);
-    }
-
-    @Override
-    protected void onBackPressed() {
-
-    }
-
-
-    @Override
-    protected void setPresenter() {
-        presenter = new VerifyOtpLoginPresenter(this);
+    public VerifyOtpLoginFragment() {
+        super(R.layout.fragment_verify_login);
     }
 
     @Override
@@ -53,10 +43,24 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
     }
 
     @Override
+    protected void setPresenter() {
+        presenter = new VerifyOtpLoginPresenter(this);
+    }
+
+    @Override
+    protected void onBackPressed() {
+
+    }
+
+    @Override
     protected void initViews() {
 
         EditText[] edit = {viewBinding.etCode1, viewBinding.etCode2, viewBinding.etCode3, viewBinding.etCode4};
 
+        viewBinding.etCode1.addTextChangedListener(new VerifyCodeTextWatcher(viewBinding.etCode1, edit, this));
+        viewBinding.etCode2.addTextChangedListener(new VerifyCodeTextWatcher(viewBinding.etCode2, edit, this));
+        viewBinding.etCode3.addTextChangedListener(new VerifyCodeTextWatcher(viewBinding.etCode3, edit, this));
+        viewBinding.etCode4.addTextChangedListener(new VerifyCodeTextWatcher(viewBinding.etCode4, edit, this));
 
         btnClickListeners();
 
