@@ -7,6 +7,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.Navigation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseActivity;
 import com.saphamrah.customer.base.BasePermissionModel;
 import com.saphamrah.customer.databinding.ActivityMainBinding;
+import com.saphamrah.customer.presentation.createRequest.CreateRequestActivity;
 
 
 import java.util.ArrayList;
@@ -68,7 +70,9 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
-
+        if (id == R.id.nav_request){
+            startActivity(new Intent(MainActivity.this, CreateRequestActivity.class));
+        }
         if (id == R.id.nav_profile) {
             Navigation.findNavController(this,R.id.mainNavigation_host).navigate(R.id.action_mainFragment_to_profileFragment);
         }

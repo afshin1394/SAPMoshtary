@@ -23,8 +23,6 @@ import com.saphamrah.customer.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -144,7 +142,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     }
     private void setProducts() {
         List<Integer> imageRes = new ArrayList<>();
-        imageRes.add(R.drawable.advertisement);
+        imageRes.add(R.drawable.advertising);
         imageRes.add(R.drawable.night);
         imageRes.add(R.drawable.midday);
         imageRes.add(R.drawable.sunrise);

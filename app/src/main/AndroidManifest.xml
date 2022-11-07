@@ -22,7 +22,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
-        android:name="com.saphamrah.customer.base.BaseApplication"
+        android:name="com.saphamrah.customer.Application"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher_icon"
@@ -36,28 +36,16 @@
         android:windowSoftInputMode="adjustResize"
         tools:replace="android:icon">
         <activity
-            android:name=".CreateRequestActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".ActivityCreateRequest"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".presentation.createRequest.CreateRequestActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+
         <activity
-            android:name="com.saphamrah.customer.presentation.view.activity.MainActivity"
+            android:name=".presentation.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -66,7 +54,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.view.activites.LoginActivity" />
+        <activity android:name=".presentation.login.LoginActivity" />
     </application>
 
 </manifest>
