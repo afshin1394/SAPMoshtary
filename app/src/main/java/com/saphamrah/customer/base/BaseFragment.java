@@ -1,6 +1,5 @@
 package com.saphamrah.customer.base;
 
-import static com.saphamrah.customer.base.BaseActivity.results;
 
 import android.app.Activity;
 import android.app.ActivityManager;

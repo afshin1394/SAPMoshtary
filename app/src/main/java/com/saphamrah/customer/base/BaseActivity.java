@@ -34,7 +34,6 @@ public abstract class BaseActivity<T extends BasePresenterOps, S extends ViewBin
         setContentView(viewBinding.getRoot());
         initViews();
         checkKeyboard();
-
     }
 
     private void checkKeyboard() {

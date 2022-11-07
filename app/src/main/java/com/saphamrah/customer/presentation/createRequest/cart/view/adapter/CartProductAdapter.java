@@ -102,6 +102,7 @@ public class CartProductAdapter extends RecyclerView.Adapter<CartProductAdapter.
             if (lin_purchase_count.getVisibility() == View.VISIBLE) {
                 et_product_count.addTextWatcher(s -> {
                     try {
+
                         models.get(position).setOrderCount(Integer.parseInt(s));
                         listener.onItemSelect(models.get(position), position, AdapterAction.ADD);
                     } catch (Exception e) {

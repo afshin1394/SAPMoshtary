@@ -4,8 +4,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_login"
-    android:background="@drawable/backrepeat"
-    android:layoutDirection="rtl">
+    android:layoutDirection="rtl"
+    android:background="@color/colorBrown50"
+    >
 
 
     <fragment
