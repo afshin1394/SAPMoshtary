@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: D./androidProjects/sap_customer/app/libs/httpcore-4.0-alpha5.jar">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/httpcore-4.0-alpha5.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
