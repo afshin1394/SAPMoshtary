@@ -35,27 +35,20 @@
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="adjustResize"
         tools:replace="android:icon">
-
-
-
-
         <activity
             android:name=".presentation.login.LoginActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:exported="true">
             <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
-
-
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
 
         <activity
             android:name=".presentation.main.MainActivity"
-            android:exported="true">
+            android:exported="false">
         </activity>
 
         <activity
