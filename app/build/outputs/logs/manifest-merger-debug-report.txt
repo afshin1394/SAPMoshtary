@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-60:12
-INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-60:12
-INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-60:12
-INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-60:12
+ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-81:12
+INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-81:12
+INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-81:12
+INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-81:12
 MERGED from [androidx.databinding:viewbinding:7.1.2] F:\.jdks\caches\transforms-3\53aa0bb2eb51a681a8f24e90de466a8f\transformed\jetified-viewbinding-7.1.2\AndroidManifest.xml:17:1-24:12
 MERGED from [com.github.chrisbanes:PhotoView:2.3.0] F:\.jdks\caches\transforms-3\d1049706bd85bd2b22a62646b46f12bd\transformed\jetified-PhotoView-2.3.0\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.navigation:navigation-fragment:2.3.5] F:\.jdks\caches\transforms-3\3ec859d214d19737a2bdfa5595eab15c\transformed\navigation-fragment-2.3.5\AndroidManifest.xml:17:1-24:12
@@ -107,22 +107,22 @@ MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.2.0] F:\.jdks\caches\t
 MERGED from [androidx.arch.core:core-runtime:2.1.0] F:\.jdks\caches\transforms-3\0ea46ef6f7e58aa27bb44d170dda77d1\transformed\core-runtime-2.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.annotation:annotation-experimental:1.1.0] F:\.jdks\caches\transforms-3\fb39dbfaba576967d67f32e636724c7f\transformed\jetified-annotation-experimental-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.multidex:multidex:2.0.1] F:\.jdks\caches\transforms-3\29efbb69368ce5ee32cfaa6817203167\transformed\multidex-2.0.1\AndroidManifest.xml:17:1-22:12
-INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-60:12
-INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-60:12
-INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-60:12
+INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-81:12
+INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-81:12
+INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-81:12
 	package
 		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:4:5-37
 		INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml
 		INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml
 	android:versionName
 		INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml
-		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-60:12
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-81:12
 		INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml
 	xmlns:tools
 		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:3:5-51
 	android:versionCode
 		INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml
-		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-60:12
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:1-81:12
 		INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:2:11-69
@@ -203,7 +203,7 @@ ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:22:5
 	android:name
 		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:22:22-71
 application
-ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:24:5-58:19
+ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:24:5-79:19
 MERGED from [devlight.io:navigationtabbar:1.2.5] F:\.jdks\caches\transforms-3\704b09db010bace30aad7c6635729b26\transformed\jetified-navigationtabbar-1.2.5\AndroidManifest.xml:23:5-26:38
 MERGED from [devlight.io:navigationtabbar:1.2.5] F:\.jdks\caches\transforms-3\704b09db010bace30aad7c6635729b26\transformed\jetified-navigationtabbar-1.2.5\AndroidManifest.xml:23:5-26:38
 MERGED from [com.miguelcatalan:materialsearchview:1.4.0] F:\.jdks\caches\transforms-3\ba0135cf4df435652ecf2036e7248bba\transformed\jetified-materialsearchview-1.4.0\AndroidManifest.xml:11:5-20
@@ -296,42 +296,66 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] F:\.jdks\ca
 		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:35:9-44
 	android:name
 		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:25:9-58
-activity#com.saphamrah.customer.presentation.createRequest.CreateRequestActivity
-ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:38:9-44:20
-	android:exported
-		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:40:13-37
-	android:name
-		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:39:13-77
-meta-data#android.app.lib_name
-ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:41:13-43:36
-	android:value
-		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:43:17-33
-	android:name
-		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:42:17-52
-activity#com.saphamrah.customer.presentation.main.MainActivity
-ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:47:9-56:20
-	android:exported
-		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:49:13-36
-	android:name
-		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:48:13-59
-intent-filter#action:name:android.intent.action.MAIN+action:name:android.intent.action.VIEW+category:name:android.intent.category.LAUNCHER
-ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:50:13-55:29
-action#android.intent.action.VIEW
-ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:51:17-69
-	android:name
-		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:51:25-66
-action#android.intent.action.MAIN
-ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:52:17-69
-	android:name
-		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:52:25-66
-category#android.intent.category.LAUNCHER
-ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:54:17-77
-	android:name
-		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:54:27-74
 activity#com.saphamrah.customer.presentation.login.LoginActivity
-ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:57:9-70
+ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:38:9-46:20
+	android:exported
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:41:13-36
+	android:theme
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:40:13-63
 	android:name
-		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:57:19-67
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:39:13-61
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:42:13-45:29
+action#android.intent.action.MAIN
+ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:43:17-69
+	android:name
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:43:25-66
+category#android.intent.category.LAUNCHER
+ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:44:17-77
+	android:name
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:44:27-74
+activity#com.saphamrah.customer.presentation.main.MainActivity
+ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:49:9-52:20
+	android:exported
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:51:13-37
+	android:name
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:50:13-59
+activity#com.saphamrah.customer.presentation.createRequest.CreateRequestActivity
+ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:54:9-58:20
+	android:exported
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:56:13-37
+	android:name
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:55:13-77
+receiver#com.saphamrah.customer.receivers.SmsReceiver
+ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:60:9-67:20
+	android:enabled
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:62:13-35
+	android:exported
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:63:13-36
+	android:name
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:61:13-50
+intent-filter#action:name:android.provider.Telephony.SMS_RECEIVED
+ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:64:13-66:29
+action#android.provider.Telephony.SMS_RECEIVED
+ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:65:17-81
+	android:name
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:65:25-79
+receiver#com.saphamrah.customer.receivers.LocationReceiver
+ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:70:9-75:20
+	android:exported
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:71:13-36
+	android:name
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:70:19-61
+intent-filter#action:name:com.sap.gpstracker
+ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:72:13-74:29
+action#com.sap.gpstracker
+ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:73:17-61
+	android:name
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:73:25-58
+service#com.saphamrah.customer.service.GpsTracker
+ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:77:9-55
+	android:name
+		ADDED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml:77:18-52
 uses-sdk
 INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\androidProjects\sap_customer\app\src\main\AndroidManifest.xml
