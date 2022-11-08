@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.saphamrah.customer.R;
+import com.saphamrah.customer.base.BaseActivity;
 import com.saphamrah.customer.base.BasePermissionModel;
 import com.saphamrah.customer.data.local.db.SapDatabase;
 import com.saphamrah.customer.data.local.temp.BonusModel;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class CreateRequestActivity extends com.saphamrah.customer.base.BaseActivity<CreateRequestInteractor.PresenterOps, ActivityCreateRequestBinding> {
+public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.PresenterOps, ActivityCreateRequestBinding> {
     private String TAG = CreateRequestActivity.class.getSimpleName();
     private List<ProductModel> productModelGlobal;
     private List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModelsGlobal;

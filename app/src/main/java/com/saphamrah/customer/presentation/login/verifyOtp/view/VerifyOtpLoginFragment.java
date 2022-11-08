@@ -2,6 +2,7 @@ package com.saphamrah.customer.presentation.login.verifyOtp.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +17,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.databinding.FragmentVerifyLoginBinding;
+import com.saphamrah.customer.presentation.login.LoginActivity;
 import com.saphamrah.customer.presentation.login.verifyOtp.interactor.VerifyOtpLoginInteracts;
 import com.saphamrah.customer.listeners.VerifyValidCode;
 import com.saphamrah.customer.presentation.login.verifyOtp.presenter.VerifyOtpLoginPresenter;
+import com.saphamrah.customer.presentation.main.MainActivity;
 import com.saphamrah.customer.utils.customViews.CustomSnackBar;
 import com.saphamrah.customer.utils.customViews.VerifyCodeTextWatcher;
 
@@ -80,12 +83,14 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
         viewBinding.btnSendCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(activity, MainActivity.class));
+
                 if (codeNumber1.length() +
                         codeNumber2.length() +
                         codeNumber3.length() +
                         codeNumber4.length() == 4) {
 
-                    presenter.verifyOtp(phoneNumber, codeNumber1 + codeNumber2 + codeNumber3 + codeNumber4);
+//                    presenter.verifyOtp(phoneNumber, codeNumber1 + codeNumber2 + codeNumber3 + codeNumber4);
 
                 } else {
 

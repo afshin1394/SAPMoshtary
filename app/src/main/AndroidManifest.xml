@@ -35,26 +35,54 @@
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="adjustResize"
         tools:replace="android:icon">
+
+
+
+
         <activity
-            android:name=".presentation.createRequest.CreateRequestActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
+            android:name=".presentation.login.LoginActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.MAIN" />
+
+
+            </intent-filter>
         </activity>
 
 
         <activity
             android:name=".presentation.main.MainActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <activity android:name=".presentation.login.LoginActivity" />
+
+        <activity
+            android:name=".presentation.createRequest.CreateRequestActivity"
+            android:exported="false">
+
+        </activity>
+
+        <receiver
+            android:name=".receivers.SmsReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
+
+
+        <receiver android:name=".receivers.LocationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.sap.gpstracker" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".service.GpsTracker" />
+
     </application>
 
 </manifest>

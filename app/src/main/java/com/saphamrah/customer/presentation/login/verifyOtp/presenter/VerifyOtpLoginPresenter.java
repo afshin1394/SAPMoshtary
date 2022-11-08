@@ -2,17 +2,18 @@ package com.saphamrah.customer.presentation.login.verifyOtp.presenter;
 
 import android.content.Context;
 
+import com.saphamrah.customer.base.BasePresenter;
+import com.saphamrah.customer.base.BasePresenterOps;
 import com.saphamrah.customer.presentation.login.verifyOtp.interactor.VerifyOtpLoginInteracts;
 import com.saphamrah.customer.presentation.login.verifyOtp.model.VerifyOtpLoginModel;
 
-public class VerifyOtpLoginPresenter implements VerifyOtpLoginInteracts.PresenterOps, VerifyOtpLoginInteracts.RequiredPresenterOps{
+import java.lang.ref.WeakReference;
 
-    private final VerifyOtpLoginInteracts.RequiredViewOps view;
-    private final VerifyOtpLoginModel model;
+public class VerifyOtpLoginPresenter extends BasePresenter<VerifyOtpLoginInteracts.RequiredViewOps,VerifyOtpLoginInteracts.ModelOps> implements VerifyOtpLoginInteracts.PresenterOps, VerifyOtpLoginInteracts.RequiredPresenterOps{
 
     public VerifyOtpLoginPresenter(VerifyOtpLoginInteracts.RequiredViewOps view) {
-        this.view = view;
-        model = new VerifyOtpLoginModel(this);
+     super(view);
+     model = new VerifyOtpLoginModel(this);
     }
 
     @Override
@@ -28,17 +29,17 @@ public class VerifyOtpLoginPresenter implements VerifyOtpLoginInteracts.Presente
 
     @Override
     public Context getContext() {
-        return view.getAppContext();
+        return view.get().getAppContext();
     }
 
     @Override
     public void sendMobile(String mobile) {
-        view.onSendMobile();
+        view.get().onSendMobile();
     }
 
     @Override
     public void verifyOtp(String mobile, String code) {
-        view.showLoading("لطفا کمی صبر نمایید");
+        view.get().showLoading("لطفا کمی صبر نمایید");
 
     }
 }

@@ -1,8 +1,10 @@
 package com.saphamrah.customer.base;
 
-public interface BasePresenterOps {
+import java.lang.ref.WeakReference;
 
-    void checkInsertLogToDB(
+public interface BasePresenterOps<TView extends BaseView,TModel extends BaseModel> {
+
+    abstract void  checkInsertLogToDB(
             Integer logType,
             String message,
             String logClass,
@@ -11,6 +13,6 @@ public interface BasePresenterOps {
             String functionChild
     );
 
-    void onDestroy();
+    abstract void onDestroy();
 
 }
