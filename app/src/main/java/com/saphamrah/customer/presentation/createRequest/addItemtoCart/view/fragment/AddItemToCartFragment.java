@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.PresenterOps, FragmentAddItemToCartBinding> implements CreateRequestActivity.CartListener {
+public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.PresenterOps, FragmentAddItemToCartBinding,CreateRequestActivity> implements CreateRequestActivity.CartListener {
     int indexOfProduct;
     private Context context;
     private BottomSheetBehavior bottomSheetBehavior;
@@ -58,9 +58,9 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initViews() {
-        ((CreateRequestActivity) getActivity()).setCartListener(this);
+        ((CreateRequestActivity) activity).setCartListener(this);
         ProductModel productModel = AddItemToCartFragmentArgs.fromBundle(getArguments()).getProduct();
-        indexOfProduct = ((CreateRequestActivity) getActivity()).getProductModelGlobal().indexOf(productModel);
+        indexOfProduct = ((CreateRequestActivity) activity).getProductModelGlobal().indexOf(productModel);
         setImageSlider(productModel);
         setViews(productModel);
     }
@@ -152,7 +152,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
                 viewBinding.btmShtPurchase.linPurchaseCount.setVisibility(View.VISIBLE);
                 viewBinding.btmShtPurchase.TVCount.setText("1");
                 productModel.setOrderCount(1);
-                ((CreateRequestActivity) getActivity()).checkCart();
+                ((CreateRequestActivity) activity).checkCart(true);
             });
 
             viewBinding.btmShtPurchase.addToCart.setOnClickListener(view -> viewBinding.btmShtPurchase.TVCount.setText(String.valueOf(Integer.parseInt(String.valueOf(viewBinding.btmShtPurchase.TVCount.getText())) + 1)));
@@ -161,7 +161,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
 
                 if (productModel.getOrderCount() > 0) {
                     productModel.setOrderCount(productModel.getOrderCount() - 1);
-                    ((CreateRequestActivity) getActivity()).checkCart();
+                    ((CreateRequestActivity) activity).checkCart(true);
                     try {
                         viewBinding.btmShtPurchase.TVCount.setText(String.valueOf(productModel.getOrderCount()));
                     } catch (Exception e) {

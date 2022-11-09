@@ -16,6 +16,7 @@ import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.local.AdvertiseModel;
 import com.saphamrah.customer.databinding.FragmentAddressBinding;
 import com.saphamrah.customer.databinding.FragmentAdvertiseBinding;
+import com.saphamrah.customer.presentation.main.MainActivity;
 import com.saphamrah.customer.presentation.main.MainInteracts;
 import com.saphamrah.customer.presentation.main.MainPresenter;
 import com.saphamrah.customer.presentation.profile.ProfileInteracts;
@@ -24,7 +25,7 @@ import com.saphamrah.customer.presentation.profile.ProfilePresenter;
 import java.util.List;
 
 
-public class AdvertiseFragment extends BaseFragment<MainPresenter, FragmentAdvertiseBinding> implements MainInteracts.RequiredViewOps {
+public class AdvertiseFragment extends BaseFragment<MainPresenter, FragmentAdvertiseBinding, MainActivity> implements MainInteracts.RequiredViewOps {
 
 
     public AdvertiseFragment() {

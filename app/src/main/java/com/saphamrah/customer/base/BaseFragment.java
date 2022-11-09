@@ -49,7 +49,7 @@ import io.reactivex.Flowable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBinding> extends Fragment implements BaseView {
+public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBinding,A extends Activity> extends Fragment implements BaseView {
 
     private final Integer PERMISSION_REQUEST_CODE = 9824;
     public static final String TAG = BaseFragment.class.getSimpleName();
@@ -64,7 +64,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     protected T presenter;
     protected S viewBinding;
     protected Context context;
-    protected Activity activity;
+    protected A activity;
 
     protected abstract void onBackPressed();
 
@@ -96,7 +96,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-        this.activity = getActivity();
+        this.activity = ((A) getActivity());
     }
 
 

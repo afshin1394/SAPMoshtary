@@ -12,6 +12,8 @@ import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.local.AddressMoshtaryModel;
 import com.saphamrah.customer.databinding.FragmentAddressBinding;
+import com.saphamrah.customer.presentation.main.MainActivity;
+import com.saphamrah.customer.presentation.main.welcome.view.MainFragment;
 import com.saphamrah.customer.presentation.profile.ProfileInteracts;
 import com.saphamrah.customer.presentation.profile.ProfilePresenter;
 import com.saphamrah.customer.presentation.profile.address.view.adapter.CustomerAddressAdapter;
@@ -19,7 +21,7 @@ import com.saphamrah.customer.presentation.profile.address.view.adapter.Customer
 import java.util.ArrayList;
 
 
-public class AddressFragment extends BaseFragment<ProfilePresenter, FragmentAddressBinding> implements ProfileInteracts.RequiredViewOps {
+public class AddressFragment extends BaseFragment<ProfilePresenter, FragmentAddressBinding, MainActivity> implements ProfileInteracts.RequiredViewOps {
 
     public AddressFragment() {
         super(R.layout.fragment_address);

@@ -10,10 +10,11 @@ import android.view.ViewGroup;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.databinding.FragmentCreditBinding;
+import com.saphamrah.customer.presentation.main.MainActivity;
 import com.saphamrah.customer.presentation.profile.ProfilePresenter;
 
 
-public class CreditFragment extends BaseFragment<ProfilePresenter, FragmentCreditBinding> {
+public class CreditFragment extends BaseFragment<ProfilePresenter, FragmentCreditBinding, MainActivity> {
 
 
     public CreditFragment() {

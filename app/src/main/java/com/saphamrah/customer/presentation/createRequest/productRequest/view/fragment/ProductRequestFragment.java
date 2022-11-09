@@ -36,15 +36,15 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresenter, FragmentProductRequestBinding> implements CreateRequestActivity.CartListener {
+public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresenter, FragmentProductRequestBinding,CreateRequestActivity> implements CreateRequestActivity.CartListener {
 
     public static final String TAG = ProductRequestFragment.class.getSimpleName();
     private FilterListAdapter filterAdapter;
     private ProductAdapter productAdapter;
 
     private ArrayList<FilterSortModel> filterSortModels = new ArrayList<>();
-    private List<ProductModel> productModels = new ArrayList<>();
-    private ArrayList<ProductModel> productModelsTemp = new ArrayList<>();
+    private List<ProductModel> productModels;
+    private List<ProductModel> productModelsTemp;
 
 
 
@@ -63,22 +63,22 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initViews() {
-        ((CreateRequestActivity) getActivity()).setCartListener(this);
+        ((CreateRequestActivity) activity).setCartListener(this);
         Log.i(TAG, "onViewCreated: ");
+        productModels = ((CreateRequestActivity) activity).getProductModelGlobal();
+        productModelsTemp = new ArrayList<>();
+        productModelsTemp.addAll(productModels);
         setFilterRecycler();
         setProductRecycler();
         setSearch();
         setViews();
-
-
     }
 
 
     @Override
     protected void setPresenter()
     {
-      productModels.clear();
-      productModels.addAll(((CreateRequestActivity) getActivity()).getProductModelGlobal());
+
     }
 
     @Override
@@ -208,11 +208,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     private void setProductRecycler() {
 
 
-        productModelsTemp.clear();
-        productModelsTemp.addAll(((CreateRequestActivity) getActivity()).getProductModelGlobal());
 
-
-        productModelsTemp.addAll(((CreateRequestActivity) getActivity()).getProductModelGlobal());
         productAdapter = new ProductAdapter(getActivity(), productModelsTemp, (model, position, Action) -> {
             switch (Action)
             {
@@ -223,7 +219,8 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
                 case ADD:
                 case REMOVE:
-                    ((CreateRequestActivity) getActivity()).checkCart();
+                    ((CreateRequestActivity) activity).getProductModelGlobal().get(position).setOrderCount(productModelsTemp.get(position).getOrderCount());
+                    ((CreateRequestActivity) activity).checkCart(true);
                     break;
             }
 

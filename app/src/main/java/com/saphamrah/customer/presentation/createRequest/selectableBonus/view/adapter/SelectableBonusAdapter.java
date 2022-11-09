@@ -134,25 +134,5 @@ public class SelectableBonusAdapter extends RecyclerView.Adapter<SelectableBonus
         }
 
     }
-    public void updateSelectableBonus(List<JayezehEntekhabiMojodiModel> newJayezehEntekhabiMojodiModels) {
-        final SyncDiffUtilCallBack<JayezehEntekhabiMojodiModel> diffCallback = new SyncDiffUtilCallBack<JayezehEntekhabiMojodiModel>(this.jayezehEntekhabiMojodiModels, newJayezehEntekhabiMojodiModels) {
-            @Override
-            public Bundle getChangedPayload(JayezehEntekhabiMojodiModel newItem, JayezehEntekhabiMojodiModel oldItem) {
-                Bundle bundle = new Bundle();
-                if (newItem.getSelectedCount()!= oldItem.getSelectedCount()){
-                    bundle.putInt("selectedCount",newItem.getSelectedCount());
-                }
 
-                if (bundle.size()==0){
-                    return null;
-                }
-
-                return bundle;
-            }
-        };
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-        diffResult.dispatchUpdatesTo(this);
-        jayezehEntekhabiMojodiModels.clear();
-        jayezehEntekhabiMojodiModels.addAll(newJayezehEntekhabiMojodiModels);
-    }
 }

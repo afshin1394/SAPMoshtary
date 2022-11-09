@@ -41,6 +41,7 @@ import com.saphamrah.customer.data.local.temp.DiscountModel;
 import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.data.local.temp.ReceiptModel;
 import com.saphamrah.customer.databinding.FragmentCartBinding;
+import com.saphamrah.customer.presentation.createRequest.cart.view.adapter.SelectableBonusCartAdapter;
 import com.saphamrah.customer.presentation.createRequest.selectableBonus.view.adapter.SelectableBonusAdapter;
 import com.saphamrah.customer.presentation.createRequest.selectableBonus.view.fragment.SelectableBonusFragmentDirections;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
@@ -57,13 +58,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, FragmentCartBinding> implements CartInteractor.RequiredViewOps, AdapterView.OnItemSelectedListener {
+public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, FragmentCartBinding,CreateRequestActivity> implements CartInteractor.RequiredViewOps, AdapterView.OnItemSelectedListener {
 
     private List<ProductModel> productModels;
     private CartProductAdapter cartProductAdapter;
     private BottomSheetBehavior sheetBehavior;
     private List<ReceiptModel> receiptModels;
-    private SelectableBonusAdapter selectableBonusAdapter;
+    private SelectableBonusCartAdapter selectableBonusCartAdapter;
+    private BonusAdapter bonusAdapter;
+    private DiscountAdapter discountAdapter;
     private int check;
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -72,7 +75,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         if (++check > 1) {
             Log.i(TAG, "onItemSelected: item log in");
             viewBinding.tvReceiptDuration.setText(String.format("%1$s: %2$s %3$s", context.getString(R.string.modatVosol), receiptModels.get(position).getDuration(), context.getString(R.string.day)));
-            ((CreateRequestActivity) activity).paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
+            activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
             checkState();
         }
     }
@@ -89,42 +92,21 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
     @Override
     protected void onBackPressed() {
-        ((CreateRequestActivity) activity).paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
+        activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
     }
 
-    private void setSelectableBonusRecycler() {
-        List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModelList = ((CreateRequestActivity) activity).getJayezehEntekhabiMojodiModels();
-        if (jayezehEntekhabiMojodiModelList != null) {
-            viewBinding.linSelectableBonus.setVisibility(View.VISIBLE);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
-            selectableBonusAdapter = new SelectableBonusAdapter(context, jayezehEntekhabiMojodiModelList, new AdapterItemListener<JayezehEntekhabiMojodiModel>() {
-                @Override
-                public void onItemSelect(JayezehEntekhabiMojodiModel model, int position, AdapterAction Action) {
-                    switch (Action) {
-
-                        case ADD:
-                        case REMOVE:
-                            jayezehEntekhabiMojodiModelList.get(position).setSelectedCount(jayezehEntekhabiMojodiModelList.get(position).getSelectedCount() + 1);
-                            selectableBonusAdapter.updateSelectableBonus(jayezehEntekhabiMojodiModelList);
-                            break;
-                    }
-                }
-            });
-            viewBinding.RVSelectableBonus.setLayoutManager(linearLayoutManager);
-            viewBinding.RVSelectableBonus.setAdapter(selectableBonusAdapter);
-        }
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initViews()
     {
+        activity = activity;
         check = 0;
         Log.i(TAG, "onFragmentResult: Cart");
         Object o = getFragmentResult("bonuses");
 
         if (o != null)
-            ((CreateRequestActivity) activity).setJayezehEntekhabiMojodiModel(((List<JayezehEntekhabiMojodiModel>) Arrays.asList(o).get(0)).stream().collect(Collectors.toList()));
+            activity.setJayezehEntekhabiMojodiModel(((List<JayezehEntekhabiMojodiModel>) Arrays.asList(o).get(0)).stream().collect(Collectors.toList()));
 
         productModels = CollectionUtils.convertArrayToList(CartFragmentArgs.fromBundle(getArguments()).getProducts());
         setProductRecycler();
@@ -136,17 +118,17 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void checkState() {
-        switch (((CreateRequestActivity) activity).paymentState) {
+        switch (activity.paymentState) {
 
             case SHOW_PRODUCTS: {
                 Log.i(TAG, "checkState: SHOW_PRODUCTS");
                 /*state 1*/
-                ((CreateRequestActivity) activity).paymentState = Constants.PaymentStates.CALCULATE_BONUS_DISCOUNT;
-                ((CreateRequestActivity) activity).rootBinding.linCart.setVisibility(View.GONE);
+                activity.paymentState = Constants.PaymentStates.CALCULATE_BONUS_DISCOUNT;
+                activity.rootBinding.linCart.setVisibility(View.GONE);
                 viewBinding.linBonus.setVisibility(View.GONE);
                 viewBinding.linDiscount.setVisibility(View.GONE);
                 viewBinding.linSelectableBonus.setVisibility(View.GONE);
-                ((CreateRequestActivity) activity).clearJayezehTakhfif();
+                activity.clearJayezehTakhfif();
                 viewBinding.btmShtPurchase.tvPayment.setText(R.string.calculateBonusDiscount);
                 break;
             }
@@ -155,7 +137,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             case CALCULATE_BONUS_DISCOUNT: {
                 Log.i(TAG, "checkState: CALCULATE_BONUS_DISCOUNT");
                 /*state2*/
-                ((CreateRequestActivity) activity).paymentState = Constants.PaymentStates.SELECTABLE_BONUS;
+                activity.paymentState = Constants.PaymentStates.SELECTABLE_BONUS;
                 presenter.getDiscountAndBonuses();
 
                 break;
@@ -174,7 +156,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
                 Log.i(TAG, "checkState: CONFIRM_REQUEST");
                 /*state4*/
                 setSelectableBonusRecycler();
-                ((CreateRequestActivity) activity).paymentState = Constants.PaymentStates.SAVE_REQUEST;
+                activity.paymentState = Constants.PaymentStates.SAVE_REQUEST;
                 presenter.getDiscountAndBonuses();
                 viewBinding.btmShtPurchase.tvPayment.setText(R.string.confirm);
 
@@ -183,9 +165,9 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             /*state5*/
             case SAVE_REQUEST: {
                 Log.i(TAG, "checkState: SAVE_REQUEST");
-                List<ProductModel> productModels = ((CreateRequestActivity) activity).getProductModelGlobal();
-                List<BonusModel> bonusModels = ((CreateRequestActivity) activity).getBonusModelsGlobal();
-                List<DiscountModel> discountModels = ((CreateRequestActivity) activity).getDiscountModelsGlobal();
+                List<ProductModel> productModels = activity.getProductModelGlobal();
+                List<BonusModel> bonusModels = activity.getBonusModelsGlobal();
+                List<DiscountModel> discountModels = activity.getDiscountModelsGlobal();
                 presenter.saveData(productModels, bonusModels, discountModels);
                 Toast.makeText(context, R.string.confirm, Toast.LENGTH_LONG).show();
                 activity.finish();
@@ -228,9 +210,9 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         });
 
         viewBinding.imgTrash.setOnClickListener(view -> {
-            ((CreateRequestActivity) activity).paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
+            activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
             AnimationUtils.scale(view);
-            ((CreateRequestActivity) activity).removeCart();
+            activity.removeCart();
         });
 
 
@@ -298,7 +280,9 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             switch (Action) {
                 case ADD:
                 case REMOVE:
-                    ((CreateRequestActivity) activity).checkCart();
+
+                    activity.clearJayezehTakhfif();
+                    activity.checkCart(false);
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -306,38 +290,12 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         viewBinding.RVOrderedProducts.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
         viewBinding.RVOrderedProducts.setAdapter(cartProductAdapter);
     }
-
-
-    private void setBonusRecycler() {
-        List<BonusModel> bonusModels = ((CreateRequestActivity) activity).getBonusModelsGlobal();
-        Log.i(TAG, "setBonusRecycler: " + bonusModels);
-        if (bonusModels != null) {
-            viewBinding.linBonus.setVisibility(View.VISIBLE);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-            BonusAdapter bonusAdapter = new BonusAdapter(context, bonusModels);
-            viewBinding.RVBonus.setLayoutManager(linearLayoutManager);
-            viewBinding.RVBonus.setAdapter(bonusAdapter);
-        }
-    }
-
-    private void setDiscountRecycler() {
-        List<DiscountModel> discountModels = ((CreateRequestActivity) activity).getDiscountModelsGlobal();
-        Log.i(TAG, "setDiscountRecycler: " + discountModels);
-        if (discountModels != null) {
-            viewBinding.linDiscount.setVisibility(View.VISIBLE);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-            DiscountAdapter discountAdapter = new DiscountAdapter(context, discountModels);
-            viewBinding.RVDiscount.setLayoutManager(linearLayoutManager);
-            viewBinding.RVDiscount.setAdapter(discountAdapter);
-        }
-    }
-
     @Override
     public void onGetDiscountAndBonuses(List<DiscountModel> discountModels, List<BonusModel> bonusModels) {
 
         viewBinding.btmShtPurchase.tvPayment.setText(R.string.selectableBonus);
-        ((CreateRequestActivity) activity).setBonusModelsGlobal(bonusModels);
-        ((CreateRequestActivity) activity).setDiscountModelsGlobal(discountModels);
+        activity.setBonusModelsGlobal(bonusModels);
+        activity.setDiscountModelsGlobal(discountModels);
         viewBinding.linBonusDiscount.setVisibility(View.VISIBLE);
         setBonusRecycler();
         setDiscountRecycler();
@@ -351,6 +309,52 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
 
     }
+
+
+    private void setBonusRecycler() {
+        Log.i(TAG, "setBonusRecycler: " + activity.getBonusModelsGlobal());
+        if (activity.getBonusModelsGlobal() != null) {
+            viewBinding.linBonus.setVisibility(View.VISIBLE);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+            bonusAdapter = new BonusAdapter(context, activity.getBonusModelsGlobal());
+            viewBinding.RVBonus.setLayoutManager(linearLayoutManager);
+            viewBinding.RVBonus.setAdapter(bonusAdapter);
+        }
+    }
+
+    private void setDiscountRecycler() {
+        Log.i(TAG, "setDiscountRecycler: " + activity.getDiscountModelsGlobal());
+        if (activity.getDiscountModelsGlobal() != null) {
+            viewBinding.linDiscount.setVisibility(View.VISIBLE);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+            discountAdapter = new DiscountAdapter(context, activity.getDiscountModelsGlobal());
+            viewBinding.RVDiscount.setLayoutManager(linearLayoutManager);
+            viewBinding.RVDiscount.setAdapter(discountAdapter);
+        }
+    }
+
+    private void setSelectableBonusRecycler() {
+        if (activity.getJayezehEntekhabiMojodiModels() != null) {
+            viewBinding.linSelectableBonus.setVisibility(View.VISIBLE);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
+            selectableBonusCartAdapter = new SelectableBonusCartAdapter(context, activity.getJayezehEntekhabiMojodiModels(), new AdapterItemListener<JayezehEntekhabiMojodiModel>() {
+                @Override
+                public void onItemSelect(JayezehEntekhabiMojodiModel model, int position, AdapterAction Action) {
+                    switch (Action) {
+
+                        case ADD:
+                        case REMOVE:
+                            activity.getJayezehEntekhabiMojodiModels().get(position).setSelectedCount(activity.getJayezehEntekhabiMojodiModels().get(position).getSelectedCount() + 1);
+                            break;
+                    }
+                }
+            });
+            viewBinding.RVSelectableBonus.setLayoutManager(linearLayoutManager);
+            viewBinding.RVSelectableBonus.setAdapter(selectableBonusCartAdapter);
+        }
+    }
+
+
 
 
 }

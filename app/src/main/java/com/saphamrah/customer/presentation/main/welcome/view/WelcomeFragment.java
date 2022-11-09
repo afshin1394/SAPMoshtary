@@ -24,6 +24,7 @@ import com.saphamrah.customer.data.local.database.entity.MoshtaryTable;
 import com.saphamrah.customer.databinding.FragmentAddressBinding;
 import com.saphamrah.customer.databinding.FragmentWelcomeBinding;
 import com.saphamrah.customer.domain.repository.MoshtaryRepository;
+import com.saphamrah.customer.presentation.main.MainActivity;
 import com.saphamrah.customer.presentation.main.MainInteracts;
 import com.saphamrah.customer.presentation.main.MainPresenter;
 import com.saphamrah.customer.presentation.profile.ProfileInteracts;
@@ -35,7 +36,7 @@ import java.util.List;
 import io.reactivex.disposables.CompositeDisposable;
 
 
-public class WelcomeFragment extends BaseFragment<MainPresenter, FragmentWelcomeBinding> implements MainInteracts.RequiredViewOps {
+public class WelcomeFragment extends BaseFragment<MainPresenter, FragmentWelcomeBinding, MainActivity> implements MainInteracts.RequiredViewOps {
 
     private BaseStatePager adapter;
     private ArrayList<AdvertiseModel> advertiseList;

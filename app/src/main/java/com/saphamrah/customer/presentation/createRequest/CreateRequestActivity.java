@@ -106,9 +106,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void checkCart() {
-
-
+    public void checkCart(boolean showCartIcon) {
         boolean stuffInCart = productModelGlobal.stream().anyMatch(new Predicate<ProductModel>() {
             @Override
             public boolean test(ProductModel productModel) {
@@ -116,19 +114,29 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
             }
         });
         Log.i(TAG, "checkCart: "+stuffInCart);
-        if (stuffInCart) {
-          viewBinding.linCart.setVisibility(View.VISIBLE);
-        }else{
-          viewBinding.linCart.setVisibility(View.GONE);
-          cartListener.onCartEmpty();
+        if (showCartIcon) {
+            if (stuffInCart) {
+                viewBinding.linCart.setVisibility(View.VISIBLE);
+            } else {
+                viewBinding.linCart.setVisibility(View.GONE);
+                cartListener.onCartEmpty();
+            }
         }
     }
 
     public void clearJayezehTakhfif(){
+        if (jayezehEntekhabiMojodiModelsGlobal!=null){
+            jayezehEntekhabiMojodiModelsGlobal.clear();
+        }
+        if (bonusModelsGlobal!=null){
+            bonusModelsGlobal.clear();
+        }
+        if (discountModelsGlobal!=null){
+            discountModelsGlobal.clear();
+        }
 
-        jayezehEntekhabiMojodiModelsGlobal= null;
-        bonusModelsGlobal = null;
-        discountModelsGlobal = null;
+
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

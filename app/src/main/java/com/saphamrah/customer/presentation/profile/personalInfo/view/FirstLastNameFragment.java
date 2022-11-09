@@ -10,10 +10,12 @@ import android.view.ViewGroup;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.databinding.FragmentFirstLastNameBinding;
+import com.saphamrah.customer.presentation.main.MainActivity;
+import com.saphamrah.customer.presentation.main.welcome.view.MainFragment;
 import com.saphamrah.customer.presentation.profile.ProfileInteracts;
 import com.saphamrah.customer.presentation.profile.ProfilePresenter;
 
-public class FirstLastNameFragment extends BaseFragment<ProfilePresenter, FragmentFirstLastNameBinding> implements ProfileInteracts.RequiredViewOps {
+public class FirstLastNameFragment extends BaseFragment<ProfilePresenter, FragmentFirstLastNameBinding, MainActivity> implements ProfileInteracts.RequiredViewOps {
 
 
     public FirstLastNameFragment() {

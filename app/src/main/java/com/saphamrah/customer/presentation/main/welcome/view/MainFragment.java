@@ -1,5 +1,6 @@
 package com.saphamrah.customer.presentation.main.welcome.view;
 
+import android.Manifest;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -24,6 +25,7 @@ import com.saphamrah.customer.data.local.AdvertiseModel;
 import com.saphamrah.customer.data.local.MenuModel;
 import com.saphamrah.customer.databinding.FragmentAddressBinding;
 import com.saphamrah.customer.databinding.FragmentMainBinding;
+import com.saphamrah.customer.presentation.main.MainActivity;
 import com.saphamrah.customer.presentation.main.MainInteracts;
 import com.saphamrah.customer.presentation.main.MainPresenter;
 import com.saphamrah.customer.presentation.main.welcome.view.adapter.MainStatePager;
@@ -40,7 +42,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 
-public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBinding> implements MainInteracts.RequiredViewOps,
+public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBinding, MainActivity> implements MainInteracts.RequiredViewOps,
         AdapterItemListener<BaseBottomSheetRecyclerModel>, AdapterItemMultiSelectListener<BaseBottomSheetRecyclerModel> {
 
     private ConstraintLayout mBottomSheetLayout;

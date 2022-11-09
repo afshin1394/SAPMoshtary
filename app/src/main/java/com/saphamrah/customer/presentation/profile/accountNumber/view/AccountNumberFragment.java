@@ -11,6 +11,7 @@ import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.local.AccountNumberModel;
 import com.saphamrah.customer.databinding.FragmentAddressBinding;
+import com.saphamrah.customer.presentation.main.MainActivity;
 import com.saphamrah.customer.presentation.profile.ProfileInteracts;
 import com.saphamrah.customer.presentation.profile.ProfilePresenter;
 import com.saphamrah.customer.presentation.profile.accountNumber.view.adapter.AccountNumberAdapter;
@@ -18,7 +19,7 @@ import com.saphamrah.customer.presentation.profile.accountNumber.view.adapter.Ac
 import java.util.ArrayList;
 
 
-public class AccountNumberFragment extends BaseFragment<ProfilePresenter, FragmentAddressBinding> implements ProfileInteracts.RequiredViewOps {
+public class AccountNumberFragment extends BaseFragment<ProfilePresenter, FragmentAddressBinding, MainActivity> implements ProfileInteracts.RequiredViewOps {
 
     public AccountNumberFragment() {
         super(R.layout.fragment_account_number);

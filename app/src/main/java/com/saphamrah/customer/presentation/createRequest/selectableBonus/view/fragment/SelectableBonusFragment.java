@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 import io.reactivex.Flowable;
 
 
-public class SelectableBonusFragment extends BaseFragment<SelectableBonusInteractor.PresenterOps, FragmentSelectableBonusBinding> implements SelectableBonusInteractor.RequiredViewOps, AdapterView.OnItemSelectedListener {
+public class SelectableBonusFragment extends BaseFragment<SelectableBonusInteractor.PresenterOps, FragmentSelectableBonusBinding,CreateRequestActivity> implements SelectableBonusInteractor.RequiredViewOps, AdapterView.OnItemSelectedListener {
 
 
     private List<DarkhastFaktorJayezehTakhfifModel> darkhastFaktorJayezehTakhfifModels;

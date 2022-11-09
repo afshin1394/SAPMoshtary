@@ -19,6 +19,7 @@ import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
 import com.saphamrah.customer.data.LocationDbModel;
 import com.saphamrah.customer.databinding.BottomSheetSearchBinding;
 import com.saphamrah.customer.databinding.FragmentRegisterBinding;
+import com.saphamrah.customer.presentation.login.LoginActivity;
 import com.saphamrah.customer.presentation.login.register.interactor.RegisterInteractor;
 import com.saphamrah.customer.presentation.login.register.presenter.RegisterPresenter;
 import com.saphamrah.customer.receivers.LocationReceiver;
@@ -31,7 +32,7 @@ import com.saphamrah.customer.utils.AdapterUtil.AdapterItemMultiSelectListener;
 
 import java.util.ArrayList;
 
-public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRegisterBinding> implements RegisterInteractor.RequiredViewOps, AdapterItemListener<BaseBottomSheetRecyclerModel>, AdapterItemMultiSelectListener<BaseBottomSheetRecyclerModel> {
+public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRegisterBinding, LoginActivity> implements RegisterInteractor.RequiredViewOps, AdapterItemListener<BaseBottomSheetRecyclerModel>, AdapterItemMultiSelectListener<BaseBottomSheetRecyclerModel> {
 
 
     private BottomSheetSearchRecyclerView bottomSheetSearch;

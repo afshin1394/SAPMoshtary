@@ -27,7 +27,7 @@ import com.saphamrah.customer.utils.customViews.VerifyCodeTextWatcher;
 
 import java.util.concurrent.TimeUnit;
 
-public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter, FragmentVerifyLoginBinding> implements VerifyOtpLoginInteracts.RequiredViewOps,
+public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter, FragmentVerifyLoginBinding,LoginActivity> implements VerifyOtpLoginInteracts.RequiredViewOps,
         VerifyValidCode {
 
     private CountDownTimer countDown;

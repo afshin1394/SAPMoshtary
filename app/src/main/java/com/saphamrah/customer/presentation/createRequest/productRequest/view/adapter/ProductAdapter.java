@@ -22,17 +22,18 @@ import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.customViews.EditTextWatcher;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = ProductAdapter.class.getSimpleName();
     private Context context;
-    private ArrayList<ProductModel> models;
+    private List<ProductModel> models;
     private AdapterItemListener<ProductModel> listener;
 
 
-    public ProductAdapter(Context context, ArrayList<ProductModel> models, AdapterItemListener<ProductModel> listener) {
+    public ProductAdapter(Context context, List<ProductModel> models, AdapterItemListener<ProductModel> listener) {
         this.context = context;
         this.models = models;
         this.listener = listener;
@@ -122,14 +123,13 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             });
 
-            if (lin_purchase_count.getVisibility() == View.VISIBLE) {
                 et_product_count.addTextWatcher(s -> {
                     try {
                         models.get(getAdapterPosition()).setOrderCount(Integer.parseInt(s));
+                        listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.ADD);
                     } catch (Exception e) {
-                        models.get(getAdapterPosition()).setOrderCount(0);
+//                        models.get(getAdapterPosition()).setOrderCount(0);
                     }
-                    listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.ADD);
                 }, 500);
 
 
@@ -139,9 +139,10 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.ADD);
                 });
                 img_remove.setOnClickListener(view14 -> {
-                    models.get(getAdapterPosition()).setOrderCount(models.get(getAdapterPosition()).getOrderCount() - 1);
 
-                    if (models.get(getAdapterPosition()).getOrderCount() > 0) {
+                    if (models.get(getAdapterPosition()).getOrderCount() > 1) {
+
+                        models.get(getAdapterPosition()).setOrderCount(models.get(getAdapterPosition()).getOrderCount() - 1);
                         et_product_count.setText(String.valueOf(models.get(getAdapterPosition()).getOrderCount()));
                     } else {
                         lin_purchase.setVisibility(View.VISIBLE);
@@ -151,7 +152,6 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 });
 
-            }
         }
 
         public void bind(ProductModel productModel) {

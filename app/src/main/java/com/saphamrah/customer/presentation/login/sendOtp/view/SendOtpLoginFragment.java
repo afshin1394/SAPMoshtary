@@ -14,13 +14,14 @@ import com.google.android.material.snackbar.Snackbar;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.databinding.FragmentSendOtpLoginBinding;
+import com.saphamrah.customer.presentation.login.LoginActivity;
 import com.saphamrah.customer.presentation.login.sendOtp.interactor.SendOtpLoginInteracts;
 import com.saphamrah.customer.presentation.login.sendOtp.presenter.SendOtpLoginPresenter;
 import com.saphamrah.customer.utils.customViews.CustomSnackBar;
 
 import java.util.Objects;
 
-public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, FragmentSendOtpLoginBinding> implements SendOtpLoginInteracts.RequiredViewOps {
+public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, FragmentSendOtpLoginBinding, LoginActivity> implements SendOtpLoginInteracts.RequiredViewOps {
 
 
     private String phoneNumber = "";

@@ -14,10 +14,11 @@ import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.databinding.FragmentAddressBinding;
 import com.saphamrah.customer.databinding.FragmentShoppingListBinding;
+import com.saphamrah.customer.presentation.main.MainActivity;
 import com.saphamrah.customer.presentation.main.MainInteracts;
 import com.saphamrah.customer.presentation.main.MainPresenter;
 
-public class ShoppingListFragment extends BaseFragment<MainPresenter, FragmentShoppingListBinding> implements MainInteracts.RequiredViewOps {
+public class ShoppingListFragment extends BaseFragment<MainPresenter, FragmentShoppingListBinding, MainActivity> implements MainInteracts.RequiredViewOps {
 
 
     public ShoppingListFragment() {
