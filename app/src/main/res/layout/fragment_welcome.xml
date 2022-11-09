@@ -78,6 +78,7 @@
         android:layout_marginTop="-50dp"
         android:layout_marginBottom="4dp"
         android:elevation="17dp"
+        android:background="@null"
         app:tabIndicatorColor="@color/colorPrimary"
         app:tabMode="fixed"
         app:tabSelectedTextColor="@color/colorPrimary"
