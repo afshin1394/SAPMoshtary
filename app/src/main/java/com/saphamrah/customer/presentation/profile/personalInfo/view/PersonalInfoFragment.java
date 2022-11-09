@@ -11,11 +11,13 @@ import android.view.ViewGroup;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.databinding.FragmentPersonalInfoBinding;
+import com.saphamrah.customer.presentation.main.MainActivity;
+import com.saphamrah.customer.presentation.main.welcome.view.MainFragment;
 import com.saphamrah.customer.presentation.profile.ProfileInteracts;
 import com.saphamrah.customer.presentation.profile.ProfilePresenter;
 
 
-public class PersonalInfoFragment extends BaseFragment<ProfilePresenter, FragmentPersonalInfoBinding> implements ProfileInteracts.RequiredViewOps {
+public class PersonalInfoFragment extends BaseFragment<ProfilePresenter, FragmentPersonalInfoBinding, MainActivity> implements ProfileInteracts.RequiredViewOps {
 
 
     public PersonalInfoFragment() {

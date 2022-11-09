@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     app:behavior_hideable="true"
     app:behavior_peekHeight="0dp"
-    app:cardBackgroundColor="@color/colorBrown50"
+
     app:cardElevation="@dimen/_8sdp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
@@ -14,13 +14,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/sheet_constraint_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <com.saphamrah.customer.utils.customViews.SearchWatcher
             android:id="@+id/searchView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorTextSecondary"
             android:layoutDirection="rtl"
             android:textDirection="rtl"
             app:layout_constraintEnd_toEndOf="parent"

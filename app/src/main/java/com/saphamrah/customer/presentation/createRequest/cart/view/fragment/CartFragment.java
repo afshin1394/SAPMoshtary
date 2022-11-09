@@ -100,7 +100,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     @Override
     protected void initViews()
     {
-        activity = activity;
         check = 0;
         Log.i(TAG, "onFragmentResult: Cart");
         Object o = getFragmentResult("bonuses");

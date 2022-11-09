@@ -2,6 +2,9 @@ package com.saphamrah.customer.presentation.main.welcome.view;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,6 +28,7 @@ import com.saphamrah.customer.data.local.AdvertiseModel;
 import com.saphamrah.customer.data.local.MenuModel;
 import com.saphamrah.customer.databinding.FragmentAddressBinding;
 import com.saphamrah.customer.databinding.FragmentMainBinding;
+import com.saphamrah.customer.presentation.createRequest.CreateRequestActivity;
 import com.saphamrah.customer.presentation.main.MainActivity;
 import com.saphamrah.customer.presentation.main.MainInteracts;
 import com.saphamrah.customer.presentation.main.MainPresenter;
@@ -66,8 +70,8 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
 
     @Override
     protected void initViews() {
-        initFragments();
 
+        initFragments();
         mBottomSheetLayout = requireView().findViewById(R.id.bottom_sheet_layout);
         sheetBehavior = BottomSheetBehavior.from(mBottomSheetLayout);
         header_Arrow_Image = requireView().findViewById(R.id.arrow_down_bottom_sheet);
@@ -175,7 +179,7 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
 
     @Override
     public void onItemSelect(BaseBottomSheetRecyclerModel model, int position, AdapterAction action) {
-
+        startActivity(new Intent(activity, CreateRequestActivity.class));
     }
 
     @Override
@@ -210,6 +214,7 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
 
 
     public void initFragments() {
+
         ArrayList<AdvertiseModel> advertiseModels = new ArrayList<>();
         baseSazmanForoshModels = new ArrayList<>();
 
@@ -254,5 +259,8 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
     private void handleBottomSheetBehaviorState() {
         bottomSheetSearch.bottomSheetBehaviorStateHandler();
     }
+
+
+
 
 }

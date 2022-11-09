@@ -19,16 +19,22 @@ import com.saphamrah.customer.R;
 
 import com.saphamrah.customer.base.BaseActivity;
 import com.saphamrah.customer.base.BasePermissionModel;
+import com.saphamrah.customer.data.LocationDbModel;
 import com.saphamrah.customer.databinding.ActivityMainBinding;
 import com.saphamrah.customer.presentation.createRequest.CreateRequestActivity;
+import com.saphamrah.customer.presentation.main.welcome.view.MainFragment;
+import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
+import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
+import com.saphamrah.customer.utils.AdapterUtil.AdapterItemMultiSelectListener;
+import com.saphamrah.customer.utils.customViews.BottomSheetSearchRecyclerView;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, ActivityMainBinding> implements MainInteracts.RequiredViewOps ,NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, ActivityMainBinding> implements MainInteracts.RequiredViewOps, NavigationView.OnNavigationItemSelectedListener, AdapterItemListener, AdapterItemMultiSelectListener {
     public ActionBarDrawerToggle actionBarDrawerToggle;
-
-
+    private BottomSheetSearchRecyclerView bottomSheetSearch;
     @Override
     protected void onKeyBoardVisibilityChange(boolean visible) {
 
@@ -66,12 +72,41 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
     }
 
 
+    private void makeSazmanForoshBottomSheet() {
+        List<LocationDbModel> baseSazmanForoshModels = new ArrayList<>();
+        baseSazmanForoshModels.add(new LocationDbModel("میهن","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("پگاه","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("میهن","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("پگاه","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("میهن","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("میهن","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("میهن","1"));
+
+        bottomSheetSearch = new BottomSheetSearchRecyclerView(this, this);
+        handleBottomSheetBehaviorState();
+        bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(this,
+                viewBinding.getRoot(),
+                baseSazmanForoshModels,
+                true,
+                getResources().getString(R.string.searchSazman),
+                false);
+
+    }
+
+
+    private void handleBottomSheetBehaviorState() {
+        bottomSheetSearch.bottomSheetBehaviorStateHandler();
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
         if (id == R.id.nav_request){
-            startActivity(new Intent(MainActivity.this, CreateRequestActivity.class));
+            makeSazmanForoshBottomSheet();
+//            startActivity(new Intent(MainActivity.this, CreateRequestActivity.class));
         }
         if (id == R.id.nav_profile) {
             Navigation.findNavController(this,R.id.mainNavigation_host).navigate(R.id.action_mainFragment_to_profileFragment);
@@ -106,4 +141,23 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
     public Context getAppContext() {
         return MainActivity.this;
     }
+
+    @Override
+    public void onItemSelect(Object model, int position, AdapterAction Action) {
+        viewBinding.menuDrawerMain.setOnClickListener(view -> {
+            viewBinding.drawerLayoutMain.closeDrawers();
+            viewBinding.drawerLayoutMain.close();
+            viewBinding.drawerLayoutMain.closeDrawer(findViewById(R.id.drawer_main));
+            startActivity(new Intent(MainActivity.this, CreateRequestActivity.class));
+        });
+
+
+    }
+
+    @Override
+    public void onItemMultiSelect(ArrayList model, AdapterAction action) {
+    }
+
+
+
 }
