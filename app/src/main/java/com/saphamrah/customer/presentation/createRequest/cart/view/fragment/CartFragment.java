@@ -71,12 +71,15 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        check++;
+        Log.i(TAG, "onItemSelected:counter "+check);
         Log.i(TAG, "onItemSelected: item log");
-        if (++check > 1) {
+        if (check > 1)
+        {
             Log.i(TAG, "onItemSelected: item log in");
             viewBinding.tvReceiptDuration.setText(String.format("%1$s: %2$s %3$s", context.getString(R.string.modatVosol), receiptModels.get(position).getDuration(), context.getString(R.string.day)));
             activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
-            checkState();
+            initViews();
         }
     }
 
@@ -101,7 +104,8 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     protected void initViews()
     {
         check = 0;
-        Log.i(TAG, "onFragmentResult: Cart");
+
+        Log.i(TAG, "onFragmentResult: Cart"+ check);
         Object o = getFragmentResult("bonuses");
 
         if (o != null)
@@ -109,9 +113,10 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
         productModels = CollectionUtils.convertArrayToList(CartFragmentArgs.fromBundle(getArguments()).getProducts());
         setProductRecycler();
+        checkState();
         setReceiptList();
         setViews();
-        checkState();
+
 
     }
 
@@ -158,6 +163,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
                 activity.paymentState = Constants.PaymentStates.SAVE_REQUEST;
                 presenter.getDiscountAndBonuses();
                 viewBinding.btmShtPurchase.tvPayment.setText(R.string.confirm);
+
 
                 break;
             }
@@ -232,8 +238,11 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
                 R.layout.custom_spinner_itemview, receiptTitles);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        viewBinding.spinnerReceipt.setAdapter(adapter);
         viewBinding.spinnerReceipt.setOnItemSelectedListener(this);
+        viewBinding.spinnerReceipt.setAdapter(adapter);
+
+
+
     }
 
     @Override
@@ -279,8 +288,8 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             switch (Action) {
                 case ADD:
                 case REMOVE:
-
-                    activity.clearJayezehTakhfif();
+                    activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
+                    checkState();
                     activity.checkCart(false);
             }
         });
@@ -305,6 +314,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
                 viewBinding.svDetails.scrollTo(0, (int) ScreenUtils.getViewLocationOnScreen(viewBinding.tvDiscountTitle)[1]);
             }
         });
+
 
 
     }

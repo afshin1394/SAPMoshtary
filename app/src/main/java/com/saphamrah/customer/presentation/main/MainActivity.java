@@ -104,7 +104,9 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
+        viewBinding.drawerLayoutMain.closeDrawer(Gravity.RIGHT);
         if (id == R.id.nav_request){
+
             makeSazmanForoshBottomSheet();
 //            startActivity(new Intent(MainActivity.this, CreateRequestActivity.class));
         }
@@ -144,12 +146,9 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
 
     @Override
     public void onItemSelect(Object model, int position, AdapterAction Action) {
-        viewBinding.menuDrawerMain.setOnClickListener(view -> {
-            viewBinding.drawerLayoutMain.closeDrawers();
-            viewBinding.drawerLayoutMain.close();
-            viewBinding.drawerLayoutMain.closeDrawer(findViewById(R.id.drawer_main));
-            startActivity(new Intent(MainActivity.this, CreateRequestActivity.class));
-        });
+        startActivity(new Intent(MainActivity.this, CreateRequestActivity.class));
+
+
 
 
     }

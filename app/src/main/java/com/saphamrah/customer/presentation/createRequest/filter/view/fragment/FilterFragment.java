@@ -39,6 +39,8 @@ public class FilterFragment extends BaseBottomDialogFragment<FilterMVPPresenter,
     private ArrayList<FilterSortModel> filterSortModels;
     private Context context;
 
+
+
     public FilterFragment() {
         super(R.layout.fragment_filter);
     }

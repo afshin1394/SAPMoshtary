@@ -13,8 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.internal.LinkedHashTreeMap;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
+import com.saphamrah.customer.presentation.createRequest.filter.view.fragment.FilterFragment;
 import com.saphamrah.customer.presentation.createRequest.productRequest.presenter.ProductRequestMVPPresenter;
 import com.saphamrah.customer.presentation.createRequest.productRequest.view.adapter.FilterListAdapter;
 import com.saphamrah.customer.presentation.createRequest.productRequest.view.adapter.ProductAdapter;
@@ -28,6 +30,7 @@ import com.saphamrah.customer.utils.RxUtils.Watcher;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -57,15 +60,20 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     protected void onBackPressed() {
      getActivity().finish();
     }
+    
+    
 
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initViews() {
-        ((CreateRequestActivity) activity).setCartListener(this);
+        Log.i(TAG, "initViews: ");
+
+
+        activity.setCartListener(this);
         Log.i(TAG, "onViewCreated: ");
-        productModels = ((CreateRequestActivity) activity).getProductModelGlobal();
+        productModels = activity.getProductModelGlobal();
         productModelsTemp = new ArrayList<>();
         productModelsTemp.addAll(productModels);
         setFilterRecycler();
@@ -87,7 +95,8 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     }
 
 
-    private void setViews() {
+    private void setViews()
+    {
         viewBinding.linSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,7 +113,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
                 ProductRequestFragmentDirections.ActionProductRequestFragmentToFilterFragment action = ProductRequestFragmentDirections.actionProductRequestFragmentToFilterFragment();
                 action.setFilterSortType(Constants.FILTER_LIST);
                 navigate(action);
-                viewBinding.linFilter.setClickable(false);
             }
         });
     }
@@ -120,6 +128,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     @Override
     public void onResume() {
         super.onResume();
+        Log.i(TAG, "onResume: "+filterSortModels);
     }
 
     private void setSearch() {
@@ -165,7 +174,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
     private void setFilterRecycler() {
 
-        filterSortModels = new ArrayList<>();
 
         FilterSortModel filterModelBrand = new FilterSortModel(100, 1, "برند", 0, false);
         FilterSortModel filterModelGorohKala = new FilterSortModel(200, 1, "گروه کالا", 0, false);
@@ -219,8 +227,8 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
                 case ADD:
                 case REMOVE:
-                    ((CreateRequestActivity) activity).getProductModelGlobal().get(position).setOrderCount(productModelsTemp.get(position).getOrderCount());
-                    ((CreateRequestActivity) activity).checkCart(true);
+                    activity.getProductModelGlobal().get(position).setOrderCount(productModelsTemp.get(position).getOrderCount());
+                    activity.checkCart(true);
                     break;
             }
 
@@ -274,4 +282,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     public void onCartEmpty() {
         navigateUp();
     }
+
+
 }

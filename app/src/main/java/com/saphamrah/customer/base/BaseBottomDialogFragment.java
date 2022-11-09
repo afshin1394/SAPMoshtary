@@ -142,9 +142,9 @@ public abstract class BaseBottomDialogFragment<T extends BasePresenterOps, S ext
     }
 
     public void setFragmentResult(String key, Object value) {
-        if (isFragmentVisible) {
+
             NavHostFragment.findNavController(this).getPreviousBackStackEntry().getSavedStateHandle().set(key, value);
-        }
+
     }
 
 

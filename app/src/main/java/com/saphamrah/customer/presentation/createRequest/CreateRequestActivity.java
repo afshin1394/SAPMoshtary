@@ -16,9 +16,11 @@ import com.saphamrah.customer.base.BasePermissionModel;
 import com.saphamrah.customer.data.local.db.SapDatabase;
 import com.saphamrah.customer.data.local.temp.BonusModel;
 import com.saphamrah.customer.data.local.temp.DiscountModel;
+import com.saphamrah.customer.data.local.temp.FilterSortModel;
 import com.saphamrah.customer.data.local.temp.JayezehEntekhabiMojodiModel;
 import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.databinding.ActivityCreateRequestBinding;
+import com.saphamrah.customer.presentation.createRequest.filter.view.fragment.FilterFragment;
 import com.saphamrah.customer.utils.Constants;
 
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.PresenterOps, ActivityCreateRequestBinding> {
+public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.PresenterOps, ActivityCreateRequestBinding>   {
     private String TAG = CreateRequestActivity.class.getSimpleName();
     private List<ProductModel> productModelGlobal;
     private List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModelsGlobal;
@@ -51,6 +53,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         super.onCreate(savedInstanceState);
         paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
         setProducts();
+
     }
 
 
@@ -203,6 +206,8 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     public void setDiscountModelsGlobal(List<DiscountModel> discountModelsGlobal) {
         this.discountModelsGlobal = discountModelsGlobal;
     }
+
+
 
     public interface CartListener {
         void onCartClick(List<ProductModel> productModels);

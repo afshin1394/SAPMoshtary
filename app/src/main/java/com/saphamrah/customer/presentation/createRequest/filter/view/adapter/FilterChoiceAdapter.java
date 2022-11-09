@@ -51,21 +51,19 @@ public class FilterChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-            if (viewType == SORT) {
-                View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.sort_choice_list_itemview, parent, false);
-                return new ViewHolderSortList(view1);
-            }
-            else if (viewType == FILTER_LIST)
-            {
-                View view2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.filter_choice_itemview, parent, false);
-                return new ViewHolderFilter(view2);
-            }else if (viewType == FILTER_SLIDER){
-                View view2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.filter_choice_slider_itemview, parent, false);
-                return new ViewHolderFilterSlider(view2);
-            }else{
-                View view2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.filter_choice_slider_itemview, parent, false);
-                return new ViewHolderFilterSlider(view2);
-            }
+        if (viewType == SORT) {
+            View view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.sort_choice_list_itemview, parent, false);
+            return new ViewHolderSortList(view1);
+        } else if (viewType == FILTER_LIST) {
+            View view2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.filter_choice_itemview, parent, false);
+            return new ViewHolderFilter(view2);
+        } else if (viewType == FILTER_SLIDER) {
+            View view2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.filter_choice_slider_itemview, parent, false);
+            return new ViewHolderFilterSlider(view2);
+        } else {
+            View view2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.filter_choice_slider_itemview, parent, false);
+            return new ViewHolderFilterSlider(view2);
+        }
 
 
     }
@@ -75,7 +73,7 @@ public class FilterChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (filterSortType == 1) {
             return SORT;
         } else {
-           return models.get(position).getType();
+            return models.get(position).getType();
         }
     }
 
@@ -132,6 +130,7 @@ public class FilterChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             switchMaterial.setText(filterModel.getName());
         }
     }
+
     public class ViewHolderFilter extends RecyclerView.ViewHolder implements AdapterItemListener<FilterSortModel> {
         private TextView title;
         private RecyclerView recyclerView;
@@ -151,6 +150,8 @@ public class FilterChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         }
 
+        boolean collapseNotify = false;
+
         @RequiresApi(api = Build.VERSION_CODES.N)
         public void bind(FilterSortModel filterModel) {
 
@@ -158,8 +159,7 @@ public class FilterChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             imgArrow.setOnClickListener(view -> {
 
 
-                if (!filterModel.isExpanded())
-                {
+                if (!filterModel.isExpanded()) {
                     imgArrow.setRotation(180);
                     AnimationUtils.expand(recyclerView);
                     filterModel.setExpanded(true);
@@ -168,19 +168,21 @@ public class FilterChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     imgArrow.setRotation(0);
                     AnimationUtils.collapse(recyclerView);
                     filterModel.setExpanded(false);
+                    collapseNotify = true;
+                    notifyDataSetChanged();
                 }
             });
 
 
-                if (filterModel.isExpanded()) {
-                    imgArrow.setRotation(180);
-                    recyclerView.setVisibility(View.VISIBLE);
-                } else {
-                    imgArrow.setRotation(0);
-                    recyclerView.setVisibility(View.GONE);
-                    setList(filterModel);
+            if (filterModel.isExpanded()) {
+                imgArrow.setRotation(180);
+                recyclerView.setVisibility(View.VISIBLE);
+            } else {
+                imgArrow.setRotation(0);
+                recyclerView.setVisibility(View.GONE);
+                setList(filterModel);
+            }
 
-                }
 
         }
 
@@ -215,7 +217,6 @@ public class FilterChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         }
     }
-
 
 
     public class ViewHolderFilterSlider extends RecyclerView.ViewHolder {
