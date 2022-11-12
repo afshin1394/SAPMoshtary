@@ -221,7 +221,10 @@
     <string name="notFoundTodayCustomer">خطا در دریافت مشتری های مسیر روز</string>
     <string name="informations">اطلاعات</string>
     <string name="address">آدرس</string>
-    <string name="addressSample">خیابان پاسداران-دروس-خیابان صالح حسینی-بن بست پروانه-پلاک 12</string>
+    <string name="addressSample1">خیابان پاسداران-دروس-خیابان صالح حسینی-بن بست پروانه-پلاک 10</string>
+    <string name="addressSample2">خیابان پاسداران-امیر ابراهیمی-خیابان صالح حسینی-بن بست دولتشاهی-پلاک 12</string>
+    <string name="addressSample3">خیابان پاسداران-قلهک-خیابان صالح حسینی-بن بست افسون-پلاک 11</string>
+    <string name="addressSample4">خیابان پاسداران-قلهک-خیابان صالح حسینی-بن بست پروانه-پلاک 13</string>
     <string name="errorAddress">لطفا اطلاعات مربوط به آدرس موردنظر را وارد نمایید.</string>
     <string name="errorSelectAddress">لطفا آدرس را انتخاب نمایید.</string>
     <string name="errorFindCustomerAddress">آدرسی برای مشتری پیدا نشد.</string>
@@ -1239,7 +1242,6 @@
     <string name="sabtAmval">اموال مشتری</string>
 
 
-
     <string name="enter">ورود</string>
     <string name="string_resendcodeuntil"> ارسال مجدد کد تا </string>
     <string name="string_time_format_zero"> %d:0%d </string>
@@ -1275,7 +1277,6 @@
     <string name="dismiss">بستن</string>
     <string name="undo">لغو کردن</string>
     <string name="notLoginYet">هنوز ثبت نام نکرده اید؟</string>
-
 
 
     <string name="first_last_name">نام و نام خانوادگی</string>

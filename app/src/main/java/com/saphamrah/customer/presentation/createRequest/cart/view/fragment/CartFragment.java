@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +50,10 @@ import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.AnimationUtils;
 import com.saphamrah.customer.utils.CollectionUtils;
 import com.saphamrah.customer.utils.Constants;
+import com.saphamrah.customer.utils.RxUtils.Watcher;
 import com.saphamrah.customer.utils.ScreenUtils;
+import com.saphamrah.customer.utils.customViews.InputFilterMinMax;
+import com.saphamrah.customer.utils.customViews.OnSingleClickListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +62,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, FragmentCartBinding,CreateRequestActivity> implements CartInteractor.RequiredViewOps, AdapterView.OnItemSelectedListener {
+public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, FragmentCartBinding,CreateRequestActivity> implements CartInteractor.RequiredViewOps {
 
     private List<ProductModel> productModels;
     private CartProductAdapter cartProductAdapter;
@@ -68,25 +72,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     private BonusAdapter bonusAdapter;
     private DiscountAdapter discountAdapter;
     private int check;
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-        check++;
-        Log.i(TAG, "onItemSelected:counter "+check);
-        Log.i(TAG, "onItemSelected: item log");
-        if (check > 1)
-        {
-            Log.i(TAG, "onItemSelected: item log in");
-            viewBinding.tvReceiptDuration.setText(String.format("%1$s: %2$s %3$s", context.getString(R.string.modatVosol), receiptModels.get(position).getDuration(), context.getString(R.string.day)));
-            activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
-            initViews();
-        }
-    }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
 
 
     public CartFragment() {
@@ -114,9 +100,29 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         productModels = CollectionUtils.convertArrayToList(CartFragmentArgs.fromBundle(getArguments()).getProducts());
         setProductRecycler();
         checkState();
+        setAddressList();
         setReceiptList();
         setViews();
 
+
+    }
+
+    private void setAddressList() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context,
+                R.layout.custom_spinner_itemview,context.getResources().getStringArray(R.array.addressArray));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        viewBinding.spinnerAddress.setAdapter(adapter);
+        viewBinding.spinnerAddress.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
     }
 
@@ -185,6 +191,10 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setViews() {
 
+        if (viewBinding.tvReceiptDuration != null) {
+            viewBinding.tvReceiptDuration.setFilters(new InputFilter[]{new InputFilterMinMax(0,30)});
+        }
+
 
         sheetBehavior = BottomSheetBehavior.from(viewBinding.btmShtPurchase.linBottomSheet);
         viewBinding.btmShtPurchase.arrowDownBottomSheet.setOnClickListener(new View.OnClickListener() {
@@ -220,6 +230,13 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             activity.removeCart();
         });
 
+        viewBinding.linReturn.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+
+            }
+        });
+
 
     }
 
@@ -238,8 +255,34 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
                 R.layout.custom_spinner_itemview, receiptTitles);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        viewBinding.spinnerReceipt.setOnItemSelectedListener(this);
+
+        viewBinding.spinnerReceipt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                check++;
+                Log.i(TAG, "onItemSelected:counter "+check);
+                Log.i(TAG, "onItemSelected: item log");
+                if (check > 1)
+                {
+                    Log.i(TAG, "onItemSelected: item log in");
+                    activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
+                    initViews();
+                    if (position == 0){
+                        viewBinding.etvReceiptDuration.setEnabled(false);
+                        viewBinding.etvReceiptDuration.setText(" 0روز ");
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         viewBinding.spinnerReceipt.setAdapter(adapter);
+//        viewBinding.etvReceiptDuration.addTextWatcher(s -> viewBinding.etvReceiptDuration.setText(s.concat(getString(R.string.day))),300);
+
 
 
 

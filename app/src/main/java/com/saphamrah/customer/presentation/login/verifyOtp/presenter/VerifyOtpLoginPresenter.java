@@ -19,7 +19,6 @@ public class VerifyOtpLoginPresenter extends BasePresenter<VerifyOtpLoginInterac
     @Override
     public void checkInsertLogToDB(Integer logType, String message, String logClass, String logActivity, String functionParent, String functionChild) {
         model.setLogToDB(logType, message, logClass, logActivity, functionParent, functionChild);
-
     }
 
     @Override
@@ -40,6 +39,5 @@ public class VerifyOtpLoginPresenter extends BasePresenter<VerifyOtpLoginInterac
     @Override
     public void verifyOtp(String mobile, String code) {
         view.get().showLoading("لطفا کمی صبر نمایید");
-
     }
 }

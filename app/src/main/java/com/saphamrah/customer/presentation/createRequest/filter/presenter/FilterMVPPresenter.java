@@ -9,7 +9,7 @@ public class FilterMVPPresenter implements FilterMVPInteractor.PresenterOps, Fil
     private FilterMVPInteractor.RequiredViewOps view;
     private final FilterMVPModel model;
 
-    public FilterMVPPresenter(FilterMVPInteractor.RequiredViewOps view, FilterMVPModel model) {
+    public FilterMVPPresenter(FilterMVPInteractor.RequiredViewOps view) {
         this.view = view;
         this.model = new FilterMVPModel(this);
     }

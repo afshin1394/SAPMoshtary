@@ -489,10 +489,11 @@
         <item>{\"title\":\"بر اساس کد مشتری\" , \"value\":\"2\"}</item>
     </string-array>
 
-    <string-array name="getProgramServiceItems">
-        <item>{\"title\":\"سرویس Retrofit\" , \"value\":\"1\"}</item>
-        <item>{\"title\":\"سرویس RX\" , \"value\":\"2\"}</item>
-        <item>{\"title\":\"سرویس GRPC\" , \"value\":\"3\"}</item>
+    <string-array name="addressArray">
+        <item>@string/addressSample1</item>
+        <item>@string/addressSample2</item>
+        <item>@string/addressSample3</item>
+        <item>@string/addressSample4</item>
     </string-array>
 
 
