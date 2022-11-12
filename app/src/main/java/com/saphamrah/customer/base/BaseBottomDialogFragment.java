@@ -92,7 +92,6 @@ public abstract class BaseBottomDialogFragment<T extends BasePresenterOps, S ext
         setPresenter();
         compositeDisposable = new CompositeDisposable();
         initViews();
-        this.setCancelable(false);
 
     }
 

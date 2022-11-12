@@ -45,7 +45,7 @@
             android:paddingRight="10dp"
             android:paddingBottom="15dp"
             android:text="@string/jayezehDetail"
-            style="@style/text_view_title_center" />
+           />
 
         <LinearLayout
             android:layout_width="match_parent"

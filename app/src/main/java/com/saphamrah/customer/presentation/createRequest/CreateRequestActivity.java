@@ -48,18 +48,14 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
-        setProducts();
 
-    }
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initViews() {
+        paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
+        setProducts();
         checkPermissions(new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE});
     }
 

@@ -105,7 +105,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
                 navigate(action);
             }
         });
-        viewBinding.linFilter.setClickable(true);
         viewBinding.linFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)

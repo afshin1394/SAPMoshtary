@@ -56,8 +56,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+                    <LinearLayout
+                        android:background="@drawable/rounded_corner_top_red_gradiant"
+                        android:orientation="vertical"
+                        android:layoutDirection="rtl"
+                        android:layout_margin="@dimen/_6sdp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            style="@style/text_view_title_center"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/address" />
+                        <View
+                            style="@style/devider_gray"/>
+                        <TextView
+                            style="@style/text_view_title_center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/addressSample" />
+                    </LinearLayout>
 
                     <LinearLayout
+                        android:background="@drawable/rounded_corner_top_red_gradiant"
                         android:id="@+id/lin_vosol"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -69,6 +91,7 @@
                             style="@style/text_view_title_center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:text="@string/vosol" />
 
                         <LinearLayout

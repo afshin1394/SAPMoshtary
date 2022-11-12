@@ -22,11 +22,7 @@ public  class  CollectionUtils {
     }
 
 
-    public static <T> T[] convertListToArray(List<T> t) {
-
-        @SuppressWarnings("unchecked")
-        T[] arr = (T[]) Array.newInstance(t.getClass(), t.size());
-        for (int i = 0; i < t.size(); i++) arr[i] = t.get(i);
-        return arr;
+    public static <T extends Object> T[] convertListToArray(List<T> t) {
+      return null;
     }
 }

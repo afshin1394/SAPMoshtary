@@ -219,7 +219,11 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
 
     @Override
     public void onCartClick(List<ProductModel> productModels) {
-        ProductRequestFragmentDirections.ActionProductRequestFragmentToCartFragment action = ProductRequestFragmentDirections.actionProductRequestFragmentToCartFragment(CollectionUtils.convertListToArray(productModels),null);
+        ProductModel[] arr  = new ProductModel[productModels.size()];
+        for (int i = 0; i < productModels.size(); i++) {
+            arr[i] = productModels.get(i);
+        }
+        ProductRequestFragmentDirections.ActionProductRequestFragmentToCartFragment action = ProductRequestFragmentDirections.actionProductRequestFragmentToCartFragment(arr,null);
         navigate(action);
     }
 
