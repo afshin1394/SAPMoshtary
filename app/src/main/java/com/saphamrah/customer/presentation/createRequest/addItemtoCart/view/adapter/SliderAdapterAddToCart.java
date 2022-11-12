@@ -36,8 +36,8 @@ public class SliderAdapterAddToCart extends
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
         Integer image = productModel.getImageResource().get(position);
-        viewHolder.textViewDescription.setText(productModel.getNameProduct());
-        viewHolder.textViewDescription.setTextSize(16);
+//        viewHolder.textViewDescription.setText(productModel.getNameProduct());
+//        viewHolder.textViewDescription.setTextSize(16);
         viewHolder.textViewDescription.setTextColor(Color.WHITE);
         Glide.with(viewHolder.itemView)
                 .load(image)

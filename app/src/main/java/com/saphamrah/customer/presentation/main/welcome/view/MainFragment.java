@@ -222,15 +222,13 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
         advertiseModels.add(new AdvertiseModel("@drawable/advertising", "", "."));
         advertiseModels.add(new AdvertiseModel("@drawable/advertising", "", "."));
 
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("پگاه","1"));
         baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("پگاه","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("بستنی میهن","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("بستنی پاندا","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("لبنیات پاستوریزه میهن","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("لبنیات استریل میهن","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("فروتلند","1"));
+
 
         viewPagerAdapter = new MainStatePager(requireActivity().getSupportFragmentManager(), advertiseModels);
 

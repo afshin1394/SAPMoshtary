@@ -27,6 +27,7 @@ import com.saphamrah.customer.databinding.FragmentProductRequestBinding;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.Constants;
 import com.saphamrah.customer.utils.RxUtils.Watcher;
+import com.saphamrah.customer.utils.customViews.OnSingleClickListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +40,7 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresenter, FragmentProductRequestBinding,CreateRequestActivity> implements CreateRequestActivity.CartListener {
+public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresenter, FragmentProductRequestBinding, CreateRequestActivity> implements CreateRequestActivity.CartListener {
 
     public static final String TAG = ProductRequestFragment.class.getSimpleName();
     private FilterListAdapter filterAdapter;
@@ -50,7 +51,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     private List<ProductModel> productModelsTemp;
 
 
-
     public ProductRequestFragment() {
         super(R.layout.fragment_product_request);
     }
@@ -58,11 +58,8 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
     @Override
     protected void onBackPressed() {
-     getActivity().finish();
+        getActivity().finish();
     }
-    
-    
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -84,10 +81,10 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
 
     @Override
-    protected void setPresenter()
-    {
+    protected void setPresenter() {
 
     }
+
 
     @Override
     protected FragmentProductRequestBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {
@@ -95,20 +92,18 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     }
 
 
-    private void setViews()
-    {
-        viewBinding.linSort.setOnClickListener(new View.OnClickListener() {
+    private void setViews() {
+        viewBinding.linSort.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onSingleClick(View v) {
                 ProductRequestFragmentDirections.ActionProductRequestFragmentToFilterFragment action = ProductRequestFragmentDirections.actionProductRequestFragmentToFilterFragment();
                 action.setFilterSortType(Constants.SORT);
                 navigate(action);
             }
         });
-        viewBinding.linFilter.setOnClickListener(new View.OnClickListener() {
+        viewBinding.linFilter.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onSingleClick(View v) {
                 ProductRequestFragmentDirections.ActionProductRequestFragmentToFilterFragment action = ProductRequestFragmentDirections.actionProductRequestFragmentToFilterFragment();
                 action.setFilterSortType(Constants.FILTER_LIST);
                 navigate(action);
@@ -127,7 +122,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     @Override
     public void onResume() {
         super.onResume();
-        Log.i(TAG, "onResume: "+filterSortModels);
+        Log.i(TAG, "onResume: " + filterSortModels);
     }
 
     private void setSearch() {
@@ -215,10 +210,8 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     private void setProductRecycler() {
 
 
-
         productAdapter = new ProductAdapter(getActivity(), productModelsTemp, (model, position, Action) -> {
-            switch (Action)
-            {
+            switch (Action) {
                 case SELECT:
                     ProductRequestFragmentDirections.ActionProductRequestFragmentToAddItemToCartFragment action = ProductRequestFragmentDirections.actionProductRequestFragmentToAddItemToCartFragment(model);
                     navigate(action);
@@ -238,8 +231,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
 
     }
-
-
 
 
     @Override
@@ -272,8 +263,8 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         ProductModel[] array = new ProductModel[productModels.size()];
         for (int i = 0; i < productModels.size(); i++) array[i] = productModels.get(i);
 
-        Log.i(TAG, "onCartClick: "+productModels.toString());
-        ProductRequestFragmentDirections.ActionProductRequestFragmentToCartFragment action = ProductRequestFragmentDirections.actionProductRequestFragmentToCartFragment(array,null);
+        Log.i(TAG, "onCartClick: " + productModels.toString());
+        ProductRequestFragmentDirections.ActionProductRequestFragmentToCartFragment action = ProductRequestFragmentDirections.actionProductRequestFragmentToCartFragment(array, null);
         navigate(action);
     }
 

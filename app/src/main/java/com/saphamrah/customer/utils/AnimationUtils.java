@@ -2,6 +2,7 @@ package com.saphamrah.customer.utils;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.transition.TransitionManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -39,6 +40,15 @@ public  class  AnimationUtils {
         v.startAnimation(a);
     }
 
+
+    public static void collapseWithHeight(ViewGroup viewGroup,View view,boolean collapse) {
+        TransitionManager.beginDelayedTransition(viewGroup);
+        //change layout params
+        int height = view.getHeight();
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        layoutParams.height = !collapse ? height - 570 : height + 570;
+        view.requestLayout();
+    }
     // item collapse
     public static void collapse(final View v) {
         final int initialHeight = v.getMeasuredHeight();
@@ -65,6 +75,7 @@ public  class  AnimationUtils {
         a.setDuration(400);
         v.startAnimation(a);
     }
+
 
     public static void scale(final View v){
         ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(v, "scaleX", 0.7f);

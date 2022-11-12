@@ -68,6 +68,8 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
 
     protected abstract void onBackPressed();
 
+
+
     protected abstract void initViews();
 
     protected abstract void setPresenter();

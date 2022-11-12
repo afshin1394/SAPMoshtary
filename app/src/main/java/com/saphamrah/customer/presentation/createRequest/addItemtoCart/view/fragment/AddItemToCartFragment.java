@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.saphamrah.customer.R;
@@ -22,8 +23,10 @@ import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.presentation.createRequest.addItemtoCart.view.adapter.SliderAdapterAddToCart;
 import com.saphamrah.customer.databinding.FragmentAddItemToCartBinding;
 import com.saphamrah.customer.presentation.createRequest.productRequest.view.fragment.ProductRequestFragmentDirections;
+import com.saphamrah.customer.utils.AnimationUtils;
 import com.saphamrah.customer.utils.CollectionUtils;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
+import com.smarteist.autoimageslider.IndicatorView.animation.type.ScaleAnimation;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
@@ -58,7 +61,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initViews() {
-        ((CreateRequestActivity) activity).setCartListener(this);
+        activity.setCartListener(this);
         ProductModel productModel = AddItemToCartFragmentArgs.fromBundle(getArguments()).getProduct();
         indexOfProduct = ((CreateRequestActivity) activity).getProductModelGlobal().indexOf(productModel);
         setImageSlider(productModel);
@@ -94,14 +97,14 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setViews(ProductModel productModel) {
 
-
-
         bottomSheetBehavior = BottomSheetBehavior.from(viewBinding.btmShtPurchase.linBottomSheet);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         final float[] oldOffset = {0f};
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            float oldOffSet = 0f;
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
 
             }
 
@@ -109,9 +112,20 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 Log.i(TAG, "onSlide: "+slideOffset);
 
-//                boolean inRangeExpanding = oldOffset[0] < slideOffset;
-//                boolean inRangeCollapsing = oldOffset[0] > slideOffset;
-//                oldOffset[0] = slideOffset;
+                boolean inRangeExpanding = oldOffset[0] < slideOffset;
+                boolean inRangeCollapsing = oldOffset[0] > slideOffset;
+                oldOffset[0] = slideOffset;
+                if (inRangeExpanding){
+//                    viewBinding.imageSlider.animate().scaleY(0.7f).translationY(-100f).setDuration(400);
+
+                    Log.i(TAG, "onSlide: EXPAND");
+                }
+                if (inRangeCollapsing){
+
+//                    viewBinding.imageSlider.animate().scaleY(1.2f).translationY(0).setDuration(400);
+                    Log.i(TAG, "onSlide: COLLAPSE");
+                }
+
 //                if (inRangeCollapsing){
 //                    AnimationUtils.expand(viewBinding.imageSlider);
 //                    AnimationUtils.collapse(viewBinding.btmShtPurchase.linDetailsView);
@@ -137,14 +151,13 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
             viewBinding.btmShtPurchase.linPurchaseCount.setVisibility(View.GONE);
         }
 
-        viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("%1$s %2$s","0",getString(R.string.rial)));
+        viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("%1$s %2$s","45500",getString(R.string.rial)));
         viewBinding.btmShtPurchase.txtProductName.setText(productModel.getNameProduct());
-        viewBinding.btmShtPurchase.txtInventory.setText(String.valueOf(productModel.getInventory()));
-        viewBinding.btmShtPurchase.txtSellPrice.setText(String.valueOf(productModel.getSellPrice()));
-        viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.valueOf(productModel.getConsumerPrice()));
-        viewBinding.btmShtPurchase.txtExpirationDate.setText(String.valueOf(productModel.getExpirationDate()));
-        viewBinding.btmShtPurchase.txtProductionDate.setText(String.valueOf(productModel.getProductionDate()));
-        viewBinding.btmShtPurchase.txtBachNumber.setText(String.valueOf(productModel.getBachNumber()));
+        viewBinding.btmShtPurchase.txtInventory.setText(String.valueOf(500));
+        viewBinding.btmShtPurchase.txtSellPrice.setText(String.valueOf(50000));
+        viewBinding.btmShtPurchase.txtExpirationDate.setText(String.valueOf("02/09/1400"));
+        viewBinding.btmShtPurchase.txtProductionDate.setText(String.valueOf("02/09/1400"));
+        viewBinding.btmShtPurchase.txtBachNumber.setText(String.valueOf(452145));
 
 
             viewBinding.btmShtPurchase.linPurchase.setOnClickListener(view -> {
@@ -152,7 +165,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
                 viewBinding.btmShtPurchase.linPurchaseCount.setVisibility(View.VISIBLE);
                 viewBinding.btmShtPurchase.TVCount.setText("1");
                 productModel.setOrderCount(1);
-                ((CreateRequestActivity) activity).checkCart(true);
+                activity.checkCart(true);
             });
 
             viewBinding.btmShtPurchase.addToCart.setOnClickListener(view -> viewBinding.btmShtPurchase.TVCount.setText(String.valueOf(Integer.parseInt(String.valueOf(viewBinding.btmShtPurchase.TVCount.getText())) + 1)));
@@ -161,7 +174,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
 
                 if (productModel.getOrderCount() > 0) {
                     productModel.setOrderCount(productModel.getOrderCount() - 1);
-                    ((CreateRequestActivity) activity).checkCart(true);
+                    activity.checkCart(true);
                     try {
                         viewBinding.btmShtPurchase.TVCount.setText(String.valueOf(productModel.getOrderCount()));
                     } catch (Exception e) {
@@ -223,7 +236,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
         for (int i = 0; i < productModels.size(); i++) {
             arr[i] = productModels.get(i);
         }
-        ProductRequestFragmentDirections.ActionProductRequestFragmentToCartFragment action = ProductRequestFragmentDirections.actionProductRequestFragmentToCartFragment(arr,null);
+        AddItemToCartFragmentDirections.ActionAddItemToCartFragmentToCartFragment action = AddItemToCartFragmentDirections.actionAddItemToCartFragmentToCartFragment(arr,null);
         navigate(action);
     }
 
