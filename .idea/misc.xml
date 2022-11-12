@@ -24,6 +24,10 @@
         <entry key="..\:/Projects/Android/SAPGit/app/src/main/res/layout/rpt_etebar_fragment.xml" value="0.26875" />
         <entry key="..\:/Projects/Android/SAPGit/app/src/main/res/layout/rpt_etebar_list_item.xml" value="0.13069908814589665" />
         <entry key="..\:/Projects/Android/SAPGit/app/src/main/res/layout/rpt_sanad_list_item.xml" value="0.32213740458015266" />
+        <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/drawable/bottom_dialog_shape.xml" value="0.1" />
+        <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/bottom_sheet_search.xml" value="0.1" />
+        <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/fragment_filter.xml" value="0.1" />
+        <entry key="..\:/Users/60153/AndroidStudioProjects/sap_customer/app/src/main/res/layout/fragment_send_otp_login.xml" value="0.1" />
         <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/drawable-mdpi/sample_gradient.xml" value="0.158" />
         <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/drawable/bg_gradient.xml" value="0.1455" />
         <entry key="..\:/android/dev/Moshtary Prj/app/src/main/res/drawable/bg_gradient_gray.xml" value="0.1715" />
@@ -93,7 +97,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

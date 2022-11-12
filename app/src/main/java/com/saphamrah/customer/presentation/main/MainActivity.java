@@ -88,7 +88,7 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
         handleBottomSheetBehaviorState();
         bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(this,
                 viewBinding.getRoot(),
-                baseSazmanForoshModels,
+                (ArrayList) baseSazmanForoshModels,
                 true,
                 getResources().getString(R.string.searchSazman),
                 false);
