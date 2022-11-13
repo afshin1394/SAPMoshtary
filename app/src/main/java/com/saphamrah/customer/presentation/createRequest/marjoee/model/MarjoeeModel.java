@@ -3,7 +3,7 @@ package com.saphamrah.customer.presentation.createRequest.marjoee.model;
 import com.saphamrah.customer.presentation.createRequest.filter.interactor.FilterMVPInteractor;
 import com.saphamrah.customer.presentation.createRequest.marjoee.interactor.MarjoeeInteractor;
 
-public class MarjoeeModel extends FilterMVPInteractor.ModelOps{
+public class MarjoeeModel extends MarjoeeInteractor.ModelOps{
     private MarjoeeInteractor.RequiredPresenterOps marjoeeModel;
 
 
