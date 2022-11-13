@@ -140,9 +140,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void removeCart() {
-        jayezehEntekhabiMojodiModelsGlobal.clear();
-        bonusModelsGlobal.clear();
-        discountModelsGlobal.clear();
+        clearJayezehTakhfif();
         productModelGlobal.forEach(productModel -> productModel.setOrderCount(0));
         viewBinding.linCart.setVisibility(View.GONE);
         cartListener.onCartEmpty();

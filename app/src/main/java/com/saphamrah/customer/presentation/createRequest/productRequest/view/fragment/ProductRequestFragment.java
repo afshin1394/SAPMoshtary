@@ -96,6 +96,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         viewBinding.linSort.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
+                viewBinding.mainView.setClickable(false);
                 ProductRequestFragmentDirections.ActionProductRequestFragmentToFilterFragment action = ProductRequestFragmentDirections.actionProductRequestFragmentToFilterFragment();
                 action.setFilterSortType(Constants.SORT);
                 navigate(action);

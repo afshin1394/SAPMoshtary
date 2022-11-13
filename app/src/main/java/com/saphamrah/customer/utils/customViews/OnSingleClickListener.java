@@ -7,7 +7,7 @@ public abstract class OnSingleClickListener  implements View.OnClickListener{
     /**
      * 最短click事件的时间间隔
      */
-    private static final long MIN_CLICK_INTERVAL = 600;
+    private static final long MIN_CLICK_INTERVAL = 1000;
     /**
      * 上次click的时间
      */

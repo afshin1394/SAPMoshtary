@@ -191,7 +191,12 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
                 .setPopExitAnim(R.anim.fade_out)
                 .setPopEnterAnim(R.anim.fade_in)
                 .build();
-        Navigation.findNavController(requireView()).navigate(action, option);
+        Log.d(TAG, "navigate: "+action);
+        try {
+            Navigation.findNavController(requireView()).navigate(action, option);
+        }catch (Exception e){
+            Log.d(TAG, "navigate: "+e.getMessage());
+        }
     }
 
     public void navigateUp() {
