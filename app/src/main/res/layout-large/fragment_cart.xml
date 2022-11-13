@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".presentation.createRequest.cart.view.fragment.CartFragment">
 
     <LinearLayout
-        android:layout_marginBottom="@dimen/_135sdp"
         android:id="@+id/lin_details"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/_125sdp"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,11 +23,36 @@
             android:orientation="horizontal">
 
             <TextView
+                android:layout_gravity="center"
                 style="@style/text_view_title_right"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
                 android:text="@string/cart" />
+
+            <LinearLayout
+                android:id="@+id/lin_purchase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/rounded_corner_purple_light_gradiant"
+                android:gravity="center"
+                android:layout_margin="@dimen/_4sdp"
+                android:padding="@dimen/_4sdp"
+                android:visibility="visible"
+                android:orientation="horizontal">
+
+
+
+                <TextView
+                    android:id="@+id/tv_payment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/marjoee"
+                    android:textSize="@dimen/_10sdp"
+                    android:textColor="@color/colorBlack" />
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/img_trash"
@@ -40,11 +66,11 @@
         </LinearLayout>
 
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <ScrollView
                 android:id="@+id/sv_details"
                 android:layout_width="match_parent"
@@ -56,6 +82,35 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <LinearLayout
+                        android:background="@drawable/rounded_corner_top_red_gradiant"
+                        android:orientation="vertical"
+                        android:layoutDirection="rtl"
+                        android:layout_margin="@dimen/_6sdp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            style="@style/text_view_title_center"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/address" />
+                        <View
+                            style="@style/devider_gray"/>
+                        <Spinner
+                            android:id="@+id/spinner_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/_4sdp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:padding="@dimen/_4sdp"
+                            android:spinnerMode="dropdown" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:background="@drawable/rounded_corner_top_red_gradiant"
                         android:id="@+id/lin_vosol"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -67,12 +122,13 @@
                             style="@style/text_view_title_center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:text="@string/vosol" />
+                        <View style="@style/devider_gray"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/reverse_bordered_cardview"
                             android:orientation="horizontal">
 
                             <Spinner
@@ -91,70 +147,156 @@
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent" />
 
-                            <TextView
-                                android:id="@+id/tv_receipt_duration"
-                                style="@style/text_view_normal2"
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/txtinputreceiptduration"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginRight="2dp"
+                                android:layout_marginBottom="2dp"
                                 android:layout_weight="1"
-                                android:text="@string/modatVosol" />
+                                android:layoutDirection="rtl"
+                                android:textDirection="rtl"
+                                android:theme="@style/TextInputLayoutTheme">
+
+                                <com.saphamrah.customer.utils.customViews.EditTextWatcher
+                                    android:id="@+id/etv_receipt_duration"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="@string/modatVosol"
+                                    android:inputType="number"
+                                    android:maxLines="1"
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textColorHint="@color/colorDivider"
+                                    android:textSize="@dimen/_10sdp" />
+                            </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
                     </LinearLayout>
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/RV_ordered_products"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_6sdp"
                         android:layoutDirection="rtl"
-                        android:padding="@dimen/_6sdp"
-                        />
+                        android:padding="@dimen/_6sdp" />
 
 
                     <LinearLayout
+                        android:visibility="visible"
                         android:id="@+id/lin_bonus_discount"
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/lin_discount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:id="@+id/tv_discount_title"
+                                style="@style/text_view_title_center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/discount" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/RV_discount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_6sdp"
+                                android:layoutDirection="rtl"
+                                android:padding="@dimen/_6sdp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/lin_bonus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                style="@style/text_view_title_center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/bonus" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/RV_bonus"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_6sdp"
+                                android:layoutDirection="rtl"
+                                android:padding="@dimen/_6sdp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lin_selectable_bonus"
+                        android:orientation="vertical"
+                        >
                         <TextView
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:id="@+id/tv_discount_title"
                             style="@style/text_view_title_center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/discount" />
+                            android:text="@string/selectableBonus" />
 
                         <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/RV_discount"
+                            android:id="@+id/RV_selectable_bonus"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/_6sdp"
                             android:layoutDirection="rtl"
                             android:padding="@dimen/_6sdp" />
 
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lin_return"
+                        android:orientation="vertical"
+                        >
                         <TextView
                             android:layout_gravity="center"
                             android:gravity="center"
                             style="@style/text_view_title_center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/bonus" />
+                            android:text="@string/marjoee" />
 
                         <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/RV_bonus"
+                            android:id="@+id/RV_return"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_margin="@dimen/_6sdp"
                             android:layoutDirection="rtl"
                             android:padding="@dimen/_6sdp" />
+
+
                     </LinearLayout>
                 </LinearLayout>
             </ScrollView>
 
         </LinearLayout>
     </LinearLayout>
-    <include    android:id="@+id/btm_sht_purchase" layout="@layout/payment_bottom_sheet"
-        />
+
+    <include
+        android:id="@+id/btm_sht_purchase"
+        layout="@layout/payment_bottom_sheet" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

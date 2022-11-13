@@ -191,8 +191,8 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setViews() {
 
-        if (viewBinding.tvReceiptDuration != null) {
-            viewBinding.tvReceiptDuration.setFilters(new InputFilter[]{new InputFilterMinMax(0,30)});
+        if (viewBinding.etvReceiptDuration != null) {
+            viewBinding.etvReceiptDuration.setFilters(new InputFilter[]{new InputFilterMinMax(0,30)});
         }
 
 
