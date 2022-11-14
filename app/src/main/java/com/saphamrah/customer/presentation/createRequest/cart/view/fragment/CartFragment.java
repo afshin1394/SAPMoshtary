@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
+import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,6 +45,7 @@ import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.data.local.temp.ReceiptModel;
 import com.saphamrah.customer.databinding.FragmentCartBinding;
 import com.saphamrah.customer.presentation.createRequest.cart.view.adapter.SelectableBonusCartAdapter;
+import com.saphamrah.customer.presentation.createRequest.filter.view.fragment.FilterFragmentDirections;
 import com.saphamrah.customer.presentation.createRequest.selectableBonus.view.adapter.SelectableBonusAdapter;
 import com.saphamrah.customer.presentation.createRequest.selectableBonus.view.fragment.SelectableBonusFragmentDirections;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
@@ -105,18 +107,19 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         setReceiptList();
         setViews();
 
-
     }
 
     private void setAddressList() {
+        String[] address =   context.getResources().getStringArray(R.array.addressArray);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context,
                 R.layout.custom_spinner_itemview,context.getResources().getStringArray(R.array.addressArray));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         viewBinding.spinnerAddress.setAdapter(adapter);
         viewBinding.spinnerAddress.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
+               activity.setAddress( address[position]);
             }
 
             @Override
@@ -140,6 +143,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
                 viewBinding.linDiscount.setVisibility(View.GONE);
                 viewBinding.linSelectableBonus.setVisibility(View.GONE);
                 activity.clearJayezehTakhfif();
+                activity.clearElamMarjoee();
                 viewBinding.btmShtPurchase.tvPayment.setText(R.string.calculateBonusDiscount);
                 break;
             }
@@ -196,7 +200,8 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         viewBinding.linMarjoee.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-
+                NavDirections action = CartFragmentDirections.actionCartFragmentToReturnFragment();
+                navigate(action);
             }
         });
 
