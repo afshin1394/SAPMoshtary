@@ -24,33 +24,33 @@
 
             <TextView
                 android:layout_gravity="center"
-                style="@style/text_view_title_right"
+                style="@style/text_view_title_right_large_screen"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="8"
+                android:layout_weight="10"
                 android:text="@string/cart" />
 
             <LinearLayout
-                android:id="@+id/lin_purchase"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/lin_marjoee"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/_24sdp"
                 android:layout_gravity="center"
                 android:background="@drawable/rounded_corner_purple_light_gradiant"
                 android:gravity="center"
-                android:layout_margin="@dimen/_4sdp"
-                android:padding="@dimen/_4sdp"
+                android:layout_margin="@dimen/_2sdp"
+                android:padding="@dimen/_2sdp"
                 android:visibility="visible"
                 android:orientation="horizontal">
 
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_marjoee"
+                    />
 
 
-                <TextView
-                    android:id="@+id/tv_payment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/marjoee"
-                    android:textSize="@dimen/_10sdp"
-                    android:textColor="@color/colorBlack" />
+
 
             </LinearLayout>
 
@@ -89,7 +89,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
-                            style="@style/text_view_title_center"
+                            style="@style/text_view_tight_large_screen"
                             android:layout_gravity="center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -119,7 +119,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            style="@style/text_view_title_center"
+                            style="@style/text_view_tight_large_screen"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -169,7 +169,7 @@
                                     android:maxLines="1"
                                     android:textColor="@color/colorTextPrimary"
                                     android:textColorHint="@color/colorDivider"
-                                    android:textSize="@dimen/_10sdp" />
+                                    android:textSize="@dimen/_6sdp" />
                             </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -180,6 +180,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_6sdp"
                         android:layoutDirection="rtl"
+                        android:nestedScrollingEnabled="false"
                         android:padding="@dimen/_6sdp" />
 
 
@@ -200,7 +201,7 @@
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:id="@+id/tv_discount_title"
-                                style="@style/text_view_title_center"
+                                style="@style/text_view_tight_large_screen"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/discount" />
@@ -211,6 +212,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/_6sdp"
                                 android:layoutDirection="rtl"
+                                android:nestedScrollingEnabled="false"
                                 android:padding="@dimen/_6sdp" />
                         </LinearLayout>
 
@@ -223,7 +225,7 @@
                             <TextView
                                 android:layout_gravity="center"
                                 android:gravity="center"
-                                style="@style/text_view_title_center"
+                                style="@style/text_view_tight_large_screen"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/bonus" />
@@ -234,6 +236,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/_6sdp"
                                 android:layoutDirection="rtl"
+                                android:nestedScrollingEnabled="false"
                                 android:padding="@dimen/_6sdp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -248,7 +251,7 @@
                         <TextView
                             android:layout_gravity="center"
                             android:gravity="center"
-                            style="@style/text_view_title_center"
+                            style="@style/text_view_tight_large_screen"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/selectableBonus" />
@@ -259,6 +262,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/_6sdp"
                             android:layoutDirection="rtl"
+                            android:nestedScrollingEnabled="false"
                             android:padding="@dimen/_6sdp" />
 
 
@@ -274,7 +278,7 @@
                         <TextView
                             android:layout_gravity="center"
                             android:gravity="center"
-                            style="@style/text_view_title_center"
+                            style="@style/text_view_tight_large_screen"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/marjoee" />
@@ -285,6 +289,7 @@
                             android:layout_height="match_parent"
                             android:layout_margin="@dimen/_6sdp"
                             android:layoutDirection="rtl"
+                            android:nestedScrollingEnabled="false"
                             android:padding="@dimen/_6sdp" />
 
 

@@ -9,6 +9,8 @@ import com.saphamrah.customer.data.local.db.localDataSourceImpl.BankLocalDataSou
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class BankRepository {
     private final BankLocalDataSource bankLocalDataSource;
@@ -24,7 +26,9 @@ public class BankRepository {
     }
 
     public Completable insertAllBanks(List<Bank> banks) {
-        return Completable.fromAction(() -> bankLocalDataSource.insertAll(banks));
+        return Completable.fromAction(() -> bankLocalDataSource.insertAll(banks))
+                .subscribeOn(Schedulers.io());
+
     }
 
 }

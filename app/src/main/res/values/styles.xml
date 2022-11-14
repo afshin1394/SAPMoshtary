@@ -8,6 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:fontFamily">@font/iransans</item>
         <item name="android:windowDisablePreview">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <item name="backgroundColor">@color/colorBrown50</item>
         <item name="background">@color/colorBrown50</item>
 
@@ -216,6 +218,16 @@
         <item name="android:layout_gravity">right</item>
         <item name="android:textSize">@dimen/_12sdp</item>
     </style>
+    <style name="text_view_title_right_large_screen">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:padding">@dimen/_2sdp</item>
+        <item name="android:gravity">right</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:textSize">@dimen/_9sdp</item>
+    </style>
+
     <style name="confirm_Btn_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -276,6 +288,14 @@
         <item name="android:layout_margin">@dimen/_2sdp</item>
         <item name="android:padding">@dimen/_2sdp</item>
         <item name="android:textSize">@dimen/_9sdp</item>
+    </style>
+    <style name="text_view_tight_large_screen">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:layout_margin">@dimen/_2sdp</item>
+        <item name="android:padding">@dimen/_1sdp</item>
+        <item name="android:textSize">@dimen/_7sdp</item>
     </style>
     <style name="devider_gray">
         <item name="android:layout_width">@dimen/_265sdp</item>

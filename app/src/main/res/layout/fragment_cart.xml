@@ -31,7 +31,7 @@
                 android:text="@string/cart" />
 
             <LinearLayout
-                android:id="@+id/lin_purchase"
+                android:id="@+id/lin_marjoee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -42,14 +42,14 @@
                 android:visibility="visible"
                 android:orientation="horizontal">
 
-
-
-                <TextView
-                    android:id="@+id/tv_payment"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/marjoee"
-                    android:textColor="@color/colorBlack" />
+                    android:src="@drawable/ic_marjoee"
+                    />
+
+
+
 
             </LinearLayout>
 
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ScrollView
+            <androidx.core.widget.NestedScrollView
                 android:id="@+id/sv_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -179,6 +179,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_6sdp"
                         android:layoutDirection="rtl"
+                        android:nestedScrollingEnabled="false"
                         android:padding="@dimen/_6sdp" />
 
 
@@ -208,6 +209,7 @@
                             android:id="@+id/RV_discount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
                             android:layout_margin="@dimen/_6sdp"
                             android:layoutDirection="rtl"
                             android:padding="@dimen/_6sdp" />
@@ -231,6 +233,7 @@
                             android:id="@+id/RV_bonus"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
                             android:layout_margin="@dimen/_6sdp"
                             android:layoutDirection="rtl"
                             android:padding="@dimen/_6sdp" />
@@ -256,6 +259,7 @@
                             android:id="@+id/RV_selectable_bonus"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
                             android:layout_margin="@dimen/_6sdp"
                             android:layoutDirection="rtl"
                             android:padding="@dimen/_6sdp" />
@@ -282,6 +286,7 @@
                             android:id="@+id/RV_return"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:nestedScrollingEnabled="false"
                             android:layout_margin="@dimen/_6sdp"
                             android:layoutDirection="rtl"
                             android:padding="@dimen/_6sdp" />
@@ -289,7 +294,7 @@
 
                     </LinearLayout>
                 </LinearLayout>
-            </ScrollView>
+            </androidx.core.widget.NestedScrollView>
 
         </LinearLayout>
     </LinearLayout>

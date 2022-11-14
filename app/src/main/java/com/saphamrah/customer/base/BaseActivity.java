@@ -10,8 +10,11 @@ import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewbinding.ViewBinding;
+
+import com.saphamrah.customer.utils.RxUtils.Watcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +40,8 @@ public abstract class BaseActivity<T extends BasePresenterOps, S extends ViewBin
         initViews();
         checkKeyboard();
     }
+
+
 
     private void checkKeyboard() {
         // ContentView is the root view of the layout of this activity/fragment
@@ -77,9 +82,12 @@ public abstract class BaseActivity<T extends BasePresenterOps, S extends ViewBin
     protected abstract S inflateBiding(LayoutInflater inflater);
 
 
+
+
     public abstract void onPermission(ArrayList<BasePermissionModel> basePermissionModels);
 
     public void setActivityPresenter(T presenter) {
+
         this.presenter = presenter;
 
     }

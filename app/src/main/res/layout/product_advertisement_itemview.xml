@@ -43,7 +43,7 @@
         android:elevation="@dimen/_4sdp"
         android:layout_width="match_parent"
         android:layout_gravity="center"
-        android:layout_height="@dimen/_120sdp"
+        android:layout_height="@dimen/_90sdp"
         android:src="@drawable/board"/>
     </LinearLayout>
     </androidx.cardview.widget.CardView>

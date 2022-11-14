@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context=".presentation.createRequest.CreateRequestActivity">
-    <include layout="@layout/toolbar_layout"/>
+
  <FrameLayout
      android:layout_width="match_parent"
      android:layout_height="match_parent"
@@ -24,11 +24,11 @@
         android:elevation="@dimen/_48sdp"
         >
         <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="@dimen/_35sdp"
-            android:layout_height="@dimen/_35sdp"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_30sdp"
             android:layout_gravity="top|center"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_marginTop="@dimen/_2sdp"
             app:lottie_rawRes="@raw/cart_red_anim"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"

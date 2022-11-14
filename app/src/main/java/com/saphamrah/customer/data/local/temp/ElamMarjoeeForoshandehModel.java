@@ -91,11 +91,14 @@ public class ElamMarjoeeForoshandehModel {
     @Expose
     private int ccForoshandeh;
 
-    public ElamMarjoeeForoshandehModel(int ccElamMarjoee, int ccKala, int tedad3, float gheymatKharid, float gheymatForosh) {
-        this.ccElamMarjoee = ccElamMarjoee;
-        this.ccKala = ccKala;
+    public ElamMarjoeeForoshandehModel(int ccElamMarjoeeSatr, String codeKala, String nameKala, String shomarehBach, String tarikhTolid, String tarikhEngheza, int tedad3, float gheymatForosh) {
+        this.ccElamMarjoeeSatr = ccElamMarjoeeSatr;
+        CodeKala = codeKala;
+        NameKala = nameKala;
+        ShomarehBach = shomarehBach;
+        TarikhTolid = tarikhTolid;
+        TarikhEngheza = tarikhEngheza;
         Tedad3 = tedad3;
-        GheymatKharid = gheymatKharid;
         GheymatForosh = gheymatForosh;
     }
 

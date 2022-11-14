@@ -34,4 +34,8 @@ public class BankLocalDataSourceImpl extends BankLocalDataSource  {
         return bankDao.getAll();
     }
 
+    @Override
+    protected void getmoshtary() {
+
+    }
 }

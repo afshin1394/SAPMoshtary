@@ -71,8 +71,8 @@
             app:argType="com.saphamrah.customer.data.local.temp.SelectableBonus[]"
             app:nullable="true" />
         <action
-            android:id="@+id/action_cartFragment_to_marjoeeFragment"
-            app:destination="@id/marjoeeFragment" />
+            android:id="@+id/action_cartFragment_to_returnFragment"
+            app:destination="@id/returnFragment" />
 
     </fragment>
     <fragment
@@ -87,9 +87,9 @@
             app:destination="@id/cartFragment" />
     </fragment>
     <fragment
-        android:id="@+id/marjoeeFragment"
-        android:name="com.saphamrah.customer.presentation.createRequest.marjoee.view.fragment.MarjoeeFragment"
-        android:label="fragment_marjoee"
-        tools:layout="@layout/fragment_marjoee" />
+        android:id="@+id/returnFragment"
+        android:name="com.saphamrah.customer.presentation.createRequest.returned.view.fragment.ReturnFragment"
+        android:label="ReturnFragment" />
+
 
 </navigation>

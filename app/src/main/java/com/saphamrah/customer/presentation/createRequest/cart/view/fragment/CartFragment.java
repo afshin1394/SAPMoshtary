@@ -31,6 +31,7 @@ import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.local.temp.FilterSortModel;
 import com.saphamrah.customer.data.local.temp.JayezehEntekhabiMojodiModel;
 import com.saphamrah.customer.data.local.temp.SelectableBonus;
+import com.saphamrah.customer.presentation.createRequest.addItemtoCart.view.fragment.AddItemToCartFragmentDirections;
 import com.saphamrah.customer.presentation.createRequest.cart.interactor.CartInteractor;
 import com.saphamrah.customer.presentation.createRequest.cart.presenter.CartPresenter;
 import com.saphamrah.customer.presentation.createRequest.cart.view.adapter.CartProductAdapter;
@@ -191,6 +192,14 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setViews() {
 
+
+        viewBinding.linMarjoee.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+
+            }
+        });
+
         if (viewBinding.etvReceiptDuration != null) {
             viewBinding.etvReceiptDuration.setFilters(new InputFilter[]{new InputFilterMinMax(0,30)});
         }
@@ -241,6 +250,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     }
 
     private void setReceiptList() {
+
         receiptModels = new ArrayList<>();
         ReceiptModel receiptModel = new ReceiptModel(1, "نقد", 0);
         ReceiptModel receiptModel1 = new ReceiptModel(2, "رسید", 0);
@@ -371,6 +381,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             bonusAdapter = new BonusAdapter(context, activity.getBonusModelsGlobal());
             viewBinding.RVBonus.setLayoutManager(linearLayoutManager);
             viewBinding.RVBonus.setAdapter(bonusAdapter);
+            viewBinding.RVBonus.setNestedScrollingEnabled(false);
         }
     }
 
@@ -382,6 +393,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             discountAdapter = new DiscountAdapter(context, activity.getDiscountModelsGlobal());
             viewBinding.RVDiscount.setLayoutManager(linearLayoutManager);
             viewBinding.RVDiscount.setAdapter(discountAdapter);
+            viewBinding.RVDiscount.setNestedScrollingEnabled(false);
         }
     }
 
@@ -403,6 +415,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             });
             viewBinding.RVSelectableBonus.setLayoutManager(linearLayoutManager);
             viewBinding.RVSelectableBonus.setAdapter(selectableBonusCartAdapter);
+            viewBinding.RVSelectableBonus.setNestedScrollingEnabled(false);
         }
     }
 
