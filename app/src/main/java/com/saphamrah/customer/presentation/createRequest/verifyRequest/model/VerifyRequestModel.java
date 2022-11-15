@@ -1,7 +1,12 @@
 package com.saphamrah.customer.presentation.createRequest.verifyRequest.model;
 
+import com.saphamrah.customer.data.local.temp.BonusModel;
+import com.saphamrah.customer.data.local.temp.DiscountModel;
+import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.presentation.createRequest.selectableBonus.interactor.SelectableBonusInteractor;
 import com.saphamrah.customer.presentation.createRequest.verifyRequest.interactor.VerifyRequestInteractor;
+
+import java.util.List;
 
 public class VerifyRequestModel extends VerifyRequestInteractor.ModelOps {
 
@@ -18,6 +23,11 @@ public class VerifyRequestModel extends VerifyRequestInteractor.ModelOps {
 
     @Override
     public void onDestroy() {
+
+    }
+
+    @Override
+    protected void saveData(List<ProductModel> productModels, List<BonusModel> bonusModels, List<DiscountModel> discountModels) {
 
     }
 }

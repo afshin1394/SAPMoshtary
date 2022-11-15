@@ -274,6 +274,14 @@
         <item name="android:padding">@dimen/_4sdp</item>
         <item name="android:textSize">@dimen/_10sdp</item>
     </style>
+    <style name="text_view_normal_right_large_screen">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:layout_margin">@dimen/_4sdp</item>
+        <item name="android:padding">@dimen/_4sdp</item>
+        <item name="android:textSize">@dimen/_7sdp</item>
+    </style>
 
     <style name="text_view_normal2">
         <item name="android:layout_width">wrap_content</item>
@@ -294,6 +302,16 @@
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:textSize">@dimen/_10sdp</item>
+    </style>
+    <style name="text_view_normal3_large_screen">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:layout_margin">@dimen/_4sdp</item>
+        <item name="android:padding">@dimen/_4sdp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">@dimen/_7sdp</item>
     </style>
 
     <style name="text_view_tight">

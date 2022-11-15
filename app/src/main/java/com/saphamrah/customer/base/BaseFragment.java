@@ -24,6 +24,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.SavedStateHandle;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
@@ -116,6 +118,8 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
         setPresenter();
         compositeDisposable = new CompositeDisposable();
         initViews();
+
+
     }
 
     public void setFragmentResult(String key, Object value) {

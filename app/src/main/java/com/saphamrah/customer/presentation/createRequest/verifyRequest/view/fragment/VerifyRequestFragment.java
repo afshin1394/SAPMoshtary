@@ -4,8 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -25,6 +27,7 @@ import com.saphamrah.customer.presentation.createRequest.verifyRequest.presenter
 import com.saphamrah.customer.presentation.createRequest.verifyRequest.view.adapter.JayezehPishFaktorAdapter;
 import com.saphamrah.customer.presentation.createRequest.verifyRequest.view.adapter.KalaPishFaktorAdapter;
 import com.saphamrah.customer.presentation.createRequest.verifyRequest.view.adapter.TakhfifPishFaktorAdatper;
+import com.saphamrah.customer.utils.Constants;
 import com.saphamrah.customer.utils.customViews.DrawingView;
 
 import java.util.List;
@@ -44,6 +47,7 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
 
     @Override
     protected void onBackPressed() {
+        activity.paymentState = Constants.PaymentStates.CONFIRM_REQUEST;
     }
 
     @Override
@@ -95,6 +99,13 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
             bitmap.recycle();
             emptyBitmap.recycle();
         }
+        Log.i(TAG, "checkState: SAVE_REQUEST");
+        List<ProductModel> productModels = activity.getProductModelGlobal();
+        List<BonusModel> bonusModels = activity.getBonusModelsGlobal();
+        List<DiscountModel> discountModels = activity.getDiscountModelsGlobal();
+        presenter.saveData(productModels, bonusModels, discountModels);
+        Toast.makeText(context, R.string.confirm, Toast.LENGTH_LONG).show();
+        activity.finish();
     }
 
     private void initCustomerInfo() {

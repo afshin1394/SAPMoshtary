@@ -9,7 +9,10 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.SavedStateHandle;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -102,13 +105,45 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
         productModels = CollectionUtils.convertArrayToList(CartFragmentArgs.fromBundle(getArguments()).getProducts());
         setProductRecycler();
+        if (!activity.setMarjoee)
         checkState();
+        if (activity.getDiscountModelsGlobal()!=null && activity.getBonusModelsGlobal()!=null)
+            presenter.getDiscountAndBonuses();
+        if (activity.getJayezehEntekhabiMojodiModels()!=null)
+            setSelectableBonusRecycler();
+
+
+        setBottomSheetOnState();
         setAddressList();
         setReceiptList();
         setMarjoeeList();
         setViews();
+        activity.setMarjoee =false;
 
+    }
 
+    private void setBottomSheetOnState() {
+        switch (activity.paymentState){
+            case SAVE_REQUEST:
+                viewBinding.btmShtPurchase.tvPayment.setText(R.string.confirm);
+                break;
+            case CONFIRM_REQUEST:
+                viewBinding.btmShtPurchase.tvPayment.setText(R.string.taeedDarkhast);
+                break;
+
+            case SELECTABLE_BONUS:
+                viewBinding.btmShtPurchase.tvPayment.setText(R.string.selectableBonus);
+                break;
+            case CALCULATE_BONUS_DISCOUNT:
+                viewBinding.btmShtPurchase.tvPayment.setText(R.string.calculateBonusDiscount);
+                break;
+            case SHOW_PRODUCTS:
+                viewBinding.btmShtPurchase.tvPayment.setText(R.string.calculateBonusDiscount);
+                break;
+            case PISH_FAKTOR:
+                viewBinding.btmShtPurchase.tvPayment.setText(R.string.pishFaktor);
+                break;
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -179,43 +214,34 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             }
 
             case SELECTABLE_BONUS: {
-
-
-                Log.i(TAG, "checkState: SELECTABLE_BONUS");
                 /*state3*/
-                if (!activity.setMarjoee) {
-                    CartFragmentDirections.ActionCartFragmentToSelectableBonusFragment action = CartFragmentDirections.actionCartFragmentToSelectableBonusFragment(new SelectableBonus[]{});
-                    navigate(action);
-                }else{
-                    activity.paymentState = Constants.PaymentStates.CALCULATE_BONUS_DISCOUNT;
-                    activity.setMarjoee = false;
-                }
+
+                CartFragmentDirections.ActionCartFragmentToSelectableBonusFragment action = CartFragmentDirections.actionCartFragmentToSelectableBonusFragment(new SelectableBonus[]{});
+                navigate(action);
+                Log.i(TAG, "checkState: SELECTABLE_BONUS");
+
 
                 break;
             }
 
             case CONFIRM_REQUEST: {
-                navigate(CartFragmentDirections.actionCartFragmentToVerifyRequestFragment());
-                activity.paymentState = Constants.PaymentStates.SAVE_REQUEST;
-//                Log.i(TAG, "checkState: CONFIRM_REQUEST");
-//                /*state4*/
-//                setSelectableBonusRecycler();
+//                navigate(CartFragmentDirections.actionCartFragmentToVerifyRequestFragment());
 //                activity.paymentState = Constants.PaymentStates.SAVE_REQUEST;
-//                presenter.getDiscountAndBonuses();
-//                viewBinding.btmShtPurchase.tvPayment.setText(R.string.confirm);
-
+                Log.i(TAG, "checkState: CONFIRM_REQUEST");
+                /*state4*/
+                setSelectableBonusRecycler();
+                presenter.getDiscountAndBonuses();
+                activity.paymentState = Constants.PaymentStates.PISH_FAKTOR;
+                viewBinding.btmShtPurchase.tvPayment.setText(R.string.pishFaktor);
 
                 break;
             }
             /*state5*/
-            case SAVE_REQUEST: {
-                Log.i(TAG, "checkState: SAVE_REQUEST");
-                List<ProductModel> productModels = activity.getProductModelGlobal();
-                List<BonusModel> bonusModels = activity.getBonusModelsGlobal();
-                List<DiscountModel> discountModels = activity.getDiscountModelsGlobal();
-                presenter.saveData(productModels, bonusModels, discountModels);
-                Toast.makeText(context, R.string.confirm, Toast.LENGTH_LONG).show();
-                activity.finish();
+            case PISH_FAKTOR: {
+                navigate(CartFragmentDirections.actionCartFragmentToVerifyRequestFragment());
+                activity.paymentState = Constants.PaymentStates.PISH_FAKTOR;
+
+
                 break;
             }
         }

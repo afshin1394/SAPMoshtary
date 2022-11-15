@@ -29,6 +29,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_marginRight="-12dp"
                 android:src="@drawable/discount_tag" />
 
             <TextView
@@ -56,7 +57,7 @@
 
             <TextView
                 android:id="@+id/tv_discount_amount"
-                style="@style/text_view_normal_right"
+                style="@style/text_view_normal_right_large_screen"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
