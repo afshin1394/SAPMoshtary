@@ -18,8 +18,11 @@ public class ProductModel implements Parcelable {
     private List<Integer> imageResource;
     private boolean isAd;
 
+    private int weight;
+    private String sazmanForosh;
+    private int numInBox;
 
-    public ProductModel(int id, String nameProduct, long consumerPrice, long sellPrice,String bachNumber, long inventory,long orderCount,String productionDate,String expirationDate,List<Integer> imageResource,boolean isAd) {
+    public ProductModel(int id, String nameProduct, long consumerPrice, long sellPrice,String bachNumber, long inventory,long orderCount,String productionDate,String expirationDate,List<Integer> imageResource,boolean isAd, String sazmanForosh, int weight, int numInBox) {
         this.id = id;
         this.nameProduct = nameProduct;
         this.consumerPrice = consumerPrice;
@@ -29,6 +32,11 @@ public class ProductModel implements Parcelable {
         this.imageResource = imageResource;
         this.orderCount = orderCount;
         this.isAd = isAd;
+        this.productionDate = productionDate;
+        this.expirationDate = expirationDate;
+        this.sazmanForosh = sazmanForosh;
+        this.weight = weight;
+        this.numInBox = numInBox;
     }
 
 
@@ -42,6 +50,9 @@ public class ProductModel implements Parcelable {
         orderCount = in.readLong();
         productionDate = in.readString();
         expirationDate = in.readString();
+        sazmanForosh = in.readString();
+        weight = in.readInt();
+        numInBox = in.readInt();
         isAd = in.readByte() != 0;
     }
 
@@ -145,6 +156,30 @@ public class ProductModel implements Parcelable {
         this.orderCount = orderCount;
     }
 
+    public String getSazmanForosh() {
+        return sazmanForosh;
+    }
+
+    public void setSazmanForosh(String sazmanForosh) {
+        this.sazmanForosh = sazmanForosh;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public int getNumInBox() {
+        return numInBox;
+    }
+
+    public void setNumInBox(int numInBox) {
+        this.numInBox = numInBox;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -161,6 +196,9 @@ public class ProductModel implements Parcelable {
         parcel.writeLong(inventory);
         parcel.writeString(productionDate);
         parcel.writeString(expirationDate);
+        parcel.writeString(sazmanForosh);
+        parcel.writeInt(weight);
+        parcel.writeInt(numInBox);
         parcel.writeByte((byte) (isAd ? 1 : 0));
     }
 
@@ -177,6 +215,9 @@ public class ProductModel implements Parcelable {
                 ", productionDate='" + productionDate + '\'' +
                 ", expirationDate='" + expirationDate + '\'' +
                 ", imageResource=" + imageResource +
+                ", sazmanForosh=" + sazmanForosh +
+                ", weight=" + weight +
+                ", numInBox=" + numInBox +
                 ", isAd=" + isAd +
                 '}';
     }

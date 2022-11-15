@@ -16,6 +16,7 @@ import com.saphamrah.customer.base.BasePermissionModel;
 import com.saphamrah.customer.data.local.db.SapDatabase;
 import com.saphamrah.customer.data.local.temp.BonusModel;
 import com.saphamrah.customer.data.local.temp.DiscountModel;
+import com.saphamrah.customer.data.local.temp.ElamMarjoeeForoshandehModel;
 import com.saphamrah.customer.data.local.temp.FilterSortModel;
 import com.saphamrah.customer.data.local.temp.JayezehEntekhabiMojodiModel;
 import com.saphamrah.customer.data.local.temp.ProductModel;
@@ -32,11 +33,13 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     private String TAG = CreateRequestActivity.class.getSimpleName();
     private List<ProductModel> productModelGlobal;
     private List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModelsGlobal;
+    private List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModelsGlobal;
     private List<BonusModel> bonusModelsGlobal;
     private List<DiscountModel> discountModelsGlobal;
+    private String address;
     public ActivityCreateRequestBinding rootBinding;
     public Constants.PaymentStates paymentState;
-
+    public boolean setMarjoee = false;
     CartListener cartListener;
 
     public void setCartListener(CartListener cartListener){
@@ -133,34 +136,37 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         if (discountModelsGlobal!=null){
             discountModelsGlobal.clear();
         }
+    }
 
-
-
+    public void clearElamMarjoee(){
+        if (elamMarjoeeForoshandehModelsGlobal!=null){
+            elamMarjoeeForoshandehModelsGlobal.clear();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void removeCart() {
         clearJayezehTakhfif();
+        clearElamMarjoee();
         productModelGlobal.forEach(productModel -> productModel.setOrderCount(0));
         viewBinding.linCart.setVisibility(View.GONE);
         cartListener.onCartEmpty();
     }
     private void setProducts() {
         List<Integer> imageRes = new ArrayList<>();
-        imageRes.add(R.drawable.advertising);
-        imageRes.add(R.drawable.night);
-        imageRes.add(R.drawable.midday);
-        imageRes.add(R.drawable.sunrise);
-        ProductModel kalaModel = new ProductModel(1, "بستنی دوقلو", 10000, 8000, "980702", 500, 0,"1400/8/5", "1400/8/25", imageRes,false);
-        ProductModel kalaModel2 = new ProductModel(2, "بستنی ماستی", 12000, 10000, "980702", 600,0, "1400/8/5", "1400/8/25", imageRes,true);
-        ProductModel kalaModel3 = new ProductModel(3, "رب دلپذیر", 13000, 8000, "980702", 600,0, "1400/8/5", "1400/8/25", imageRes,false);
-        ProductModel kalaModel4 = new ProductModel(4, "آب معدنی", 14000, 10000, "980702", 600, 0,"1400/2/5", "1400/9/25", imageRes,false);
-        ProductModel kalaModel5 = new ProductModel(5, "شربت سکنجبین", 16000, 7000, "980702", 600,0, "1400/1/5", "1400/9/25", imageRes,false);
-        ProductModel kalaModel6 = new ProductModel(6, "آب انبه", 18000, 9000, "980702", 500,0, "1400/8/5", "1400/8/25", imageRes,true);
-        ProductModel kalaModel7 = new ProductModel(7, "آب پرتقال", 19000, 7000, "980702", 600,0, "1400/8/5", "1400/8/25", imageRes,false);
-        ProductModel kalaModel8 = new ProductModel(8, "آب سیب", 17000, 9000, "980702", 300,0, "1400/5/5", "1400/8/25", imageRes,false);
-        ProductModel kalaModel9 = new ProductModel(9, "آب هلو", 22000, 9000, "980702", 300, 0,"1400/7/5", "1400/8/25", imageRes,true);
-        ProductModel kalaModel10 = new ProductModel(10, "آب انار", 10000, 9000, "980702", 300, 0,"1400/8/1", "1400/8/15", imageRes,false);
+        imageRes.add(R.drawable.delpazir);
+        imageRes.add(R.drawable.yogourt);
+        imageRes.add(R.drawable.bastani);
+        ProductModel kalaModel = new ProductModel(1, "بستنی دوقلو", 10000, 8000, "980702", 500, 0,"1400/8/5", "1400/8/25", imageRes,false,"پاندا",290,15);
+        ProductModel kalaModel2 = new ProductModel(2, "بستنی ماستی", 12000, 10000, "980702", 600,0, "1400/8/5", "1400/8/25", imageRes,true,"پاندا",290,15);
+        ProductModel kalaModel3 = new ProductModel(3, "رب دلپذیر", 13000, 8000, "980702", 600,0, "1400/8/5", "1400/8/25", imageRes,false,"میهن",290,15);
+        ProductModel kalaModel4 = new ProductModel(4, "آب معدنی", 14000, 10000, "980702", 600, 0,"1400/2/5", "1400/9/25", imageRes,false,"پاندا",290,15);
+        ProductModel kalaModel5 = new ProductModel(5, "شربت سکنجبین", 16000, 7000, "980702", 600,0, "1400/1/5", "1400/9/25", imageRes,false,"فرودلند",290,15);
+        ProductModel kalaModel6 = new ProductModel(6, "آب انبه", 18000, 9000, "980702", 500,0, "1400/8/5", "1400/8/25", imageRes,true,"پاندا",290,15);
+        ProductModel kalaModel7 = new ProductModel(7, "آب پرتقال", 19000, 7000, "980702", 600,0, "1400/8/5", "1400/8/25", imageRes,false,"لبنیات پاستوریزه",290,15);
+        ProductModel kalaModel8 = new ProductModel(8, "آب سیب", 17000, 9000, "980702", 300,0, "1400/5/5", "1400/8/25", imageRes,false,"فروتلند",290,15);
+        ProductModel kalaModel9 = new ProductModel(9, "آب هلو", 22000, 9000, "980702", 300, 0,"1400/7/5", "1400/8/25", imageRes,true,"پاندا",290,15);
+        ProductModel kalaModel10 = new ProductModel(10, "آب انار", 10000, 9000, "980702", 300, 0,"1400/8/1", "1400/8/15", imageRes,false,"میهن",290,15);
         productModelGlobal = new ArrayList<>();
         productModelGlobal.add(kalaModel);
         productModelGlobal.add(kalaModel2);
@@ -201,7 +207,25 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         this.discountModelsGlobal = discountModelsGlobal;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public List<ElamMarjoeeForoshandehModel> getElamMarjoeeForoshandehModelsGlobal() {
+        if (elamMarjoeeForoshandehModelsGlobal!=null)
+        return elamMarjoeeForoshandehModelsGlobal.stream().filter(elamMarjoeeForoshandehModel -> elamMarjoeeForoshandehModel.getTedad3()>0).collect(Collectors.toList());
+        else
+            return null;
+    }
 
+    public void setElamMarjoeeForoshandehModelsGlobal(List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModelsGlobal) {
+        this.elamMarjoeeForoshandehModelsGlobal = elamMarjoeeForoshandehModelsGlobal;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public interface CartListener {
         void onCartClick(List<ProductModel> productModels);

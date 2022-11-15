@@ -1,17 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.createRequest.returned.view.fragment.ReturnedFragment">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/RV_ordered_products"
+    android:orientation="vertical"
+    tools:context=".presentation.createRequest.returned.view.fragment.ReturnFragment">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_6sdp"
-        android:layoutDirection="rtl"
-        android:nestedScrollingEnabled="false"
-        android:padding="@dimen/_6sdp" />
+        android:layout_marginBottom="140dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/purchase_light_background">
+            <TextView
+                style="@style/text_view_title_right_large_screen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/marjoee" />
+        </LinearLayout>
 
-</FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RV_ordered_products"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_6sdp"
+            android:layoutDirection="rtl"
+            android:nestedScrollingEnabled="false"
+            android:padding="@dimen/_6sdp" />
+
+    </LinearLayout>
+
+    <include android:id="@+id/btm_sht_return" layout="@layout/bottom_sheet_marjoee"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -82,8 +82,6 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
         viewBinding.imageSlider.setIndicatorAnimation(IndicatorAnimationType.WORM); //set indicator animation by using IndicatorAnimationType. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         viewBinding.imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         viewBinding.imageSlider.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
-        viewBinding.imageSlider.setIndicatorSelectedColor(Color.WHITE);
-        viewBinding.imageSlider.setIndicatorUnselectedColor(Color.GRAY);
         viewBinding.imageSlider.setScrollTimeInSec(4); //set scroll delay in seconds :
         viewBinding.imageSlider.startAutoCycle();
     }
@@ -91,50 +89,50 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setViews(ProductModel productModel) {
 
-        bottomSheetBehavior = BottomSheetBehavior.from(viewBinding.btmShtPurchase.linBottomSheet);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        final float[] oldOffset = {0f};
-        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            float oldOffSet = 0f;
-
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-
-
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                Log.i(TAG, "onSlide: " + slideOffset);
-
-                boolean inRangeExpanding = oldOffset[0] < slideOffset;
-                boolean inRangeCollapsing = oldOffset[0] > slideOffset;
-                oldOffset[0] = slideOffset;
-                if (inRangeExpanding) {
-//                    viewBinding.imageSlider.animate().scaleY(0.7f).translationY(-100f).setDuration(400);
-
-                    Log.i(TAG, "onSlide: EXPAND");
-                }
-                if (inRangeCollapsing) {
-
-//                    viewBinding.imageSlider.animate().scaleY(1.2f).translationY(0).setDuration(400);
-                    Log.i(TAG, "onSlide: COLLAPSE");
-                }
-
-//                if (inRangeCollapsing){
-//                    AnimationUtils.expand(viewBinding.imageSlider);
-//                    AnimationUtils.collapse(viewBinding.btmShtPurchase.linDetailsView);
-//                    if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
-//                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-//                }else if (inRangeExpanding){
+//        bottomSheetBehavior = BottomSheetBehavior.from(viewBinding.btmShtPurchase.linBottomSheet);
+//        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//        final float[] oldOffset = {0f};
+//        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+//            float oldOffSet = 0f;
 //
-//                    AnimationUtils.collapse(viewBinding.imageSlider);
-//                    AnimationUtils.expand(viewBinding.btmShtPurchase.linDetailsView);
-//                    if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
-//                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//            @Override
+//            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+//
+//
+//            }
+//
+//            @Override
+//            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+//                Log.i(TAG, "onSlide: " + slideOffset);
+//
+//                boolean inRangeExpanding = oldOffset[0] < slideOffset;
+//                boolean inRangeCollapsing = oldOffset[0] > slideOffset;
+//                oldOffset[0] = slideOffset;
+//                if (inRangeExpanding) {
+////                    viewBinding.imageSlider.animate().scaleY(0.7f).translationY(-100f).setDuration(400);
+//
+//                    Log.i(TAG, "onSlide: EXPAND");
 //                }
-            }
-        });
+//                if (inRangeCollapsing) {
+//
+////                    viewBinding.imageSlider.animate().scaleY(1.2f).translationY(0).setDuration(400);
+//                    Log.i(TAG, "onSlide: COLLAPSE");
+//                }
+//
+////                if (inRangeCollapsing){
+////                    AnimationUtils.expand(viewBinding.imageSlider);
+////                    AnimationUtils.collapse(viewBinding.btmShtPurchase.linDetailsView);
+////                    if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+////                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+////                }else if (inRangeExpanding){
+////
+////                    AnimationUtils.collapse(viewBinding.imageSlider);
+////                    AnimationUtils.expand(viewBinding.btmShtPurchase.linDetailsView);
+////                    if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+////                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+////                }
+//            }
+//        });
 
 
         if (productModel.getOrderCount() > 0) {
@@ -144,34 +142,33 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
         } else {
             viewBinding.btmShtPurchase.linPurchase.setVisibility(View.VISIBLE);
             viewBinding.btmShtPurchase.linPurchaseCount.setVisibility(View.GONE);
+            viewBinding.btmShtPurchase.cvTxtConsumerPrice.setVisibility(View.INVISIBLE);
+
         }
 
-        viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("%1$s %2$s", "45500", getString(R.string.rial)));
+        viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("%1$s %2$s :هزینه پرداختی", "45500", getString(R.string.rial)));
         viewBinding.btmShtPurchase.txtProductName.setText(productModel.getNameProduct());
-        viewBinding.btmShtPurchase.txtInventory.setText(String.valueOf(500));
-        viewBinding.btmShtPurchase.txtSellPrice.setText(String.valueOf(50000));
-        viewBinding.btmShtPurchase.txtExpirationDate.setText(String.valueOf("02/09/1400"));
-        viewBinding.btmShtPurchase.txtProductionDate.setText(String.valueOf("02/09/1400"));
-        viewBinding.btmShtPurchase.txtBachNumber.setText(String.valueOf(452145));
+        viewBinding.btmShtPurchase.bachNumberTv.setText(productModel.getBachNumber());
+        viewBinding.btmShtPurchase.brandTv.setText(productModel.getSazmanForosh());
+        viewBinding.btmShtPurchase.expirationDateTv.setText(productModel.getExpirationDate());
+        viewBinding.btmShtPurchase.productionDateTv.setText(productModel.getProductionDate());
+        viewBinding.btmShtPurchase.numberInBoxTv.setText(" عدد " + productModel.getNumInBox());
+        viewBinding.btmShtPurchase.weightTv.setText("گرم" + productModel.getWeight());
 
 
         viewBinding.btmShtPurchase.linPurchase.setOnClickListener(view -> {
             viewBinding.btmShtPurchase.linPurchase.setVisibility(View.GONE);
             viewBinding.btmShtPurchase.linPurchaseCount.setVisibility(View.VISIBLE);
+            viewBinding.btmShtPurchase.cvTxtConsumerPrice.setVisibility(View.VISIBLE);
             viewBinding.btmShtPurchase.TVCount.setText("1");
             productModel.setOrderCount(1);
             activity.checkCart(true);
         });
 
-        viewBinding.btmShtPurchase.addToCart.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View view) {
-                  productModel.setOrderCount(productModel.getOrderCount()+1);
-                  viewBinding.btmShtPurchase.TVCount.setText(String.valueOf(Integer.parseInt(String.valueOf(viewBinding.btmShtPurchase.TVCount.getText())) + 1));
-
-
-                           }
-                       });
+        viewBinding.btmShtPurchase.addToCart.setOnClickListener(view -> {
+            productModel.setOrderCount(productModel.getOrderCount()+1);
+            viewBinding.btmShtPurchase.TVCount.setText(String.valueOf(Integer.parseInt(String.valueOf(viewBinding.btmShtPurchase.TVCount.getText())) + 1));
+                     });
                 viewBinding.btmShtPurchase.removeFromCart.setOnClickListener(view2 -> {
 
 
@@ -183,6 +180,11 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
                         } catch (Exception e) {
 
                         }
+                        if (productModel.getOrderCount() == 0){
+                            viewBinding.btmShtPurchase.linPurchaseCount.setVisibility(View.GONE);
+                            viewBinding.btmShtPurchase.linPurchase.setVisibility(View.VISIBLE);
+                            viewBinding.btmShtPurchase.cvTxtConsumerPrice.setVisibility(View.INVISIBLE);
+                        }
                     } else {
                         viewBinding.btmShtPurchase.linPurchaseCount.setVisibility(View.GONE);
                         viewBinding.btmShtPurchase.linPurchase.setVisibility(View.VISIBLE);
@@ -191,18 +193,29 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
                 });
 
 
+        viewBinding.btmShtPurchase.trashIv.setOnClickListener(view -> {
+            productModel.setOrderCount(0);
+            activity.checkCart(true);
+            viewBinding.btmShtPurchase.linPurchaseCount.setVisibility(View.GONE);
+            viewBinding.btmShtPurchase.linPurchase.setVisibility(View.VISIBLE);
+            viewBinding.btmShtPurchase.TVCount.setText(String.valueOf(productModel.getOrderCount()));
+            viewBinding.btmShtPurchase.cvTxtConsumerPrice.setVisibility(View.INVISIBLE);
+        });
+
+
         viewBinding.btmShtPurchase.TVCount.addTextWatcher(s -> {
 
 
             try {
                 productModel.setOrderCount(Long.parseLong(s));
-                viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("%1$s %2$s", productModel.getConsumerPrice() * productModel.getOrderCount(), getString(R.string.rial)));
+                viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getConsumerPrice() * productModel.getOrderCount(), getString(R.string.rial)));
+
             } catch (Exception e) {
-                viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("%1$s %2$s", "0", getString(R.string.rial)));
+                viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.valueOf("هزینه ای وجود ندارد"));
             }
 
         }, 300);
-        viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("%1$s %2$s", productModel.getConsumerPrice() * productModel.getOrderCount(), getString(R.string.rial)));
+        viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getConsumerPrice() * productModel.getOrderCount(), getString(R.string.rial)));
 
 
     }

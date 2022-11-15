@@ -35,7 +35,9 @@
             app:argType="com.saphamrah.customer.data.local.temp.ProductModel" />
         <action
             android:id="@+id/action_addItemToCartFragment_to_cartFragment"
-            app:destination="@id/cartFragment" />
+            app:destination="@id/cartFragment"
+            app:popUpTo="@id/productRequestFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <dialog
         android:id="@+id/filterFragment"
@@ -71,8 +73,13 @@
             app:argType="com.saphamrah.customer.data.local.temp.SelectableBonus[]"
             app:nullable="true" />
         <action
-            android:id="@+id/action_cartFragment_to_returnFragment"
+            android:id="@+id/action_cartFragmentToReturnFragment"
             app:destination="@id/returnFragment" />
+
+        <action
+            android:id="@+id/action_cartFragment_to_verifyRequestFragment"
+            app:destination="@+id/verifyRequestFragment"
+            app:popUpTo="@id/cartFragment" />
 
     </fragment>
     <fragment
@@ -90,6 +97,12 @@
         android:id="@+id/returnFragment"
         android:name="com.saphamrah.customer.presentation.createRequest.returned.view.fragment.ReturnFragment"
         android:label="ReturnFragment" />
+
+    <fragment
+        android:id="@+id/verifyRequestFragment"
+        android:name="com.saphamrah.customer.presentation.createRequest.verifyRequest.view.fragment.VerifyRequestFragment"
+        android:label="VerifyRequestFragment"/>
+
 
 
 </navigation>

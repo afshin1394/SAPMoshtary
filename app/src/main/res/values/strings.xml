@@ -1299,4 +1299,7 @@
     <string name="day">روز</string>
     <string name="sort">مرتب سازی</string>
     <string name="orders">سفارشات</string>
+    <string name="pishFaktor">"پیش فاکتور "</string>
+    <string name="record">ثبت</string>
+    <string name="tedad">تعداد</string>
 </resources>

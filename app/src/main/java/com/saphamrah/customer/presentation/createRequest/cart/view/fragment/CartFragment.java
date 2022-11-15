@@ -44,6 +44,7 @@ import com.saphamrah.customer.data.local.temp.DiscountModel;
 import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.data.local.temp.ReceiptModel;
 import com.saphamrah.customer.databinding.FragmentCartBinding;
+import com.saphamrah.customer.presentation.createRequest.cart.view.adapter.MarjoeeCartAdapter;
 import com.saphamrah.customer.presentation.createRequest.cart.view.adapter.SelectableBonusCartAdapter;
 import com.saphamrah.customer.presentation.createRequest.filter.view.fragment.FilterFragmentDirections;
 import com.saphamrah.customer.presentation.createRequest.selectableBonus.view.adapter.SelectableBonusAdapter;
@@ -65,17 +66,17 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, FragmentCartBinding,CreateRequestActivity> implements CartInteractor.RequiredViewOps {
+public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, FragmentCartBinding, CreateRequestActivity> implements CartInteractor.RequiredViewOps {
 
     private List<ProductModel> productModels;
     private CartProductAdapter cartProductAdapter;
+    private MarjoeeCartAdapter marjoeeCartAdapter;
     private BottomSheetBehavior sheetBehavior;
     private List<ReceiptModel> receiptModels;
     private SelectableBonusCartAdapter selectableBonusCartAdapter;
     private BonusAdapter bonusAdapter;
     private DiscountAdapter discountAdapter;
     private int check;
-
 
 
     public CartFragment() {
@@ -90,11 +91,10 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    protected void initViews()
-    {
+    protected void initViews() {
         check = 0;
 
-        Log.i(TAG, "onFragmentResult: Cart"+ check);
+        Log.i(TAG, "onFragmentResult: Cart" + check);
         Object o = getFragmentResult("bonuses");
 
         if (o != null)
@@ -105,21 +105,41 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         checkState();
         setAddressList();
         setReceiptList();
+        setMarjoeeList();
         setViews();
+
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void setMarjoeeList() {
+        if (activity.getElamMarjoeeForoshandehModelsGlobal() != null) {
+            if (activity.getElamMarjoeeForoshandehModelsGlobal().size() > 0) {
+                viewBinding.linReturn.setVisibility(View.VISIBLE);
+                marjoeeCartAdapter = new MarjoeeCartAdapter(getActivity(), activity.getElamMarjoeeForoshandehModelsGlobal());
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+                viewBinding.RVReturn.setLayoutManager(linearLayoutManager);
+                viewBinding.RVReturn.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+                viewBinding.RVReturn.setAdapter(marjoeeCartAdapter);
+            } else {
+                viewBinding.linReturn.setVisibility(View.GONE);
+            }
+        } else {
+            viewBinding.linReturn.setVisibility(View.GONE);
+        }
+    }
+
     private void setAddressList() {
-        String[] address =   context.getResources().getStringArray(R.array.addressArray);
+        String[] address = context.getResources().getStringArray(R.array.addressArray);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context,
-                R.layout.custom_spinner_itemview,context.getResources().getStringArray(R.array.addressArray));
+                R.layout.custom_spinner_itemview, context.getResources().getStringArray(R.array.addressArray));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         viewBinding.spinnerAddress.setAdapter(adapter);
         viewBinding.spinnerAddress.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
-               activity.setAddress( address[position]);
+                activity.setAddress(address[position]);
             }
 
             @Override
@@ -159,21 +179,30 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             }
 
             case SELECTABLE_BONUS: {
+
+
                 Log.i(TAG, "checkState: SELECTABLE_BONUS");
                 /*state3*/
-                CartFragmentDirections.ActionCartFragmentToSelectableBonusFragment action = CartFragmentDirections.actionCartFragmentToSelectableBonusFragment(new SelectableBonus[]{});
-                navigate(action);
+                if (!activity.setMarjoee) {
+                    CartFragmentDirections.ActionCartFragmentToSelectableBonusFragment action = CartFragmentDirections.actionCartFragmentToSelectableBonusFragment(new SelectableBonus[]{});
+                    navigate(action);
+                }else{
+                    activity.paymentState = Constants.PaymentStates.CALCULATE_BONUS_DISCOUNT;
+                    activity.setMarjoee = false;
+                }
 
                 break;
             }
 
             case CONFIRM_REQUEST: {
-                Log.i(TAG, "checkState: CONFIRM_REQUEST");
-                /*state4*/
-                setSelectableBonusRecycler();
+                navigate(CartFragmentDirections.actionCartFragmentToVerifyRequestFragment());
                 activity.paymentState = Constants.PaymentStates.SAVE_REQUEST;
-                presenter.getDiscountAndBonuses();
-                viewBinding.btmShtPurchase.tvPayment.setText(R.string.confirm);
+//                Log.i(TAG, "checkState: CONFIRM_REQUEST");
+//                /*state4*/
+//                setSelectableBonusRecycler();
+//                activity.paymentState = Constants.PaymentStates.SAVE_REQUEST;
+//                presenter.getDiscountAndBonuses();
+//                viewBinding.btmShtPurchase.tvPayment.setText(R.string.confirm);
 
 
                 break;
@@ -197,7 +226,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     private void setViews() {
 
 
-        viewBinding.linMarjoee.setOnClickListener(new OnSingleClickListener() {
+        viewBinding.imgMarjoee.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
                 NavDirections action = CartFragmentDirections.actionCartFragmentToReturnFragment();
@@ -206,7 +235,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         });
 
         if (viewBinding.etvReceiptDuration != null) {
-            viewBinding.etvReceiptDuration.setFilters(new InputFilter[]{new InputFilterMinMax(0,30)});
+            viewBinding.etvReceiptDuration.setFilters(new InputFilter[]{new InputFilterMinMax(0, 30)});
         }
 
 
@@ -276,14 +305,13 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 check++;
-                Log.i(TAG, "onItemSelected:counter "+check);
+                Log.i(TAG, "onItemSelected:counter " + check);
                 Log.i(TAG, "onItemSelected: item log");
-                if (check > 1)
-                {
+                if (check > 1) {
                     Log.i(TAG, "onItemSelected: item log in");
                     activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
                     initViews();
-                    if (position == 0){
+                    if (position == 0) {
                         viewBinding.etvReceiptDuration.setEnabled(false);
                         viewBinding.etvReceiptDuration.setText(" 0روز ");
                     }
@@ -297,9 +325,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         });
         viewBinding.spinnerReceipt.setAdapter(adapter);
 //        viewBinding.etvReceiptDuration.addTextWatcher(s -> viewBinding.etvReceiptDuration.setText(s.concat(getString(R.string.day))),300);
-
-
-
 
     }
 
@@ -356,6 +381,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         viewBinding.RVOrderedProducts.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
         viewBinding.RVOrderedProducts.setAdapter(cartProductAdapter);
     }
+
     @Override
     public void onGetDiscountAndBonuses(List<DiscountModel> discountModels, List<BonusModel> bonusModels) {
 
@@ -372,7 +398,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
                 viewBinding.svDetails.scrollTo(0, (int) ScreenUtils.getViewLocationOnScreen(viewBinding.tvDiscountTitle)[1]);
             }
         });
-
 
 
     }
@@ -423,8 +448,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             viewBinding.RVSelectableBonus.setNestedScrollingEnabled(false);
         }
     }
-
-
 
 
 }

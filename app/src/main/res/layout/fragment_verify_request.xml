@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layTitle"
+        android:layoutDirection="rtl"
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/paddingTitle"
+        android:elevation="@dimen/elevationActivityTitle"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/lblActivityTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="?android:attr/actionBarSize"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/pishFaktor"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/lblActivityTitle" />
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:layout_below="@+id/layTitle"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layoutDirection="rtl"
+                android:background="@color/colorWhite">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/scrollMain">
+
+                    <LinearLayout
+                        android:id="@+id/Main"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorWhite"
+                        android:gravity="center|center_vertical|center_horizontal"
+                        android:orientation="vertical" >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:orientation="horizontal"
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/lblCodeMoshtary"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center|center_horizontal|center_vertical"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:text="@string/customerCode"/>
+                                <TextView
+                                    android:id="@+id/txtCodeMoshtary"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center|center_horizontal|center_vertical"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textColor="@color/colorTextPrimary"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/lblNameMoshtary"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center|center_horizontal|center_vertical"
+                                    android:text="@string/customerName"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/colorTextPrimary"/>
+                                <TextView
+                                    android:id="@+id/txtNameMoshtary"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center|center_horizontal|center_vertical"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textColor="@color/colorTextPrimary"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:orientation="horizontal"
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/lblMablaghKol"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center|center_horizontal|center_vertical"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textStyle="bold"
+                                    android:text="@string/sumCost"
+                                    android:textColor="@color/colorTextPrimary"/>
+                                <TextView
+                                    android:id="@+id/txtMablaghKol"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center|center_horizontal|center_vertical"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textColor="@color/colorTextPrimary"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/lblMablaghFaktor"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center|center_horizontal|center_vertical"
+                                    android:text="@string/mablaghKhales"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/colorTextPrimary"/>
+                                <TextView
+                                    android:id="@+id/txtMablaghFaktor"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center|center_horizontal|center_vertical"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textColor="@color/colorTextPrimary"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:orientation="horizontal"
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/lblMablaghBaArzeshAfzoode"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center|center_horizontal|center_vertical"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textStyle="bold"
+                                    android:text="@string/mablaghArzeshAfzoode"
+                                    android:textColor="@color/colorTextPrimary"/>
+                                <TextView
+                                    android:id="@+id/txtMablaghBaArzeshAfzoode"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center|center_horizontal|center_vertical"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textColor="@color/colorTextPrimary"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:orientation="horizontal"
+                            android:gravity="center">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/lblNoeVosol"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center|center_horizontal|center_vertical"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textStyle="bold"
+                                    android:text="@string/noeVosol"
+                                    android:textColor="@color/colorTextPrimary"/>
+                                <TextView
+                                    android:id="@+id/txtNoeVosol"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center|center_horizontal|center_vertical"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textColor="@color/colorTextPrimary"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/lblModatVosol"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center|center_horizontal|center_vertical"
+                                    android:text="@string/modatVosol"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/colorTextPrimary"/>
+                                <TextView
+                                    android:id="@+id/txtModatVosol"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center|center_horizontal|center_vertical"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textColor="@color/colorTextPrimary"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/lblAddress"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center|center_horizontal|center_vertical"
+                                android:text="@string/addressTahvilTitleWithColon"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/FontSize16"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/txtAddress"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/FontSize16"
+                                android:layout_margin="@dimen/_2sdp"
+                                android:textColor="@color/colorTextPrimary"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/layKala"
+                            android:gravity="center|center_vertical|center_horizontal"
+                            android:orientation="vertical"
+                            android:layoutDirection="rtl"
+                            android:layout_margin="@dimen/_2sdp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:text="@string/radif"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="3"
+                                    android:text="@string/sharhKala"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:text="@string/mablagh"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:text="@string/carton"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:text="@string/basteh"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:text="@string/adad"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="2"
+                                    android:text="@string/sumCost"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                            </LinearLayout>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recycler_kala_info"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scrollbars="vertical">
+                            </androidx.recyclerview.widget.RecyclerView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/lyTakhfif"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center|center_vertical|center_horizontal"
+                            android:orientation="vertical"
+                            android:layout_margin="@dimen/_2sdp">
+
+                            <TextView
+                                android:id="@+id/lblTakhfifListTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:background="@color/colorListHeaderBackground"
+                                android:gravity="center"
+                                android:paddingTop="10dp"
+                                android:paddingRight="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/takhfifatForoshList"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/FontSize16" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="3"
+                                    android:text="@string/sharhTakhfif"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:text="@string/darsadTakhfif"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:text="@string/mablaghTakhfif"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                            </LinearLayout>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recycler_takhfif"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scrollbars="vertical">
+                            </androidx.recyclerview.widget.RecyclerView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/lyMarjoee"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:layout_margin="@dimen/_2sdp">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/lblMarjoeeListTitle"
+                                android:text="@string/marjoeeList"
+                                android:textSize="@dimen/FontSize16"
+                                android:textColor="@color/colorTextPrimary"
+                                android:gravity="center"
+                                android:background="@color/colorListHeaderBackground"
+                                android:paddingBottom="10dp"
+                                android:paddingTop="10dp"
+                                android:paddingRight="10dp"
+                                android:layout_marginTop="20dp"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="4"
+                                    android:text="@string/nameKala"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="2"
+                                    android:text="@string/shomareBach"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:text="@string/count"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="2"
+                                    android:text="@string/mablagh"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                            </LinearLayout>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recycler_kala_marjoee"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scrollbars="vertical">
+                            </androidx.recyclerview.widget.RecyclerView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/lyJayezeh"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:layout_margin="@dimen/_2sdp">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/lblJayezehListTitle"
+                                android:text="@string/jayezehList"
+                                android:textSize="@dimen/FontSize16"
+                                android:textColor="@color/colorTextPrimary"
+                                android:gravity="center"
+                                android:background="@color/colorListHeaderBackground"
+                                android:paddingBottom="10dp"
+                                android:paddingTop="10dp"
+                                android:paddingRight="10dp"
+                                android:layout_marginTop="20dp"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="4"
+                                    android:text="@string/nameKala"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:text="@string/count"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                            </LinearLayout>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recycler_kala_jayezeh"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scrollbars="vertical">
+                            </androidx.recyclerview.widget.RecyclerView>
+                        </LinearLayout>
+
+
+
+                    </LinearLayout>
+                </ScrollView>
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblMoshtary"
+                android:textSize="@dimen/fontSizeSelectBonus"
+                android:textColor="@color/colorTextPrimary"
+                android:gravity="center"
+                android:layout_below="@+id/layTitle"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:layout_marginTop="@dimen/_4sdp"
+                />
+
+
+            <RelativeLayout
+                android:id="@+id/rlMoshtarySign"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                >
+
+                <TextView
+                    android:id="@+id/lblTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorListHeaderBackground"
+                    android:padding="@dimen/_3sdp"
+                    android:text="@string/emzaMoshtary"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="@dimen/FontSize16" />
+
+
+                <ImageView
+                    android:id="@+id/imgClearSign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/ic_erase"
+                    android:padding="@dimen/_3sdp"
+                    />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/laySign"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_200sdp"
+                android:background="@color/colorWhite"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:id="@+id/layNazar"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_40sdp"
+                android:maxHeight="@dimen/_80sdp"
+                >
+
+
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txtDesc"
+                    android:hint="@string/description"
+                    android:textColorHint="@color/colorDivider"
+                    android:textSize="@dimen/FontSize16"
+                    android:maxHeight="@dimen/_80sdp"
+                    android:maxLength="200"
+                    android:textColor="@color/colorTextPrimary"
+                    android:inputType="textMultiLine" />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnApply"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:background="@drawable/purchase_light_background"
+                    android:gravity="center"
+                    android:padding="@dimen/altdlgButtonPadding"
+                    android:text="@string/record"
+                    android:textColor="@color/colorTextSecondary"
+                    android:textSize="@dimen/btnFontMain" />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+
+
+</RelativeLayout>
+

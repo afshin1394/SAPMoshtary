@@ -9,60 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/altdlg_bg"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/_4sdp"
         app:cardCornerRadius="10dp"
         android:layoutDirection="rtl">
-        <com.daimajia.swipe.SwipeLayout
-            android:background="@drawable/purchase_light_background"
 
-            xmlns:swipe="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/swipe"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            swipe:leftEdgeSwipeOffset="0dp"
-            swipe:rightEdgeSwipeOffset="0dp">
 
-            <LinearLayout
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:id="@+id/laySwipe"
-                android:gravity="center"
-                android:tag="Bottom3">
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:id="@+id/layDelete"
-                    android:layout_gravity="center"
-                    android:background="@color/colorDivider">
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imgDelete"
-                        android:src="@drawable/ic_delete"
-                        android:layout_gravity="center"
-                        android:layout_centerInParent="true"
-                        android:layoutDirection="rtl"/>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:id="@+id/layEditCount"
-                    android:layout_gravity="center"
-                    android:background="@color/colorBackAddCustomerDocSwipe">
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imgEditCount"
-                        android:src="@drawable/ic_edit_user"
-                        android:layout_gravity="center_vertical"
-                        android:layoutDirection="rtl"/>
-                </RelativeLayout>
-            </LinearLayout>
+
 
 
             <LinearLayout
+                android:background="@drawable/purchase_light_background"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -70,9 +26,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                    <TextView
+                    <ImageView
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="0.1"
+                        android:layout_marginRight="@dimen/_2sdp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_marjoee"/>
+                    <TextView
+                        android:maxLines="1"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:id="@+id/tv_CodeNameKala"
                         android:text="10234422-حلوای عقاب"
@@ -86,6 +49,7 @@
                     <TextView
                         android:layout_gravity="center"
                         android:text=" بچ:0345643 "
+                        android:maxLines="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -108,6 +72,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <TextView
+                            android:maxLines="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -120,6 +85,7 @@
                             android:text=" مبلغ مرجوعی: 230000ریال"
                             android:gravity="center_vertical|right"/>
                         <TextView
+                            android:maxLines="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -139,64 +105,69 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
-                <LinearLayout
-                    android:id="@+id/lin_addmarjoee_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/_2sdp"
-                    android:orientation="horizontal"
-                    android:elevation="@dimen/_24sdp"
-                    android:visibility="gone">
 
                     <LinearLayout
-                        android:layout_width="@dimen/_144sdp"
-                        android:layout_height="@dimen/_36sdp"
-                        android:layout_gravity="center_vertical|start"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:background="@drawable/rounded_corner_background"
-                        android:elevation="@dimen/_4sdp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/add_to_cart"
-                            android:layout_width="@dimen/_24sdp"
-                            android:layout_height="@dimen/_24sdp"
-                            android:layout_margin="@dimen/_12sdp"
-                            android:padding="@dimen/_4sdp"
-                            android:src="@drawable/add_product" />
-
-                        <com.saphamrah.customer.utils.customViews.EditTextWatcher
-                            android:id="@+id/tv_count"
-                            android:layout_width="@dimen/_36sdp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center|top"
-                            android:gravity="center|top"
-                            android:inputType="number"
-                            android:padding="@dimen/_6sdp"
-                            android:text="0"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/_12sdp" />
-
-                        <ImageView
-                            android:id="@+id/remove_from_cart"
-                            android:layout_width="@dimen/_24sdp"
-                            android:layout_height="@dimen/_24sdp"
-                            android:layout_margin="@dimen/_12sdp"
-                            android:src="@drawable/sharp_remove_black_36" />
-
-
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="@dimen/_36sdp"
-                        android:layout_height="@dimen/_24sdp"
+                        android:id="@+id/lin_addmarjoee_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:elevation="@dimen/_24sdp"
-                        android:src="@drawable/ic_trash_2" />
-                </LinearLayout>
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|start"
+                            android:layout_marginRight="@dimen/_22sdp"
+                            android:background="@drawable/rounded_corner_dark_red_gradiant"
+                            android:elevation="@dimen/_1sdp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/add_to_cart"
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_16sdp"
+                                android:layout_margin="@dimen/_2sdp"
+                                android:padding="@dimen/_4sdp"
+                                android:src="@drawable/add_product" />
+
+                            <com.saphamrah.customer.utils.customViews.EditTextWatcher
+                                android:id="@+id/etw_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center|top"
+                                android:gravity="bottom"
+                                android:inputType="number"
+                                android:maxWidth="@dimen/_28sdp"
+                                android:paddingLeft="@dimen/_8sdp"
+                                android:paddingRight="@dimen/_8sdp"
+                                android:text="45"
+                                android:textColor="@color/colorBlack"
+                                android:textDirection="rtl"
+                                android:textSize="@dimen/_8sdp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/remove_from_cart"
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_16sdp"
+                                android:padding="@dimen/_2sdp"
+                                android:src="@drawable/sharp_remove_black_36" />
+
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/remove_marjoee"
+                            android:layout_width="@dimen/_28sdp"
+                            android:layout_height="@dimen/_28sdp"
+                            android:layout_gravity="center"
+                            android:elevation="@dimen/_24sdp"
+                            android:padding="@dimen/_4sdp"
+                            android:src="@drawable/ic_trash_2" />
+                    </LinearLayout>
                 <LinearLayout
                     android:id="@+id/lin_addmarjoee"
                     android:layout_width="wrap_content"
@@ -205,7 +176,10 @@
                     android:layout_gravity="center"
                     android:background="@drawable/rounded_corner_purchase_red_dark_gradiant"
                     android:gravity="center"
-                    android:padding="@dimen/_8sdp"
+                    android:paddingTop="@dimen/_1sdp"
+                    android:paddingBottom="@dimen/_1sdp"
+                    android:paddingLeft="@dimen/_16sdp"
+                    android:paddingRight="@dimen/_16sdp"
                     android:visibility="visible">
 
                     <TextView
@@ -218,7 +192,6 @@
                 </FrameLayout>
             </LinearLayout>
 
-        </com.daimajia.swipe.SwipeLayout>
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>
