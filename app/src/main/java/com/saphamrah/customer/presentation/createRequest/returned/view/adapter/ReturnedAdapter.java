@@ -1,5 +1,6 @@
 package com.saphamrah.customer.presentation.createRequest.returned.view.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,6 +80,7 @@ public class ReturnedAdapter extends RecyclerView.Adapter<ReturnedAdapter.ViewHo
             removeMarjoee = itemView.findViewById(R.id.remove_marjoee);
         }
 
+        @SuppressLint("SuspiciousIndentation")
         public void bind(ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModel) {
             nameCodeKala.setText(String.format("%1$s - %2$s",elamMarjoeeForoshandehModel.getCodeKala(),elamMarjoeeForoshandehModel.getNameKala()));
             shomarehBach.setText(String.format("%1$s:%2$s",context.getString(R.string.shomareBach),elamMarjoeeForoshandehModel.getShomarehBach()));
@@ -121,7 +123,10 @@ public class ReturnedAdapter extends RecyclerView.Adapter<ReturnedAdapter.ViewHo
             count.addTextWatcher(new Watcher() {
                 @Override
                 public void onTextChange(String s) {
+                    if (!s.equals(""))
+                    elamMarjoeeForoshandehModel.setTedad3(Integer.parseInt(s));
                     mablaghMarjoee.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh), ((int) (elamMarjoeeForoshandehModel.getGheymatForosh() * elamMarjoeeForoshandehModel.getTedad3())),context.getString(R.string.rial)));
+                    listener.onItemSelect(elamMarjoeeForoshandehModel,getAdapterPosition(), AdapterAction.ADD);
                 }
             },300);
 

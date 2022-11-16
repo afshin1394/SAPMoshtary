@@ -1,5 +1,6 @@
 package com.saphamrah.customer.presentation.createRequest.cart.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 
@@ -82,6 +83,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     private int check;
 
 
+
     public CartFragment() {
         super(R.layout.fragment_cart);
     }
@@ -92,25 +94,20 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     }
 
 
+    @SuppressLint("SuspiciousIndentation")
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initViews() {
         check = 0;
 
-        Log.i(TAG, "onFragmentResult: Cart" + check);
-        Object o = getFragmentResult("bonuses");
-
-        if (o != null)
-            activity.setJayezehEntekhabiMojodiModel(((List<JayezehEntekhabiMojodiModel>) Arrays.asList(o).get(0)).stream().collect(Collectors.toList()));
-
         productModels = CollectionUtils.convertArrayToList(CartFragmentArgs.fromBundle(getArguments()).getProducts());
         setProductRecycler();
-        if (!activity.setMarjoee)
-        checkState();
-        if (activity.getDiscountModelsGlobal()!=null && activity.getBonusModelsGlobal()!=null)
-            presenter.getDiscountAndBonuses();
-        if (activity.getJayezehEntekhabiMojodiModels()!=null)
-            setSelectableBonusRecycler();
+       if (!activity.setMarjoee)
+           checkState();
+       if (activity.getDiscountModelsGlobal()!=null && activity.getBonusModelsGlobal()!=null)
+           presenter.getDiscountAndBonuses();
+       if (activity.getJayezehEntekhabiMojodiModels()!=null)
+           setSelectableBonusRecycler();
 
 
         setBottomSheetOnState();
@@ -119,6 +116,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         setMarjoeeList();
         setViews();
         activity.setMarjoee =false;
+        Log.i(TAG, "initViews: "+activity.paymentState);
 
     }
 
@@ -186,7 +184,8 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void checkState() {
+    private void checkState()
+    {
         switch (activity.paymentState) {
 
             case SHOW_PRODUCTS: {
@@ -199,7 +198,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
                 viewBinding.linSelectableBonus.setVisibility(View.GONE);
                 activity.clearJayezehTakhfif();
                 activity.clearElamMarjoee();
-                viewBinding.btmShtPurchase.tvPayment.setText(R.string.calculateBonusDiscount);
+
                 break;
             }
 
@@ -214,33 +213,31 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             }
 
             case SELECTABLE_BONUS: {
+                Log.i(TAG, "checkState: SELECTABLE_BONUS");
                 /*state3*/
-
                 CartFragmentDirections.ActionCartFragmentToSelectableBonusFragment action = CartFragmentDirections.actionCartFragmentToSelectableBonusFragment(new SelectableBonus[]{});
                 navigate(action);
-                Log.i(TAG, "checkState: SELECTABLE_BONUS");
+
 
 
                 break;
             }
 
             case CONFIRM_REQUEST: {
-//                navigate(CartFragmentDirections.actionCartFragmentToVerifyRequestFragment());
-//                activity.paymentState = Constants.PaymentStates.SAVE_REQUEST;
+
                 Log.i(TAG, "checkState: CONFIRM_REQUEST");
                 /*state4*/
                 setSelectableBonusRecycler();
                 presenter.getDiscountAndBonuses();
                 activity.paymentState = Constants.PaymentStates.PISH_FAKTOR;
-                viewBinding.btmShtPurchase.tvPayment.setText(R.string.pishFaktor);
 
                 break;
             }
             /*state5*/
             case PISH_FAKTOR: {
+                Log.i(TAG, "checkState: PISH FAKTOR");
                 navigate(CartFragmentDirections.actionCartFragmentToVerifyRequestFragment());
                 activity.paymentState = Constants.PaymentStates.PISH_FAKTOR;
-
 
                 break;
             }
@@ -259,7 +256,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
                 navigate(action);
             }
         });
-
+//
         if (viewBinding.etvReceiptDuration != null) {
             viewBinding.etvReceiptDuration.setFilters(new InputFilter[]{new InputFilterMinMax(0, 30)});
         }
@@ -290,6 +287,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         });
 
         viewBinding.btmShtPurchase.linPurchase.setOnClickListener(v -> {
+            Log.i(TAG, "initViews: "+activity.paymentState);
             checkState();
         });
 
@@ -325,32 +323,49 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
                 R.layout.custom_spinner_itemview, receiptTitles);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        viewBinding.spinnerReceipt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        viewBinding.spinnerReceipt.post(() -> viewBinding.spinnerReceipt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                check++;
-                Log.i(TAG, "onItemSelected:counter " + check);
-                Log.i(TAG, "onItemSelected: item log");
-                if (check > 1) {
-                    Log.i(TAG, "onItemSelected: item log in");
+
+
+                    Log.i(TAG, "onItemSelected: in check");
                     activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
-                    initViews();
+                    checkState();
+                    setBottomSheetOnState();
                     if (position == 0) {
-                        viewBinding.etvReceiptDuration.setEnabled(false);
-                        viewBinding.etvReceiptDuration.setText(" 0روز ");
+
+                        viewBinding.etvReceiptDuration.setHint(" 0 ");
                     }
-                }
+//                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });
+        }));
+
+
         viewBinding.spinnerReceipt.setAdapter(adapter);
-//        viewBinding.etvReceiptDuration.addTextWatcher(s -> viewBinding.etvReceiptDuration.setText(s.concat(getString(R.string.day))),300);
+        viewBinding.etvReceiptDuration.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean focused) {
+                if (focused)
+                    viewBinding.etvReceiptDuration.setHint("");
+                else
+                    viewBinding.etvReceiptDuration.setHint("تعداد روز مجاز وصول");
+            }
+        });
+        viewBinding.etvReceiptDuration.addTextWatcher(new Watcher() {
+            @Override
+            public void onTextChange(String s) {
+                Log.i(TAG, "onTextChange: "+s);
+
+                viewBinding.etvReceiptDuration.setHint(s .concat(context.getString(R.string.day)));
+
+            }
+        },100);
 
     }
 

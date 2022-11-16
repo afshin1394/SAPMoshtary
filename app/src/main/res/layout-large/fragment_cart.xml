@@ -134,29 +134,19 @@
                                 android:layout_height="match_parent" />
 
 
-                            <com.google.android.material.textfield.TextInputLayout
-                                android:id="@+id/txtinputreceiptduration"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="2dp"
-                                android:layout_marginRight="2dp"
-                                android:layout_marginBottom="2dp"
-                                android:layout_weight="1"
-                                android:layoutDirection="rtl"
-                                android:textDirection="rtl"
-                                android:theme="@style/TextInputLayoutTheme">
+
 
                                 <com.saphamrah.customer.utils.customViews.EditTextWatcher
                                     android:id="@+id/etv_receipt_duration"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="1"
                                     android:hint="@string/modatVosol"
-                                    android:inputType="number"
                                     android:maxLines="1"
+                                    android:inputType="number"
                                     android:textColor="@color/colorTextPrimary"
                                     android:textColorHint="@color/colorDivider"
                                     android:textSize="@dimen/_6sdp" />
-                            </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
                     </LinearLayout>
 

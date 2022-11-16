@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -84,4 +85,6 @@ public class EditTextWatcher extends AppCompatEditText implements TextWatcher {
                     }
                 });
     }
+
+
 }

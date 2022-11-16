@@ -70,7 +70,8 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
         {
             ((CreateRequestActivity) activity).paymentState = Constants.PaymentStates.CONFIRM_REQUEST;
             Log.i(TAG, "setViews: "+jayezehEntekhabiMojodiModels);
-            setFragmentResult("bonuses", jayezehEntekhabiMojodiModels.stream().filter(jayezehEntekhabiMojodiModel -> jayezehEntekhabiMojodiModel.getSelectedCount() > 0).collect(Collectors.toList()));
+            activity.setJayezehEntekhabiMojodiModel(jayezehEntekhabiMojodiModels.stream().filter(jayezehEntekhabiMojodiModel -> jayezehEntekhabiMojodiModel.getSelectedCount() > 0).collect(Collectors.toList()));
+            navigateUp();
         });
     }
 

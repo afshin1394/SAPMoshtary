@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/_2sdp"
     app:cardCornerRadius="@dimen/_4sdp"
-
     >
 
     <LinearLayout
@@ -16,8 +15,6 @@
         android:background="@drawable/purchase_light_background"
         android:layoutDirection="rtl"
         android:orientation="vertical"
-
-
         >
 
         <LinearLayout

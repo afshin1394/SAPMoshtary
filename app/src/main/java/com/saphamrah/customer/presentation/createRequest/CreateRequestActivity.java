@@ -129,12 +129,15 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     public void clearJayezehTakhfif(){
         if (jayezehEntekhabiMojodiModelsGlobal!=null){
             jayezehEntekhabiMojodiModelsGlobal.clear();
+            jayezehEntekhabiMojodiModelsGlobal = null;
         }
         if (bonusModelsGlobal!=null){
             bonusModelsGlobal.clear();
+            bonusModelsGlobal = null;
         }
         if (discountModelsGlobal!=null){
             discountModelsGlobal.clear();
+            discountModelsGlobal =null;
         }
     }
 
