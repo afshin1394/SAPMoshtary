@@ -5,5 +5,7 @@
     android:singleLine="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="@dimen/_4sdp"
+    android:background="@drawable/bordered_purchase_light_background"
     android:ellipsize="marquee"
     android:textAlignment="inherit"/>

@@ -1,6 +1,8 @@
 package com.saphamrah.customer.utils.customViews;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -9,8 +11,10 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatEditText;
 
+import com.saphamrah.customer.R;
 import com.saphamrah.customer.utils.RxUtils.Watcher;
 
 import java.util.concurrent.TimeUnit;
@@ -86,5 +90,13 @@ public class EditTextWatcher extends AppCompatEditText implements TextWatcher {
                 });
     }
 
-
+    @SuppressLint("UseCompatLoadingForColorStateLists")
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        EditTextWatcher.this.setTextCursorDrawable(null);
+        EditTextWatcher.this.setTextColor(getContext().getColor(R.color.colorTextPrimary));
+        EditTextWatcher.this.setBackgroundTintList(getContext().getResources().getColorStateList(R.drawable.edit_text_background_shape));
+    }
 }

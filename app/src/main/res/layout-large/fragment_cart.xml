@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ScrollView
+            <androidx.core.widget.NestedScrollView
                 android:id="@+id/sv_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -122,10 +122,10 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
-                                android:layout_margin="@dimen/_4sdp"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:padding="@dimen/_4sdp"
+
+                                android:padding="@dimen/_2sdp"
                                 android:spinnerMode="dropdown" />
 
                             <View
@@ -144,7 +144,6 @@
                                     android:hint="@string/modatVosol"
                                     android:maxLines="1"
                                     android:inputType="number"
-                                    android:textColor="@color/colorTextPrimary"
                                     android:textColorHint="@color/colorDivider"
                                     android:textSize="@dimen/_6sdp" />
                         </LinearLayout>
@@ -271,7 +270,7 @@
 
                     </LinearLayout>
                 </LinearLayout>
-            </ScrollView>
+            </androidx.core.widget.NestedScrollView>
 
         </LinearLayout>
     </LinearLayout>

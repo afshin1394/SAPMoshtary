@@ -41,6 +41,7 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
     private List<DarkhastFaktorJayezehTakhfifModel> darkhastFaktorJayezehTakhfifModels;
     private List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels;
     private SelectableBonusAdapter selectableBonusAdapter;
+    private int counter;
 
     public SelectableBonusFragment() {
         super(R.layout.fragment_selectable_bonus);
@@ -62,16 +63,23 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
         presenter.getJayezeh();
         setViews();
 
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setViews() {
         viewBinding.btmShtSelectableBonus.linConfirm.setOnClickListener(v ->
         {
-            ((CreateRequestActivity) activity).paymentState = Constants.PaymentStates.CONFIRM_REQUEST;
-            Log.i(TAG, "setViews: "+jayezehEntekhabiMojodiModels);
-            activity.setJayezehEntekhabiMojodiModel(jayezehEntekhabiMojodiModels.stream().filter(jayezehEntekhabiMojodiModel -> jayezehEntekhabiMojodiModel.getSelectedCount() > 0).collect(Collectors.toList()));
-            navigateUp();
+
+            if (counter < darkhastFaktorJayezehTakhfifModels.size()) {
+                  counter++;
+                  viewBinding.btmShtSelectableBonus.spBonusDescription.setSelection(counter);
+            }else {
+                ((CreateRequestActivity) activity).paymentState = Constants.PaymentStates.CONFIRM_REQUEST;
+                Log.i(TAG, "setViews: " + jayezehEntekhabiMojodiModels);
+                activity.setJayezehEntekhabiMojodiModel(jayezehEntekhabiMojodiModels.stream().filter(jayezehEntekhabiMojodiModel -> jayezehEntekhabiMojodiModel.getSelectedCount() > 0).collect(Collectors.toList()));
+                navigateUp();
+            }
         });
     }
 
@@ -112,7 +120,7 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
 
     @Override
     public void onGetJayezeh(List<DarkhastFaktorJayezehTakhfifModel> darkhastFaktorJayezehTakhfifModels) {
-
+        counter = 0;
         this.darkhastFaktorJayezehTakhfifModels = darkhastFaktorJayezehTakhfifModels;
         this.jayezehEntekhabiMojodiModels = new ArrayList<>();
         this.jayezehEntekhabiMojodiModels.clear();
@@ -133,10 +141,10 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
             bonusTitles.add(model.getSharhJayezehTakhfif());
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
-                R.layout.custom_spinner_itemview, bonusTitles);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        viewBinding.btmShtSelectableBonus.tvBonusDescription.setAdapter(adapter);
-        viewBinding.btmShtSelectableBonus.tvBonusDescription.setOnItemSelectedListener(this);
+                R.layout.custom_spinner_title, bonusTitles);
+        adapter.setDropDownViewResource(R.layout.custom_spinner_itemview);
+        viewBinding.btmShtSelectableBonus.spBonusDescription.setAdapter(adapter);
+        viewBinding.btmShtSelectableBonus.spBonusDescription.setOnItemSelectedListener(this);
         Log.i(TAG, "setBonusSpinner: " + this.jayezehEntekhabiMojodiModels);
         setSelectableBonusRecycler();
     }
@@ -147,6 +155,7 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
         selectableBonusAdapter = new SelectableBonusAdapter(context, jayezehEntekhabiMojodiModels, (model, position, Action) -> {
 
+
         });
         Log.i(TAG, "setSelectableBonusRecycler:" + this.jayezehEntekhabiMojodiModels);
         viewBinding.RVBonusList.setLayoutManager(linearLayoutManager);
@@ -155,6 +164,7 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+
         this.jayezehEntekhabiMojodiModels.clear();
         this.jayezehEntekhabiMojodiModels.addAll(darkhastFaktorJayezehTakhfifModels.get(position).getJayezehEntekhabiMojodiModelList());
         selectableBonusAdapter.notifyDataSetChanged();

@@ -164,9 +164,9 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
     private void setAddressList() {
         String[] address = context.getResources().getStringArray(R.array.addressArray);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context,
-                R.layout.custom_spinner_itemview, context.getResources().getStringArray(R.array.addressArray));
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+                R.layout.custom_spinner_title, address);
+        adapter.setDropDownViewResource(R.layout.custom_spinner_itemview);
         viewBinding.spinnerAddress.setAdapter(adapter);
         viewBinding.spinnerAddress.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -321,8 +321,8 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             receiptTitles.add(model.getName());
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
-                R.layout.custom_spinner_itemview, receiptTitles);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                R.layout.custom_spinner_title, receiptTitles);
+        adapter.setDropDownViewResource(R.layout.custom_spinner_itemview);
         viewBinding.spinnerReceipt.post(() -> viewBinding.spinnerReceipt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -414,6 +414,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
                 case REMOVE:
                     activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
                     checkState();
+                    setBottomSheetOnState();
                     activity.checkCart(false);
             }
         });

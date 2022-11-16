@@ -96,6 +96,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:padding="@dimen/_4sdp"
+
                             android:spinnerMode="dropdown" />
 
                     </LinearLayout>
@@ -149,6 +150,8 @@
                                     android:hint="@string/modatVosol"
                                     android:maxLines="1"
                                     android:inputType="number"
+                                    android:textCursorDrawable="@null"
+                                    android:backgroundTint="@color/colorTextPrimary"
                                     android:textColor="@color/colorTextPrimary"
                                     android:textColorHint="@color/colorDivider"
                                     android:textSize="@dimen/fontSizeSelectBonus" />
