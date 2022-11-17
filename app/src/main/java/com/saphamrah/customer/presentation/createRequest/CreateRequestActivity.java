@@ -15,6 +15,7 @@ import com.saphamrah.customer.base.BaseActivity;
 import com.saphamrah.customer.base.BasePermissionModel;
 import com.saphamrah.customer.data.local.db.SapDatabase;
 import com.saphamrah.customer.data.local.temp.BonusModel;
+import com.saphamrah.customer.data.local.temp.DarkhastFaktorJayezehTakhfifModel;
 import com.saphamrah.customer.data.local.temp.DiscountModel;
 import com.saphamrah.customer.data.local.temp.ElamMarjoeeForoshandehModel;
 import com.saphamrah.customer.data.local.temp.FilterSortModel;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.PresenterOps, ActivityCreateRequestBinding>   {
     private String TAG = CreateRequestActivity.class.getSimpleName();
     private List<ProductModel> productModelGlobal;
-    private List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModelsGlobal;
+    private List<DarkhastFaktorJayezehTakhfifModel> darkhastFaktorJayezehTakhfifModels;
     private List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModelsGlobal;
     private List<BonusModel> bonusModelsGlobal;
     private List<DiscountModel> discountModelsGlobal;
@@ -127,9 +128,9 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     }
 
     public void clearJayezehTakhfif(){
-        if (jayezehEntekhabiMojodiModelsGlobal!=null){
-            jayezehEntekhabiMojodiModelsGlobal.clear();
-            jayezehEntekhabiMojodiModelsGlobal = null;
+        if (darkhastFaktorJayezehTakhfifModels!=null){
+            darkhastFaktorJayezehTakhfifModels.clear();
+
         }
         if (bonusModelsGlobal!=null){
             bonusModelsGlobal.clear();
@@ -187,11 +188,12 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         return productModelGlobal;
     }
 
-    public void  setJayezehEntekhabiMojodiModel(List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModelsGlobal){
-        this.jayezehEntekhabiMojodiModelsGlobal = jayezehEntekhabiMojodiModelsGlobal;
+    public List<DarkhastFaktorJayezehTakhfifModel> getDarkhastFaktorJayezehTakhfifModels() {
+        return darkhastFaktorJayezehTakhfifModels;
     }
-    public List<JayezehEntekhabiMojodiModel> getJayezehEntekhabiMojodiModels(){
-        return this.jayezehEntekhabiMojodiModelsGlobal;
+
+    public void setDarkhastFaktorJayezehTakhfifModels(List<DarkhastFaktorJayezehTakhfifModel> darkhastFaktorJayezehTakhfifModels) {
+        this.darkhastFaktorJayezehTakhfifModels = darkhastFaktorJayezehTakhfifModels;
     }
 
     public List<BonusModel> getBonusModelsGlobal() {

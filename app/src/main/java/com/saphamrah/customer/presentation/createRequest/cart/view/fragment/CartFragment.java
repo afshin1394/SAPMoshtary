@@ -362,7 +362,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             public void onTextChange(String s) {
                 Log.i(TAG, "onTextChange: "+s);
 
-                viewBinding.etvReceiptDuration.setHint(s .concat(context.getString(R.string.day)));
+                viewBinding.etvReceiptDuration.setHint(s.concat(context.getString(R.string.day)));
 
             }
         },100);
@@ -477,7 +477,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
                 @Override
                 public void onItemSelect(JayezehEntekhabiMojodiModel model, int position, AdapterAction Action) {
                     switch (Action) {
-
                         case ADD:
                         case REMOVE:
                             activity.getJayezehEntekhabiMojodiModels().get(position).setSelectedCount(activity.getJayezehEntekhabiMojodiModels().get(position).getSelectedCount() + 1);

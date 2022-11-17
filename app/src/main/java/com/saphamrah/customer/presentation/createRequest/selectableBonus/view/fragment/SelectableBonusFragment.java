@@ -30,6 +30,8 @@ import com.saphamrah.customer.utils.Constants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import io.reactivex.Flowable;
@@ -39,9 +41,9 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
 
 
     private List<DarkhastFaktorJayezehTakhfifModel> darkhastFaktorJayezehTakhfifModels;
-    private List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels;
     private SelectableBonusAdapter selectableBonusAdapter;
-    private int counter;
+    private int counter = 0;
+
 
     public SelectableBonusFragment() {
         super(R.layout.fragment_selectable_bonus);
@@ -51,7 +53,7 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
     @Override
     protected void onBackPressed()
     {
-        ((CreateRequestActivity) activity).paymentState = Constants.PaymentStates.CALCULATE_BONUS_DISCOUNT;
+        activity.paymentState = Constants.PaymentStates.CALCULATE_BONUS_DISCOUNT;
     }
 
 
@@ -60,32 +62,55 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initViews() {
-        presenter.getJayezeh();
-        setViews();
-
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setViews() {
+
+
+
+        setConfirmButton();
+
         viewBinding.btmShtSelectableBonus.linConfirm.setOnClickListener(v ->
         {
 
-            if (counter < darkhastFaktorJayezehTakhfifModels.size()) {
-                  counter++;
-                  viewBinding.btmShtSelectableBonus.spBonusDescription.setSelection(counter);
-            }else {
-                ((CreateRequestActivity) activity).paymentState = Constants.PaymentStates.CONFIRM_REQUEST;
-                Log.i(TAG, "setViews: " + jayezehEntekhabiMojodiModels);
-                activity.setJayezehEntekhabiMojodiModel(jayezehEntekhabiMojodiModels.stream().filter(jayezehEntekhabiMojodiModel -> jayezehEntekhabiMojodiModel.getSelectedCount() > 0).collect(Collectors.toList()));
+            darkhastFaktorJayezehTakhfifModels.get(counter).setSelected(true);
+            setConfirmButton();
+
+            if (darkhastFaktorJayezehTakhfifModels.size()>0 && counter<darkhastFaktorJayezehTakhfifModels.size()-2)
+            {
+                counter++;
+                activity.setJayezehEntekhabiMojodiModel(darkhastFaktorJayezehTakhfifModels.get(counter).getJayezehEntekhabiMojodiModelList());
+                viewBinding.btmShtSelectableBonus.spBonusDescription.setSelection(counter);
+            }
+            else
+            {
+                viewBinding.btmShtSelectableBonus.tvPayment.setText(R.string.confirm);
+                activity.paymentState = Constants.PaymentStates.CONFIRM_REQUEST;
                 navigateUp();
             }
         });
     }
 
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void setConfirmButton() {
+        if (darkhastFaktorJayezehTakhfifModels.stream().filter(darkhastFaktorJayezehTakhfifModel -> !darkhastFaktorJayezehTakhfifModel.isSelected()).count() >0)
+        {
+            viewBinding.btmShtSelectableBonus.tvPayment.setText(R.string.next);
+        }
+        else
+        {
+            viewBinding.btmShtSelectableBonus.tvPayment.setText(R.string.confirm);
+        }
+    }
+
     @Override
     protected void setPresenter() {
         presenter = new SelectableBonusPresenter(this);
+        presenter.getJayezeh();
     }
 
     @Override
@@ -118,15 +143,15 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
         return context;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onGetJayezeh(List<DarkhastFaktorJayezehTakhfifModel> darkhastFaktorJayezehTakhfifModels) {
-        counter = 0;
         this.darkhastFaktorJayezehTakhfifModels = darkhastFaktorJayezehTakhfifModels;
-        this.jayezehEntekhabiMojodiModels = new ArrayList<>();
-        this.jayezehEntekhabiMojodiModels.clear();
-        this.jayezehEntekhabiMojodiModels.addAll(darkhastFaktorJayezehTakhfifModels.get(0).getJayezehEntekhabiMojodiModelList());
-        Log.i(TAG, "onGetJayezeh:2 " + jayezehEntekhabiMojodiModels);
-        setBonusSpinner(darkhastFaktorJayezehTakhfifModels);
+        setBonusSpinner();
+        setSelectableBonusRecycler();
+        setViews();
+
+
     }
 
     @Override
@@ -134,8 +159,7 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
 
     }
 
-    private void setBonusSpinner(List<DarkhastFaktorJayezehTakhfifModel> darkhastFaktorJayezehTakhfifModels) {
-
+    private void setBonusSpinner() {
         List<String> bonusTitles = new ArrayList<>();
         for (DarkhastFaktorJayezehTakhfifModel model : darkhastFaktorJayezehTakhfifModels) {
             bonusTitles.add(model.getSharhJayezehTakhfif());
@@ -145,30 +169,23 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
         adapter.setDropDownViewResource(R.layout.custom_spinner_itemview);
         viewBinding.btmShtSelectableBonus.spBonusDescription.setAdapter(adapter);
         viewBinding.btmShtSelectableBonus.spBonusDescription.setOnItemSelectedListener(this);
-        Log.i(TAG, "setBonusSpinner: " + this.jayezehEntekhabiMojodiModels);
-        setSelectableBonusRecycler();
     }
 
     private void setSelectableBonusRecycler()
     {
-        Log.i(TAG, "setSelectableBonusRecycler:" + this.jayezehEntekhabiMojodiModels);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
-        selectableBonusAdapter = new SelectableBonusAdapter(context, jayezehEntekhabiMojodiModels, (model, position, Action) -> {
-
+        selectableBonusAdapter = new SelectableBonusAdapter(context, darkhastFaktorJayezehTakhfifModels.get(counter).getJayezehEntekhabiMojodiModelList(), (model, position, Action) -> {
 
         });
-        Log.i(TAG, "setSelectableBonusRecycler:" + this.jayezehEntekhabiMojodiModels);
         viewBinding.RVBonusList.setLayoutManager(linearLayoutManager);
         viewBinding.RVBonusList.setAdapter(selectableBonusAdapter);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-
-        this.jayezehEntekhabiMojodiModels.clear();
-        this.jayezehEntekhabiMojodiModels.addAll(darkhastFaktorJayezehTakhfifModels.get(position).getJayezehEntekhabiMojodiModelList());
-        selectableBonusAdapter.notifyDataSetChanged();
-        Log.i(TAG, "onItemSelected:2 " + jayezehEntekhabiMojodiModels);
+        this.counter = position;
+        this.selectableBonusAdapter.setJayezehEntekhabiMojodiModels(darkhastFaktorJayezehTakhfifModels.get(position).getJayezehEntekhabiMojodiModelList());
     }
 
 

@@ -55,7 +55,7 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.ViewHo
         public void bind(DiscountModel discountModel) {
             description.setText(discountModel.getDescription());
             percentage.setText(String.format("%1$s : %2$s%3$s",context.getString(R.string.discount_percentage),discountModel.getPercentage(),context.getString(R.string.percentageSign)));
-            amount.setText(String.format("%1$s : %2$s%3$s",context.getString(R.string.mablaghTakhfif) ,discountModel.getAmount(),context.getString(R.string.rial)));
+            amount.setText(String.format("%1$s : %2$s%3$s",context.getString(R.string.mablaghTakhfif) , ((long) discountModel.getAmount()),context.getString(R.string.rial)));
         }
     }
 }

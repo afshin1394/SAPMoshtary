@@ -17,6 +17,7 @@ public class DarkhastFaktorJayezehTakhfifModel  {
     private float MablaghJayezehTakhfif;
     private int ccKalaJayezeh;
     private int TedadJayezeh;
+    private boolean selected;
     private List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModelList;
 
     public DarkhastFaktorJayezehTakhfifModel(int ccDarkhastFaktorJayezehTakhfif, long ccDarkhastFaktor, int ccJayezehTakhfif, String sharhJayezehTakhfif, int tedadJayezeh,List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels) {
@@ -133,6 +134,14 @@ public class DarkhastFaktorJayezehTakhfifModel  {
 
     public void setJayezehEntekhabiMojodiModelList(List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModelList) {
         this.jayezehEntekhabiMojodiModelList = jayezehEntekhabiMojodiModelList;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     @Override

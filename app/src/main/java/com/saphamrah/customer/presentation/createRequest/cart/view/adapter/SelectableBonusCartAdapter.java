@@ -75,7 +75,7 @@ public class SelectableBonusCartAdapter extends RecyclerView.Adapter<SelectableB
         public void bind(JayezehEntekhabiMojodiModel jayezehEntekhabiMojodiModel)
         {
             tv_description.setText(jayezehEntekhabiMojodiModel.getNameKala());
-            bonusQuantity.setText(String.format("%1$s%2$s%3$s",context.getString(R.string.tedadJayezeh),jayezehEntekhabiMojodiModel.getTedad(),context.getString(R.string.adad)));
+            bonusQuantity.setText(String.format("%1$s%2$s%3$s",context.getString(R.string.tedadJayezeh),  jayezehEntekhabiMojodiModel.getSelectedCount(),context.getString(R.string.adad)));
 
 
         }

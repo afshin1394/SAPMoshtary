@@ -1,5 +1,6 @@
 package com.saphamrah.customer.presentation.createRequest.selectableBonus.view.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.style.AlignmentSpan;
@@ -52,35 +53,43 @@ public class SelectableBonusAdapter extends RecyclerView.Adapter<SelectableBonus
         return new SelectableBonusAdapter.ViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List<Object> payloads) {
-        Log.i(TAG, "SelectableBonusAdapter: onBindViewHolder payload"+jayezehEntekhabiMojodiModels);
-        if (payloads.isEmpty()) {
-            super.onBindViewHolder(holder, position, payloads);
-        }else {
-            Bundle bundle = (Bundle) payloads.get(0);
-
-            for (String key : bundle.keySet()){
-                if (key.equals("selectedCount")){
-                    holder.etv_bonus_name.setText(bundle.getString("selectedCount"));
-                }
-            }
-        }
-        holder.bind(jayezehEntekhabiMojodiModels.get(position));
-
-
+    @SuppressLint("NotifyDataSetChanged")
+    public void setJayezehEntekhabiMojodiModels(List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModelList) {
+        this.jayezehEntekhabiMojodiModels = jayezehEntekhabiMojodiModelList;
+        notifyDataSetChanged();
     }
+
+    //    @Override
+//    public void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List<Object> payloads) {
+//        Log.i(TAG, "SelectableBonusAdapter: onBindViewHolder payload"+jayezehEntekhabiMojodiModels);
+//        if (payloads.isEmpty()) {
+//            super.onBindViewHolder(holder, position, payloads);
+//        }else {
+//            Bundle bundle = (Bundle) payloads.get(0);
+//
+//            for (String key : bundle.keySet()){
+//                if (key.equals("selectedCount")){
+//                    holder.etv_bonus_name.setText(bundle.getString("selectedCount"));
+//                }
+//            }
+//        }
+//        holder.bind(jayezehEntekhabiMojodiModels.get(position));
+//
+//
+//    }
 
     @Override
     public void onBindViewHolder(@NonNull SelectableBonusAdapter.ViewHolder holder, int position) {
         Log.i(TAG, "SelectableBonusAdapter: onBindViewHolder"+jayezehEntekhabiMojodiModels);
-
+        holder.bind(jayezehEntekhabiMojodiModels.get(position));
     }
 
     @Override
     public int getItemCount() {
         return jayezehEntekhabiMojodiModels.size();
     }
+
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         private TextView tv_inventory;
@@ -130,7 +139,7 @@ public class SelectableBonusAdapter extends RecyclerView.Adapter<SelectableBonus
 
                     }
                 }
-            },400);
+            },100);
         }
 
     }

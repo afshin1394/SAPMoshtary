@@ -6,6 +6,7 @@
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
+        motion:layoutDuringTransition="honorRequest"
         motion:duration="1000"
         motion:motionInterpolator="linear">
         <OnSwipe
@@ -18,7 +19,7 @@
         <Constraint
             android:id="@+id/btm_sht_purchase"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/_150sdp"
+            android:layout_height="@dimen/_130sdp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintLeft_toLeftOf="parent"
             motion:layout_constraintRight_toRightOf="parent"

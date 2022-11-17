@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.data.local.temp.ProductModel;
+import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
+import com.saphamrah.customer.utils.customViews.OnSingleClickListener;
 
 import java.util.List;
 
@@ -52,10 +54,17 @@ public class AdsAdapter extends RecyclerView.Adapter<AdsAdapter.ViewHolder> {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtAdTitle = itemView.findViewById(R.id.TV_AD_title);
+            itemView.setOnClickListener(new OnSingleClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    listener.onItemSelect(productModelList.get(getAdapterPosition()),getAdapterPosition(), AdapterAction.SELECT);
+                }
+            });
         }
 
         public void bind(ProductModel productModel) {
             txtAdTitle.setText(productModel.getNameProduct());
+
 //            listener.onItemSelect(productModel,getAdapterPosition(), AdapterAction.SELECT);
         }
     }

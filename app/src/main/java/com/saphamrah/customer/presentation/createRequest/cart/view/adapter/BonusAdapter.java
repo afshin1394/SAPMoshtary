@@ -52,7 +52,7 @@ public class BonusAdapter extends RecyclerView.Adapter<BonusAdapter.ViewHolder> 
         public void bind(BonusModel bonusModel)
         {
             bonusName.setText(bonusModel.getDescription());
-            bonusQuantity.setText(String.format("%1$s%2$s%3$s",context.getString(R.string.tedadJayezeh),bonusModel.getAmount(),context.getString(R.string.adad)));
+            bonusQuantity.setText(String.format("%1$s%2$s%3$s",context.getString(R.string.tedadJayezeh), ((int) bonusModel.getAmount()),context.getString(R.string.adad)));
 
         }
     }
