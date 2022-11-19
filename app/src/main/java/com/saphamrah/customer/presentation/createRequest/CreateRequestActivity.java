@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.PresenterOps, ActivityCreateRequestBinding>   {
     private String TAG = CreateRequestActivity.class.getSimpleName();
     private List<ProductModel> productModelGlobal;
-    private List<DarkhastFaktorJayezehTakhfifModel> darkhastFaktorJayezehTakhfifModels;
+    private List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels;
     private List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModelsGlobal;
     private List<BonusModel> bonusModelsGlobal;
     private List<DiscountModel> discountModelsGlobal;
@@ -128,8 +128,8 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     }
 
     public void clearJayezehTakhfif(){
-        if (darkhastFaktorJayezehTakhfifModels!=null){
-            darkhastFaktorJayezehTakhfifModels.clear();
+        if (jayezehEntekhabiMojodiModels!=null){
+            jayezehEntekhabiMojodiModels.clear();
 
         }
         if (bonusModelsGlobal!=null){
@@ -188,12 +188,12 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         return productModelGlobal;
     }
 
-    public List<DarkhastFaktorJayezehTakhfifModel> getDarkhastFaktorJayezehTakhfifModels() {
-        return darkhastFaktorJayezehTakhfifModels;
+    public List<JayezehEntekhabiMojodiModel> getJayezehEntekhabiMojodiModels() {
+        return jayezehEntekhabiMojodiModels;
     }
 
-    public void setDarkhastFaktorJayezehTakhfifModels(List<DarkhastFaktorJayezehTakhfifModel> darkhastFaktorJayezehTakhfifModels) {
-        this.darkhastFaktorJayezehTakhfifModels = darkhastFaktorJayezehTakhfifModels;
+    public void setJayezehEntekhabiMojodiModels(List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels) {
+        this.jayezehEntekhabiMojodiModels = jayezehEntekhabiMojodiModels;
     }
 
     public List<BonusModel> getBonusModelsGlobal() {

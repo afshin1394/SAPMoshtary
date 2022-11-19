@@ -36,7 +36,8 @@ public class FilterFragment extends BaseBottomDialogFragment<FilterMVPPresenter,
 
     private static final String TAG = FilterFragment.class.getSimpleName();
     private FilterChoiceAdapter filterChoiceAdapter;
-    private ArrayList<FilterSortModel> filterSortModels;
+    private List<FilterSortModel> filterSortModels;
+    private List<FilterSortModel> selectedFilterSortModels = new ArrayList<>();
     private Context context;
 
 
@@ -109,8 +110,8 @@ public class FilterFragment extends BaseBottomDialogFragment<FilterMVPPresenter,
                 FilterSortModel[] array = new FilterSortModel[filterSortModels.size()];
                 for(int i = 0; i < filterSortModels.size(); i++) array[i] = filterSortModels.get(i);
 
-                Log.i(TAG, "onBackPressed: "+filterSortModels);
-                setFragmentResult("filters",filterSortModels.stream().filter(FilterSortModel::isEnabled).collect(Collectors.toList()));
+                Log.i(TAG, "onBackPressed222: "+selectedFilterSortModels);
+                setFragmentResult("filters",selectedFilterSortModels.stream().filter(FilterSortModel::isEnabled).collect(Collectors.toList()));
                 NavHostFragment.findNavController(FilterFragment.this).navigateUp();
             }
         });
@@ -137,12 +138,12 @@ public class FilterFragment extends BaseBottomDialogFragment<FilterMVPPresenter,
         filterCategoryModels.add(filterCategory2);
 
         filterSortModels = new ArrayList<>();
-        FilterSortModel filterModelBrand = new FilterSortModel(100,2,"برند",0,false);
-        FilterSortModel filterModelGorohKala = new FilterSortModel(200,2,"گروه کالا",0,false);
-        FilterSortModel filterGheymatForosh = new FilterSortModel(300,3,"قیمت فروش",0,false);
-        FilterSortModel filterGheymatMasrafKonandeh = new FilterSortModel(300,3,"قیمت مصرف کننده",0,false);
-        FilterSortModel filterTarikh = new FilterSortModel(400,3,"تاریخ تولید",0,false);
-        FilterSortModel filterEngheza = new FilterSortModel(500,3,"تاریخ انقضا",0,false);
+        FilterSortModel filterModelBrand = new FilterSortModel(100,2,"ارزانترین",0,false);
+        FilterSortModel filterModelGorohKala = new FilterSortModel(200,2,"گرانترین",0,false);
+        FilterSortModel filterGheymatForosh = new FilterSortModel(300,3,"پرفروش ترین",0,false);
+        FilterSortModel filterGheymatMasrafKonandeh = new FilterSortModel(300,3,"بیشترین موجودی",0,false);
+        FilterSortModel filterTarikh = new FilterSortModel(400,3,"جدیدترین تاریخ تولید",0,false);
+        FilterSortModel filterEngheza = new FilterSortModel(500,3,"جدیدترین تاریخ انقضا",0,false);
         FilterSortModel filterModel = new FilterSortModel(1,2,"دلپذیر",100,false);
         FilterSortModel filterModel2 = new FilterSortModel(2,2,"پاکان",100,false);
         FilterSortModel filterModel3 = new FilterSortModel(3,2,"توکلی",100,false);
@@ -178,7 +179,7 @@ public class FilterFragment extends BaseBottomDialogFragment<FilterMVPPresenter,
         Log.i(TAG, "setRecycler: " + filterSortModelsAdapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),2);
         filterChoiceAdapter = new FilterChoiceAdapter(sortFilterType,context,filterSortModels, filterSortModelsAdapter, (model, position, Action) -> {
-
+            selectedFilterSortModels.add(model);
         });
         viewBinding.RecyclerFilterSortChoice.setLayoutManager(gridLayoutManager);
         viewBinding.RecyclerFilterSortChoice.setAdapter(filterChoiceAdapter);

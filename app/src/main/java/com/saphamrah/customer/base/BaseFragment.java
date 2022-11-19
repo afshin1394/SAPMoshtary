@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.navigation.NavBackStackEntry;
@@ -44,6 +45,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -131,6 +133,9 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
         return NavHostFragment.findNavController(this).getCurrentBackStackEntry().getSavedStateHandle().get(key);
     }
 
+    public MutableLiveData<Object> getFragmentResultObserver(String key) {
+        return Objects.requireNonNull(Navigation.findNavController(viewBinding.getRoot()).getCurrentBackStackEntry()).getSavedStateHandle().getLiveData(key);
+    }
 
     public void addDisposable(Disposable disposable) {
         compositeDisposable.add(disposable);

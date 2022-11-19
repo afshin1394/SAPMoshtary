@@ -81,7 +81,7 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
             if (darkhastFaktorJayezehTakhfifModels.size()>0 && counter<darkhastFaktorJayezehTakhfifModels.size()-2)
             {
                 counter++;
-                activity.setJayezehEntekhabiMojodiModel(darkhastFaktorJayezehTakhfifModels.get(counter).getJayezehEntekhabiMojodiModelList());
+                activity.setJayezehEntekhabiMojodiModels(darkhastFaktorJayezehTakhfifModels.get(counter).getJayezehEntekhabiMojodiModelList());
                 viewBinding.btmShtSelectableBonus.spBonusDescription.setSelection(counter);
             }
             else
@@ -165,7 +165,7 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
             bonusTitles.add(model.getSharhJayezehTakhfif());
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
-                R.layout.custom_spinner_title, bonusTitles);
+                R.layout.custom_spinner_title_bold, bonusTitles);
         adapter.setDropDownViewResource(R.layout.custom_spinner_itemview);
         viewBinding.btmShtSelectableBonus.spBonusDescription.setAdapter(adapter);
         viewBinding.btmShtSelectableBonus.spBonusDescription.setOnItemSelectedListener(this);

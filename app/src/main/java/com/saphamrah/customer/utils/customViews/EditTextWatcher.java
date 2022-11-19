@@ -91,12 +91,14 @@ public class EditTextWatcher extends AppCompatEditText implements TextWatcher {
     }
 
     @SuppressLint("UseCompatLoadingForColorStateLists")
-    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        EditTextWatcher.this.setTextCursorDrawable(null);
-        EditTextWatcher.this.setTextColor(getContext().getColor(R.color.colorTextPrimary));
-        EditTextWatcher.this.setBackgroundTintList(getContext().getResources().getColorStateList(R.drawable.edit_text_background_shape));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            EditTextWatcher.this.setTextCursorDrawable(null);
+            EditTextWatcher.this.setTextColor(getContext().getColor(R.color.colorTextPrimary));
+            EditTextWatcher.this.setBackgroundTintList(getContext().getResources().getColorStateList(R.drawable.edit_text_background_shape));
+        }
     }
 }

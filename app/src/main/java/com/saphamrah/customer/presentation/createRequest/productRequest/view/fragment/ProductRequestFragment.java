@@ -1,5 +1,6 @@
 package com.saphamrah.customer.presentation.createRequest.productRequest.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,12 +26,14 @@ import com.saphamrah.customer.data.local.temp.FilterSortModel;
 import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.databinding.FragmentProductRequestBinding;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
+import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.Constants;
 import com.saphamrah.customer.utils.RxUtils.Watcher;
 import com.saphamrah.customer.utils.customViews.OnSingleClickListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -46,10 +49,11 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     private FilterListAdapter filterAdapter;
     private ProductAdapter productAdapter;
 
-    private ArrayList<FilterSortModel> filterSortModels = new ArrayList<>();
+    private List<FilterSortModel> filterSortModels = new ArrayList<>();
     private List<ProductModel> productModels;
     private List<ProductModel> productModelsTemp;
 
+    private List<FilterSortModel> filterListObserver = new ArrayList<>();
 
     public ProductRequestFragment() {
         super(R.layout.fragment_product_request);
@@ -167,44 +171,33 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setFilterRecycler() {
 
+//        Object o = getFragmentResult("filters");
+//        if (o != null)
+//            filterSortModels =  ((List<FilterSortModel>) Arrays.asList(o).get(0)).stream().collect(Collectors.toList());
 
-        FilterSortModel filterModelBrand = new FilterSortModel(100, 1, "برند", 0, false);
-        FilterSortModel filterModelGorohKala = new FilterSortModel(200, 1, "گروه کالا", 0, false);
-        FilterSortModel filterModel = new FilterSortModel(1, 1, "دلپذیر", 100, false);
-        FilterSortModel filterModel2 = new FilterSortModel(2, 1, "پاکان", 100, false);
-        FilterSortModel filterModel3 = new FilterSortModel(3, 1, "توکلی", 100, false);
-        FilterSortModel filterModel4 = new FilterSortModel(4, 1, "فروتلند", 100, false);
-        FilterSortModel filterModel5 = new FilterSortModel(5, 1, "سس", 200, false);
-        FilterSortModel filterModel6 = new FilterSortModel(6, 1, "پنیر", 200, false);
-        FilterSortModel filterModel7 = new FilterSortModel(7, 1, "دستمال کاغذی", 200, false);
-        FilterSortModel filterModel8 = new FilterSortModel(8, 1, "کبریت", 200, false);
-        FilterSortModel filterModel9 = new FilterSortModel(9, 2, "قیمت مصرف کننده", -1, false);
-        FilterSortModel filterModel10 = new FilterSortModel(10, 2, "موجودی", -1, false);
-        FilterSortModel filterModel11 = new FilterSortModel(11, 2, "قیمت فروش", -1, false);
-        filterSortModels.add(filterModelBrand);
-        filterSortModels.add(filterModelGorohKala);
-        filterSortModels.add(filterModel);
-        filterSortModels.add(filterModel2);
-        filterSortModels.add(filterModel3);
-        filterSortModels.add(filterModel4);
-        filterSortModels.add(filterModel5);
-        filterSortModels.add(filterModel6);
-        filterSortModels.add(filterModel7);
-        filterSortModels.add(filterModel8);
-        filterSortModels.add(filterModel9);
-        filterSortModels.add(filterModel10);
-        filterSortModels.add(filterModel11);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        filterAdapter = new FilterListAdapter(getActivity(), filterSortModels, (model, position, Action) -> {
-            if (Action == AdapterAction.REMOVE) {
-                filterSortModels.remove(model);
-                filterAdapter.notifyDataSetChanged();
-            }
-        });
+        filterAdapter = new FilterListAdapter(getActivity(), filterListObserver, null);
         viewBinding.RecyclerFilterList.setLayoutManager(linearLayoutManager);
         viewBinding.RecyclerFilterList.setAdapter(filterAdapter);
+
+
+        @SuppressLint("NotifyDataSetChanged")
+        AdapterItemListener<FilterSortModel> listenerFilterSort = (model, position, Action) -> {
+            if (Action == AdapterAction.REMOVE) {
+                filterListObserver.remove(model);
+                filterAdapter.notifyDataSetChanged();
+            }
+        };
+
+        getFragmentResultObserver("filters").observe(getViewLifecycleOwner(), o -> {
+            filterListObserver = new ArrayList<>((Collection<? extends FilterSortModel>) o);
+            filterAdapter.setDataChanged(filterListObserver, listenerFilterSort);
+        });
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

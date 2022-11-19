@@ -1,6 +1,7 @@
 package com.saphamrah.customer.presentation.createRequest.productRequest.view.adapter;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +18,17 @@ import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.ViewHolder>
 {
 
     private Context context;
-    private ArrayList<FilterSortModel> models;
+    private List<FilterSortModel> models;
     private AdapterItemListener<FilterSortModel> listener;
 
 
-    public FilterListAdapter(Context context, ArrayList<FilterSortModel> models, AdapterItemListener<FilterSortModel> listener)
+    public FilterListAdapter(Context context, List<FilterSortModel> models, AdapterItemListener<FilterSortModel> listener)
     {
         this.context = context;
         this.models = models;
@@ -78,5 +80,11 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.Vi
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    public void setDataChanged(List<FilterSortModel> models, AdapterItemListener<FilterSortModel> listener){
+        this.models = models;
+        this.listener = listener;
+        notifyDataSetChanged();
+    }
 
 }
