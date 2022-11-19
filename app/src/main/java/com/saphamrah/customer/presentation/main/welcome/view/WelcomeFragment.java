@@ -1,39 +1,23 @@
 package com.saphamrah.customer.presentation.main.welcome.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.tabs.TabLayout;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.local.AdvertiseModel;
 import com.saphamrah.customer.base.BaseStatePager;
-import com.saphamrah.customer.data.local.database.AppDatabase;
-import com.saphamrah.customer.data.local.database.entity.MoshtaryTable;
-import com.saphamrah.customer.databinding.FragmentAddressBinding;
 import com.saphamrah.customer.databinding.FragmentWelcomeBinding;
-import com.saphamrah.customer.domain.repository.MoshtaryRepository;
 import com.saphamrah.customer.presentation.main.MainActivity;
 import com.saphamrah.customer.presentation.main.MainInteracts;
 import com.saphamrah.customer.presentation.main.MainPresenter;
-import com.saphamrah.customer.presentation.profile.ProfileInteracts;
-import com.saphamrah.customer.presentation.profile.ProfilePresenter;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.disposables.CompositeDisposable;
 
 
 public class WelcomeFragment extends BaseFragment<MainPresenter, FragmentWelcomeBinding, MainActivity> implements MainInteracts.RequiredViewOps {

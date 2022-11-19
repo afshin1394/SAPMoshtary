@@ -106,7 +106,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
            checkState();
        if (activity.getDiscountModelsGlobal()!=null && activity.getBonusModelsGlobal()!=null)
            presenter.getDiscountAndBonuses();
-       if (activity.getJayezehEntekhabiMojodiModels()!=null)
+       if (activity.getJayezehEntekhabiMojodiModels().size()>0)
            setSelectableBonusRecycler();
 
 

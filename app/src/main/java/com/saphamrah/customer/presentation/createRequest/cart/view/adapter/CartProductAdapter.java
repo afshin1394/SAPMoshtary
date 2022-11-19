@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
@@ -109,6 +110,10 @@ public class CartProductAdapter extends RecyclerView.Adapter<CartProductAdapter.
 
                     }
                 }, 500);
+
+                Glide.with(context)
+                        .load(models.get(getAdapterPosition()).getImageResource().get(0))
+                        .into(img_product);
 
                 img_add.setOnClickListener(view13 -> {
                     models.get(position).setOrderCount(models.get(position).getOrderCount() + 1);

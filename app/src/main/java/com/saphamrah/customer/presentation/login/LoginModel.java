@@ -1,16 +1,6 @@
 package com.saphamrah.customer.presentation.login;
 
-import com.saphamrah.customer.data.local.db.entity.Bank;
-import com.saphamrah.customer.domain.repository.BankRepository;
-
-import java.util.List;
-
-
-import io.reactivex.CompletableObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import com.saphamrah.customer.data.repository.BankRepository;
 
 public class LoginModel extends LoginInteracts.ModelOps {
 

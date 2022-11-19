@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
+                android:background="@drawable/purchase_light_background"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -38,7 +39,11 @@
                     android:src="@drawable/advertise"/>
             </LinearLayout>
             <ImageView
-                android:scaleType="centerCrop"
+                android:id="@+id/IMG_AD"
+
+                android:scaleType="fitXY"
+                android:paddingLeft="@dimen/_16sdp"
+                android:paddingRight="@dimen/_16sdp"
                 android:elevation="@dimen/_4sdp"
                 android:layout_width="match_parent"
                 android:layout_gravity="center"

@@ -1,4 +1,4 @@
-package com.saphamrah.customer.domain.repository;
+package com.saphamrah.customer.data.repository;
 
 import com.saphamrah.customer.data.local.db.dao.CompanyDao;
 import com.saphamrah.customer.data.local.db.entity.Company;

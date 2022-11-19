@@ -7,12 +7,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.data.local.MenuModel;
 import com.saphamrah.customer.utils.CheckTabletOrPhone;
@@ -51,7 +53,10 @@ public class DialogMenuAdapter extends RecyclerView.Adapter<DialogMenuAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
-        holder.title.setText(models.get(0).getTitle());
+        holder.title.setText(models.get(position).getTitle());
+        Glide.with(context)
+        .load(models.get(position).getImageRes())
+        .into(holder.image);
         holder.root.setOnClickListener(view -> {
             listener.onItemClick(models.get(position), position);
         });
@@ -72,6 +77,7 @@ public class DialogMenuAdapter extends RecyclerView.Adapter<DialogMenuAdapter.Vi
     {
         private TextView title;
         private LinearLayout root;
+        private ImageView image;
 
         public ViewHolder(View view)
         {
@@ -80,6 +86,7 @@ public class DialogMenuAdapter extends RecyclerView.Adapter<DialogMenuAdapter.Vi
 
             title = view.findViewById(R.id.text_sheet_menu);
             root = view.findViewById(R.id.root_sheet_main);
+            image = view.findViewById(R.id.img_sheet_menu);
 
         }
 

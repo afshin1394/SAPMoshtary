@@ -39,7 +39,9 @@
         android:src="@drawable/advertise"/>
         </LinearLayout>
     <ImageView
+        android:id="@+id/IMG_AD"
         android:scaleType="centerCrop"
+
         android:elevation="@dimen/_4sdp"
         android:layout_width="match_parent"
         android:layout_gravity="center"

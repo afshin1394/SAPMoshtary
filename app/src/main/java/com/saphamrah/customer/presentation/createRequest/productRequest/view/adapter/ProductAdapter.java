@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
@@ -114,6 +115,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             img_add = view.findViewById(R.id.img_add);
             et_product_count = view.findViewById(R.id.ET_product_count);
             img_product = view.findViewById(R.id.img_product);
+
             img_product.setOnClickListener(view1 -> listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.SELECT));
             lin_purchase.setOnClickListener(view12 -> {
                 models.get(getAdapterPosition()).setOrderCount(models.get(getAdapterPosition()).getOrderCount() + 1);
@@ -155,15 +157,22 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         public void bind(ProductModel productModel) {
+
+            Glide.with(context)
+                    .load(productModel.getImageResource().get(0))
+                    .into(img_product);
             nameProduct.setText(String.format("%1$s", productModel.getNameProduct()));
 //            sellPrice.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh),kalaModel.getSellPrice(),context.getString(R.string.rial)));
             inventory.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mojodi), productModel.getInventory(), context.getString(R.string.adad)));
             consumerPrice.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mablaghMasrafKonandeh), productModel.getConsumerPrice(), context.getString(R.string.rial)));
-            if (productModel.getOrderCount() > 0) {
+            if (productModel.getOrderCount() > 0)
+            {
                 lin_purchase_count.setVisibility(View.VISIBLE);
                 lin_purchase.setVisibility(View.GONE);
                 et_product_count.setText(String.valueOf(productModel.getOrderCount()));
-            } else {
+            }
+            else
+            {
                 lin_purchase_count.setVisibility(View.GONE);
                 lin_purchase.setVisibility(View.VISIBLE);
             }
@@ -191,6 +200,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public void bind(int position) {
             adsAdapter = new AdsAdapter(context, models, listener);
             recyclerView.setAdapter(adsAdapter);
+
         }
     }
 }

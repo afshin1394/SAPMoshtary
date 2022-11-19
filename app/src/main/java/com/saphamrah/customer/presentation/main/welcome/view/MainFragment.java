@@ -81,33 +81,46 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
 
 
         ArrayList<MenuModel> menuModels = new ArrayList<>();
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
-        menuModels.add(new MenuModel("سفارش"));
+        menuModels.add(new MenuModel("دلپذیر",R.drawable.logo_delpazir));
+        menuModels.add(new MenuModel("دومینو",R.drawable.logo_domino));
+        menuModels.add(new MenuModel("بستنی میهن",R.drawable.logo_mihan));
+        menuModels.add(new MenuModel("کاله",R.drawable.logo_kalleh));
+        menuModels.add(new MenuModel("لینا",R.drawable.logo_lina));
+        menuModels.add(new MenuModel("لبنیات پاستوریزه میهن",R.drawable.logo_delpazir));
+        menuModels.add(new MenuModel("دلپذیر",R.drawable.logo_delpazir));
+        menuModels.add(new MenuModel("کاله",R.drawable.logo_kalleh));
+        menuModels.add(new MenuModel("دومینو",R.drawable.logo_domino));
+        menuModels.add(new MenuModel("بستنی میهن",R.drawable.logo_mihan));
+        menuModels.add(new MenuModel("لینا",R.drawable.logo_lina));
+        menuModels.add(new MenuModel("رامک",R.drawable.logo_ramak));
+        menuModels.add(new MenuModel("دلپذیر",R.drawable.logo_delpazir));
+        menuModels.add(new MenuModel("دومینو",R.drawable.logo_domino));
+        menuModels.add(new MenuModel("بستنی میهن",R.drawable.logo_mihan));
+        menuModels.add(new MenuModel("لینا",R.drawable.logo_lina));
+        menuModels.add(new MenuModel("رامک",R.drawable.logo_ramak));
+        menuModels.add(new MenuModel("دلپذیر",R.drawable.logo_delpazir));
+        menuModels.add(new MenuModel("دومینو",R.drawable.logo_domino));
+        menuModels.add(new MenuModel("بستنی میهن",R.drawable.logo_mihan));
+        menuModels.add(new MenuModel("کاله",R.drawable.logo_kalleh));
+        menuModels.add(new MenuModel("دامداران",R.drawable.logo_damdaran));
+        menuModels.add(new MenuModel("لبنیات پاستوریزه میهن",R.drawable.logo_delpazir));
+        menuModels.add(new MenuModel("دلپذیر",R.drawable.logo_delpazir));
+        menuModels.add(new MenuModel("رامک",R.drawable.logo_ramak));
+        menuModels.add(new MenuModel("بستنی میهن",R.drawable.logo_mihan));
+        menuModels.add(new MenuModel("لینا",R.drawable.logo_lina));
+        menuModels.add(new MenuModel("لبنیات پاستوریزه میهن",R.drawable.logo_delpazir));
+        menuModels.add(new MenuModel("دلپذیر",R.drawable.logo_delpazir));
+        menuModels.add(new MenuModel("کاله",R.drawable.logo_kalleh));
+        menuModels.add(new MenuModel("دامداران",R.drawable.logo_damdaran));
+        menuModels.add(new MenuModel("بستنی میهن",R.drawable.logo_mihan));
+        menuModels.add(new MenuModel("رامک",R.drawable.logo_ramak));
+        menuModels.add(new MenuModel("لبنیات پاستوریزه میهن",R.drawable.logo_delpazir));
+        menuModels.add(new MenuModel("دلپذیر",R.drawable.logo_delpazir));
+        menuModels.add(new MenuModel("دامداران",R.drawable.logo_damdaran));
+        menuModels.add(new MenuModel("بستنی میهن",R.drawable.logo_mihan));
+        menuModels.add(new MenuModel("لینا",R.drawable.logo_lina));
+        menuModels.add(new MenuModel("کاله",R.drawable.logo_kalleh));
+        menuModels.add(new MenuModel("لبنیات پاستوریزه میهن",R.drawable.logo_delpazir));
 
         DialogMenuAdapter adapter = new DialogMenuAdapter(getContext(), menuModels, (model, position) -> {
 
@@ -218,13 +231,15 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
         ArrayList<AdvertiseModel> advertiseModels = new ArrayList<>();
         baseSazmanForoshModels = new ArrayList<>();
 
-        advertiseModels.add(new AdvertiseModel("@drawable/advertising", "", "."));
-        advertiseModels.add(new AdvertiseModel("@drawable/advertising", "", "."));
-        advertiseModels.add(new AdvertiseModel("@drawable/advertising", "", "."));
+        advertiseModels.add(new AdvertiseModel("@drawable/carrnina_mihan", "http://www.mihan-food.com/", "."));
+        advertiseModels.add(new AdvertiseModel("@drawable/delpazir", "http://www.kadbanoco.com/fa/", "."));
+        advertiseModels.add(new AdvertiseModel("@drawable/pipe_lina", "https://www.linafood.com", "."));
+        advertiseModels.add(new AdvertiseModel("@drawable/bastani", "http://www.mihan-food.com/", "."));
+
 
         baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1"));
         baseSazmanForoshModels.add(new LocationDbModel("بستنی میهن","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("بستنی پاندا","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("لینا","1"));
         baseSazmanForoshModels.add(new LocationDbModel("لبنیات پاستوریزه میهن","1"));
         baseSazmanForoshModels.add(new LocationDbModel("لبنیات استریل میهن","1"));
         baseSazmanForoshModels.add(new LocationDbModel("فروتلند","1"));

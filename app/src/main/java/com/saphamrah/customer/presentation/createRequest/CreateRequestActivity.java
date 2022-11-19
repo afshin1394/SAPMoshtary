@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.PresenterOps, ActivityCreateRequestBinding>   {
     private String TAG = CreateRequestActivity.class.getSimpleName();
     private List<ProductModel> productModelGlobal;
-    private List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels;
+    private List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels = new ArrayList<>();
     private List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModelsGlobal;
     private List<BonusModel> bonusModelsGlobal;
     private List<DiscountModel> discountModelsGlobal;
@@ -157,20 +157,53 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         cartListener.onCartEmpty();
     }
     private void setProducts() {
-        List<Integer> imageRes = new ArrayList<>();
-        imageRes.add(R.drawable.delpazir);
-        imageRes.add(R.drawable.yogourt);
-        imageRes.add(R.drawable.bastani);
-        ProductModel kalaModel = new ProductModel(1, "بستنی دوقلو", 10000, 8000, "980702", 500, 0,"1400/8/5", "1400/8/25", imageRes,false,"پاندا",290,15);
-        ProductModel kalaModel2 = new ProductModel(2, "بستنی ماستی", 12000, 10000, "980702", 600,0, "1400/8/5", "1400/8/25", imageRes,true,"پاندا",290,15);
-        ProductModel kalaModel3 = new ProductModel(3, "رب دلپذیر", 13000, 8000, "980702", 600,0, "1400/8/5", "1400/8/25", imageRes,false,"میهن",290,15);
-        ProductModel kalaModel4 = new ProductModel(4, "آب معدنی", 14000, 10000, "980702", 600, 0,"1400/2/5", "1400/9/25", imageRes,false,"پاندا",290,15);
-        ProductModel kalaModel5 = new ProductModel(5, "شربت سکنجبین", 16000, 7000, "980702", 600,0, "1400/1/5", "1400/9/25", imageRes,false,"فرودلند",290,15);
-        ProductModel kalaModel6 = new ProductModel(6, "آب انبه", 18000, 9000, "980702", 500,0, "1400/8/5", "1400/8/25", imageRes,true,"پاندا",290,15);
-        ProductModel kalaModel7 = new ProductModel(7, "آب پرتقال", 19000, 7000, "980702", 600,0, "1400/8/5", "1400/8/25", imageRes,false,"لبنیات پاستوریزه",290,15);
-        ProductModel kalaModel8 = new ProductModel(8, "آب سیب", 17000, 9000, "980702", 300,0, "1400/5/5", "1400/8/25", imageRes,false,"فروتلند",290,15);
-        ProductModel kalaModel9 = new ProductModel(9, "آب هلو", 22000, 9000, "980702", 300, 0,"1400/7/5", "1400/8/25", imageRes,true,"پاندا",290,15);
-        ProductModel kalaModel10 = new ProductModel(10, "آب انار", 10000, 9000, "980702", 300, 0,"1400/8/1", "1400/8/15", imageRes,false,"میهن",290,15);
+        List<Integer> imageRes1 = new ArrayList<>();
+        imageRes1.add(R.drawable.delpazir);
+        imageRes1.add(R.drawable.yogourt);
+        imageRes1.add(R.drawable.bastani);
+
+        List<Integer> imageRes2 = new ArrayList<>();
+        imageRes2.add(R.drawable.bastani);
+        imageRes2.add(R.drawable.yogourt);
+        imageRes2.add(R.drawable.bastani);
+
+        List<Integer> imageRes3 = new ArrayList<>();
+        imageRes3.add(R.drawable.product_cornile);
+        imageRes3.add(R.drawable.yogourt);
+        imageRes3.add(R.drawable.bastani);
+
+
+        List<Integer> imageRes4 = new ArrayList<>();
+        imageRes4.add(R.drawable.product_mayonise);
+        imageRes4.add(R.drawable.yogourt);
+        imageRes4.add(R.drawable.bastani);
+
+
+        List<Integer> imageRes5 = new ArrayList<>();
+        imageRes5.add(R.drawable.product_prime);
+        imageRes5.add(R.drawable.yogourt);
+        imageRes5.add(R.drawable.bastani);
+
+        List<Integer> imageRes6 = new ArrayList<>();
+        imageRes6.add(R.drawable.product_salar);
+        imageRes6.add(R.drawable.yogourt);
+        imageRes6.add(R.drawable.bastani);
+
+        List<Integer> imageRes7 = new ArrayList<>();
+        imageRes7.add(R.drawable.product_vaferan);
+        imageRes7.add(R.drawable.yogourt);
+        imageRes7.add(R.drawable.bastani);
+
+        ProductModel kalaModel = new ProductModel(1, "رب دلپذیر", 10000, 8000, "980702", 500, 0,"1400/8/5", "1400/8/25", imageRes1,false,"پاندا",290,15);
+        ProductModel kalaModel2 = new ProductModel(2, "بستنی سالار", 12000, 10000, "980702", 600,0, "1400/8/5", "1400/8/25", imageRes2,true,"پاندا",290,15);
+        ProductModel kalaModel3 = new ProductModel(3, "بستنی زعفرانی", 13000, 8000, "980702", 600,0, "1400/8/5", "1400/8/25", imageRes6,false,"میهن",290,15);
+        ProductModel kalaModel4 = new ProductModel(4, "رب دلپذیر", 14000, 10000, "980702", 600, 0,"1400/2/5", "1400/9/25", imageRes7,false,"پاندا",290,15);
+        ProductModel kalaModel5 = new ProductModel(5, "بستنی کرنایل", 16000, 7000, "980702", 600,0, "1400/1/5", "1400/9/25", imageRes1,false,"فرودلند",290,15);
+        ProductModel kalaModel6 = new ProductModel(6, "مایونز", 18000, 9000, "980702", 500,0, "1400/8/5", "1400/8/25", imageRes2,true,"پاندا",290,15);
+        ProductModel kalaModel7 = new ProductModel(7, "بستنی زعفرونی", 19000, 7000, "980702", 600,0, "1400/8/5", "1400/8/25", imageRes3,false,"لبنیات پاستوریزه",290,15);
+        ProductModel kalaModel8 = new ProductModel(8, "آب سیب", 17000, 9000, "980702", 300,0, "1400/5/5", "1400/8/25", imageRes4,false,"فروتلند",290,15);
+        ProductModel kalaModel9 = new ProductModel(9, "آب هلو", 22000, 9000, "980702", 300, 0,"1400/7/5", "1400/8/25", imageRes5,true,"پاندا",290,15);
+        ProductModel kalaModel10 = new ProductModel(10, "آب انار", 10000, 9000, "980702", 300, 0,"1400/8/1", "1400/8/15", imageRes7,false,"میهن",290,15);
         productModelGlobal = new ArrayList<>();
         productModelGlobal.add(kalaModel);
         productModelGlobal.add(kalaModel2);
@@ -193,7 +226,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     }
 
     public void setJayezehEntekhabiMojodiModels(List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels) {
-        this.jayezehEntekhabiMojodiModels = jayezehEntekhabiMojodiModels;
+        this.jayezehEntekhabiMojodiModels.addAll(jayezehEntekhabiMojodiModels);
     }
 
     public List<BonusModel> getBonusModelsGlobal() {

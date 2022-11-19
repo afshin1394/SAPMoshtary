@@ -1,4 +1,4 @@
-package com.saphamrah.customer.domain.repository;
+package com.saphamrah.customer.data.repository;
 
 import android.content.Context;
 

@@ -1,7 +1,9 @@
 package com.saphamrah.customer.presentation.main.welcome.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -21,6 +23,7 @@ import com.saphamrah.customer.presentation.main.MainInteracts;
 import com.saphamrah.customer.presentation.main.MainPresenter;
 import com.saphamrah.customer.presentation.profile.ProfileInteracts;
 import com.saphamrah.customer.presentation.profile.ProfilePresenter;
+import com.saphamrah.customer.utils.customViews.OnSingleClickListener;
 
 import java.util.List;
 
@@ -62,6 +65,18 @@ public class AdvertiseFragment extends BaseFragment<MainPresenter, FragmentAdver
 
         Drawable res = getResources().getDrawable(imageResource);
         viewBinding.adsImageview.setImageDrawable(res);
+
+        //link
+        String link = model.getLink();
+        viewBinding.adsImageview.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                startActivity(browserIntent);
+            }
+        });
+
+
     }
 
     @Override
