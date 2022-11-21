@@ -68,7 +68,7 @@ public class SelectableBonusPresenter implements SelectableBonusInteractor.Prese
         DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel1 = new DarkhastFaktorJayezehTakhfifModel(1,2910,2,"جایزه برندینگ پگاه",5,jayezehEntekhabiMojodiModelList.subList(2,3));
         DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel2 = new DarkhastFaktorJayezehTakhfifModel(1,2910,3,"جایزه برندینگ میهن",5,jayezehEntekhabiMojodiModelList.subList(3,4));
         DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel3 = new DarkhastFaktorJayezehTakhfifModel(1,2910,4,"جایزه برندینگ پاکان",5,jayezehEntekhabiMojodiModelList.subList(4,5));
-        DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel4 = new DarkhastFaktorJayezehTakhfifModel(1,2910,5,"جایزه برندینگ دلپذیر",5,jayezehEntekhabiMojodiModelList.subList(5,7));
+        DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel4 = new DarkhastFaktorJayezehTakhfifModel(1,2910,5,"جایزه برندینگ دومینو",5,jayezehEntekhabiMojodiModelList.subList(5,7));
         DarkhastFaktorJayezehTakhfifModel darkhastFaktorJayezehTakhfifModel5 = new DarkhastFaktorJayezehTakhfifModel(1,2910,6,"جایزه برندینگ توکلی",5,jayezehEntekhabiMojodiModelList.subList(7,8));
         Log.i("modelss1", "getJayezeh: "+jayezehEntekhabiMojodiModelList.toString());
         darkhastFaktorJayezehTakhfifModels.add(darkhastFaktorJayezehTakhfifModel1);
