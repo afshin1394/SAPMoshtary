@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.saphamrah.customer.R;
@@ -29,9 +30,7 @@ import com.saphamrah.customer.utils.AdapterUtil.AdapterItemMultiSelectListener;
 
 import java.util.ArrayList;
 
-import io.reactivex.internal.operators.flowable.FlowableReplay;
-
-public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerModel> {
+public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerModel, V extends ViewBinding> {
 
     private ConstraintLayout.LayoutParams buttonLayoutParams;
     private int collapsedMargin; //Button margin in collapsed state
@@ -73,14 +72,14 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
     }
 
     public void bottomSheetWithSearchAndRecyclerView(Context context,
-                                                     View view,
+                                                     V viewBinding,
                                                      ArrayList<T> items,
                                                      boolean isSearchEnable,
                                                      String searchHint,
                                                      boolean isMultiSelect
     ) {
 
-        initBottomSheetView(context, view, isSearchEnable, isMultiSelect);
+        initBottomSheetView(context, viewBinding, isSearchEnable, isMultiSelect);
 
         //Dynamic List
         if (isSearchEnable) {
@@ -100,11 +99,13 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
 
     }
 
-    private void initBottomSheetView(Context context, View view, boolean isSearchEnable, boolean isMultiSelect) {
+    private void initBottomSheetView(Context context, V viewBinding, boolean isSearchEnable, boolean isMultiSelect) {
+        View view = viewBinding.getRoot();
         cardViewBottomSheet = view.findViewById(R.id.cardViewBottomSheet);
         recyclerViewSearchResult = view.findViewById(R.id.sheet_recyclerview);
         btnApply = view.findViewById(R.id.sheet_button);
         searchView = view.findViewById(R.id.searchView);
+
 
         cardViewBottomSheet.setBackgroundResource(R.drawable.bottom_dialog_shape);
 
@@ -142,6 +143,7 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
         collapsedMargin = peekHeight - buttonHeight; //Button margin in bottom sheet collapsed state
         buttonLayoutParams.topMargin = collapsedMargin;
         btnApply.setLayoutParams(buttonLayoutParams);
+        recyclerViewSearchResult.setPadding(0,0,0, (int) (buttonHeight *1.5));
 
        /* //OPTIONAL - Setting up recyclerview margins
         ConstraintLayout.LayoutParams recyclerLayoutParams = (ConstraintLayout.LayoutParams) recyclerView.getLayoutParams();
@@ -245,6 +247,7 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
     }
 
     private void initAsyncSearchListAdapter(ArrayList<T> items, boolean isMultiSelect) {
+
         asyncSearchListAdapter = new AsyncSearchListAdapter<T>(isMultiSelect, new AdapterItemListener<T>() {
             @Override
             public void onItemSelect(T model, int position, AdapterAction action) {
@@ -260,6 +263,24 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
     }
 
     private void initSearchView(Context context, ArrayList<T> items, boolean isMultiSelect, String searchHint) {
+        //
+        ImageView closeBtn = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
+        ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_button);
+
+        EditText searchEditText = ((EditText)  searchView.findViewById(androidx.appcompat.R.id.search_src_text));
+
+        searchEditText.setHintTextColor(context.getResources().getColor(R.color.colorTextSecondary));
+        searchEditText.setTextColor(context.getResources().getColor(R.color.colorTextSecondary));
+
+        closeBtn.setColorFilter(context.getResources().getColor(R.color.colorTextSecondary));
+        searchIcon.setColorFilter(context.getResources().getColor(R.color.colorTextSecondary));
+
+        // open search view by default
+        searchView.setIconifiedByDefault(true);
+        searchView.setFocusable(true);
+        searchView.setIconified(false);
+        searchView.clearFocus();
+
         searchView.setQueryHint(searchHint);
 
         searchView.addTextWatcher(s -> {
@@ -270,18 +291,8 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
             }
         }, 400);
 
-        ImageView closeBtn = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
-        ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_button);
-        EditText searchEditText = ((EditText)  searchView.findViewById(androidx.appcompat.R.id.search_src_text));
 
-        searchEditText.setHintTextColor(context.getResources().getColor(R.color.colorTextSecondary));
-        searchEditText.setTextColor(context.getResources().getColor(R.color.colorTextSecondary));
 
-        closeBtn.setColorFilter(context.getResources().getColor(R.color.colorTextSecondary));
-        searchIcon.setColorFilter(context.getResources().getColor(R.color.colorTextSecondary));
-
-       /* closeBtn.setBackgroundColor(context.getResources().getColor(R.color.colorTextSecondary));
-        searchIcon.setBackgroundColor(context.getResources().getColor(R.color.colorTextSecondary));*/
 
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override

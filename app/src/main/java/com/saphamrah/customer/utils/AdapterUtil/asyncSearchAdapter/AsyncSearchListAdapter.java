@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
+import com.saphamrah.customer.data.LocationDbModel;
 import com.saphamrah.customer.databinding.ItemBaseSearchBinding;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
@@ -68,6 +70,16 @@ public class AsyncSearchListAdapter<T extends BaseBottomSheetRecyclerModel> exte
 
         public void bind(T baseSearchDbModel) {
             binding.txtSearch.setText(baseSearchDbModel.getName());
+
+            int resImg = ((LocationDbModel) baseSearchDbModel).getResId();
+
+            if (resImg != 0) {
+                binding.imageViewSearch.setVisibility(View.VISIBLE);
+
+                Glide.with(binding.getRoot())
+                        .load(resImg)
+                        .into(binding.imageViewSearch);
+            }
 
             if (!isMultiSelect) {
                 binding.checkboxSearch.setVisibility(View.GONE);

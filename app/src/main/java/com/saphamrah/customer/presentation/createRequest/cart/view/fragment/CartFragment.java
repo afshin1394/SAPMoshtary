@@ -95,7 +95,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
 
     @SuppressLint("SuspiciousIndentation")
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initViews() {
         check = 0;
@@ -144,7 +143,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setMarjoeeList() {
         if (activity.getElamMarjoeeForoshandehModelsGlobal() != null) {
             if (activity.getElamMarjoeeForoshandehModelsGlobal().size() > 0) {
@@ -183,7 +181,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void checkState()
     {
         switch (activity.paymentState) {
@@ -245,7 +242,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setViews() {
 
 
@@ -406,7 +402,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setProductRecycler() {
         cartProductAdapter = new CartProductAdapter(getActivity(), productModels, (model, position, Action) -> {
             switch (Action) {

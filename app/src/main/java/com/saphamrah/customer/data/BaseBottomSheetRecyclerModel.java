@@ -4,6 +4,7 @@ public class BaseBottomSheetRecyclerModel {
 
     private String name;
     private String type;
+    private int imageRes;
     private boolean isSelected = false;
 
     public String getType() {
@@ -28,5 +29,13 @@ public class BaseBottomSheetRecyclerModel {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public int getImageRes() {
+        return imageRes;
+    }
+
+    public void setImageRes(int imageRes) {
+        this.imageRes = imageRes;
     }
 }

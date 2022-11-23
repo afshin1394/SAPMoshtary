@@ -40,12 +40,12 @@ public class CartPresenter implements CartInteractor.PresenterOps, CartInteracto
     public void getDiscountAndBonuses() {
 
         List<DiscountModel> discountModels = new ArrayList<>();
-        DiscountModel discountModel = new DiscountModel(1, "اب انار", 4, 1400);
-        DiscountModel discountModel1 = new DiscountModel(2, "اب سیب", 2, 2100);
-        DiscountModel discountModel2 = new DiscountModel(3, "آبلیمو", 1, 5000);
-        DiscountModel discountModel3 = new DiscountModel(4, "پلاستیک فریزر", 7, 6500);
-        DiscountModel discountModel4 = new DiscountModel(5, "اب زرشک", 3, 1300);
-        DiscountModel discountModel5 = new DiscountModel(6, "اب زرشک", 4, 8000);
+        DiscountModel discountModel = new DiscountModel(1, "تخفیف حجمی درجه1", 4, 1400);
+        DiscountModel discountModel1 = new DiscountModel(2, "تخفیف حجمی درجه2", 2, 2100);
+        DiscountModel discountModel2 = new DiscountModel(3, "تخفیف حجمی درجه3", 1, 5000);
+        DiscountModel discountModel3 = new DiscountModel(4, "تخفیف صنفی درجه1", 7, 6500);
+        DiscountModel discountModel4 = new DiscountModel(5, "تخفیف صنفی درجه2", 3, 1300);
+        DiscountModel discountModel5 = new DiscountModel(6, "تخفیف صنفی درجه2", 4, 8000);
         discountModels.add(discountModel);
         discountModels.add(discountModel1);
         discountModels.add(discountModel2);

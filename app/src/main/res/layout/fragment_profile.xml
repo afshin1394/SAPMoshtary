@@ -46,7 +46,7 @@
 
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="140dp"
             android:paddingTop="20dp"
             android:gravity="center|top"
             android:orientation="vertical">
@@ -59,14 +59,7 @@
                 android:textColor="@color/colorGrey800"
                 android:textSize="20dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:fontFamily="@font/iransans"
-                android:text="مشتری عادی"
-                android:textColor="@color/colorGrey800"
-                android:textSize="16dp" />
+
         </LinearLayout>
 
     <View
@@ -117,6 +110,57 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/ic_round_person_24"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorGrey500"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/sale_info_ll"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingTop="17dp"
+        android:paddingBottom="17dp"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_arrow_back_ios_24"
+            android:layout_gravity="center"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="16dp"
+            android:textColor="@color/colorGrey800"
+            android:fontFamily="@font/iransans"
+            android:text="اطلاعات فروش"
+            android:layout_marginEnd="6dp"
+            android:gravity="center"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_round_all_inbox_24"/>
 
     </LinearLayout>
 

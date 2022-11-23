@@ -3,18 +3,23 @@ package com.saphamrah.customer.presentation.main.welcome.view;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +34,13 @@ import com.saphamrah.customer.data.local.MenuModel;
 import com.saphamrah.customer.databinding.FragmentAddressBinding;
 import com.saphamrah.customer.databinding.FragmentMainBinding;
 import com.saphamrah.customer.presentation.createRequest.CreateRequestActivity;
+import com.saphamrah.customer.presentation.login.LoginActivity;
 import com.saphamrah.customer.presentation.main.MainActivity;
 import com.saphamrah.customer.presentation.main.MainInteracts;
 import com.saphamrah.customer.presentation.main.MainPresenter;
 import com.saphamrah.customer.presentation.main.welcome.view.adapter.MainStatePager;
 import com.saphamrah.customer.presentation.main.welcome.view.adapter.DialogMenuAdapter;
+import com.saphamrah.customer.utils.ImageUtils;
 import com.saphamrah.customer.utils.customViews.ZoomOutPageTransformer;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
@@ -42,12 +49,14 @@ import com.saphamrah.customer.utils.CheckTabletOrPhone;
 import com.saphamrah.customer.utils.SnapToBlock;
 import com.saphamrah.customer.utils.customViews.BottomSheetSearchRecyclerView;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Objects;
 
 
 public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBinding, MainActivity> implements MainInteracts.RequiredViewOps,
-        AdapterItemListener<BaseBottomSheetRecyclerModel>, AdapterItemMultiSelectListener<BaseBottomSheetRecyclerModel> {
+        AdapterItemListener<LocationDbModel>, AdapterItemMultiSelectListener<LocationDbModel> {
 
     private ConstraintLayout mBottomSheetLayout;
 
@@ -81,51 +90,23 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
 
 
         ArrayList<MenuModel> menuModels = new ArrayList<>();
-        menuModels.add(new MenuModel("دلپذیر",R.drawable.logo_delpazir));
-        menuModels.add(new MenuModel("دومینو",R.drawable.logo_domino));
-        menuModels.add(new MenuModel("بستنی میهن",R.drawable.logo_mihan));
-        menuModels.add(new MenuModel("کاله",R.drawable.logo_kalleh));
-        menuModels.add(new MenuModel("لینا",R.drawable.logo_lina));
-        menuModels.add(new MenuModel("لبنیات پاستوریزه میهن",R.drawable.logo_delpazir));
-        menuModels.add(new MenuModel("دلپذیر",R.drawable.logo_delpazir));
-        menuModels.add(new MenuModel("کاله",R.drawable.logo_kalleh));
-        menuModels.add(new MenuModel("دومینو",R.drawable.logo_domino));
-        menuModels.add(new MenuModel("بستنی میهن",R.drawable.logo_mihan));
-        menuModels.add(new MenuModel("لینا",R.drawable.logo_lina));
-        menuModels.add(new MenuModel("رامک",R.drawable.logo_ramak));
-        menuModels.add(new MenuModel("دلپذیر",R.drawable.logo_delpazir));
-        menuModels.add(new MenuModel("دومینو",R.drawable.logo_domino));
-        menuModels.add(new MenuModel("بستنی میهن",R.drawable.logo_mihan));
-        menuModels.add(new MenuModel("لینا",R.drawable.logo_lina));
-        menuModels.add(new MenuModel("رامک",R.drawable.logo_ramak));
-        menuModels.add(new MenuModel("دلپذیر",R.drawable.logo_delpazir));
-        menuModels.add(new MenuModel("دومینو",R.drawable.logo_domino));
-        menuModels.add(new MenuModel("بستنی میهن",R.drawable.logo_mihan));
-        menuModels.add(new MenuModel("کاله",R.drawable.logo_kalleh));
-        menuModels.add(new MenuModel("دامداران",R.drawable.logo_damdaran));
-        menuModels.add(new MenuModel("لبنیات پاستوریزه میهن",R.drawable.logo_delpazir));
-        menuModels.add(new MenuModel("دلپذیر",R.drawable.logo_delpazir));
-        menuModels.add(new MenuModel("رامک",R.drawable.logo_ramak));
-        menuModels.add(new MenuModel("بستنی میهن",R.drawable.logo_mihan));
-        menuModels.add(new MenuModel("لینا",R.drawable.logo_lina));
-        menuModels.add(new MenuModel("لبنیات پاستوریزه میهن",R.drawable.logo_delpazir));
-        menuModels.add(new MenuModel("دلپذیر",R.drawable.logo_delpazir));
-        menuModels.add(new MenuModel("کاله",R.drawable.logo_kalleh));
-        menuModels.add(new MenuModel("دامداران",R.drawable.logo_damdaran));
-        menuModels.add(new MenuModel("بستنی میهن",R.drawable.logo_mihan));
-        menuModels.add(new MenuModel("رامک",R.drawable.logo_ramak));
-        menuModels.add(new MenuModel("لبنیات پاستوریزه میهن",R.drawable.logo_delpazir));
-        menuModels.add(new MenuModel("دلپذیر",R.drawable.logo_delpazir));
-        menuModels.add(new MenuModel("دامداران",R.drawable.logo_damdaran));
-        menuModels.add(new MenuModel("بستنی میهن",R.drawable.logo_mihan));
-        menuModels.add(new MenuModel("لینا",R.drawable.logo_lina));
-        menuModels.add(new MenuModel("کاله",R.drawable.logo_kalleh));
-        menuModels.add(new MenuModel("لبنیات پاستوریزه میهن",R.drawable.logo_delpazir));
+        menuModels.add(new MenuModel("درخواست کالا",R.drawable.ic_add_request));
+        menuModels.add(new MenuModel("پروفایل کاربر", R.drawable.ic_account));
+        menuModels.add(new MenuModel("ثبت نام", R.drawable.ic_add_user));
 
         DialogMenuAdapter adapter = new DialogMenuAdapter(getContext(), menuModels, (model, position) -> {
 
-            makeSazmanForoshBottomSheet();
-
+            switch (position){
+                case 0:
+                    makeSazmanForoshBottomSheet();
+                    break;
+                case 1:
+                    Navigation.findNavController(requireActivity(),R.id.mainNavigation_host).navigate(R.id.action_mainFragment_to_profileFragment);
+                    break;
+                case 2:
+                    startActivity(new Intent(context, LoginActivity.class));
+                    break;
+            }
         });
 //        GridLayoutManager mLayoutManager = new GridLayoutManager(this,5);
         GridLayoutManager mLayoutManager = setConfigForDifferentScreens();
@@ -190,15 +171,6 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
         return mLayoutManager;
     }
 
-    @Override
-    public void onItemSelect(BaseBottomSheetRecyclerModel model, int position, AdapterAction action) {
-        startActivity(new Intent(activity, CreateRequestActivity.class));
-    }
-
-    @Override
-    public void onItemMultiSelect(ArrayList<BaseBottomSheetRecyclerModel> model, AdapterAction action) {
-
-    }
 
     @Override
     public void onError(String error) {
@@ -237,12 +209,16 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
         advertiseModels.add(new AdvertiseModel("@drawable/bastani", "http://www.mihan-food.com/", "."));
 
 
-        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("بستنی میهن","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("لینا","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("لبنیات پاستوریزه میهن","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("لبنیات استریل میهن","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("فروتلند","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
+        baseSazmanForoshModels.add(new LocationDbModel("دومینو","1",R.drawable.logo_domino));
+        baseSazmanForoshModels.add(new LocationDbModel("بستنی میهن","1",R.drawable.logo_mihan));
+        baseSazmanForoshModels.add(new LocationDbModel("کاله","1",R.drawable.logo_kalleh));
+        baseSazmanForoshModels.add(new LocationDbModel("لینا","1",R.drawable.logo_lina));
+        baseSazmanForoshModels.add(new LocationDbModel("لبنیات پاستوریزه میهن","1",R.drawable.logo_delpazir));
+        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
+        baseSazmanForoshModels.add(new LocationDbModel("کاله","1",R.drawable.logo_kalleh));
+        baseSazmanForoshModels.add(new LocationDbModel("لبنیات پاستوریزه میهن","1",R.drawable.logo_delpazir));
+
 
 
         viewPagerAdapter = new MainStatePager(requireActivity().getSupportFragmentManager(), advertiseModels);
@@ -260,7 +236,7 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
         handleBottomSheetBehaviorState();
 
         bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(getContext(),
-                getView(),
+                viewBinding,
                 baseSazmanForoshModels,
                 true,
                 getContext().getResources().getString(R.string.searchSazman),
@@ -274,6 +250,18 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
     }
 
 
+    @Override
+    public void onItemSelect(LocationDbModel model, int position, AdapterAction Action) {
+        Log.i(TAG, "onItemSelect: "+model.toString());
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), model.getResId());
+        Log.i(TAG, "onItemSelect: "+bm);
+//        Uri uri = ImageUtils.convertBitmapToUri(context,"sazmanIcon",bm);
+//        Log.i(TAG, "onItemSelect: "+uri);
+        startActivity(new Intent(activity, CreateRequestActivity.class).putExtra("sazmanName",model.getName()));
+    }
 
+    @Override
+    public void onItemMultiSelect(ArrayList<LocationDbModel> model, AdapterAction action) {
 
+    }
 }

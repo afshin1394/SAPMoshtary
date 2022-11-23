@@ -18,6 +18,7 @@ import com.saphamrah.customer.presentation.login.LoginActivity;
 import com.saphamrah.customer.presentation.login.sendOtp.interactor.SendOtpLoginInteracts;
 import com.saphamrah.customer.presentation.login.sendOtp.presenter.SendOtpLoginPresenter;
 import com.saphamrah.customer.utils.customViews.CustomSnackBar;
+import com.saphamrah.customer.utils.customViews.OnSingleClickListener;
 
 import java.util.Objects;
 
@@ -80,19 +81,20 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
 
     private void btnClickListeners() {
 
-        viewBinding.btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigate(R.id.action_SendOtpLoginFragment_to_RegisterFragment);
-            }
-        });
+        viewBinding.btnRegister.setOnClickListener(new OnSingleClickListener() {
+               @Override
+               public void onSingleClick(View v) {
+                   navigate(R.id.action_SendOtpLoginFragment_to_RegisterFragment);
 
-        viewBinding.btnSendNumber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkLogin();
-            }
-        });
+               }
+           });
+
+                viewBinding.btnSendNumber.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        checkLogin();
+                    }
+                });
     }
 
     private void checkLogin() {

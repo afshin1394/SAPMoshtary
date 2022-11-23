@@ -34,11 +34,14 @@ import com.saphamrah.customer.presentation.createRequest.returned.view.adapter.S
 import com.saphamrah.customer.presentation.createRequest.selectableBonus.interactor.SelectableBonusInteractor;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
+import com.saphamrah.customer.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import io.reactivex.Observable;
+import io.reactivex.functions.Predicate;
 
 
 public class ReturnFragment extends BaseFragment<ReturnedInteractor.PresenterOps, FragmentReturnBinding, CreateRequestActivity> implements ReturnedInteractor.RequiredViewOps {
@@ -52,7 +55,7 @@ public class ReturnFragment extends BaseFragment<ReturnedInteractor.PresenterOps
 
     @Override
     protected void onBackPressed() {
-
+      activity.paymentState = Constants.PaymentStates.CONFIRM_REQUEST;
     }
 
     @Override
@@ -84,7 +87,6 @@ public class ReturnFragment extends BaseFragment<ReturnedInteractor.PresenterOps
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL,false);
 
         marjoeeAdapter = new ReturnedAdapter(context, elamMarjoeeForoshandehModels, new AdapterItemListener<ElamMarjoeeForoshandehModel>() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onItemSelect(ElamMarjoeeForoshandehModel model, int position, AdapterAction Action) {
                  switch (Action){
@@ -92,7 +94,7 @@ public class ReturnFragment extends BaseFragment<ReturnedInteractor.PresenterOps
                      case ADD:
                          Log.i(TAG, "onItemSelect: "+elamMarjoeeForoshandehModels.get(position).getTedad3());
                          Log.i(TAG, "onItemSelect: "+backup.get(position).getTedad3());
-                         List<ElamMarjoeeForoshandehModel> marjoees = backup.stream().filter(backup -> backup.getTedad3()>0).collect(Collectors.toList());
+                         List<ElamMarjoeeForoshandehModel> marjoees = Observable.fromIterable(backup).filter(elamMarjoeeForoshandehModel -> elamMarjoeeForoshandehModel.getTedad3()>0).toList().blockingGet();
                          if (marjoees.size()> 0)
                              expand();
                          else

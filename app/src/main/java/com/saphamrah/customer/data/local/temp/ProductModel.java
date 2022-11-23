@@ -10,7 +10,7 @@ public class ProductModel implements Parcelable {
     private String nameProduct;
     private long consumerPrice;
     private long sellPrice;
-    private String bachNumber;
+    private String codeKala;
     private long inventory;
     private long orderCount;
     private String productionDate;
@@ -27,7 +27,7 @@ public class ProductModel implements Parcelable {
         this.nameProduct = nameProduct;
         this.consumerPrice = consumerPrice;
         this.sellPrice = sellPrice;
-        this.bachNumber = bachNumber;
+        this.codeKala = bachNumber;
         this.inventory = inventory;
         this.imageResource = imageResource;
         this.orderCount = orderCount;
@@ -45,7 +45,7 @@ public class ProductModel implements Parcelable {
         nameProduct = in.readString();
         consumerPrice = in.readLong();
         sellPrice = in.readLong();
-        bachNumber = in.readString();
+        codeKala = in.readString();
         inventory = in.readLong();
         orderCount = in.readLong();
         productionDate = in.readString();
@@ -100,12 +100,12 @@ public class ProductModel implements Parcelable {
         this.sellPrice = sellPrice;
     }
 
-    public String getBachNumber() {
-        return bachNumber;
+    public String getCodeKala() {
+        return codeKala;
     }
 
-    public void setBachNumber(String bachNumber) {
-        this.bachNumber = bachNumber;
+    public void setCodeKala(String codeKala) {
+        this.codeKala = codeKala;
     }
 
     public long getInventory() {
@@ -192,7 +192,7 @@ public class ProductModel implements Parcelable {
         parcel.writeLong(consumerPrice);
         parcel.writeLong(sellPrice);
         parcel.writeLong(orderCount);
-        parcel.writeString(bachNumber);
+        parcel.writeString(codeKala);
         parcel.writeLong(inventory);
         parcel.writeString(productionDate);
         parcel.writeString(expirationDate);
@@ -209,7 +209,7 @@ public class ProductModel implements Parcelable {
                 ", nameProduct='" + nameProduct + '\'' +
                 ", consumerPrice=" + consumerPrice +
                 ", sellPrice=" + sellPrice +
-                ", bachNumber='" + bachNumber + '\'' +
+                ", bachNumber='" + codeKala + '\'' +
                 ", inventory=" + inventory +
                 ", orderCount=" + orderCount +
                 ", productionDate='" + productionDate + '\'' +

@@ -7,28 +7,42 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.gson.internal.LinkedHashTreeMap;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
+import com.saphamrah.customer.data.local.temp.BonusModel;
+import com.saphamrah.customer.data.local.temp.DarkhastFaktorJayezehTakhfifModel;
+import com.saphamrah.customer.data.local.temp.DiscountModel;
+import com.saphamrah.customer.data.local.temp.JayezehEntekhabiMojodiModel;
+import com.saphamrah.customer.databinding.FragmentProductRequestBinding;
+import com.saphamrah.customer.presentation.createRequest.cart.view.adapter.BonusAdapter;
+import com.saphamrah.customer.presentation.createRequest.cart.view.adapter.DiscountAdapter;
 import com.saphamrah.customer.presentation.createRequest.filter.view.fragment.FilterFragment;
+import com.saphamrah.customer.presentation.createRequest.productRequest.interactor.ProductRequestMVPInteractor;
 import com.saphamrah.customer.presentation.createRequest.productRequest.presenter.ProductRequestMVPPresenter;
+import com.saphamrah.customer.presentation.createRequest.productRequest.view.adapter.BonusProductAdapter;
+import com.saphamrah.customer.presentation.createRequest.productRequest.view.adapter.DiscountProductAdapter;
 import com.saphamrah.customer.presentation.createRequest.productRequest.view.adapter.FilterListAdapter;
 import com.saphamrah.customer.presentation.createRequest.productRequest.view.adapter.ProductAdapter;
 import com.saphamrah.customer.presentation.createRequest.CreateRequestActivity;
 import com.saphamrah.customer.data.local.temp.FilterSortModel;
 import com.saphamrah.customer.data.local.temp.ProductModel;
-import com.saphamrah.customer.databinding.FragmentProductRequestBinding;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.Constants;
 import com.saphamrah.customer.utils.RxUtils.Watcher;
+import com.saphamrah.customer.utils.ScreenUtils;
 import com.saphamrah.customer.utils.customViews.OnSingleClickListener;
 
 import java.util.ArrayList;
@@ -43,7 +57,7 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresenter, FragmentProductRequestBinding, CreateRequestActivity> implements CreateRequestActivity.CartListener {
+public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresenter, FragmentProductRequestBinding, CreateRequestActivity> implements ProductRequestMVPInteractor.RequiredViewOps, CreateRequestActivity.CartListener {
 
     public static final String TAG = ProductRequestFragment.class.getSimpleName();
     private FilterListAdapter filterAdapter;
@@ -54,6 +68,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     private List<ProductModel> productModelsTemp;
 
     private List<FilterSortModel> filterListObserver = new ArrayList<>();
+    private BottomSheetBehavior bottomSheetBehavior;
 
     public ProductRequestFragment() {
         super(R.layout.fragment_product_request);
@@ -66,7 +81,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initViews() {
         Log.i(TAG, "initViews: ");
@@ -86,7 +100,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
     @Override
     protected void setPresenter() {
-
+     presenter = new ProductRequestMVPPresenter(this);
     }
 
 
@@ -96,7 +110,19 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setViews() {
+        bottomSheetBehavior = BottomSheetBehavior.from(viewBinding.btmShtJayezehTakhfifKala.linBottomSheet);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetBehavior.setDraggable(false);
+        viewBinding.btmShtJayezehTakhfifKala.IVCollapse.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                handleBottomSheetBehaiviour();
+            }
+        });
+        viewBinding.txtProducts.setText(String.format("%1$s %2$s" ,context.getString(R.string.products) , activity.sazmanName));
+
         viewBinding.linSort.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -171,12 +197,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setFilterRecycler() {
-
-//        Object o = getFragmentResult("filters");
-//        if (o != null)
-//            filterSortModels =  ((List<FilterSortModel>) Arrays.asList(o).get(0)).stream().collect(Collectors.toList());
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -194,21 +215,21 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         };
 
         getFragmentResultObserver("filters").observe(getViewLifecycleOwner(), o -> {
-            filterListObserver = new ArrayList<>((Collection<? extends FilterSortModel>) o);
+            filterListObserver = new ArrayList<>((List<FilterSortModel>) o);
             filterAdapter.setDataChanged(filterListObserver, listenerFilterSort);
         });
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setProductRecycler() {
-
-
         productAdapter = new ProductAdapter(getActivity(), productModelsTemp, (model, position, Action) -> {
             switch (Action) {
                 case SELECT:
                     ProductRequestFragmentDirections.ActionProductRequestFragmentToAddItemToCartFragment action = ProductRequestFragmentDirections.actionProductRequestFragmentToAddItemToCartFragment(model);
                     navigate(action);
+                    break;
+                case DETAIL:
+                    presenter.getJayezehTakhfifDetails();
                     break;
 
                 case ADD:
@@ -222,8 +243,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         viewBinding.RecyclerProduct.setLayoutManager(linearLayoutManager);
         viewBinding.RecyclerProduct.setAdapter(productAdapter);
-
-
     }
 
 
@@ -267,5 +286,37 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         navigateUp();
     }
 
+    @Override
+    public void onGetDiscountAndBonuses(List<DiscountModel> discountModels, List<BonusModel> bonusModels) {
+        setBonusRecycler(bonusModels);
+        setDiscountRecycler(discountModels);
+        handleBottomSheetBehaiviour();
 
+
+    }
+
+    private void handleBottomSheetBehaiviour() {
+        if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            viewBinding.btmShtJayezehTakhfifKala.IVCollapse.setRotation(0);
+        } else {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            viewBinding.btmShtJayezehTakhfifKala.IVCollapse.setRotation(180);
+        }
+    }
+
+    private void setBonusRecycler(List<BonusModel> bonusModels) {
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+            BonusProductAdapter bonusAdapter = new BonusProductAdapter(context, bonusModels);
+            viewBinding.btmShtJayezehTakhfifKala.RVBonus.setLayoutManager(linearLayoutManager);
+            viewBinding.btmShtJayezehTakhfifKala.RVBonus.setAdapter(bonusAdapter);
+
+    }
+
+    private void setDiscountRecycler(List<DiscountModel> discountModels) {
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+            DiscountProductAdapter discountAdapter = new DiscountProductAdapter(context, discountModels);
+            viewBinding.btmShtJayezehTakhfifKala.RVDiscount.setLayoutManager(linearLayoutManager);
+            viewBinding.btmShtJayezehTakhfifKala.RVDiscount.setAdapter(discountAdapter);
+    }
 }

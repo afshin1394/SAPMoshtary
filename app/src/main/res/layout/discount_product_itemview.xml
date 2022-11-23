@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    >
+    <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="@drawable/bordered_purchase_light_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layoutDirection="rtl"
+
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_gravity="center"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/discount_tag"
+            android:padding="@dimen/_2sdp"
+            />
+
+
+        <TextView
+            style="@style/text_view_title_right_large_screen"
+            android:id="@+id/tv_discount_description"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/discount"
+            />
+        <TextView
+            android:text="@string/discount_percentage"
+            style="@style/text_view_title_right_large_screen"
+            android:id="@+id/tv_discount_percentage"
+            android:layout_gravity="center"
+            android:maxLines="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

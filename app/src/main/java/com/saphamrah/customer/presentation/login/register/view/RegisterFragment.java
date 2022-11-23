@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
@@ -38,14 +39,17 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
     private BottomSheetSearchRecyclerView bottomSheetSearch;
     private ArrayList<LocationDbModel> baseSearchProvinceDbModels;
     private ArrayList<LocationDbModel> baseSearchCityDbModels;
-
+    private BottomSheetSearchBinding bottomSheetSearchBinding;
     public RegisterFragment() {
         super(R.layout.fragment_register);
     }
 
     @Override
     protected FragmentRegisterBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {
-        return FragmentRegisterBinding.inflate(inflater, container, false);
+        FragmentRegisterBinding fragmentRegisterBinding = FragmentRegisterBinding.inflate(inflater, container, false);
+        View view = fragmentRegisterBinding.getRoot();
+        bottomSheetSearchBinding = BottomSheetSearchBinding.bind(view);
+        return fragmentRegisterBinding;
     }
 
 
@@ -87,8 +91,12 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         baseSearchCityDbModels.add(new LocationDbModel("ایلام", "city"));
         baseSearchCityDbModels.add(new LocationDbModel("ایلام", "city"));
         baseSearchCityDbModels.add(new LocationDbModel("ایلام", "city"));
-
-
+        baseSearchCityDbModels.add(new LocationDbModel("تهران", "city"));
+        baseSearchCityDbModels.add(new LocationDbModel("تبریز", "city"));
+        baseSearchCityDbModels.add(new LocationDbModel("اراک", "city"));
+        baseSearchCityDbModels.add(new LocationDbModel("تهران", "city"));
+        baseSearchCityDbModels.add(new LocationDbModel("تبریز", "city"));
+        baseSearchCityDbModels.add(new LocationDbModel("اراک", "city"));
     }
 
     private void clickListeners() {
@@ -203,7 +211,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         handleBottomSheetBehaviorState();
 
         bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(getContext(),
-                getView(),
+                bottomSheetSearchBinding,
                 baseSearchCityDbModels,
                 true,
                 getContext().getResources().getString(R.string.searchCity),
@@ -219,7 +227,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
         bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(
                 getContext(),
-                getView(),
+                bottomSheetSearchBinding,
                 baseSearchProvinceDbModels,
                 true,
                 getContext().getResources().getString(R.string.searchProvince),
@@ -277,7 +285,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         handleBottomSheetBehaviorState();
 
         bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(getContext(),
-                getView(),
+                bottomSheetSearchBinding,
                 itemTitles,
                 false,
                 "",

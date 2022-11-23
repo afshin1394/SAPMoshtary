@@ -1,4 +1,3 @@
-/*
 package com.saphamrah.customer.presentation.createRequest.verifyRequest.view.adapter;
 
 import android.content.Context;
@@ -12,17 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.saphamrah.customer.R;
+import com.saphamrah.customer.data.local.temp.ElamMarjoeeForoshandehModel;
+import com.saphamrah.customer.databinding.MarjoeePishfaktorCustomlistBinding;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MarjoeePishFaktorAdapter extends RecyclerView.Adapter<MarjoeePishFaktorAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<KalaElamMarjoeeModel> models;
+    private List<ElamMarjoeeForoshandehModel> models;
     private int noePrintFaktor;
 
-    public MarjoeePishFaktorAdapter(Context context, ArrayList<KalaElamMarjoeeModel> models, int noePrintFaktor)
+    public MarjoeePishFaktorAdapter(Context context, List<ElamMarjoeeForoshandehModel> models, int noePrintFaktor)
     {
         this.context = context;
         this.models = models;
@@ -34,20 +36,15 @@ public class MarjoeePishFaktorAdapter extends RecyclerView.Adapter<MarjoeePishFa
     @Override
     public MarjoeePishFaktorAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-
-
-        View view = LayoutInflater.from(context).inflate(R.layout.marjoee_pishfaktor_customlist, parent , false);
-
-        return new MarjoeePishFaktorAdapter.ViewHolder(view);
+        MarjoeePishfaktorCustomlistBinding marjoeePishfaktorCustomlistBinding =
+                MarjoeePishfaktorCustomlistBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new MarjoeePishFaktorAdapter.ViewHolder(marjoeePishfaktorCustomlistBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MarjoeePishFaktorAdapter.ViewHolder holder, int position)
     {
-        holder.lblNameKala.setText(models.get(position).getNameKala());
-        holder.lblShomarehBach.setText(models.get(position).getShomarehBach());
-        holder.lblTedad.setText(String.valueOf(models.get(position).getTedad3()));
-        holder.lblFee.setText(new DecimalFormat("#,###,###").format(models.get(position).getFee()));
+       holder.bind(models.get(position));
     }
 
     @Override
@@ -58,27 +55,19 @@ public class MarjoeePishFaktorAdapter extends RecyclerView.Adapter<MarjoeePishFa
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        private TextView lblNameKala;
-        private TextView lblShomarehBach;
-        private TextView lblTedad;
-        private TextView lblFee;
-
-        public ViewHolder(@NonNull View itemView)
+        MarjoeePishfaktorCustomlistBinding binding;
+        public ViewHolder(@NonNull MarjoeePishfaktorCustomlistBinding binding)
         {
-            super(itemView);
-            Typeface font = Typeface.createFromAsset(context.getAssets() , context.getResources().getString(R.string.fontPath));
+            super(binding.getRoot());
+            this.binding = binding;
+        }
 
-            lblNameKala = itemView.findViewById(R.id.lblNameKala);
-            lblShomarehBach = itemView.findViewById(R.id.lblShomarehBach);
-            lblTedad = itemView.findViewById(R.id.lblTedad);
-            lblFee = itemView.findViewById(R.id.lblFee);
-
-            lblNameKala.setTypeface(font);
-            lblShomarehBach.setTypeface(font);
-            lblTedad.setTypeface(font);
-            lblFee.setTypeface(font);
+        public void bind(ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModel) {
+            binding.lblNameKala.setText(elamMarjoeeForoshandehModel.getNameKala());
+            binding.lblShomarehBach.setText(elamMarjoeeForoshandehModel.getShomarehBach());
+            binding.lblTedad.setText(String.valueOf(elamMarjoeeForoshandehModel.getTedad3()));
+//            binding.lblFee.setText(new DecimalFormat("#,###,###").format(elamMarjoeeForoshandehModel.getFee()));
         }
     }
 
 }
-*/

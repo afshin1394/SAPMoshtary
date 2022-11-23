@@ -1291,6 +1291,8 @@
     <string name="discount_percentage">درصد تخفیف</string>
     <string name="minPrice">0ریال</string>
     <string name="discount">تخفیف</string>
+    <string name="discountList">لیست تخفیف ها</string>
+
     <string name="bonus">جایزه</string>
     <string name="cart">سبد خرید</string>
     <string name="calculateBonusDiscount">محاسبه تخفیف جایزه</string>
@@ -1303,4 +1305,5 @@
     <string name="record">ثبت</string>
     <string name="tedad">تعداد</string>
     <string name="next">بعدی</string>
+    <string name="mablaghPardakhti">مبلغ پرداختی</string>
 </resources>

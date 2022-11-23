@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +22,7 @@ import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.customViews.EditTextWatcher;
+import com.saphamrah.customer.utils.customViews.OnSingleClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +70,6 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             case SELL:
                 ((ViewHolderSell) holder).bind(productModel);
-
                 break;
         }
 
@@ -101,6 +102,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private ImageView img_add;
         private ImageView img_remove;
         private EditTextWatcher et_product_count;
+        private ImageView imgDiscountBonus;
 
         public ViewHolderSell(View view) {
             super(view);
@@ -115,6 +117,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             img_add = view.findViewById(R.id.img_add);
             et_product_count = view.findViewById(R.id.ET_product_count);
             img_product = view.findViewById(R.id.img_product);
+            imgDiscountBonus = view.findViewById(R.id.img_discountbonus);
 
             img_product.setOnClickListener(view1 -> listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.SELECT));
             lin_purchase.setOnClickListener(view12 -> {
@@ -123,6 +126,13 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 lin_purchase.setVisibility(View.GONE);
                 listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.ADD);
 
+            });
+
+            imgDiscountBonus.setOnClickListener(new OnSingleClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    listener.onItemSelect(models.get(getAdapterPosition()),getAdapterPosition(),AdapterAction.DETAIL);
+                }
             });
 
                 et_product_count.addTextWatcher(s -> {
@@ -153,6 +163,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.REMOVE);
 
                 });
+
 
         }
 

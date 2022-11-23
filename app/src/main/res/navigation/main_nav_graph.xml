@@ -51,6 +51,13 @@
             app:exitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_profileFragment_to_saleInfoFragment"
+            app:destination="@id/saleInfoFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/personalInfoFragment"
@@ -111,4 +118,8 @@
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right"/>
     </fragment>
+    <fragment
+        android:id="@+id/saleInfoFragment"
+        android:name="com.saphamrah.customer.presentation.profile.saleInfo.view.SaleInfoFragment"
+        android:label="SaleInfoFragment" />
 </navigation>

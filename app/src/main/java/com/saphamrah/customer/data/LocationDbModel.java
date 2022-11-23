@@ -4,11 +4,18 @@ public class LocationDbModel extends BaseBottomSheetRecyclerModel {
 
     private String name;
     private String type;
+    private int resId;
     private boolean isSelected = false;
 
     public LocationDbModel(String name, String type) {
         this.name = name;
         this.type = type;
+    }
+
+    public LocationDbModel(String name, String type, int resId) {
+        this.name = name;
+        this.type = type;
+        this.resId = resId;
     }
 
     public String getType() {
@@ -27,6 +34,14 @@ public class LocationDbModel extends BaseBottomSheetRecyclerModel {
         this.name = name;
     }
 
+    public int getResId() {
+        return resId;
+    }
+
+    public void setResId(int resId) {
+        this.resId = resId;
+    }
+
     @Override
     public boolean isSelected() {
         return isSelected;
@@ -35,5 +50,15 @@ public class LocationDbModel extends BaseBottomSheetRecyclerModel {
     @Override
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    @Override
+    public String toString() {
+        return "LocationDbModel{" +
+                "name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", resId=" + resId +
+                ", isSelected=" + isSelected +
+                '}';
     }
 }

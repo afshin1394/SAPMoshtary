@@ -3,7 +3,10 @@ package com.saphamrah.customer.presentation.createRequest;
 import androidx.annotation.RequiresApi;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +33,10 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+
 public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.PresenterOps, ActivityCreateRequestBinding>   {
     private String TAG = CreateRequestActivity.class.getSimpleName();
     private List<ProductModel> productModelGlobal;
@@ -40,6 +47,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     private String address;
     public ActivityCreateRequestBinding rootBinding;
     public Constants.PaymentStates paymentState;
+    public String sazmanName;
     public boolean setMarjoee = false;
     CartListener cartListener;
 
@@ -54,12 +62,16 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
 
 
 
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initViews() {
+        //sazmanName
+        sazmanName = (((String) getIntent().getExtras().get("sazmanName")));
+        Log.i(TAG, "initViews: "+sazmanName);
+
         paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
         setProducts();
+
         checkPermissions(new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE});
     }
 
@@ -108,14 +120,10 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         return CreateRequestActivity.this;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void checkCart(boolean showCartIcon) {
-        boolean stuffInCart = productModelGlobal.stream().anyMatch(new Predicate<ProductModel>() {
-            @Override
-            public boolean test(ProductModel productModel) {
-                return productModel.getOrderCount() > 0;
-            }
-        });
+
+        boolean stuffInCart = Observable.fromIterable(productModelGlobal).any(productModel -> productModel.getOrderCount() > 0).blockingGet();
+
         Log.i(TAG, "checkCart: "+stuffInCart);
         if (showCartIcon) {
             if (stuffInCart) {
@@ -148,11 +156,10 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void removeCart() {
         clearJayezehTakhfif();
         clearElamMarjoee();
-        productModelGlobal.forEach(productModel -> productModel.setOrderCount(0));
+        Observable.fromIterable(productModelGlobal).forEach(productModel -> productModel.setOrderCount(0)).dispose();
         viewBinding.linCart.setVisibility(View.GONE);
         cartListener.onCartEmpty();
     }
@@ -245,12 +252,12 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         this.discountModelsGlobal = discountModelsGlobal;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    @SuppressLint("SuspiciousIndentation")
     public List<ElamMarjoeeForoshandehModel> getElamMarjoeeForoshandehModelsGlobal() {
         if (elamMarjoeeForoshandehModelsGlobal!=null)
-        return elamMarjoeeForoshandehModelsGlobal.stream().filter(elamMarjoeeForoshandehModel -> elamMarjoeeForoshandehModel.getTedad3()>0).collect(Collectors.toList());
+        return Observable.fromIterable(elamMarjoeeForoshandehModelsGlobal).filter(elamMarjoeeForoshandehModel -> elamMarjoeeForoshandehModel.getTedad3()>0).toList().blockingGet();
         else
-            return null;
+        return null;
     }
 
     public void setElamMarjoeeForoshandehModelsGlobal(List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModelsGlobal) {

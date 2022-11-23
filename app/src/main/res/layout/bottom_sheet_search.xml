@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardViewBottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<androidx.cardview.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/cardViewBottomSheet"
     app:behavior_hideable="true"
     app:behavior_peekHeight="0dp"
     app:cardElevation="@dimen/_8sdp"
@@ -31,13 +36,14 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/sheet_recyclerview"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:clipToPadding="false"
-            app:layout_constraintBottom_toBottomOf="@id/sheet_button"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/searchView"
-            tools:listitem="@layout/item_base_search" />
+            tools:listitem="@layout/item_base_search"
+            />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/sheet_button"
@@ -51,11 +57,12 @@
             android:textSize="18sp"
             app:backgroundTint="@color/colorAccent"
             app:cornerRadius="8dp"
-            app:layout_constraintEnd_toEndOf="@+id/sheet_recyclerview"
-            app:layout_constraintStart_toStartOf="@+id/sheet_recyclerview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>

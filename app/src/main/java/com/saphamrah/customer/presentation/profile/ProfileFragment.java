@@ -54,5 +54,10 @@ public class ProfileFragment extends Fragment {
         binding.hesabLl.setOnClickListener(view1 -> {
             Navigation.findNavController(requireActivity(),R.id.mainNavigation_host).navigate(R.id.action_profileFragment_to_accountNumberFragment);
         });
+
+        binding.saleInfoLl.setOnClickListener(view1 -> {
+            Navigation.findNavController(requireActivity(),R.id.mainNavigation_host).navigate(R.id.action_profileFragment_to_saleInfoFragment);
+        });
+
     }
 }

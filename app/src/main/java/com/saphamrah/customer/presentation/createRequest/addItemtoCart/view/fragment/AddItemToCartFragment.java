@@ -1,18 +1,17 @@
 package com.saphamrah.customer.presentation.createRequest.addItemtoCart.view.fragment;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.saphamrah.customer.R;
@@ -22,16 +21,13 @@ import com.saphamrah.customer.presentation.createRequest.CreateRequestActivity;
 import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.presentation.createRequest.addItemtoCart.view.adapter.SliderAdapterAddToCart;
 import com.saphamrah.customer.databinding.FragmentAddItemToCartBinding;
-import com.saphamrah.customer.presentation.createRequest.productRequest.view.fragment.ProductRequestFragmentDirections;
-import com.saphamrah.customer.utils.AnimationUtils;
-import com.saphamrah.customer.utils.CollectionUtils;
+import com.saphamrah.customer.presentation.createRequest.cart.view.adapter.BonusAdapter;
+import com.saphamrah.customer.presentation.createRequest.cart.view.adapter.DiscountAdapter;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
-import com.smarteist.autoimageslider.IndicatorView.animation.type.ScaleAnimation;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
 import java.util.List;
-import java.util.Map;
 
 
 public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.PresenterOps, FragmentAddItemToCartBinding, CreateRequestActivity> implements CreateRequestActivity.CartListener {
@@ -148,10 +144,10 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
 
         viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("%1$s %2$s :هزینه پرداختی", "45500", getString(R.string.rial)));
         viewBinding.btmShtPurchase.txtProductName.setText(productModel.getNameProduct());
-        viewBinding.btmShtPurchase.bachNumberTv.setText(productModel.getBachNumber());
+        viewBinding.btmShtPurchase.kalaCodeTv.setText(productModel.getCodeKala());
         viewBinding.btmShtPurchase.brandTv.setText(productModel.getSazmanForosh());
-        viewBinding.btmShtPurchase.expirationDateTv.setText(productModel.getExpirationDate());
-        viewBinding.btmShtPurchase.productionDateTv.setText(productModel.getProductionDate());
+        viewBinding.btmShtPurchase.qeymateForoshTv.setText(productModel.getSellPrice() + " تومان");
+        viewBinding.btmShtPurchase.qeymateMasrafkonandeTv.setText( productModel.getConsumerPrice() + " تومان");
         viewBinding.btmShtPurchase.numberInBoxTv.setText(" عدد " + productModel.getNumInBox());
         viewBinding.btmShtPurchase.weightTv.setText("گرم" + productModel.getWeight());
 
@@ -208,14 +204,14 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
 
             try {
                 productModel.setOrderCount(Long.parseLong(s));
-                viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getConsumerPrice() * productModel.getOrderCount(), getString(R.string.rial)));
+                viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
 
             } catch (Exception e) {
                 viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.valueOf("هزینه ای وجود ندارد"));
             }
 
         }, 300);
-        viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getConsumerPrice() * productModel.getOrderCount(), getString(R.string.rial)));
+        viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
 
 
     }
@@ -259,4 +255,6 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
     public void onCartEmpty() {
 
     }
+
+
 }

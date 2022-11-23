@@ -74,20 +74,20 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
 
     private void makeSazmanForoshBottomSheet() {
         List<LocationDbModel> baseSazmanForoshModels = new ArrayList<>();
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("پگاه","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("پگاه","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","1"));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","1"));
+        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
+        baseSazmanForoshModels.add(new LocationDbModel("دومینو","1",R.drawable.logo_domino));
+        baseSazmanForoshModels.add(new LocationDbModel("بستنی میهن","1",R.drawable.logo_mihan));
+        baseSazmanForoshModels.add(new LocationDbModel("کاله","1",R.drawable.logo_kalleh));
+        baseSazmanForoshModels.add(new LocationDbModel("لینا","1",R.drawable.logo_lina));
+        baseSazmanForoshModels.add(new LocationDbModel("لبنیات پاستوریزه میهن","1",R.drawable.logo_mihan));
+        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
+        baseSazmanForoshModels.add(new LocationDbModel("کاله","1",R.drawable.logo_kalleh));
+        baseSazmanForoshModels.add(new LocationDbModel("لبنیات پاستوریزه میهن","1",R.drawable.logo_mihan));
 
         bottomSheetSearch = new BottomSheetSearchRecyclerView(this, this);
         handleBottomSheetBehaviorState();
         bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(this,
-                viewBinding.getRoot(),
+                viewBinding,
                 (ArrayList) baseSazmanForoshModels,
                 true,
                 getResources().getString(R.string.searchSazman),
@@ -146,7 +146,7 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
 
     @Override
     public void onItemSelect(Object model, int position, AdapterAction Action) {
-        startActivity(new Intent(MainActivity.this, CreateRequestActivity.class));
+        startActivity(new Intent(MainActivity.this, CreateRequestActivity.class).putExtra("sazmanIcon", ((LocationDbModel) model).getResId()));
 
 
 

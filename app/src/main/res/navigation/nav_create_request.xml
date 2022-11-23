@@ -37,7 +37,7 @@
             android:id="@+id/action_addItemToCartFragment_to_cartFragment"
             app:destination="@id/cartFragment"
             app:popUpTo="@id/productRequestFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
     </fragment>
     <dialog
         android:id="@+id/filterFragment"

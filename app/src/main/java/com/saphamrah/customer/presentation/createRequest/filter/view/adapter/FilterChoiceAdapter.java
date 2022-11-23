@@ -9,6 +9,7 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.slider.RangeSlider;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.saphamrah.customer.R;
@@ -36,6 +38,7 @@ public class FilterChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<FilterSortModel> allFilters;
     private AdapterItemListener<FilterSortModel> listener;
     private int filterSortType;
+    private int prevSelection  = -1;
 
 
     public FilterChoiceAdapter(int filterSortType, Context context, List<FilterSortModel> filterGlobal, List<FilterSortModel> models, AdapterItemListener<FilterSortModel> listener) {
@@ -82,16 +85,18 @@ public class FilterChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         FilterSortModel filterModel = models.get(position);
 
+
         switch (holder.getItemViewType()) {
             case SORT:
                 ViewHolderSortList viewHolderSort = (ViewHolderSortList) holder;
-                viewHolderSort.bind(filterModel);
+                viewHolderSort.bind(models, filterModel, position);
                 break;
 
             case FILTER_LIST:
                 ViewHolderFilter viewHolderFilter = (ViewHolderFilter) holder;
                 viewHolderFilter.bind(filterModel);
                 break;
+
             case FILTER_SLIDER:
                 ViewHolderFilterSlider viewHolderFilterSlider = (ViewHolderFilterSlider) holder;
                 viewHolderFilterSlider.bind(filterModel);
@@ -113,21 +118,45 @@ public class FilterChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public class ViewHolderSortList extends RecyclerView.ViewHolder {
-        private SwitchMaterial switchMaterial;
+        private MaterialCheckBox materialCheckBox;
 
 
         @RequiresApi(api = Build.VERSION_CODES.N)
         public ViewHolderSortList(View view) {
             super(view);
-            switchMaterial = view.getRootView().findViewById(R.id.S_sort_choice);
-            switchMaterial.setOnClickListener(view1 -> {
-                FilterSortModel filterSortModel = models.stream().filter(filterSortModel1 -> filterSortModel1.getId() == models.get(getAdapterPosition()).getId()).collect(Collectors.toList()).get(0);
-                listener.onItemSelect(filterSortModel, getAdapterPosition(), AdapterAction.TOGGLE);
-            });
+            materialCheckBox = view.getRootView().findViewById(R.id.S_sort_choice);
+
         }
 
-        public void bind(FilterSortModel filterModel) {
-            switchMaterial.setText(filterModel.getName());
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        public void bind(List<FilterSortModel> models, FilterSortModel filterModel, int position) {
+            materialCheckBox.setText(filterModel.getName());
+
+            if (filterModel.isEnabled()) {
+                materialCheckBox.setChecked(true);
+                prevSelection = position;
+            } else {
+                materialCheckBox.setChecked(false);
+            }
+
+            materialCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        models.get(position).setEnabled(true);
+                        if (prevSelection >= 0) {
+                            models.get(prevSelection).setEnabled(false);
+                            notifyItemChanged(prevSelection);
+                        }
+                        prevSelection = position;
+                    } else {
+                        models.get(position).setEnabled(false);
+                    }
+                    FilterSortModel filterSortModel = models.stream().filter(filterSortModel1 -> filterSortModel1.getId() == models.get(getAdapterPosition()).getId()).collect(Collectors.toList()).get(0);
+                    listener.onItemSelect(filterSortModel, getAdapterPosition(), AdapterAction.TOGGLE);
+                }
+            });
+
         }
     }
 

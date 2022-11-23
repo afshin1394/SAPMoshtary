@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
 import com.saphamrah.customer.databinding.ItemBaseSearchBinding;
 
@@ -52,6 +53,15 @@ public class BottomSheetRecyclerAdapter<T extends BaseBottomSheetRecyclerModel> 
 
         public void bind(T baseSearchDbModel) {
             binding.txtSearch.setText(baseSearchDbModel.getName());
+
+            if (baseSearchDbModel.getImageRes() != 0) {
+                binding.imageViewSearch.setVisibility(View.VISIBLE);
+
+                Glide.with(binding.getRoot())
+                        .load(baseSearchDbModel.getImageRes())
+                        .into(binding.imageViewSearch);
+            }
+
 
             if (!isMultiSelect) {
                 binding.checkboxSearch.setVisibility(View.GONE);

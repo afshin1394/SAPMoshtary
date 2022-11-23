@@ -44,7 +44,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@drawable/rounded_corner_top_red_gradiant"
             android:layoutDirection="rtl"
             android:orientation="horizontal"
             android:padding="@dimen/_8sdp">
