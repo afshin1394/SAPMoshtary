@@ -1,18 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lin_bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_corner_top_red_gradiant"
     android:layoutDirection="rtl"
-    android:maxHeight="670dp"
+    android:maxHeight="370dp"
     android:orientation="horizontal"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="220dp"
+    app:behavior_peekHeight="160dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:background="@drawable/triangle_red_gradiant_shape"
+
+
+        >
+        <ImageView
+
+            android:id="@+id/arrow_down_bottom_sheet"
+            android:layout_width="40dp"
+            android:layout_height="@dimen/_18sdp"
+            android:elevation="@dimen/_360sdp"
+            android:src="@drawable/ic_arrow_up"
+            android:padding="@dimen/_1sdp"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="@dimen/_20sdp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -20,27 +39,11 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <ImageView
-
-            android:id="@+id/arrow_down_bottom_sheet"
-            android:layout_width="40dp"
-            android:layout_height="@dimen/_18sdp"
-            android:layout_gravity="center_horizontal"
-            android:elevation="@dimen/_360sdp"
-            android:padding="@dimen/_2sdp"
-            android:src="@drawable/ic_arrow_up"
-            app:civ_border_color="@color/colorRed200"
-            app:civ_border_width="2dp"
-            app:civ_circle_background_color="@color/colorRed200"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@drawable/rounded_corner_top_red_gradiant"
             android:layoutDirection="rtl"
             android:orientation="horizontal"
             android:padding="@dimen/_8sdp">
@@ -48,7 +51,7 @@
 
             <TextView
                 android:id="@+id/txt_payment_sum"
-                style="@style/text_view_title_center_large_screen"
+                style="@style/text_view_title_center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -67,13 +70,13 @@
 
                 <LinearLayout
                     android:id="@+id/lin_purchase"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_120sdp"
+                    android:layout_height="@dimen/_36sdp"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/_6sdp"
                     android:background="@drawable/rounded_corner_purchase_red_dark_gradiant"
                     android:gravity="center"
-                    android:padding="@dimen/_10sdp"
+                    android:padding="@dimen/_4sdp"
                     android:visibility="visible"
                     android:orientation="horizontal">
 
@@ -93,7 +96,6 @@
                         android:id="@+id/tv_payment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/_9sdp"
                         android:text="@string/calculateBonusDiscount"
                         android:textColor="@color/colorBlack" />
 
@@ -116,7 +118,7 @@
 
                 <TextView
                     android:id="@+id/txt_production_date"
-                    style="@style/text_view_normal_large_screen"
+                    style="@style/text_view_normal2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -124,7 +126,7 @@
 
                 <TextView
                     android:id="@+id/txt_expiration_date"
-                    style="@style/text_view_normal_large_screen"
+                    style="@style/text_view_normal2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -138,7 +140,7 @@
 
                 <TextView
                     android:id="@+id/txt_sell_price"
-                    style="@style/text_view_normal_large_screen"
+                    style="@style/text_view_normal2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -146,7 +148,7 @@
 
                 <TextView
                     android:id="@+id/txt_inventory"
-                    style="@style/text_view_normal_large_screen"
+                    style="@style/text_view_normal2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -160,14 +162,14 @@
 
                 <TextView
                     android:id="@+id/txt_bach_number"
-                    style="@style/text_view_normal_large_screen"
+                    style="@style/text_view_normal2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/mashmolMaliatAvarez" />
 
                 <TextView
-                    style="@style/text_view_normal_large_screen"
+                    style="@style/text_view_normal2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -177,4 +179,4 @@
 
         </LinearLayout>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

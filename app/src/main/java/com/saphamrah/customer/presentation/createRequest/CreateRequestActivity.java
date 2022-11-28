@@ -88,7 +88,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
             @Override
             public void onClick(View view) {
                 SapDatabase.getDatabase(CreateRequestActivity.this).exportDatabase();
-                List<ProductModel> orderedProducts =  productModelGlobal.stream().filter(productModel -> productModel.getOrderCount() > 0).collect(Collectors.toList());
+                List<ProductModel> orderedProducts =  productModelGlobal.stream().filter(productModel -> productModel.getPackCount()>0 || productModel.getNumCount()>0 || productModel.getBoxCount()>0).collect(Collectors.toList());
                 cartListener.onCartClick(orderedProducts);
             }
         });
@@ -122,7 +122,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
 
     public void checkCart(boolean showCartIcon) {
 
-        boolean stuffInCart = Observable.fromIterable(productModelGlobal).any(productModel -> productModel.getOrderCount() > 0).blockingGet();
+        boolean stuffInCart = Observable.fromIterable(productModelGlobal).any(productModel -> productModel.getBoxCount()>0 || productModel.getPackCount()>0 || productModel.getNumCount()>0).blockingGet();
 
         Log.i(TAG, "checkCart: "+stuffInCart);
         if (showCartIcon) {
@@ -159,7 +159,9 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     public void removeCart() {
         clearJayezehTakhfif();
         clearElamMarjoee();
-        Observable.fromIterable(productModelGlobal).forEach(productModel -> productModel.setOrderCount(0)).dispose();
+        Observable.fromIterable(productModelGlobal).forEach(productModel -> productModel.setBoxCount(0)).dispose();
+        Observable.fromIterable(productModelGlobal).forEach(productModel -> productModel.setPackCount(0)).dispose();
+        Observable.fromIterable(productModelGlobal).forEach(productModel -> productModel.setNumCount(0)).dispose();
         viewBinding.linCart.setVisibility(View.GONE);
         cartListener.onCartEmpty();
     }
@@ -201,16 +203,16 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         imageRes7.add(R.drawable.yogourt);
         imageRes7.add(R.drawable.bastani);
 
-        ProductModel kalaModel = new ProductModel(1, "رب دلپذیر", 10000, 8000, "980702", 500, 0,"1400/8/5", "1400/8/25", imageRes1,false,"پاندا",290,15);
-        ProductModel kalaModel2 = new ProductModel(2, "بستنی سالار", 12000, 10000, "980702", 600,0, "1400/8/5", "1400/8/25", imageRes2,true,"پاندا",290,15);
-        ProductModel kalaModel3 = new ProductModel(3, "بستنی زعفرانی", 13000, 8000, "980702", 600,0, "1400/8/5", "1400/8/25", imageRes6,false,"میهن",290,15);
-        ProductModel kalaModel4 = new ProductModel(4, "رب دلپذیر", 14000, 10000, "980702", 600, 0,"1400/2/5", "1400/9/25", imageRes7,false,"پاندا",290,15);
-        ProductModel kalaModel5 = new ProductModel(5, "بستنی کرنایل", 16000, 7000, "980702", 600,0, "1400/1/5", "1400/9/25", imageRes1,false,"فرودلند",290,15);
-        ProductModel kalaModel6 = new ProductModel(6, "مایونز", 18000, 9000, "980702", 500,0, "1400/8/5", "1400/8/25", imageRes2,true,"پاندا",290,15);
-        ProductModel kalaModel7 = new ProductModel(7, "بستنی زعفرونی", 19000, 7000, "980702", 600,0, "1400/8/5", "1400/8/25", imageRes3,false,"لبنیات پاستوریزه",290,15);
-        ProductModel kalaModel8 = new ProductModel(8, "آب سیب", 17000, 9000, "980702", 300,0, "1400/5/5", "1400/8/25", imageRes4,false,"فروتلند",290,15);
-        ProductModel kalaModel9 = new ProductModel(9, "آب هلو", 22000, 9000, "980702", 300, 0,"1400/7/5", "1400/8/25", imageRes5,true,"پاندا",290,15);
-        ProductModel kalaModel10 = new ProductModel(10, "آب انار", 10000, 9000, "980702", 300, 0,"1400/8/1", "1400/8/15", imageRes7,false,"میهن",290,15);
+        ProductModel kalaModel = new ProductModel(1, "رب دلپذیر", 10000, 8000, "980702", 500, "1400/5/5","1400/8/5", imageRes1,false,0,0,0,3,6,0,290,"دلپذیر");
+        ProductModel kalaModel2 = new ProductModel(2, "بستنی سالار", 12000, 10000, "980702", 600,"1400/5/5", "1400/8/5", imageRes2, true,0,0,0,6,12,0,290,"میهن");
+        ProductModel kalaModel3 = new ProductModel(3, "بستنی زعفرانی", 13000, 8000, "980702", 600,"1400/5/5", "1400/8/5", imageRes6, false,0,0,0,2,6,0,250,"پاندا");
+        ProductModel kalaModel4 = new ProductModel(4, "رب مهرام", 14000, 10000, "980702", 600, "1400/5/5","1400/2/5", imageRes7, false,0,0,0,3,6,0,250,"مهرام");
+        ProductModel kalaModel5 = new ProductModel(5, "بستنی کرنایل", 16000, 7000, "980702", 600,"1400/5/5", "1400/1/5", imageRes1, false,0,0,0,3,6,0,250,"پاندا");
+        ProductModel kalaModel6 = new ProductModel(6, "مایونز", 18000, 9000, "980702", 500,"1400/5/5", "1400/8/5", imageRes2, true,0,0,0,2,6,0,0,"دلپذیر");
+        ProductModel kalaModel7 = new ProductModel(7, "بستنی زعفرونی", 19000, 7000, "980702", 600,"1400/5/5", "1400/8/5", imageRes3,false,0,0,0,3,6,0,250,"پاندا");
+        ProductModel kalaModel8 = new ProductModel(8, "آب سیب", 17000, 9000, "980702", 300,"1400/5/5", "1400/5/5", imageRes4, false,0,0,0,3,6,0,0,"فروتلند");
+        ProductModel kalaModel9 = new ProductModel(9, "آب هلو", 22000, 9000, "980702", 300, "1400/5/5","1400/7/5", imageRes5, false,0,0,0,4,6,0,0,"فروتلند");
+        ProductModel kalaModel10 = new ProductModel(10, "آب انار", 10000, 9000, "980702", 300, "1400/5/5","1400/8/1", imageRes7, false,0,0,0,2,6,0,0,"فروتلند");
         productModelGlobal = new ArrayList<>();
         productModelGlobal.add(kalaModel);
         productModelGlobal.add(kalaModel2);

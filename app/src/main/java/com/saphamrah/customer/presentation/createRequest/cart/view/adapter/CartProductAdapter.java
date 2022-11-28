@@ -9,14 +9,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.card.MaterialCardView;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.customViews.EditTextWatcher;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -60,8 +64,8 @@ public class CartProductAdapter extends RecyclerView.Adapter<CartProductAdapter.
         private CircleImageView img_product;
         private TextView inventory;
         private View img_addToCart;
-        private LinearLayout lin_purchase;
-        private LinearLayout lin_purchase_count;
+        private MaterialCardView card_purchase;
+        private MaterialCardView card_purchaseCount;
         private ImageView img_add;
         private ImageView img_remove;
         private EditTextWatcher et_product_count;
@@ -73,11 +77,11 @@ public class CartProductAdapter extends RecyclerView.Adapter<CartProductAdapter.
             inventory = view.findViewById(R.id.tv_inventory);
             consumerPrice = view.findViewById(R.id.tv_consumerPrice);
             img_addToCart = view.findViewById(R.id.img_add_to_cart);
-            lin_purchase = view.findViewById(R.id.lin_purchase);
-            lin_purchase_count = view.findViewById(R.id.lin_purchaseCount);
+            card_purchase = view.findViewById(R.id.card_purchase);
+            card_purchaseCount = view.findViewById(R.id.card_purchaseCount);
             img_remove = view.findViewById(R.id.img_remove);
             img_add = view.findViewById(R.id.img_add);
-            et_product_count = view.findViewById(R.id.ET_product_count);
+            et_product_count = view.findViewById(R.id.etv_product_count);
             img_product = view.findViewById(R.id.img_product);
 
         }
@@ -88,19 +92,19 @@ public class CartProductAdapter extends RecyclerView.Adapter<CartProductAdapter.
             inventory.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mojodi), productModel.getInventory(), context.getString(R.string.adad)));
             consumerPrice.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mablaghMasrafKonandeh), productModel.getConsumerPrice(), context.getString(R.string.rial)));
             if (productModel.getOrderCount() > 0) {
-                lin_purchase_count.setVisibility(View.VISIBLE);
+                card_purchaseCount.setVisibility(View.VISIBLE);
                 et_product_count.setText(String.valueOf(productModel.getOrderCount()));
             }
 
             img_product.setOnClickListener(view1 -> listener.onItemSelect(models.get(position), position, AdapterAction.SELECT));
-            lin_purchase.setOnClickListener(view12 -> {
+            card_purchase.setOnClickListener(view12 -> {
                 models.get(getAdapterPosition()).setOrderCount(models.get(position).getOrderCount() + 1);
-                lin_purchase_count.setVisibility(View.VISIBLE);
-                lin_purchase.setVisibility(View.GONE);
+                card_purchaseCount.setVisibility(View.VISIBLE);
+                card_purchase.setVisibility(View.GONE);
                 listener.onItemSelect(models.get(position), position, AdapterAction.ADD);
             });
 
-            if (lin_purchase_count.getVisibility() == View.VISIBLE) {
+            if (card_purchaseCount.getVisibility() == View.VISIBLE) {
                 et_product_count.addTextWatcher(s -> {
                     try {
 

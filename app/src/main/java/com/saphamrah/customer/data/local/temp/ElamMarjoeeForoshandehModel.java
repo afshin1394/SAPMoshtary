@@ -1,9 +1,11 @@
 package com.saphamrah.customer.data.local.temp;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ElamMarjoeeForoshandehModel {
+public class ElamMarjoeeForoshandehModel implements Comparable<ElamMarjoeeForoshandehModel>{
 
 
     @SerializedName("ccElamMarjoeeSatr")
@@ -346,5 +348,15 @@ public class ElamMarjoeeForoshandehModel {
 
     public void setExtraProp_TedadMarjoee(int extraProp_TedadMarjoee) {
         ExtraProp_TedadMarjoee = extraProp_TedadMarjoee;
+    }
+
+    @Override
+    public int compareTo(ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModel) {
+        return this.getTedad3() == elamMarjoeeForoshandehModel.getTedad3()?1:0;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return this.getTedad3() == ((ElamMarjoeeForoshandehModel) obj).getTedad3();
     }
 }

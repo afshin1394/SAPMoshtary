@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/colorBrown50"
-    tools:context=".presentation.createRequest.productRequest.view.fragment.ProductRequestFragment"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    tools:context=".presentation.createRequest.productRequest.view.fragment.ProductRequestFragment">
 
 
     <LinearLayout
         android:id="@+id/mainView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
 
         <LinearLayout
-            android:elevation="@dimen/_100sdp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30sdp"
+            android:elevation="@dimen/_100sdp"
             android:orientation="horizontal"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -41,87 +40,90 @@
                     android:id="@+id/searchView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:queryHint="@string/nameKala"
-                    android:layoutDirection="rtl" >
-                </com.saphamrah.customer.utils.customViews.SearchWatcher>
+                    android:layoutDirection="rtl"
+                    android:queryHint="@string/nameKala"></com.saphamrah.customer.utils.customViews.SearchWatcher>
             </RelativeLayout>
 
         </LinearLayout>
+
         <LinearLayout
 
-            android:elevation="@dimen/_120sdp"
-            android:background="@drawable/black_simple_shape"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layoutDirection="rtl"
-            >
+            android:background="@drawable/black_simple_shape"
+            android:elevation="@dimen/_120sdp"
+            android:layoutDirection="rtl">
+
             <LinearLayout
                 android:id="@+id/lin_filter"
-                android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
 
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+
                 <ImageView
-                    android:padding="@dimen/_4sdp"
                     android:layout_width="@dimen/_24sdp"
                     android:layout_height="@dimen/_24sdp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_filter_pallete"/>
+                    android:padding="@dimen/_4sdp"
+                    android:src="@drawable/ic_filter_pallete" />
+
                 <TextView
 
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textColor="@color/colorBlack"
-                    android:text="@string/filter"
                     android:gravity="center"
-                    />
+                    android:text="@string/filter"
+                    android:textColor="@color/colorBlack" />
             </LinearLayout>
+
             <LinearLayout
-                android:layout_marginRight="@dimen/_32sdp"
+                android:id="@+id/lin_sort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_gravity="center"
-                android:id="@+id/lin_sort"
-                >
+                android:layout_marginRight="@dimen/_32sdp"
+                android:orientation="horizontal">
+
                 <ImageView
-                    android:padding="@dimen/_4sdp"
                     android:layout_width="@dimen/_24sdp"
                     android:layout_height="@dimen/_24sdp"
                     android:layout_alignParentEnd="true"
-                    android:src="@drawable/ic_sort_blue"/>
+                    android:padding="@dimen/_4sdp"
+                    android:src="@drawable/ic_sort_blue" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textColor="@color/colorBlack"
-                    android:text="@string/sort"
                     android:gravity="center"
+                    android:text="@string/sort"
+                    android:textColor="@color/colorBlack"
 
                     />
             </LinearLayout>
 
 
-
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
             android:orientation="horizontal">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/Recycler_filter_list"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:background="@color/colorGray"
-                android:layout_height="match_parent"
                 android:orientation="horizontal" />
         </LinearLayout>
+
         <LinearLayout
-            android:layout_marginTop="@dimen/_10sdp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="18"
@@ -142,22 +144,26 @@
                     android:gravity="center"
                     android:text="@string/products" />
             </LinearLayout>
-            <View
-                style="@style/devider_gray"
-                />
+
+            <View style="@style/devider_gray" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/Recycler_product"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layoutAnimation="@anim/recycler_animation"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                />
+                android:orientation="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
         </LinearLayout>
 
 
     </LinearLayout>
-    <include layout="@layout/bottom_sheet_product_jayezeh_takhfif" android:id="@+id/btm_sht_jayezeh_takhfif_kala"/>
 
+    <include
+        android:id="@+id/btm_sht_jayezeh_takhfif_kala"
+        layout="@layout/bottom_sheet_product_jayezeh_takhfif" />
+
+    <include
+        android:id="@+id/btm_sht_carton_baste_adad"
+        layout="@layout/bottom_sheet_carton_baste_adad" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

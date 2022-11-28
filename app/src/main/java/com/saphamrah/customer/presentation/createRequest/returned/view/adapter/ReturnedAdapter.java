@@ -22,19 +22,38 @@ import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.RxUtils.Watcher;
 import com.saphamrah.customer.utils.customViews.EditTextWatcher;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReturnedAdapter extends RecyclerView.Adapter<ReturnedAdapter.ViewHolder> {
     private Context context;
-    private List<ElamMarjoeeForoshandehModel> models;
     private AdapterItemListener<ElamMarjoeeForoshandehModel> listener;
-
-    public ReturnedAdapter(Context context, List<ElamMarjoeeForoshandehModel> models, AdapterItemListener<ElamMarjoeeForoshandehModel> listener) {
+    private AsyncListDiffer<ElamMarjoeeForoshandehModel> mDiffer;//callBack
+    public ReturnedAdapter(Context context, AdapterItemListener<ElamMarjoeeForoshandehModel> listener) {
         this.context = context;
-        this.models = models;
+        this.mDiffer = new AsyncListDiffer<>(this,diffCallback);
         this.listener = listener;
     }
+    private DiffUtil.ItemCallback<ElamMarjoeeForoshandehModel> diffCallback = new DiffUtil.ItemCallback<ElamMarjoeeForoshandehModel>() {
+        @Override
+        public boolean areItemsTheSame(ElamMarjoeeForoshandehModel oldItem, ElamMarjoeeForoshandehModel newItem) {
+            return oldItem.getCcElamMarjoeeSatr() == newItem.getCcElamMarjoeeSatr();
+        }        @Override
+        public boolean areContentsTheSame(ElamMarjoeeForoshandehModel oldItem, ElamMarjoeeForoshandehModel newItem) {
+            return oldItem.equals(newItem);
+        }
+    };//define AsyncListDiffer
 
+    @Override
+    public int getItemCount() {
+        return mDiffer.getCurrentList().size();
+    }
+    public void submitList(List<ElamMarjoeeForoshandehModel> data) {
+        mDiffer.submitList(data);
+    }
+    public ElamMarjoeeForoshandehModel getItem(int position) {
+        return mDiffer.getCurrentList().get(position);
+    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,14 +63,10 @@ public class ReturnedAdapter extends RecyclerView.Adapter<ReturnedAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ReturnedAdapter.ViewHolder holder, int position) {
-        holder.bind(models.get(position));
+        holder.bind(getItem(position));
     }
 
 
-    @Override
-    public int getItemCount() {
-        return models.size();
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView nameCodeKala;
@@ -85,7 +100,7 @@ public class ReturnedAdapter extends RecyclerView.Adapter<ReturnedAdapter.ViewHo
             nameCodeKala.setText(String.format("%1$s - %2$s",elamMarjoeeForoshandehModel.getCodeKala(),elamMarjoeeForoshandehModel.getNameKala()));
             shomarehBach.setText(String.format("%1$s:%2$s",context.getString(R.string.shomareBach),elamMarjoeeForoshandehModel.getShomarehBach()));
             mablaghForosh.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh),elamMarjoeeForoshandehModel.getGheymatForosh(),context.getString(R.string.rial)));
-            mablaghMarjoee.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh),elamMarjoeeForoshandehModel.getGheymatForosh() * elamMarjoeeForoshandehModel.getTedad3(),context.getString(R.string.rial)));
+            mablaghMarjoee.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghMarjoee),elamMarjoeeForoshandehModel.getGheymatForosh() * elamMarjoeeForoshandehModel.getTedad3(),context.getString(R.string.rial)));
             addMarjoee.setOnClickListener(view -> {
                 addMarjoeeCount.setVisibility(View.VISIBLE);
                 addMarjoee.setVisibility(View.GONE);

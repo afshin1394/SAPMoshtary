@@ -12,6 +12,7 @@ import androidx.lifecycle.SavedStateHandle;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,9 +61,8 @@ public class ReturnFragment extends BaseFragment<ReturnedInteractor.PresenterOps
 
     @Override
     protected void initViews() {
-        bottomSheetBehavior=BottomSheetBehavior.from(viewBinding.btmShtReturn.linBottomSheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(viewBinding.btmShtReturn.linBottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        setSelectedMarjoeeRecycler();
         viewBinding.btmShtReturn.linConfirmMarjoee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,42 +72,39 @@ public class ReturnFragment extends BaseFragment<ReturnedInteractor.PresenterOps
         });
     }
 
-    private void setSelectedMarjoeeRecycler() {
+    private void setSelectedMarjoeeRecycler(List<ElamMarjoeeForoshandehModel> marjoees) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL,false);
         selectedReturnedAdapter = new SelectedReturnedAdapter(context);
         viewBinding.btmShtReturn.RVSelectedMarjoee.setLayoutManager(linearLayoutManager);
+        selectedReturnedAdapter.submitList(marjoees);
         viewBinding.btmShtReturn.RVSelectedMarjoee.setAdapter(selectedReturnedAdapter);
+        ((SimpleItemAnimator) viewBinding.btmShtReturn.RVSelectedMarjoee.getItemAnimator()).setSupportsChangeAnimations(false);
     }
 
     private void setMarjoeeRecycler(List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModels) {
-        List<ElamMarjoeeForoshandehModel> backup = new ArrayList<>();
-
-        backup.addAll(elamMarjoeeForoshandehModels);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL,false);
 
-        marjoeeAdapter = new ReturnedAdapter(context, elamMarjoeeForoshandehModels, new AdapterItemListener<ElamMarjoeeForoshandehModel>() {
-            @Override
-            public void onItemSelect(ElamMarjoeeForoshandehModel model, int position, AdapterAction Action) {
-                 switch (Action){
-                     case REMOVE:
-                     case ADD:
-                         Log.i(TAG, "onItemSelect: "+elamMarjoeeForoshandehModels.get(position).getTedad3());
-                         Log.i(TAG, "onItemSelect: "+backup.get(position).getTedad3());
-                         List<ElamMarjoeeForoshandehModel> marjoees = Observable.fromIterable(backup).filter(elamMarjoeeForoshandehModel -> elamMarjoeeForoshandehModel.getTedad3()>0).toList().blockingGet();
-                         if (marjoees.size()> 0)
-                             expand();
-                         else
-                             collapse();
+        marjoeeAdapter = new ReturnedAdapter(context, (model, position, Action) -> {
+             switch (Action){
+                 case REMOVE:
+                 case ADD:
+                     List<ElamMarjoeeForoshandehModel> marjoees = Observable.fromIterable(elamMarjoeeForoshandehModels).filter(elamMarjoeeForoshandehModel -> elamMarjoeeForoshandehModel.getTedad3()>0).toList().blockingGet();
+                     if (marjoees.size()> 0)
+                         expand();
+                     else
+                         collapse();
 
-                         selectedReturnedAdapter.submitList(marjoees);
+                     selectedReturnedAdapter.submitList(marjoees);
 
-                         break;
-                 }
-            }
+                     break;
+             }
         });
+        marjoeeAdapter.submitList(elamMarjoeeForoshandehModels);
         viewBinding.RVOrderedProducts.setLayoutManager(linearLayoutManager);
         viewBinding.RVOrderedProducts.setAdapter(marjoeeAdapter);
+        ((SimpleItemAnimator) viewBinding.RVOrderedProducts.getItemAnimator()).setSupportsChangeAnimations(false);
+
     }
 
     @Override
@@ -149,17 +146,19 @@ public class ReturnFragment extends BaseFragment<ReturnedInteractor.PresenterOps
         return context;
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onGetMarjoee(List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModels) {
-        activity.setElamMarjoeeForoshandehModelsGlobal(elamMarjoeeForoshandehModels);
+
         if (init) {
+            List<ElamMarjoeeForoshandehModel> marjoees = Observable.fromIterable(elamMarjoeeForoshandehModels).filter(elamMarjoeeForoshandehModel -> elamMarjoeeForoshandehModel.getTedad3()>0).toList().blockingGet();
+            setSelectedMarjoeeRecycler(marjoees);
             setMarjoeeRecycler(elamMarjoeeForoshandehModels);
+            activity.setElamMarjoeeForoshandehModelsGlobal(elamMarjoeeForoshandehModels);
             init = false;
         }
         else
         {
-            marjoeeAdapter.notifyDataSetChanged();
+            marjoeeAdapter.submitList(elamMarjoeeForoshandehModels);
         }
     }
 

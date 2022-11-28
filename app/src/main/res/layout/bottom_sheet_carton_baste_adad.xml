@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lin_bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corner_top_red_gradiant"
+    android:maxHeight="@dimen/_270sdp"
+
+    android:orientation="vertical"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="0dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/IV_collapse"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:padding="@dimen/_2sdp"
+            android:src="@drawable/ic_arrow_down_secondary" />
+        <View
+            style="@style/devider_gray"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:id="@+id/brand_ll"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+
+                <TextView
+                    android:text="نام کالا"
+                    style="@style/text_view_title"/>
+
+                <TextView
+                    android:id="@+id/tv_brand"
+                    android:text="بستنی پاندا"
+                    style="@style/text_view_item"/>
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorGrey500"
+                />
+
+            <LinearLayout
+                android:id="@+id/kala_code_ll"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:text="کد کالا"
+                    style="@style/text_view_title"/>
+
+                <TextView
+                    android:id="@+id/tv_kala_code"
+                    android:text="524985237"
+                    style="@style/text_view_item"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginLeft="@dimen/_4sdp"
+            android:layout_marginRight="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <include layout="@layout/add_remove_product" android:id="@+id/lay_adad"/>
+            <include layout="@layout/add_remove_product" android:id="@+id/lay_baste"/>
+            <include layout="@layout/add_remove_product" android:id="@+id/lay_carton"/>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+</LinearLayout>

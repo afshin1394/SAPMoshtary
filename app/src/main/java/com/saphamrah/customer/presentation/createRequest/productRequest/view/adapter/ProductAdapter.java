@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.card.MaterialCardView;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
@@ -63,13 +64,14 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ProductModel productModel = models.get(position);
 
-        switch (holder.getItemViewType()) {
+        switch (holder.getItemViewType())
+        {
             case ADVERTISEMENT:
                 ((ViewHolderAdvertisement) holder).bind(position);
                 break;
 
             case SELL:
-                ((ViewHolderSell) holder).bind(productModel);
+                ((ViewHolderSell) holder).bind(productModel,position);
                 break;
         }
 
@@ -97,11 +99,11 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private CircleImageView img_product;
         private TextView inventory;
         private View img_addToCart;
-        private LinearLayout lin_purchase;
-        private LinearLayout lin_purchase_count;
+        private MaterialCardView card_purchase;
+        private MaterialCardView card_purchase_count;
         private ImageView img_add;
         private ImageView img_remove;
-        private EditTextWatcher et_product_count;
+        private TextView tv_product_count;
         private ImageView imgDiscountBonus;
 
         public ViewHolderSell(View view) {
@@ -111,86 +113,94 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             inventory = view.findViewById(R.id.tv_inventory);
             consumerPrice = view.findViewById(R.id.tv_consumerPrice);
             img_addToCart = view.findViewById(R.id.img_add_to_cart);
-            lin_purchase = view.findViewById(R.id.lin_purchase);
-            lin_purchase_count = view.findViewById(R.id.lin_purchaseCount);
+            card_purchase = view.findViewById(R.id.card_purchase);
+            card_purchase_count = view.findViewById(R.id.card_purchaseCount);
             img_remove = view.findViewById(R.id.img_remove);
             img_add = view.findViewById(R.id.img_add);
-            et_product_count = view.findViewById(R.id.ET_product_count);
+            tv_product_count = view.findViewById(R.id.tv_product_count);
             img_product = view.findViewById(R.id.img_product);
             imgDiscountBonus = view.findViewById(R.id.img_discountbonus);
 
-            img_product.setOnClickListener(view1 -> listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.SELECT));
-            lin_purchase.setOnClickListener(view12 -> {
-                models.get(getAdapterPosition()).setOrderCount(models.get(getAdapterPosition()).getOrderCount() + 1);
-                lin_purchase_count.setVisibility(View.VISIBLE);
-                lin_purchase.setVisibility(View.GONE);
-                listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.ADD);
-
-            });
-
-            imgDiscountBonus.setOnClickListener(new OnSingleClickListener() {
-                @Override
-                public void onSingleClick(View v) {
-                    listener.onItemSelect(models.get(getAdapterPosition()),getAdapterPosition(),AdapterAction.DETAIL);
-                }
-            });
-
-                et_product_count.addTextWatcher(s -> {
-                    try {
-                        models.get(getAdapterPosition()).setOrderCount(Integer.parseInt(s));
-                        listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.ADD);
-                    } catch (Exception e) {
-//                        models.get(getAdapterPosition()).setOrderCount(0);
-                    }
-                }, 500);
 
 
-                img_add.setOnClickListener(view13 -> {
-                    models.get(getAdapterPosition()).setOrderCount(models.get(getAdapterPosition()).getOrderCount() + 1);
-                    et_product_count.setText(String.valueOf(models.get(getAdapterPosition()).getOrderCount()));
-                    listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.ADD);
-                });
-                img_remove.setOnClickListener(view14 -> {
 
-                    if (models.get(getAdapterPosition()).getOrderCount() > 1) {
+//                et_product_count.addTextWatcher(s -> {
+//                    try {
+//                        models.get(getAdapterPosition()).setOrderCount(Integer.parseInt(s));
+//                        listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.ADD);
+//                    } catch (Exception e) {
+////                        models.get(getAdapterPosition()).setOrderCount(0);
+//                    }
+//                }, 500);
 
-                        models.get(getAdapterPosition()).setOrderCount(models.get(getAdapterPosition()).getOrderCount() - 1);
-                        et_product_count.setText(String.valueOf(models.get(getAdapterPosition()).getOrderCount()));
-                    } else {
-                        lin_purchase.setVisibility(View.VISIBLE);
-                        lin_purchase_count.setVisibility(View.GONE);
-                    }
-                    listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.REMOVE);
 
-                });
+//                img_add.setOnClickListener(view13 -> {
+//                    models.get(getAdapterPosition()).setOrderCount(models.get(getAdapterPosition()).getOrderCount() + 1);
+//                    et_product_count.setText(String.valueOf(models.get(getAdapterPosition()).getOrderCount()));
+//                    listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.ADD);
+//                });
+//                img_remove.setOnClickListener(view14 -> {
+//
+//
+//                    if (models.get(getAdapterPosition()).getOrderCount() > 1) {
+//
+//                        models.get(getAdapterPosition()).setOrderCount(models.get(getAdapterPosition()).getOrderCount() - 1);
+//                        et_product_count.setText(String.valueOf(models.get(getAdapterPosition()).getOrderCount()));
+//                    } else {
+//                        lin_purchase.setVisibility(View.VISIBLE);
+//                        lin_purchase_count.setVisibility(View.GONE);
+//                    }
+//                    listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.REMOVE);
+//
+//                });
+
+
 
 
         }
 
-        public void bind(ProductModel productModel) {
+        public void bind(ProductModel productModel,int position) {
 
             Glide.with(context)
                     .load(productModel.getImageResource().get(0))
                     .into(img_product);
             nameProduct.setText(String.format("%1$s", productModel.getNameProduct()));
 //            sellPrice.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh),kalaModel.getSellPrice(),context.getString(R.string.rial)));
-            inventory.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mojodi), productModel.getInventory(), context.getString(R.string.adad)));
+            inventory.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mablaghForosh), productModel.getSellPrice(), context.getString(R.string.rial)));
             consumerPrice.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mablaghMasrafKonandeh), productModel.getConsumerPrice(), context.getString(R.string.rial)));
             if (productModel.getOrderCount() > 0)
             {
-                lin_purchase_count.setVisibility(View.VISIBLE);
-                lin_purchase.setVisibility(View.GONE);
-                et_product_count.setText(String.valueOf(productModel.getOrderCount()));
+                card_purchase_count.setVisibility(View.VISIBLE);
+                card_purchase.setVisibility(View.GONE);
             }
             else
             {
-                lin_purchase_count.setVisibility(View.GONE);
-                lin_purchase.setVisibility(View.VISIBLE);
+                card_purchase_count.setVisibility(View.GONE);
+                card_purchase.setVisibility(View.VISIBLE);
+
             }
+            img_product.setOnClickListener(view1 -> listener.onItemSelect(models.get(position), position, AdapterAction.SELECT));
+            card_purchase.setOnClickListener(view12 -> {
 
-//            bachNumber.setText(String.format("%1$s:%2$s",context.getString(R.string.shomareBach),kalaModel.getBachNumber()));
+                listener.onItemSelect(models.get(position),position, AdapterAction.ADD);
+            });
 
-//            linChoice.setOnClickListener(view -> listener.onItemSelect(kalaModel,position, AdapterAction.SELECT));
+            card_purchase_count.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemSelect(models.get(position), position, AdapterAction.ADD);
+                }
+            });
+
+            imgDiscountBonus.setOnClickListener(new OnSingleClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    listener.onItemSelect(models.get(position),position,AdapterAction.DETAIL);
+                }
+            });
+
+            tv_product_count.setText(String.valueOf(models.get(position).getOrderCount()));
+
         }
     }
 
@@ -204,14 +214,11 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             linearLayoutManager = new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false);
             recyclerView = view.findViewById(R.id.RV_ads);
             recyclerView.setLayoutManager(linearLayoutManager);
-
-
         }
 
         public void bind(int position) {
             adsAdapter = new AdsAdapter(context, models, listener);
             recyclerView.setAdapter(adsAdapter);
-
         }
     }
 }

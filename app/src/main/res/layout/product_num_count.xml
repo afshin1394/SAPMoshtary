@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:elevation="@dimen/_140sdp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/add_remove_gradiant"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.google.android.material.card.MaterialCardView
+            app:cardCornerRadius="0dp"
+            android:id="@+id/card_purchase"
+            android:visibility="visible"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:elevation="@dimen/_280sdp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@drawable/rounded_corner_left_red_dark_gradiant"
+                android:padding="@dimen/_6sdp"
+                android:layout_gravity="center"
+                >
+
+                <ImageView
+                    android:src="@drawable/ic_baseline_shopping_cart_red"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="افزودن به سبد خرید"
+                    android:textColor="@color/colorWhite" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+
+            android:elevation="@dimen/_290sdp"
+            android:id="@+id/card_purchaseCount"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout
+
+                android:background="@drawable/add_remove_gradiant"
+                android:layout_gravity="center"
+                android:elevation="@dimen/_140sdp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+
+                <TextView
+                    android:id="@+id/tv_product_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:inputType="text"
+                    android:maxWidth="@dimen/_20sdp"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:text="1"
+                     />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>
+

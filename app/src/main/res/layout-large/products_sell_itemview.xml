@@ -5,7 +5,10 @@
     android:layout_margin="@dimen/_2sdp"
     android:layoutDirection="rtl"
     android:orientation="horizontal">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -37,13 +40,14 @@
 
                 >
 
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_weight="10"
+                        android:layout_weight="18"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/_38sdp"
@@ -115,12 +119,15 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/mablaghMasrafKonandeh" />
                         </LinearLayout>
+
                     </LinearLayout>
+
 
                     <include
                         android:id="@+id/img_add_to_cart"
-                        layout="@layout/add_remove_item"
-                        android:layout_width="wrap_content"
+                        layout="@layout/product_num_count"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
                         android:layout_height="match_parent" />
 
                 </LinearLayout>
@@ -128,4 +135,7 @@
         </FrameLayout>
 
     </LinearLayout>
+
+
+</LinearLayout>
 </FrameLayout>

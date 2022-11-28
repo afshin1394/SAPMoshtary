@@ -12,33 +12,42 @@ public class ProductModel implements Parcelable {
     private long sellPrice;
     private String codeKala;
     private long inventory;
-    private long orderCount;
     private String productionDate;
     private String expirationDate;
     private List<Integer> imageResource;
     private boolean isAd;
+    private int boxCount;
+    private int packCount;
+    private int numCount;
+    private int numInPack;
+    private int numInBox;
+    private int orderCount;
+    
 
     private int weight;
     private String sazmanForosh;
-    private int numInBox;
 
-    public ProductModel(int id, String nameProduct, long consumerPrice, long sellPrice,String bachNumber, long inventory,long orderCount,String productionDate,String expirationDate,List<Integer> imageResource,boolean isAd, String sazmanForosh, int weight, int numInBox) {
+
+    public ProductModel(int id, String nameProduct, long consumerPrice, long sellPrice, String codeKala, long inventory, String productionDate, String expirationDate, List<Integer> imageResource, boolean isAd, int boxCount, int packCount, int numCount, int numInPack, int numInBox,int orderCount, int weight, String sazmanForosh) {
         this.id = id;
         this.nameProduct = nameProduct;
         this.consumerPrice = consumerPrice;
         this.sellPrice = sellPrice;
-        this.codeKala = bachNumber;
+        this.codeKala = codeKala;
         this.inventory = inventory;
-        this.imageResource = imageResource;
-        this.orderCount = orderCount;
-        this.isAd = isAd;
         this.productionDate = productionDate;
         this.expirationDate = expirationDate;
-        this.sazmanForosh = sazmanForosh;
-        this.weight = weight;
+        this.imageResource = imageResource;
+        this.isAd = isAd;
+        this.boxCount = boxCount;
+        this.packCount = packCount;
+        this.numCount = numCount;
+        this.numInPack = numInPack;
         this.numInBox = numInBox;
+        this.orderCount = orderCount;
+        this.weight = weight;
+        this.sazmanForosh = sazmanForosh;
     }
-
 
     protected ProductModel(Parcel in) {
         id = in.readInt();
@@ -47,14 +56,19 @@ public class ProductModel implements Parcelable {
         sellPrice = in.readLong();
         codeKala = in.readString();
         inventory = in.readLong();
-        orderCount = in.readLong();
         productionDate = in.readString();
         expirationDate = in.readString();
-        sazmanForosh = in.readString();
-        weight = in.readInt();
-        numInBox = in.readInt();
         isAd = in.readByte() != 0;
+        boxCount = in.readInt();
+        packCount = in.readInt();
+        numCount = in.readInt();
+        numInPack = in.readInt();
+        orderCount = in.readInt();
+        weight = in.readInt();
+        sazmanForosh = in.readString();
+        numInBox = in.readInt();
     }
+
 
     public static final Creator<ProductModel> CREATOR = new Creator<ProductModel>() {
         @Override
@@ -124,6 +138,14 @@ public class ProductModel implements Parcelable {
         this.imageResource = imageResource;
     }
 
+    public int getOrderCount() {
+        return orderCount;
+    }
+
+    public void setOrderCount(int orderCount) {
+        this.orderCount = orderCount;
+    }
+
     public String getProductionDate() {
         return productionDate;
     }
@@ -148,13 +170,7 @@ public class ProductModel implements Parcelable {
         isAd = ad;
     }
 
-    public long getOrderCount() {
-        return orderCount;
-    }
 
-    public void setOrderCount(long orderCount) {
-        this.orderCount = orderCount;
-    }
 
     public String getSazmanForosh() {
         return sazmanForosh;
@@ -180,6 +196,38 @@ public class ProductModel implements Parcelable {
         this.numInBox = numInBox;
     }
 
+    public int getBoxCount() {
+        return boxCount;
+    }
+
+    public void setBoxCount(int boxCount) {
+        this.boxCount = boxCount;
+    }
+
+    public int getPackCount() {
+        return packCount;
+    }
+
+    public void setPackCount(int packCount) {
+        this.packCount = packCount;
+    }
+
+    public int getNumCount() {
+        return numCount;
+    }
+
+    public void setNumCount(int numCount) {
+        this.numCount = numCount;
+    }
+
+    public int getNumInPack() {
+        return numInPack;
+    }
+
+    public void setNumInPack(int numInPack) {
+        this.numInPack = numInPack;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -187,38 +235,27 @@ public class ProductModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+
         parcel.writeInt(id);
         parcel.writeString(nameProduct);
         parcel.writeLong(consumerPrice);
         parcel.writeLong(sellPrice);
-        parcel.writeLong(orderCount);
         parcel.writeString(codeKala);
         parcel.writeLong(inventory);
         parcel.writeString(productionDate);
         parcel.writeString(expirationDate);
-        parcel.writeString(sazmanForosh);
-        parcel.writeInt(weight);
-        parcel.writeInt(numInBox);
         parcel.writeByte((byte) (isAd ? 1 : 0));
+        parcel.writeInt(boxCount);
+        parcel.writeInt(packCount);
+        parcel.writeInt(numCount);
+        parcel.writeInt(numInPack);
+        parcel.writeInt(orderCount);
+        parcel.writeInt(weight);
+        parcel.writeString(sazmanForosh);
+        parcel.writeInt(numInBox);
     }
 
-    @Override
-    public String toString() {
-        return "ProductModel{" +
-                "id=" + id +
-                ", nameProduct='" + nameProduct + '\'' +
-                ", consumerPrice=" + consumerPrice +
-                ", sellPrice=" + sellPrice +
-                ", bachNumber='" + codeKala + '\'' +
-                ", inventory=" + inventory +
-                ", orderCount=" + orderCount +
-                ", productionDate='" + productionDate + '\'' +
-                ", expirationDate='" + expirationDate + '\'' +
-                ", imageResource=" + imageResource +
-                ", sazmanForosh=" + sazmanForosh +
-                ", weight=" + weight +
-                ", numInBox=" + numInBox +
-                ", isAd=" + isAd +
-                '}';
-    }
+
+
+
 }

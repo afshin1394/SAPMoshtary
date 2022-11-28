@@ -403,10 +403,12 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
 
     private void setProductRecycler() {
+
         cartProductAdapter = new CartProductAdapter(getActivity(), productModels, (model, position, Action) -> {
             switch (Action) {
                 case ADD:
                 case REMOVE:
+                    calculateNumPackBoxCount(model);
                     activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
                     checkState();
                     setBottomSheetOnState();
@@ -417,6 +419,17 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         viewBinding.RVOrderedProducts.setLayoutManager(linearLayoutManager);
         viewBinding.RVOrderedProducts.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
         viewBinding.RVOrderedProducts.setAdapter(cartProductAdapter);
+    }
+
+    private void calculateNumPackBoxCount(ProductModel model) {
+       int boxCount = model.getOrderCount()/model.getNumInBox();
+       int packCount = (model.getOrderCount() - boxCount * model.getNumInBox())/model.getNumInPack();
+       int remainingCount = model.getOrderCount() - (packCount * model.getNumInPack() + boxCount * model.getNumInBox());
+       Log.i(TAG, "calculateNumPackBoxCount: boxCount: "+boxCount + "packCount: "+packCount + "count: "+remainingCount);
+        Log.i(TAG, "calculateNumPackBoxCount: num in box "+model.getNumInBox() + "num in pack:"+model.getPackCount());
+       model.setBoxCount(boxCount);
+       model.setPackCount(packCount);
+       model.setNumCount(remainingCount);
     }
 
     @Override

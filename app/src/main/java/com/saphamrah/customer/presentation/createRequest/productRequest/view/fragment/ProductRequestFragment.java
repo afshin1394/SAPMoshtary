@@ -5,30 +5,25 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.gson.internal.LinkedHashTreeMap;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.local.temp.BonusModel;
-import com.saphamrah.customer.data.local.temp.DarkhastFaktorJayezehTakhfifModel;
 import com.saphamrah.customer.data.local.temp.DiscountModel;
-import com.saphamrah.customer.data.local.temp.JayezehEntekhabiMojodiModel;
 import com.saphamrah.customer.databinding.FragmentProductRequestBinding;
-import com.saphamrah.customer.presentation.createRequest.cart.view.adapter.BonusAdapter;
-import com.saphamrah.customer.presentation.createRequest.cart.view.adapter.DiscountAdapter;
-import com.saphamrah.customer.presentation.createRequest.filter.view.fragment.FilterFragment;
 import com.saphamrah.customer.presentation.createRequest.productRequest.interactor.ProductRequestMVPInteractor;
 import com.saphamrah.customer.presentation.createRequest.productRequest.presenter.ProductRequestMVPPresenter;
 import com.saphamrah.customer.presentation.createRequest.productRequest.view.adapter.BonusProductAdapter;
@@ -40,18 +35,13 @@ import com.saphamrah.customer.data.local.temp.FilterSortModel;
 import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
+import com.saphamrah.customer.utils.AnimationUtils;
 import com.saphamrah.customer.utils.Constants;
 import com.saphamrah.customer.utils.RxUtils.Watcher;
-import com.saphamrah.customer.utils.ScreenUtils;
 import com.saphamrah.customer.utils.customViews.OnSingleClickListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -68,7 +58,8 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     private List<ProductModel> productModelsTemp;
 
     private List<FilterSortModel> filterListObserver = new ArrayList<>();
-    private BottomSheetBehavior bottomSheetBehavior;
+    private BottomSheetBehavior bottomSheetBonusDiscount;
+    private BottomSheetBehavior bottomSheetBoxPackNum;
 
     public ProductRequestFragment() {
         super(R.layout.fragment_product_request);
@@ -87,7 +78,8 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
 
         activity.setCartListener(this);
-        Log.i(TAG, "onViewCreated: ");
+        activity.checkCart(true);
+        Log.i(TAG, "onViewCreated:");
         productModels = activity.getProductModelGlobal();
         productModelsTemp = new ArrayList<>();
         productModelsTemp.addAll(productModels);
@@ -95,12 +87,13 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         setProductRecycler();
         setSearch();
         setViews();
+
     }
 
 
     @Override
     protected void setPresenter() {
-     presenter = new ProductRequestMVPPresenter(this);
+        presenter = new ProductRequestMVPPresenter(this);
     }
 
 
@@ -112,16 +105,21 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
     @SuppressLint("ClickableViewAccessibility")
     private void setViews() {
-        bottomSheetBehavior = BottomSheetBehavior.from(viewBinding.btmShtJayezehTakhfifKala.linBottomSheet);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        bottomSheetBehavior.setDraggable(false);
+        bottomSheetBonusDiscount = BottomSheetBehavior.from(viewBinding.btmShtJayezehTakhfifKala.linBottomSheet);
+        bottomSheetBonusDiscount.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetBonusDiscount.setDraggable(false);
+
+        bottomSheetBoxPackNum = BottomSheetBehavior.from(viewBinding.btmShtCartonBasteAdad.linBottomSheet);
+        bottomSheetBoxPackNum.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetBoxPackNum.setDraggable(false);
+
         viewBinding.btmShtJayezehTakhfifKala.IVCollapse.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                handleBottomSheetBehaiviour();
+                handleBottomSheetBehaiviourDiscountBonus();
             }
         });
-        viewBinding.txtProducts.setText(String.format("%1$s %2$s" ,context.getString(R.string.products) , activity.sazmanName));
+        viewBinding.txtProducts.setText(String.format("%1$s %2$s", context.getString(R.string.products), activity.sazmanName));
 
         viewBinding.linSort.setOnClickListener(new OnSingleClickListener() {
             @Override
@@ -140,20 +138,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
                 navigate(action);
             }
         });
-    }
-
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        Log.d(TAG, "onViewStateRestored: ");
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume: " + filterSortModels);
     }
 
     private void setSearch() {
@@ -234,8 +218,9 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
                 case ADD:
                 case REMOVE:
-                    activity.getProductModelGlobal().get(position).setOrderCount(productModelsTemp.get(position).getOrderCount());
-                    activity.checkCart(true);
+                    onClickListener = null;
+                    openCartonBastehAdadBottomSheet(position);
+                    handleBottomSheetBehaiviourBoxPackNum();
                     break;
             }
 
@@ -243,6 +228,212 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         viewBinding.RecyclerProduct.setLayoutManager(linearLayoutManager);
         viewBinding.RecyclerProduct.setAdapter(productAdapter);
+        ((SimpleItemAnimator) viewBinding.RecyclerProduct.getItemAnimator()).setSupportsChangeAnimations(false);
+    }
+
+    View.OnClickListener onClickListener;
+
+    private void openCartonBastehAdadBottomSheet(int position) {
+
+
+        if (bottomSheetBoxPackNum.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBoxPackNum.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
+
+        viewBinding.btmShtCartonBasteAdad.layCarton.tvQuantity.setHint(getString(R.string.carton));
+        viewBinding.btmShtCartonBasteAdad.layBaste.tvQuantity.setHint(getString(R.string.basteh));
+        viewBinding.btmShtCartonBasteAdad.layAdad.tvQuantity.setHint(getString(R.string.adad));
+
+        viewBinding.btmShtCartonBasteAdad.tvBrand.setText(productModelsTemp.get(position).getNameProduct());
+        viewBinding.btmShtCartonBasteAdad.tvKalaCode.setText(productModelsTemp.get(position).getCodeKala());
+        viewBinding.btmShtCartonBasteAdad.layCarton.tvQuantity.setText("");
+        viewBinding.btmShtCartonBasteAdad.layBaste.tvQuantity.setText("");
+        viewBinding.btmShtCartonBasteAdad.layAdad.tvQuantity.setText("");
+        viewBinding.btmShtCartonBasteAdad.layAdad.tvQuantity.setHint(R.string.adad);
+        viewBinding.btmShtCartonBasteAdad.layBaste.tvQuantity.setHint(R.string.basteh);
+        viewBinding.btmShtCartonBasteAdad.layCarton.tvQuantity.setHint(R.string.carton);
+        if (productModelsTemp.get(position).getBoxCount() > 0)
+            viewBinding.btmShtCartonBasteAdad.layCarton.tvQuantity.setText(String.valueOf(productModelsTemp.get(position).getBoxCount()));
+        if (productModelsTemp.get(position).getPackCount() > 0)
+            viewBinding.btmShtCartonBasteAdad.layBaste.tvQuantity.setText(String.valueOf(productModelsTemp.get(position).getPackCount()));
+        if (productModelsTemp.get(position).getNumCount() > 0)
+            viewBinding.btmShtCartonBasteAdad.layAdad.tvQuantity.setText(String.valueOf(productModelsTemp.get(position).getNumCount()));
+
+        viewBinding.btmShtCartonBasteAdad.IVCollapse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handleBottomSheetBehaiviourBoxPackNum();
+            }
+        });
+
+
+        viewBinding.btmShtCartonBasteAdad.layCarton.tvAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                productModelsTemp.get(position).setBoxCount(productModelsTemp.get(position).getBoxCount() + 1);
+                int orderCount = calculateOrderCount(productModelsTemp.get(position));
+                productModelsTemp.get(position).setOrderCount(orderCount);
+                viewBinding.btmShtCartonBasteAdad.layCarton.tvQuantity.setText(String.valueOf(productModelsTemp.get(position).getBoxCount()));
+                productAdapter.notifyItemChanged(position);
+                activity.checkCart(true);
+
+
+            }
+        });
+
+        viewBinding.btmShtCartonBasteAdad.layBaste.tvAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("clickables", "onClick: ");
+                productModelsTemp.get(position).setPackCount(productModelsTemp.get(position).getPackCount() + 1);
+                int orderCount = calculateOrderCount(productModelsTemp.get(position));
+                productModelsTemp.get(position).setOrderCount(orderCount);
+                viewBinding.btmShtCartonBasteAdad.layBaste.tvQuantity.setText(String.valueOf(productModelsTemp.get(position).getPackCount()));
+                productAdapter.notifyItemChanged(position);
+                activity.checkCart(true);
+
+            }
+        });
+
+
+        viewBinding.btmShtCartonBasteAdad.layAdad.tvAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                productModelsTemp.get(position).setNumCount(productModelsTemp.get(position).getNumCount() + 1);
+                int orderCount = calculateOrderCount(productModelsTemp.get(position));
+                productModelsTemp.get(position).setOrderCount(orderCount);
+                viewBinding.btmShtCartonBasteAdad.layAdad.tvQuantity.setText(String.valueOf(productModelsTemp.get(position).getNumCount()));
+                productAdapter.notifyItemChanged(position);
+                activity.checkCart(true);
+            }
+        });
+
+        viewBinding.btmShtCartonBasteAdad.layCarton.tvRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (productModelsTemp.get(position).getBoxCount() > 1) {
+                    productModelsTemp.get(position).setBoxCount(productModelsTemp.get(position).getBoxCount() - 1);
+                    int orderCount = calculateOrderCount(productModelsTemp.get(position));
+                    productModelsTemp.get(position).setOrderCount(orderCount);
+                    viewBinding.btmShtCartonBasteAdad.layCarton.tvQuantity.setText(String.valueOf(productModelsTemp.get(position).getBoxCount()));
+                } else {
+                    productModelsTemp.get(position).setBoxCount(productModelsTemp.get(position).getBoxCount() - 1);
+                    int orderCount = calculateOrderCount(productModelsTemp.get(position));
+                    productModelsTemp.get(position).setOrderCount(orderCount);
+                    viewBinding.btmShtCartonBasteAdad.layCarton.tvQuantity.setText("");
+                    viewBinding.btmShtCartonBasteAdad.layCarton.tvQuantity.setHint(getString(R.string.carton));
+                }
+                productAdapter.notifyItemChanged(position);
+                activity.checkCart(true);
+            }
+        });
+        viewBinding.btmShtCartonBasteAdad.layBaste.tvRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (productModelsTemp.get(position).getPackCount() > 1) {
+                    productModelsTemp.get(position).setPackCount(productModelsTemp.get(position).getPackCount() - 1);
+                    int orderCount = calculateOrderCount(productModelsTemp.get(position));
+                    productModelsTemp.get(position).setOrderCount(orderCount);
+                    viewBinding.btmShtCartonBasteAdad.layBaste.tvQuantity.setText(String.valueOf(productModelsTemp.get(position).getPackCount()));
+                    productAdapter.notifyItemChanged(position);
+                } else {
+                    productModelsTemp.get(position).setPackCount(productModelsTemp.get(position).getPackCount() - 1);
+                    int orderCount = calculateOrderCount(productModelsTemp.get(position));
+                    productModelsTemp.get(position).setOrderCount(orderCount);
+                    viewBinding.btmShtCartonBasteAdad.layBaste.tvQuantity.setText("");
+                    viewBinding.btmShtCartonBasteAdad.layBaste.tvQuantity.setHint(getString(R.string.basteh));
+                }
+                productAdapter.notifyItemChanged(position);
+                activity.checkCart(true);
+
+
+            }
+        });
+
+        viewBinding.btmShtCartonBasteAdad.layAdad.tvRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (productModelsTemp.get(position).getNumCount() > 1) {
+                    productModelsTemp.get(position).setNumCount(productModelsTemp.get(position).getNumCount() - 1);
+                    int orderCount = calculateOrderCount(productModelsTemp.get(position));
+                    productModelsTemp.get(position).setOrderCount(orderCount);
+                    viewBinding.btmShtCartonBasteAdad.layAdad.tvQuantity.setText(String.valueOf(productModelsTemp.get(position).getNumCount()));
+                } else {
+                    productModelsTemp.get(position).setNumCount(productModelsTemp.get(position).getNumCount() - 1);
+                    int orderCount = calculateOrderCount(productModelsTemp.get(position));
+                    productModelsTemp.get(position).setOrderCount(orderCount);
+                    viewBinding.btmShtCartonBasteAdad.layAdad.tvQuantity.setText("");
+                    viewBinding.btmShtCartonBasteAdad.layAdad.tvQuantity.setHint(getString(R.string.adad));
+                }
+                productAdapter.notifyItemChanged(position);
+                activity.checkCart(true);
+
+
+            }
+        });
+
+
+
+
+        viewBinding.btmShtCartonBasteAdad.layCarton.tvQuantity.removeWatcher();
+        viewBinding.btmShtCartonBasteAdad.layCarton.tvQuantity.addTextWatcher(new Watcher() {
+            @Override
+            public void onTextChange(String s) {
+                try {
+                    productModelsTemp.get(position).setBoxCount(Integer.parseInt(s));
+                    int orderCount = calculateOrderCount(productModelsTemp.get(position));
+                    productModelsTemp.get(position).setOrderCount(orderCount);
+                    productAdapter.notifyItemChanged(position);
+                } catch (Exception e) {
+                    productModelsTemp.get(position).setBoxCount(0);
+                    int orderCount = calculateOrderCount(productModelsTemp.get(position));
+                    productModelsTemp.get(position).setOrderCount(orderCount);
+                    productAdapter.notifyItemChanged(position);
+                }
+            }
+        }, 400);
+
+        viewBinding.btmShtCartonBasteAdad.layBaste.tvQuantity.removeWatcher();
+        viewBinding.btmShtCartonBasteAdad.layBaste.tvQuantity.addTextWatcher(new Watcher() {
+            @Override
+            public void onTextChange(String s) {
+                try {
+                    productModelsTemp.get(position).setPackCount(Integer.parseInt(s));
+                    int orderCount = calculateOrderCount(productModelsTemp.get(position));
+                    productModelsTemp.get(position).setOrderCount(orderCount);
+                    productAdapter.notifyItemChanged(position);
+                } catch (Exception e) {
+                    productModelsTemp.get(position).setBoxCount(0);
+                    int orderCount = calculateOrderCount(productModelsTemp.get(position));
+                    productModelsTemp.get(position).setOrderCount(orderCount);
+                    productAdapter.notifyItemChanged(position);
+                }
+            }
+        }, 400);
+        viewBinding.btmShtCartonBasteAdad.layAdad.tvQuantity.removeWatcher();
+        viewBinding.btmShtCartonBasteAdad.layAdad.tvQuantity.addTextWatcher(new Watcher() {
+            @Override
+            public void onTextChange(String s) {
+                try {
+                    productModelsTemp.get(position).setNumCount(Integer.parseInt(s));
+                    int orderCount = calculateOrderCount(productModelsTemp.get(position));
+                    productModelsTemp.get(position).setOrderCount(orderCount);
+                    productAdapter.notifyItemChanged(position);
+                } catch (Exception e) {
+                    productModelsTemp.get(position).setBoxCount(0);
+                    int orderCount = calculateOrderCount(productModelsTemp.get(position));
+                    productModelsTemp.get(position).setOrderCount(orderCount);
+                    productAdapter.notifyItemChanged(position);
+                }
+            }
+        }, 400);
+    }
+
+    private int calculateOrderCount(ProductModel productModel) {
+        return productModel.getBoxCount() * productModel.getNumInBox() + productModel.getPackCount() * productModel.getNumInPack() + productModel.getNumCount();
     }
 
 
@@ -290,33 +481,45 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     public void onGetDiscountAndBonuses(List<DiscountModel> discountModels, List<BonusModel> bonusModels) {
         setBonusRecycler(bonusModels);
         setDiscountRecycler(discountModels);
-        handleBottomSheetBehaiviour();
+        handleBottomSheetBehaiviourDiscountBonus();
 
 
     }
 
-    private void handleBottomSheetBehaiviour() {
-        if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+    private void handleBottomSheetBehaiviourBoxPackNum() {
+        if (bottomSheetBoxPackNum.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+            viewBinding.btmShtCartonBasteAdad.IVCollapse.setRotation(0);
+            bottomSheetBoxPackNum.setState(BottomSheetBehavior.STATE_EXPANDED);
+        } else {
+            bottomSheetBoxPackNum.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
+    }
+
+    private void handleBottomSheetBehaiviourDiscountBonus() {
+        if (bottomSheetBonusDiscount.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBonusDiscount.setState(BottomSheetBehavior.STATE_EXPANDED);
             viewBinding.btmShtJayezehTakhfifKala.IVCollapse.setRotation(0);
         } else {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            bottomSheetBonusDiscount.setState(BottomSheetBehavior.STATE_COLLAPSED);
             viewBinding.btmShtJayezehTakhfifKala.IVCollapse.setRotation(180);
         }
     }
 
     private void setBonusRecycler(List<BonusModel> bonusModels) {
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-            BonusProductAdapter bonusAdapter = new BonusProductAdapter(context, bonusModels);
-            viewBinding.btmShtJayezehTakhfifKala.RVBonus.setLayoutManager(linearLayoutManager);
-            viewBinding.btmShtJayezehTakhfifKala.RVBonus.setAdapter(bonusAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        BonusProductAdapter bonusAdapter = new BonusProductAdapter(context, bonusModels);
+        viewBinding.btmShtJayezehTakhfifKala.RVBonus.setLayoutManager(linearLayoutManager);
+        viewBinding.btmShtJayezehTakhfifKala.RVBonus.setAdapter(bonusAdapter);
 
     }
 
     private void setDiscountRecycler(List<DiscountModel> discountModels) {
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-            DiscountProductAdapter discountAdapter = new DiscountProductAdapter(context, discountModels);
-            viewBinding.btmShtJayezehTakhfifKala.RVDiscount.setLayoutManager(linearLayoutManager);
-            viewBinding.btmShtJayezehTakhfifKala.RVDiscount.setAdapter(discountAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        DiscountProductAdapter discountAdapter = new DiscountProductAdapter(context, discountModels);
+        viewBinding.btmShtJayezehTakhfifKala.RVDiscount.setLayoutManager(linearLayoutManager);
+        viewBinding.btmShtJayezehTakhfifKala.RVDiscount.setAdapter(discountAdapter);
     }
+
+
 }

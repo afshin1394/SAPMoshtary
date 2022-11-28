@@ -5,7 +5,10 @@
     android:layout_margin="@dimen/_2sdp"
     android:layoutDirection="rtl"
     android:orientation="horizontal">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,7 +30,6 @@
                 app:civ_border_width="@dimen/_2sdp" />
 
             <androidx.cardview.widget.CardView
-
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center"
@@ -115,11 +117,13 @@
                                 android:text="@string/mablaghMasrafKonandeh" />
                         </LinearLayout>
                     </LinearLayout>
-                   <include android:layout_height="match_parent" android:layout_width="0dp" android:layout_weight="2" android:id="@+id/img_add_to_cart" layout="@layout/add_remove_item"/>
+                   <include android:layout_height="match_parent" android:layout_width="0dp" android:layout_weight="2" android:id="@+id/img_add_to_cart" layout="@layout/product_num_count"  />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </FrameLayout>
+
+    </LinearLayout>
 
     </LinearLayout>
 </FrameLayout>

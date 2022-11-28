@@ -22,7 +22,7 @@ public class SelectedReturnedAdapter extends RecyclerView.Adapter<SelectedReturn
     private AsyncListDiffer<ElamMarjoeeForoshandehModel> mDiffer;//callBack
     private Context context;
     public SelectedReturnedAdapter(Context context) {
-        this.mDiffer = new AsyncListDiffer<ElamMarjoeeForoshandehModel>(this,diffCallback);
+        this.mDiffer = new AsyncListDiffer<>(this,diffCallback);
         this.context = context;
     }
 
@@ -32,8 +32,7 @@ public class SelectedReturnedAdapter extends RecyclerView.Adapter<SelectedReturn
             return oldItem.getCcElamMarjoeeSatr() == newItem.getCcElamMarjoeeSatr();
         }        @Override
         public boolean areContentsTheSame(ElamMarjoeeForoshandehModel oldItem, ElamMarjoeeForoshandehModel newItem) {
-            return false
-                    ;
+            return false;
         }
     };//define AsyncListDiffer
     @NonNull
@@ -57,7 +56,7 @@ public class SelectedReturnedAdapter extends RecyclerView.Adapter<SelectedReturn
     }
     public ElamMarjoeeForoshandehModel getItem(int position) {
         return mDiffer.getCurrentList().get(position);
-    }//
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView marjoeeKalaName;
