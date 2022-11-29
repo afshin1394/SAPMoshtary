@@ -2,6 +2,7 @@ package com.saphamrah.customer.presentation.createRequest.verifyRequest.model;
 
 import com.saphamrah.customer.data.local.temp.BonusModel;
 import com.saphamrah.customer.data.local.temp.DiscountModel;
+import com.saphamrah.customer.data.local.temp.ElamMarjoeeForoshandehModel;
 import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.presentation.createRequest.selectableBonus.interactor.SelectableBonusInteractor;
 import com.saphamrah.customer.presentation.createRequest.verifyRequest.interactor.VerifyRequestInteractor;
@@ -16,18 +17,29 @@ public class VerifyRequestModel extends VerifyRequestInteractor.ModelOps {
         this.view = view;
     }
 
+
+
+
+
     @Override
-    public void setLogToDB(Integer logType, String message, String logClass, String logActivity, String functionParent, String functionChild) {
+    public void saveElamMarjoeeForoshandeh(List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModels) {
 
     }
 
     @Override
-    public void onDestroy() {
+    public void saveDiscounts(List<DiscountModel> discountModelsGlobal) {
 
     }
 
     @Override
-    protected void saveData(List<ProductModel> productModels, List<BonusModel> bonusModels, List<DiscountModel> discountModels) {
+    public void saveBonuses(List<BonusModel> bonusModelsGlobal) {
 
     }
+
+    @Override
+    public void saveProducts(List<ProductModel> orderedProducts) {
+
+    }
+
+
 }

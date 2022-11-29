@@ -17,6 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:background="@drawable/purchase_light_background"
+
             android:weightSum="12"
             android:orientation="horizontal"
             android:layout_width="match_parent"

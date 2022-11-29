@@ -42,7 +42,7 @@
 
             android:elevation="@dimen/_190sdp"
             android:id="@+id/card_purchaseCount"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
@@ -79,7 +79,7 @@
             tools:targetApi="o" />
         <ImageView
             android:padding="@dimen/_4sdp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:id="@+id/img_remove"
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"

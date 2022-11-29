@@ -1,5 +1,6 @@
 package com.saphamrah.customer.presentation.profile;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,56 +9,92 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.navigation.NavigationView;
 import com.saphamrah.customer.R;
+import com.saphamrah.customer.base.BaseFragment;
+import com.saphamrah.customer.databinding.FragmentAddressBinding;
 import com.saphamrah.customer.databinding.FragmentMainBinding;
 import com.saphamrah.customer.databinding.FragmentProfileBinding;
+import com.saphamrah.customer.presentation.main.MainActivity;
 
 
-public class ProfileFragment extends Fragment {
-    private FragmentProfileBinding binding;
+public class ProfileFragment extends BaseFragment<ProfilePresenter, FragmentProfileBinding, MainActivity> implements ProfileInteracts.RequiredViewOps {
 
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
+    NavigationView navigationView;
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public ProfileFragment(){
+        super(R.layout.fragment_profile);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        binding = FragmentProfileBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
-        return view;
+    protected void onBackPressed() {
+
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    protected void initViews() {
+        hideMenuItem();
 
-        binding.personalInfoLl.setOnClickListener(view1 -> {
+        viewBinding.personalInfoLl.setOnClickListener(view1 -> {
             Navigation.findNavController(requireActivity(),R.id.mainNavigation_host).navigate(R.id.action_profileFragment_to_personalInfoFragment);
         });
 
-        binding.addressLl.setOnClickListener(view1 -> {
+        viewBinding.addressLl.setOnClickListener(view1 -> {
             Navigation.findNavController(requireActivity(),R.id.mainNavigation_host).navigate(R.id.action_profileFragment_to_addressFragment);
         });
 
-        binding.hesabLl.setOnClickListener(view1 -> {
+        viewBinding.hesabLl.setOnClickListener(view1 -> {
             Navigation.findNavController(requireActivity(),R.id.mainNavigation_host).navigate(R.id.action_profileFragment_to_accountNumberFragment);
         });
 
-        binding.saleInfoLl.setOnClickListener(view1 -> {
+        viewBinding.saleInfoLl.setOnClickListener(view1 -> {
             Navigation.findNavController(requireActivity(),R.id.mainNavigation_host).navigate(R.id.action_profileFragment_to_saleInfoFragment);
         });
+    }
 
+    @Override
+    protected void setPresenter() {
+
+    }
+
+    @Override
+    protected FragmentProfileBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {
+        return FragmentProfileBinding.inflate(inflater, container, false);
+    }
+
+    @Override
+    public void onError(String error) {
+
+    }
+
+    @Override
+    public void showLoading(String message) {
+
+    }
+
+    @Override
+    public void dismissLoading() {
+
+    }
+
+    @Override
+    public void showNoConnection() {
+
+    }
+
+    @Override
+    public Context getAppContext() {
+        return requireContext();
+    }
+
+    private void hideMenuItem()
+    {
+        navigationView = activity.findViewById(R.id.drawer_main);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.nav_profile).setVisible(false);
     }
 }

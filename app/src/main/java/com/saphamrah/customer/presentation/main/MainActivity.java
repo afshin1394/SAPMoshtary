@@ -8,9 +8,13 @@ import androidx.navigation.Navigation;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
@@ -114,7 +118,9 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
             Navigation.findNavController(this,R.id.mainNavigation_host).navigate(R.id.action_mainFragment_to_profileFragment);
         }
         if (id == R.id.nav_main) {
-            Navigation.findNavController(this,R.id.mainNavigation_host).navigate(R.id.action_profileFragment_to_mainFragment);
+//            Navigation.findNavController(this,R.id.mainNavigation_host).navigate(R.id.action_profileFragment_to_mainFragment);
+            this.finish();
+            startActivity(new Intent(this, MainActivity.class));
         }
         return true;
     }
@@ -145,9 +151,13 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
     }
 
     @Override
-    public void onItemSelect(Object model, int position, AdapterAction Action) {
-        startActivity(new Intent(MainActivity.this, CreateRequestActivity.class).putExtra("sazmanIcon", ((LocationDbModel) model).getResId()));
-
+    public void onItemSelect(Object obj, int position, AdapterAction Action) {
+         LocationDbModel model=(LocationDbModel) obj ;
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), (model.getResId()));
+//        Uri uri = ImageUtils.convertBitmapToUri(context,"sazmanIcon",bm);
+//        Log.i(TAG, "onItemSelect: "+uri);
+        startActivity(new Intent(this, CreateRequestActivity.class).putExtra("sazmanName",model.getName()));
+        handleBottomSheetBehaviorState();
 
 
 

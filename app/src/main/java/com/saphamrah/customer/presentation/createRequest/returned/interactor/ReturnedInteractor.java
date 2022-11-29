@@ -24,7 +24,7 @@ public interface ReturnedInteractor {
         void onGetMarjoee(List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModels);
     }
 
-    abstract class ModelOps extends BaseModel {
+    abstract class ModelOps  extends BaseModel {
 
         public abstract void getMarjoee();
     }

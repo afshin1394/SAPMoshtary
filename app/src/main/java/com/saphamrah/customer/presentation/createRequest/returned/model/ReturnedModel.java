@@ -1,12 +1,14 @@
 package com.saphamrah.customer.presentation.createRequest.returned.model;
 
+import com.saphamrah.customer.base.BaseModel;
 import com.saphamrah.customer.data.local.temp.ElamMarjoeeForoshandehModel;
 import com.saphamrah.customer.presentation.createRequest.returned.interactor.ReturnedInteractor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReturnedModel extends ReturnedInteractor.ModelOps{
+public class ReturnedModel extends ReturnedInteractor.ModelOps
+{
     private ReturnedInteractor.RequiredPresenterOps presenter;
 
 
@@ -14,15 +16,9 @@ public class ReturnedModel extends ReturnedInteractor.ModelOps{
         this.presenter = presenter;
     }
 
-    @Override
-    public void setLogToDB(Integer logType, String message, String logClass, String logActivity, String functionParent, String functionChild) {
 
-    }
 
-    @Override
-    public void onDestroy() {
 
-    }
 
     @Override
     public void getMarjoee() {
@@ -40,5 +36,15 @@ public class ReturnedModel extends ReturnedInteractor.ModelOps{
         elamMarjoeeForoshandehModels.add(elamMarjoeeForoshandehModel5);
         elamMarjoeeForoshandehModels.add(elamMarjoeeForoshandehModel6);
         presenter.onGetMarjoee(elamMarjoeeForoshandehModels);
+    }
+
+    @Override
+    public void setLogToDB(Integer logType, String message, String logClass, String logActivity, String functionParent, String functionChild) {
+
+    }
+
+    @Override
+    public void onDestroy() {
+
     }
 }

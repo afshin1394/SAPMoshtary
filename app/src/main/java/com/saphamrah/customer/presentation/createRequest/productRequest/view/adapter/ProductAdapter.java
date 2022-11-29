@@ -181,7 +181,6 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             img_product.setOnClickListener(view1 -> listener.onItemSelect(models.get(position), position, AdapterAction.SELECT));
             card_purchase.setOnClickListener(view12 -> {
-
                 listener.onItemSelect(models.get(position),position, AdapterAction.ADD);
             });
 

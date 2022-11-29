@@ -94,6 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="end"
+        android:layoutDirection="rtl"
         android:background="@color/bg_drawer"
         app:menu="@menu/main_menu" />
 

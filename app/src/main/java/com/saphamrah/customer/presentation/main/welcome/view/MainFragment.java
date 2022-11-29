@@ -21,10 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.navigation.NavigationView;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
@@ -63,6 +65,7 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
     private MainStatePager viewPagerAdapter;
     private BottomSheetBehavior sheetBehavior;
     private View header_Arrow_Image;
+    private NavigationView navigationView;
 
     private BottomSheetSearchRecyclerView bottomSheetSearch;
 
@@ -123,15 +126,12 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
         recyclerView.setAdapter(adapter);
 
 
-        header_Arrow_Image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        header_Arrow_Image.setOnClickListener(v -> {
 
-                if(sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED){
-                    sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                } else {
-                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
+            if(sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED){
+                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            } else {
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
         sheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -144,6 +144,12 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
                 header_Arrow_Image.setRotation(slideOffset * 180);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        showMenuItem();
     }
 
     @Override
@@ -258,10 +264,18 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
 //        Uri uri = ImageUtils.convertBitmapToUri(context,"sazmanIcon",bm);
 //        Log.i(TAG, "onItemSelect: "+uri);
         startActivity(new Intent(activity, CreateRequestActivity.class).putExtra("sazmanName",model.getName()));
+        handleBottomSheetBehaviorState();
     }
 
     @Override
     public void onItemMultiSelect(ArrayList<LocationDbModel> model, AdapterAction action) {
 
+    }
+
+    private void showMenuItem()
+    {
+        navigationView = activity.findViewById(R.id.drawer_main);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.nav_profile).setVisible(true);
     }
 }

@@ -125,13 +125,14 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         boolean stuffInCart = Observable.fromIterable(productModelGlobal).any(productModel -> productModel.getBoxCount()>0 || productModel.getPackCount()>0 || productModel.getNumCount()>0).blockingGet();
 
         Log.i(TAG, "checkCart: "+stuffInCart);
-        if (showCartIcon) {
-            if (stuffInCart) {
+        if (stuffInCart) {
+            if (showCartIcon) {
                 viewBinding.linCart.setVisibility(View.VISIBLE);
             } else {
                 viewBinding.linCart.setVisibility(View.GONE);
-                cartListener.onCartEmpty();
             }
+        }else{
+            cartListener.onCartEmpty();
         }
     }
 

@@ -3,19 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="HardcodedText">
 
-    <item
-        android:id="@+id/nav_request"
-        android:title="درخواست کالا"
-        android:icon="@drawable/ic_launcher_icon"/>
+    <item android:title="ثبت کالا">
+        <menu>
+            <item
+                android:id="@+id/nav_request"
+                android:title="ثبت درخواست" />
+        </menu>
+    </item>
 
-    <item
-        android:id="@+id/nav_profile"
-        android:title="پروفایل کاربر"
-        />
+    <item android:title="پروفایل"
 
-    <item
-        android:id="@+id/nav_main"
-        android:title="صفحه اصلی"
-        />
+        >
+        <menu>
+            <item
+                android:id="@+id/nav_profile"
+                android:title="پروفایل کاربر"
+                />
+        </menu>
+    </item>
 
+    <item android:title="صفحه اصلی">
+        <menu>
+            <item
+                android:id="@+id/nav_main"
+                android:title="صفحه اصلی"
+                />
+        </menu>
+    </item>
 </menu>

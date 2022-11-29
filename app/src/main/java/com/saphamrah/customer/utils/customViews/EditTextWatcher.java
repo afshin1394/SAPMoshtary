@@ -33,24 +33,23 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 
-public class EditTextWatcher extends AppCompatEditText implements TextWatcher{
+public class EditTextWatcher extends AppCompatEditText implements TextWatcher {
     private final BehaviorSubject<String> querySubject = BehaviorSubject.create();
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-    public EditTextWatcher(@NonNull Context context)
-    {
+
+    public EditTextWatcher(@NonNull Context context) {
         super(context);
-        this.addTextChangedListener(this);
+
     }
 
-    public EditTextWatcher(@NonNull Context context, @Nullable AttributeSet attrs)
-    {
+    public EditTextWatcher(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        this.addTextChangedListener(this);
+
     }
 
     public EditTextWatcher(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.addTextChangedListener(this);
+
     }
 
     @Override
@@ -68,40 +67,42 @@ public class EditTextWatcher extends AppCompatEditText implements TextWatcher{
         querySubject.onNext(NumberUtils.arabicToDecimal(editable.toString()));
     }
 
-    /**this is necessary for disposing the querySubject**/
-    public void removeWatcher()
-    {
+    /**
+     * this is necessary for disposing the querySubject
+     **/
+    public void removeWatcher() {
         compositeDisposable.clear();
+        this.removeTextChangedListener(this);
     }
 
     public void addTextWatcher(Watcher watcher, long emitTime) {
+        this.addTextChangedListener(this);
+        querySubject
+                .debounce(emitTime, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .switchMap((Function<String, ObservableSource<String>>) Observable::just)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
 
-                querySubject
-                        .debounce(emitTime, TimeUnit.MILLISECONDS)
-                        .distinctUntilChanged()
-                        .switchMap((Function<String, ObservableSource<String>>) Observable::just)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<String>() {
-                            @Override
-                            public void onSubscribe(Disposable d) {
-                               compositeDisposable.add(d);
-                            }
+                    @Override
+                    public void onNext(String s) {
+                        watcher.onTextChange(s);
+                    }
 
-                            @Override
-                            public void onNext(String s) {
-                                watcher.onTextChange(s);
-                            }
+                    @Override
+                    public void onError(Throwable e) {
 
-                            @Override
-                            public void onError(Throwable e) {
+                    }
 
-                            }
-
-                            @Override
-                            public void onComplete() {
-                            }
-                        });
+                    @Override
+                    public void onComplete() {
+                    }
+                });
     }
 
     @SuppressLint("UseCompatLoadingForColorStateLists")

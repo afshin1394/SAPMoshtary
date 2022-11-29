@@ -69,8 +69,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import io.reactivex.Observable;
+import io.reactivex.functions.Predicate;
 
-public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, FragmentCartBinding, CreateRequestActivity> implements CartInteractor.RequiredViewOps {
+
+public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, FragmentCartBinding, CreateRequestActivity> implements CartInteractor.RequiredViewOps, CreateRequestActivity.CartListener {
 
     private List<ProductModel> productModels;
     private CartProductAdapter cartProductAdapter;
@@ -99,7 +102,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     protected void initViews() {
         check = 0;
 
-        productModels = CollectionUtils.convertArrayToList(CartFragmentArgs.fromBundle(getArguments()).getProducts());
+        productModels = Observable.fromIterable(activity.getProductModelGlobal()).filter(productModel -> productModel.getOrderCount()>0).toList().blockingGet();
         setProductRecycler();
        if (!activity.setMarjoee)
            checkState();
@@ -158,6 +161,13 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         } else {
             viewBinding.linReturn.setVisibility(View.GONE);
         }
+        viewBinding.svDetails.post(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
+            @Override
+            public void run() {
+                viewBinding.svDetails.scrollTo(0, (int) ScreenUtils.getViewLocationOnScreen(viewBinding.linReturn)[1]);
+            }
+        });
     }
 
     private void setAddressList() {
@@ -225,7 +235,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
                 Log.i(TAG, "checkState: CONFIRM_REQUEST");
                 /*state4*/
                 setSelectableBonusRecycler();
-                presenter.getDiscountAndBonuses();
                 activity.paymentState = Constants.PaymentStates.PISH_FAKTOR;
 
                 break;
@@ -353,6 +362,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
                     viewBinding.etvReceiptDuration.setHint("تعداد روز مجاز وصول");
             }
         });
+        viewBinding.etvReceiptDuration.removeWatcher();
         viewBinding.etvReceiptDuration.addTextWatcher(new Watcher() {
             @Override
             public void onTextChange(String s) {
@@ -404,10 +414,15 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
     private void setProductRecycler() {
 
-        cartProductAdapter = new CartProductAdapter(getActivity(), productModels, (model, position, Action) -> {
+        cartProductAdapter = new CartProductAdapter(getActivity(),productModels,  (model, position, Action) -> {
             switch (Action) {
                 case ADD:
                 case REMOVE:
+                    if (model.getOrderCount() == 0) {
+                        productModels.remove(model);
+                        cartProductAdapter.notifyDataSetChanged();
+                    }
+
                     calculateNumPackBoxCount(model);
                     activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
                     checkState();
@@ -419,6 +434,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         viewBinding.RVOrderedProducts.setLayoutManager(linearLayoutManager);
         viewBinding.RVOrderedProducts.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
         viewBinding.RVOrderedProducts.setAdapter(cartProductAdapter);
+
     }
 
     private void calculateNumPackBoxCount(ProductModel model) {
@@ -495,8 +511,24 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             viewBinding.RVSelectableBonus.setLayoutManager(linearLayoutManager);
             viewBinding.RVSelectableBonus.setAdapter(selectableBonusCartAdapter);
             viewBinding.RVSelectableBonus.setNestedScrollingEnabled(false);
+            viewBinding.svDetails.post(new Runnable() {
+                @RequiresApi(api = Build.VERSION_CODES.Q)
+                @Override
+                public void run() {
+                    viewBinding.svDetails.scrollTo(0, (int) ScreenUtils.getViewLocationOnScreen(viewBinding.linSelectableBonus)[1]);
+                }
+            });
         }
     }
 
 
+    @Override
+    public void onCartClick(List<ProductModel> productModels) {
+
+    }
+
+    @Override
+    public void onCartEmpty() {
+       navigateUp();
+    }
 }

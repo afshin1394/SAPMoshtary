@@ -4,6 +4,7 @@
     android:layout_width="@dimen/_80sdp"
     android:layout_height="wrap_content"
     android:padding="@dimen/_4sdp"
+    android:layoutDirection="rtl"
     android:background="@android:color/transparent"
     android:layout_gravity="center"
     android:elevation="@dimen/_120sdp"
@@ -17,11 +18,12 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
         <ImageView
-            android:id="@+id/tv_remove"
+            android:id="@+id/tv_add"
             android:layout_width="@dimen/_24sdp"
             android:layout_gravity="center"
             android:layout_height="@dimen/_24sdp"
-            android:src="@drawable/minus_red" />
+            android:src="@drawable/plus_green" />
+
 
 
         <com.saphamrah.customer.utils.customViews.EditTextWatcher
@@ -34,11 +36,11 @@
             style="@style/text_view_title_right_large_screen"
             />
         <ImageView
-            android:id="@+id/tv_add"
+            android:id="@+id/tv_remove"
             android:layout_width="@dimen/_24sdp"
             android:layout_gravity="center"
             android:layout_height="@dimen/_24sdp"
-            android:src="@drawable/plus_green" />
+            android:src="@drawable/minus_red" />
 
     </LinearLayout>
 </LinearLayout>

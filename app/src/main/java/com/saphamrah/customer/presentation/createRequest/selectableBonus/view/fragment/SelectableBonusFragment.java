@@ -108,9 +108,8 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
 
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setConfirmButton() {
-        if (darkhastFaktorJayezehTakhfifModels.size()>1)
+        if (darkhastFaktorJayezehTakhfifModels.size()>2)
         {
             viewBinding.btmShtSelectableBonus.tvPayment.setText(R.string.next);
         }

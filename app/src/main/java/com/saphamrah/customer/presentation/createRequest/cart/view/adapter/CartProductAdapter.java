@@ -1,6 +1,7 @@
 package com.saphamrah.customer.presentation.createRequest.cart.view.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
 import com.saphamrah.customer.R;
+import com.saphamrah.customer.data.local.temp.ElamMarjoeeForoshandehModel;
 import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
@@ -29,12 +33,22 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CartProductAdapter extends RecyclerView.Adapter<CartProductAdapter.ViewHolder> {
 
     private Context context;
-    private List<ProductModel> models;
+//    private List<ProductModel> models;
     private AdapterItemListener<ProductModel> listener;
-
+//    private AsyncListDiffer<ProductModel> mDiffer;
+    private List<ProductModel> productModels;
+    private DiffUtil.ItemCallback<ProductModel> diffCallback = new DiffUtil.ItemCallback<ProductModel>() {
+        @Override
+        public boolean areItemsTheSame(ProductModel oldItem, ProductModel newItem) {
+            return oldItem.getId() == newItem.getId();
+        }        @Override
+        public boolean areContentsTheSame(ProductModel oldItem, ProductModel newItem) {
+            return oldItem.getOrderCount() == newItem.getOrderCount();
+        }
+    };//define AsyncListDiffer
     public CartProductAdapter(Context context ,List<ProductModel> productModels,AdapterItemListener<ProductModel> listener) {
         this.context = context;
-        this.models = productModels;
+        this.productModels = productModels;
         this.listener = listener;
     }
 
@@ -47,15 +61,21 @@ public class CartProductAdapter extends RecyclerView.Adapter<CartProductAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull CartProductAdapter.ViewHolder holder, int position) {
-        ProductModel productModel = models.get(position);
-        holder.bind(position,productModel);
+        ProductModel productModel = productModels.get(position);
+        holder.bind(productModel);
     }
 
-
+//
+//    public void submitList(List<ProductModel> data) {
+//        mDiffer.submitList(data);
+//    }
+//    public ProductModel getItem(int position) {
+//        return mDiffer.getCurrentList().get(position);
+//    }
 
     @Override
     public int getItemCount() {
-        return models.size();
+        return productModels.size();
     }
 
     public class ViewHolder extends  RecyclerView.ViewHolder {
@@ -86,56 +106,53 @@ public class CartProductAdapter extends RecyclerView.Adapter<CartProductAdapter.
 
         }
 
-        public void bind(int position,ProductModel productModel) {
+        public void bind(ProductModel productModel) {
             nameProduct.setText(String.format("%1$s", productModel.getNameProduct()));
 //            sellPrice.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh),kalaModel.getSellPrice(),context.getString(R.string.rial)));
-            inventory.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mojodi), productModel.getInventory(), context.getString(R.string.adad)));
+            inventory.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mablaghForosh), productModel.getSellPrice(), context.getString(R.string.rial)));
             consumerPrice.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mablaghMasrafKonandeh), productModel.getConsumerPrice(), context.getString(R.string.rial)));
             if (productModel.getOrderCount() > 0) {
                 card_purchaseCount.setVisibility(View.VISIBLE);
                 et_product_count.setText(String.valueOf(productModel.getOrderCount()));
             }
 
-            img_product.setOnClickListener(view1 -> listener.onItemSelect(models.get(position), position, AdapterAction.SELECT));
+            img_product.setOnClickListener(view1 -> listener.onItemSelect(productModel, getAdapterPosition(), AdapterAction.SELECT));
             card_purchase.setOnClickListener(view12 -> {
-                models.get(getAdapterPosition()).setOrderCount(models.get(position).getOrderCount() + 1);
+                productModel.setOrderCount(productModel.getOrderCount() + 1);
                 card_purchaseCount.setVisibility(View.VISIBLE);
                 card_purchase.setVisibility(View.GONE);
-                listener.onItemSelect(models.get(position), position, AdapterAction.ADD);
+                listener.onItemSelect(productModel, getAdapterPosition(), AdapterAction.ADD);
             });
 
-            if (card_purchaseCount.getVisibility() == View.VISIBLE) {
+            if (card_purchaseCount.getVisibility() == View.VISIBLE)
+            {
                 et_product_count.addTextWatcher(s -> {
                     try {
-
-                        models.get(position).setOrderCount(Integer.parseInt(s));
-                        listener.onItemSelect(models.get(position), position, AdapterAction.ADD);
+                        productModel.setOrderCount(Integer.parseInt(s));
+                        listener.onItemSelect(productModel, getAdapterPosition(), AdapterAction.ADD);
                     } catch (Exception e) {
 
                     }
                 }, 500);
 
+
                 Glide.with(context)
-                        .load(models.get(getAdapterPosition()).getImageResource().get(0))
+                        .load(productModel.getImageResource().get(0))
                         .into(img_product);
 
                 img_add.setOnClickListener(view13 -> {
-                    models.get(position).setOrderCount(models.get(position).getOrderCount() + 1);
-                    et_product_count.setText(String.valueOf(models.get(position).getOrderCount()));
-                    listener.onItemSelect(models.get(position), position, AdapterAction.ADD);
+                    productModel.setOrderCount(productModel.getOrderCount() + 1);
+                    et_product_count.setText(String.valueOf(productModel.getOrderCount()));
+                    listener.onItemSelect(productModel, getAdapterPosition(), AdapterAction.ADD);
                 });
                 img_remove.setOnClickListener(view14 -> {
-                    models.get(position).setOrderCount(models.get(position).getOrderCount() - 1);
-                    if (models.get(position).getOrderCount() > 0)
+                    if (productModel.getOrderCount() > 0)
                     {
-                        et_product_count.setText(String.valueOf(models.get(position).getOrderCount()));
-                        listener.onItemSelect(models.get(position), position, AdapterAction.REMOVE);
-
-                    }else{
-                        listener.onItemSelect(models.get(position), position, AdapterAction.REMOVE);
-                        models.remove(position);
-                        notifyDataSetChanged();
+                        productModel.setOrderCount(productModel.getOrderCount() - 1);
+                        et_product_count.setText(String.valueOf(productModel.getOrderCount()));
                     }
+                    listener.onItemSelect(productModel, getAdapterPosition(), AdapterAction.REMOVE);
+
                 });
 
             }

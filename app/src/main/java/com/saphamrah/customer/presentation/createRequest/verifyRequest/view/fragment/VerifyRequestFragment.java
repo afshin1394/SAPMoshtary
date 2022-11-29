@@ -115,6 +115,9 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
             emptyBitmap.recycle();
         }
 
+        presenter.saveRequest(activity.getProductModelGlobal(),activity.getDiscountModelsGlobal(),activity.getBonusModelsGlobal(),activity.getJayezehEntekhabiMojodiModels(),activity.getElamMarjoeeForoshandehModelsGlobal());
+        activity.finish();
+
     }
 
     private void initCustomerInfo() {
