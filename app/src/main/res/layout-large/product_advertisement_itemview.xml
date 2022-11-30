@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
-                android:background="@drawable/purchase_light_background"
+                android:background="@color/colorRed800"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -27,6 +27,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     style="@style/text_view_title_right_large_screen"
+                    android:textColor="@color/colorWhite"
                     android:layout_weight="11"
                     android:text="بنر تبلیغاتی"/>
                 <ImageView
@@ -40,10 +41,10 @@
             </LinearLayout>
             <ImageView
                 android:id="@+id/IMG_AD"
+                android:background="@drawable/transparent_round_bottom_shape"
 
                 android:scaleType="fitXY"
-                android:paddingLeft="@dimen/_16sdp"
-                android:paddingRight="@dimen/_16sdp"
+
                 android:elevation="@dimen/_4sdp"
                 android:layout_width="match_parent"
                 android:layout_gravity="center"

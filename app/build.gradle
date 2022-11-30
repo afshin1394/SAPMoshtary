@@ -271,6 +271,9 @@ dependencies {
 
     def lottieVersion = "4.1.0"
     implementation "com.airbnb.android:lottie:$lottieVersion"
+
+
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 }
 ///**Protobuf dependencies**/
 //protobuf

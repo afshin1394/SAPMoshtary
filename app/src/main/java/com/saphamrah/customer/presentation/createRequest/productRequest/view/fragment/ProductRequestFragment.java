@@ -337,7 +337,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
                     productModelsTemp.get(position).setOrderCount(orderCount);
                     viewBinding.btmShtCartonBasteAdad.layBaste.tvQuantity.setText(String.valueOf(productModelsTemp.get(position).getPackCount()));
-                    productAdapter.notifyItemChanged(position);
                 } else {
                     productModelsTemp.get(position).setPackCount(productModelsTemp.get(position).getPackCount() - 1);
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
@@ -386,13 +385,13 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
                     productModelsTemp.get(position).setBoxCount(Integer.parseInt(s));
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
                     productModelsTemp.get(position).setOrderCount(orderCount);
-                    productAdapter.notifyItemChanged(position);
                 } catch (Exception e) {
                     productModelsTemp.get(position).setBoxCount(0);
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
                     productModelsTemp.get(position).setOrderCount(orderCount);
-                    productAdapter.notifyItemChanged(position);
                 }
+                productAdapter.notifyItemChanged(position);
+                activity.checkCart(true);
             }
         }, 400);
 
@@ -404,13 +403,13 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
                     productModelsTemp.get(position).setPackCount(Integer.parseInt(s));
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
                     productModelsTemp.get(position).setOrderCount(orderCount);
-                    productAdapter.notifyItemChanged(position);
                 } catch (Exception e) {
                     productModelsTemp.get(position).setBoxCount(0);
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
                     productModelsTemp.get(position).setOrderCount(orderCount);
-                    productAdapter.notifyItemChanged(position);
                 }
+                productAdapter.notifyItemChanged(position);
+                activity.checkCart(true);
             }
         }, 400);
         viewBinding.btmShtCartonBasteAdad.layAdad.tvQuantity.removeWatcher();
@@ -421,13 +420,13 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
                     productModelsTemp.get(position).setNumCount(Integer.parseInt(s));
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
                     productModelsTemp.get(position).setOrderCount(orderCount);
-                    productAdapter.notifyItemChanged(position);
                 } catch (Exception e) {
                     productModelsTemp.get(position).setBoxCount(0);
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
                     productModelsTemp.get(position).setOrderCount(orderCount);
-                    productAdapter.notifyItemChanged(position);
                 }
+                productAdapter.notifyItemChanged(position);
+                activity.checkCart(true);
             }
         }, 400);
     }

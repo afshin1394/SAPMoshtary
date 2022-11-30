@@ -132,7 +132,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
                 viewBinding.linCart.setVisibility(View.GONE);
             }
         }else{
-            cartListener.onCartEmpty();
+            viewBinding.linCart.setVisibility(View.GONE);
         }
     }
 
@@ -163,7 +163,9 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         Observable.fromIterable(productModelGlobal).forEach(productModel -> productModel.setBoxCount(0)).dispose();
         Observable.fromIterable(productModelGlobal).forEach(productModel -> productModel.setPackCount(0)).dispose();
         Observable.fromIterable(productModelGlobal).forEach(productModel -> productModel.setNumCount(0)).dispose();
-        viewBinding.linCart.setVisibility(View.GONE);
+        Observable.fromIterable(productModelGlobal).forEach(productModel -> productModel.setOrderCount(0)).dispose();
+        Log.i(TAG, "removeCart: "+productModelGlobal.toString());
+        checkCart(false);
         cartListener.onCartEmpty();
     }
     private void setProducts() {

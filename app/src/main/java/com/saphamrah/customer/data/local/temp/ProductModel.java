@@ -255,7 +255,27 @@ public class ProductModel implements Parcelable {
         parcel.writeInt(numInBox);
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "ProductModel{" +
+                "id=" + id +
+                ", nameProduct='" + nameProduct + '\'' +
+                ", consumerPrice=" + consumerPrice +
+                ", sellPrice=" + sellPrice +
+                ", codeKala='" + codeKala + '\'' +
+                ", inventory=" + inventory +
+                ", productionDate='" + productionDate + '\'' +
+                ", expirationDate='" + expirationDate + '\'' +
+                ", imageResource=" + imageResource +
+                ", isAd=" + isAd +
+                ", boxCount=" + boxCount +
+                ", packCount=" + packCount +
+                ", numCount=" + numCount +
+                ", numInPack=" + numInPack +
+                ", numInBox=" + numInBox +
+                ", orderCount=" + orderCount +
+                ", weight=" + weight +
+                ", sazmanForosh='" + sazmanForosh + '\'' +
+                '}';
+    }
 }

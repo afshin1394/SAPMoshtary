@@ -49,7 +49,7 @@
 
             <TextView
                 android:id="@+id/tv_discount_percentage"
-                style="@style/text_view_normal_right"
+                style="@style/text_view_normal_right_large_screen"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"

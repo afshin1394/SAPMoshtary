@@ -5,18 +5,23 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
-import com.saphamrah.customer.databinding.FragmentAddressBinding;
+import com.saphamrah.customer.data.local.RptStatusModel;
 import com.saphamrah.customer.databinding.FragmentShoppingListBinding;
 import com.saphamrah.customer.presentation.main.MainActivity;
 import com.saphamrah.customer.presentation.main.MainInteracts;
 import com.saphamrah.customer.presentation.main.MainPresenter;
+import com.saphamrah.customer.presentation.main.shopping.adapter.RptStatusAdapter;
+
+import java.util.ArrayList;
 
 public class ShoppingListFragment extends BaseFragment<MainPresenter, FragmentShoppingListBinding, MainActivity> implements MainInteracts.RequiredViewOps {
 
@@ -32,6 +37,26 @@ public class ShoppingListFragment extends BaseFragment<MainPresenter, FragmentSh
 
     @Override
     protected void initViews() {
+
+        ArrayList<RptStatusModel> models = new ArrayList<>();
+
+        models.add(new RptStatusModel("2254652145", "1401/05/09","2,450,000","نقد",1,true));
+        models.add(new RptStatusModel("2254652145", "1401/05/10","3,410,000","نقد",2,true));
+        models.add(new RptStatusModel("2254652145", "1401/03/09","3,420,000","نقد",3, true));
+        models.add(new RptStatusModel("4532863752", "1401/05/09","4,050,000","چک",4, true));
+
+        RptStatusAdapter adapter = new RptStatusAdapter(requireContext(),models);
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(requireContext());
+        viewBinding.recyclerView.setLayoutManager(mLayoutManager);
+        viewBinding.recyclerView.setAdapter(adapter);
+
+        viewBinding.shimmerViewContainer.startShimmer();
+
+        new Handler().postDelayed(() -> {
+            viewBinding.shimmerViewContainer.stopShimmer();
+            viewBinding.shimmerViewContainer.setVisibility(View.GONE);
+        }, 5000);
 
     }
 

@@ -6,7 +6,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
 
         app:cardCornerRadius="@dimen/_4sdp"
         android:layout_margin="@dimen/_8sdp"
@@ -17,8 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:background="@drawable/purchase_light_background"
-
+            android:background="@color/colorRed800"
             android:weightSum="12"
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -29,6 +28,7 @@
                android:layout_height="wrap_content"
                android:layout_gravity="center_vertical"
                style="@style/text_view_title_right"
+               android:textColor="@color/colorWhite"
                android:layout_weight="11"
                android:text="بنر تبلیغاتی"/>
     <ImageView
@@ -40,17 +40,18 @@
         android:rotation="320"
         android:src="@drawable/advertise"/>
         </LinearLayout>
+
     <ImageView
         android:id="@+id/IMG_AD"
         android:scaleType="centerCrop"
-
+        android:background="@drawable/transparent_round_bottom_shape"
         android:elevation="@dimen/_4sdp"
         android:layout_width="match_parent"
         android:layout_gravity="center"
         android:layout_height="@dimen/_90sdp"
         android:src="@drawable/board"/>
     </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 
 </LinearLayout>

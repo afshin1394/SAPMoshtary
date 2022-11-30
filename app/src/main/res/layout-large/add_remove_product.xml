@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="@dimen/_2sdp"
+    android:padding="@dimen/_6sdp"
     android:layoutDirection="rtl"
     android:background="@android:color/transparent"
     android:layout_gravity="center"
@@ -35,7 +35,7 @@
             android:textStyle="bold"
             android:text="100"
             android:gravity="center"
-            style="@style/text_view_title_right"
+            style="@style/text_view_title_right_large_screen"
             />
         <ImageView
             android:id="@+id/tv_remove"

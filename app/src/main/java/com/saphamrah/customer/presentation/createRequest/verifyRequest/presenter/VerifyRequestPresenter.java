@@ -11,6 +11,7 @@ import com.saphamrah.customer.presentation.createRequest.verifyRequest.interacto
 import com.saphamrah.customer.presentation.createRequest.verifyRequest.model.VerifyRequestModel;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -48,8 +49,8 @@ public class VerifyRequestPresenter implements VerifyRequestInteractor.Presenter
 
     @Override
     public void saveRequest(List<ProductModel> productModelGlobal, List<DiscountModel> discountModelsGlobal, List<BonusModel> bonusModelsGlobal, List<JayezehEntekhabiMojodiModel> jayezehEntekhabiMojodiModels, List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModelsGlobal) {
-       List<ProductModel> orderedProducts =  Observable.fromIterable(productModelGlobal).filter(productModel -> productModel.getOrderCount()>0).toList().blockingGet();
-       List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModels = Observable.fromIterable(elamMarjoeeForoshandehModelsGlobal).filter(elamMarjoeeForoshandehModel -> elamMarjoeeForoshandehModel.getTedad3() > 0).toList().blockingGet();
+       List<ProductModel> orderedProducts =  Observable.fromIterable(productModelGlobal!=null?productModelGlobal:new ArrayList<>()).filter(productModel -> productModel.getOrderCount()>0).toList().blockingGet();
+       List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModels = Observable.fromIterable(elamMarjoeeForoshandehModelsGlobal!=null?elamMarjoeeForoshandehModelsGlobal:new ArrayList<>()).filter(elamMarjoeeForoshandehModel -> elamMarjoeeForoshandehModel.getTedad3() > 0).toList().blockingGet();
        model.saveProducts(orderedProducts);
        model.saveDiscounts(discountModelsGlobal);
        model.saveBonuses(bonusModelsGlobal);

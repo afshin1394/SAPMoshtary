@@ -101,7 +101,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     @Override
     protected void initViews() {
         check = 0;
-
+        
         productModels = Observable.fromIterable(activity.getProductModelGlobal()).filter(productModel -> productModel.getOrderCount()>0).toList().blockingGet();
         setProductRecycler();
        if (!activity.setMarjoee)
@@ -188,7 +188,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
             }
         });
-
     }
 
     private void checkState()
@@ -418,11 +417,11 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             switch (Action) {
                 case ADD:
                 case REMOVE:
-                    if (model.getOrderCount() == 0) {
+                    if (model.getOrderCount() == 0)
+                    {
                         productModels.remove(model);
                         cartProductAdapter.notifyDataSetChanged();
                     }
-
                     calculateNumPackBoxCount(model);
                     activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
                     checkState();
@@ -529,6 +528,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
     @Override
     public void onCartEmpty() {
+        Log.i(TAG, "onCartEmpty: ");
        navigateUp();
     }
 }
