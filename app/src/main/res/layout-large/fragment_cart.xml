@@ -13,8 +13,50 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/_125sdp"
         android:orientation="vertical">
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/shimmer_toolbar">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/purchase_light_background"
+                android:elevation="@dimen/_12sdp"
+                android:layoutDirection="rtl"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_gravity="center"
+                    style="@style/text_view_title_right_large_screen"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:text="@string/cart" />
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:padding="@dimen/_2sdp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_marjoee"
+                    />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_trash_3" />
+
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
         <LinearLayout
+            android:visibility="visible"
+            android:id="@+id/lin_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/purchase_light_background"
@@ -67,7 +109,41 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/shimmer_address">
+                        <LinearLayout
+                            android:background="@drawable/rounded_corner_top_red_gradiant"
+                            android:orientation="vertical"
+                            android:layoutDirection="rtl"
+                            android:layout_margin="@dimen/_6sdp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                style="@style/text_view_tight_large_screen"
+                                android:layout_gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/address" />
+                            <View
+                                style="@style/devider_gray"/>
+                            <Spinner
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="@dimen/_4sdp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:padding="@dimen/_4sdp"
+                                android:spinnerMode="dropdown" />
+
+                        </LinearLayout>
+                    </com.facebook.shimmer.ShimmerFrameLayout>
                     <LinearLayout
+                        android:id="@+id/lin_address"
+                        android:visibility="visible"
                         android:background="@drawable/rounded_corner_top_red_gradiant"
                         android:orientation="vertical"
                         android:layoutDirection="rtl"
@@ -94,8 +170,65 @@
                             android:spinnerMode="dropdown" />
 
                     </LinearLayout>
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:visibility="gone"
+                        android:id="@+id/shimmer_vosol"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:background="@drawable/rounded_corner_top_red_gradiant"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_6sdp"
+                            android:layoutDirection="rtl"
+                            android:orientation="vertical">
 
+                            <TextView
+                                style="@style/text_view_tight_large_screen"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@string/vosol" />
+                            <View style="@style/devider_gray"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <Spinner
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+
+                                    android:padding="@dimen/_2sdp"
+                                    android:spinnerMode="dropdown" />
+
+                                <View
+                                    style="@style/devider_gray"
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent" />
+
+
+
+
+                                <com.saphamrah.customer.utils.customViews.EditTextWatcher
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:hint="@string/modatVosol"
+                                    android:maxLines="1"
+                                    android:inputType="number"
+                                    android:textColorHint="@color/colorDivider"
+                                    android:textSize="@dimen/_6sdp" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.facebook.shimmer.ShimmerFrameLayout>
                     <LinearLayout
+
+                        android:visibility="visible"
                         android:background="@drawable/rounded_corner_top_red_gradiant"
                         android:id="@+id/lin_vosol"
                         android:layout_width="match_parent"
@@ -148,9 +281,630 @@
                                     android:textSize="@dimen/_6sdp" />
                         </LinearLayout>
                     </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/shimmer_cart_product_list"
+                        >
 
+                      <LinearLayout
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="vertical"
+                          >
+
+
+
+
+                            <FrameLayout
+                                android:layoutDirection="rtl"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <de.hdodenhof.circleimageview.CircleImageView
+                                    android:layout_width="@dimen/_90sdp"
+                                    android:layout_height="@dimen/_70sdp"
+                                    android:layout_gravity="center_vertical|start"
+                                    android:elevation="@dimen/_40sdp"
+                                    android:src="@drawable/board"
+                                    app:civ_border_color="@color/colorGray"
+                                    app:civ_border_overlay="true"
+                                    app:civ_border_width="@dimen/_2sdp" />
+
+                                <androidx.cardview.widget.CardView
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right|center"
+                                    android:layout_marginLeft="@dimen/_18sdp"
+                                    android:layout_marginRight="@dimen/_40sdp"
+                                    app:cardCornerRadius="@dimen/_10sdp"
+
+                                    >
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="horizontal">
+
+                                        <LinearLayout
+                                            android:layout_weight="10"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginRight="@dimen/_40sdp"
+                                            android:background="@color/colorWhite"
+                                            android:orientation="vertical"
+
+                                            >
+
+
+                                            <LinearLayout
+
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal">
+
+                                                <TextView
+                                                    style="@style/text_view_title_right_large_screen"
+                                                    android:layout_width="@dimen/_80sdp"
+                                                    android:layout_height="wrap_content"
+                                                    android:background="@color/gray_vf"
+                                                    />
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content">
+
+                                                <ImageView
+                                                    android:layout_width="@dimen/_18sdp"
+                                                    android:layout_height="@dimen/_18sdp"
+                                                    android:layout_gravity="center"
+                                                    android:src="@drawable/rounded_gray_bg" />
+
+                                                <TextView
+                                                    style="@style/text_view_tight_large_screen"
+                                                    android:layout_width="@dimen/_40sdp"
+                                                    android:layout_height="wrap_content"
+                                                    android:background="@color/gray_vf"
+                                                     />
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content">
+
+                                                <ImageView
+                                                    android:layout_width="@dimen/_18sdp"
+                                                    android:layout_height="@dimen/_18sdp"
+                                                    android:layout_gravity="center"
+                                                    android:src="@drawable/rounded_gray_bg" />
+
+                                                <TextView
+                                                    style="@style/text_view_tight_large_screen"
+                                                    android:layout_width="@dimen/_30sdp"
+                                                    android:layout_height="wrap_content"
+                                                    android:background="@color/gray_vf"
+                                                     />
+                                            </LinearLayout>
+                                        </LinearLayout>
+                                        <View android:layout_height="match_parent" android:layout_width="@dimen/_20sdp"  layout="@layout/add_remove_item" android:background="@color/gray_vf"/>
+
+                                    </LinearLayout>
+                                </androidx.cardview.widget.CardView>
+                            </FrameLayout>
+                          <FrameLayout
+                              android:layoutDirection="rtl"
+                              android:layout_width="match_parent"
+                              android:layout_height="match_parent">
+
+                              <de.hdodenhof.circleimageview.CircleImageView
+                                  android:layout_width="@dimen/_90sdp"
+                                  android:layout_height="@dimen/_70sdp"
+                                  android:layout_gravity="center_vertical|start"
+                                  android:elevation="@dimen/_40sdp"
+                                  android:src="@drawable/board"
+                                  app:civ_border_color="@color/colorGray"
+                                  app:civ_border_overlay="true"
+                                  app:civ_border_width="@dimen/_2sdp" />
+
+                              <androidx.cardview.widget.CardView
+
+                                  android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:layout_gravity="right|center"
+                                  android:layout_marginLeft="@dimen/_18sdp"
+                                  android:layout_marginRight="@dimen/_40sdp"
+                                  app:cardCornerRadius="@dimen/_10sdp"
+
+                                  >
+
+                                  <LinearLayout
+                                      android:layout_width="match_parent"
+                                      android:layout_height="match_parent"
+                                      android:orientation="horizontal">
+
+                                      <LinearLayout
+                                          android:layout_weight="10"
+                                          android:layout_width="0dp"
+                                          android:layout_height="wrap_content"
+                                          android:layout_marginRight="@dimen/_40sdp"
+                                          android:background="@color/colorWhite"
+                                          android:orientation="vertical"
+
+                                          >
+
+
+                                          <LinearLayout
+
+                                              android:layout_width="match_parent"
+                                              android:layout_height="wrap_content"
+                                              android:orientation="horizontal">
+
+                                              <TextView
+                                                  style="@style/text_view_title_right_large_screen"
+                                                  android:layout_width="@dimen/_80sdp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="@color/gray_vf"
+                                                  />
+
+                                          </LinearLayout>
+
+                                          <LinearLayout
+
+                                              android:layout_width="wrap_content"
+                                              android:layout_height="wrap_content">
+
+                                              <ImageView
+                                                  android:layout_width="@dimen/_18sdp"
+                                                  android:layout_height="@dimen/_18sdp"
+                                                  android:layout_gravity="center"
+                                                  android:src="@drawable/rounded_gray_bg" />
+
+                                              <TextView
+                                                  style="@style/text_view_tight_large_screen"
+                                                  android:layout_width="@dimen/_40sdp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="@color/gray_vf"
+                                                  />
+                                          </LinearLayout>
+
+                                          <LinearLayout
+                                              android:layout_width="wrap_content"
+                                              android:layout_height="wrap_content">
+
+                                              <ImageView
+                                                  android:layout_width="@dimen/_18sdp"
+                                                  android:layout_height="@dimen/_18sdp"
+                                                  android:layout_gravity="center"
+                                                  android:src="@drawable/rounded_gray_bg" />
+
+                                              <TextView
+                                                  style="@style/text_view_tight_large_screen"
+                                                  android:layout_width="@dimen/_30sdp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="@color/gray_vf"
+                                                  />
+                                          </LinearLayout>
+                                      </LinearLayout>
+                                      <View android:layout_height="match_parent" android:layout_width="@dimen/_20sdp"  layout="@layout/add_remove_item" android:background="@color/gray_vf"/>
+
+                                  </LinearLayout>
+                              </androidx.cardview.widget.CardView>
+                          </FrameLayout>
+                          <FrameLayout
+                              android:layoutDirection="rtl"
+                              android:layout_width="match_parent"
+                              android:layout_height="match_parent">
+
+                              <de.hdodenhof.circleimageview.CircleImageView
+                                  android:layout_width="@dimen/_90sdp"
+                                  android:layout_height="@dimen/_70sdp"
+                                  android:layout_gravity="center_vertical|start"
+                                  android:elevation="@dimen/_40sdp"
+                                  android:src="@drawable/board"
+                                  app:civ_border_color="@color/colorGray"
+                                  app:civ_border_overlay="true"
+                                  app:civ_border_width="@dimen/_2sdp" />
+
+                              <androidx.cardview.widget.CardView
+
+                                  android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:layout_gravity="right|center"
+                                  android:layout_marginLeft="@dimen/_18sdp"
+                                  android:layout_marginRight="@dimen/_40sdp"
+                                  app:cardCornerRadius="@dimen/_10sdp"
+
+                                  >
+
+                                  <LinearLayout
+                                      android:layout_width="match_parent"
+                                      android:layout_height="match_parent"
+                                      android:orientation="horizontal">
+
+                                      <LinearLayout
+                                          android:layout_weight="10"
+                                          android:layout_width="0dp"
+                                          android:layout_height="wrap_content"
+                                          android:layout_marginRight="@dimen/_40sdp"
+                                          android:background="@color/colorWhite"
+                                          android:orientation="vertical"
+
+                                          >
+
+
+                                          <LinearLayout
+
+                                              android:layout_width="match_parent"
+                                              android:layout_height="wrap_content"
+                                              android:orientation="horizontal">
+
+                                              <TextView
+                                                  style="@style/text_view_title_right_large_screen"
+                                                  android:layout_width="@dimen/_80sdp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="@color/gray_vf"
+                                                  />
+
+                                          </LinearLayout>
+
+                                          <LinearLayout
+
+                                              android:layout_width="wrap_content"
+                                              android:layout_height="wrap_content">
+
+                                              <ImageView
+                                                  android:layout_width="@dimen/_18sdp"
+                                                  android:layout_height="@dimen/_18sdp"
+                                                  android:layout_gravity="center"
+                                                  android:src="@drawable/rounded_gray_bg" />
+
+                                              <TextView
+                                                  style="@style/text_view_tight_large_screen"
+                                                  android:layout_width="@dimen/_40sdp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="@color/gray_vf"
+                                                  />
+                                          </LinearLayout>
+
+                                          <LinearLayout
+                                              android:layout_width="wrap_content"
+                                              android:layout_height="wrap_content">
+
+                                              <ImageView
+                                                  android:layout_width="@dimen/_18sdp"
+                                                  android:layout_height="@dimen/_18sdp"
+                                                  android:layout_gravity="center"
+                                                  android:src="@drawable/rounded_gray_bg" />
+
+                                              <TextView
+                                                  style="@style/text_view_tight_large_screen"
+                                                  android:layout_width="@dimen/_30sdp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="@color/gray_vf"
+                                                  />
+                                          </LinearLayout>
+                                      </LinearLayout>
+                                      <View android:layout_height="match_parent" android:layout_width="@dimen/_20sdp"  layout="@layout/add_remove_item" android:background="@color/gray_vf"/>
+
+                                  </LinearLayout>
+                              </androidx.cardview.widget.CardView>
+                          </FrameLayout>
+                          <FrameLayout
+                              android:layoutDirection="rtl"
+                              android:layout_width="match_parent"
+                              android:layout_height="match_parent">
+
+                              <de.hdodenhof.circleimageview.CircleImageView
+                                  android:layout_width="@dimen/_90sdp"
+                                  android:layout_height="@dimen/_70sdp"
+                                  android:layout_gravity="center_vertical|start"
+                                  android:elevation="@dimen/_40sdp"
+                                  android:src="@drawable/board"
+                                  app:civ_border_color="@color/colorGray"
+                                  app:civ_border_overlay="true"
+                                  app:civ_border_width="@dimen/_2sdp" />
+
+                              <androidx.cardview.widget.CardView
+
+                                  android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:layout_gravity="right|center"
+                                  android:layout_marginLeft="@dimen/_18sdp"
+                                  android:layout_marginRight="@dimen/_40sdp"
+                                  app:cardCornerRadius="@dimen/_10sdp"
+
+                                  >
+
+                                  <LinearLayout
+                                      android:layout_width="match_parent"
+                                      android:layout_height="match_parent"
+                                      android:orientation="horizontal">
+
+                                      <LinearLayout
+                                          android:layout_weight="10"
+                                          android:layout_width="0dp"
+                                          android:layout_height="wrap_content"
+                                          android:layout_marginRight="@dimen/_40sdp"
+                                          android:background="@color/colorWhite"
+                                          android:orientation="vertical"
+
+                                          >
+
+
+                                          <LinearLayout
+
+                                              android:layout_width="match_parent"
+                                              android:layout_height="wrap_content"
+                                              android:orientation="horizontal">
+
+                                              <TextView
+                                                  style="@style/text_view_title_right_large_screen"
+                                                  android:layout_width="@dimen/_80sdp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="@color/gray_vf"
+                                                  />
+
+                                          </LinearLayout>
+
+                                          <LinearLayout
+
+                                              android:layout_width="wrap_content"
+                                              android:layout_height="wrap_content">
+
+                                              <ImageView
+                                                  android:layout_width="@dimen/_18sdp"
+                                                  android:layout_height="@dimen/_18sdp"
+                                                  android:layout_gravity="center"
+                                                  android:src="@drawable/rounded_gray_bg" />
+
+                                              <TextView
+                                                  style="@style/text_view_tight_large_screen"
+                                                  android:layout_width="@dimen/_40sdp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="@color/gray_vf"
+                                                  />
+                                          </LinearLayout>
+
+                                          <LinearLayout
+                                              android:layout_width="wrap_content"
+                                              android:layout_height="wrap_content">
+
+                                              <ImageView
+                                                  android:layout_width="@dimen/_18sdp"
+                                                  android:layout_height="@dimen/_18sdp"
+                                                  android:layout_gravity="center"
+                                                  android:src="@drawable/rounded_gray_bg" />
+
+                                              <TextView
+                                                  style="@style/text_view_tight_large_screen"
+                                                  android:layout_width="@dimen/_30sdp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="@color/gray_vf"
+                                                  />
+                                          </LinearLayout>
+                                      </LinearLayout>
+                                      <View android:layout_height="match_parent" android:layout_width="@dimen/_20sdp"  layout="@layout/add_remove_item" android:background="@color/gray_vf"/>
+
+                                  </LinearLayout>
+                              </androidx.cardview.widget.CardView>
+                          </FrameLayout>
+                          <FrameLayout
+                              android:layoutDirection="rtl"
+                              android:layout_width="match_parent"
+                              android:layout_height="match_parent">
+
+                              <de.hdodenhof.circleimageview.CircleImageView
+                                  android:layout_width="@dimen/_90sdp"
+                                  android:layout_height="@dimen/_70sdp"
+                                  android:layout_gravity="center_vertical|start"
+                                  android:elevation="@dimen/_40sdp"
+                                  android:src="@drawable/board"
+                                  app:civ_border_color="@color/colorGray"
+                                  app:civ_border_overlay="true"
+                                  app:civ_border_width="@dimen/_2sdp" />
+
+                              <androidx.cardview.widget.CardView
+
+                                  android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:layout_gravity="right|center"
+                                  android:layout_marginLeft="@dimen/_18sdp"
+                                  android:layout_marginRight="@dimen/_40sdp"
+                                  app:cardCornerRadius="@dimen/_10sdp"
+
+                                  >
+
+                                  <LinearLayout
+                                      android:layout_width="match_parent"
+                                      android:layout_height="match_parent"
+                                      android:orientation="horizontal">
+
+                                      <LinearLayout
+                                          android:layout_weight="10"
+                                          android:layout_width="0dp"
+                                          android:layout_height="wrap_content"
+                                          android:layout_marginRight="@dimen/_40sdp"
+                                          android:background="@color/colorWhite"
+                                          android:orientation="vertical"
+
+                                          >
+
+
+                                          <LinearLayout
+
+                                              android:layout_width="match_parent"
+                                              android:layout_height="wrap_content"
+                                              android:orientation="horizontal">
+
+                                              <TextView
+                                                  style="@style/text_view_title_right_large_screen"
+                                                  android:layout_width="@dimen/_80sdp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="@color/gray_vf"
+                                                  />
+
+                                          </LinearLayout>
+
+                                          <LinearLayout
+
+                                              android:layout_width="wrap_content"
+                                              android:layout_height="wrap_content">
+
+                                              <ImageView
+                                                  android:layout_width="@dimen/_18sdp"
+                                                  android:layout_height="@dimen/_18sdp"
+                                                  android:layout_gravity="center"
+                                                  android:src="@drawable/rounded_gray_bg" />
+
+                                              <TextView
+                                                  style="@style/text_view_tight_large_screen"
+                                                  android:layout_width="@dimen/_40sdp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="@color/gray_vf"
+                                                  />
+                                          </LinearLayout>
+
+                                          <LinearLayout
+                                              android:layout_width="wrap_content"
+                                              android:layout_height="wrap_content">
+
+                                              <ImageView
+                                                  android:layout_width="@dimen/_18sdp"
+                                                  android:layout_height="@dimen/_18sdp"
+                                                  android:layout_gravity="center"
+                                                  android:src="@drawable/rounded_gray_bg" />
+
+                                              <TextView
+                                                  style="@style/text_view_tight_large_screen"
+                                                  android:layout_width="@dimen/_30sdp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="@color/gray_vf"
+                                                  />
+                                          </LinearLayout>
+                                      </LinearLayout>
+                                      <View android:layout_height="match_parent" android:layout_width="@dimen/_20sdp"  layout="@layout/add_remove_item" android:background="@color/gray_vf"/>
+
+                                  </LinearLayout>
+                              </androidx.cardview.widget.CardView>
+                          </FrameLayout>
+                          <FrameLayout
+                              android:layoutDirection="rtl"
+                              android:layout_width="match_parent"
+                              android:layout_height="match_parent">
+
+                              <de.hdodenhof.circleimageview.CircleImageView
+                                  android:layout_width="@dimen/_90sdp"
+                                  android:layout_height="@dimen/_70sdp"
+                                  android:layout_gravity="center_vertical|start"
+                                  android:elevation="@dimen/_40sdp"
+                                  android:src="@drawable/board"
+                                  app:civ_border_color="@color/colorGray"
+                                  app:civ_border_overlay="true"
+                                  app:civ_border_width="@dimen/_2sdp" />
+
+                              <androidx.cardview.widget.CardView
+
+                                  android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:layout_gravity="right|center"
+                                  android:layout_marginLeft="@dimen/_18sdp"
+                                  android:layout_marginRight="@dimen/_40sdp"
+                                  app:cardCornerRadius="@dimen/_10sdp"
+
+                                  >
+
+                                  <LinearLayout
+                                      android:layout_width="match_parent"
+                                      android:layout_height="match_parent"
+                                      android:orientation="horizontal">
+
+                                      <LinearLayout
+                                          android:layout_weight="10"
+                                          android:layout_width="0dp"
+                                          android:layout_height="wrap_content"
+                                          android:layout_marginRight="@dimen/_40sdp"
+                                          android:background="@color/colorWhite"
+                                          android:orientation="vertical"
+
+                                          >
+
+
+                                          <LinearLayout
+
+                                              android:layout_width="match_parent"
+                                              android:layout_height="wrap_content"
+                                              android:orientation="horizontal">
+
+                                              <TextView
+                                                  style="@style/text_view_title_right_large_screen"
+                                                  android:layout_width="@dimen/_80sdp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="@color/gray_vf"
+                                                  />
+
+                                          </LinearLayout>
+
+                                          <LinearLayout
+
+                                              android:layout_width="wrap_content"
+                                              android:layout_height="wrap_content">
+
+                                              <ImageView
+                                                  android:layout_width="@dimen/_18sdp"
+                                                  android:layout_height="@dimen/_18sdp"
+                                                  android:layout_gravity="center"
+                                                  android:src="@drawable/rounded_gray_bg" />
+
+                                              <TextView
+                                                  style="@style/text_view_tight_large_screen"
+                                                  android:layout_width="@dimen/_40sdp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="@color/gray_vf"
+                                                  />
+                                          </LinearLayout>
+
+                                          <LinearLayout
+                                              android:layout_width="wrap_content"
+                                              android:layout_height="wrap_content">
+
+                                              <ImageView
+                                                  android:layout_width="@dimen/_18sdp"
+                                                  android:layout_height="@dimen/_18sdp"
+                                                  android:layout_gravity="center"
+                                                  android:src="@drawable/rounded_gray_bg" />
+
+                                              <TextView
+                                                  style="@style/text_view_tight_large_screen"
+                                                  android:layout_width="@dimen/_30sdp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="@color/gray_vf"
+                                                  />
+                                          </LinearLayout>
+                                      </LinearLayout>
+                                      <View android:layout_height="match_parent" android:layout_width="@dimen/_20sdp" layout="@layout/add_remove_item" android:background="@color/gray_vf"/>
+
+                                  </LinearLayout>
+                              </androidx.cardview.widget.CardView>
+                          </FrameLayout>
+
+                      </LinearLayout>
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+                    </LinearLayout>
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/RV_ordered_products"
+                        android:visibility="visible"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_6sdp"
@@ -160,13 +914,13 @@
 
 
                     <LinearLayout
-                        android:visibility="visible"
+                        android:visibility="invisible"
                         android:id="@+id/lin_bonus_discount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
                         <LinearLayout
-                            android:visibility="gone"
+                            android:visibility="invisible"
                             android:id="@+id/lin_discount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -217,7 +971,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:visibility="gone"
+                        android:visibility="invisible"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/lin_selectable_bonus"

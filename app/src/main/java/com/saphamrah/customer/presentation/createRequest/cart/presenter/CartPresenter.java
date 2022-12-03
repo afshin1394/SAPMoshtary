@@ -1,6 +1,7 @@
 package com.saphamrah.customer.presentation.createRequest.cart.presenter;
 
 import android.content.Context;
+import android.os.Handler;
 
 import com.saphamrah.customer.data.local.temp.BonusModel;
 import com.saphamrah.customer.data.local.temp.DiscountModel;
@@ -75,5 +76,17 @@ public class CartPresenter implements CartInteractor.PresenterOps, CartInteracto
     @Override
     public void saveData(List<ProductModel> productModels, List<BonusModel> bonusModels, List<DiscountModel> discountModels) {
         model.saveData(productModels,bonusModels,discountModels);
+    }
+
+    @Override
+    public void getCart() {
+        view.get().showLoading("");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.get().dismissLoading();
+                view.get().onGetCart();
+            }
+        },2000);
     }
 }

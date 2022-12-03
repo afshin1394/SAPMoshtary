@@ -1307,4 +1307,5 @@
     <string name="next">بعدی</string>
     <string name="mablaghPardakhti">مبلغ پرداختی</string>
     <string name="number2">1 \n عدد</string>
+    <string name="exitOnCart">سبد خرید فعلی شما حذف خواهد شد آیا مطمئن هستید؟</string>
 </resources>

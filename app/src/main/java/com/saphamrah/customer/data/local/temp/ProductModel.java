@@ -26,9 +26,10 @@ public class ProductModel implements Parcelable {
 
     private int weight;
     private String sazmanForosh;
+    private int ccSazmanForosh;
 
 
-    public ProductModel(int id, String nameProduct, long consumerPrice, long sellPrice, String codeKala, long inventory, String productionDate, String expirationDate, List<Integer> imageResource, boolean isAd, int boxCount, int packCount, int numCount, int numInPack, int numInBox,int orderCount, int weight, String sazmanForosh) {
+    public ProductModel(int id, String nameProduct, long consumerPrice, long sellPrice, String codeKala, long inventory, String productionDate, String expirationDate, List<Integer> imageResource, boolean isAd, int boxCount, int packCount, int numCount, int numInPack, int numInBox,int orderCount, int weight, String sazmanForosh,int ccSazmanForosh) {
         this.id = id;
         this.nameProduct = nameProduct;
         this.consumerPrice = consumerPrice;
@@ -47,6 +48,7 @@ public class ProductModel implements Parcelable {
         this.orderCount = orderCount;
         this.weight = weight;
         this.sazmanForosh = sazmanForosh;
+        this.ccSazmanForosh = ccSazmanForosh;
     }
 
     protected ProductModel(Parcel in) {
@@ -81,6 +83,11 @@ public class ProductModel implements Parcelable {
             return new ProductModel[size];
         }
     };
+
+
+    public int getCcSazmanForosh() {
+        return ccSazmanForosh;
+    }
 
     public int getId() {
         return id;

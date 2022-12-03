@@ -1,7 +1,9 @@
 package com.saphamrah.customer.presentation.createRequest.productRequest.presenter;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 
 import com.saphamrah.customer.base.BasePresenter;
 import com.saphamrah.customer.data.local.temp.BonusModel;
@@ -69,6 +71,16 @@ public class ProductRequestMVPPresenter extends BasePresenter<ProductRequestMVPI
         bonusModels.add(bonusModel5);
 
         view.get().onGetDiscountAndBonuses(discountModels,bonusModels);
+
+    }
+
+    @Override
+    public void getProducts() {
+        view.get().showLoading("");
+        new Handler().postDelayed(() -> {
+          view.get().onGetProducts();
+          view.get().dismissLoading();
+        }, 1000);
 
     }
 }

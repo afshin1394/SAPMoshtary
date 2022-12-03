@@ -13,12 +13,16 @@ import java.util.List;
 public interface CartInteractor {
     interface RequiredViewOps extends BaseView {
        void onGetDiscountAndBonuses(List<DiscountModel> discountModels , List<BonusModel> bonusModels);
+
+        void onGetCart();
     }
 
     interface PresenterOps extends BasePresenterOps {
 
         void getDiscountAndBonuses();
         void saveData(List<ProductModel> productModels, List<BonusModel> bonusModels, List<DiscountModel> discountModels);
+
+        void getCart();
     }
 
     interface RequiredPresenterOps extends BaseRequiredPresenterOps {

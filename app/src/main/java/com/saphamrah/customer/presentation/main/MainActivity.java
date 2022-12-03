@@ -79,14 +79,14 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
     private void makeSazmanForoshBottomSheet() {
         List<LocationDbModel> baseSazmanForoshModels = new ArrayList<>();
         baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
-        baseSazmanForoshModels.add(new LocationDbModel("دومینو","1",R.drawable.logo_domino));
-        baseSazmanForoshModels.add(new LocationDbModel("بستنی میهن","1",R.drawable.logo_mihan));
-        baseSazmanForoshModels.add(new LocationDbModel("کاله","1",R.drawable.logo_kalleh));
-        baseSazmanForoshModels.add(new LocationDbModel("لینا","1",R.drawable.logo_lina));
-        baseSazmanForoshModels.add(new LocationDbModel("لبنیات پاستوریزه میهن","1",R.drawable.logo_mihan));
+        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_domino));
+        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
+        baseSazmanForoshModels.add(new LocationDbModel("مهرام","3",R.drawable.logo_kalleh));
+        baseSazmanForoshModels.add(new LocationDbModel("لینا","7",R.drawable.logo_lina));
+        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
         baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
-        baseSazmanForoshModels.add(new LocationDbModel("کاله","1",R.drawable.logo_kalleh));
-        baseSazmanForoshModels.add(new LocationDbModel("لبنیات پاستوریزه میهن","1",R.drawable.logo_mihan));
+        baseSazmanForoshModels.add(new LocationDbModel("کاله","8",R.drawable.logo_kalleh));
+        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
 
         bottomSheetSearch = new BottomSheetSearchRecyclerView(this, this);
         handleBottomSheetBehaviorState();
@@ -156,7 +156,7 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
         Bitmap bm = BitmapFactory.decodeResource(getResources(), (model.getResId()));
 //        Uri uri = ImageUtils.convertBitmapToUri(context,"sazmanIcon",bm);
 //        Log.i(TAG, "onItemSelect: "+uri);
-        startActivity(new Intent(this, CreateRequestActivity.class).putExtra("sazmanName",model.getName()));
+        startActivity(new Intent(MainActivity.this, CreateRequestActivity.class).putExtra("sazmanName",model.getName()).putExtra("ccSazmanForosh",Integer.parseInt(model.getType())));
         handleBottomSheetBehaviorState();
 
 

@@ -16,10 +16,14 @@ public interface ProductRequestMVPInteractor {
 
 
         void onGetDiscountAndBonuses(List<DiscountModel> discountModels, List<BonusModel> bonusModels);
+
+        void onGetProducts();
     }
 
     interface PresenterOps extends BasePresenterOps {
         void getJayezehTakhfifDetails();
+
+        void getProducts();
     }
 
     interface RequiredPresenterOps extends BaseRequiredPresenterOps {

@@ -24,6 +24,9 @@
         <action
             android:id="@+id/action_productRequestFragment_to_cartFragment"
             app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/action_productRequestFragment_to_dialogDoubleActionFragment"
+            app:destination="@id/dialogDoubleActionFragment" />
     </fragment>
     <fragment
         android:id="@+id/addItemToCartFragment"
@@ -100,7 +103,14 @@
         android:id="@+id/verifyRequestFragment"
         android:name="com.saphamrah.customer.presentation.createRequest.verifyRequest.view.fragment.VerifyRequestFragment"
         android:label="VerifyRequestFragment"/>
-
+    <fragment
+        android:id="@+id/dialogDoubleActionFragment"
+        android:name="com.saphamrah.customer.utils.dialogs.DoubleActionFragmentDialog"
+        android:label="DialogDoubleActionFragment" >
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
 
 
 </navigation>

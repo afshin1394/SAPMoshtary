@@ -2,12 +2,18 @@ package com.saphamrah.customer.presentation.createRequest.productRequest.view.fr
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
@@ -18,11 +24,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.local.temp.BonusModel;
 import com.saphamrah.customer.data.local.temp.DiscountModel;
+import com.saphamrah.customer.databinding.FragmentDoubleActionDialogBinding;
 import com.saphamrah.customer.databinding.FragmentProductRequestBinding;
 import com.saphamrah.customer.presentation.createRequest.productRequest.interactor.ProductRequestMVPInteractor;
 import com.saphamrah.customer.presentation.createRequest.productRequest.presenter.ProductRequestMVPPresenter;
@@ -39,6 +47,9 @@ import com.saphamrah.customer.utils.AnimationUtils;
 import com.saphamrah.customer.utils.Constants;
 import com.saphamrah.customer.utils.RxUtils.Watcher;
 import com.saphamrah.customer.utils.customViews.OnSingleClickListener;
+import com.saphamrah.customer.utils.dialogs.DoubleActionFragmentDialog;
+import com.saphamrah.customer.utils.dialogs.IDoubleActionDialog;
+import com.saphamrah.customer.utils.loadingUtils.ShimmerLoading;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +67,10 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     private List<FilterSortModel> filterSortModels = new ArrayList<>();
     private List<ProductModel> productModels;
     private List<ProductModel> productModelsTemp;
-
     private List<FilterSortModel> filterListObserver = new ArrayList<>();
     private BottomSheetBehavior bottomSheetBonusDiscount;
     private BottomSheetBehavior bottomSheetBoxPackNum;
+    private ShimmerLoading shimmerLoading = new ShimmerLoading();
 
     public ProductRequestFragment() {
         super(R.layout.fragment_product_request);
@@ -68,26 +79,30 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
     @Override
     protected void onBackPressed() {
-        getActivity().finish();
+
+        FragmentTransaction wft = getChildFragmentManager().beginTransaction();
+         new DoubleActionFragmentDialog(context.getString(R.string.exitOnCart), true, new IDoubleActionDialog() {
+             @Override
+             public void onConfirmClick() {
+                getActivity().finish();
+             }
+
+             @Override
+             public void onCancelClick() {
+
+
+             }
+         }).show(wft,"exit");
+
+
+
     }
 
 
     @Override
     protected void initViews() {
         Log.i(TAG, "initViews: ");
-
-
-        activity.setCartListener(this);
-        activity.checkCart(true);
-        Log.i(TAG, "onViewCreated:");
-        productModels = activity.getProductModelGlobal();
-        productModelsTemp = new ArrayList<>();
-        productModelsTemp.addAll(productModels);
-        setFilterRecycler();
-        setProductRecycler();
-        setSearch();
-        setViews();
-
+        presenter.getProducts();
     }
 
 
@@ -375,8 +390,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         });
 
 
-
-
         viewBinding.btmShtCartonBasteAdad.layCarton.tvQuantity.removeWatcher();
         viewBinding.btmShtCartonBasteAdad.layCarton.tvQuantity.addTextWatcher(new Watcher() {
             @Override
@@ -443,12 +456,12 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
     @Override
     public void showLoading(String message) {
-
+        shimmerLoading.startLoading(new ShimmerFrameLayout[]{viewBinding.shimmerViewContainer, viewBinding.shimmerToolbar, viewBinding.shimmerSortOrder}, new View[]{viewBinding.linToolbar, viewBinding.linSortOrder});
     }
 
     @Override
     public void dismissLoading() {
-
+        shimmerLoading.stopLoading();
     }
 
     @Override
@@ -483,6 +496,20 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         handleBottomSheetBehaiviourDiscountBonus();
 
 
+    }
+
+    @Override
+    public void onGetProducts() {
+        activity.setCartListener(this);
+        activity.checkCart(true);
+        Log.i(TAG, "onViewCreated:");
+        productModels = activity.getProductModelGlobal();
+        productModelsTemp = new ArrayList<>();
+        productModelsTemp.addAll(productModels);
+        setFilterRecycler();
+        setProductRecycler();
+        setSearch();
+        setViews();
     }
 
 

@@ -57,6 +57,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initViews() {
+        activity.checkCart(true);
         activity.setCartListener(this);
         productModel = AddItemToCartFragmentArgs.fromBundle(getArguments()).getProduct();
         setImageSlider(productModel);

@@ -30,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
@@ -62,6 +63,7 @@ import com.saphamrah.customer.utils.RxUtils.Watcher;
 import com.saphamrah.customer.utils.ScreenUtils;
 import com.saphamrah.customer.utils.customViews.InputFilterMinMax;
 import com.saphamrah.customer.utils.customViews.OnSingleClickListener;
+import com.saphamrah.customer.utils.loadingUtils.ShimmerLoading;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,7 +86,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     private BonusAdapter bonusAdapter;
     private DiscountAdapter discountAdapter;
     private int check;
-
+    private ShimmerLoading shimmerLoading = new ShimmerLoading();
 
 
     public CartFragment() {
@@ -101,15 +103,17 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     @Override
     protected void initViews() {
         check = 0;
-        
-        productModels = Observable.fromIterable(activity.getProductModelGlobal()).filter(productModel -> productModel.getOrderCount()>0).toList().blockingGet();
+        activity.rootBinding.linCart.setVisibility(View.GONE);
+        productModels = Observable.fromIterable(activity.getProductModelGlobal()).filter(productModel -> productModel.getOrderCount() > 0).toList().blockingGet();
         setProductRecycler();
-       if (!activity.setMarjoee)
-           checkState();
-       if (activity.getDiscountModelsGlobal()!=null && activity.getBonusModelsGlobal()!=null)
-           presenter.getDiscountAndBonuses();
-       if (activity.getJayezehEntekhabiMojodiModels().size()>0)
-           setSelectableBonusRecycler();
+        if (!activity.setMarjoee)
+            checkState();
+
+
+        if (activity.getDiscountModelsGlobal() != null && activity.getBonusModelsGlobal() != null)
+            presenter.getDiscountAndBonuses();
+        if (activity.getJayezehEntekhabiMojodiModels().size() > 0)
+            setSelectableBonusRecycler();
 
 
         setBottomSheetOnState();
@@ -117,13 +121,14 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         setReceiptList();
         setMarjoeeList();
         setViews();
-        activity.setMarjoee =false;
-        Log.i(TAG, "initViews: "+activity.paymentState);
+        activity.setMarjoee = false;
+        Log.i(TAG, "initViews: " + activity.paymentState);
+
 
     }
 
     private void setBottomSheetOnState() {
-        switch (activity.paymentState){
+        switch (activity.paymentState) {
             case SAVE_REQUEST:
                 viewBinding.btmShtPurchase.tvPayment.setText(R.string.confirm);
                 break;
@@ -190,30 +195,54 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         });
     }
 
-    private void checkState()
-    {
+    private void checkState() {
         switch (activity.paymentState) {
 
             case SHOW_PRODUCTS: {
+
                 Log.i(TAG, "checkState: SHOW_PRODUCTS");
                 /*state 1*/
-                activity.paymentState = Constants.PaymentStates.CALCULATE_BONUS_DISCOUNT;
-                activity.rootBinding.linCart.setVisibility(View.GONE);
-                viewBinding.linBonus.setVisibility(View.GONE);
-                viewBinding.linDiscount.setVisibility(View.GONE);
-                viewBinding.linSelectableBonus.setVisibility(View.GONE);
-                activity.clearJayezehTakhfif();
-                activity.clearElamMarjoee();
+                if (!addRemoveProduct) {
+                    showLoading("");
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            activity.paymentState = Constants.PaymentStates.CALCULATE_BONUS_DISCOUNT;
+                            activity.clearJayezehTakhfif();
+                            activity.clearElamMarjoee();
+                            dismissLoading();
+
+                            addRemoveProduct = false;
+                        }
+                    }, 1000);
+                }else{
+                    activity.paymentState = Constants.PaymentStates.CALCULATE_BONUS_DISCOUNT;
+                    viewBinding.linBonus.setVisibility(View.GONE);
+                    viewBinding.linDiscount.setVisibility(View.GONE);
+                    viewBinding.linSelectableBonus.setVisibility(View.GONE);
+                    activity.clearJayezehTakhfif();
+                    activity.clearElamMarjoee();
+                }
+
 
                 break;
             }
 
 
             case CALCULATE_BONUS_DISCOUNT: {
-                Log.i(TAG, "checkState: CALCULATE_BONUS_DISCOUNT");
                 /*state2*/
-                activity.paymentState = Constants.PaymentStates.SELECTABLE_BONUS;
-                presenter.getDiscountAndBonuses();
+                Log.i(TAG, "checkState: CALCULATE_BONUS_DISCOUNT");
+                showLoading("");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.paymentState = Constants.PaymentStates.SELECTABLE_BONUS;
+                        presenter.getDiscountAndBonuses();
+
+                    }
+                }, 1000);
+
 
                 break;
             }
@@ -221,10 +250,10 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             case SELECTABLE_BONUS: {
                 Log.i(TAG, "checkState: SELECTABLE_BONUS");
                 /*state3*/
+
+                check = 0;
                 CartFragmentDirections.ActionCartFragmentToSelectableBonusFragment action = CartFragmentDirections.actionCartFragmentToSelectableBonusFragment(new SelectableBonus[]{});
                 navigate(action);
-
-
 
                 break;
             }
@@ -233,16 +262,27 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
                 Log.i(TAG, "checkState: CONFIRM_REQUEST");
                 /*state4*/
-                setSelectableBonusRecycler();
-                activity.paymentState = Constants.PaymentStates.PISH_FAKTOR;
+                showLoading("");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setSelectableBonusRecycler();
+                        activity.paymentState = Constants.PaymentStates.PISH_FAKTOR;
+                        dismissLoading();
+                    }
+                }, 1000);
+
 
                 break;
             }
-            /*state5*/
+
             case PISH_FAKTOR: {
+                /*state5*/
                 Log.i(TAG, "checkState: PISH FAKTOR");
+                check = 0;
                 navigate(CartFragmentDirections.actionCartFragmentToVerifyRequestFragment());
                 activity.paymentState = Constants.PaymentStates.PISH_FAKTOR;
+
 
                 break;
             }
@@ -291,7 +331,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         });
 
         viewBinding.btmShtPurchase.linPurchase.setOnClickListener(v -> {
-            Log.i(TAG, "initViews: "+activity.paymentState);
+            Log.i(TAG, "initViews: " + activity.paymentState);
             checkState();
         });
 
@@ -332,16 +372,16 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
-
+                check++;
+                if (check > 1) {
                     Log.i(TAG, "onItemSelected: in check");
                     activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
                     checkState();
                     setBottomSheetOnState();
                     if (position == 0) {
-
                         viewBinding.etvReceiptDuration.setHint(" 0 ");
                     }
-//                }
+                }
             }
 
             @Override
@@ -365,12 +405,12 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         viewBinding.etvReceiptDuration.addTextWatcher(new Watcher() {
             @Override
             public void onTextChange(String s) {
-                Log.i(TAG, "onTextChange: "+s);
+                Log.i(TAG, "onTextChange: " + s);
 
                 viewBinding.etvReceiptDuration.setHint(s.concat(context.getString(R.string.day)));
 
             }
-        },100);
+        }, 100);
 
     }
 
@@ -392,12 +432,13 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
     @Override
     public void showLoading(String message) {
-
+        shimmerLoading.startLoading(new ShimmerFrameLayout[]{viewBinding.shimmerAddress, viewBinding.shimmerVosol, viewBinding.shimmerToolbar, viewBinding.shimmerCartProductList, viewBinding.btmShtPurchase.shimmerPurchase}
+                , new View[]{viewBinding.linAddress, viewBinding.linVosol, viewBinding.linToolbar, viewBinding.RVOrderedProducts, viewBinding.btmShtPurchase.linPurchase});
     }
 
     @Override
     public void dismissLoading() {
-
+        shimmerLoading.stopLoading();
     }
 
     @Override
@@ -410,15 +451,16 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         return context;
     }
 
+    private boolean addRemoveProduct = false;
 
     private void setProductRecycler() {
 
-        cartProductAdapter = new CartProductAdapter(getActivity(),productModels,  (model, position, Action) -> {
+        cartProductAdapter = new CartProductAdapter(getActivity(), productModels, (model, position, Action) -> {
             switch (Action) {
                 case ADD:
                 case REMOVE:
-                    if (model.getOrderCount() == 0)
-                    {
+                    addRemoveProduct = true;
+                    if (model.getOrderCount() == 0) {
                         productModels.remove(model);
                         cartProductAdapter.notifyDataSetChanged();
                     }
@@ -437,14 +479,14 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     }
 
     private void calculateNumPackBoxCount(ProductModel model) {
-       int boxCount = model.getOrderCount()/model.getNumInBox();
-       int packCount = (model.getOrderCount() - boxCount * model.getNumInBox())/model.getNumInPack();
-       int remainingCount = model.getOrderCount() - (packCount * model.getNumInPack() + boxCount * model.getNumInBox());
-       Log.i(TAG, "calculateNumPackBoxCount: boxCount: "+boxCount + "packCount: "+packCount + "count: "+remainingCount);
-        Log.i(TAG, "calculateNumPackBoxCount: num in box "+model.getNumInBox() + "num in pack:"+model.getPackCount());
-       model.setBoxCount(boxCount);
-       model.setPackCount(packCount);
-       model.setNumCount(remainingCount);
+        int boxCount = model.getOrderCount() / model.getNumInBox();
+        int packCount = (model.getOrderCount() - boxCount * model.getNumInBox()) / model.getNumInPack();
+        int remainingCount = model.getOrderCount() - (packCount * model.getNumInPack() + boxCount * model.getNumInBox());
+        Log.i(TAG, "calculateNumPackBoxCount: boxCount: " + boxCount + "packCount: " + packCount + "count: " + remainingCount);
+        Log.i(TAG, "calculateNumPackBoxCount: num in box " + model.getNumInBox() + "num in pack:" + model.getPackCount());
+        model.setBoxCount(boxCount);
+        model.setPackCount(packCount);
+        model.setNumCount(remainingCount);
     }
 
     @Override
@@ -460,10 +502,16 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void run() {
-                viewBinding.svDetails.scrollTo(0, (int) ScreenUtils.getViewLocationOnScreen(viewBinding.tvDiscountTitle)[1]);
+                viewBinding.svDetails.smoothScrollTo(0,(int) viewBinding.tvDiscountTitle.getY());
+//                viewBinding.svDetails.scrollTo(0, (int) ScreenUtils.getViewLocationOnScreen(viewBinding.tvDiscountTitle)[1]);
             }
         });
+        dismissLoading();
 
+    }
+
+    @Override
+    public void onGetCart() {
 
     }
 
@@ -529,6 +577,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     @Override
     public void onCartEmpty() {
         Log.i(TAG, "onCartEmpty: ");
-       navigateUp();
+        navigateUp();
     }
 }

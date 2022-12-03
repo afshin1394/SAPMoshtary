@@ -1,6 +1,7 @@
 package com.saphamrah.customer.base;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -32,23 +33,18 @@ import java.util.Objects;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public abstract class BaseDialogFragment<T extends BasePresenterOps, S extends ViewBinding> extends DialogFragment implements BaseView {
+public abstract class BaseDialogFragment< S extends ViewBinding> extends DialogFragment  {
 
     private final Integer PERMISSION_REQUEST_CODE = 9824;
     public static final String TAG = BaseFragment.class.getSimpleName();
 
-    private Integer layout;
 
-    public BaseDialogFragment(Integer layout)
-    {
-        this.layout = layout;
-    }
 
     protected CompositeDisposable compositeDisposable;
 
-    protected T presenter;
     protected S viewBinding;
     protected Context context;
+    protected Activity activity;
 
     protected abstract void onBackPressed();
 
