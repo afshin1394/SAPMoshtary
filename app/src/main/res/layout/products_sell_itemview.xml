@@ -92,11 +92,11 @@
                                 android:src="@drawable/ic_mojodgiri" />
 
                             <TextView
-                                android:id="@+id/tv_inventory"
+                                android:id="@+id/tv_sell_price"
                                 style="@style/text_view_tight"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/mojodi" />
+                                android:text="@string/mablaghForosh" />
                         </LinearLayout>
 
                         <LinearLayout

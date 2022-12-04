@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.saphamrah.customer.databinding.FragmentAddItemToCartBinding;
 import com.saphamrah.customer.presentation.createRequest.cart.view.adapter.BonusAdapter;
 import com.saphamrah.customer.presentation.createRequest.cart.view.adapter.DiscountAdapter;
 import com.saphamrah.customer.utils.RxUtils.Watcher;
+import com.saphamrah.customer.utils.customViews.InputFilterMinMax;
 import com.saphamrah.customer.utils.customViews.OnSingleClickListener;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
@@ -210,6 +212,9 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
     }
     private void openCartonBastehAdadBottomSheet(ProductModel  productModel) {
 
+        viewBinding.btmShtPurchase.tvQuantityBasteh.setFilters(new InputFilter[]{new InputFilterMinMax(0, 10000)});
+        viewBinding.btmShtPurchase.tvQuantityCarton.setFilters(new InputFilter[]{new InputFilterMinMax(0, 10000)});
+        viewBinding.btmShtPurchase.tvQuantityAdad.setFilters(new InputFilter[]{new InputFilterMinMax(0, 10000)});
 
         viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
         Log.d(TAG, "openCartonBastehAdadBottomSheet: "+productModel.toString());
@@ -232,7 +237,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
             public void onSingleClick(View v) {
                 productModel.setBoxCount(productModel.getBoxCount() + 1);
                 int orderCount  = calculateOrderCount(productModel);
-                productModel.setOrderCount( orderCount );
+                productModel.setOrderCount(orderCount);
                 viewBinding.btmShtPurchase.tvQuantityCarton.setText(String.valueOf(productModel.getBoxCount()));
                 activity.checkCart(true);
             }
@@ -315,7 +320,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
 
             }
         });
-        viewBinding.btmShtPurchase.tvRemoveCarton.setOnClickListener(new OnSingleClickListener() {
+        viewBinding.btmShtPurchase.tvRemoveAdad.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
 
@@ -325,7 +330,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
                     int orderCount  = calculateOrderCount(productModel);
                     productModel.setOrderCount( orderCount );
                     checkOrderCount(orderCount);
-                    viewBinding.btmShtPurchase.tvQuantityCarton.setText(String.valueOf(productModel.getNumCount()));
+                    viewBinding.btmShtPurchase.tvQuantityAdad.setText(String.valueOf(productModel.getNumCount()));
                 }else{
                     if (productModel.getNumCount() == 1) {
                         productModel.setNumCount(productModel.getNumCount() - 1);
@@ -333,8 +338,8 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
                         productModel.setOrderCount(orderCount);
                         checkOrderCount(orderCount);
                     }
-                    viewBinding.btmShtPurchase.tvQuantityCarton.setText("");
-                    viewBinding.btmShtPurchase.tvQuantityCarton.setHint(getString(R.string.adad));
+                    viewBinding.btmShtPurchase.tvQuantityAdad.setText("");
+                    viewBinding.btmShtPurchase.tvQuantityAdad.setHint(getString(R.string.adad));
                 }
                 activity.checkCart(true);
 
@@ -350,59 +355,59 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
             viewBinding.btmShtPurchase.linPurchase.setVisibility(View.VISIBLE);
             viewBinding.btmShtPurchase.cvTxtConsumerPrice.setVisibility(View.INVISIBLE);
         });
-//        viewBinding.btmShtPurchase.layCarton.tvQuantity.removeWatcher();
-//        viewBinding.btmShtPurchase.layCarton.tvQuantity.addTextWatcher(new Watcher() {
-//            @Override
-//            public void onTextChange(String s) {
-//                try {
-//                    productModel.setBoxCount(Integer.parseInt(s));
-//                    int orderCount  = calculateOrderCount(productModel);
-//                    productModel.setOrderCount(orderCount);
-//                    viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
-//                }catch (Exception e){
-//                    productModel.setBoxCount(0);
-//                    int orderCount  = calculateOrderCount(productModel);
-//                    productModel.setOrderCount(orderCount);
-//                }
-//                activity.checkCart(true);
-//            }
-//        },400);
-//        viewBinding.btmShtPurchase.layBasteh.tvQuantity.removeWatcher();
-//        viewBinding.btmShtPurchase.layBasteh.tvQuantity.addTextWatcher(new Watcher() {
-//            @Override
-//            public void onTextChange(String s) {
-//                try {
-//                    productModel.setPackCount(Integer.parseInt(s));
-//                    int orderCount  = calculateOrderCount(productModel);
-//                    productModel.setOrderCount(orderCount);
-//                    viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
-//
-//                }catch (Exception e){
-//                    productModel.setPackCount(0);
-//                    int orderCount  = calculateOrderCount(productModel);
-//                    productModel.setOrderCount(orderCount);
-//                }
-//                activity.checkCart(true);
-//            }
-//        },400);
-//        viewBinding.btmShtPurchase.layAdad.tvQuantity.removeWatcher();
-//        viewBinding.btmShtPurchase.layAdad.tvQuantity.addTextWatcher(new Watcher() {
-//            @Override
-//            public void onTextChange(String s) {
-//                try {
-//                    productModel.setNumCount(Integer.parseInt(s));
-//                    int orderCount  = calculateOrderCount(productModel);
-//                    productModel.setOrderCount(orderCount);
-//                    viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
-//
-//                }catch (Exception e){
-//                    productModel.setNumCount(0);
-//                    int orderCount  = calculateOrderCount(productModel);
-//                    productModel.setOrderCount(orderCount);
-//                }
-//                activity.checkCart(true);
-//            }
-//        },400);
+        viewBinding.btmShtPurchase.tvQuantityCarton.removeWatcher();
+        viewBinding.btmShtPurchase.tvQuantityCarton.addTextWatcher(new Watcher() {
+            @Override
+            public void onTextChange(String s) {
+                try {
+                    productModel.setBoxCount(Integer.parseInt(s));
+                    int orderCount  = calculateOrderCount(productModel);
+                    productModel.setOrderCount(orderCount);
+                    viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
+                }catch (Exception e){
+                    productModel.setBoxCount(0);
+                    int orderCount  = calculateOrderCount(productModel);
+                    productModel.setOrderCount(orderCount);
+                }
+                activity.checkCart(true);
+            }
+        },400);
+        viewBinding.btmShtPurchase.tvQuantityBasteh.removeWatcher();
+        viewBinding.btmShtPurchase.tvQuantityBasteh.addTextWatcher(new Watcher() {
+            @Override
+            public void onTextChange(String s) {
+                try {
+                    productModel.setPackCount(Integer.parseInt(s));
+                    int orderCount  = calculateOrderCount(productModel);
+                    productModel.setOrderCount(orderCount);
+                    viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
+
+                }catch (Exception e){
+                    productModel.setPackCount(0);
+                    int orderCount  = calculateOrderCount(productModel);
+                    productModel.setOrderCount(orderCount);
+                }
+                activity.checkCart(true);
+            }
+        },400);
+        viewBinding.btmShtPurchase.tvQuantityAdad.removeWatcher();
+        viewBinding.btmShtPurchase.tvQuantityAdad.addTextWatcher(new Watcher() {
+            @Override
+            public void onTextChange(String s) {
+                try {
+                    productModel.setNumCount(Integer.parseInt(s));
+                    int orderCount  = calculateOrderCount(productModel);
+                    productModel.setOrderCount(orderCount);
+                    viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
+
+                }catch (Exception e){
+                    productModel.setNumCount(0);
+                    int orderCount  = calculateOrderCount(productModel);
+                    productModel.setOrderCount(orderCount);
+                }
+                activity.checkCart(true);
+            }
+        },400);
     }
 
     private void checkOrderCount(int orderCount) {

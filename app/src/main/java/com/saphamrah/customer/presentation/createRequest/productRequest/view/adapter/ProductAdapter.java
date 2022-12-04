@@ -4,6 +4,7 @@ import static com.saphamrah.customer.utils.Constants.ADVERTISEMENT;
 import static com.saphamrah.customer.utils.Constants.SELL;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,7 +98,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private TextView nameProduct;
         private TextView consumerPrice;
         private CircleImageView img_product;
-        private TextView inventory;
+        private TextView sell_price;
         private View img_addToCart;
         private MaterialCardView card_purchase;
         private MaterialCardView card_purchase_count;
@@ -110,7 +111,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(view);
 
             nameProduct = view.findViewById(R.id.tv_title);
-            inventory = view.findViewById(R.id.tv_inventory);
+            sell_price = view.findViewById(R.id.tv_sell_price);
             consumerPrice = view.findViewById(R.id.tv_consumerPrice);
             img_addToCart = view.findViewById(R.id.img_add_to_cart);
             card_purchase = view.findViewById(R.id.card_purchase);
@@ -124,37 +125,6 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
 
-//                et_product_count.addTextWatcher(s -> {
-//                    try {
-//                        models.get(getAdapterPosition()).setOrderCount(Integer.parseInt(s));
-//                        listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.ADD);
-//                    } catch (Exception e) {
-////                        models.get(getAdapterPosition()).setOrderCount(0);
-//                    }
-//                }, 500);
-
-
-//                img_add.setOnClickListener(view13 -> {
-//                    models.get(getAdapterPosition()).setOrderCount(models.get(getAdapterPosition()).getOrderCount() + 1);
-//                    et_product_count.setText(String.valueOf(models.get(getAdapterPosition()).getOrderCount()));
-//                    listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.ADD);
-//                });
-//                img_remove.setOnClickListener(view14 -> {
-//
-//
-//                    if (models.get(getAdapterPosition()).getOrderCount() > 1) {
-//
-//                        models.get(getAdapterPosition()).setOrderCount(models.get(getAdapterPosition()).getOrderCount() - 1);
-//                        et_product_count.setText(String.valueOf(models.get(getAdapterPosition()).getOrderCount()));
-//                    } else {
-//                        lin_purchase.setVisibility(View.VISIBLE);
-//                        lin_purchase_count.setVisibility(View.GONE);
-//                    }
-//                    listener.onItemSelect(models.get(getAdapterPosition()), getAdapterPosition(), AdapterAction.REMOVE);
-//
-//                });
-
-
 
 
         }
@@ -166,8 +136,9 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .into(img_product);
             nameProduct.setText(String.format("%1$s", productModel.getNameProduct()));
 //            sellPrice.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh),kalaModel.getSellPrice(),context.getString(R.string.rial)));
-            inventory.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mablaghForosh), productModel.getSellPrice(), context.getString(R.string.rial)));
+            sell_price.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mablaghForosh), productModel.getSellPrice(), context.getString(R.string.rial)));
             consumerPrice.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mablaghMasrafKonandeh), productModel.getConsumerPrice(), context.getString(R.string.rial)));
+            Log.i(TAG, "bind: "+productModel.getOrderCount());
             if (productModel.getOrderCount() > 0)
             {
                 card_purchase_count.setVisibility(View.VISIBLE);
