@@ -209,10 +209,10 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
         ArrayList<AdvertiseModel> advertiseModels = new ArrayList<>();
         baseSazmanForoshModels = new ArrayList<>();
 
-        advertiseModels.add(new AdvertiseModel("@drawable/carrnina_mihan", "http://www.mihan-food.com/", "."));
-        advertiseModels.add(new AdvertiseModel("@drawable/delpazir", "http://www.kadbanoco.com/fa/", "."));
-        advertiseModels.add(new AdvertiseModel("@drawable/pipe_lina", "https://www.linafood.com", "."));
-        advertiseModels.add(new AdvertiseModel("@drawable/bastani", "http://www.mihan-food.com/", "."));
+//        advertiseModels.add(new AdvertiseModel("@drawable/carrnina_mihan", "http://www.mihan-food.com/", "."));
+        advertiseModels.add(new AdvertiseModel("@drawable/tuna", "http://www.kadbanoco.com/fa/", "."));
+        advertiseModels.add(new AdvertiseModel("@drawable/dressing", "http://www.kadbanoco.com/fa/", "."));
+//        advertiseModels.add(new AdvertiseModel("@drawable/bastani", "http://www.mihan-food.com/", "."));
 
 
         baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));

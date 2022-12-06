@@ -56,29 +56,34 @@
                         >
 
 
-                        <LinearLayout
+                        <RelativeLayout
 
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
+
                             <TextView
+                                android:layout_alignParentStart="true"
+                                android:layout_toRightOf="@+id/img_discountbonus"
                                 android:id="@+id/tv_title"
                                 style="@style/text_view_title_right"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="right"
                                 android:text="@string/titleOfPrompt" />
 
-                                <ImageView
-                                    android:id="@+id/img_discountbonus"
-                                    android:padding="@dimen/_4sdp"
-                                    android:layout_gravity="center"
-                                    android:layout_width="0dp"
-                                    android:layout_weight="0.4"
-                                    android:layout_height="match_parent"
-                                    android:src="@drawable/bonus_discount_tag"/>
-                        </LinearLayout>
+                            <ImageView
+                                android:layout_alignParentEnd="true"
+                                android:id="@+id/img_discountbonus"
+                                android:padding="@dimen/_6sdp"
+                                android:layout_gravity="left"
+                                android:layout_width="@dimen/_28sdp"
+                                android:layout_height="@dimen/_26sdp"
+                                android:src="@drawable/bonus_discount_tag"/>
+
+                        </RelativeLayout>
+
 
                         <LinearLayout
 

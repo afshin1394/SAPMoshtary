@@ -525,6 +525,10 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
 
     private void handleBottomSheetBehaiviourBoxPackNum() {
+        if (bottomSheetBonusDiscount.getState() == BottomSheetBehavior.STATE_EXPANDED){
+            bottomSheetBonusDiscount.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
+
         if (bottomSheetBoxPackNum.getState() != BottomSheetBehavior.STATE_EXPANDED) {
             viewBinding.btmShtCartonBasteAdad.IVCollapse.setRotation(0);
             bottomSheetBoxPackNum.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -534,6 +538,10 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     }
 
     private void handleBottomSheetBehaiviourDiscountBonus() {
+        if (bottomSheetBoxPackNum.getState() == BottomSheetBehavior.STATE_EXPANDED){
+            bottomSheetBoxPackNum.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
+
         if (bottomSheetBonusDiscount.getState() != BottomSheetBehavior.STATE_EXPANDED) {
             bottomSheetBonusDiscount.setState(BottomSheetBehavior.STATE_EXPANDED);
             viewBinding.btmShtJayezehTakhfifKala.IVCollapse.setRotation(0);
@@ -548,7 +556,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         BonusProductAdapter bonusAdapter = new BonusProductAdapter(context, bonusModels);
         viewBinding.btmShtJayezehTakhfifKala.RVBonus.setLayoutManager(linearLayoutManager);
         viewBinding.btmShtJayezehTakhfifKala.RVBonus.setAdapter(bonusAdapter);
-
     }
 
     private void setDiscountRecycler(List<DiscountModel> discountModels) {

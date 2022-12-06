@@ -863,6 +863,7 @@
     <string name="vazeiatMorajee">وضعیت مراجعه</string>
     <string name="yourLocation">مکان فعلی شما</string>
     <string name="location">موقعیت جغرافیایی</string>
+    <string name="locationWithStar">موقعیت جغرافیایی*</string>
     <string name="notFoundLocationChangeSetting">موقعیت مکانی برای شما ثبت نشده، لطفا تنظیمات دستگاه خود را بررسی نمایید.</string>
     <string name="messageBox">صندوق پیام</string>
     <string name="messageDetail">جزئیات پیام</string>
@@ -1242,6 +1243,7 @@
     <string name="sabtAmval">اموال مشتری</string>
 
 
+
     <string name="enter">ورود</string>
     <string name="string_resendcodeuntil"> ارسال مجدد کد تا </string>
     <string name="string_time_format_zero"> %d:0%d </string>
@@ -1308,4 +1310,11 @@
     <string name="mablaghPardakhti">مبلغ پرداختی</string>
     <string name="number2">1 \n عدد</string>
     <string name="exitOnCart">سبد خرید فعلی شما حذف خواهد شد آیا مطمئن هستید؟</string>
+
+    <string name="errorProvince">لطفا استان را به درستی وارد نمایید.</string>
+    <string name="errorCity">لطفا شهر را به درستی وارد نمایید.</string>
+    <string name="errorMainStreet">لطفا خیابان اصلی را به درستی وارد نمایید.</string>
+    <string name="errorLocation">لطفا مکان را خود را انتخاب نمایید.</string>
+    <string name="errorPlaque">لطفا پلاک را به درستی وارد نمایید.</string>
+
 </resources>
