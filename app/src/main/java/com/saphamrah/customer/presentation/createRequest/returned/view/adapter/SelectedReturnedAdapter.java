@@ -62,17 +62,20 @@ public class SelectedReturnedAdapter extends RecyclerView.Adapter<SelectedReturn
         TextView marjoeeKalaName;
         TextView tedad;
         TextView mablaghMarjoee;
+        TextView elatMarjoee;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             marjoeeKalaName = itemView.findViewById(R.id.tv_marjoee_kala_name);
             tedad = itemView.findViewById(R.id.tv_marjoee_tedad);
             mablaghMarjoee = itemView.findViewById(R.id.tv_mablagh_marjoee);
+            elatMarjoee = itemView.findViewById(R.id.tv_elat_marjoee);
         }
 
         public void setData(ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModel) {
             marjoeeKalaName.setText(elamMarjoeeForoshandehModel.getNameKala());
             tedad.setText(String.format("%1$s:%2$s",context.getString(R.string.tedad),elamMarjoeeForoshandehModel.getTedad3()));
             mablaghMarjoee.setText(String.format("%1$s%2$s", ((int) (elamMarjoeeForoshandehModel.getTedad3() * elamMarjoeeForoshandehModel.getGheymatForosh())),context.getString(R.string.rial)));
+            elatMarjoee.setText(elamMarjoeeForoshandehModel.getNameElatMarjoeeKala());
         }
     }
 }

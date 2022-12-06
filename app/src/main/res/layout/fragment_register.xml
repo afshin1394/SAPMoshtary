@@ -391,7 +391,7 @@
 
         </ScrollView>
 
-        <org.osmdroid.views.MapView
+        <!--<org.osmdroid.views.MapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"
             android:layout_height="225dp"
@@ -399,7 +399,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginRight="15dp"
-            android:visibility="gone" />
+            android:visibility="gone" />-->
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnApply"
@@ -416,7 +416,9 @@
 
     </RelativeLayout>
 
-    <include layout="@layout/bottom_sheet_search" />
+    <include layout="@layout/bottom_sheet_recycler_search" />
+    <include layout="@layout/bottom_sheet_map_search" />
+
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

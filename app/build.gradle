@@ -115,6 +115,12 @@ dependencies {
     //circle image view
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    //mapIr
+    implementation 'ir.map:map-sdk:4.0.0'
+    implementation 'ir.map.servicesdk:service-sdk:4.0.3'
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.6.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.6.0'
+
     // open Street map
     implementation 'org.osmdroid:osmdroid-android:6.1.10'
     implementation 'com.github.MKergall:osmbonuspack:6.6.0'

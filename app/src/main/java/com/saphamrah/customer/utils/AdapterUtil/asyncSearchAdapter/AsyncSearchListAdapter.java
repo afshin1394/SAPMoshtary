@@ -23,7 +23,7 @@ public class AsyncSearchListAdapter<T extends BaseBottomSheetRecyclerModel> exte
 
     private boolean isMultiSelect;
     private final AsyncListDiffer<T> mDiffer = new AsyncListDiffer<T>(this, new SearchListAdapterDiffUtil<T>());
-    private final AdapterItemListener<T> adapterItemListener;
+    private AdapterItemListener<T> adapterItemListener;
 
 
     public AsyncSearchListAdapter(boolean isMultiSelect, AdapterItemListener<T> adapterItemListener) {
@@ -32,6 +32,13 @@ public class AsyncSearchListAdapter<T extends BaseBottomSheetRecyclerModel> exte
         this.isMultiSelect = isMultiSelect;
         this.adapterItemListener = adapterItemListener;
 
+    }
+
+
+    public AsyncSearchListAdapter(boolean isMultiSelect) {
+
+        super(new SearchListAdapterDiffUtil<T>());
+        this.isMultiSelect = isMultiSelect;
     }
 
     @NonNull
@@ -70,16 +77,6 @@ public class AsyncSearchListAdapter<T extends BaseBottomSheetRecyclerModel> exte
 
         public void bind(T baseSearchDbModel) {
             binding.txtSearch.setText(baseSearchDbModel.getName());
-
-            int resImg = ((LocationDbModel) baseSearchDbModel).getResId();
-
-            if (resImg != 0) {
-                binding.imageViewSearch.setVisibility(View.VISIBLE);
-
-                Glide.with(binding.getRoot())
-                        .load(resImg)
-                        .into(binding.imageViewSearch);
-            }
 
             if (!isMultiSelect) {
                 binding.checkboxSearch.setVisibility(View.GONE);

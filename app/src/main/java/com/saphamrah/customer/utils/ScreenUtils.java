@@ -1,5 +1,8 @@
 package com.saphamrah.customer.utils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 public class ScreenUtils {
@@ -10,5 +13,10 @@ public class ScreenUtils {
         result[0] = location[0];
         result[1] = location[1];
         return result;
+    }
+    public static int getWindowHeight(Context context) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.heightPixels;
     }
 }

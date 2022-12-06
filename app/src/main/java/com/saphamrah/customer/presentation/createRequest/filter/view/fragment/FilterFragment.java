@@ -42,9 +42,7 @@ public class FilterFragment extends BaseBottomDialogFragment<FilterMVPPresenter,
 
 
 
-    public FilterFragment() {
-        super(R.layout.fragment_filter);
-    }
+
 
 
 

@@ -26,9 +26,7 @@ public class WelcomeFragment extends BaseFragment<MainPresenter, FragmentWelcome
     private ArrayList<AdvertiseModel> advertiseList;
 
     public WelcomeFragment(ArrayList<AdvertiseModel> advertiseList){
-        super(R.layout.fragment_welcome);
         this.advertiseList = advertiseList;
-
     }
 
 //        MoshtaryRepository moshtaryRepository = new MoshtaryRepository(getContext());

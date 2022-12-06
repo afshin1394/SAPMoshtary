@@ -18,12 +18,9 @@ import com.saphamrah.customer.presentation.profile.ProfilePresenter;
 public class FirstLastNameFragment extends BaseFragment<ProfilePresenter, FragmentFirstLastNameBinding, MainActivity> implements ProfileInteracts.RequiredViewOps {
 
 
-    public FirstLastNameFragment() {
-        super(R.layout.fragment_first_last_name);
-    }
-
     @Override
     protected void onBackPressed() {
+        navigateUp();
 
     }
 

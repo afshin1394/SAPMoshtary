@@ -23,13 +23,10 @@ import java.util.ArrayList;
 
 public class AddressFragment extends BaseFragment<ProfilePresenter, FragmentAddressBinding, MainActivity> implements ProfileInteracts.RequiredViewOps {
 
-    public AddressFragment() {
-        super(R.layout.fragment_address);
-    }
 
     @Override
     protected void onBackPressed() {
-
+        navigateUp();
     }
 
     @Override

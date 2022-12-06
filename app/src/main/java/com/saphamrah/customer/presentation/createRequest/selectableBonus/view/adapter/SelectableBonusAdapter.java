@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.data.local.temp.JayezehEntekhabiModel;
 import com.saphamrah.customer.data.local.temp.JayezehEntekhabiMojodiModel;
@@ -85,16 +86,18 @@ public class SelectableBonusAdapter extends RecyclerView.Adapter<SelectableBonus
         private TextView tv_inventory;
         private TextView tv_bonus_name;
         private EditTextWatcher etv_bonus_name;
-        private LinearLayout lin_minus;
-        private LinearLayout lin_plus;
+
+        private MaterialCardView card_plus;
+        private MaterialCardView card_minus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_inventory = itemView.findViewById(R.id.tv_inventory);
             tv_bonus_name = itemView.findViewById(R.id.tv_title);
             etv_bonus_name = itemView.findViewById(R.id.etv_bonus_count);
-            lin_minus = itemView.findViewById(R.id.lin_minus);
-            lin_plus = itemView.findViewById(R.id.lin_plus);
+
+            card_minus = itemView.findViewById(R.id.card_minus);
+            card_plus = itemView.findViewById(R.id.card_plus);
         }
 
         public void bind(JayezehEntekhabiMojodiModel jayezehEntekhabiMojodiModel) {
@@ -102,7 +105,7 @@ public class SelectableBonusAdapter extends RecyclerView.Adapter<SelectableBonus
             tv_inventory.setText(String.format("%1$s %2$s %3$s", context.getString(R.string.mojodi), jayezehEntekhabiMojodiModel.getTedad(), context.getString(R.string.adad)));
             tv_bonus_name.setText(jayezehEntekhabiMojodiModel.getNameKala());
             etv_bonus_name.setText(String.format("%1$s", jayezehEntekhabiMojodiModel.getSelectedCount()));
-            lin_plus.setOnClickListener(new View.OnClickListener() {
+            card_plus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.i(TAG, "SelectableBonusAdapter: onclick" + jayezehEntekhabiMojodiModels);
@@ -112,7 +115,7 @@ public class SelectableBonusAdapter extends RecyclerView.Adapter<SelectableBonus
                 }
             });
 
-            lin_minus.setOnClickListener(new View.OnClickListener() {
+            card_minus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (jayezehEntekhabiMojodiModel.getSelectedCount() > 0) {

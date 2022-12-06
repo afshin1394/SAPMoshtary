@@ -40,6 +40,7 @@
             android:id="@+id/sp_bonus_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/bordered_transparent"
             android:gravity="center"
             android:paddingTop="15dp"
             android:paddingRight="10dp"

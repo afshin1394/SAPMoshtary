@@ -1,4 +1,4 @@
-package com.saphamrah.customer.utils;
+package com.saphamrah.customer.utils.mapModule.Service;
 
 import android.Manifest;
 import android.app.Activity;
@@ -13,16 +13,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.saphamrah.customer.Application;
-
-import java.util.List;
-
-public class LocationProvider extends Service implements LocationListener  {
+public class LocationProvider extends Service implements LocationListener
+{
     private Context context;
     boolean isGPSEnabled = false;
     boolean isNetworkEnabled = false;
@@ -38,9 +33,9 @@ public class LocationProvider extends Service implements LocationListener  {
 
     LocationManager locationManager;
 
-    public LocationProvider()
+    public LocationProvider(Context context)
     {
-        this.context = Application.getContext();
+        this.context = context;
         latitude = 0.0;
         longitude = 0.0;
         getLocation();
@@ -64,7 +59,7 @@ public class LocationProvider extends Service implements LocationListener  {
                     {
                         ActivityCompat.requestPermissions((Activity)context , new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                     }
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 6000, 3, this);
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 3, this);
                     if (locationManager != null)
                     {
                         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -104,13 +99,11 @@ public class LocationProvider extends Service implements LocationListener  {
                     }
                 }
             }
-
         }
         catch(Exception e)
         {
             e.printStackTrace();
-           /* Logger logger = new Logger();
-            logger.insertLogToDB(context,Constants.LOG_EXCEPTION(), e.toString(), "GPSTracker", "", "getLocation", "");*/
+
         }
         return location;
     }
@@ -209,16 +202,6 @@ public class LocationProvider extends Service implements LocationListener  {
     }
 
     @Override
-    public void onLocationChanged(@NonNull List<Location> locations) {
-        LocationListener.super.onLocationChanged(locations);
-    }
-
-    @Override
-    public void onFlushComplete(int requestCode) {
-        LocationListener.super.onFlushComplete(requestCode);
-    }
-
-    @Override
     public void onProviderDisabled(String provider) {
 
     }
@@ -233,6 +216,11 @@ public class LocationProvider extends Service implements LocationListener  {
     {
     }
 
+    @Override
+    public IBinder onBind(Intent intent)
+    {
+        return null;
+    }
 
     LocationListener locationListener=new LocationListener() {
         @Override
@@ -265,12 +253,6 @@ public class LocationProvider extends Service implements LocationListener  {
         if (locationManager !=null) locationManager.removeUpdates(locationListener);
         if (locationManager !=null) locationManager =null;
         if (locationListener !=null) locationListener =null;
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
     }
 
 }

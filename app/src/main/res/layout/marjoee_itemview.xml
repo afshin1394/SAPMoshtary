@@ -103,7 +103,7 @@
                 </LinearLayout>
                 <FrameLayout
                     android:layout_gravity="center"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <LinearLayout
@@ -127,15 +127,15 @@
 
                             <ImageView
                                 android:id="@+id/add_to_cart"
-                                android:layout_width="@dimen/_20sdp"
-                                android:layout_height="@dimen/_16sdp"
+                                android:layout_width="@dimen/_22sdp"
+                                android:layout_height="@dimen/_18sdp"
                                 android:layout_margin="@dimen/_2sdp"
                                 android:padding="@dimen/_4sdp"
                                 android:src="@drawable/add_product" />
 
                             <com.saphamrah.customer.utils.customViews.EditTextWatcher
                                 android:id="@+id/etw_count"
-                                android:layout_width="wrap_content"
+                                android:layout_width="@dimen/_40sdp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="bottom"
                                 android:gravity="center"
@@ -144,15 +144,14 @@
                                 android:paddingLeft="@dimen/_8sdp"
                                 android:paddingRight="@dimen/_8sdp"
                                 android:text="5"
-                                android:textColor="@color/colorBlack"
                                 android:textDirection="rtl"
-                                android:textSize="@dimen/_8sdp"
-                                android:textStyle="bold" />
+                                android:textSize="@dimen/_10sdp"
+                                 />
 
                             <ImageView
                                 android:id="@+id/remove_from_cart"
-                                android:layout_width="@dimen/_20sdp"
-                                android:layout_height="@dimen/_16sdp"
+                                android:layout_width="@dimen/_22sdp"
+                                android:layout_height="@dimen/_18sdp"
                                 android:padding="@dimen/_2sdp"
                                 android:src="@drawable/sharp_remove_black_36" />
 
@@ -161,8 +160,8 @@
 
                         <ImageView
                             android:id="@+id/remove_marjoee"
-                            android:layout_width="@dimen/_28sdp"
-                            android:layout_height="@dimen/_28sdp"
+                            android:layout_width="@dimen/_32sdp"
+                            android:layout_height="@dimen/_38sdp"
                             android:layout_gravity="center"
                             android:elevation="@dimen/_24sdp"
                             android:padding="@dimen/_4sdp"

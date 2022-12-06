@@ -26,13 +26,10 @@ public class ProfileFragment extends BaseFragment<ProfilePresenter, FragmentProf
 
     NavigationView navigationView;
 
-    public ProfileFragment(){
-        super(R.layout.fragment_profile);
-    }
 
     @Override
     protected void onBackPressed() {
-
+        navigateUp();
     }
 
     @Override

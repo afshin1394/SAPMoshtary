@@ -26,9 +26,6 @@ import java.util.ArrayList;
 public class ShoppingListFragment extends BaseFragment<MainPresenter, FragmentShoppingListBinding, MainActivity> implements MainInteracts.RequiredViewOps {
 
 
-    public ShoppingListFragment() {
-        super(R.layout.fragment_shopping_list);
-    }
 
     @Override
     protected void onBackPressed() {

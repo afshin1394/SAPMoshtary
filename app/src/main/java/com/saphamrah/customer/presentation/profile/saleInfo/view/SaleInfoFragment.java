@@ -22,13 +22,10 @@ import java.util.ArrayList;
 public class SaleInfoFragment extends BaseFragment<ProfilePresenter, FragmentSaleInfoBinding, MainActivity> implements ProfileInteracts.RequiredViewOps {
 
 
-    public SaleInfoFragment() {
-        super(R.layout.fragment_sale_info);
-    }
 
     @Override
     protected void onBackPressed() {
-
+        navigateUp();
     }
 
     @Override

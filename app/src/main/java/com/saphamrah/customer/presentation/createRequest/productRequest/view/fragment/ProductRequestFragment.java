@@ -74,29 +74,30 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     private BottomSheetBehavior bottomSheetBoxPackNum;
     private ShimmerLoading shimmerLoading = new ShimmerLoading();
 
-    public ProductRequestFragment() {
-        super(R.layout.fragment_product_request);
-    }
-
 
     @Override
     protected void onBackPressed() {
+        if (bottomSheetBonusDiscount.getState() == BottomSheetBehavior.STATE_EXPANDED) {
 
-        FragmentTransaction wft = getChildFragmentManager().beginTransaction();
-         new DoubleActionFragmentDialog(context.getString(R.string.exitOnCart), true, new IDoubleActionDialog() {
-             @Override
-             public void onConfirmClick() {
-                getActivity().finish();
-             }
+            bottomSheetBonusDiscount.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        } else if (bottomSheetBoxPackNum.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBoxPackNum.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        } else {
+            FragmentTransaction wft = getChildFragmentManager().beginTransaction();
+            new DoubleActionFragmentDialog(context.getString(R.string.exitOnCart), true, new IDoubleActionDialog() {
+                @Override
+                public void onConfirmClick() {
+                    getActivity().finish();
+                }
 
-             @Override
-             public void onCancelClick() {
+                @Override
+                public void onCancelClick() {
 
 
-             }
-         }).show(wft,"exit");
+                }
+            }).show(wft, "exit");
 
-
+        }
 
     }
 
@@ -124,11 +125,11 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     private void setViews() {
         bottomSheetBonusDiscount = BottomSheetBehavior.from(viewBinding.btmShtJayezehTakhfifKala.linBottomSheet);
         bottomSheetBonusDiscount.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        bottomSheetBonusDiscount.setDraggable(false);
+//        bottomSheetBonusDiscount.setDraggable(false);
 
         bottomSheetBoxPackNum = BottomSheetBehavior.from(viewBinding.btmShtCartonBasteAdad.linBottomSheet);
         bottomSheetBoxPackNum.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        bottomSheetBoxPackNum.setDraggable(false);
+//        bottomSheetBoxPackNum.setDraggable(false);
 
         viewBinding.btmShtJayezehTakhfifKala.IVCollapse.setOnClickListener(new OnSingleClickListener() {
             @Override
@@ -256,6 +257,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         viewBinding.btmShtCartonBasteAdad.tvQuantityBasteh.setFilters(new InputFilter[]{new InputFilterMinMax(0, 10000)});
         viewBinding.btmShtCartonBasteAdad.tvQuantityAdad.setFilters(new InputFilter[]{new InputFilterMinMax(0, 10000)});
 
+
         if (bottomSheetBoxPackNum.getState() == BottomSheetBehavior.STATE_EXPANDED) {
             bottomSheetBoxPackNum.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
@@ -269,15 +271,19 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         viewBinding.btmShtCartonBasteAdad.tvQuantityCarton.setText("");
         viewBinding.btmShtCartonBasteAdad.tvQuantityBasteh.setText("");
         viewBinding.btmShtCartonBasteAdad.tvQuantityAdad.setText("");
-        viewBinding.btmShtCartonBasteAdad.tvQuantityAdad.setHint(R.string.adad);
-        viewBinding.btmShtCartonBasteAdad.tvQuantityBasteh.setHint(R.string.basteh);
-        viewBinding.btmShtCartonBasteAdad.tvQuantityCarton.setHint(R.string.carton);
+
         if (productModelsTemp.get(position).getBoxCount() > 0)
             viewBinding.btmShtCartonBasteAdad.tvQuantityCarton.setText(String.valueOf(productModelsTemp.get(position).getBoxCount()));
         if (productModelsTemp.get(position).getPackCount() > 0)
             viewBinding.btmShtCartonBasteAdad.tvQuantityBasteh.setText(String.valueOf(productModelsTemp.get(position).getPackCount()));
         if (productModelsTemp.get(position).getNumCount() > 0)
             viewBinding.btmShtCartonBasteAdad.tvQuantityAdad.setText(String.valueOf(productModelsTemp.get(position).getNumCount()));
+        if (productModelsTemp.get(position).getNumCount() == 0)
+            viewBinding.btmShtCartonBasteAdad.tvQuantityAdad.setHint(R.string.adad);
+        if (productModelsTemp.get(position).getPackCount() == 0)
+            viewBinding.btmShtCartonBasteAdad.tvQuantityBasteh.setHint(R.string.basteh);
+        if (productModelsTemp.get(position).getBoxCount() == 0)
+            viewBinding.btmShtCartonBasteAdad.tvQuantityCarton.setHint(R.string.carton);
 
         viewBinding.btmShtCartonBasteAdad.IVCollapse.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -296,8 +302,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
                 viewBinding.btmShtCartonBasteAdad.tvQuantityCarton.setText(String.valueOf(productModelsTemp.get(position).getBoxCount()));
                 productAdapter.notifyItemChanged(position);
                 activity.checkCart(true);
-
-
             }
         });
 
@@ -311,7 +315,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
                 viewBinding.btmShtCartonBasteAdad.tvQuantityBasteh.setText(String.valueOf(productModelsTemp.get(position).getPackCount()));
                 productAdapter.notifyItemChanged(position);
                 activity.checkCart(true);
-
             }
         });
 
@@ -333,14 +336,17 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
             public void onClick(View v) {
 
                 if (productModelsTemp.get(position).getBoxCount() > 1) {
+
                     productModelsTemp.get(position).setBoxCount(productModelsTemp.get(position).getBoxCount() - 1);
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
                     productModelsTemp.get(position).setOrderCount(orderCount);
                     viewBinding.btmShtCartonBasteAdad.tvQuantityCarton.setText(String.valueOf(productModelsTemp.get(position).getBoxCount()));
+
                 } else {
                     if (productModelsTemp.get(position).getBoxCount() == 1) {
                         productModelsTemp.get(position).setBoxCount(productModelsTemp.get(position).getBoxCount() - 1);
                         productModelsTemp.get(position).setOrderCount(calculateOrderCount(productModelsTemp.get(position)));
+
                     }
                     viewBinding.btmShtCartonBasteAdad.tvQuantityCarton.setText("");
                     viewBinding.btmShtCartonBasteAdad.tvQuantityCarton.setHint(getString(R.string.carton));
@@ -378,8 +384,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
             @Override
             public void onClick(View v) {
 
-                if (productModelsTemp.get(position).getNumCount() > 1)
-                {
+                if (productModelsTemp.get(position).getNumCount() > 1) {
                     productModelsTemp.get(position).setNumCount(productModelsTemp.get(position).getNumCount() - 1);
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
                     productModelsTemp.get(position).setOrderCount(orderCount);
@@ -395,8 +400,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
                 }
                 productAdapter.notifyItemChanged(position);
                 activity.checkCart(true);
-
-
             }
         });
 
@@ -405,10 +408,12 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         viewBinding.btmShtCartonBasteAdad.tvQuantityCarton.addTextWatcher(new Watcher() {
             @Override
             public void onTextChange(String s) {
+                Log.i(TAG, "onTextChange: tvQuantityCarton" + s);
                 try {
                     productModelsTemp.get(position).setBoxCount(Integer.parseInt(s));
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
                     productModelsTemp.get(position).setOrderCount(orderCount);
+                    productModelsTemp.get(position).setBoxCount(Integer.parseInt(viewBinding.btmShtCartonBasteAdad.tvQuantityCarton.getText().toString()));
                 } catch (Exception e) {
                     productModelsTemp.get(position).setBoxCount(0);
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
@@ -423,10 +428,13 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         viewBinding.btmShtCartonBasteAdad.tvQuantityBasteh.addTextWatcher(new Watcher() {
             @Override
             public void onTextChange(String s) {
+                Log.i(TAG, "onTextChange: tvQuantityBasteh" + s);
                 try {
                     productModelsTemp.get(position).setPackCount(Integer.parseInt(s));
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
                     productModelsTemp.get(position).setOrderCount(orderCount);
+                    productModelsTemp.get(position).setPackCount(Integer.parseInt(viewBinding.btmShtCartonBasteAdad.tvQuantityBasteh.getText().toString()));
+
                 } catch (Exception e) {
                     productModelsTemp.get(position).setPackCount(0);
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
@@ -440,10 +448,12 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         viewBinding.btmShtCartonBasteAdad.tvQuantityAdad.addTextWatcher(new Watcher() {
             @Override
             public void onTextChange(String s) {
+                Log.i(TAG, "onTextChange: tvQuantityAdad" + s);
                 try {
                     productModelsTemp.get(position).setNumCount(Integer.parseInt(s));
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
                     productModelsTemp.get(position).setOrderCount(orderCount);
+                    productModelsTemp.get(position).setNumCount(Integer.parseInt(viewBinding.btmShtCartonBasteAdad.tvQuantityAdad.getText().toString()));
                 } catch (Exception e) {
                     productModelsTemp.get(position).setNumCount(0);
                     int orderCount = calculateOrderCount(productModelsTemp.get(position));
@@ -505,8 +515,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         setBonusRecycler(bonusModels);
         setDiscountRecycler(discountModels);
         handleBottomSheetBehaiviourDiscountBonus();
-
-
     }
 
     @Override
@@ -525,7 +533,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
 
     private void handleBottomSheetBehaiviourBoxPackNum() {
-        if (bottomSheetBonusDiscount.getState() == BottomSheetBehavior.STATE_EXPANDED){
+        if (bottomSheetBonusDiscount.getState() == BottomSheetBehavior.STATE_EXPANDED) {
             bottomSheetBonusDiscount.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
 
@@ -538,7 +546,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     }
 
     private void handleBottomSheetBehaiviourDiscountBonus() {
-        if (bottomSheetBoxPackNum.getState() == BottomSheetBehavior.STATE_EXPANDED){
+        if (bottomSheetBoxPackNum.getState() == BottomSheetBehavior.STATE_EXPANDED) {
             bottomSheetBoxPackNum.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
 

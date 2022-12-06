@@ -107,7 +107,7 @@ public class ReturnedAdapter extends RecyclerView.Adapter<ReturnedAdapter.ViewHo
                 elamMarjoeeForoshandehModel.setTedad3(1);
                 mablaghMarjoee.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh), ((int) (elamMarjoeeForoshandehModel.getGheymatForosh() * elamMarjoeeForoshandehModel.getTedad3())),context.getString(R.string.rial)));
                 count.setText(String.valueOf(elamMarjoeeForoshandehModel.getTedad3()));
-                listener.onItemSelect(elamMarjoeeForoshandehModel,getAdapterPosition(), AdapterAction.ADD);
+                listener.onItemSelect(elamMarjoeeForoshandehModel,getAdapterPosition(), AdapterAction.SELECT);
 
             });
 

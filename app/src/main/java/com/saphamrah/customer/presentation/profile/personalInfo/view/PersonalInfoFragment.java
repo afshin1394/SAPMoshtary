@@ -20,13 +20,10 @@ import com.saphamrah.customer.presentation.profile.ProfilePresenter;
 public class PersonalInfoFragment extends BaseFragment<ProfilePresenter, FragmentPersonalInfoBinding, MainActivity> implements ProfileInteracts.RequiredViewOps {
 
 
-    public PersonalInfoFragment() {
-        super(R.layout.fragment_personal_info);
-    }
 
     @Override
     protected void onBackPressed() {
-
+        navigateUp();
     }
 
     @Override

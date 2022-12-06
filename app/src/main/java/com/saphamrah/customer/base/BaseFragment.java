@@ -57,11 +57,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
 
     private final Integer PERMISSION_REQUEST_CODE = 9824;
     public static final String TAG = BaseFragment.class.getSimpleName();
-    private Integer layout;
 
-    public BaseFragment(Integer layout) {
-        this.layout = layout;
-    }
 
     protected CompositeDisposable compositeDisposable;
 
@@ -92,7 +88,7 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
             public void handleOnBackPressed() {
                 // Handle the back button event
                 onBackPressed();
-                navigateUp();
+//                navigateUp();
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
@@ -189,6 +185,14 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
     public void navigate(Integer action, Bundle bundle) {
 
         Navigation.findNavController(requireView()).navigate(action, bundle);
+    }
+    public void navigateWithOptions(NavDirections action,NavOptions navOptions){
+        Log.d(TAG, "navigate: "+action);
+        try {
+            Navigation.findNavController(requireView()).navigate(action, navOptions);
+        }catch (Exception e){
+            Log.d(TAG, "navigate: "+e.getMessage());
+        }
     }
 
 

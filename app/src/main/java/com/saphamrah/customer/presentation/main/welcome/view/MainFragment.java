@@ -71,9 +71,7 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
 
     private ArrayList<LocationDbModel> baseSazmanForoshModels;
 
-    public MainFragment() {
-        super(R.layout.fragment_main);
-    }
+
 
     @Override
     protected void onBackPressed() {

@@ -38,9 +38,7 @@ public abstract class BaseBottomDialogFragment<T extends BasePresenterOps, S ext
 
     private Integer layout;
 
-    public BaseBottomDialogFragment(Integer layout) {
-        this.layout = layout;
-    }
+
 
     protected CompositeDisposable compositeDisposable;
 

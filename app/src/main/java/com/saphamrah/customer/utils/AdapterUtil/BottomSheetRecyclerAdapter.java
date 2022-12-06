@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
 import com.saphamrah.customer.databinding.ItemBaseSearchBinding;
 
@@ -17,12 +16,17 @@ public class BottomSheetRecyclerAdapter<T extends BaseBottomSheetRecyclerModel> 
 
     private ArrayList<T> items;
     private boolean isMultiSelect;
-    private final AdapterItemListener<T> adapterItemListener;
+    private AdapterItemListener<T> adapterItemListener;
 
     public BottomSheetRecyclerAdapter(ArrayList<T> items, boolean isMultiSelect, AdapterItemListener<T> adapterItemListener) {
         this.items = items;
         this.isMultiSelect = isMultiSelect;
         this.adapterItemListener = adapterItemListener;
+    }
+
+    public BottomSheetRecyclerAdapter(ArrayList<T> items, boolean isMultiSelect) {
+        this.items = items;
+        this.isMultiSelect = isMultiSelect;
     }
 
     @NonNull
@@ -54,18 +58,12 @@ public class BottomSheetRecyclerAdapter<T extends BaseBottomSheetRecyclerModel> 
         public void bind(T baseSearchDbModel) {
             binding.txtSearch.setText(baseSearchDbModel.getName());
 
-            if (baseSearchDbModel.getImageRes() != 0) {
-                binding.imageViewSearch.setVisibility(View.VISIBLE);
-
-                Glide.with(binding.getRoot())
-                        .load(baseSearchDbModel.getImageRes())
-                        .into(binding.imageViewSearch);
-            }
-
-
-            if (!isMultiSelect) {
+            if (isMultiSelect)
+                binding.checkboxSearch.setVisibility(View.VISIBLE);
+             else
                 binding.checkboxSearch.setVisibility(View.GONE);
-            }
+
+
 
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -128,7 +126,7 @@ public class BottomSheetRecyclerAdapter<T extends BaseBottomSheetRecyclerModel> 
     public ArrayList<T> getSelectedItems() {
         ArrayList<T> mDifferTemp = new ArrayList<>();
 
-        for (int i = 0; i <items.size(); i++) {
+        for (int i = 0; i < items.size(); i++) {
             if (items.get(i).isSelected())
                 mDifferTemp.add(items.get(i));
 

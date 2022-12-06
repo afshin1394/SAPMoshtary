@@ -17,26 +17,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <LinearLayout
-                android:id="@+id/lin_plus"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/purchase_light_background">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_plus"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:cardBackgroundColor="@color/colorRed50">
                 <ImageView
                     android:scaleType="fitCenter"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="@dimen/_2sdp"
                     android:src="@drawable/ic_add_black"/>
-            </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
-                android:background="@color/colorWhite"
+                android:background="@drawable/purchase_light_background"
                 android:orientation="vertical"
 
                 >
@@ -93,19 +94,20 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/lin_minus"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/purchase_light_background">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_minus"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:cardBackgroundColor="@color/colorRed50">
                 <ImageView
                     android:scaleType="fitCenter"
                     android:padding="@dimen/_8sdp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_minus"/>
-            </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 

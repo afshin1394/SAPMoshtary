@@ -38,6 +38,17 @@
         style="@style/text_view_tight"
         android:text="@string/tedadAghlam"/>
 
+
+    <TextView
+        android:id="@+id/tv_elat_marjoee"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        style="@style/text_view_tight"
+        android:text="@string/elatMarjoee"/>
+
     <TextView
         android:id="@+id/tv_mablagh_marjoee"
         android:layout_width="0dp"
@@ -47,5 +58,7 @@
         android:layout_height="wrap_content"
         style="@style/text_view_tight"
         android:text="@string/mablaghMarjoee"/>
+
+
 
 </LinearLayout>

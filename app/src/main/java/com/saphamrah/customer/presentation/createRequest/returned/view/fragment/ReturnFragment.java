@@ -36,6 +36,8 @@ import com.saphamrah.customer.presentation.createRequest.selectableBonus.interac
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.Constants;
+import com.saphamrah.customer.utils.customViews.CustomSpinner;
+import com.saphamrah.customer.utils.customViews.CustomSpinnerResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +52,8 @@ public class ReturnFragment extends BaseFragment<ReturnedInteractor.PresenterOps
     private boolean init;
     private SelectedReturnedAdapter selectedReturnedAdapter;
     BottomSheetBehavior bottomSheetBehavior;
-    public ReturnFragment() {
-        super(R.layout.fragment_returned);
-    }
+    private CustomSpinner customSpinner = new CustomSpinner();
+    List<String> marjoeeTitles;
 
     @Override
     protected void onBackPressed() {
@@ -61,6 +62,13 @@ public class ReturnFragment extends BaseFragment<ReturnedInteractor.PresenterOps
 
     @Override
     protected void initViews() {
+        //marjoee
+        marjoeeTitles = new ArrayList<>();
+        marjoeeTitles.add("ضایعات");
+        marjoeeTitles.add("تاریخ گذشته");
+        marjoeeTitles.add("خرابی هنگام حمل");
+        marjoeeTitles.add("عدم فروش");
+
         bottomSheetBehavior = BottomSheetBehavior.from(viewBinding.btmShtReturn.linBottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         viewBinding.btmShtReturn.linConfirmMarjoee.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +78,11 @@ public class ReturnFragment extends BaseFragment<ReturnedInteractor.PresenterOps
                 navigateUp();
             }
         });
+    }
+
+    private void setMarjoeeSpinner(List<String> marjoeeTitles) {
+
+
     }
 
     private void setSelectedMarjoeeRecycler(List<ElamMarjoeeForoshandehModel> marjoees) {
@@ -98,6 +111,21 @@ public class ReturnFragment extends BaseFragment<ReturnedInteractor.PresenterOps
                      selectedReturnedAdapter.submitList(marjoees);
 
                      break;
+                 case SELECT:
+                     customSpinner.showSpinnerSingleButton(activity, marjoeeTitles,false, new CustomSpinnerResponse() {
+                         @Override
+                         public void onSingleSelect(int selectedIndex)
+                         {
+                             model.setNameElatMarjoeeKala(marjoeeTitles.get(selectedIndex));
+                             List<ElamMarjoeeForoshandehModel> marjoees = Observable.fromIterable(elamMarjoeeForoshandehModels).filter(elamMarjoeeForoshandehModel -> elamMarjoeeForoshandehModel.getTedad3()>0).toList().blockingGet();
+                             selectedReturnedAdapter.submitList(marjoees);
+                         }
+                         @Override
+                         public void onMultiSelect(ArrayList<Integer> selectedIndexes)
+                         {
+
+                         }
+                     });
              }
         });
         marjoeeAdapter.submitList(elamMarjoeeForoshandehModels);

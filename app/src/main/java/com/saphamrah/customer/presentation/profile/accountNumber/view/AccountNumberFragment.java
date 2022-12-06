@@ -21,13 +21,10 @@ import java.util.ArrayList;
 
 public class AccountNumberFragment extends BaseFragment<ProfilePresenter, FragmentAddressBinding, MainActivity> implements ProfileInteracts.RequiredViewOps {
 
-    public AccountNumberFragment() {
-        super(R.layout.fragment_account_number);
-    }
 
     @Override
     protected void onBackPressed() {
-
+        navigateUp();
     }
 
     @Override

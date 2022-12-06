@@ -6,8 +6,11 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.os.Handler;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,10 +42,6 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
     private BottomSheetBehavior bottomSheetBehavior;
     private ProductModel productModel;
 
-    public AddItemToCartFragment() {
-        super(R.layout.fragment_add_item_to_cart);
-    }
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -62,9 +61,10 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
         activity.checkCart(true);
         activity.setCartListener(this);
         productModel = AddItemToCartFragmentArgs.fromBundle(getArguments()).getProduct();
+        Log.i("countorder", "initViews: orderCount"+productModel.getOrderCount());
+//        calculateNumPackBoxCount(productModel);
         setImageSlider(productModel);
         setViews(productModel);
-        Log.i("COUNTERSS", "initViews: order_count: "+productModel.getOrderCount()+"num_count: "+productModel.getNumCount() + "packCount: "+productModel.getPackCount() + "boxCount: " + productModel.getBoxCount());
 
     }
 
@@ -88,7 +88,6 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
         viewBinding.imageSlider.startAutoCycle();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setViews(ProductModel productModel)
     {
         if (productModel.getOrderCount() > 0) {
@@ -100,9 +99,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
             viewBinding.btmShtPurchase.linPurchaseCount.setVisibility(View.GONE);
             viewBinding.btmShtPurchase.cvTxtConsumerPrice.setVisibility(View.INVISIBLE);
         }
-        Log.i(TAG, "openCartonBastehAdadBottomSheet:carton "+viewBinding.btmShtPurchase.tvQuantityCarton.getText().toString());
-        Log.i(TAG, "openCartonBastehAdadBottomSheet:basteh "+viewBinding.btmShtPurchase.tvQuantityBasteh.getText().toString());
-        Log.i(TAG, "openCartonBastehAdadBottomSheet:adad "+viewBinding.btmShtPurchase.tvQuantityAdad.getText().toString());
+
         viewBinding.btmShtPurchase.txtProductName.setText(productModel.getNameProduct());
         viewBinding.btmShtPurchase.kalaCodeTv.setText(productModel.getCodeKala());
         viewBinding.btmShtPurchase.brandTv.setText(productModel.getSazmanForosh());
@@ -121,6 +118,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
             openCartonBastehAdadBottomSheet(productModel);
             activity.checkCart(true);
         });
+
 
 //        viewBinding.btmShtPurchase.la.setOnClickListener(view -> {
 //            productModel.setOrderCount(productModel.getOrderCount()+1);
@@ -202,7 +200,10 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
         }
 
         AddItemToCartFragmentDirections.ActionAddItemToCartFragmentToCartFragment action = AddItemToCartFragmentDirections.actionAddItemToCartFragmentToCartFragment(arr, null);
-        navigate(action);
+        NavOptions navOptions = new NavOptions.Builder()
+                .setPopUpTo(R.id.addItemToCartFragment, true)
+                .build();
+        navigateWithOptions(action,navOptions);
     }
 
     @Override
@@ -360,6 +361,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
             @Override
             public void onTextChange(String s) {
                 try {
+                    Log.i(TAG, "onTextChange: tvQuantityCarton"+s);
                     productModel.setBoxCount(Integer.parseInt(s));
                     int orderCount  = calculateOrderCount(productModel);
                     productModel.setOrderCount(orderCount);
@@ -377,6 +379,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
             @Override
             public void onTextChange(String s) {
                 try {
+                    Log.i(TAG, "onTextChange: tvQuantityBasteh"+s);
                     productModel.setPackCount(Integer.parseInt(s));
                     int orderCount  = calculateOrderCount(productModel);
                     productModel.setOrderCount(orderCount);
@@ -395,6 +398,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
             @Override
             public void onTextChange(String s) {
                 try {
+                    Log.i(TAG, "onTextChange: tvQuantityAdad"+s);
                     productModel.setNumCount(Integer.parseInt(s));
                     int orderCount  = calculateOrderCount(productModel);
                     productModel.setOrderCount(orderCount);
@@ -419,6 +423,17 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
 
     private int calculateOrderCount(ProductModel productModel) {
         return productModel.getBoxCount() * productModel.getNumInBox() + productModel.getPackCount() * productModel.getNumInPack() + productModel.getNumCount();
+    }
+
+    private void calculateNumPackBoxCount(ProductModel model) {
+        int boxCount = model.getOrderCount() / model.getNumInBox();
+        int packCount = (model.getOrderCount() - boxCount * model.getNumInBox()) / model.getNumInPack();
+        int remainingCount = model.getOrderCount() - (packCount * model.getNumInPack() + boxCount * model.getNumInBox());
+        Log.i(TAG, "calculateNumPackBoxCount: boxCount: " + boxCount + "packCount: " + packCount + "count: " + remainingCount);
+        Log.i(TAG, "calculateNumPackBoxCount: num in box " + model.getNumInBox() + "num in pack:" + model.getPackCount());
+        model.setBoxCount(boxCount);
+        model.setPackCount(packCount);
+        model.setNumCount(remainingCount);
     }
 
 }

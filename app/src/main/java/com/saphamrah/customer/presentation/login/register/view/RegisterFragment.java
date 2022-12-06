@@ -10,45 +10,78 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
 import com.saphamrah.customer.Constants;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
 import com.saphamrah.customer.data.LocationDbModel;
-import com.saphamrah.customer.databinding.BottomSheetSearchBinding;
+import com.saphamrah.customer.databinding.BottomSheetMapSearchBinding;
+import com.saphamrah.customer.databinding.BottomSheetRecyclerSearchBinding;
 import com.saphamrah.customer.databinding.FragmentRegisterBinding;
 import com.saphamrah.customer.presentation.login.LoginActivity;
 import com.saphamrah.customer.presentation.login.register.interactor.RegisterInteractor;
 import com.saphamrah.customer.presentation.login.register.presenter.RegisterPresenter;
 import com.saphamrah.customer.receivers.LocationReceiver;
 import com.saphamrah.customer.service.GpsTracker;
-import com.saphamrah.customer.utils.customViews.BottomSheetSearchRecyclerView;
+import com.saphamrah.customer.utils.customViews.bottomSheetModule.BaseBottomSheet;
+import com.saphamrah.customer.utils.customViews.bottomSheetModule.list.BaseBottomSheetRecyclerView;
 import com.saphamrah.customer.utils.customViews.CustomSnackBar;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemMultiSelectListener;
+import com.saphamrah.customer.utils.customViews.bottomSheetModule.list.BottomSheetDynamicListMultiSelect;
+import com.saphamrah.customer.utils.customViews.bottomSheetModule.list.BottomSheetDynamicListSingleSelect;
+import com.saphamrah.customer.utils.customViews.bottomSheetModule.map.ApplyButtonMap;
+import com.saphamrah.customer.utils.customViews.bottomSheetModule.map.BottomSheetMap;
+import com.saphamrah.customer.utils.mapModule.Enums.MapType;
+import com.saphamrah.customer.utils.mapModule.Interfaces.IMapClickEvents;
+import com.saphamrah.customer.utils.mapModule.MapDesigns.OsmDroid;
+import com.saphamrah.customer.utils.mapModule.Models.MapObjectModel;
+
+import org.osmdroid.api.IMapController;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
 
 public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRegisterBinding, LoginActivity> implements RegisterInteractor.RequiredViewOps, AdapterItemListener<BaseBottomSheetRecyclerModel>, AdapterItemMultiSelectListener<BaseBottomSheetRecyclerModel> {
 
+    private OsmDroid osmDroid;
+    private MapView mapView;
+    private MapObjectModel currentMapModel;
+    private BaseBottomSheet baseBottomSheetMap;
+    private BottomSheetMap bottomSheetMap;
+    private BottomSheetMap.BottomSheetMapBuilder<BottomSheetMapSearchBinding> bottomSheetMapBuilder;
 
-    private BottomSheetSearchRecyclerView bottomSheetSearch;
+
+    private BaseBottomSheet baseBottomSheetRecyclerView;
+    private BottomSheetDynamicListSingleSelect bottomSheetDynamicListSingleSelect;
+    private BottomSheetDynamicListMultiSelect bottomSheetDynamicListMultiSelect;
+    private BaseBottomSheetRecyclerView.BaseBottomSheetRecyclerViewBuilder<BottomSheetRecyclerSearchBinding> bottomSheetRecyclerViewBuilder;
     private ArrayList<LocationDbModel> baseSearchProvinceDbModels;
     private ArrayList<LocationDbModel> baseSearchCityDbModels;
-    private BottomSheetSearchBinding bottomSheetSearchBinding;
-    public RegisterFragment() {
-        super(R.layout.fragment_register);
-    }
+
+    private BottomSheetRecyclerSearchBinding bottomSheetRecyclerSearchBinding;
+    private BottomSheetMapSearchBinding bottomSheetMapSearchBinding;
+
+    private DividerItemDecoration divider;
+
 
     @Override
     protected FragmentRegisterBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {
         FragmentRegisterBinding fragmentRegisterBinding = FragmentRegisterBinding.inflate(inflater, container, false);
         View view = fragmentRegisterBinding.getRoot();
-        bottomSheetSearchBinding = BottomSheetSearchBinding.bind(view);
+        bottomSheetRecyclerSearchBinding = BottomSheetRecyclerSearchBinding.bind(view);
+        bottomSheetMapSearchBinding = BottomSheetMapSearchBinding.bind(view);
         return fragmentRegisterBinding;
     }
 
@@ -60,13 +93,21 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
     @Override
     protected void onBackPressed() {
-
+        if (baseBottomSheetMap.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetMap.closeBottomSheet();
+        } else {
+            navigateUp();
+        }
     }
 
     @Override
     protected void initViews() {
 
-        bottomSheetSearch = new BottomSheetSearchRecyclerView(this, this);
+        baseBottomSheetMap = new BaseBottomSheet(bottomSheetMapSearchBinding, getContext(), R.id.cardView_mapView_BottomSheet);
+        baseBottomSheetRecyclerView = new BaseBottomSheet(bottomSheetRecyclerSearchBinding, getContext(), R.id.cardView_recyclerView_bottomSheet);
+        bottomSheetRecyclerViewBuilder = new BaseBottomSheetRecyclerView.BaseBottomSheetRecyclerViewBuilder<>();
+        bottomSheetMapBuilder = new BottomSheetMap.BottomSheetMapBuilder<>();
+
 
         clickListeners();
 
@@ -97,6 +138,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         baseSearchCityDbModels.add(new LocationDbModel("تهران", "city"));
         baseSearchCityDbModels.add(new LocationDbModel("تبریز", "city"));
         baseSearchCityDbModels.add(new LocationDbModel("اراک", "city"));
+
     }
 
     private void clickListeners() {
@@ -106,17 +148,16 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         viewBinding.edtInputLocation.setOnClickListener(v -> handleGetLocation());
         viewBinding.edtInputIdentity.setOnClickListener(v -> handleGetIdentityType());
         viewBinding.edtInputIdentity.setOnFocusChangeListener((v, hasFocus) -> handleGetIdentityType());
-        viewBinding.edtInputFname.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
-        viewBinding.edtInputLname.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
-        viewBinding.edtInputMobile.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
-        viewBinding.edtInputBoardName.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
-        viewBinding.edtInputNationalCode.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
-        viewBinding.edtInputMainStreet.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
-        viewBinding.edtInputMainAlley.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
-        viewBinding.edtInputPlaque.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
-        viewBinding.edtInputPostalCode.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
-        viewBinding.edtInputLocation.setOnFocusChangeListener((v, haseFocus)  -> handleBottomSheetBehaviorState());
-
+        viewBinding.edtInputFname.setOnFocusChangeListener((v, haseFocus) -> closeBottomSheetBehavior());
+        viewBinding.edtInputLname.setOnFocusChangeListener((v, haseFocus) -> closeBottomSheetBehavior());
+        viewBinding.edtInputMobile.setOnFocusChangeListener((v, haseFocus) -> closeBottomSheetBehavior());
+        viewBinding.edtInputBoardName.setOnFocusChangeListener((v, haseFocus) -> closeBottomSheetBehavior());
+        viewBinding.edtInputNationalCode.setOnFocusChangeListener((v, haseFocus) -> closeBottomSheetBehavior());
+        viewBinding.edtInputMainStreet.setOnFocusChangeListener((v, haseFocus) -> closeBottomSheetBehavior());
+        viewBinding.edtInputMainAlley.setOnFocusChangeListener((v, haseFocus) -> closeBottomSheetBehavior());
+        viewBinding.edtInputPlaque.setOnFocusChangeListener((v, haseFocus) -> closeBottomSheetBehavior());
+        viewBinding.edtInputPostalCode.setOnFocusChangeListener((v, haseFocus) -> closeBottomSheetBehavior());
+        viewBinding.edtInputLocation.setOnFocusChangeListener((v, haseFocus) -> closeBottomSheetBehavior());
 
     }
 
@@ -127,59 +168,121 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
     private void handleGetLocation() {
 
 
-      /*  viewBinding.mapView.setVisibility(View.VISIBLE);
+        mapView = bottomSheetMapSearchBinding.mapViewBottomSheet;
+        mapView.setClickable(true);
+        mapView.setMultiTouchControls(true);
 
-        Configuration.getInstance().load(getContext(), PreferenceManager.getDefaultSharedPreferences(getContext()));
+        osmDroid = new OsmDroid(getContext(),mapView,true, MapType.OsmDroid);
+        osmDroid.zoomCameraToSpecificPosition(osmDroid.getCurrentLocation(),20);
+        osmDroid.removeAllAvailableFeaturesOnMap();
 
-        viewBinding.mapView.setTileSource(TileSourceFactory.MAPNIK);
-        viewBinding.mapView.setMultiTouchControls(true);
 
-        GoogleLocationProvider googleLocationProvider = new GoogleLocationProvider(getContext());
 
-        IMapController mapController = new MapController(viewBinding.mapView);
-        mapController.setCenter(new GeoPoint(googleLocationProvider.getLatitude() , googleLocationProvider.getLongitude()));
-        mapController.setZoom(17.0);
+        currentMapModel = new MapObjectModel.Builder()
+                .setGroup_key(osmDroid.CURRENT_LOCATION_GROUP_ID())
+                .setLayer_id(osmDroid.CURRENT_LOCATION_LAYER_ID())
+                .setSource_id(osmDroid.CURRENT_LOCATION_SOURCE_ID())
+                .setImage_id(osmDroid.CURRENT_LOCATION_IMAGE_ID())
+                .setLatLng(new LatLng(osmDroid.getCurrentLocation().getLatitude(), osmDroid.getCurrentLocation().getLongitude()))
+                .setDrawable(getResources().getDrawable(R.drawable.ic_user_marker))
+                .create();
 
-        Marker marker = new Marker(viewBinding.mapView);
-        marker.setPosition(new GeoPoint(googleLocationProvider.getLatitude() , googleLocationProvider.getLongitude()));
-        marker.setTitle(getResources().getString(R.string.yourLocation));
-        marker.setIcon(getResources().getDrawable(R.drawable.ic_user_marker));
-        viewBinding.mapView.getOverlays().add(marker);*/
+        osmDroid.addSingleLocationLayer(currentMapModel);
+        osmDroid.onMapContentClickListener(osmDroid.CURRENT_LOCATION_GROUP_ID(), new IMapClickEvents() {
+            @Override
+            public void onMarkSingleTap(int index, Object object) {
+
+            }
+
+            @Override
+            public void onMarkLongTap(int index, Object object) {
+
+            }
+
+            @Override
+            public void onOtherItemsClick(GeoPoint point) {
+
+                osmDroid.removeExistingFeatures(osmDroid.CURRENT_LOCATION_GROUP_ID());
+
+                currentMapModel = new MapObjectModel.Builder()
+                        .setGroup_key(osmDroid.CURRENT_LOCATION_GROUP_ID())
+                        .setLayer_id(osmDroid.CURRENT_LOCATION_GROUP_ID())
+                        .setSource_id(osmDroid.CURRENT_LOCATION_GROUP_ID())
+                        .setImage_id(osmDroid.CURRENT_LOCATION_GROUP_ID())
+                        .setLatLng(new LatLng(point.getLatitude(), point.getLongitude()))
+                        .setDrawable(getResources().getDrawable(R.drawable.ic_user_marker))
+                        .create();
+
+                osmDroid.addSingleLocationLayer(currentMapModel);
+                mapView.invalidate();
+
+
+                bottomSheetMap = new BottomSheetMap<>(
+                        bottomSheetMapSearchBinding,
+                        getContext(),
+                        R.id.cardView_mapView_BottomSheet,
+                        currentMapModel,
+                        bottomSheetMapBuilder
+                                .setSearchEnable(true)
+                                .setButtonApplyEnable(true)
+                                .setSearchHint(getString(R.string.search_address)),
+                        new ApplyButtonMap() {
+                            @Override
+                            public void onApplyButtonListener(LatLng latLng) {
+                                Log.d("RegisterFragment", "latlng: "+ latLng);
+
+                            }
+                        }
+                );
+            }
+        });
+
+        bottomSheetMap = new BottomSheetMap<>(
+                bottomSheetMapSearchBinding,
+                getContext(),
+                R.id.cardView_mapView_BottomSheet,
+                currentMapModel,
+                bottomSheetMapBuilder
+                        .setSearchEnable(true)
+                        .setButtonApplyEnable(true)
+                        .setSearchHint(getString(R.string.search_address)),
+                new ApplyButtonMap() {
+                    @Override
+                    public void onApplyButtonListener(LatLng latLng) {
+                        Log.d("RegisterFragment", "latlng: "+ latLng);
+
+                    }
+                }
+        );
+
     }
 
-    public void startGPSService(int minDistance, int timeInterval, int fastestTimeInterval, int maxAccurancy)
-    {
+    public void startGPSService(int minDistance, int timeInterval, int fastestTimeInterval, int maxAccurancy) {
         Intent intent = new Intent(getContext(), GpsTracker.class);
-        intent.putExtra(Constants.DISTANCE() , minDistance);
-        intent.putExtra(Constants.INTERVAL() , timeInterval);
-        intent.putExtra(Constants.FASTEST_INTERVAL() , fastestTimeInterval);
-        intent.putExtra(Constants.ACCURACY() , maxAccurancy);
+        intent.putExtra(Constants.DISTANCE(), minDistance);
+        intent.putExtra(Constants.INTERVAL(), timeInterval);
+        intent.putExtra(Constants.FASTEST_INTERVAL(), fastestTimeInterval);
+        intent.putExtra(Constants.ACCURACY(), maxAccurancy);
        /* intent.putExtra("ccAfrad" , ccAfrad);
         intent.putExtra("ccForoshandeh" , ccForoshandeh);
         intent.putExtra("ccMamorPakhsh" , ccMamorPakhsh);
         intent.putExtra("ccMasir" , ccMasir);*/
-        try
-        {
-            Log.d("locationReceiver" , "service start");
+        try {
+            Log.d("locationReceiver", "service start");
             FragmentActivity fragmentActivity = getActivity();
 
-            if (Build.VERSION.SDK_INT >= 26)
-            {
+            if (Build.VERSION.SDK_INT >= 26) {
                 LocationReceiver locationReceiver = new LocationReceiver();
                 IntentFilter filter = new IntentFilter("com.sap.gpstracker");
 
-                fragmentActivity.registerReceiver(locationReceiver , filter);
+                fragmentActivity.registerReceiver(locationReceiver, filter);
                 fragmentActivity.startForegroundService(intent);
                 //Toast.makeText(MainActivity.this, "Tracking Started..", Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
+            } else {
                 fragmentActivity.startService(intent);
                 //Toast.makeText(MainActivity.this, "Tracking Started..", Toast.LENGTH_SHORT).show();
             }
-        }
-        catch (Exception exception)
-        {
+        } catch (Exception exception) {
             exception.printStackTrace();
 //            mPresenter.checkInsertLogToDB(Constants.LOG_EXCEPTION(), exception.toString(), "", "MainActivity", "onCreate" , "");
         }
@@ -208,14 +311,26 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
     private void handleSearchCity() {
 
         clearFocusEditTextsWithoutBtmSheet();
-        handleBottomSheetBehaviorState();
+        closeBottomSheetBehavior();
 
-        bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(getContext(),
-                bottomSheetSearchBinding,
-                baseSearchCityDbModels,
+        divider =
+                new DividerItemDecoration(context,
+                        DividerItemDecoration.VERTICAL);
+
+        divider.setDrawable(ContextCompat.getDrawable(context,
+                R.drawable.layer_line_divider));
+
+        bottomSheetDynamicListMultiSelect = new BottomSheetDynamicListMultiSelect(
+                bottomSheetRecyclerSearchBinding,
+                getContext(),
+                R.id.cardView_recyclerView_bottomSheet,
+                new LinearLayoutManager(getContext()),
+                bottomSheetRecyclerViewBuilder.setDividerItemDecoration(divider),
                 true,
                 getContext().getResources().getString(R.string.searchCity),
-                false);
+                baseSearchCityDbModels,
+                this);
+
 
     }
 
@@ -223,15 +338,25 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
     private void handleSearchProvince() {
 
         clearFocusEditTextsWithoutBtmSheet();
-        handleBottomSheetBehaviorState();
+        closeBottomSheetBehavior();
 
-        bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(
+        divider =
+                new DividerItemDecoration(context,
+                        DividerItemDecoration.VERTICAL);
+
+        divider.setDrawable(ContextCompat.getDrawable(context,
+                R.drawable.layer_line_divider));
+
+        bottomSheetDynamicListSingleSelect = new BottomSheetDynamicListSingleSelect(
+                bottomSheetRecyclerSearchBinding,
                 getContext(),
-                bottomSheetSearchBinding,
-                baseSearchProvinceDbModels,
+                R.id.cardView_recyclerView_bottomSheet,
+                new LinearLayoutManager(getContext()),
+                bottomSheetRecyclerViewBuilder.setDividerItemDecoration(divider),
                 true,
                 getContext().getResources().getString(R.string.searchProvince),
-                false);
+                baseSearchCityDbModels,
+                this);
 
     }
 
@@ -249,8 +374,9 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
     }
 
-    private void handleBottomSheetBehaviorState() {
-        bottomSheetSearch.bottomSheetBehaviorStateHandler();
+    private void closeBottomSheetBehavior() {
+        baseBottomSheetRecyclerView.closeBottomSheet();
+        baseBottomSheetMap.closeBottomSheet();
     }
 
     @Override
@@ -282,14 +408,26 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
     public void onGetIdentities(ArrayList<BaseBottomSheetRecyclerModel> itemTitles) {
 
         clearFocusEditTextsWithoutBtmSheet();
-        handleBottomSheetBehaviorState();
+        closeBottomSheetBehavior();
 
-        bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(getContext(),
-                bottomSheetSearchBinding,
-                itemTitles,
+        divider =
+                new DividerItemDecoration(context,
+                        DividerItemDecoration.VERTICAL);
+
+        divider.setDrawable(ContextCompat.getDrawable(context,
+                R.drawable.layer_line_divider));
+
+        bottomSheetDynamicListMultiSelect = new BottomSheetDynamicListMultiSelect(
+                bottomSheetRecyclerSearchBinding,
+                getContext(),
+                R.id.cardView_recyclerView_bottomSheet,
+                new LinearLayoutManager(getContext()),
+                bottomSheetRecyclerViewBuilder
+                        .setDividerItemDecoration(divider),
                 false,
                 "",
-                true);
+                itemTitles,
+                this);
 
     }
 
@@ -330,7 +468,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
     public void onItemSelect(BaseBottomSheetRecyclerModel model, int position, AdapterAction Action) {
 
         Log.d("RegisterFragment", "isSelected: " + model.isSelected());
-        handleBottomSheetBehaviorState();
+        closeBottomSheetBehavior();
 
         if (model.getType() == null) {
             viewBinding.edtInputIdentity.setText(model.getName());

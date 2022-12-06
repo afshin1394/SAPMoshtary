@@ -56,15 +56,14 @@ public class SelectableBonusFragment extends BaseFragment<SelectableBonusInterac
     private int counter = 0;
 
 
-    public SelectableBonusFragment() {
-        super(R.layout.fragment_selectable_bonus);
-    }
+
 
 
     @Override
     protected void onBackPressed()
     {
         activity.paymentState = Constants.PaymentStates.CALCULATE_BONUS_DISCOUNT;
+        navigateUp();
     }
 
 

@@ -111,7 +111,7 @@ public class EditTextWatcher extends AppCompatEditText implements TextWatcher {
         super.onAttachedToWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             EditTextWatcher.this.setTextCursorDrawable(null);
-            EditTextWatcher.this.setTextColor(getContext().getColor(R.color.colorTextPrimary));
+            EditTextWatcher.this.setTextColor(getContext().getColor(R.color.colorBlack));
             EditTextWatcher.this.setBackgroundTintList(getContext().getResources().getColorStateList(R.drawable.edit_text_background_shape));
         }
     }

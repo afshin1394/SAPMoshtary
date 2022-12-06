@@ -46,13 +46,10 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
 
     private DrawingView drawingView;
 
-    public VerifyRequestFragment() {
-        super(R.layout.fragment_verify_request);
-    }
-
     @Override
     protected void onBackPressed() {
         activity.paymentState = Constants.PaymentStates.CONFIRM_REQUEST;
+
     }
 
     @Override

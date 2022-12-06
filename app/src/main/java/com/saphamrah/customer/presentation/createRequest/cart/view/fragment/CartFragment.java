@@ -89,13 +89,12 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     private ShimmerLoading shimmerLoading = new ShimmerLoading();
 
 
-    public CartFragment() {
-        super(R.layout.fragment_cart);
-    }
+
 
     @Override
     protected void onBackPressed() {
         activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
+        navigateUp();
     }
 
 
@@ -465,6 +464,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
                         cartProductAdapter.notifyDataSetChanged();
                     }
                     calculateNumPackBoxCount(model);
+                    Log.i("calcBASTEADAD", "setProductRecycler: boxCount"+model.getBoxCount() + "packCount "+model.getPackCount() + "numCount "+model.getNumCount());
                     activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
                     checkState();
                     setBottomSheetOnState();

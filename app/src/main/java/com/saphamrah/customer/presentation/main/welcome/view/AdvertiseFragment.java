@@ -31,10 +31,6 @@ import java.util.List;
 public class AdvertiseFragment extends BaseFragment<MainPresenter, FragmentAdvertiseBinding, MainActivity> implements MainInteracts.RequiredViewOps {
 
 
-    public AdvertiseFragment() {
-        super(R.layout.fragment_advertise);
-    }
-
     @Override
     protected void onBackPressed() {
 

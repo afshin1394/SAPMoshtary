@@ -36,9 +36,6 @@ public class VerifyOtpLoginFragment extends BaseFragment<VerifyOtpLoginPresenter
 
     private String phoneNumber = "";
 
-    public VerifyOtpLoginFragment() {
-        super(R.layout.fragment_verify_login);
-    }
 
     @Override
     protected FragmentVerifyLoginBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {

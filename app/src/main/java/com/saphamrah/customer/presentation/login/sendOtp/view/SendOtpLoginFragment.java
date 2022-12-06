@@ -27,9 +27,6 @@ public class SendOtpLoginFragment extends BaseFragment<SendOtpLoginPresenter, Fr
 
     private String phoneNumber = "";
 
-    public SendOtpLoginFragment() {
-        super(R.layout.fragment_send_otp_login);
-    }
 
     @Override
     protected FragmentSendOtpLoginBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {

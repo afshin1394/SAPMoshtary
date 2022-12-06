@@ -44,15 +44,19 @@ public class MarjoeeCartAdapter extends RecyclerView.Adapter<MarjoeeCartAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder{
         private TextView marjoeeName;
         private TextView marjoeeTedad;
+        private TextView elatMarjoee;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             marjoeeName = itemView.findViewById(R.id.tv_marjoee_kala_cart_name);
             marjoeeTedad = itemView.findViewById(R.id.tv_tedad_marjoee_cart);
+            elatMarjoee = itemView.findViewById(R.id.tv_elat_marjoee);
+
         }
 
         public void bind(ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModel) {
             marjoeeName.setText(elamMarjoeeForoshandehModel.getNameKala());
             marjoeeTedad.setText(String.format("%1$s:%2$s",context.getString(R.string.tedad),elamMarjoeeForoshandehModel.getTedad3()));
+            elatMarjoee.setText(elamMarjoeeForoshandehModel.getNameElatMarjoeeKala());
         }
     }
 }

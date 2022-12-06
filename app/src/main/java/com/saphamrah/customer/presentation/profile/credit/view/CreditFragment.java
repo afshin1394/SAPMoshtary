@@ -17,9 +17,6 @@ import com.saphamrah.customer.presentation.profile.ProfilePresenter;
 public class CreditFragment extends BaseFragment<ProfilePresenter, FragmentCreditBinding, MainActivity> {
 
 
-    public CreditFragment() {
-        super(R.layout.fragment_credit);
-    }
 
     @Override
     protected void onBackPressed() {

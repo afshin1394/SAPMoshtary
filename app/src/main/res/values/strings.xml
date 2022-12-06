@@ -1316,5 +1316,6 @@
     <string name="errorMainStreet">لطفا خیابان اصلی را به درستی وارد نمایید.</string>
     <string name="errorLocation">لطفا مکان را خود را انتخاب نمایید.</string>
     <string name="errorPlaque">لطفا پلاک را به درستی وارد نمایید.</string>
+    <string name="search_address">جستجو آدرس</string>
 
 </resources>

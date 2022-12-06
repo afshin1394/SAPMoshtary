@@ -90,11 +90,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
 
-                            <ImageView
-                                android:layout_width="@dimen/_16sdp"
-                                android:layout_height="@dimen/_16sdp"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_mojodgiri" />
+<!--                            <ImageView-->
+<!--                                android:layout_width="@dimen/_16sdp"-->
+<!--                                android:layout_height="@dimen/_16sdp"-->
+<!--                                android:layout_gravity="center"-->
+<!--                                android:src="@drawable/ic_mojodgiri" />-->
 
                             <TextView
                                 android:id="@+id/tv_sell_price"
@@ -108,11 +108,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
 
-                            <ImageView
-                                android:layout_width="@dimen/_16sdp"
-                                android:layout_height="@dimen/_16sdp"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_money" />
+<!--                            <ImageView-->
+<!--                                android:layout_width="@dimen/_16sdp"-->
+<!--                                android:layout_height="@dimen/_16sdp"-->
+<!--                                android:layout_gravity="center"-->
+<!--                                android:src="@drawable/ic_money" />-->
 
                             <TextView
                                 android:id="@+id/tv_consumerPrice"
