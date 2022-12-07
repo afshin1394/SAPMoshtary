@@ -13,10 +13,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -33,6 +35,7 @@ import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
 import com.saphamrah.customer.data.LocationDbModel;
 import com.saphamrah.customer.data.local.AdvertiseModel;
 import com.saphamrah.customer.data.local.MenuModel;
+import com.saphamrah.customer.databinding.BottomSheetRecyclerSearchBinding;
 import com.saphamrah.customer.databinding.FragmentAddressBinding;
 import com.saphamrah.customer.databinding.FragmentMainBinding;
 import com.saphamrah.customer.presentation.createRequest.CreateRequestActivity;
@@ -49,7 +52,10 @@ import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemMultiSelectListener;
 import com.saphamrah.customer.utils.CheckTabletOrPhone;
 import com.saphamrah.customer.utils.SnapToBlock;
-import com.saphamrah.customer.utils.customViews.BottomSheetSearchRecyclerView;
+
+import com.saphamrah.customer.utils.customViews.bottomSheetModule.BaseBottomSheet;
+import com.saphamrah.customer.utils.customViews.bottomSheetModule.list.BaseBottomSheetRecyclerView;
+import com.saphamrah.customer.utils.customViews.bottomSheetModule.list.BottomSheetDynamicListSingleSelect;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -58,7 +64,7 @@ import java.util.Objects;
 
 
 public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBinding, MainActivity> implements MainInteracts.RequiredViewOps,
-        AdapterItemListener<LocationDbModel>, AdapterItemMultiSelectListener<LocationDbModel> {
+        AdapterItemListener<BaseBottomSheetRecyclerModel> {
 
     private ConstraintLayout mBottomSheetLayout;
 
@@ -67,11 +73,15 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
     private View header_Arrow_Image;
     private NavigationView navigationView;
 
-    private BottomSheetSearchRecyclerView bottomSheetSearch;
+    private BottomSheetRecyclerSearchBinding bottomSheetRecyclerSearchBinding;
 
     private ArrayList<LocationDbModel> baseSazmanForoshModels;
 
+    private DividerItemDecoration divider;
+    private BaseBottomSheet baseBottomSheetRecyclerView;
 
+    private BottomSheetDynamicListSingleSelect bottomSheetDynamicListSingleSelect;
+    private BaseBottomSheetRecyclerView.BaseBottomSheetRecyclerViewBuilder baseBottomSheetRecyclerViewBuilder;
 
     @Override
     protected void onBackPressed() {
@@ -85,7 +95,6 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
         mBottomSheetLayout = requireView().findViewById(R.id.bottom_sheet_layout);
         sheetBehavior = BottomSheetBehavior.from(mBottomSheetLayout);
         header_Arrow_Image = requireView().findViewById(R.id.arrow_down_bottom_sheet);
-        bottomSheetSearch = new BottomSheetSearchRecyclerView(this, this);
 
         RecyclerView recyclerView = requireView().findViewById(R.id.recycler_view_bottom_sheet);
 
@@ -157,7 +166,10 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
 
     @Override
     protected FragmentMainBinding inflateBiding(LayoutInflater inflater, @Nullable ViewGroup container) {
-        return FragmentMainBinding.inflate(inflater, container, false);
+        FragmentMainBinding fragmentMainBinding = FragmentMainBinding.inflate(inflater, container, false);
+        View view = fragmentMainBinding.getRoot();
+        bottomSheetRecyclerSearchBinding = BottomSheetRecyclerSearchBinding.bind(view);
+        return fragmentMainBinding;
     }
 
     private GridLayoutManager setConfigForDifferentScreens(){
@@ -214,14 +226,14 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
 
 
         baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_domino));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
+//        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_domino));
+//        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
         baseSazmanForoshModels.add(new LocationDbModel("مهرام","3",R.drawable.logo_kalleh));
         baseSazmanForoshModels.add(new LocationDbModel("لینا","7",R.drawable.logo_lina));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
+//        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
         baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
         baseSazmanForoshModels.add(new LocationDbModel("کاله","8",R.drawable.logo_kalleh));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
+//        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
 
 
         viewPagerAdapter = new MainStatePager(requireActivity().getSupportFragmentManager(), advertiseModels);
@@ -236,43 +248,70 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
 
     private void makeSazmanForoshBottomSheet() {
 
-        handleBottomSheetBehaviorState();
+        baseBottomSheetRecyclerView = new BaseBottomSheet(
+                bottomSheetRecyclerSearchBinding,
+                getContext(),
+                R.id.cardView_recyclerView_bottomSheet);
 
-        bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(getContext(),
-                viewBinding,
-                baseSazmanForoshModels,
+        closeBottomSheetBehavior();
+
+        divider =
+                new DividerItemDecoration(getContext(),
+                        DividerItemDecoration.VERTICAL);
+
+        divider.setDrawable(ContextCompat.getDrawable(getContext(),
+                R.drawable.layer_line_divider));
+
+        baseBottomSheetRecyclerViewBuilder = new BaseBottomSheetRecyclerView.BaseBottomSheetRecyclerViewBuilder();
+
+        bottomSheetDynamicListSingleSelect = new BottomSheetDynamicListSingleSelect(
+                bottomSheetRecyclerSearchBinding,
+                getContext(),
+                R.id.cardView_recyclerView_bottomSheet,
+                new LinearLayoutManager(getContext()),
+                baseBottomSheetRecyclerViewBuilder.setDividerItemDecoration(divider),
                 true,
-                getContext().getResources().getString(R.string.searchSazman),
-                false);
+                getResources().getString(R.string.searchSazman),
+                baseSazmanForoshModels,
+                this
+        );
 
     }
 
 
-    private void handleBottomSheetBehaviorState() {
-        bottomSheetSearch.bottomSheetBehaviorStateHandler();
+    private void closeBottomSheetBehavior() {
+        baseBottomSheetRecyclerView.closeBottomSheet();
     }
 
 
-    @Override
-    public void onItemSelect(LocationDbModel model, int position, AdapterAction Action) {
-        Log.i(TAG, "onItemSelect: "+model.toString());
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), model.getResId());
-        Log.i(TAG, "onItemSelect: "+bm);
-//        Uri uri = ImageUtils.convertBitmapToUri(context,"sazmanIcon",bm);
-//        Log.i(TAG, "onItemSelect: "+uri);
-        startActivity(new Intent(activity, CreateRequestActivity.class).putExtra("sazmanName",model.getName()).putExtra("ccSazmanForosh",Integer.parseInt(model.getType())));
-        handleBottomSheetBehaviorState();
-    }
+//    @Override
+//    public void onItemSelect(LocationDbModel model, int position, AdapterAction Action) {
+//        Log.i(TAG, "onItemSelect: "+model.toString());
+//        Bitmap bm = BitmapFactory.decodeResource(getResources(), model.getResId());
+//        Log.i(TAG, "onItemSelect: "+bm);
+////        Uri uri = ImageUtils.convertBitmapToUri(context,"sazmanIcon",bm);
+////        Log.i(TAG, "onItemSelect: "+uri);
+//        startActivity(new Intent(activity, CreateRequestActivity.class).putExtra("sazmanName",model.getName()).putExtra("ccSazmanForosh",Integer.parseInt(model.getType())));
+//        handleBottomSheetBehaviorState();
+//    }
 
-    @Override
-    public void onItemMultiSelect(ArrayList<LocationDbModel> model, AdapterAction action) {
 
-    }
 
     private void showMenuItem()
     {
         navigationView = activity.findViewById(R.id.drawer_main);
         Menu nav_Menu = navigationView.getMenu();
         nav_Menu.findItem(R.id.nav_profile).setVisible(true);
+    }
+
+    @Override
+    public void onItemSelect(BaseBottomSheetRecyclerModel model, int position, AdapterAction Action) {
+                Log.i(TAG, "onItemSelect: "+model.toString());
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), model.getImageRes());
+        Log.i(TAG, "onItemSelect: "+bm);
+//        Uri uri = ImageUtils.convertBitmapToUri(context,"sazmanIcon",bm);
+//        Log.i(TAG, "onItemSelect: "+uri);
+        startActivity(new Intent(activity, CreateRequestActivity.class).putExtra("sazmanName",model.getName()).putExtra("ccSazmanForosh",Integer.parseInt(model.getType())));
+//        handleBottomSheetBehaviorState();
     }
 }

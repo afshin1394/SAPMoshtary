@@ -175,8 +175,8 @@
                     android:layout_gravity="center"
                     android:background="@drawable/rounded_corner_purchase_red_dark_gradiant"
                     android:gravity="center"
-                    android:paddingTop="@dimen/_1sdp"
-                    android:paddingBottom="@dimen/_1sdp"
+                    android:paddingTop="@dimen/_8sdp"
+                    android:paddingBottom="@dimen/_8sdp"
                     android:paddingLeft="@dimen/_16sdp"
                     android:paddingRight="@dimen/_16sdp"
                     android:visibility="visible">

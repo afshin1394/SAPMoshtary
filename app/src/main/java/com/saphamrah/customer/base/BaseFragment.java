@@ -120,6 +120,11 @@ public abstract class BaseFragment<T extends BasePresenterOps, S extends ViewBin
 
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
     public void setFragmentResult(String key, Object value) {
         NavHostFragment.findNavController(this).getPreviousBackStackEntry().getSavedStateHandle().set(key,value);
         navigateUp();

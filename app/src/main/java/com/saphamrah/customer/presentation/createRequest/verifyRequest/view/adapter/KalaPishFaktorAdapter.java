@@ -68,9 +68,9 @@ public class KalaPishFaktorAdapter extends RecyclerView.Adapter<KalaPishFaktorAd
             binding.lblRadif.setText(String.valueOf(position + 1));
             binding.lblNameKala.setText(productModel.getNameProduct());
             binding.lblMablagh.setText(formatter.format((int) productModel.getConsumerPrice()));
-           /* lblCarton.setText(String.valueOf(counts[0]));
-            lblBasteh.setText(String.valueOf(counts[1]));*/
-            binding.lblAdad.setText(String.valueOf(productModel.getOrderCount()));
+            binding.lblCarton.setText(String.valueOf(productModel.getNumCount()));
+            binding.lblBasteh.setText(String.valueOf(productModel.getPackCount()));
+            binding.lblAdad.setText(String.valueOf(productModel.getBoxCount()));
             double sumMablagh = productModel.getOrderCount() * productModel.getConsumerPrice();
             binding.lblMablaghKol.setText(formatter.format(sumMablagh));
         }

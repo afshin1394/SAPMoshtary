@@ -66,7 +66,7 @@ public class MarjoeePishFaktorAdapter extends RecyclerView.Adapter<MarjoeePishFa
             binding.lblNameKala.setText(elamMarjoeeForoshandehModel.getNameKala());
             binding.lblShomarehBach.setText(elamMarjoeeForoshandehModel.getShomarehBach());
             binding.lblTedad.setText(String.valueOf(elamMarjoeeForoshandehModel.getTedad3()));
-//            binding.lblFee.setText(new DecimalFormat("#,###,###").format(elamMarjoeeForoshandehModel.getFee()));
+            binding.lblFee.setText(new DecimalFormat("#,###,###").format(elamMarjoeeForoshandehModel.getGheymatForosh()*elamMarjoeeForoshandehModel.getTedad3()));
         }
     }
 

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="HardcodedText">
 
-    <item android:title="ثبت کالا">
+    <item android:title="درخواست کالا">
         <menu>
             <item
                 android:id="@+id/nav_request"

@@ -25,7 +25,7 @@
         android:gravity="right"
         android:layout_gravity="center"
         android:layout_height="wrap_content"
-        style="@style/text_view_tight"
+        style="@style/text_view_tight_large_screen"
         android:text="@string/marjoee"
         />
     <TextView
@@ -35,7 +35,7 @@
         android:gravity="right"
         android:layout_gravity="center"
         android:layout_height="wrap_content"
-        style="@style/text_view_tight"
+        style="@style/text_view_tight_large_screen"
         android:text="@string/tedadAghlam"/>
 
 
@@ -46,7 +46,7 @@
         android:gravity="right"
         android:layout_gravity="center"
         android:layout_height="wrap_content"
-        style="@style/text_view_tight"
+        style="@style/text_view_tight_large_screen"
         android:text="@string/elatMarjoee"/>
 
     <TextView
@@ -56,7 +56,7 @@
         android:gravity="right"
         android:layout_gravity="center"
         android:layout_height="wrap_content"
-        style="@style/text_view_tight"
+        style="@style/text_view_tight_large_screen"
         android:text="@string/mablaghMarjoee"/>
 
 

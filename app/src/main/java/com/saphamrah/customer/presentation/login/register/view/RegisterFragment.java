@@ -104,7 +104,24 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         baseBottomSheetRecyclerView = new BaseBottomSheet(bottomSheetRecyclerSearchBinding, getContext(), R.id.cardView_recyclerView_bottomSheet);
         bottomSheetRecyclerViewBuilder = new BaseBottomSheetRecyclerView.BaseBottomSheetRecyclerViewBuilder<>();
         bottomSheetMapBuilder = new BottomSheetMap.BottomSheetMapBuilder<>();
+        mapView = bottomSheetMapSearchBinding.mapViewBottomSheet;
+        mapView.setClickable(true);
+        mapView.setMultiTouchControls(true);
 
+        osmDroid = new OsmDroid(getContext(),mapView,true, MapType.OsmDroid);
+        osmDroid.zoomCameraToSpecificPosition(osmDroid.getCurrentLocation(),20);
+
+        osmDroid.removeAllAvailableFeaturesOnMap();
+        currentMapModel = new MapObjectModel.Builder()
+                .setGroup_key(osmDroid.CURRENT_LOCATION_GROUP_ID())
+                .setLayer_id(osmDroid.CURRENT_LOCATION_LAYER_ID())
+                .setSource_id(osmDroid.CURRENT_LOCATION_SOURCE_ID())
+                .setImage_id(osmDroid.CURRENT_LOCATION_IMAGE_ID())
+                .setLatLng(new LatLng(osmDroid.getCurrentLocation().getLatitude(), osmDroid.getCurrentLocation().getLongitude()))
+                .setDrawable(getResources().getDrawable(R.drawable.ic_user_marker))
+                .create();
+
+        osmDroid.addSingleLocationLayer(currentMapModel);
 
         clickListeners();
 

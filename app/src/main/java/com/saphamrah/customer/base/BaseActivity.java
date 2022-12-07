@@ -1,6 +1,7 @@
 package com.saphamrah.customer.base;
 
 
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Build;
@@ -34,6 +35,7 @@ public abstract class BaseActivity<T extends BasePresenterOps, S extends ViewBin
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         results = new HashMap<>();
         viewBinding = inflateBiding(getLayoutInflater());
         setContentView(viewBinding.getRoot());

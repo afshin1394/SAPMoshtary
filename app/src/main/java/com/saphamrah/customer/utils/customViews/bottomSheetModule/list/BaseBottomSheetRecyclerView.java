@@ -1,5 +1,6 @@
 package com.saphamrah.customer.utils.customViews.bottomSheetModule.list;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.widget.Button;
@@ -53,6 +54,7 @@ public class BaseBottomSheetRecyclerView<V extends ViewBinding> extends BaseBott
         initRecyclerView();
     }
 
+    @SuppressLint("SuspiciousIndentation")
     @Override
     public void initRecyclerView() {
         initBottomSheetView(context);

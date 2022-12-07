@@ -46,7 +46,7 @@
                         android:layout_weight="10"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/_68sdp"
+                        android:layout_marginRight="@dimen/_38sdp"
                         android:background="@color/colorWhite"
                         android:orientation="vertical"
 
@@ -73,11 +73,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
 
-                            <ImageView
-                                android:layout_width="@dimen/_18sdp"
-                                android:layout_height="@dimen/_18sdp"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_mojodgiri" />
+<!--                            <ImageView-->
+<!--                                android:layout_width="@dimen/_18sdp"-->
+<!--                                android:layout_height="@dimen/_18sdp"-->
+<!--                                android:layout_gravity="center"-->
+<!--                                android:src="@drawable/ic_mojodgiri" />-->
 
                             <TextView
                                 android:id="@+id/tv_inventory"
@@ -91,11 +91,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
 
-                            <ImageView
-                                android:layout_width="@dimen/_18sdp"
-                                android:layout_height="@dimen/_18sdp"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_money" />
+<!--                            <ImageView-->
+<!--                                android:layout_width="@dimen/_18sdp"-->
+<!--                                android:layout_height="@dimen/_18sdp"-->
+<!--                                android:layout_gravity="center"-->
+<!--                                android:src="@drawable/ic_money" />-->
 
                             <TextView
                                 android:id="@+id/tv_consumerPrice"

@@ -1,44 +1,50 @@
 package com.saphamrah.customer.presentation.main;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.Navigation;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.content.ContextCompat;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.saphamrah.customer.R;
-
 import com.saphamrah.customer.base.BaseActivity;
 import com.saphamrah.customer.base.BasePermissionModel;
+import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
 import com.saphamrah.customer.data.LocationDbModel;
 import com.saphamrah.customer.databinding.ActivityMainBinding;
+import com.saphamrah.customer.databinding.BottomSheetRecyclerSearchBinding;
 import com.saphamrah.customer.presentation.createRequest.CreateRequestActivity;
-import com.saphamrah.customer.presentation.main.welcome.view.MainFragment;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
-import com.saphamrah.customer.utils.AdapterUtil.AdapterItemMultiSelectListener;
-import com.saphamrah.customer.utils.customViews.BottomSheetSearchRecyclerView;
-
+import com.saphamrah.customer.utils.customViews.bottomSheetModule.BaseBottomSheet;
+import com.saphamrah.customer.utils.customViews.bottomSheetModule.list.BaseBottomSheetRecyclerView;
+import com.saphamrah.customer.utils.customViews.bottomSheetModule.list.BottomSheetDynamicListSingleSelect;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, ActivityMainBinding> implements MainInteracts.RequiredViewOps, NavigationView.OnNavigationItemSelectedListener, AdapterItemListener, AdapterItemMultiSelectListener {
+public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, ActivityMainBinding> implements MainInteracts.RequiredViewOps, NavigationView.OnNavigationItemSelectedListener, AdapterItemListener<BaseBottomSheetRecyclerModel> {
+
+    private DividerItemDecoration divider;
+    private BaseBottomSheet baseBottomSheetRecyclerView;
+
+    private BottomSheetRecyclerSearchBinding bottomSheetRecyclerSearchBinding;
+    private BottomSheetDynamicListSingleSelect bottomSheetDynamicListSingleSelect;
+    private BaseBottomSheetRecyclerView.BaseBottomSheetRecyclerViewBuilder baseBottomSheetRecyclerViewBuilder;
+
     public ActionBarDrawerToggle actionBarDrawerToggle;
-    private BottomSheetSearchRecyclerView bottomSheetSearch;
+
     @Override
     protected void onKeyBoardVisibilityChange(boolean visible) {
 
@@ -67,7 +73,10 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
 
     @Override
     protected ActivityMainBinding inflateBiding(LayoutInflater inflater) {
-        return ActivityMainBinding.inflate(inflater);
+        ActivityMainBinding activityMainBinding = ActivityMainBinding.inflate(inflater);
+        View view = activityMainBinding.getRoot();
+        bottomSheetRecyclerSearchBinding = BottomSheetRecyclerSearchBinding.bind(view);
+        return activityMainBinding;
     }
 
     @Override
@@ -79,29 +88,43 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
     private void makeSazmanForoshBottomSheet() {
         List<LocationDbModel> baseSazmanForoshModels = new ArrayList<>();
         baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_domino));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
+//        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_domino));
+//        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
         baseSazmanForoshModels.add(new LocationDbModel("مهرام","3",R.drawable.logo_kalleh));
         baseSazmanForoshModels.add(new LocationDbModel("لینا","7",R.drawable.logo_lina));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
+//        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
         baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
         baseSazmanForoshModels.add(new LocationDbModel("کاله","8",R.drawable.logo_kalleh));
-        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
+//        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
 
-        bottomSheetSearch = new BottomSheetSearchRecyclerView(this, this);
-        handleBottomSheetBehaviorState();
-        bottomSheetSearch.bottomSheetWithSearchAndRecyclerView(this,
-                viewBinding,
-                (ArrayList) baseSazmanForoshModels,
+        closeBottomSheetBehavior();
+
+        divider =
+                new DividerItemDecoration(this,
+                        DividerItemDecoration.VERTICAL);
+
+        divider.setDrawable(ContextCompat.getDrawable(this,
+                R.drawable.layer_line_divider));
+
+        baseBottomSheetRecyclerViewBuilder = new BaseBottomSheetRecyclerView.BaseBottomSheetRecyclerViewBuilder();
+
+        bottomSheetDynamicListSingleSelect = new BottomSheetDynamicListSingleSelect(
+                bottomSheetRecyclerSearchBinding,
+                this,
+                R.id.cardView_recyclerView_bottomSheet,
+                new LinearLayoutManager(this),
+                baseBottomSheetRecyclerViewBuilder.setDividerItemDecoration(divider),
                 true,
                 getResources().getString(R.string.searchSazman),
-                false);
+                (ArrayList) baseSazmanForoshModels,
+                this
+                );
 
     }
 
 
-    private void handleBottomSheetBehaviorState() {
-        bottomSheetSearch.bottomSheetBehaviorStateHandler();
+    private void closeBottomSheetBehavior() {
+        baseBottomSheetRecyclerView.closeBottomSheet();
     }
 
     @Override
@@ -150,23 +173,13 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
         return MainActivity.this;
     }
 
+
     @Override
-    public void onItemSelect(Object obj, int position, AdapterAction Action) {
-         LocationDbModel model=(LocationDbModel) obj ;
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), (model.getResId()));
+    public void onItemSelect(BaseBottomSheetRecyclerModel model, int position, AdapterAction Action) {
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), (model.getImageRes()));
 //        Uri uri = ImageUtils.convertBitmapToUri(context,"sazmanIcon",bm);
 //        Log.i(TAG, "onItemSelect: "+uri);
         startActivity(new Intent(MainActivity.this, CreateRequestActivity.class).putExtra("sazmanName",model.getName()).putExtra("ccSazmanForosh",Integer.parseInt(model.getType())));
-        handleBottomSheetBehaviorState();
-
-
-
+        closeBottomSheetBehavior();
     }
-
-    @Override
-    public void onItemMultiSelect(ArrayList model, AdapterAction action) {
-    }
-
-
-
 }

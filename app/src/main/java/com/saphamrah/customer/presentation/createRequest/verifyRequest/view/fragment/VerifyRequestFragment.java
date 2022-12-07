@@ -49,6 +49,7 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
     @Override
     protected void onBackPressed() {
         activity.paymentState = Constants.PaymentStates.CONFIRM_REQUEST;
+        navigateUp();
 
     }
 
