@@ -78,7 +78,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     @Override
     protected void onBackPressed() {
         if (bottomSheetBonusDiscount.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-
             bottomSheetBonusDiscount.setState(BottomSheetBehavior.STATE_COLLAPSED);
         } else if (bottomSheetBoxPackNum.getState() == BottomSheetBehavior.STATE_EXPANDED) {
             bottomSheetBoxPackNum.setState(BottomSheetBehavior.STATE_COLLAPSED);

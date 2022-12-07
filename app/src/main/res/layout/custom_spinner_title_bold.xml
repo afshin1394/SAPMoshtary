@@ -6,6 +6,9 @@
     android:layout_height="wrap_content"
     android:textSize="@dimen/_10sdp"
     android:textStyle="bold"
+    android:textDirection="rtl"
+    android:paddingRight="@dimen/_10sdp"
+    android:text="@string/jayezehList"
+    android:textColor="@color/outlines"
     android:background="@android:color/transparent"
-
     />

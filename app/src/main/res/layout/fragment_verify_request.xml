@@ -461,6 +461,63 @@
                             </androidx.recyclerview.widget.RecyclerView>
                         </LinearLayout>
 
+
+                        <LinearLayout
+                            android:id="@+id/lyJayezeh"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:layout_margin="@dimen/_2sdp">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/lblJayezehListTitle"
+                                android:text="@string/jayezehList"
+                                android:textSize="@dimen/FontSize16"
+                                android:textColor="@color/colorTextPrimary"
+                                android:gravity="center"
+                                android:background="@color/colorListHeaderBackground"
+                                android:paddingBottom="10dp"
+                                android:paddingTop="10dp"
+                                android:paddingRight="10dp"
+                                android:layout_marginTop="20dp"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="4"
+                                    android:text="@string/nameKala"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:text="@string/count"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/table_header_cell_bg" />
+                            </LinearLayout>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recycler_kala_jayezeh"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scrollbars="vertical">
+                            </androidx.recyclerview.widget.RecyclerView>
+                        </LinearLayout>
+
                         <LinearLayout
                             android:id="@+id/lyMarjoee"
                             android:layout_width="match_parent"
@@ -537,63 +594,6 @@
                                 android:scrollbars="vertical">
                             </androidx.recyclerview.widget.RecyclerView>
                         </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/lyJayezeh"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_margin="@dimen/_2sdp">
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/lblJayezehListTitle"
-                                android:text="@string/jayezehList"
-                                android:textSize="@dimen/FontSize16"
-                                android:textColor="@color/colorTextPrimary"
-                                android:gravity="center"
-                                android:background="@color/colorListHeaderBackground"
-                                android:paddingBottom="10dp"
-                                android:paddingTop="10dp"
-                                android:paddingRight="10dp"
-                                android:layout_marginTop="20dp"/>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="4"
-                                    android:text="@string/nameKala"
-                                    android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
-                                    android:gravity="center"
-                                    android:paddingTop="5dp"
-                                    android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:text="@string/count"
-                                    android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
-                                    android:gravity="center"
-                                    android:paddingTop="5dp"
-                                    android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
-                            </LinearLayout>
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/recycler_kala_jayezeh"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:scrollbars="vertical">
-                            </androidx.recyclerview.widget.RecyclerView>
-                        </LinearLayout>
-
 
 
                     </LinearLayout>

@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/purchase_light_background">
             <TextView
-                style="@style/text_view_title_right_large_screen"
+                style="@style/text_view_title_center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

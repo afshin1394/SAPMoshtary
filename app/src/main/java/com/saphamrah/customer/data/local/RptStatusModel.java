@@ -5,6 +5,7 @@ public class RptStatusModel {
     private String tarikh;
     private String mablaq;
     private String noePardakht;
+    private String elateAdamDarkhast;
     private int statusCode;
     private boolean isSuccessful;
 
@@ -18,6 +19,24 @@ public class RptStatusModel {
         this.noePardakht = noePardakht;
         this.statusCode = statusCode;
         this.isSuccessful = isSuccessful;
+    }
+
+    public RptStatusModel(String code, String tarikh, String mablaq, String noePardakht, String elateAdamDarkhast, int statusCode, boolean isSuccessful) {
+        this.code = code;
+        this.tarikh = tarikh;
+        this.mablaq = mablaq;
+        this.noePardakht = noePardakht;
+        this.elateAdamDarkhast = elateAdamDarkhast;
+        this.statusCode = statusCode;
+        this.isSuccessful = isSuccessful;
+    }
+
+    public String getElateAdamDarkhast() {
+        return elateAdamDarkhast;
+    }
+
+    public void setElateAdamDarkhast(String elateAdamDarkhast) {
+        this.elateAdamDarkhast = elateAdamDarkhast;
     }
 
     public String getCode() {

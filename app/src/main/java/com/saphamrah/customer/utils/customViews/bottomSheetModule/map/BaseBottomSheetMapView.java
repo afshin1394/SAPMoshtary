@@ -13,7 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.viewbinding.ViewBinding;
 
+
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.utils.customViews.SearchWatcher;
 import com.saphamrah.customer.utils.customViews.bottomSheetModule.BaseBottomSheet;
@@ -31,6 +33,7 @@ public class BaseBottomSheetMapView<V extends ViewBinding, M extends MapObjectMo
     protected SearchWatcher searchView;
     protected Button btnApply;
     protected Button btnCancel;
+    public FloatingActionButton fabGetCurrentLocation;
 
     protected ImageView closeBtn;
     protected ImageView searchIcon;
@@ -49,6 +52,7 @@ public class BaseBottomSheetMapView<V extends ViewBinding, M extends MapObjectMo
         view = viewBinding.getRoot();
 
         searchView = view.findViewById(R.id.searchView_mapView_bottomSheet);
+        fabGetCurrentLocation = view.findViewById(R.id.fab_location_mapView_bottomSheet);
 
         closeBtn = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
         searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_button);
@@ -89,5 +93,9 @@ public class BaseBottomSheetMapView<V extends ViewBinding, M extends MapObjectMo
         initBottomSheetView(context);
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
 
+    }
+
+    public FloatingActionButton getFabGetCurrentLocation() {
+        return fabGetCurrentLocation;
     }
 }

@@ -48,8 +48,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="@dimen/btnFontMain"
-            android:textColor="@color/colorWhite"
-            android:padding="@dimen/altdlgButtonPadding"
+            android:textColor="@color/colorBlack"
             android:layout_margin="1dp"
             android:background="@android:color/transparent"/>
 

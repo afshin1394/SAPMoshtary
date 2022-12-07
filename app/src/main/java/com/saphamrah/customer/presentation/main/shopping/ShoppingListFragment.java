@@ -38,9 +38,10 @@ public class ShoppingListFragment extends BaseFragment<MainPresenter, FragmentSh
         ArrayList<RptStatusModel> models = new ArrayList<>();
 
         models.add(new RptStatusModel("2254652145", "1401/05/09","2,450,000","نقد",1,true));
-        models.add(new RptStatusModel("2254652145", "1401/05/10","3,410,000","نقد",2,true));
-        models.add(new RptStatusModel("2254652145", "1401/03/09","3,420,000","نقد",3, true));
-        models.add(new RptStatusModel("4532863752", "1401/05/09","4,050,000","چک",4, true));
+        models.add(new RptStatusModel("2254652145", "1401/05/09","2,450,000","نقد",2,true));
+        models.add(new RptStatusModel("2254652145", "1401/05/09","2,450,000","نقد",3,true));
+        models.add(new RptStatusModel("2254652145", "1401/05/09","2,450,000","نقد",4,true));
+        models.add(new RptStatusModel("2254652145", "1401/05/09","2,450,000","نقد","کمبود موجودی",1,false));
 
         RptStatusAdapter adapter = new RptStatusAdapter(requireContext(),models);
 

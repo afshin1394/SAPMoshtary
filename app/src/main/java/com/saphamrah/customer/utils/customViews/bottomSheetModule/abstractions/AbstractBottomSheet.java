@@ -32,13 +32,15 @@ public abstract class AbstractBottomSheet {
         searchEditText.setTextColor(context.getResources().getColor(R.color.colorTextSecondary));
 
         closeBtn.setColorFilter(context.getResources().getColor(R.color.colorTextSecondary));
-        searchIcon.setColorFilter(context.getResources().getColor(R.color.colorTextSecondary));
+//        searchIcon.setColorFilter(context.getResources().getColor(R.color.colorTextSecondary));
 
-        // open search view by default
+        searchView.setIconifiedByDefault(false);
+
+       /* // open search view by default
         searchView.setIconifiedByDefault(true);
         searchView.setFocusable(true);
         searchView.setIconified(false);
-        searchView.clearFocus();
+        searchView.clearFocus();*/
 
         searchView.setQueryHint(searchHint);
 

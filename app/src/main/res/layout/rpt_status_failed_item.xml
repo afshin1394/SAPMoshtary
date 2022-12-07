@@ -33,6 +33,50 @@
         android:orientation="horizontal">
 
      <TextView
+         android:id="@+id/textview_elate_adamdarkhast"
+         android:layout_width="0dp"
+         android:layout_height="match_parent"
+         android:layout_weight="1"
+         android:textSize="15dp"
+         android:textColor="@color/colorBadStatus"
+         android:fontFamily="@font/iransans"
+         android:text="کمبود موجودی"
+         android:layout_marginStart="10dp"
+         android:textDirection="rtl"
+         android:gravity="end"
+         android:layout_gravity="end"/>
+
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textSize="14dp"
+         android:textColor="@color/colorGrey600"
+         android:fontFamily="@font/iransans"
+         android:text="علت عدم درخواست:"
+         android:layout_marginEnd="15dp"
+         android:gravity="center"
+         android:layout_gravity="end"/>
+
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorGrey500"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="@dimen/_4sdp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layoutDirection="ltr"
+        android:orientation="horizontal">
+
+     <TextView
          android:id="@+id/textview_code_sefaresh"
          android:layout_width="0dp"
          android:layout_height="match_parent"
@@ -179,8 +223,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:backgroundTint="@color/colorBrown400"
+        android:padding="10dp"
         android:text="مشاهده فاکتور"/>
 
    </LinearLayout>
@@ -190,7 +234,7 @@
        android:layout_height="wrap_content"
        android:layout_margin="@dimen/_3sdp"
        app:strokeWidth="@dimen/_3sdp"
-       app:strokeColor="@color/colorGoodStatus"
+       app:strokeColor="@color/colorBadStatus"
        app:cardCornerRadius="@dimen/btnCornerRadius"
        app:cardElevation="@dimen/_2sdp">
 
@@ -204,7 +248,7 @@
          android:id="@+id/imageview_status"
          android:layout_width="match_parent"
          android:layout_height="@dimen/_150sdp"
-         android:src="@drawable/final_confirm_rpt"/>
+         android:src="@drawable/rpt_info"/>
 
 
      <LinearLayout
@@ -220,28 +264,8 @@
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:gravity="end"
-          android:text="تایید تحویل"/>
+          android:text="عدم صدور فاکتور"/>
 
-      <LinearLayout
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="2.8">
-
-       <TextView
-           android:layout_width="0dp"
-           android:layout_height="wrap_content"
-           android:layout_weight="1"
-           android:gravity="center"
-           android:text="ارسال به مسیر"/>
-       <TextView
-           android:layout_width="0dp"
-           android:layout_height="wrap_content"
-           android:layout_weight="1"
-           android:gravity="center"
-           android:text="صدور فاکتور"/>
-
-
-      </LinearLayout>
 
       <TextView
           android:layout_width="0dp"
@@ -260,8 +284,8 @@
          android:layoutDirection="rtl"
          android:progressTint="@color/bg_view"
          android:thumbTint="@color/bg_view"
-         android:progress="3"
-         android:max="3"
+         android:progress="2"
+         android:max="1"
          android:layout_marginStart="@dimen/_2sdp"
          android:layout_marginEnd="@dimen/_2sdp"
          android:layout_marginBottom="@dimen/_12sdp"/>
@@ -269,9 +293,5 @@
     </LinearLayout>
    </com.google.android.material.card.MaterialCardView>
   </LinearLayout>
-
-
-
  </androidx.cardview.widget.CardView>
-
 </LinearLayout>

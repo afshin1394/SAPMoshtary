@@ -1,28 +1,26 @@
 package com.saphamrah.customer.presentation.main.shopping.adapter;
 
 
-import android.annotation.SuppressLint;
+import static com.saphamrah.customer.utils.Constants.ADVERTISEMENT;
+import static com.saphamrah.customer.utils.Constants.FAILED;
+import static com.saphamrah.customer.utils.Constants.SELL;
+import static com.saphamrah.customer.utils.Constants.SUCCESSFUL;
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-import com.google.android.material.card.MaterialCardView;
 import com.saphamrah.customer.R;
-import com.saphamrah.customer.data.local.AddressMoshtaryModel;
 import com.saphamrah.customer.data.local.RptStatusModel;
 
 import java.util.ArrayList;
 
-public class RptStatusAdapter extends RecyclerView.Adapter<RptStatusAdapter.ViewHolder> {
+public class RptStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     //    private final OnItemClickListener listener;
@@ -36,55 +34,37 @@ public class RptStatusAdapter extends RecyclerView.Adapter<RptStatusAdapter.View
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rpt_status_item, parent, false);
 
-        return new ViewHolder(view);
+        switch (viewType) {
+            case SUCCESSFUL:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rpt_status_item, parent, false);
+                return new ViewHolderSuccessful(view);
+
+            case FAILED:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rpt_status_failed_item, parent, false);
+                return new ViewHolderFailed(view);
+
+        }
+
+        return null;
     }
 
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        int resId = 0;
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
-        holder.codeSefareshTV.setText(models.get(position).getCode());
-        holder.tarikhSefareshTV.setText(models.get(position).getTarikh());
-        holder.mablaqTV.setText(models.get(position).getMablaq());
-        holder.noePardakhtTV.setText(models.get(position).getNoePardakht());
+        switch (holder.getItemViewType()){
+            case SUCCESSFUL:
+                ((ViewHolderSuccessful) holder).bind(position);
+                break;
 
-        switch (models.get(position).getStatusCode()) {
-
-            case 1:
-                holder.seekBar.setProgress(0);
-                resId = R.drawable.first_confirm_rpt;
-                break;
-            case 2:
-                holder.seekBar.setProgress(1);
-                resId = R.drawable.factor_rpt;
-                break;
-            case 3:
-                holder.seekBar.setProgress(2);
-                resId = R.drawable.delivir_rpt;
-                break;
-            case 4:
-                holder.seekBar.setProgress(3);
-                resId = R.drawable.final_confirm_rpt;
+            case FAILED:
+                ((ViewHolderFailed) holder).bind(position);
                 break;
 
         }
-
-        if (models.get(position).isSuccessful())
-            holder.materialCardView.setStrokeColor(context.getResources().getColor(R.color.colorGoodStatus));
-        else
-            holder.materialCardView.setStrokeColor(context.getResources().getColor(R.color.colorBadStatus));
-
-        Glide.with(context)
-                .load(resId)
-                .into(holder.statusIV);
-
-        holder.seekBar.setOnTouchListener((v, event) -> true);
-
     }
 
 
@@ -94,16 +74,26 @@ public class RptStatusAdapter extends RecyclerView.Adapter<RptStatusAdapter.View
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemViewType(int position) {
+
+        if (models.get(position).isSuccessful()) {
+            return SUCCESSFUL;
+        } else {
+            return FAILED;
+        }
+
+    }
+
+    public class ViewHolderSuccessful extends RecyclerView.ViewHolder {
         private TextView codeSefareshTV;
         private TextView tarikhSefareshTV;
         private TextView mablaqTV;
         private TextView noePardakhtTV;
         private ImageView statusIV;
         private SeekBar seekBar;
-        private MaterialCardView materialCardView;
 
-        public ViewHolder(View view) {
+        public ViewHolderSuccessful(View view) {
             super(view);
 //            Typeface font = Typeface.createFromAsset(context.getAssets() , context.getResources().getString(R.string.fontPath));
 
@@ -113,38 +103,77 @@ public class RptStatusAdapter extends RecyclerView.Adapter<RptStatusAdapter.View
             noePardakhtTV = view.findViewById(R.id.textview_noe_pardakht);
             statusIV = view.findViewById(R.id.imageview_status);
             seekBar = view.findViewById(R.id.seekbar);
-            materialCardView = view.findViewById(R.id.material_cardview);
         }
 
-//        void bind(final KalaElamMarjoeeModel kalaElamMarjoeeModel , final int position , final OnItemClickListener listener)
-//        {
-//            layDelete.setOnClickListener(new View.OnClickListener() {
-//                @Override public void onClick(View v) {
-//                    swipe.close(true);
-//                    listener.onItemClick(Constants.DELETE(), kalaElamMarjoeeModel , position);
-//                }
-//            });
-//
-//            layEditCount.setOnClickListener(new View.OnClickListener() {
-//                @Override public void onClick(View v) {
-//                    swipe.close(true);
-//                    listener.onItemClick(Constants.CLEARING(), kalaElamMarjoeeModel , position);
-//                }
-//            });
-//        }
 
+        public void bind(int position){
+            int resId = 0;
+
+            codeSefareshTV.setText(models.get(position).getCode());
+            tarikhSefareshTV.setText(models.get(position).getTarikh());
+            mablaqTV.setText(models.get(position).getMablaq());
+            noePardakhtTV.setText(models.get(position).getNoePardakht());
+
+            switch (models.get(position).getStatusCode()) {
+
+                case 1:
+                    seekBar.setProgress(0);
+                    resId = R.drawable.first_confirm_rpt;
+                    break;
+                case 2:
+                    seekBar.setProgress(1);
+                    resId = R.drawable.factor_rpt;
+                    break;
+                case 3:
+                    seekBar.setProgress(2);
+                    resId = R.drawable.delivir_rpt;
+                    break;
+                case 4:
+                    seekBar.setProgress(3);
+                    resId = R.drawable.final_confirm_rpt;
+                    break;
+
+            }
+
+            Glide.with(context)
+                    .load(resId)
+                    .into(statusIV);
+
+            seekBar.setOnTouchListener((v, event) -> true);
+
+        }
     }
 
+    public class ViewHolderFailed extends RecyclerView.ViewHolder {
+        private TextView codeSefareshTV;
+        private TextView tarikhSefareshTV;
+        private TextView mablaqTV;
+        private TextView noePardakhtTV;
+        private TextView elateAdamDarkhastTV;
+        private SeekBar seekBar;
 
-//    public interface OnItemClickListener
-//    {
-//        void onItemClick(int operation, KalaElamMarjoeeModel kalaElamMarjoeeModel , int position);
-//    }
+        public ViewHolderFailed(View view) {
+            super(view);
+//            Typeface font = Typeface.createFromAsset(context.getAssets() , context.getResources().getString(R.string.fontPath));
 
+            codeSefareshTV = view.findViewById(R.id.textview_code_sefaresh);
+            tarikhSefareshTV = view.findViewById(R.id.textview_tarikh_sabt);
+            mablaqTV = view.findViewById(R.id.textview_cost);
+            noePardakhtTV = view.findViewById(R.id.textview_noe_pardakht);
+            elateAdamDarkhastTV = view.findViewById(R.id.textview_elate_adamdarkhast);
+            seekBar = view.findViewById(R.id.seekbar);
+        }
 
-//    @Override
-//    public int getSwipeLayoutResourceId(int position) {
-//        return R.id.swipe;
-//    }
+        public void bind(int position){
 
+            codeSefareshTV.setText(models.get(position).getCode());
+            tarikhSefareshTV.setText(models.get(position).getTarikh());
+            mablaqTV.setText(models.get(position).getMablaq());
+            noePardakhtTV.setText(models.get(position).getNoePardakht());
+            elateAdamDarkhastTV.setText(models.get(position).getElateAdamDarkhast());
+
+            seekBar.setOnTouchListener((v, event) -> true);
+
+        }
+    }
 }

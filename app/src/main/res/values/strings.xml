@@ -1078,6 +1078,7 @@
     <string name="errorDuplicatedVarizBeBank">"این فیش بانکی قبلا ارسال شده است"</string>
     <string name="errorTarikhVarizBeBank">"امکان ارسال فیش به علت عدم ثبت تاریخ روز وجود ندارد"</string>
     <string name="exit">برای خروج یک بار دیگر کلیک کنید</string>
+    <string name="exitDialog">آیا برای خروج مطمئن هستید؟</string>
     <string name="isTaeedShode">شما یک وصول تایید نشده دارید لطفا با واحد وصول هماهنگ نمایید</string>
     <string name="canNotDelete">شما نمیتوانید این گزینه را حذف نمایید</string>
     <string name="btnOk">متوجه شدم</string>

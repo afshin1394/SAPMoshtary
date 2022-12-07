@@ -46,6 +46,7 @@ public class CustomSpinner {
             {
                 selectedIndex = position;
                 adapter.updateListStatus(selectedIndex);
+                response.onChangeItem(selectedIndex);
             }
         });
 

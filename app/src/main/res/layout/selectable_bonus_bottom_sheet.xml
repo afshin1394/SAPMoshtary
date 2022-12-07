@@ -26,28 +26,25 @@
 
 
 
-        <ImageView
 
-            android:id="@+id/arrow_down_bottom_sheet"
-            android:layout_width="40dp"
-            android:layout_height="@dimen/_18sdp"
-            android:elevation="@dimen/_360sdp"
-            android:src="@drawable/ic_arrow_up"
-            android:padding="@dimen/_1sdp"
-            />
     </LinearLayout>
+
         <Spinner
+            android:layout_marginTop="@dimen/_2sdp"
             android:id="@+id/sp_bonus_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bordered_transparent"
             android:gravity="center"
-            android:paddingTop="15dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
             android:text="@string/jayezehDetail"
            />
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_height="1dp"
+            android:background="@color/outlines"
+            />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -74,7 +71,6 @@
                     android:hint="@string/takhfifJayezeh"
                     android:inputType="none"
                     android:maxLines="1"
-                    android:text="0"
                     android:textColor="@color/colorTextPrimary"
                     android:textColorHint="@color/colorDivider"
                     android:textSize="@dimen/fontSizeSelectBonus" />

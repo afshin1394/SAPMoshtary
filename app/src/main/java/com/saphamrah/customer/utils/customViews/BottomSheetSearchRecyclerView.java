@@ -276,10 +276,10 @@ public class BottomSheetSearchRecyclerView<T extends BaseBottomSheetRecyclerMode
         searchIcon.setColorFilter(context.getResources().getColor(R.color.colorTextSecondary));
 
         // open search view by default
-        searchView.setIconifiedByDefault(true);
-        searchView.setFocusable(true);
-        searchView.setIconified(false);
-        searchView.clearFocus();
+        searchView.setIconifiedByDefault(false);
+//        searchView.setFocusable(true);
+//        searchView.setIconified(false);
+//        searchView.clearFocus();
 
         searchView.setQueryHint(searchHint);
 

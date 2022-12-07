@@ -5,7 +5,10 @@
     android:singleLine="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/_4sdp"
+    android:padding="@dimen/_6sdp"
+    android:gravity="center"
+    android:textColor="@color/outlines"
+    android:text="@string/jayezehList"
     android:background="@drawable/bordered_purchase_light"
     android:ellipsize="marquee"
     android:textAlignment="inherit"/>

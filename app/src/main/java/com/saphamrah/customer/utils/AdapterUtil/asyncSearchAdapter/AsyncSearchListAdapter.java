@@ -78,6 +78,16 @@ public class AsyncSearchListAdapter<T extends BaseBottomSheetRecyclerModel> exte
         public void bind(T baseSearchDbModel) {
             binding.txtSearch.setText(baseSearchDbModel.getName());
 
+            int resImg = ((LocationDbModel) baseSearchDbModel).getResId();
+
+            if (resImg != 0) {
+                binding.imageViewSearch.setVisibility(View.VISIBLE);
+
+                Glide.with(binding.getRoot())
+                        .load(resImg)
+                        .into(binding.imageViewSearch);
+            }
+
             if (!isMultiSelect) {
                 binding.checkboxSearch.setVisibility(View.GONE);
             }

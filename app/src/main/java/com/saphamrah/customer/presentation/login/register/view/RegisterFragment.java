@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
 import com.saphamrah.customer.Constants;
 import com.saphamrah.customer.R;
@@ -39,6 +38,7 @@ import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemMultiSelectListener;
 import com.saphamrah.customer.utils.customViews.bottomSheetModule.list.BottomSheetDynamicListMultiSelect;
 import com.saphamrah.customer.utils.customViews.bottomSheetModule.list.BottomSheetDynamicListSingleSelect;
+import com.saphamrah.customer.utils.customViews.bottomSheetModule.list.BottomSheetStaticListSingleSelect;
 import com.saphamrah.customer.utils.customViews.bottomSheetModule.map.ApplyButtonMap;
 import com.saphamrah.customer.utils.customViews.bottomSheetModule.map.BottomSheetMap;
 import com.saphamrah.customer.utils.mapModule.Enums.MapType;
@@ -64,8 +64,8 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
 
     private BaseBottomSheet baseBottomSheetRecyclerView;
+    private BottomSheetStaticListSingleSelect bottomSheetStaticListSingleSelect;
     private BottomSheetDynamicListSingleSelect bottomSheetDynamicListSingleSelect;
-    private BottomSheetDynamicListMultiSelect bottomSheetDynamicListMultiSelect;
     private BaseBottomSheetRecyclerView.BaseBottomSheetRecyclerViewBuilder<BottomSheetRecyclerSearchBinding> bottomSheetRecyclerViewBuilder;
     private ArrayList<LocationDbModel> baseSearchProvinceDbModels;
     private ArrayList<LocationDbModel> baseSearchCityDbModels;
@@ -93,15 +93,12 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
     @Override
     protected void onBackPressed() {
-        if (baseBottomSheetMap.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            bottomSheetMap.closeBottomSheet();
-        } else {
-            navigateUp();
-        }
+
     }
 
     @Override
     protected void initViews() {
+
 
         baseBottomSheetMap = new BaseBottomSheet(bottomSheetMapSearchBinding, getContext(), R.id.cardView_mapView_BottomSheet);
         baseBottomSheetRecyclerView = new BaseBottomSheet(bottomSheetRecyclerSearchBinding, getContext(), R.id.cardView_recyclerView_bottomSheet);
@@ -115,29 +112,13 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         baseSearchCityDbModels = new ArrayList<>();
 
         baseSearchProvinceDbModels.add(new LocationDbModel("تهران", "province"));
-        baseSearchProvinceDbModels.add(new LocationDbModel("تبریز", "province"));
-        baseSearchProvinceDbModels.add(new LocationDbModel("گیلان", "province"));
-        baseSearchProvinceDbModels.add(new LocationDbModel("گرگان", "province"));
 
         baseSearchCityDbModels.add(new LocationDbModel("تهران", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("تبریز", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("اراک", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("ایلام", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("ایلام", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("ایلام", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("ایلام", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("ایلام", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("ایلام", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("ایلام", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("ایلام", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("ایلام", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("ایلام", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("تهران", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("تبریز", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("اراک", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("تهران", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("تبریز", "city"));
-        baseSearchCityDbModels.add(new LocationDbModel("اراک", "city"));
+        baseSearchCityDbModels.add(new LocationDbModel("شهرری", "city"));
+        baseSearchCityDbModels.add(new LocationDbModel("ورامین", "city"));
+        baseSearchCityDbModels.add(new LocationDbModel("دماوند", "city"));
+        baseSearchCityDbModels.add(new LocationDbModel("بومهن", "city"));
+        baseSearchCityDbModels.add(new LocationDbModel("رودهن", "city"));
 
     }
 
@@ -174,8 +155,8 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
 
         osmDroid = new OsmDroid(getContext(),mapView,true, MapType.OsmDroid);
         osmDroid.zoomCameraToSpecificPosition(osmDroid.getCurrentLocation(),20);
-        osmDroid.removeAllAvailableFeaturesOnMap();
 
+        osmDroid.removeAllAvailableFeaturesOnMap();
 
 
         currentMapModel = new MapObjectModel.Builder()
@@ -188,6 +169,25 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
                 .create();
 
         osmDroid.addSingleLocationLayer(currentMapModel);
+
+        bottomSheetMap = new BottomSheetMap<>(
+                bottomSheetMapSearchBinding,
+                getContext(),
+                R.id.cardView_mapView_BottomSheet,
+                currentMapModel,
+                bottomSheetMapBuilder
+                        .setSearchEnable(true)
+                        .setButtonApplyEnable(true)
+                        .setSearchHint(getString(R.string.search_address)),
+                new ApplyButtonMap() {
+                    @Override
+                    public void onApplyButtonListener(LatLng latLng) {
+                        Log.d("RegisterFragment", "latlng: "+ latLng);
+
+                    }
+                }
+        );
+
         osmDroid.onMapContentClickListener(osmDroid.CURRENT_LOCATION_GROUP_ID(), new IMapClickEvents() {
             @Override
             public void onMarkSingleTap(int index, Object object) {
@@ -237,23 +237,44 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
             }
         });
 
-        bottomSheetMap = new BottomSheetMap<>(
-                bottomSheetMapSearchBinding,
-                getContext(),
-                R.id.cardView_mapView_BottomSheet,
-                currentMapModel,
-                bottomSheetMapBuilder
-                        .setSearchEnable(true)
-                        .setButtonApplyEnable(true)
-                        .setSearchHint(getString(R.string.search_address)),
-                new ApplyButtonMap() {
-                    @Override
-                    public void onApplyButtonListener(LatLng latLng) {
-                        Log.d("RegisterFragment", "latlng: "+ latLng);
 
-                    }
-                }
-        );
+
+        bottomSheetMap.getFabGetCurrentLocation().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                osmDroid.removeExistingFeatures(osmDroid.CURRENT_LOCATION_GROUP_ID());
+
+                currentMapModel = new MapObjectModel.Builder()
+                        .setGroup_key(osmDroid.CURRENT_LOCATION_GROUP_ID())
+                        .setLayer_id(osmDroid.CURRENT_LOCATION_GROUP_ID())
+                        .setSource_id(osmDroid.CURRENT_LOCATION_GROUP_ID())
+                        .setImage_id(osmDroid.CURRENT_LOCATION_GROUP_ID())
+                        .setLatLng(new LatLng(osmDroid.getCurrentLocation().getLatitude(), osmDroid.getCurrentLocation().getLongitude()))
+                        .setDrawable(getResources().getDrawable(R.drawable.ic_user_marker))
+                        .create();
+
+                osmDroid.addSingleLocationLayer(currentMapModel);
+                mapView.invalidate();
+
+                bottomSheetMap = new BottomSheetMap<>(
+                        bottomSheetMapSearchBinding,
+                        getContext(),
+                        R.id.cardView_mapView_BottomSheet,
+                        currentMapModel,
+                        bottomSheetMapBuilder
+                                .setSearchEnable(true)
+                                .setButtonApplyEnable(true)
+                                .setSearchHint(getString(R.string.search_address)),
+                        new ApplyButtonMap() {
+                            @Override
+                            public void onApplyButtonListener(LatLng latLng) {
+                                Log.d("RegisterFragment", "latlng: "+ latLng);
+
+                            }
+                        }
+                );
+            }
+        });
 
     }
 
@@ -320,7 +341,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         divider.setDrawable(ContextCompat.getDrawable(context,
                 R.drawable.layer_line_divider));
 
-        bottomSheetDynamicListMultiSelect = new BottomSheetDynamicListMultiSelect(
+        bottomSheetDynamicListSingleSelect = new BottomSheetDynamicListSingleSelect(
                 bottomSheetRecyclerSearchBinding,
                 getContext(),
                 R.id.cardView_recyclerView_bottomSheet,
@@ -355,7 +376,7 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
                 bottomSheetRecyclerViewBuilder.setDividerItemDecoration(divider),
                 true,
                 getContext().getResources().getString(R.string.searchProvince),
-                baseSearchCityDbModels,
+                baseSearchProvinceDbModels,
                 this);
 
     }
@@ -417,15 +438,13 @@ public class RegisterFragment extends BaseFragment<RegisterPresenter, FragmentRe
         divider.setDrawable(ContextCompat.getDrawable(context,
                 R.drawable.layer_line_divider));
 
-        bottomSheetDynamicListMultiSelect = new BottomSheetDynamicListMultiSelect(
+        bottomSheetStaticListSingleSelect = new BottomSheetStaticListSingleSelect(
                 bottomSheetRecyclerSearchBinding,
                 getContext(),
                 R.id.cardView_recyclerView_bottomSheet,
                 new LinearLayoutManager(getContext()),
                 bottomSheetRecyclerViewBuilder
                         .setDividerItemDecoration(divider),
-                false,
-                "",
                 itemTitles,
                 this);
 

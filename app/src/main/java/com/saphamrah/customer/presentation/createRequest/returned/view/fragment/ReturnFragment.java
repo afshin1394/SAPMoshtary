@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,6 +39,8 @@ import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.Constants;
 import com.saphamrah.customer.utils.customViews.CustomSpinner;
 import com.saphamrah.customer.utils.customViews.CustomSpinnerResponse;
+import com.saphamrah.customer.utils.dialogs.DoubleActionFragmentDialog;
+import com.saphamrah.customer.utils.dialogs.IDoubleActionDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +60,19 @@ public class ReturnFragment extends BaseFragment<ReturnedInteractor.PresenterOps
 
     @Override
     protected void onBackPressed() {
-      activity.paymentState = Constants.PaymentStates.CONFIRM_REQUEST;
+//        FragmentTransaction wft = getChildFragmentManager().beginTransaction();
+//        new DoubleActionFragmentDialog(context.getString(R.string.exitDialog), false, new IDoubleActionDialog() {
+//            @Override
+//            public void onConfirmClick() {
+//                activity.setMarjoee = false;
+//                navigateUp();
+//            }
+//
+//            @Override
+//            public void onCancelClick() {
+//
+//            }
+//        }).show(wft,"dialog");
     }
 
     @Override
@@ -114,11 +129,16 @@ public class ReturnFragment extends BaseFragment<ReturnedInteractor.PresenterOps
                  case SELECT:
                      customSpinner.showSpinnerSingleButton(activity, marjoeeTitles,false, new CustomSpinnerResponse() {
                          @Override
-                         public void onSingleSelect(int selectedIndex)
-                         {
+                         public void onChangeItem(int selectedIndex) {
                              model.setNameElatMarjoeeKala(marjoeeTitles.get(selectedIndex));
                              List<ElamMarjoeeForoshandehModel> marjoees = Observable.fromIterable(elamMarjoeeForoshandehModels).filter(elamMarjoeeForoshandehModel -> elamMarjoeeForoshandehModel.getTedad3()>0).toList().blockingGet();
                              selectedReturnedAdapter.submitList(marjoees);
+                         }
+
+                         @Override
+                         public void onSingleSelect(int selectedIndex)
+                         {
+
                          }
                          @Override
                          public void onMultiSelect(ArrayList<Integer> selectedIndexes)
