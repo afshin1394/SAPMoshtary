@@ -11,7 +11,6 @@
     <string name="Test">تست</string>
     <string name="demo">دمو</string>
     <string name="versionText">نسخه %1$s %2$s</string>
-    <string name="currentVersion">نسخه مورداستفاده : %1$s</string>
     <string name="newestVersion">آخرین نسخه قابل دریافت : %1$s</string>
     <string name="lastStableVersion">آخرین نسخه قابل استفاده : %1$s</string>
     <string name="forceUpdate">بروزرسانی ضروری</string>
@@ -498,7 +497,8 @@
     <string name="saleReport">آمار فروش</string>
     <string name="countFaktorForosh">تعداد فاکتور فروش</string>
     <string name="mablaghForoshRial">مبلغ فروش(میلیون ریال)</string>
-    <string name="mablaghMarjoee">مبلغ فاکتور مرجوعی(ریال)</string>
+    <string name="mablaghMarjoee">مبلغ مرجوعی</string>
+
     <string name="countMarjoee">تعداد مرجوعی</string>
     <string name="mablaghForosh">مبلغ فروش</string>
     <string name="tarikhForosh">تاریخ فاکتور</string>
@@ -1318,5 +1318,22 @@
     <string name="errorLocation">لطفا مکان را خود را انتخاب نمایید.</string>
     <string name="errorPlaque">لطفا پلاک را به درستی وارد نمایید.</string>
     <string name="search_address">جستجو آدرس</string>
+    <string name="warningOrderedBefore" />
+    <string name="orderedBefore">برای سازمان %s قبلا درخواست ثبت شده,آیا مایل به ادامه هستید؟</string>
+    <string name="searchCompany">جستجوی شرکت</string>
 
+
+
+    <string name="totalPriceList">لیست جمع مبالغ</string>
+    <string name="priceDescription">شرح مبلغ</string>
+    <string name="sumRequest">جمع درخواست</string>
+    <string name="sumOffRequest">مبلغ تخفیف درخواست</string>
+    <string name="sumRejectRequest">مبلغ مرجوعی درخواست</string>
+    <string name="sumValueAddedRequest">مبلغ ارزش افزوده درخواست</string>
+    <string name="sumPayable">مبلغ قابل پرداخت</string>
+    <string name="sumPaid">مبلغ پرداخت شده</string>
+    <string name="priceRemainRequest">مبلغ مانده درخواست</string>
+    <string name="sumPriceRemain">مبلغ کل مانده</string>
+    <string name="descRequestList">لیست خلاصه درخواست</string>
+    <string name="explanation">شرح</string>
 </resources>

@@ -105,7 +105,7 @@ public class ReturnedAdapter extends RecyclerView.Adapter<ReturnedAdapter.ViewHo
                 addMarjoeeCount.setVisibility(View.VISIBLE);
                 addMarjoee.setVisibility(View.GONE);
                 elamMarjoeeForoshandehModel.setTedad3(1);
-                mablaghMarjoee.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh), ((int) (elamMarjoeeForoshandehModel.getGheymatForosh() * elamMarjoeeForoshandehModel.getTedad3())),context.getString(R.string.rial)));
+                mablaghMarjoee.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghMarjoee), ((int) (elamMarjoeeForoshandehModel.getGheymatForosh() * elamMarjoeeForoshandehModel.getTedad3())),context.getString(R.string.rial)));
                 count.setText(String.valueOf(elamMarjoeeForoshandehModel.getTedad3()));
                 listener.onItemSelect(elamMarjoeeForoshandehModel,getAdapterPosition(), AdapterAction.SELECT);
 
@@ -114,7 +114,7 @@ public class ReturnedAdapter extends RecyclerView.Adapter<ReturnedAdapter.ViewHo
                 addToCart.setOnClickListener(view -> {
                     elamMarjoeeForoshandehModel.setTedad3(elamMarjoeeForoshandehModel.getTedad3() + 1);
                     count.setText(String.valueOf(elamMarjoeeForoshandehModel.getTedad3()));
-                    mablaghMarjoee.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh), ((int) (elamMarjoeeForoshandehModel.getGheymatForosh() * elamMarjoeeForoshandehModel.getTedad3())),context.getString(R.string.rial)));
+                    mablaghMarjoee.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghMarjoee), ((int) (elamMarjoeeForoshandehModel.getGheymatForosh() * elamMarjoeeForoshandehModel.getTedad3())),context.getString(R.string.rial)));
                     listener.onItemSelect(elamMarjoeeForoshandehModel,getAdapterPosition(), AdapterAction.ADD);
                 });
                 removeFromCart.setOnClickListener(view -> {
@@ -127,7 +127,7 @@ public class ReturnedAdapter extends RecyclerView.Adapter<ReturnedAdapter.ViewHo
                         addMarjoeeCount.setVisibility(View.GONE);
                         addMarjoee.setVisibility(View.VISIBLE);
 
-                        mablaghMarjoee.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh), ((int) (elamMarjoeeForoshandehModel.getGheymatForosh() * elamMarjoeeForoshandehModel.getTedad3())),context.getString(R.string.rial)));
+                        mablaghMarjoee.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghMarjoee), ((int) (elamMarjoeeForoshandehModel.getGheymatForosh() * elamMarjoeeForoshandehModel.getTedad3())),context.getString(R.string.rial)));
                     }
 
                     listener.onItemSelect(elamMarjoeeForoshandehModel,getAdapterPosition(), AdapterAction.REMOVE);
@@ -140,7 +140,7 @@ public class ReturnedAdapter extends RecyclerView.Adapter<ReturnedAdapter.ViewHo
                 public void onTextChange(String s) {
                     if (!s.equals(""))
                     elamMarjoeeForoshandehModel.setTedad3(Integer.parseInt(s));
-                    mablaghMarjoee.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh), ((int) (elamMarjoeeForoshandehModel.getGheymatForosh() * elamMarjoeeForoshandehModel.getTedad3())),context.getString(R.string.rial)));
+                    mablaghMarjoee.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghMarjoee), ((int) (elamMarjoeeForoshandehModel.getGheymatForosh() * elamMarjoeeForoshandehModel.getTedad3())),context.getString(R.string.rial)));
                     listener.onItemSelect(elamMarjoeeForoshandehModel,getAdapterPosition(), AdapterAction.ADD);
                 }
             },300);
@@ -151,7 +151,7 @@ public class ReturnedAdapter extends RecyclerView.Adapter<ReturnedAdapter.ViewHo
                     elamMarjoeeForoshandehModel.setTedad3(0);
                     addMarjoeeCount.setVisibility(View.GONE);
                     addMarjoee.setVisibility(View.VISIBLE);
-                    mablaghMarjoee.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh), 0 ,context.getString(R.string.rial)));
+                    mablaghMarjoee.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghMarjoee), 0 ,context.getString(R.string.rial)));
                     listener.onItemSelect(elamMarjoeeForoshandehModel,getAdapterPosition(), AdapterAction.REMOVE);
                 }
             });

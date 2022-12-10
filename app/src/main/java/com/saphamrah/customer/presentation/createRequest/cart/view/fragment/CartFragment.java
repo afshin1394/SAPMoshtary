@@ -94,6 +94,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     @Override
     protected void onBackPressed() {
         activity.paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
+        activity.setMarjoee = false;
         navigateUp();
     }
 
@@ -169,7 +170,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void run() {
-                viewBinding.svDetails.scrollTo(0, (int) ScreenUtils.getViewLocationOnScreen(viewBinding.linReturn)[1]);
+                viewBinding.svDetails.smoothScrollTo(0, (int) ScreenUtils.getViewLocationOnScreen(viewBinding.linReturn)[1]);
             }
         });
     }
@@ -203,13 +204,13 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
                 /*state 1*/
                 if (!addRemoveProduct) {
                     showLoading("");
-
+                    activity.clearJayezehTakhfif();
+                    activity.clearElamMarjoee();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             activity.paymentState = Constants.PaymentStates.CALCULATE_BONUS_DISCOUNT;
-                            activity.clearJayezehTakhfif();
-                            activity.clearElamMarjoee();
+
                             dismissLoading();
 
                             addRemoveProduct = false;
@@ -320,11 +321,11 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
         sheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
                 viewBinding.btmShtPurchase.arrowDownBottomSheet.setRotation(slideOffset * 180);
             }
         });
@@ -346,6 +347,8 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
             }
         });
+
+
 
 
     }
@@ -492,7 +495,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     @Override
     public void onGetDiscountAndBonuses(List<DiscountModel> discountModels, List<BonusModel> bonusModels) {
 
-        viewBinding.btmShtPurchase.tvPayment.setText(R.string.selectableBonus);
         activity.setBonusModelsGlobal(bonusModels);
         activity.setDiscountModelsGlobal(discountModels);
         viewBinding.linBonusDiscount.setVisibility(View.VISIBLE);
@@ -503,6 +505,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             @Override
             public void run() {
                 viewBinding.svDetails.smoothScrollTo(0,(int) viewBinding.tvDiscountTitle.getY());
+                setBottomSheetOnState();
 //                viewBinding.svDetails.scrollTo(0, (int) ScreenUtils.getViewLocationOnScreen(viewBinding.tvDiscountTitle)[1]);
             }
         });
@@ -524,7 +527,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             bonusAdapter = new BonusAdapter(context, activity.getBonusModelsGlobal());
             viewBinding.RVBonus.setLayoutManager(linearLayoutManager);
             viewBinding.RVBonus.setAdapter(bonusAdapter);
-            viewBinding.RVBonus.setNestedScrollingEnabled(false);
         }
     }
 
@@ -536,7 +538,6 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             discountAdapter = new DiscountAdapter(context, activity.getDiscountModelsGlobal());
             viewBinding.RVDiscount.setLayoutManager(linearLayoutManager);
             viewBinding.RVDiscount.setAdapter(discountAdapter);
-            viewBinding.RVDiscount.setNestedScrollingEnabled(false);
         }
     }
 
@@ -557,12 +558,11 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             });
             viewBinding.RVSelectableBonus.setLayoutManager(linearLayoutManager);
             viewBinding.RVSelectableBonus.setAdapter(selectableBonusCartAdapter);
-            viewBinding.RVSelectableBonus.setNestedScrollingEnabled(false);
             viewBinding.svDetails.post(new Runnable() {
                 @RequiresApi(api = Build.VERSION_CODES.Q)
                 @Override
                 public void run() {
-                    viewBinding.svDetails.scrollTo(0, (int) ScreenUtils.getViewLocationOnScreen(viewBinding.linSelectableBonus)[1]);
+                    viewBinding.svDetails.smoothScrollTo(0, (int) ScreenUtils.getViewLocationOnScreen(viewBinding.linSelectableBonus)[1]);
                 }
             });
         }

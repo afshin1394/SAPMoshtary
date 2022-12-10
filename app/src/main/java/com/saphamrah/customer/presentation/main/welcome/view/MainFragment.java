@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -56,6 +57,8 @@ import com.saphamrah.customer.utils.SnapToBlock;
 import com.saphamrah.customer.utils.customViews.bottomSheetModule.BaseBottomSheet;
 import com.saphamrah.customer.utils.customViews.bottomSheetModule.list.BaseBottomSheetRecyclerView;
 import com.saphamrah.customer.utils.customViews.bottomSheetModule.list.BottomSheetDynamicListSingleSelect;
+import com.saphamrah.customer.utils.dialogs.DoubleActionFragmentDialog;
+import com.saphamrah.customer.utils.dialogs.IDoubleActionDialog;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -228,7 +231,7 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
         baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_domino));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
-        baseSazmanForoshModels.add(new LocationDbModel("مهرام","3",R.drawable.logo_kalleh));
+        baseSazmanForoshModels.add(new LocationDbModel("مهرام","3",R.drawable.logo_mahram));
         baseSazmanForoshModels.add(new LocationDbModel("لینا","7",R.drawable.logo_lina));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
         baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
@@ -271,7 +274,7 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
                 new LinearLayoutManager(getContext()),
                 baseBottomSheetRecyclerViewBuilder.setDividerItemDecoration(divider),
                 true,
-                getResources().getString(R.string.searchSazman),
+                getResources().getString(R.string.searchCompany),
                 baseSazmanForoshModels,
                 this
         );
@@ -311,7 +314,25 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
         Log.i(TAG, "onItemSelect: "+bm);
 //        Uri uri = ImageUtils.convertBitmapToUri(context,"sazmanIcon",bm);
 //        Log.i(TAG, "onItemSelect: "+uri);
-        startActivity(new Intent(activity, CreateRequestActivity.class).putExtra("sazmanName",model.getName()).putExtra("ccSazmanForosh",Integer.parseInt(model.getType())));
-//        handleBottomSheetBehaviorState();
+        int ccSazmanForosh = Integer.parseInt(model.getType());
+        if (ccSazmanForosh == 7)
+        {
+            FragmentTransaction wft = getChildFragmentManager().beginTransaction();
+            new DoubleActionFragmentDialog(String.format(getString(R.string.orderedBefore), model.getName()), true, new IDoubleActionDialog() {
+                @Override
+                public void onConfirmClick() {
+                    startActivity(new Intent(activity, CreateRequestActivity.class).putExtra("sazmanName", model.getName()).putExtra("ccSazmanForosh", ccSazmanForosh));
+                }
+
+                @Override
+                public void onCancelClick() {
+
+                }
+            }).show(wft,"dialog");
+        }
+        else
+        {
+            startActivity(new Intent(activity, CreateRequestActivity.class).putExtra("sazmanName", model.getName()).putExtra("ccSazmanForosh", ccSazmanForosh));
+        }
     }
 }

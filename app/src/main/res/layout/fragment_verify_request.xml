@@ -5,14 +5,14 @@
     android:layoutDirection="rtl">
 
     <RelativeLayout
+        android:id="@+id/layTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/layTitle"
-        android:layoutDirection="rtl"
+        android:layout_alignParentTop="true"
         android:background="@color/colorPrimary"
-        android:padding="@dimen/paddingTitle"
         android:elevation="@dimen/elevationActivityTitle"
-        android:layout_alignParentTop="true">
+        android:layoutDirection="rtl"
+        android:padding="@dimen/paddingTitle">
 
         <TextView
             android:id="@+id/lblActivityTitle"
@@ -28,24 +28,24 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fillViewport="true"
         android:layout_below="@+id/layTitle"
-        >
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout android:layout_width="match_parent"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layoutDirection="rtl"
-                android:background="@color/colorWhite">
+                android:background="@color/colorWhite"
+                android:layoutDirection="rtl">
 
                 <ScrollView
+                    android:id="@+id/scrollMain"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/scrollMain">
+                    android:layout_height="match_parent">
 
                     <LinearLayout
                         android:id="@+id/Main"
@@ -53,35 +53,38 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorWhite"
                         android:gravity="center|center_vertical|center_horizontal"
-                        android:orientation="vertical" >
+                        android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
-                            android:orientation="horizontal"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:id="@+id/lblNameMoshtary"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
-                                    android:textSize="@dimen/FontSize16"
-                                    android:textStyle="bold"
                                     android:text="@string/customerName"
-                                    android:textColor="@color/colorTextPrimary"/>
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/txtNameMoshtary"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
-                                    android:textSize="@dimen/FontSize16"
-                                    android:textColor="@color/colorTextPrimary"/>
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="@dimen/FontSize16" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -89,29 +92,32 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
-                            android:orientation="horizontal"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:id="@+id/lblCodeMoshtary"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
-                                    android:textSize="@dimen/FontSize16"
-                                    android:textStyle="bold"
+                                    android:text="@string/customerCode"
                                     android:textColor="@color/colorTextPrimary"
-                                    android:text="@string/customerCode"/>
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/txtCodeMoshtary"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
-                                    android:textSize="@dimen/FontSize16"
-                                    android:textColor="@color/colorTextPrimary"/>
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="@dimen/FontSize16" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -119,22 +125,24 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:id="@+id/lblNationalCode"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
                                     android:text="@string/nationalCode"
+                                    android:textColor="@color/colorTextPrimary"
                                     android:textSize="@dimen/FontSize16"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/colorTextPrimary"/>
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/txtNationalCode"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
-                                    android:textSize="@dimen/FontSize16"
-                                    android:textColor="@color/colorTextPrimary"/>
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="@dimen/FontSize16" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -142,29 +150,32 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
-                            android:orientation="horizontal"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:id="@+id/lblMablaghKol"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
-                                    android:textSize="@dimen/FontSize16"
-                                    android:textStyle="bold"
                                     android:text="@string/sumCost"
-                                    android:textColor="@color/colorTextPrimary"/>
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/txtMablaghKol"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
-                                    android:textSize="@dimen/FontSize16"
-                                    android:textColor="@color/colorTextPrimary"/>
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="@dimen/FontSize16" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -172,22 +183,24 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:id="@+id/lblMablaghBaArzeshAfzoode"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
                                     android:text="@string/mablaghArzeshAfzoode"
+                                    android:textColor="@color/colorTextPrimary"
                                     android:textSize="@dimen/FontSize16"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/colorTextPrimary"/>
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/txtMablaghFaktor"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
-                                    android:textSize="@dimen/FontSize16"
-                                    android:textColor="@color/colorTextPrimary"/>
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="@dimen/FontSize16" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -195,29 +208,32 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
-                            android:orientation="horizontal"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:id="@+id/lblMablaghPardakhti"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
-                                    android:textSize="@dimen/FontSize16"
-                                    android:textStyle="bold"
                                     android:text="@string/mablaghPardakhti"
-                                    android:textColor="@color/colorTextPrimary"/>
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/txtMablaghBaArzeshAfzoode"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
-                                    android:textSize="@dimen/FontSize16"
-                                    android:textColor="@color/colorTextPrimary"/>
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="@dimen/FontSize16" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -225,29 +241,32 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
-                            android:orientation="horizontal"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:id="@+id/lblNoeVosol"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
-                                    android:textSize="@dimen/FontSize16"
-                                    android:textStyle="bold"
                                     android:text="@string/noeVosol"
-                                    android:textColor="@color/colorTextPrimary"/>
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="@dimen/FontSize16"
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/txtNoeVosol"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
-                                    android:textSize="@dimen/FontSize16"
-                                    android:textColor="@color/colorTextPrimary"/>
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="@dimen/FontSize16" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -255,22 +274,24 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:id="@+id/lblModatVosol"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
                                     android:text="@string/modatVosol"
+                                    android:textColor="@color/colorTextPrimary"
                                     android:textSize="@dimen/FontSize16"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/colorTextPrimary"/>
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/txtModatVosol"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center|center_horizontal|center_vertical"
-                                    android:textSize="@dimen/FontSize16"
-                                    android:textColor="@color/colorTextPrimary"/>
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="@dimen/FontSize16" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -279,6 +300,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:orientation="horizontal">
+
                             <TextView
                                 android:id="@+id/lblAddress"
                                 android:layout_width="wrap_content"
@@ -288,119 +310,129 @@
                                 android:textColor="@color/colorTextPrimary"
                                 android:textSize="@dimen/FontSize16"
                                 android:textStyle="bold" />
+
                             <TextView
                                 android:id="@+id/txtAddress"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="@dimen/FontSize16"
                                 android:layout_margin="@dimen/_2sdp"
-                                android:textColor="@color/colorTextPrimary"/>
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/FontSize16" />
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/lyKala"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:id="@+id/lyKala"
+                            android:layout_margin="@dimen/_2sdp"
                             android:gravity="center|center_vertical|center_horizontal"
-                            android:orientation="vertical"
                             android:layoutDirection="rtl"
-                            android:layout_margin="@dimen/_2sdp">
+                            android:orientation="vertical">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
-                                    android:text="@string/radif"
-                                    android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
+                                    android:background="@drawable/table_header_cell_bg"
                                     android:gravity="center"
                                     android:paddingTop="5dp"
                                     android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:text="@string/radif"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14" />
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="3"
+                                    android:background="@drawable/table_header_cell_bg"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
                                     android:text="@string/sharhKala"
                                     android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
-                                    android:gravity="center"
-                                    android:paddingTop="5dp"
-                                    android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:textSize="@dimen/FontSize14" />
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
+                                    android:background="@drawable/table_header_cell_bg"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
                                     android:text="@string/mablagh"
                                     android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
-                                    android:gravity="center"
-                                    android:paddingTop="5dp"
-                                    android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:textSize="@dimen/FontSize14" />
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
+                                    android:background="@drawable/table_header_cell_bg"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
                                     android:text="@string/carton"
                                     android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
-                                    android:gravity="center"
-                                    android:paddingTop="5dp"
-                                    android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:textSize="@dimen/FontSize14" />
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
+                                    android:background="@drawable/table_header_cell_bg"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
                                     android:text="@string/basteh"
                                     android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
-                                    android:gravity="center"
-                                    android:paddingTop="5dp"
-                                    android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:textSize="@dimen/FontSize14" />
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
-                                    android:text="@string/adad"
-                                    android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
+                                    android:background="@drawable/table_header_cell_bg"
                                     android:gravity="center"
                                     android:paddingTop="5dp"
                                     android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:text="@string/adad"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14" />
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="2"
-                                    android:text="@string/sumCost"
-                                    android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
+                                    android:background="@drawable/table_header_cell_bg"
                                     android:gravity="center"
                                     android:paddingTop="5dp"
                                     android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:text="@string/sumCost"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14" />
                             </LinearLayout>
+
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/recycler_kala_info"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:scrollbars="vertical">
-                            </androidx.recyclerview.widget.RecyclerView>
+                                android:scrollbars="vertical"></androidx.recyclerview.widget.RecyclerView>
                         </LinearLayout>
+
                         <LinearLayout
                             android:id="@+id/lyTakhfif"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_margin="@dimen/_2sdp"
                             android:gravity="center|center_vertical|center_horizontal"
-                            android:orientation="vertical"
-                            android:layout_margin="@dimen/_2sdp">
+                            android:orientation="vertical">
 
                             <TextView
                                 android:id="@+id/lblTakhfifListTitle"
@@ -415,50 +447,54 @@
                                 android:text="@string/takhfifatForoshList"
                                 android:textColor="@color/colorTextPrimary"
                                 android:textSize="@dimen/FontSize16" />
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="3"
+                                    android:background="@drawable/table_header_cell_bg"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
                                     android:text="@string/sharhTakhfif"
                                     android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
-                                    android:gravity="center"
-                                    android:paddingTop="5dp"
-                                    android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:textSize="@dimen/FontSize14" />
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
+                                    android:background="@drawable/table_header_cell_bg"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
                                     android:text="@string/darsadTakhfif"
                                     android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
-                                    android:gravity="center"
-                                    android:paddingTop="5dp"
-                                    android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:textSize="@dimen/FontSize14" />
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
-                                    android:text="@string/mablaghTakhfif"
-                                    android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
+                                    android:background="@drawable/table_header_cell_bg"
                                     android:gravity="center"
                                     android:paddingTop="5dp"
                                     android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:text="@string/mablaghTakhfif"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14" />
                             </LinearLayout>
+
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/recycler_takhfif"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:scrollbars="vertical">
-                            </androidx.recyclerview.widget.RecyclerView>
+                                android:scrollbars="vertical"></androidx.recyclerview.widget.RecyclerView>
                         </LinearLayout>
 
 
@@ -466,164 +502,498 @@
                             android:id="@+id/lyJayezeh"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
+                            android:layout_margin="@dimen/_2sdp"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_margin="@dimen/_2sdp">
+                            android:orientation="vertical">
+
                             <TextView
+                                android:id="@+id/lblJayezehListTitle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/lblJayezehListTitle"
-                                android:text="@string/jayezehList"
-                                android:textSize="@dimen/FontSize16"
-                                android:textColor="@color/colorTextPrimary"
-                                android:gravity="center"
+                                android:layout_marginTop="20dp"
                                 android:background="@color/colorListHeaderBackground"
-                                android:paddingBottom="10dp"
+                                android:gravity="center"
                                 android:paddingTop="10dp"
                                 android:paddingRight="10dp"
-                                android:layout_marginTop="20dp"/>
+                                android:paddingBottom="10dp"
+                                android:text="@string/jayezehList"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/FontSize16" />
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="4"
-                                    android:text="@string/nameKala"
-                                    android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
+                                    android:background="@drawable/table_header_cell_bg"
                                     android:gravity="center"
                                     android:paddingTop="5dp"
                                     android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:text="@string/nameKala"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14" />
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
-                                    android:text="@string/count"
-                                    android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
+                                    android:background="@drawable/table_header_cell_bg"
                                     android:gravity="center"
                                     android:paddingTop="5dp"
                                     android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:text="@string/count"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14" />
                             </LinearLayout>
+
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/recycler_kala_jayezeh"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:scrollbars="vertical">
-                            </androidx.recyclerview.widget.RecyclerView>
+                                android:scrollbars="vertical"></androidx.recyclerview.widget.RecyclerView>
                         </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/lyMarjoee"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_margin="@dimen/_2sdp"
                             android:gravity="center"
-                            android:orientation="vertical"
-                            android:layout_margin="@dimen/_2sdp">
+                            android:orientation="vertical">
+
                             <TextView
+                                android:id="@+id/lblMarjoeeListTitle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/lblMarjoeeListTitle"
-                                android:text="@string/marjoeeList"
-                                android:textSize="@dimen/FontSize16"
-                                android:textColor="@color/colorTextPrimary"
-                                android:gravity="center"
+                                android:layout_marginTop="20dp"
                                 android:background="@color/colorListHeaderBackground"
-                                android:paddingBottom="10dp"
+                                android:gravity="center"
                                 android:paddingTop="10dp"
                                 android:paddingRight="10dp"
-                                android:layout_marginTop="20dp"/>
+                                android:paddingBottom="10dp"
+                                android:text="@string/marjoeeList"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/FontSize16" />
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="4"
-                                    android:text="@string/nameKala"
-                                    android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
+                                    android:background="@drawable/table_header_cell_bg"
                                     android:gravity="center"
                                     android:paddingTop="5dp"
                                     android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:text="@string/nameKala"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14" />
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="2"
-                                    android:text="@string/shomareBach"
-                                    android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
+                                    android:background="@drawable/table_header_cell_bg"
                                     android:gravity="center"
                                     android:paddingTop="5dp"
                                     android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:text="@string/shomareBach"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14" />
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
-                                    android:text="@string/count"
-                                    android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
+                                    android:background="@drawable/table_header_cell_bg"
                                     android:gravity="center"
                                     android:paddingTop="5dp"
                                     android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:text="@string/count"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14" />
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="2"
-                                    android:text="@string/mablagh"
-                                    android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/FontSize14"
+                                    android:background="@drawable/table_header_cell_bg"
                                     android:gravity="center"
                                     android:paddingTop="5dp"
                                     android:paddingBottom="5dp"
-                                    android:background="@drawable/table_header_cell_bg" />
+                                    android:text="@string/mablagh"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14" />
                             </LinearLayout>
+
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/recycler_kala_marjoee"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:scrollbars="vertical">
-                            </androidx.recyclerview.widget.RecyclerView>
+                                android:scrollbars="vertical"></androidx.recyclerview.widget.RecyclerView>
                         </LinearLayout>
 
+
+                        <LinearLayout
+                            android:id="@+id/lySumPrice"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/_2sdp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/lblTotalPriceList"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:background="@color/colorListHeaderBackground"
+                                android:gravity="center"
+                                android:paddingTop="10dp"
+                                android:paddingRight="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/descRequestList"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="@dimen/FontSize16" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="4"
+                                    android:background="@drawable/table_header_cell_bg"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:text="@string/explanation"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="2"
+                                    android:background="@drawable/table_header_cell_bg"
+                                    android:gravity="center"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:text="@string/mablagh"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/FontSize14" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="start|center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lblMablaghNakhalesFaktor"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:text="@string/sumRequest"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+
+                                <TextView
+                                    android:id="@+id/txtMablaghNakhalesFaktor"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="start|center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lblMablaghTakhfif"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:text="@string/sumOffRequest"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/txtMablaghTakhfif"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="start|center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lblMablaghMarjoee"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:text="@string/sumRejectRequest"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/txtMablaghMarjoee"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layArzeshAfzoode"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="start|center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lblMablaghArzeshAfzoode"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:text="@string/sumValueAddedRequest"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/txtMablaghArzeshAfzoode"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="start|center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lblSumMablaghFaktor"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:text="@string/sumPayable"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/txtSumMablaghFaktor"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="start|center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lblSumMablaghPardakht"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:text="@string/sumPaid"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/txtSumMablaghPardakht"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="start|center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lblSumMablaghMandehFaktor"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:text="@string/priceRemainRequest"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/txtSumMablaghMandehFaktor"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="start|center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lblSumMablaghMandehKol"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:text="@string/sumPriceRemain"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/txtSumMablaghMandehKol"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:background="@drawable/table_content_black_cell_bg"
+                                    android:fontFamily="@font/iransans"
+                                    android:gravity="center"
+                                    android:textColor="@color/colorBlack"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
 
                     </LinearLayout>
                 </ScrollView>
 
-
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/lblMoshtary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/lblMoshtary"
-                android:textSize="@dimen/fontSizeSelectBonus"
-                android:textColor="@color/colorTextPrimary"
-                android:gravity="center"
                 android:layout_below="@+id/layTitle"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:gravity="center"
                 android:paddingLeft="10dp"
+                android:paddingTop="5dp"
                 android:paddingRight="10dp"
                 android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:layout_marginTop="@dimen/_4sdp"
-                />
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/fontSizeSelectBonus" />
 
 
             <RelativeLayout
                 android:id="@+id/rlMoshtarySign"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                >
+                android:gravity="center_vertical">
 
                 <TextView
                     android:id="@+id/lblTitle"
@@ -641,9 +1011,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:src="@drawable/ic_erase"
                     android:padding="@dimen/_3sdp"
-                    />
+                    android:src="@drawable/ic_erase" />
 
             </RelativeLayout>
 
@@ -657,26 +1026,24 @@
 
             <LinearLayout
                 android:id="@+id/layNazar"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/_40sdp"
                 android:maxHeight="@dimen/_80sdp"
-                >
-
+                android:minHeight="@dimen/_40sdp"
+                android:orientation="vertical">
 
 
                 <EditText
+                    android:id="@+id/txtDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtDesc"
                     android:hint="@string/description"
-                    android:textColorHint="@color/colorDivider"
-                    android:textSize="@dimen/FontSize16"
+                    android:inputType="textMultiLine"
                     android:maxHeight="@dimen/_80sdp"
                     android:maxLength="200"
                     android:textColor="@color/colorTextPrimary"
-                    android:inputType="textMultiLine" />
+                    android:textColorHint="@color/colorDivider"
+                    android:textSize="@dimen/FontSize16" />
 
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -696,12 +1063,9 @@
             </LinearLayout>
 
 
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-
 
 
 </RelativeLayout>

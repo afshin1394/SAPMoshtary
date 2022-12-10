@@ -37,7 +37,6 @@ import java.util.List;
 public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, ActivityMainBinding> implements MainInteracts.RequiredViewOps, NavigationView.OnNavigationItemSelectedListener, AdapterItemListener<BaseBottomSheetRecyclerModel> {
 
     private DividerItemDecoration divider;
-    private BaseBottomSheet baseBottomSheetRecyclerView;
 
     private BottomSheetRecyclerSearchBinding bottomSheetRecyclerSearchBinding;
     private BottomSheetDynamicListSingleSelect bottomSheetDynamicListSingleSelect;
@@ -90,14 +89,13 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
         baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_domino));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
-        baseSazmanForoshModels.add(new LocationDbModel("مهرام","3",R.drawable.logo_kalleh));
+        baseSazmanForoshModels.add(new LocationDbModel("مهرام","3",R.drawable.logo_mahram));
         baseSazmanForoshModels.add(new LocationDbModel("لینا","7",R.drawable.logo_lina));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
         baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
         baseSazmanForoshModels.add(new LocationDbModel("کاله","8",R.drawable.logo_kalleh));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
 
-        closeBottomSheetBehavior();
 
         divider =
                 new DividerItemDecoration(this,
@@ -115,7 +113,7 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
                 new LinearLayoutManager(this),
                 baseBottomSheetRecyclerViewBuilder.setDividerItemDecoration(divider),
                 true,
-                getResources().getString(R.string.searchSazman),
+                getResources().getString(R.string.searchCompany),
                 (ArrayList) baseSazmanForoshModels,
                 this
                 );
@@ -124,7 +122,7 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
 
 
     private void closeBottomSheetBehavior() {
-        baseBottomSheetRecyclerView.closeBottomSheet();
+        bottomSheetDynamicListSingleSelect.closeBottomSheet();
     }
 
     @Override

@@ -45,6 +45,7 @@ public class DoubleActionFragmentDialog extends BaseDialogFragment<FragmentDoubl
             @Override
             public void onClick(View v) {
                 iDialogDoubleAction.onConfirmClick();
+                dismiss();
 
             }
         });

@@ -43,7 +43,7 @@
             android:elevation="@dimen/_190sdp"
             android:id="@+id/card_purchaseCount"
             android:visibility="visible"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
 
@@ -52,7 +52,7 @@
 
             android:background="@drawable/add_remove_gradiant"
             android:layout_gravity="center"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
@@ -62,15 +62,13 @@
         android:rotation="270"
         android:id="@+id/img_add"
         android:layout_gravity="center_horizontal"
-        android:padding="@dimen/_2sdp"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:src="@drawable/add_product"/>
         <com.saphamrah.customer.utils.customViews.EditTextWatcher
-            android:layout_weight="3"
             android:id="@+id/etv_product_count"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:inputType="number"
