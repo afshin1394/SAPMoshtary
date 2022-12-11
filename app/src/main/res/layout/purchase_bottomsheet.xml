@@ -13,37 +13,43 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lin_title_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="12dp"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:visibility="visible">
-
-
+        android:visibility="visible"
+        >
 
         <TextView
             android:id="@+id/txt_product_name"
-            style="@style/text_view_title_center"
-            android:layout_margin="4dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="بستنی ماستی" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:maxWidth="300dp"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_12sdp"
+            android:text="سس کچاپ دلپذیر 709 گرم" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_txt_consumer_price"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            app:cardCornerRadius="5dp"
-            android:visibility="visible"
-            android:layout_margin="@dimen/_2sdp"
-            android:layout_weight="2">
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginRight="@dimen/_30sdp"
+            app:cardCornerRadius="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingTop="7dp"
+                android:paddingBottom="7dp"
                 android:background="#EBE4A9A9"
                 >
 
@@ -54,9 +60,10 @@
                     android:layout_weight="2"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:maxLines="1"
                     android:textSize="@dimen/_10sdp"
                     android:textColor="@color/colorBlack"
-                    android:text="هزینه پرداختی: 2000ریال" />
+                    android:text="مبلغ سفارش: 2000ریال" />
 
 
             </LinearLayout>
@@ -65,240 +72,240 @@
         </androidx.cardview.widget.CardView>
 
 
-
-    </LinearLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
-        <FrameLayout
-            android:layout_width="match_parent"
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
-           >
 
             <LinearLayout
+                android:id="@+id/lin_purchaseCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-
-                android:orientation="vertical">
-
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <LinearLayout
-                    android:id="@+id/lin_purchaseCount"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:layout_height="@dimen/_36sdp"
+                    android:layout_gravity="center_vertical|start"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:elevation="@dimen/_4sdp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
                     <LinearLayout
+                        android:id="@+id/lin_carton"
                         android:layout_width="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_margin="@dimen/_2sdp"
-                        android:layout_height="@dimen/_36sdp"
-                        android:layout_gravity="center_vertical|start"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:elevation="@dimen/_4sdp"
-                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:layoutDirection="rtl"
+                        android:background="@android:color/transparent"
+                        android:layout_gravity="center"
+                        android:elevation="@dimen/_120sdp"
+                        android:layout_marginLeft="@dimen/_4sdp"
+                        android:layout_marginRight="@dimen/_4sdp"
                         android:orientation="horizontal">
+
                         <LinearLayout
-                            android:id="@+id/lin_carton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/_2sdp"
-                            android:layoutDirection="rtl"
-                            android:background="@android:color/transparent"
-                            android:layout_gravity="center"
-                            android:elevation="@dimen/_120sdp"
-                            android:layout_marginLeft="@dimen/_4sdp"
-                            android:layout_marginRight="@dimen/_4sdp"
+                            android:gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/tv_add_carton"
+                                android:layout_width="@dimen/_24sdp"
+                                android:layout_gravity="center"
+                                android:layout_height="@dimen/_24sdp"
+                                android:src="@drawable/plus_green" />
 
-                            <LinearLayout
+
+
+                            <com.saphamrah.customer.utils.customViews.EditTextWatcher
+                                android:id="@+id/tv_quantity_carton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:hint="@string/carton"
+                                android:textStyle="bold"
+                                android:text="100"
                                 android:gravity="center"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal">
-                                <ImageView
-                                    android:id="@+id/tv_add_carton"
-                                    android:layout_width="@dimen/_24sdp"
-                                    android:layout_gravity="center"
-                                    android:layout_height="@dimen/_24sdp"
-                                    android:src="@drawable/plus_green" />
+                                style="@style/text_view_title_right"
+                                />
+                            <ImageView
+                                android:id="@+id/tv_remove_carton"
+                                android:layout_width="@dimen/_24sdp"
+                                android:layout_gravity="center"
+                                android:layout_height="@dimen/_24sdp"
+                                android:src="@drawable/minus_red" />
 
-
-
-                                <com.saphamrah.customer.utils.customViews.EditTextWatcher
-                                    android:id="@+id/tv_quantity_carton"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:hint="@string/carton"
-                                    android:textStyle="bold"
-                                    android:text="100"
-                                    android:gravity="center"
-                                    style="@style/text_view_title_right"
-                                    />
-                                <ImageView
-                                    android:id="@+id/tv_remove_carton"
-                                    android:layout_width="@dimen/_24sdp"
-                                    android:layout_gravity="center"
-                                    android:layout_height="@dimen/_24sdp"
-                                    android:src="@drawable/minus_red" />
-
-                            </LinearLayout>
                         </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/linBasteh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:layoutDirection="rtl"
+                        android:background="@android:color/transparent"
+                        android:layout_gravity="center"
+                        android:elevation="@dimen/_120sdp"
+                        android:layout_marginLeft="@dimen/_4sdp"
+                        android:layout_marginRight="@dimen/_4sdp"
+                        android:orientation="horizontal">
+
                         <LinearLayout
-                            android:id="@+id/linBasteh"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/_2sdp"
-                            android:layoutDirection="rtl"
-                            android:background="@android:color/transparent"
-                            android:layout_gravity="center"
-                            android:elevation="@dimen/_120sdp"
-                            android:layout_marginLeft="@dimen/_4sdp"
-                            android:layout_marginRight="@dimen/_4sdp"
+                            android:gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/tv_add_basteh"
+                                android:layout_width="@dimen/_24sdp"
+                                android:layout_gravity="center"
+                                android:layout_height="@dimen/_24sdp"
+                                android:src="@drawable/plus_green" />
 
-                            <LinearLayout
+
+
+                            <com.saphamrah.customer.utils.customViews.EditTextWatcher
+                                android:id="@+id/tv_quantity_basteh"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:hint="@string/carton"
+                                android:textStyle="bold"
+                                android:text="100"
                                 android:gravity="center"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal">
-                                <ImageView
-                                    android:id="@+id/tv_add_basteh"
-                                    android:layout_width="@dimen/_24sdp"
-                                    android:layout_gravity="center"
-                                    android:layout_height="@dimen/_24sdp"
-                                    android:src="@drawable/plus_green" />
+                                style="@style/text_view_title_right"
+                                />
+                            <ImageView
+                                android:id="@+id/tv_remove_basteh"
+                                android:layout_width="@dimen/_24sdp"
+                                android:layout_gravity="center"
+                                android:layout_height="@dimen/_24sdp"
+                                android:src="@drawable/minus_red" />
 
-
-
-                                <com.saphamrah.customer.utils.customViews.EditTextWatcher
-                                    android:id="@+id/tv_quantity_basteh"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:hint="@string/carton"
-                                    android:textStyle="bold"
-                                    android:text="100"
-                                    android:gravity="center"
-                                    style="@style/text_view_title_right"
-                                    />
-                                <ImageView
-                                    android:id="@+id/tv_remove_basteh"
-                                    android:layout_width="@dimen/_24sdp"
-                                    android:layout_gravity="center"
-                                    android:layout_height="@dimen/_24sdp"
-                                    android:src="@drawable/minus_red" />
-
-                            </LinearLayout>
                         </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/lin_adad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_2sdp"
+                        android:layoutDirection="rtl"
+                        android:background="@android:color/transparent"
+                        android:layout_gravity="center"
+                        android:elevation="@dimen/_120sdp"
+                        android:layout_marginLeft="@dimen/_4sdp"
+                        android:layout_marginRight="@dimen/_4sdp"
+                        android:orientation="horizontal">
+
                         <LinearLayout
-                            android:id="@+id/lin_adad"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/_2sdp"
-                            android:layoutDirection="rtl"
-                            android:background="@android:color/transparent"
-                            android:layout_gravity="center"
-                            android:elevation="@dimen/_120sdp"
-                            android:layout_marginLeft="@dimen/_4sdp"
-                            android:layout_marginRight="@dimen/_4sdp"
+                            android:gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/tv_add_adad"
+                                android:layout_width="@dimen/_24sdp"
+                                android:layout_gravity="center"
+                                android:layout_height="@dimen/_24sdp"
+                                android:src="@drawable/plus_green" />
 
-                            <LinearLayout
+
+
+                            <com.saphamrah.customer.utils.customViews.EditTextWatcher
+                                android:id="@+id/tv_quantity_adad"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:hint="@string/carton"
+                                android:textStyle="bold"
+                                android:text="100"
                                 android:gravity="center"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal">
-                                <ImageView
-                                    android:id="@+id/tv_add_adad"
-                                    android:layout_width="@dimen/_24sdp"
-                                    android:layout_gravity="center"
-                                    android:layout_height="@dimen/_24sdp"
-                                    android:src="@drawable/plus_green" />
+                                style="@style/text_view_title_right"
+                                />
+                            <ImageView
+                                android:id="@+id/tv_remove_adad"
+                                android:layout_width="@dimen/_24sdp"
+                                android:layout_gravity="center"
+                                android:layout_height="@dimen/_24sdp"
+                                android:src="@drawable/minus_red" />
 
-
-
-                                <com.saphamrah.customer.utils.customViews.EditTextWatcher
-                                    android:id="@+id/tv_quantity_adad"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:hint="@string/carton"
-                                    android:textStyle="bold"
-                                    android:text="100"
-                                    android:gravity="center"
-                                    style="@style/text_view_title_right"
-                                    />
-                                <ImageView
-                                    android:id="@+id/tv_remove_adad"
-                                    android:layout_width="@dimen/_24sdp"
-                                    android:layout_gravity="center"
-                                    android:layout_height="@dimen/_24sdp"
-                                    android:src="@drawable/minus_red" />
-
-                            </LinearLayout>
                         </LinearLayout>
-
                     </LinearLayout>
 
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal"
-                    >
-                    <TextView
-                        android:id="@+id/text_zarib_forosh"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/text_view_title"
-                        android:text="ضریب فروش: 5"/>
-                    <ImageView
-                        android:id="@+id/trash_iv"
-                        android:layout_width="@dimen/_28sdp"
-                        android:layout_height="@dimen/_28sdp"
-                        android:elevation="@dimen/_24sdp"
-                        android:src="@drawable/ic_trash_2" />
-
-                </LinearLayout>
-
-
-
 
             </LinearLayout>
-
-
             <LinearLayout
-                android:id="@+id/lin_purchase"
-                android:layout_width="@dimen/_144sdp"
-                android:layout_height="@dimen/_36sdp"
-                android:layout_gravity="center"
-                android:background="@drawable/rounded_corner_purchase_red_dark_gradiant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="@dimen/_4sdp"
-                android:visibility="gone">
-
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                >
                 <TextView
+                    android:id="@+id/text_zarib_forosh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="افزودن به سبد خرید"
-                    android:textColor="@color/colorBlack" />
+                    style="@style/text_view_title"
+                    android:text="ضریب فروش: 5"/>
+                <ImageView
+                    android:id="@+id/trash_iv"
+                    android:layout_width="@dimen/_28sdp"
+                    android:layout_height="@dimen/_28sdp"
+                    android:elevation="@dimen/_24sdp"
+                    android:src="@drawable/ic_trash_2" />
 
             </LinearLayout>
-        </FrameLayout>
 
+
+
+
+        </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lin_purchase"
+            android:layout_width="@dimen/_144sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_gravity="center"
+            android:background="@drawable/rounded_corner_purchase_red_dark_gradiant"
+            android:gravity="center"
+            android:padding="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_16sdp"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="افزودن به سبد خرید"
+                android:textColor="@color/colorBlack" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+
+    <LinearLayout
         android:id="@+id/lin_details_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -306,303 +313,303 @@
         android:visibility="visible"
         android:gravity="end">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorGrey500"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorGrey500"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="62dp"
-                android:paddingEnd="15dp"
-                android:paddingStart="15dp"
-                android:orientation="horizontal"
-                android:gravity="end"
+                android:id="@+id/brand_ll"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true">
 
-                <LinearLayout
-                    android:id="@+id/brand_ll"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
 
+                <TextView
+                    android:text="نام برند"
+                    style="@style/text_view_title"/>
 
-                        <TextView
-                            android:text="نام برند"
-                            style="@style/text_view_title"/>
+                <TextView
+                    android:id="@+id/brand_tv"
+                    android:text="پاندا"
+                    style="@style/text_view_item"/>
 
-                        <TextView
-                            android:id="@+id/brand_tv"
-                            android:text="پاندا"
-                            style="@style/text_view_item"/>
-
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorGrey500"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/kala_code_ll"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <TextView
-                        android:text="کد کالا"
-                        style="@style/text_view_title"/>
-
-                    <TextView
-                        android:id="@+id/kala_code_tv"
-                        android:text="524985237"
-                        style="@style/text_view_item"/>
-
-
-                </LinearLayout>
 
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
                 android:background="@color/colorGrey500"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="62dp"
-                android:paddingEnd="15dp"
-                android:paddingStart="15dp"
-                android:orientation="horizontal"
-                android:gravity="end"
+                android:id="@+id/kala_code_ll"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:text="کد کالا"
+                    style="@style/text_view_title"/>
+
+                <TextView
+                    android:id="@+id/kala_code_tv"
+                    android:text="524985237"
+                    style="@style/text_view_item"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorGrey500"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:id="@+id/qeymate_forosh_ll"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true">
 
-                <LinearLayout
-                    android:id="@+id/qeymate_forosh_ll"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
 
+                <TextView
+                    android:text="قیمت فروش"
+                    style="@style/text_view_title"/>
 
-                    <TextView
-                        android:text="قیمت فروش"
-                        style="@style/text_view_title"/>
+                <TextView
+                    android:id="@+id/qeymate_forosh_tv"
+                    android:text="37000 تومان"
+                    android:textDirection="rtl"
+                    style="@style/text_view_item"/>
 
-                    <TextView
-                        android:id="@+id/qeymate_forosh_tv"
-                        android:text="37000 تومان"
-                        android:textDirection="rtl"
-                        style="@style/text_view_item"/>
-
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorGrey500"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/qeymate_masrafkonande_ll"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <TextView
-                        android:text="قیمت مصرف کننده"
-                        style="@style/text_view_title"/>
-
-                    <TextView
-                        android:id="@+id/qeymate_masrafkonande_tv"
-                        android:text="39000 تومان"
-                        android:textDirection="rtl"
-                        style="@style/text_view_item"/>
-
-
-                </LinearLayout>
 
             </LinearLayout>
 
-
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
                 android:background="@color/colorGrey500"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="62dp"
-                android:paddingEnd="15dp"
-                android:paddingStart="15dp"
-                android:orientation="horizontal"
-                android:gravity="end"
+                android:id="@+id/qeymate_masrafkonande_ll"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:text="قیمت مصرف کننده"
+                    style="@style/text_view_title"/>
+
+                <TextView
+                    android:id="@+id/qeymate_masrafkonande_tv"
+                    android:text="39000 تومان"
+                    android:textDirection="rtl"
+                    style="@style/text_view_item"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorGrey500"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:id="@+id/weight_ll"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true">
 
-                <LinearLayout
-                    android:id="@+id/weight_ll"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
 
+                <TextView
+                    android:text="وزن خالص"
+                    style="@style/text_view_title"/>
 
-                    <TextView
-                        android:text="وزن خالص"
-                        style="@style/text_view_title"/>
+                <TextView
+                    android:id="@+id/weight_tv"
+                    android:text="2250 گرم"
+                    style="@style/text_view_item"/>
 
-                    <TextView
-                        android:id="@+id/weight_tv"
-                        android:text="2250 گرم"
-                        style="@style/text_view_item"/>
-
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorGrey500"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/number_in_box_ll"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <TextView
-                        android:text="تعداد در کارتن"
-                        style="@style/text_view_title"/>
-
-                    <TextView
-                        android:id="@+id/number_in_box_tv"
-                        android:text="2 عدد"
-                        style="@style/text_view_item"/>
-
-
-                </LinearLayout>
 
             </LinearLayout>
 
-
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
                 android:background="@color/colorGrey500"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 />
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:visibility="visible">-->
+            <LinearLayout
+                android:id="@+id/number_in_box_ll"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true">
 
-<!--            <TextView-->
-<!--                style="@style/text_view_normal2"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="@string/tarikhTolid" />-->
+                <TextView
+                    android:text="تعداد در کارتن"
+                    style="@style/text_view_title"/>
 
-<!--            <TextView-->
-<!--                style="@style/text_view_normal2"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="@string/tarikhTolid" />-->
-<!--        </LinearLayout>-->
+                <TextView
+                    android:id="@+id/number_in_box_tv"
+                    android:text="2 عدد"
+                    style="@style/text_view_item"/>
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
 
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:visibility="visible">-->
+            </LinearLayout>
 
-<!--            <TextView-->
-<!--                style="@style/text_view_normal2"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="@string/tarikhTolid" />-->
+        </LinearLayout>
 
-<!--            <TextView-->
-<!--                style="@style/text_view_normal2"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="@string/tarikhTolid" />-->
-<!--        </LinearLayout>-->
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:visibility="visible">-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorGrey500"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            />
 
-<!--            <TextView-->
-<!--                style="@style/text_view_normal2"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="@string/tarikhTolid" />-->
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="horizontal"-->
+        <!--            android:visibility="visible">-->
 
-<!--            <TextView-->
-<!--                style="@style/text_view_normal2"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="@string/tarikhTolid" />-->
-<!--        </LinearLayout>-->
+        <!--            <TextView-->
+        <!--                style="@style/text_view_normal2"-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:text="@string/tarikhTolid" />-->
+
+        <!--            <TextView-->
+        <!--                style="@style/text_view_normal2"-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:text="@string/tarikhTolid" />-->
+        <!--        </LinearLayout>-->
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="horizontal"-->
+        <!--            android:visibility="visible">-->
+
+        <!--            <TextView-->
+        <!--                style="@style/text_view_normal2"-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:text="@string/tarikhTolid" />-->
+
+        <!--            <TextView-->
+        <!--                style="@style/text_view_normal2"-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:text="@string/tarikhTolid" />-->
+        <!--        </LinearLayout>-->
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="horizontal"-->
+        <!--            android:visibility="visible">-->
+
+        <!--            <TextView-->
+        <!--                style="@style/text_view_normal2"-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:text="@string/tarikhTolid" />-->
+
+        <!--            <TextView-->
+        <!--                style="@style/text_view_normal2"-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:text="@string/tarikhTolid" />-->
+        <!--        </LinearLayout>-->
     </LinearLayout>
-    </LinearLayout>
+</LinearLayout>
 

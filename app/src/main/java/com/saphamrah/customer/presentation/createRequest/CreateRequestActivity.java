@@ -186,6 +186,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
 
         List<Integer> imageResDelpazirHezarjazire = new ArrayList<>();
         imageResDelpazirHezarjazire.add(R.drawable.delpazir_hezarjazire);
+        imageResDelpazirHezarjazire.add(R.drawable.delpazir_hezarjazire_back);
 
         List<Integer> imageResDelpazirKhiarShour = new ArrayList<>();
         imageResDelpazirKhiarShour.add(R.drawable.delpazir_cumber);
@@ -321,9 +322,9 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     @SuppressLint("SuspiciousIndentation")
     public List<ElamMarjoeeForoshandehModel> getElamMarjoeeForoshandehModelsGlobal() {
         if (elamMarjoeeForoshandehModelsGlobal!=null)
-        return Observable.fromIterable(elamMarjoeeForoshandehModelsGlobal).filter(elamMarjoeeForoshandehModel -> elamMarjoeeForoshandehModel.getTedad3()>0).toList().blockingGet();
+            return Observable.fromIterable(elamMarjoeeForoshandehModelsGlobal).filter(elamMarjoeeForoshandehModel -> elamMarjoeeForoshandehModel.getTedad3()>0).toList().blockingGet();
         else
-        return null;
+            return null;
     }
 
     public void setElamMarjoeeForoshandehModelsGlobal(List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModelsGlobal) {
