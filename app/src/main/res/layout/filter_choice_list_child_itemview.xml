@@ -10,6 +10,8 @@
             android:visibility="visible"
             android:layoutDirection="rtl"
             android:text="@string/gorohKala"
+
+            android:buttonTint="@color/colorPrimaryDarkRed"
             style="@style/filter_item_choice_style_txt"
             />
 

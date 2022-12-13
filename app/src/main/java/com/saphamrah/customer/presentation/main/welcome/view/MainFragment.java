@@ -234,7 +234,7 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
         baseSazmanForoshModels.add(new LocationDbModel("مهرام","3",R.drawable.logo_mahram));
         baseSazmanForoshModels.add(new LocationDbModel("لینا","7",R.drawable.logo_lina));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
-        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
+//        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
         baseSazmanForoshModels.add(new LocationDbModel("کاله","8",R.drawable.logo_kalleh));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
 

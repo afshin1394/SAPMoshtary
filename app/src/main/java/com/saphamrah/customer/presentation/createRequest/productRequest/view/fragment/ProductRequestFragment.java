@@ -1,5 +1,12 @@
 package com.saphamrah.customer.presentation.createRequest.productRequest.view.fragment;
 
+import static com.saphamrah.customer.presentation.createRequest.CreateRequestActivity.sort_order;
+import static com.saphamrah.customer.utils.Constants.MAX_CONSUMER_PRICE;
+import static com.saphamrah.customer.utils.Constants.MAX_SELL_PRICE;
+import static com.saphamrah.customer.utils.Constants.MIN_CONSUMER_PRICE;
+import static com.saphamrah.customer.utils.Constants.MIN_SELL_PRICE;
+import static com.saphamrah.customer.utils.Constants.SORT;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -54,11 +61,17 @@ import com.saphamrah.customer.utils.dialogs.IDoubleActionDialog;
 import com.saphamrah.customer.utils.loadingUtils.ShimmerLoading;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.TreeSet;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresenter, FragmentProductRequestBinding, CreateRequestActivity> implements ProductRequestMVPInteractor.RequiredViewOps, CreateRequestActivity.CartListener {
 
@@ -86,13 +99,12 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
             new DoubleActionFragmentDialog(context.getString(R.string.exitOnCart), true, new IDoubleActionDialog() {
                 @Override
                 public void onConfirmClick() {
+
                     getActivity().finish();
                 }
 
                 @Override
                 public void onCancelClick() {
-
-
                 }
             }).show(wft, "exit");
 
@@ -143,7 +155,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
             public void onSingleClick(View v) {
                 viewBinding.mainView.setClickable(false);
                 ProductRequestFragmentDirections.ActionProductRequestFragmentToFilterFragment action = ProductRequestFragmentDirections.actionProductRequestFragmentToFilterFragment();
-                action.setFilterSortType(Constants.SORT);
+                action.setFilterSortType(SORT);
                 navigate(action);
             }
         });
@@ -151,7 +163,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
             @Override
             public void onSingleClick(View v) {
                 ProductRequestFragmentDirections.ActionProductRequestFragmentToFilterFragment action = ProductRequestFragmentDirections.actionProductRequestFragmentToFilterFragment();
-                action.setFilterSortType(Constants.FILTER_LIST);
+                action.setFilterSortType(Constants.FILTER);
                 navigate(action);
             }
         });
@@ -195,6 +207,8 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
                 }
             }
         }, 400);
+
+
     }
 
 
@@ -212,15 +226,51 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
             if (Action == AdapterAction.REMOVE) {
                 filterListObserver.remove(model);
                 filterAdapter.notifyDataSetChanged();
+                checkFilters(filterListObserver);
             }
         };
 
         getFragmentResultObserver("filters").observe(getViewLifecycleOwner(), o -> {
             filterListObserver = new ArrayList<>((List<FilterSortModel>) o);
             filterAdapter.setDataChanged(filterListObserver, listenerFilterSort);
+            checkFilters(filterListObserver);
         });
 
     }
+
+    private void checkFilters(List<FilterSortModel> filterListObserver) {
+        List<ProductModel> productModels = new ArrayList<>();
+        if (filterListObserver.size() == 0) {
+            productModels.addAll(this.productModels);
+        } else {
+
+            for (FilterSortModel filterSortModel : filterListObserver) {
+                if (filterSortModel.getType() == SORT) {
+                    productModels.addAll(this.productModels);
+                    sort_order = filterSortModel.getId();
+                    Collections.sort(productModels);
+                } else {
+                    for (ProductModel productModel : this.productModels) {
+                    if (filterSortModel.getParent_id() == 100){
+                        if (productModel.getBrandId() == filterSortModel.getId())
+                            productModels.add(productModel);
+                    }
+                    else if (filterSortModel.getParent_id() == 200){
+                        if (productModel.getGorohKalaId() == filterSortModel.getId())
+                            productModels.add(productModel);
+                    }
+                    }
+                }
+            }
+        }
+        productModelsTemp.clear();
+        productModelsTemp.addAll(productModels);
+        productAdapter.notifyDataSetChanged();
+    }
+
+
+
+
 
     private void setProductRecycler() {
         productAdapter = new ProductAdapter(getActivity(), productModelsTemp, (model, position, Action) -> {
@@ -235,7 +285,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
                 case ADD:
                 case REMOVE:
-                    onClickListener = null;
                     openCartonBastehAdadBottomSheet(position);
                     handleBottomSheetBehaiviourBoxPackNum();
                     break;
@@ -248,7 +297,6 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         ((SimpleItemAnimator) viewBinding.RecyclerProduct.getItemAnimator()).setSupportsChangeAnimations(false);
     }
 
-    View.OnClickListener onClickListener;
 
     private void openCartonBastehAdadBottomSheet(int position) {
 

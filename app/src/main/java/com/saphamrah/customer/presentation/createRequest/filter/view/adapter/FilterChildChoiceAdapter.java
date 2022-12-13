@@ -16,7 +16,7 @@ import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 
 import java.util.List;
 
-public class FilterChildChoiceAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FilterChildChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private List<FilterSortModel> filterSortModels;
     private AdapterItemListener<FilterSortModel> listener;
@@ -35,7 +35,8 @@ public class FilterChildChoiceAdapter  extends RecyclerView.Adapter<RecyclerView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position)
+    {
         FilterSortModel filterSortModel = filterSortModels.get(position);
         ((ViewHolder) holder).bind(filterSortModel);
     }

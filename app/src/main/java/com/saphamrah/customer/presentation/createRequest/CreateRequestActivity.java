@@ -51,6 +51,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     public int ccSazmanForosh;
     public boolean setMarjoee = false;
     CartListener cartListener;
+    public static  int  sort_order = 0;
 
     public void setCartListener(CartListener cartListener){
         this.cartListener = cartListener;
@@ -248,24 +249,24 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         imageResPomegranate.add(R.drawable.pomegranate_two);
         imageResPomegranate.add(R.drawable.peach_juice_three);
 
-        ProductModel kalaModel = new ProductModel(1, "رب دلپذیر", 10000, 8000, "980702", 500, "1400/5/5","1400/8/5", imageResDelpazir,false,0,0,0,3,6,0,290,"دلپذیر",1);
-        ProductModel kalaModel11 = new ProductModel(11, "سس کچاپ دلپذیر - 709 گرم", 12000, 9000, "980702", 500, "1400/5/5","1400/8/5", imageResDelpazirKetchap,false,0,0,0,3,6,0,290,"دلپذیر",1);
-        ProductModel kalaModel12 = new ProductModel(12, "سس هزار جزیره دلپذیر 454 گرم", 12000, 9000, "980702", 500, "1400/5/5","1400/8/5", imageResDelpazirHezarjazire,false,0,0,0,3,6,0,290,"دلپذیر",1);
-        ProductModel kalaModel13 = new ProductModel(13, "سس مایونز کم چرب دلپذیر- 460 گرم", 12000, 9000, "980702", 500, "1400/5/5","1400/8/5", imageResDelpazirKamcharb,false,0,0,0,3,6,0,290,"دلپذیر",1);
-        ProductModel kalaModel14 = new ProductModel(14, "خیارشور ویژه دلپذیر - 650 گرم", 12000, 9000, "980702", 500, "1400/5/5","1400/8/5", imageResDelpazirKhiarShour,false,0,0,0,3,6,0,290,"دلپذیر",1);
-        ProductModel kalaModel2 = new ProductModel(2, "بستنی سالار", 12000, 10000, "980702", 600,"1400/5/5", "1400/8/5", imageResDelpazir, true,0,0,0,6,12,0,290,"میهن",2);
-        ProductModel kalaModel3 = new ProductModel(3, "بستنی زعفرانی", 13000, 8000, "980702", 600,"1400/5/5", "1400/8/5", imageResZaferani, false,0,0,0,2,6,0,250,"میهن",2);
-        ProductModel kalaModel15 = new ProductModel(15, "بستنی چوبی پریما دبل میکس بری میهن - 60 گرم", 13000, 8000, "980702", 600,"1400/5/5", "1400/8/5", imageResBerry, false,0,0,0,2,6,0,250,"میهن",2);
-        ProductModel kalaModel16 = new ProductModel(16, "بستنی چوبی وانیلا پریما میهن - 80 گرم", 13000, 8000, "980702", 600,"1400/5/5", "1400/8/5", imageResPrima, false,0,0,0,2,6,0,250,"میهن",2);
-        ProductModel kalaModel17 = new ProductModel(17, "بستنی موزی میرکس میهن - 85 گرم", 13000, 8000, "980702", 600,"1400/5/5", "1400/8/5", imageResMiracs, false,0,0,0,2,6,0,250,"میهن",2);
-        ProductModel kalaModel18 = new ProductModel(18, "بستنی قیفی سوپر کارنیلو میهن - 100 گرم", 13000, 8000, "980702", 600,"1400/5/5", "1400/8/5", imageResQifi, false,0,0,0,2,6,0,250,"میهن",2);
-        ProductModel kalaModel4 = new ProductModel(4, "رب مهرام", 14000, 10000, "980702", 600, "1400/5/5","1400/2/5", imageResMahram, false,0,0,0,3,6,0,250,"مهرام",3);
-        ProductModel kalaModel5 = new ProductModel(5, "بستنی دبل چاکلت", 16000, 7000, "980702", 600,"1400/5/5", "1400/1/5", imageResDoubleChocolate, false,0,0,0,3,6,0,250,"میهن",2);
-        ProductModel kalaModel6 = new ProductModel(6, "مایونز دلپذیر", 18000, 9000, "980702", 500,"1400/5/5", "1400/8/5", imageResMayonese, true,0,0,0,2,6,0,0,"دلپذیر",1);
+        ProductModel kalaModel = new ProductModel(1,Constants.DELPAZIR,Constants.PASTE, "رب دلپذیر", 14500, 8000, "980702", 500, "1400/5/5","1400/8/5", imageResDelpazir,false,0,0,0,3,6,0,290,"دلپذیر",1);
+        ProductModel kalaModel11 = new ProductModel(11,Constants.DELPAZIR,Constants.SAUCE ,"سس کچاپ دلپذیر - 709 گرم", 12100, 9200, "980702", 500, "1400/5/5","1400/8/5", imageResDelpazirKetchap,false,0,0,0,3,6,0,290,"دلپذیر",1);
+        ProductModel kalaModel12 = new ProductModel(12,Constants.DELPAZIR,Constants.SAUCE, "سس هزار جزیره دلپذیر 454 گرم", 14100, 9010, "980702", 500, "1400/5/5","1400/8/5", imageResDelpazirHezarjazire,false,0,0,0,3,6,0,290,"دلپذیر",1);
+        ProductModel kalaModel13 = new ProductModel(13,Constants.DELPAZIR,Constants.SAUCE, "سس مایونز کم چرب دلپذیر- 460 گرم", 12300, 4000, "980702", 500, "1400/5/5","1400/8/5", imageResDelpazirKamcharb,false,0,0,0,3,6,0,290,"دلپذیر",1);
+        ProductModel kalaModel14 = new ProductModel(14,Constants.DELPAZIR,Constants.CANNED, "خیارشور ویژه دلپذیر - 650 گرم", 12400, 5100, "980702", 500, "1400/5/5","1400/8/5", imageResDelpazirKhiarShour,false,0,0,0,3,6,0,290,"دلپذیر",1);
+        ProductModel kalaModel2 = new ProductModel(2,Constants.MIHAN,Constants.ICE_CREAM, "بستنی سالار", 12400, 10200, "980702", 600,"1400/5/5", "1400/8/5", imageResDelpazir, true,0,0,0,6,12,0,290,"میهن",2);
+        ProductModel kalaModel3 = new ProductModel(3,Constants.MIHAN,Constants.ICE_CREAM, "بستنی زعفرانی", 11000, 8300, "980702", 600,"1400/5/5", "1400/8/5", imageResZaferani, false,0,0,0,2,6,0,250,"میهن",2);
+        ProductModel kalaModel15 = new ProductModel(15,Constants.MIHAN,Constants.ICE_CREAM, "بستنی چوبی پریما دبل میکس بری میهن - 60 گرم", 13000, 8560, "980702", 600,"1400/5/5", "1400/8/5", imageResBerry, false,0,0,0,2,6,0,250,"میهن",2);
+        ProductModel kalaModel16 = new ProductModel(16,Constants.MIHAN,Constants.ICE_CREAM, "بستنی چوبی وانیلا پریما میهن - 80 گرم", 13000, 8100, "980702", 600,"1400/5/5", "1400/8/5", imageResPrima, false,0,0,0,2,6,0,250,"میهن",2);
+        ProductModel kalaModel17 = new ProductModel(17,Constants.MIHAN,Constants.ICE_CREAM, "بستنی موزی میرکس میهن - 85 گرم", 13000, 8040, "980702", 600,"1400/5/5", "1400/8/5", imageResMiracs, false,0,0,0,2,6,0,250,"میهن",2);
+        ProductModel kalaModel18 = new ProductModel(18,Constants.MIHAN,Constants.ICE_CREAM, "بستنی قیفی سوپر کارنیلو میهن - 100 گرم", 13000, 5000, "980702", 600,"1400/5/5", "1400/8/5", imageResQifi, false,0,0,0,2,6,0,250,"میهن",2);
+        ProductModel kalaModel4 = new ProductModel(4,Constants.MAHRAM,Constants.PASTE, "رب مهرام", 19000, 12000, "980702", 600, "1400/5/5","1400/2/5", imageResMahram, false,0,0,0,3,6,0,250,"مهرام",3);
+        ProductModel kalaModel5 = new ProductModel(5,Constants.MIHAN,Constants.ICE_CREAM, "بستنی دبل چاکلت", 14000, 7000, "980702", 600,"1400/5/5", "1400/1/5", imageResDoubleChocolate, false,0,0,0,3,6,0,250,"میهن",2);
+        ProductModel kalaModel6 = new ProductModel(6,Constants.DELPAZIR, Constants.SAUCE,"مایونز دلپذیر", 18300, 9000, "980702", 500,"1400/5/5", "1400/8/5", imageResMayonese, true,0,0,0,2,6,0,0,"دلپذیر",1);
 //        ProductModel kalaModel7 = new ProductModel(7, "خیارشور دلپذیر", 19000, 7000, "980702", 600,"1400/5/5", "1400/8/5", imageResKhiarShoor,false,0,0,0,3,6,0,250,"دلپذیر",1);
-        ProductModel kalaModel8 = new ProductModel(8, "آب سیب", 17000, 9000, "980702", 300,"1400/5/5", "1400/5/5", imageResAppleJuice, false,0,0,0,3,6,0,0,"فروتلند",5);
-        ProductModel kalaModel9 = new ProductModel(9, "آب هلو", 22000, 9000, "980702", 300, "1400/5/5","1400/7/5", imageResPeachJuice, false,0,0,0,4,6,0,0,"فروتلند",5);
-        ProductModel kalaModel10 = new ProductModel(10, "آب انار", 10000, 9000, "980702", 300, "1400/5/5","1400/8/1", imageResPomegranate, false,0,0,0,2,6,0,0,"فروتلند",5);
+        ProductModel kalaModel8 = new ProductModel(8,Constants.MIHAN,Constants.JUICE, "آب سیب", 11000, 9300, "980702", 300,"1400/5/5", "1400/5/5", imageResAppleJuice, false,0,0,0,3,6,0,0,"فروتلند",5);
+        ProductModel kalaModel9 = new ProductModel(9, Constants.MIHAN,Constants.JUICE,"آب هلو", 21000, 9200, "980702", 300, "1400/5/5","1400/7/5", imageResPeachJuice, false,0,0,0,4,6,0,0,"فروتلند",5);
+        ProductModel kalaModel10 = new ProductModel(10,Constants.MIHAN, Constants.JUICE,"آب انار", 12000, 9100, "980702", 300, "1400/5/5","1400/8/1", imageResPomegranate, false,0,0,0,2,6,0,0,"فروتلند",5);
         productModelGlobal = new ArrayList<>();
         productModelGlobal.add(kalaModel);
         productModelGlobal.add(kalaModel2);

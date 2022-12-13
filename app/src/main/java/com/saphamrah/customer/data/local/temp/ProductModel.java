@@ -1,11 +1,19 @@
 package com.saphamrah.customer.data.local.temp;
 
+import static com.saphamrah.customer.presentation.createRequest.CreateRequestActivity.sort_order;
+import static com.saphamrah.customer.utils.Constants.MAX_CONSUMER_PRICE;
+import static com.saphamrah.customer.utils.Constants.MAX_SELL_PRICE;
+import static com.saphamrah.customer.utils.Constants.MIN_CONSUMER_PRICE;
+import static com.saphamrah.customer.utils.Constants.MIN_SELL_PRICE;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.List;
 
-public class ProductModel implements Parcelable {
+public class ProductModel implements Parcelable ,Comparable<ProductModel>{
+
+
     private int id;
     private String nameProduct;
     private long consumerPrice;
@@ -27,10 +35,14 @@ public class ProductModel implements Parcelable {
     private int weight;
     private String sazmanForosh;
     private int ccSazmanForosh;
+    private int gorohKalaId;
+    private int brandId;
 
 
-    public ProductModel(int id, String nameProduct, long consumerPrice, long sellPrice, String codeKala, long inventory, String productionDate, String expirationDate, List<Integer> imageResource, boolean isAd, int boxCount, int packCount, int numCount, int numInPack, int numInBox,int orderCount, int weight, String sazmanForosh,int ccSazmanForosh) {
+    public ProductModel(int id,int brandId,int gorohKalaId, String nameProduct, long consumerPrice, long sellPrice, String codeKala, long inventory, String productionDate, String expirationDate, List<Integer> imageResource, boolean isAd, int boxCount, int packCount, int numCount, int numInPack, int numInBox,int orderCount, int weight, String sazmanForosh,int ccSazmanForosh) {
         this.id = id;
+        this.gorohKalaId = gorohKalaId;
+        this.brandId = brandId;
         this.nameProduct = nameProduct;
         this.consumerPrice = consumerPrice;
         this.sellPrice = sellPrice;
@@ -53,6 +65,8 @@ public class ProductModel implements Parcelable {
 
     protected ProductModel(Parcel in) {
         id = in.readInt();
+        brandId = in.readInt();
+        gorohKalaId = in.readInt();
         nameProduct = in.readString();
         consumerPrice = in.readLong();
         sellPrice = in.readLong();
@@ -235,6 +249,22 @@ public class ProductModel implements Parcelable {
         this.numInPack = numInPack;
     }
 
+    public int getGorohKalaId() {
+        return gorohKalaId;
+    }
+
+    public void setGorohKalaId(int gorohKalaId) {
+        this.gorohKalaId = gorohKalaId;
+    }
+
+    public int getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(int brandId) {
+        this.brandId = brandId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -244,6 +274,8 @@ public class ProductModel implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
 
         parcel.writeInt(id);
+        parcel.writeInt(brandId);
+        parcel.writeInt(gorohKalaId);
         parcel.writeString(nameProduct);
         parcel.writeLong(consumerPrice);
         parcel.writeLong(sellPrice);
@@ -266,6 +298,8 @@ public class ProductModel implements Parcelable {
     public String toString() {
         return "ProductModel{" +
                 "id=" + id +
+                "brandId=" + brandId +
+                "gorohkalaId" + gorohKalaId +
                 ", nameProduct='" + nameProduct + '\'' +
                 ", consumerPrice=" + consumerPrice +
                 ", sellPrice=" + sellPrice +
@@ -284,5 +318,36 @@ public class ProductModel implements Parcelable {
                 ", weight=" + weight +
                 ", sazmanForosh='" + sazmanForosh + '\'' +
                 '}';
+    }
+
+
+    @Override
+    public int compareTo(ProductModel productModel) {
+        switch (sort_order){
+            case MAX_SELL_PRICE:
+                if (this.sellPrice < productModel.sellPrice)
+                    return 1;
+                else
+                    return -1;
+            case MIN_SELL_PRICE:
+                if (this.sellPrice > productModel.sellPrice)
+                    return 1;
+                else
+                    return -1;
+
+            case MAX_CONSUMER_PRICE:
+                if (this.consumerPrice < productModel.consumerPrice)
+                    return 1;
+                else
+                    return -1;
+
+            case MIN_CONSUMER_PRICE:
+                if (this.consumerPrice > productModel.consumerPrice)
+                    return 1;
+                else
+                    return -1;
+        }
+
+        return 0;
     }
 }

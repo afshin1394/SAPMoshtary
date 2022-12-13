@@ -12,6 +12,7 @@
         <item name="windowNoTitle">true</item>
         <item name="backgroundColor">@color/colorBrown50</item>
         <item name="background">@color/colorBrown50</item>
+        <item name="sliderStyle">@style/Widget.App.Slider</item>
 
     </style>
 
@@ -205,6 +206,17 @@
         <item name="android:textSize">@dimen/_8sdp</item>
     </style>
 
+
+    <style name="text_view_subtitle_right_large_screen">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:padding">@dimen/_4sdp</item>
+        <item name="android:gravity">right</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:textSize">@dimen/_6sdp</item>
+    </style>
+
     <style name="text_view_subtitle_hint">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -377,5 +389,31 @@
 <!--        <item name="colorPrimary">@color/colorPrimaryDark</item>-->
 <!--    </style>-->
 
+
+    <style name="Widget.App.Slider" parent="Widget.Material3.Slider">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Slider</item>
+        <item name="labelStyle">@style/Widget.App.Tooltip</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Slider" parent="">
+        <item name="trackColorActive">#802424</item>
+        <item name="trackColorInactive">#EBE4A9A9</item>
+        <item name="colorPrimary">#802424</item>
+        <item name="colorOnPrimary">@color/colorBlack</item>
+        <item name="colorOnSurface">#EBE4A9A9</item>
+
+
+
+    </style>
+    <style name="Widget.App.Tooltip" parent="Widget.Material3.Tooltip">
+        <item name="android:textAppearance">@style/TextAppearance.App.Tooltip</item>
+        <item name="backgroundTint">#EBE4A9A9</item>
+        <item name="labelBehavior">visible</item>
+
+    </style>
+
+    <style name="TextAppearance.App.Tooltip" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">#EBE4A9A9</item>
+    </style>
 
 </resources>

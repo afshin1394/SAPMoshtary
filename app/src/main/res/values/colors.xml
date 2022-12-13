@@ -11,6 +11,7 @@
 
 
     <color name="outlines">#802424</color>
+    <color name="colorPrimaryDarkRed">#802424</color>
 
     <color name="colorTextPrimary">#4d5a6a</color>
     <color name="colorTextSecondary">#757575</color>

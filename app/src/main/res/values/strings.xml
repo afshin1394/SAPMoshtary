@@ -1336,4 +1336,6 @@
     <string name="sumPriceRemain">مبلغ کل مانده</string>
     <string name="descRequestList">لیست خلاصه درخواست</string>
     <string name="explanation">شرح</string>
+    <string name="from">از:</string>
+    <string name="to">تا:</string>
 </resources>

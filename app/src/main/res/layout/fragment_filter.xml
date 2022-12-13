@@ -18,6 +18,7 @@
 
                 android:id="@+id/TV_filterAndSort_title"
                 style="@style/text_view_title_center"
+                android:textColor="@color/colorBlack"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/filter" />
@@ -38,6 +39,7 @@
                 <TextView
                     android:id="@+id/BTN_Cancel"
                     style="@style/confirm_Btn_style"
+                    android:textColor="@color/colorBlack"
                     android:layout_margin="@dimen/_8sdp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -47,6 +49,7 @@
                     android:id="@+id/BTN_Confirm"
                     style="@style/confirm_Btn_style"
                     android:layout_margin="@dimen/_8sdp"
+                    android:textColor="@color/colorBlack"
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -3,31 +3,39 @@ package com.saphamrah.customer.data.local.temp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
+import androidx.annotation.Nullable;
 
-public class FilterSortModel implements Parcelable {
+import java.util.List;
+import java.util.Objects;
+
+public class FilterSortModel implements Parcelable  {
 
     private int id;
     private int type;
+    private int filterType;
     private String name;
     private int parent_id;
     private boolean isEnabled;
     private boolean isExpanded;
 
-    public FilterSortModel(int id, int type, String name, int parent_id,boolean isEnabled) {
+    public FilterSortModel(int id, int type,int filterType, String name, int parent_id,boolean isEnabled) {
         this.id = id;
         this.type = type;
+        this.filterType = filterType;
         this.name = name;
         this.parent_id = parent_id;
         this.isEnabled = isEnabled;
     }
 
+
     protected FilterSortModel(Parcel in) {
         id = in.readInt();
         type = in.readInt();
+        filterType = in.readInt();
         name = in.readString();
         parent_id = in.readInt();
         isEnabled = in.readByte() != 0;
+        isExpanded = in.readByte() != 0;
     }
 
     public static final Creator<FilterSortModel> CREATOR = new Creator<FilterSortModel>() {
@@ -90,15 +98,12 @@ public class FilterSortModel implements Parcelable {
         isExpanded = expanded;
     }
 
-    @Override
-    public String toString() {
-        return "FilterSortModel{" +
-                "id=" + id +
-                ", type=" + type +
-                ", name='" + name + '\'' +
-                ", parent_id=" + parent_id +
-                ", isEnabled=" + isEnabled +
-                '}';
+    public int getFilterType() {
+        return filterType;
+    }
+
+    public void setFilterType(int filterType) {
+        this.filterType = filterType;
     }
 
     @Override
@@ -110,8 +115,24 @@ public class FilterSortModel implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
         parcel.writeInt(type);
+        parcel.writeInt(filterType);
         parcel.writeString(name);
         parcel.writeInt(parent_id);
         parcel.writeByte((byte) (isEnabled ? 1 : 0));
+        parcel.writeByte((byte) (isExpanded ? 1 : 0));
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FilterSortModel)) return false;
+        FilterSortModel that = (FilterSortModel) o;
+        return getId() == that.getId() && getType() == that.getType() && getFilterType() == that.getFilterType() && getParent_id() == that.getParent_id() && isEnabled() == that.isEnabled() && isExpanded() == that.isExpanded() && Objects.equals(getName(), that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getType(), getFilterType(), getName(), getParent_id(), isEnabled(), isExpanded());
     }
 }
