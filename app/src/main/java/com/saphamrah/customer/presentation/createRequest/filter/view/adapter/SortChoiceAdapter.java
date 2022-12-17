@@ -93,8 +93,5 @@ public class SortChoiceAdapter extends RecyclerView.Adapter<SortChoiceAdapter.Vi
             FilterSortModel filterSortModel = Observable.fromIterable(sortModels).filter(filterSortModel1 -> filterSortModel1.getId() == sortModels.get(getBindingAdapterPosition()).getId()).toList().blockingGet().get(0);
             listener.onItemSelect(filterSortModel, getBindingAdapterPosition(), AdapterAction.TOGGLE);
         };
-
-
-
     }
 }

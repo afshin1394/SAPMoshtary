@@ -49,8 +49,7 @@ public class FilterChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     List<FilterSortModel> parentListWithSlider;
 
 
-
-    public FilterChoiceAdapter( Context context, List<FilterSortModel> filterGlobal,  AdapterItemListener<FilterSortModel> listener) {
+    public FilterChoiceAdapter(Context context, List<FilterSortModel> filterGlobal, AdapterItemListener<FilterSortModel> listener) {
         this.context = context;
         this.listener = listener;
         this.allFilters = filterGlobal;
@@ -60,8 +59,6 @@ public class FilterChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-
 
 
         if (viewType == FILTER_LIST) {
@@ -111,7 +108,6 @@ public class FilterChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public List<FilterSortModel> getFilterSortList() {
         return allFilters;
     }
-
 
 
     public class ViewHolderFilter extends RecyclerView.ViewHolder implements AdapterItemListener<FilterSortModel> {
@@ -178,8 +174,7 @@ public class FilterChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         @Override
         public void onItemSelect(FilterSortModel model, int position, AdapterAction Action) {
-            switch (Action)
-            {
+            switch (Action) {
                 case TOGGLE:
                     FilterSortModel filterSortModel = Observable.fromIterable(allFilters).filter(filterSortModel1 -> filterSortModel1.getId() == model.getId()).blockingFirst();
                     if (model.isEnabled()) {
@@ -208,25 +203,44 @@ public class FilterChoiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             sliderMin = view.findViewById(R.id.TV_slider_min);
             simpleRangeView = view.findViewById(R.id.range_slider);
             simpleRangeView.addOnSliderTouchListener(sliderTouchListener);
-            sliderMin.setText(String.format("%1$s%2$s%3$s",context.getString(R.string.from),"1000","ريال"));
-            sliderMax.setText(String.format("%1$s%2$s%3$s",context.getString(R.string.to),"800000","ريال"));
+            simpleRangeView.addOnChangeListener(onChangeListener);
+            sliderMin.setText(String.format("%1$s%2$s%3$s", context.getString(R.string.from), "1000", "ريال"));
+            sliderMax.setText(String.format("%1$s%2$s%3$s", context.getString(R.string.to), "800000", "ريال"));
 
         }
 
         public void bind(FilterSortModel filterModel) {
             sliderTitle.setText(filterModel.getName());
+            if (filterModel.isEnabled()){
+                sliderMin.setText(String.format("%1$s%2$s%3$s", context.getString(R.string.from), filterModel.getMinValue(), "ريال"));
+                sliderMax.setText(String.format("%1$s%2$s%3$s", context.getString(R.string.to), filterModel.getMaxValue(), "ريال"));
+                simpleRangeView.setValues(((float) filterModel.getMinValue()), ((float) filterModel.getMaxValue()));
+
+            }
 
         }
 
-        RangeSlider.OnSliderTouchListener sliderTouchListener = new RangeSlider.OnSliderTouchListener() {
+        PersianRangeSlider.OnSliderTouchListener sliderTouchListener = new PersianRangeSlider.OnSliderTouchListener() {
             @Override
             public void onStartTrackingTouch(@NonNull RangeSlider slider) {
+
             }
 
             @Override
             public void onStopTrackingTouch(@NonNull RangeSlider slider) {
-                sliderMin.setText(String.format("%1$s%2$s%3$s",context.getString(R.string.from),slider.getValues().get(0).intValue(),"ريال"));
-                sliderMax.setText(String.format("%1$s%2$s%3$s",context.getString(R.string.to),slider.getValues().get(1).intValue(),"ريال"));
+                parentListWithSlider.get(getBindingAdapterPosition()).setMinValue(slider.getValues().get(0).intValue());
+                parentListWithSlider.get(getBindingAdapterPosition()).setMaxValue(slider.getValues().get(1).intValue());
+                parentListWithSlider.get(getBindingAdapterPosition()).setEnabled(true);
+                listener.onItemSelect(parentListWithSlider.get(getBindingAdapterPosition()), getBindingAdapterPosition(), AdapterAction.TRACK);
+            }
+        };
+
+        PersianRangeSlider.OnChangeListener onChangeListener = new PersianRangeSlider.OnChangeListener() {
+            @Override
+            public void onValueChange(@NonNull RangeSlider slider, float value, boolean fromUser) {
+                sliderMin.setText(String.format("%1$s%2$s%3$s", context.getString(R.string.from), slider.getValues().get(0).intValue(), "ريال"));
+                sliderMax.setText(String.format("%1$s%2$s%3$s", context.getString(R.string.to), slider.getValues().get(1).intValue(), "ريال"));
+
             }
         };
     }

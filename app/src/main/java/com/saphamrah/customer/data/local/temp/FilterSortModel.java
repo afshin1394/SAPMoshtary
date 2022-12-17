@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-public class FilterSortModel implements Parcelable  {
+public class FilterSortModel implements Parcelable , Comparable<FilterSortModel>  {
 
     private int id;
     private int type;
@@ -17,15 +17,20 @@ public class FilterSortModel implements Parcelable  {
     private int parent_id;
     private boolean isEnabled;
     private boolean isExpanded;
+    private int maxValue = 0;
+    private int minValue = 0;
+    private int filterSortType;
 
-    public FilterSortModel(int id, int type,int filterType, String name, int parent_id,boolean isEnabled) {
+    public FilterSortModel(int id, int type,int filterType, String name, int parent_id,boolean isEnabled,int filterSortType) {
         this.id = id;
         this.type = type;
         this.filterType = filterType;
         this.name = name;
         this.parent_id = parent_id;
         this.isEnabled = isEnabled;
+        this.filterSortType = filterSortType;
     }
+
 
 
     protected FilterSortModel(Parcel in) {
@@ -36,6 +41,9 @@ public class FilterSortModel implements Parcelable  {
         parent_id = in.readInt();
         isEnabled = in.readByte() != 0;
         isExpanded = in.readByte() != 0;
+        minValue = in.readInt();
+        maxValue = in.readInt();
+        filterSortType = in.readInt();
     }
 
     public static final Creator<FilterSortModel> CREATOR = new Creator<FilterSortModel>() {
@@ -106,6 +114,30 @@ public class FilterSortModel implements Parcelable  {
         this.filterType = filterType;
     }
 
+    public int getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(int maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public int getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(int minValue) {
+        this.minValue = minValue;
+    }
+
+    public int getFilterSortType() {
+        return filterSortType;
+    }
+
+    public void setFilterSortType(int filterSortType) {
+        this.filterSortType = filterSortType;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -120,6 +152,9 @@ public class FilterSortModel implements Parcelable  {
         parcel.writeInt(parent_id);
         parcel.writeByte((byte) (isEnabled ? 1 : 0));
         parcel.writeByte((byte) (isExpanded ? 1 : 0));
+        parcel.writeInt(minValue);
+        parcel.writeInt(maxValue);
+        parcel.writeInt(filterSortType);
     }
 
 
@@ -134,5 +169,13 @@ public class FilterSortModel implements Parcelable  {
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getType(), getFilterType(), getName(), getParent_id(), isEnabled(), isExpanded());
+    }
+
+    @Override
+    public int compareTo(FilterSortModel filterSortModel) {
+        if (this.id == filterSortModel.getId())
+        return 1;
+        else
+            return -1;
     }
 }

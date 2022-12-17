@@ -1,5 +1,6 @@
 package com.saphamrah.customer.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.navigation.NavDirections;
@@ -32,7 +34,7 @@ import java.util.Objects;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public abstract class BaseBottomDialogFragment<T extends BasePresenterOps, S extends ViewBinding> extends BottomSheetDialogFragment implements BaseView {
+public abstract class BaseBottomDialogFragment<A extends Activity,T extends BasePresenterOps, S extends ViewBinding> extends BottomSheetDialogFragment implements BaseView {
     private final Integer PERMISSION_REQUEST_CODE = 9824;
     public static final String TAG = BaseFragment.class.getSimpleName();
 
@@ -44,6 +46,7 @@ public abstract class BaseBottomDialogFragment<T extends BasePresenterOps, S ext
 
     protected T presenter;
     protected S viewBinding;
+    protected A activity;
     protected Context context;
     protected boolean isFragmentVisible;
 
@@ -75,6 +78,7 @@ public abstract class BaseBottomDialogFragment<T extends BasePresenterOps, S ext
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
+        this.activity = ((A) requireActivity());
     }
 
     @Nullable

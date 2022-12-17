@@ -1,10 +1,15 @@
 package com.saphamrah.customer.presentation.createRequest.filter.view.fragment;
 
 
+import static com.saphamrah.customer.utils.Constants.BRAND;
+import static com.saphamrah.customer.utils.Constants.CONSUMER_PRICE_TRACK;
+import static com.saphamrah.customer.utils.Constants.GOROH_KALA;
 import static com.saphamrah.customer.utils.Constants.MAX_CONSUMER_PRICE;
 import static com.saphamrah.customer.utils.Constants.MAX_SELL_PRICE;
 import static com.saphamrah.customer.utils.Constants.MIN_CONSUMER_PRICE;
 import static com.saphamrah.customer.utils.Constants.MIN_SELL_PRICE;
+import static com.saphamrah.customer.utils.Constants.SELL;
+import static com.saphamrah.customer.utils.Constants.SELL_PRICE_TRACK;
 import static com.saphamrah.customer.utils.Constants.SORT;
 
 import android.content.Context;
@@ -23,30 +28,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.saphamrah.customer.Constants;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseBottomDialogFragment;
 import com.saphamrah.customer.data.local.temp.FilterCategoryModel;
 import com.saphamrah.customer.data.local.temp.FilterSortModel;
+import com.saphamrah.customer.presentation.createRequest.CreateRequestActivity;
 import com.saphamrah.customer.presentation.createRequest.filter.interactor.FilterMVPInteractor;
 import com.saphamrah.customer.presentation.createRequest.filter.presenter.FilterMVPPresenter;
 import com.saphamrah.customer.databinding.FragmentFilterBinding;
-import com.saphamrah.customer.presentation.createRequest.filter.view.adapter.FilterChildChoiceAdapter;
 import com.saphamrah.customer.presentation.createRequest.filter.view.adapter.FilterChoiceAdapter;
 import com.saphamrah.customer.presentation.createRequest.filter.view.adapter.SortChoiceAdapter;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
+import com.saphamrah.customer.utils.Constants;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import io.reactivex.Observable;
+import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 
 
-public class FilterFragment extends BaseBottomDialogFragment<FilterMVPPresenter, FragmentFilterBinding> implements FilterMVPInteractor.RequiredViewOps {
+public class FilterFragment extends BaseBottomDialogFragment<CreateRequestActivity,FilterMVPPresenter, FragmentFilterBinding> implements FilterMVPInteractor.RequiredViewOps {
 
     private static final String TAG = FilterFragment.class.getSimpleName();
     private FilterChoiceAdapter filterChoiceAdapter;
@@ -117,7 +125,11 @@ public class FilterFragment extends BaseBottomDialogFragment<FilterMVPPresenter,
                     array[i] = filterSortModels.get(i);
 
                 Log.i(TAG, "onBackPressed222: " + selectedFilterSortModels);
-                setFragmentResult("filters", selectedFilterSortModels);
+                if (sortFilterType == SORT)
+                    activity.disableFilters();
+                selectedFilterSortModels.addAll(Observable.fromIterable(filterSortModels).filter(filterSortModel -> filterSortModel.isEnabled()).toList().blockingGet());
+                Set<FilterSortModel> filterSortModels = new HashSet<>(selectedFilterSortModels);
+                setFragmentResult("filters", filterSortModels);
                 NavHostFragment.findNavController(FilterFragment.this).navigateUp();
             }
         });
@@ -134,57 +146,8 @@ public class FilterFragment extends BaseBottomDialogFragment<FilterMVPPresenter,
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setRecycler(int sortFilterType) {
-        ArrayList<FilterCategoryModel> filterCategoryModels = new ArrayList<>();
-        FilterCategoryModel filterCategory = new FilterCategoryModel(1, "برند", 1);
 
-        FilterCategoryModel filterCategory2 = new FilterCategoryModel(2, "گروه کالا", 2);
-
-        filterCategoryModels.add(filterCategory);
-        filterCategoryModels.add(filterCategory2);
-
-        filterSortModels = new ArrayList<>();
-        FilterSortModel filterModelBrand = new FilterSortModel(100, 2, 3, "برند", 0, false);
-        FilterSortModel filterModelGorohKala = new FilterSortModel(200, 2, 3, "گروه کالا", 0, false);
-
-        FilterSortModel filterModel = new FilterSortModel(101, 2, 3, "دلپذیر", 100, false);
-        FilterSortModel filterModel2 = new FilterSortModel(102, 2, 3, "مهرام", 100, false);
-        FilterSortModel filterModel3 = new FilterSortModel(103, 2, 3, "لینا", 100, false);
-        FilterSortModel filterModel4 = new FilterSortModel(104, 2, 3, "کاله", 100, false);
-
-        FilterSortModel filterModel5 = new FilterSortModel(1, 2, 3, "رب", 200, false);
-        FilterSortModel filterModel6 = new FilterSortModel(3, 2, 3, "کنسرو", 200, false);
-        FilterSortModel filterModel7 = new FilterSortModel(2, 2, 3, "سس", 200, false);
-        FilterSortModel filterModel8 = new FilterSortModel(4, 2, 3, "بستنی", 200, false);
-        FilterSortModel filterModel9 = new FilterSortModel(5, 2, 3, "آبمیوه", 200, false);
-//        FilterSortModel filterModel8 = new FilterSortModel(8, 2, 3, "کبریت", 200, false);
-
-        FilterSortModel filterModel10 = new FilterSortModel(9, 2, 4, "قیمت مصرف کننده", -1, false);
-        FilterSortModel filterModel11 = new FilterSortModel(10, 2, 4, "موجودی", -1, false);
-        FilterSortModel filterModel12 = new FilterSortModel(11, 2, 4, "قیمت فروش", -1, false);
-
-        FilterSortModel filterGheymatForosh = new FilterSortModel(MAX_SELL_PRICE, 1, -1, "بیشترین قیمت فروش", 0, false);
-        FilterSortModel filterGheymatMasrafKonandeh = new FilterSortModel(MIN_SELL_PRICE, 1, -1, "کمترین قیمت فروش", 0, false);
-        FilterSortModel filterTarikh = new FilterSortModel(MAX_CONSUMER_PRICE, 1, -1, "بیشترین قیمت مصرف کننده", 0, false);
-        FilterSortModel filterEngheza = new FilterSortModel(MIN_CONSUMER_PRICE, 1, -1, "کمترین قیمت مصرف کننده", 0, false);
-        filterSortModels.add(filterModelBrand);
-        filterSortModels.add(filterModelGorohKala);
-        filterSortModels.add(filterGheymatForosh);
-        filterSortModels.add(filterGheymatMasrafKonandeh);
-        filterSortModels.add(filterTarikh);
-        filterSortModels.add(filterEngheza);
-        filterSortModels.add(filterModel);
-        filterSortModels.add(filterModel2);
-        filterSortModels.add(filterModel3);
-        filterSortModels.add(filterModel4);
-        filterSortModels.add(filterModel5);
-        filterSortModels.add(filterModel6);
-        filterSortModels.add(filterModel7);
-        filterSortModels.add(filterModel9);
-        filterSortModels.add(filterModel10);
-        filterSortModels.add(filterModel11);
-        filterSortModels.add(filterModel12);
-
-
+        filterSortModels = activity.getFilterSortModels();
         List<FilterSortModel> filterSortModelsTitle = filterSortModels.stream().filter(filterSortModel -> filterSortModel.getType() == 2 && filterSortModel.getFilterType() == 3 && filterSortModel.getParent_id() == 0).collect(Collectors.toList());
         List<FilterSortModel> sortList = Observable.fromIterable(filterSortModels).filter(new Predicate<FilterSortModel>() {
             @Override
@@ -202,15 +165,17 @@ public class FilterFragment extends BaseBottomDialogFragment<FilterMVPPresenter,
             sortChoiceAdapter = new SortChoiceAdapter(context, sortList, new AdapterItemListener<FilterSortModel>() {
                 @Override
                 public void onItemSelect(FilterSortModel model, int position, AdapterAction Action) {
-                    if (!selectedFilterSortModels.contains(model) && model.isEnabled()) {
+
+                    if (!selectedFilterSortModels.contains(model) && model.isEnabled())
+                    {
                         for (int i = 0; i < selectedFilterSortModels.size(); i++) {
+
                             if (selectedFilterSortModels.get(i).getType() == SORT)
                                 selectedFilterSortModels.remove(i);
+
                         }
                         selectedFilterSortModels.add(model);
-
-                        }
-
+                    }
 
                 }
             });
@@ -220,8 +185,13 @@ public class FilterFragment extends BaseBottomDialogFragment<FilterMVPPresenter,
         } else {
 
             filterChoiceAdapter = new FilterChoiceAdapter(context, filterSortModels, (model, position, Action) -> {
-                if(!selectedFilterSortModels.contains(model))
-                selectedFilterSortModels.add(model);
+                if(!selectedFilterSortModels.contains(model) && model.isEnabled()) {
+                    selectedFilterSortModels.add(model);
+                }else {
+                    if (model.getFilterType() == 3) {
+                        selectedFilterSortModels.remove(model);
+                    }
+                }
             });
             viewBinding.RecyclerFilterSortChoice.setLayoutManager(gridLayoutManager);
             viewBinding.RecyclerFilterSortChoice.setAdapter(filterChoiceAdapter);

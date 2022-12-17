@@ -1,5 +1,15 @@
 package com.saphamrah.customer.presentation.createRequest;
 
+import static com.saphamrah.customer.utils.Constants.BRAND;
+import static com.saphamrah.customer.utils.Constants.CONSUMER_PRICE_TRACK;
+import static com.saphamrah.customer.utils.Constants.GOROH_KALA;
+import static com.saphamrah.customer.utils.Constants.MAX_CONSUMER_PRICE;
+import static com.saphamrah.customer.utils.Constants.MAX_SELL_PRICE;
+import static com.saphamrah.customer.utils.Constants.MIN_CONSUMER_PRICE;
+import static com.saphamrah.customer.utils.Constants.MIN_SELL_PRICE;
+import static com.saphamrah.customer.utils.Constants.SELL_PRICE_TRACK;
+import static com.saphamrah.customer.utils.Constants.SORT;
+
 import androidx.annotation.RequiresApi;
 
 import android.Manifest;
@@ -21,6 +31,7 @@ import com.saphamrah.customer.data.local.temp.BonusModel;
 import com.saphamrah.customer.data.local.temp.DarkhastFaktorJayezehTakhfifModel;
 import com.saphamrah.customer.data.local.temp.DiscountModel;
 import com.saphamrah.customer.data.local.temp.ElamMarjoeeForoshandehModel;
+import com.saphamrah.customer.data.local.temp.FilterCategoryModel;
 import com.saphamrah.customer.data.local.temp.FilterSortModel;
 import com.saphamrah.customer.data.local.temp.JayezehEntekhabiMojodiModel;
 import com.saphamrah.customer.data.local.temp.ProductModel;
@@ -44,6 +55,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     private List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModelsGlobal;
     private List<BonusModel> bonusModelsGlobal;
     private List<DiscountModel> discountModelsGlobal;
+    private List<FilterSortModel> filterSortModels;
     private String address;
     public ActivityCreateRequestBinding rootBinding;
     public Constants.PaymentStates paymentState;
@@ -75,9 +87,12 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
 
         paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
         setProducts();
+        setFilters();
 
         checkPermissions(new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE});
     }
+
+
 
     @Override
     protected ActivityCreateRequestBinding inflateBiding(LayoutInflater inflater) {
@@ -285,6 +300,70 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         productModelGlobal.add(kalaModel16);
         productModelGlobal.add(kalaModel17);
         productModelGlobal.add(kalaModel18);
+    }
+
+    private void setFilters() {
+        ArrayList<FilterCategoryModel> filterCategoryModels = new ArrayList<>();
+        FilterCategoryModel filterCategory = new FilterCategoryModel(1, "برند", 1);
+
+        FilterCategoryModel filterCategory2 = new FilterCategoryModel(2, "گروه کالا", 2);
+
+        filterCategoryModels.add(filterCategory);
+        filterCategoryModels.add(filterCategory2);
+
+        filterSortModels = new ArrayList<>();
+        FilterSortModel filterModelBrand = new FilterSortModel(100, 2, 3, "برند", 0, false,-1);
+        FilterSortModel filterModelGorohKala = new FilterSortModel(200, 2, 3, "گروه کالا", 0, false,-1);
+
+        FilterSortModel filterModel = new FilterSortModel(101, 2, 3, "دلپذیر", 100, false,BRAND);
+        FilterSortModel filterModel2 = new FilterSortModel(102, 2, 3, "مهرام", 100, false,BRAND);
+        FilterSortModel filterModel3 = new FilterSortModel(103, 2, 3, "لینا", 100, false,BRAND);
+        FilterSortModel filterModel4 = new FilterSortModel(104, 2, 3, "کاله", 100, false,BRAND);
+
+        FilterSortModel filterModel5 = new FilterSortModel(1, 2, 3, "رب", 200, false,GOROH_KALA);
+        FilterSortModel filterModel6 = new FilterSortModel(3, 2, 3, "کنسرو", 200, false,GOROH_KALA);
+        FilterSortModel filterModel7 = new FilterSortModel(2, 2, 3, "سس", 200, false,GOROH_KALA);
+        FilterSortModel filterModel8 = new FilterSortModel(4, 2, 3, "بستنی", 200, false,GOROH_KALA);
+        FilterSortModel filterModel9 = new FilterSortModel(5, 2, 3, "آبمیوه", 200, false,GOROH_KALA);
+//        FilterSortModel filterModel8 = new FilterSortModel(8, 2, 3, "کبریت", 200, false);
+
+        FilterSortModel filterModel10 = new FilterSortModel(Constants.CONSUMER_PRICE_TRACK, 2, 4, "بازه قیمت مصرف کننده", -1, false,CONSUMER_PRICE_TRACK);
+//        FilterSortModel filterModel11 = new FilterSortModel(10, 2, 4, "موجودی", -1, false);
+        FilterSortModel filterModel12 = new FilterSortModel(Constants.SELL_PRICE_TRACK, 2, 4, " بازه قیمت فروش", -1, false,SELL_PRICE_TRACK);
+
+        FilterSortModel filterGheymatForosh = new FilterSortModel(MAX_SELL_PRICE, 1, -1, "بیشترین قیمت فروش", 0, false,SORT);
+        FilterSortModel filterGheymatMasrafKonandeh = new FilterSortModel(MIN_SELL_PRICE, 1, -1, "کمترین قیمت فروش", 0, false,SORT);
+        FilterSortModel filterTarikh = new FilterSortModel(MAX_CONSUMER_PRICE, 1, -1, "بیشترین قیمت مصرف کننده", 0, false,SORT);
+        FilterSortModel filterEngheza = new FilterSortModel(MIN_CONSUMER_PRICE, 1, -1, "کمترین قیمت مصرف کننده", 0, false,SORT);
+        filterSortModels.add(filterModelBrand);
+        filterSortModels.add(filterModelGorohKala);
+        filterSortModels.add(filterGheymatForosh);
+        filterSortModels.add(filterGheymatMasrafKonandeh);
+        filterSortModels.add(filterTarikh);
+        filterSortModels.add(filterEngheza);
+        filterSortModels.add(filterModel);
+        filterSortModels.add(filterModel2);
+        filterSortModels.add(filterModel3);
+        filterSortModels.add(filterModel4);
+        filterSortModels.add(filterModel5);
+        filterSortModels.add(filterModel6);
+        filterSortModels.add(filterModel7);
+        filterSortModels.add(filterModel9);
+        filterSortModels.add(filterModel10);
+//        filterSortModels.add(filterModel11);
+        filterSortModels.add(filterModel12);
+
+    }
+
+    public List<FilterSortModel> getFilterSortModels() {
+        return filterSortModels;
+    }
+
+    public void disableFilters(){
+        Observable.fromIterable(filterSortModels).filter(filterSortModel -> filterSortModel.getFilterType() != SORT).map(filterSortModel -> {
+            filterSortModel.setEnabled(false);
+            return filterSortModel;
+        }).blockingSubscribe();
     }
 
     public List<ProductModel> getProductModelGlobal() {

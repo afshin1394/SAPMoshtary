@@ -30,7 +30,10 @@ public class Constants {
     public static final int  JUICE = 5;
 
 
-    // brand
+    public static final int BRAND = 100;
+    public static final int GOROH_KALA = 200;
+
+
 
     public static final int DELPAZIR = 101;
     public static final int MIHAN = 102;
@@ -44,8 +47,8 @@ public class Constants {
     public static final int MIN_CONSUMER_PRICE = 1002;
     public static final int MIN_SELL_PRICE = 1003;
     public static final int MAX_SELL_PRICE = 1004;
-
-
+    public static final int CONSUMER_PRICE_TRACK = 1005;
+    public static final int SELL_PRICE_TRACK = 1006;
 
 
     public enum PaymentStates {

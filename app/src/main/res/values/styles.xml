@@ -401,14 +401,11 @@
         <item name="colorPrimary">#802424</item>
         <item name="colorOnPrimary">@color/colorBlack</item>
         <item name="colorOnSurface">#EBE4A9A9</item>
-
-
-
     </style>
     <style name="Widget.App.Tooltip" parent="Widget.Material3.Tooltip">
         <item name="android:textAppearance">@style/TextAppearance.App.Tooltip</item>
         <item name="backgroundTint">#EBE4A9A9</item>
-        <item name="labelBehavior">visible</item>
+        <item name="labelBehavior">gone</item>
 
     </style>
 

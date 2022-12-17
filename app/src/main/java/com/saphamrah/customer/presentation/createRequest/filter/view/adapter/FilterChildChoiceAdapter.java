@@ -54,7 +54,7 @@ public class FilterChildChoiceAdapter extends RecyclerView.Adapter<RecyclerView.
             checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onItemSelect(filterSortModels.get(getAdapterPosition()),getAdapterPosition(), AdapterAction.TOGGLE);
+                    listener.onItemSelect(filterSortModels.get(getBindingAdapterPosition()),getBindingAdapterPosition(), AdapterAction.TOGGLE);
                 }
             });
         }
@@ -62,6 +62,11 @@ public class FilterChildChoiceAdapter extends RecyclerView.Adapter<RecyclerView.
         public void bind( FilterSortModel filterSortModel)
         {
             checkBox.setText(filterSortModel.getName());
+            if (filterSortModel.isEnabled()){
+                checkBox.setChecked(true);
+            }else{
+                checkBox.setChecked(false);
+            }
         }
     }
 }

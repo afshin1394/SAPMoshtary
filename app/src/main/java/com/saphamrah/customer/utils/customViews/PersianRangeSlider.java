@@ -14,26 +14,27 @@ import com.saphamrah.customer.R;
 
 
 public class PersianRangeSlider extends RangeSlider {
-    private Context context;
     public PersianRangeSlider(@NonNull Context context) {
         super(context);
-        this.context = context;
+
     }
 
     public PersianRangeSlider(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
+
     }
 
     public PersianRangeSlider(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs,defStyleAttr);
-        this.context = context;
+
     }
+
+
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        this.setStepSize(1000);
+        this.setStepSize(1000f);
         this.setLabelFormatter(new LabelFormatter() {
             @NonNull
             @Override
@@ -41,6 +42,5 @@ public class PersianRangeSlider extends RangeSlider {
                 return  String.format("%1$s %2$s", ((int) value),"ريال");
             }
         });
-        this.setLabelBehavior(LabelFormatter.LABEL_FLOATING);
     }
 }

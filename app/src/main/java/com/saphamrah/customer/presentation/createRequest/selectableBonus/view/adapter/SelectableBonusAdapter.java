@@ -20,16 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
 import com.saphamrah.customer.R;
-import com.saphamrah.customer.data.local.temp.JayezehEntekhabiModel;
 import com.saphamrah.customer.data.local.temp.JayezehEntekhabiMojodiModel;
-import com.saphamrah.customer.data.local.temp.ProductModel;
-import com.saphamrah.customer.data.local.temp.SelectableBonus;
-import com.saphamrah.customer.presentation.createRequest.filter.view.adapter.FilterChoiceAdapter;
-import com.saphamrah.customer.presentation.createRequest.selectableBonus.model.SelectableBonusModel;
-import com.saphamrah.customer.presentation.createRequest.selectableBonus.view.fragment.SelectableBonusFragment;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
-import com.saphamrah.customer.utils.AdapterUtil.SyncDiffUtilCallBack;
 import com.saphamrah.customer.utils.RxUtils.Watcher;
 import com.saphamrah.customer.utils.customViews.EditTextWatcher;
 

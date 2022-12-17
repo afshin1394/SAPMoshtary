@@ -1,10 +1,16 @@
 package com.saphamrah.customer.presentation.createRequest.productRequest.view.fragment;
 
+import static com.saphamrah.customer.base.BaseActivity.results;
 import static com.saphamrah.customer.presentation.createRequest.CreateRequestActivity.sort_order;
+import static com.saphamrah.customer.utils.Constants.BRAND;
+import static com.saphamrah.customer.utils.Constants.CONSUMER_PRICE_TRACK;
+import static com.saphamrah.customer.utils.Constants.GOROH_KALA;
 import static com.saphamrah.customer.utils.Constants.MAX_CONSUMER_PRICE;
 import static com.saphamrah.customer.utils.Constants.MAX_SELL_PRICE;
 import static com.saphamrah.customer.utils.Constants.MIN_CONSUMER_PRICE;
 import static com.saphamrah.customer.utils.Constants.MIN_SELL_PRICE;
+import static com.saphamrah.customer.utils.Constants.SELL;
+import static com.saphamrah.customer.utils.Constants.SELL_PRICE_TRACK;
 import static com.saphamrah.customer.utils.Constants.SORT;
 
 import android.annotation.SuppressLint;
@@ -52,7 +58,9 @@ import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 import com.saphamrah.customer.utils.AnimationUtils;
+import com.saphamrah.customer.utils.CollectionUtils;
 import com.saphamrah.customer.utils.Constants;
+import com.saphamrah.customer.utils.FilterUtils.BrandFilter;
 import com.saphamrah.customer.utils.RxUtils.Watcher;
 import com.saphamrah.customer.utils.customViews.InputFilterMinMax;
 import com.saphamrah.customer.utils.customViews.OnSingleClickListener;
@@ -63,7 +71,9 @@ import com.saphamrah.customer.utils.loadingUtils.ShimmerLoading;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import io.reactivex.Observable;
@@ -82,6 +92,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     private List<FilterSortModel> filterSortModels = new ArrayList<>();
     private List<ProductModel> productModels;
     private List<ProductModel> productModelsTemp;
+    private Set<ProductModel> filteredProductModelsTemp;
     private List<FilterSortModel> filterListObserver = new ArrayList<>();
     private BottomSheetBehavior bottomSheetBonusDiscount;
     private BottomSheetBehavior bottomSheetBoxPackNum;
@@ -105,6 +116,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
                 @Override
                 public void onCancelClick() {
+
                 }
             }).show(wft, "exit");
 
@@ -177,10 +189,10 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
                 productModelsTemp.clear();
                 Log.i("setSearch", "onNext: " + s);
                 if (s.equals("")) {
-                    productModelsTemp.addAll(productModels);
+                    productModelsTemp.addAll(filteredProductModelsTemp);
                     productAdapter.notifyDataSetChanged();
                 } else {
-                    Observable.fromIterable(productModels)
+                    Observable.fromIterable(filteredProductModelsTemp)
                             .subscribe(new Observer<ProductModel>() {
                                 @Override
                                 public void onSubscribe(Disposable d) {
@@ -224,52 +236,158 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         @SuppressLint("NotifyDataSetChanged")
         AdapterItemListener<FilterSortModel> listenerFilterSort = (model, position, Action) -> {
             if (Action == AdapterAction.REMOVE) {
+                model.setEnabled(false);
                 filterListObserver.remove(model);
                 filterAdapter.notifyDataSetChanged();
+                Log.i(TAG, "setFilterRecycler: "+filterListObserver.size());
                 checkFilters(filterListObserver);
             }
         };
 
         getFragmentResultObserver("filters").observe(getViewLifecycleOwner(), o -> {
-            filterListObserver = new ArrayList<>((List<FilterSortModel>) o);
+            filterListObserver = new ArrayList<>((Set<FilterSortModel>) o);
             filterAdapter.setDataChanged(filterListObserver, listenerFilterSort);
             checkFilters(filterListObserver);
         });
-
     }
 
-    private void checkFilters(List<FilterSortModel> filterListObserver) {
-        List<ProductModel> productModels = new ArrayList<>();
-        if (filterListObserver.size() == 0) {
-            productModels.addAll(this.productModels);
-        } else {
-
-            for (FilterSortModel filterSortModel : filterListObserver) {
-                if (filterSortModel.getType() == SORT) {
-                    productModels.addAll(this.productModels);
-                    sort_order = filterSortModel.getId();
-                    Collections.sort(productModels);
-                } else {
-                    for (ProductModel productModel : this.productModels) {
-                    if (filterSortModel.getParent_id() == 100){
-                        if (productModel.getBrandId() == filterSortModel.getId())
-                            productModels.add(productModel);
-                    }
-                    else if (filterSortModel.getParent_id() == 200){
-                        if (productModel.getGorohKalaId() == filterSortModel.getId())
-                            productModels.add(productModel);
-                    }
-                    }
-                }
+    private List<ProductModel> checkForBrand(FilterSortModel filterSortModel, List<ProductModel> filteredList) {
+        for (ProductModel productModel : this.productModelsTemp) {
+            if (productModel.getBrandId() == filterSortModel.getId()) {
+                filteredList.add(productModel);
             }
         }
+        Log.i(TAG, "checkFilters-->BRAND:" + productModelsTemp.toString());
+        return filteredList;
+    }
+
+    private List<ProductModel> checkForGorohKala(FilterSortModel filterSortModel, List<ProductModel> filteredList) {
+        for (ProductModel productModel : this.productModelsTemp) {
+            if (productModel.getGorohKalaId() == filterSortModel.getId()) {
+                filteredList.add(productModel);
+            }
+        }
+        Log.i(TAG, "checkFilters-->GOROH_KALA:" + productModelsTemp.toString());
+        return filteredList;
+    }
+
+    private List<ProductModel> checkSellPriceTrack(FilterSortModel filterSortModel, List<ProductModel> filteredList) {
+        for (ProductModel productModel : this.productModelsTemp) {
+            if (productModel.getSellPrice() > filterSortModel.getMinValue() && productModel.getSellPrice() < filterSortModel.getMaxValue()) {
+                filteredList.add(productModel);
+            }
+        }
+        Log.i(TAG, "checkFilters-->SELL_PRICE_TRACK:" + productModelsTemp.toString());
+        return filteredList;
+    }
+
+    private List<ProductModel> checkConsumerPriceTrack(FilterSortModel filterSortModel, List<ProductModel> filteredList) {
+        for (ProductModel productModel : this.productModelsTemp) {
+            if (productModel.getConsumerPrice() > filterSortModel.getMinValue() && productModel.getConsumerPrice() < filterSortModel.getMaxValue()) {
+                filteredList.add(productModel);
+            }
+        }
+        Log.i(TAG, "checkFilters-->SELL_PRICE_TRACK:" + productModelsTemp.toString());
+        return filteredList;
+    }
+
+
+
+    private void checkFilters(List<FilterSortModel> filterListObserver) {
+        List<ProductModel> filteredList = new ArrayList<>();
+        List<ProductModel> globalFilterList = new ArrayList<>();
         productModelsTemp.clear();
-        productModelsTemp.addAll(productModels);
+        productModelsTemp.addAll(this.productModels);
+
+
+
+        if (filterListObserver.size() != 0) {
+
+            List<FilterSortModel> brandFilters = Observable.fromIterable(filterListObserver).filter(filterSortModel -> filterSortModel.getFilterSortType() == BRAND).toList().blockingGet();
+
+            List<FilterSortModel> gorohKalaFilters = Observable.fromIterable(filterListObserver).filter(filterSortModel -> filterSortModel.getFilterSortType() == GOROH_KALA).toList().blockingGet();
+
+            List<FilterSortModel> consumerPriceTrackFilters = Observable.fromIterable(filterListObserver).filter(filterSortModel -> filterSortModel.getFilterSortType() == CONSUMER_PRICE_TRACK).toList().blockingGet();
+
+            List<FilterSortModel> sellPriceTrackFilters = Observable.fromIterable(filterListObserver).filter(filterSortModel -> filterSortModel.getFilterSortType() == SELL_PRICE_TRACK).toList().blockingGet();
+
+            List<ProductModel> filteredBrandProducts = new ArrayList<>();
+            for (FilterSortModel filterSortModel : brandFilters) {
+                filteredBrandProducts.addAll(checkForBrand(filterSortModel, filteredList));
+            }
+            filteredList.clear();
+            if (filteredBrandProducts.size()!= 0) {
+                productModelsTemp.clear();
+                productModelsTemp.addAll(filteredBrandProducts);
+            }else{
+                if (brandFilters.size()>0){
+                    productModelsTemp.clear();
+                }
+            }
+
+            Set<ProductModel> filteredGorohKalaProducts = new HashSet<>();
+            for (FilterSortModel filterSortModel : gorohKalaFilters) {
+                filteredGorohKalaProducts.addAll(checkForGorohKala(filterSortModel, filteredList));
+            }
+            filteredList.clear();
+            if (filteredGorohKalaProducts.size()!= 0) {
+                productModelsTemp.clear();
+                productModelsTemp.addAll(filteredGorohKalaProducts);
+            }else{
+                if (gorohKalaFilters.size()>0){
+                    productModelsTemp.clear();
+                }
+            }
+
+            Set<ProductModel> filteredSellPriceProducts = new HashSet<>();
+            for (FilterSortModel filterSortModel : sellPriceTrackFilters) {
+                filteredSellPriceProducts.addAll(checkSellPriceTrack(filterSortModel, filteredList));
+            }
+            filteredList.clear();
+            if (filteredSellPriceProducts.size()!= 0) {
+                productModelsTemp.clear();
+                productModelsTemp.addAll(filteredSellPriceProducts);
+            }else{
+                if (sellPriceTrackFilters.size()>0){
+                    productModelsTemp.clear();
+                }
+            }
+
+
+            Set<ProductModel> filteredConsumerPriceProducts = new HashSet<>();
+            for (FilterSortModel filterSortModel : consumerPriceTrackFilters) {
+                filteredConsumerPriceProducts.addAll(checkConsumerPriceTrack(filterSortModel, filteredList));
+            }
+            filteredList.clear();
+            if (filteredConsumerPriceProducts.size()!= 0 )
+            {
+                productModelsTemp.clear();
+                productModelsTemp.addAll(filteredConsumerPriceProducts);
+            }else{
+                if (consumerPriceTrackFilters.size()>0){
+                    productModelsTemp.clear();
+                }
+            }
+            Log.i(TAG, "checkFilters: "+globalFilterList.size());
+            checkForSort();
+        }else{
+            productModelsTemp.clear();
+            productModelsTemp.addAll(this.productModels);
+        }
+        filteredProductModelsTemp.addAll(productModelsTemp);
         productAdapter.notifyDataSetChanged();
     }
 
-
-
+    private void checkForSort() {
+        for (FilterSortModel filterSortModel : filterListObserver) {
+            if (filterSortModel.getType() == SORT) {
+                productModelsTemp.clear();
+                productModelsTemp.addAll(this.productModels);
+                sort_order = filterSortModel.getId();
+                Collections.sort(productModelsTemp);
+            }
+        }
+    }
 
 
     private void setProductRecycler() {
@@ -571,6 +689,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         Log.i(TAG, "onViewCreated:");
         productModels = activity.getProductModelGlobal();
         productModelsTemp = new ArrayList<>();
+        filteredProductModelsTemp = new HashSet<>();
         productModelsTemp.addAll(productModels);
         setFilterRecycler();
         setProductRecycler();
