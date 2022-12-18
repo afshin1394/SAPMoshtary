@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:layoutDirection="rtl">
 
-    <RelativeLayout
+    <LinearLayout
+        android:gravity="center"
         android:id="@+id/layTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +24,7 @@
             android:text="@string/pishFaktor"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/lblActivityTitle" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

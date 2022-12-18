@@ -20,7 +20,7 @@ public class SellPriceTrackFilter implements Filter<ProductModel,FilterSortModel
                 filteredList.add(productModel);
             }
         }
-        Log.i(TAG, "checkFilters-->SELL_PRICE_TRACK:" + model.toString());
+        Log.i(TAG, "checkFilters-->SELL_PRICE_TRACK:" + model);
         return filteredList;
     }
 }

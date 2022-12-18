@@ -2,9 +2,13 @@ package com.saphamrah.customer.presentation.createRequest.verifyRequest.view.fra
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +37,11 @@ import com.saphamrah.customer.presentation.createRequest.verifyRequest.view.adap
 import com.saphamrah.customer.utils.Constants;
 import com.saphamrah.customer.utils.customViews.DrawingView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.PresenterOps, FragmentVerifyRequestBinding, CreateRequestActivity> implements VerifyRequestInteractor.RequiredViewOps {
 
@@ -65,6 +73,7 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
 
     @Override
     protected void initViews() {
+
         initialSignLayout();
 
         initCustomerInfo();
@@ -79,42 +88,17 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
 
     }
 
+
+
     private void checkSaveSignPic() {
         String description = viewBinding.txtDesc.getText().toString();
 
-       /* if (enableEmzaMoshtary.equals("0")) {
-            Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
-            Bitmap bmp = Bitmap.createBitmap(1, 1, conf);
-            mPresenter.checkSaveBitmap(description, ccMoshtary, new PubFunc().new ImageUtils().convertBitmapToByteArray(VerifyCustomerRequestActivity2.this, bmp, 100));
-            bmp.recycle();
-        } else if (enableEmzaMoshtary.equals("1")) {
-            Bitmap bitmap = drawingView.getBitmap();
-            Bitmap emptyBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
-            emptyBitmap.eraseColor(getResources().getColor(R.color.colorWhite));
 
-            if (bitmap.sameAs(emptyBitmap)) {
-                showToast(R.string.errorEmptyEmzaMoshtary, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
-            } else {
-                mPresenter.checkSaveBitmap(description, ccMoshtary, new PubFunc().new ImageUtils().convertBitmapToByteArray(VerifyCustomerRequestActivity2.this, bitmap, 100));
-                bitmap.recycle();
-                emptyBitmap.recycle();
-            }
-        }*/
+        takeScreenshotOfFaktor(new Random().nextInt(1000));
 
-        Bitmap bitmap = drawingView.getBitmap();
-        Bitmap emptyBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
-        emptyBitmap.eraseColor(getResources().getColor(R.color.colorWhite));
 
-        if (bitmap.sameAs(emptyBitmap)) {
-//            showToast(R.string.errorEmptyEmzaMoshtary, Constants.FAILED_MESSAGE(), Constants.DURATION_LONG());
-        } else {
-//            mPresenter.checkSaveBitmap(description, ccMoshtary, new PubFunc().new ImageUtils().convertBitmapToByteArray(VerifyCustomerRequestActivity2.this, bitmap, 100));
-            bitmap.recycle();
-            emptyBitmap.recycle();
-        }
-
-        presenter.saveRequest(activity.getProductModelGlobal(),activity.getDiscountModelsGlobal(),activity.getBonusModelsGlobal(),activity.getJayezehEntekhabiMojodiModels(),activity.getElamMarjoeeForoshandehModelsGlobal());
-        activity.finish();
+//        presenter.saveRequest(activity.getProductModelGlobal(),activity.getDiscountModelsGlobal(),activity.getBonusModelsGlobal(),activity.getJayezehEntekhabiMojodiModels(),activity.getElamMarjoeeForoshandehModelsGlobal());
+//        activity.finish();
 
     }
 
@@ -125,6 +109,89 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
         viewBinding.txtAddress.setText(address);
 //        viewBinding.txtNoeVosol.setText(receipt);
 
+    }
+
+    private Bitmap getBitmapFromView(View view, int width, int height)
+    {
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null)
+        {
+            canvas.drawColor(Color.WHITE);
+            bgDrawable.draw(canvas);
+        }
+        else
+            canvas.drawColor(Color.WHITE);
+        view.draw(canvas);
+        return bitmap;
+    }
+
+
+    Bitmap DarkhastImage;
+
+    public void takeScreenshotOfFaktor(long ccDarkhastFaktor)
+    {
+        try
+        {
+            String mPath ="";
+            String typeStr ="";
+
+            File pix = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File screenshots = new File(pix, "Screenshots");
+            mPath = screenshots.getPath();
+            typeStr = "/Emza-";
+
+
+            File tempdir = new File(mPath);
+            if (!tempdir.exists())
+                tempdir.mkdirs();
+
+
+            mPath = mPath + typeStr + ccDarkhastFaktor + ".jpg";
+
+
+                Log.d("Printactivity","screen charkareh");
+            viewBinding.getRoot().setDrawingCacheEnabled(true);
+
+            viewBinding.getRoot().measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+            viewBinding.getRoot().layout(0, 0, viewBinding.getRoot().getMeasuredWidth(), viewBinding.getRoot().getMeasuredHeight());
+
+            DarkhastImage = getBitmapFromView(viewBinding.getRoot(), viewBinding.getRoot().getWidth(), viewBinding.getRoot().getHeight());
+            viewBinding.getRoot().setDrawingCacheEnabled(false);
+
+            File imageFile = new File(mPath);
+            Log.i(TAG, "takeScreenshotOfFaktor: "+mPath);
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            DarkhastImage.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            DarkhastImage.recycle();
+            outputStream.flush();
+            outputStream.close();
+//            Resize(mPath);
+
+        } catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public static Bitmap saveBitmapFromView(Context context,int id,View v) {
+        Bitmap b = Bitmap.createBitmap(v.getWidth() , v.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+        v.draw(c);
+        Log.i(TAG, "loadBitmapFromView: "+context.getFilesDir());
+        File file = new File(context.getFilesDir(), "ScreenShot"+id+".jpg"); // the File to save , append increasing numeric counter to prevent files from getting overwritten.
+
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            b.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return b;
     }
 
     private void initJayezeh() {
