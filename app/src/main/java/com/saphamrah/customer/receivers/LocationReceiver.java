@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.location.Location;
 
 
-import com.saphamrah.customer.Constants;
 import com.saphamrah.customer.data.GPSDataModel;
+import com.saphamrah.customer.utils.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

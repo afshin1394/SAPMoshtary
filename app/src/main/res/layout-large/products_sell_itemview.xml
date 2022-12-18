@@ -27,7 +27,7 @@
                 android:src="@drawable/board"
                 app:civ_border_color="@color/colorGray"
                 app:civ_border_overlay="true"
-                app:civ_border_width="@dimen/_2sdp" />
+                app:civ_border_width="@dimen/_2sdp"/>
 
             <androidx.cardview.widget.CardView
 

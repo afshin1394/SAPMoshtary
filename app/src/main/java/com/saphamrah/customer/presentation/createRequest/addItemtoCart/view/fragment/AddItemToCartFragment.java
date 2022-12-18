@@ -217,7 +217,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
         viewBinding.btmShtPurchase.tvQuantityCarton.setFilters(new InputFilter[]{new InputFilterMinMax(0, 10000)});
         viewBinding.btmShtPurchase.tvQuantityAdad.setFilters(new InputFilter[]{new InputFilterMinMax(0, 10000)});
 
-        viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
+        viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("مبلغ سفارش: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
         Log.d(TAG, "openCartonBastehAdadBottomSheet: "+productModel.toString());
         viewBinding.btmShtPurchase.tvQuantityCarton.setText("");
         viewBinding.btmShtPurchase.tvQuantityAdad.setText("");
@@ -365,7 +365,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
                     productModel.setBoxCount(Integer.parseInt(s));
                     int orderCount  = calculateOrderCount(productModel);
                     productModel.setOrderCount(orderCount);
-                    viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
+                    viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("مبلغ سفارش: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
                 }catch (Exception e){
                     productModel.setBoxCount(0);
                     int orderCount  = calculateOrderCount(productModel);
@@ -383,7 +383,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
                     productModel.setPackCount(Integer.parseInt(s));
                     int orderCount  = calculateOrderCount(productModel);
                     productModel.setOrderCount(orderCount);
-                    viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
+                    viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("مبلغ سفارش: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
 
                 }catch (Exception e){
                     productModel.setPackCount(0);
@@ -402,7 +402,7 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
                     productModel.setNumCount(Integer.parseInt(s));
                     int orderCount  = calculateOrderCount(productModel);
                     productModel.setOrderCount(orderCount);
-                    viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("هزینه پرداختی: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
+                    viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("مبلغ سفارش: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
 
                 }catch (Exception e){
                     productModel.setNumCount(0);

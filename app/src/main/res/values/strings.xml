@@ -376,7 +376,7 @@
     <string name="sumTedad">جمع تعداد</string>
     <string name="sumMablagh">جمع مبلغ</string>
     <string name="count">تعداد</string>
-    <string name="addressTahvil">تحویل</string>
+    <string name="addressTahvil">آدرس تحویل</string>
     <string name="errorNoeAddress">لطفا نوع آدرس را انتخاب نمایید.</string>
     <string name="addressAdded">آدرس جدید برای مشتری ثبت شد.</string>
     <string name="telephone">تلفن</string>
@@ -501,6 +501,7 @@
 
     <string name="countMarjoee">تعداد مرجوعی</string>
     <string name="mablaghForosh">مبلغ فروش</string>
+    <string name="mablaghKharid">مبلغ خرید</string>
     <string name="tarikhForosh">تاریخ فاکتور</string>
     <string name="baseMablaghForosh">مبلغ فروش مبنا</string>
     <string name="mablaghForoshUnitRial">مبلغ فروش(ریال)</string>
@@ -1321,6 +1322,7 @@
     <string name="warningOrderedBefore" />
     <string name="orderedBefore">برای سازمان %s قبلا درخواست ثبت شده,آیا مایل به ادامه هستید؟</string>
     <string name="searchCompany">جستجوی شرکت</string>
+    <string name="sureDeleteDarkhast">آیا از لغو درخواست خود اطمینان دارید؟</string>
 
 
 
@@ -1338,4 +1340,5 @@
     <string name="explanation">شرح</string>
     <string name="from">از:</string>
     <string name="to">تا:</string>
+    <string name="saveRequest">عکس درخواست ذخیره شد</string>
 </resources>

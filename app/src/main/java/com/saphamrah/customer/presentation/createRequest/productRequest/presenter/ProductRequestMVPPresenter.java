@@ -10,6 +10,7 @@ import com.saphamrah.customer.data.local.temp.BonusModel;
 import com.saphamrah.customer.data.local.temp.DarkhastFaktorJayezehTakhfifModel;
 import com.saphamrah.customer.data.local.temp.DiscountModel;
 import com.saphamrah.customer.data.local.temp.JayezehEntekhabiMojodiModel;
+import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.presentation.createRequest.productRequest.interactor.ProductRequestMVPInteractor;
 import com.saphamrah.customer.presentation.createRequest.productRequest.model.ProductRequestMVPModel;
 
@@ -80,6 +81,14 @@ public class ProductRequestMVPPresenter extends BasePresenter<ProductRequestMVPI
         new Handler().postDelayed(() -> {
           view.get().onGetProducts();
           view.get().dismissLoading();
+        }, 1000);
+
+    }
+
+    @Override
+    public void getProductAdvertise() {
+        new Handler().postDelayed(() -> {
+        view.get().onGetProductAdvertise(1);
         }, 1000);
 
     }

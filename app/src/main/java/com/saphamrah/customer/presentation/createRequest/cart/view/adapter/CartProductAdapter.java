@@ -82,7 +82,7 @@ public class CartProductAdapter extends RecyclerView.Adapter<CartProductAdapter.
         private TextView nameProduct;
         private TextView consumerPrice;
         private CircleImageView img_product;
-        private TextView inventory;
+        private TextView mablaghKharid;
         private View img_addToCart;
         private MaterialCardView card_purchase;
         private MaterialCardView card_purchaseCount;
@@ -94,7 +94,7 @@ public class CartProductAdapter extends RecyclerView.Adapter<CartProductAdapter.
             super(view);
 
             nameProduct = view.findViewById(R.id.tv_title);
-            inventory = view.findViewById(R.id.tv_inventory);
+            mablaghKharid = view.findViewById(R.id.tv_inventory);
             consumerPrice = view.findViewById(R.id.tv_consumerPrice);
             img_addToCart = view.findViewById(R.id.img_add_to_cart);
             card_purchase = view.findViewById(R.id.card_purchase);
@@ -109,7 +109,7 @@ public class CartProductAdapter extends RecyclerView.Adapter<CartProductAdapter.
         public void bind(ProductModel productModel) {
             nameProduct.setText(String.format("%1$s", productModel.getNameProduct()));
 //            sellPrice.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh),kalaModel.getSellPrice(),context.getString(R.string.rial)));
-            inventory.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mablaghForosh), productModel.getSellPrice(), context.getString(R.string.rial)));
+            mablaghKharid.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mablaghKharid), productModel.getSellPrice(), context.getString(R.string.rial)));
             consumerPrice.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mablaghMasrafKonandeh), productModel.getConsumerPrice(), context.getString(R.string.rial)));
             if (productModel.getOrderCount() > 0) {
                 card_purchaseCount.setVisibility(View.VISIBLE);

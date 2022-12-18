@@ -223,8 +223,8 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
         baseSazmanForoshModels = new ArrayList<>();
 
 //        advertiseModels.add(new AdvertiseModel("@drawable/carrnina_mihan", "http://www.mihan-food.com/", "."));
-        advertiseModels.add(new AdvertiseModel("@drawable/tuna", "http://www.kadbanoco.com/fa/", "."));
-        advertiseModels.add(new AdvertiseModel("@drawable/dressing", "http://www.kadbanoco.com/fa/", "."));
+//        advertiseModels.add(new AdvertiseModel("@drawable/tuna", "http://www.kadbanoco.com/fa/", "."));
+        advertiseModels.add(new AdvertiseModel("@drawable/dlpazir_ketchap_front", "http://www.kadbanoco.com/fa/", ".", "980703" , 1, "دلپذیر"));
 //        advertiseModels.add(new AdvertiseModel("@drawable/bastani", "http://www.mihan-food.com/", "."));
 
 
@@ -321,8 +321,10 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
             new DoubleActionFragmentDialog(String.format(getString(R.string.orderedBefore), model.getName()), true, new IDoubleActionDialog() {
                 @Override
                 public void onConfirmClick() {
-                    startActivity(new Intent(activity, CreateRequestActivity.class).putExtra("sazmanName", model.getName()).putExtra("ccSazmanForosh", ccSazmanForosh));
-                }
+                    Intent intent = new Intent(activity, CreateRequestActivity.class);
+                    intent.putExtra("sazmanName",model.getName()).putExtra("ccSazmanForosh",Integer.parseInt(model.getType()));
+                    intent.putExtra("advertiseProductCodeKala","554893");
+                    startActivity(intent);                }
 
                 @Override
                 public void onCancelClick() {
@@ -332,7 +334,10 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
         }
         else
         {
-            startActivity(new Intent(activity, CreateRequestActivity.class).putExtra("sazmanName", model.getName()).putExtra("ccSazmanForosh", ccSazmanForosh));
+            Intent intent = new Intent(activity, CreateRequestActivity.class);
+            intent.putExtra("sazmanName",model.getName()).putExtra("ccSazmanForosh",Integer.parseInt(model.getType()));
+            intent.putExtra("advertiseProductCodeKala","554893");
+            startActivity(intent);
         }
     }
 }

@@ -176,13 +176,39 @@
 
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:backgroundTint="@color/colorBrown400"
-        android:text="مشاهده فاکتور"/>
+        android:layout_marginTop="@dimen/_5sdp"
+        android:orientation="horizontal">
 
+     <Button
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:padding="10dp"
+         android:backgroundTint="@color/colorBrown400"
+         android:text="مشاهده فاکتور"/>
+
+     <View
+         android:layout_width="@dimen/marginSize10dp"
+         android:layout_height="match_parent"
+         android:layout_weight="1"/>
+
+
+     <Button
+         android:id="@+id/btn_laqve_darkhast"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:padding="9dp"
+         android:backgroundTint="@color/colorRed900"
+         android:textSize="11dp"
+         android:text="لغو درخواست"
+         android:layout_gravity="bottom|end"
+         android:visibility="gone"
+         />
+
+
+    </LinearLayout>
    </LinearLayout>
    <com.google.android.material.card.MaterialCardView
        android:id="@+id/material_cardview"

@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.snackbar.Snackbar;
-import com.saphamrah.customer.Constants;
+
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.BaseBottomSheetRecyclerModel;
@@ -30,6 +30,7 @@ import com.saphamrah.customer.presentation.login.register.interactor.RegisterInt
 import com.saphamrah.customer.presentation.login.register.presenter.RegisterPresenter;
 import com.saphamrah.customer.receivers.LocationReceiver;
 import com.saphamrah.customer.service.GpsTracker;
+import com.saphamrah.customer.utils.Constants;
 import com.saphamrah.customer.utils.customViews.bottomSheetModule.BaseBottomSheet;
 import com.saphamrah.customer.utils.customViews.bottomSheetModule.list.BaseBottomSheetRecyclerView;
 import com.saphamrah.customer.utils.customViews.CustomSnackBar;

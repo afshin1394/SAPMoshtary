@@ -136,7 +136,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .into(img_product);
             nameProduct.setText(String.format("%1$s", productModel.getNameProduct()));
 //            sellPrice.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh),kalaModel.getSellPrice(),context.getString(R.string.rial)));
-            sell_price.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mablaghForosh), productModel.getSellPrice(), context.getString(R.string.rial)));
+            sell_price.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mablaghKharid), productModel.getSellPrice(), context.getString(R.string.rial)));
             consumerPrice.setText(String.format("%1$s:%2$s %3$s", context.getString(R.string.mablaghMasrafKonandeh), productModel.getConsumerPrice(), context.getString(R.string.rial)));
             Log.i(TAG, "bind: "+productModel.getOrderCount());
             if (productModel.getOrderCount() > 0)

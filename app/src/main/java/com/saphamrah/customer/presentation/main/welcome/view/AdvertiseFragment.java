@@ -18,6 +18,7 @@ import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.local.AdvertiseModel;
 import com.saphamrah.customer.databinding.FragmentAddressBinding;
 import com.saphamrah.customer.databinding.FragmentAdvertiseBinding;
+import com.saphamrah.customer.presentation.createRequest.CreateRequestActivity;
 import com.saphamrah.customer.presentation.main.MainActivity;
 import com.saphamrah.customer.presentation.main.MainInteracts;
 import com.saphamrah.customer.presentation.main.MainPresenter;
@@ -67,8 +68,15 @@ public class AdvertiseFragment extends BaseFragment<MainPresenter, FragmentAdver
         viewBinding.adsImageview.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-                startActivity(browserIntent);
+
+                Intent intent = new Intent(requireActivity(), CreateRequestActivity.class);
+                intent.putExtra("sazmanName",model.getSazmanForosh()).putExtra("ccSazmanForosh",model.getCcSazmanforosh());
+                intent.putExtra("advertiseProductCodeKala",model.getCodeKala());
+                startActivity(intent);
+
+
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+//                startActivity(browserIntent);
             }
         });
 

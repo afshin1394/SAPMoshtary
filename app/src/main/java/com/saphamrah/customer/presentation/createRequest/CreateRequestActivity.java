@@ -60,8 +60,10 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     public ActivityCreateRequestBinding rootBinding;
     public Constants.PaymentStates paymentState;
     public String sazmanName;
+    public String codeKala;
     public int ccSazmanForosh;
     public boolean setMarjoee = false;
+    public boolean isAdvertiseObserved;
     CartListener cartListener;
     public static  int  sort_order = 0;
 
@@ -81,9 +83,11 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     protected void initViews() {
         //sazmanName
         sazmanName = (((String) getIntent().getExtras().get("sazmanName")));
-        ccSazmanForosh = (((int) getIntent().getExtras().get("ccSazmanForosh")));
+        ccSazmanForosh = ((int) getIntent().getExtras().get("ccSazmanForosh"));
+        codeKala = (((String) getIntent().getExtras().get("advertiseProductCodeKala")));
         Log.i(TAG, "initViews: "+ccSazmanForosh);
         Log.i(TAG, "initViews: "+sazmanName);
+        Log.i(TAG, "initViews: "+codeKala);
 
         paymentState = Constants.PaymentStates.SHOW_PRODUCTS;
         setProducts();
@@ -264,24 +268,31 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         imageResPomegranate.add(R.drawable.pomegranate_two);
         imageResPomegranate.add(R.drawable.peach_juice_three);
 
+
+        List<Integer> imageResTavakoli = new ArrayList<>();
+        imageResTavakoli.add(R.drawable.tavakoli);
+        imageResTavakoli.add(R.drawable.tavakoli_two);
+
         ProductModel kalaModel = new ProductModel(1,Constants.DELPAZIR,Constants.PASTE, "رب دلپذیر", 14500, 8000, "980702", 500, "1400/5/5","1400/8/5", imageResDelpazir,false,0,0,0,3,6,0,290,"دلپذیر",1);
-        ProductModel kalaModel11 = new ProductModel(11,Constants.DELPAZIR,Constants.SAUCE ,"سس کچاپ دلپذیر - 709 گرم", 12100, 9200, "980702", 500, "1400/5/5","1400/8/5", imageResDelpazirKetchap,false,0,0,0,3,6,0,290,"دلپذیر",1);
-        ProductModel kalaModel12 = new ProductModel(12,Constants.DELPAZIR,Constants.SAUCE, "سس هزار جزیره دلپذیر 454 گرم", 14100, 9010, "980702", 500, "1400/5/5","1400/8/5", imageResDelpazirHezarjazire,false,0,0,0,3,6,0,290,"دلپذیر",1);
-        ProductModel kalaModel13 = new ProductModel(13,Constants.DELPAZIR,Constants.SAUCE, "سس مایونز کم چرب دلپذیر- 460 گرم", 12300, 4000, "980702", 500, "1400/5/5","1400/8/5", imageResDelpazirKamcharb,false,0,0,0,3,6,0,290,"دلپذیر",1);
-        ProductModel kalaModel14 = new ProductModel(14,Constants.DELPAZIR,Constants.CANNED, "خیارشور ویژه دلپذیر - 650 گرم", 12400, 5100, "980702", 500, "1400/5/5","1400/8/5", imageResDelpazirKhiarShour,false,0,0,0,3,6,0,290,"دلپذیر",1);
-        ProductModel kalaModel2 = new ProductModel(2,Constants.MIHAN,Constants.ICE_CREAM, "بستنی سالار", 12400, 10200, "980702", 600,"1400/5/5", "1400/8/5", imageResDelpazir, true,0,0,0,6,12,0,290,"میهن",2);
-        ProductModel kalaModel3 = new ProductModel(3,Constants.MIHAN,Constants.ICE_CREAM, "بستنی زعفرانی", 11000, 8300, "980702", 600,"1400/5/5", "1400/8/5", imageResZaferani, false,0,0,0,2,6,0,250,"میهن",2);
-        ProductModel kalaModel15 = new ProductModel(15,Constants.MIHAN,Constants.ICE_CREAM, "بستنی چوبی پریما دبل میکس بری میهن - 60 گرم", 13000, 8560, "980702", 600,"1400/5/5", "1400/8/5", imageResBerry, false,0,0,0,2,6,0,250,"میهن",2);
-        ProductModel kalaModel16 = new ProductModel(16,Constants.MIHAN,Constants.ICE_CREAM, "بستنی چوبی وانیلا پریما میهن - 80 گرم", 13000, 8100, "980702", 600,"1400/5/5", "1400/8/5", imageResPrima, false,0,0,0,2,6,0,250,"میهن",2);
-        ProductModel kalaModel17 = new ProductModel(17,Constants.MIHAN,Constants.ICE_CREAM, "بستنی موزی میرکس میهن - 85 گرم", 13000, 8040, "980702", 600,"1400/5/5", "1400/8/5", imageResMiracs, false,0,0,0,2,6,0,250,"میهن",2);
-        ProductModel kalaModel18 = new ProductModel(18,Constants.MIHAN,Constants.ICE_CREAM, "بستنی قیفی سوپر کارنیلو میهن - 100 گرم", 13000, 5000, "980702", 600,"1400/5/5", "1400/8/5", imageResQifi, false,0,0,0,2,6,0,250,"میهن",2);
-        ProductModel kalaModel4 = new ProductModel(4,Constants.MAHRAM,Constants.PASTE, "رب مهرام", 19000, 12000, "980702", 600, "1400/5/5","1400/2/5", imageResMahram, false,0,0,0,3,6,0,250,"مهرام",3);
-        ProductModel kalaModel5 = new ProductModel(5,Constants.MIHAN,Constants.ICE_CREAM, "بستنی دبل چاکلت", 14000, 7000, "980702", 600,"1400/5/5", "1400/1/5", imageResDoubleChocolate, false,0,0,0,3,6,0,250,"میهن",2);
-        ProductModel kalaModel6 = new ProductModel(6,Constants.DELPAZIR, Constants.SAUCE,"مایونز دلپذیر", 18300, 9000, "980702", 500,"1400/5/5", "1400/8/5", imageResMayonese, true,0,0,0,2,6,0,0,"دلپذیر",1);
+        ProductModel kalaModel11 = new ProductModel(11,Constants.DELPAZIR,Constants.SAUCE ,"سس کچاپ دلپذیر - 709 گرم", 12100, 9200, "980703", 500, "1400/5/5","1400/8/5", imageResDelpazirKetchap,false,0,0,0,3,6,0,290,"دلپذیر",1);
+        ProductModel kalaModel12 = new ProductModel(12,Constants.DELPAZIR,Constants.SAUCE, "سس هزار جزیره دلپذیر 454 گرم", 14100, 9010, "980704", 500, "1400/5/5","1400/8/5", imageResDelpazirHezarjazire,false,0,0,0,3,6,0,290,"دلپذیر",1);
+        ProductModel kalaModel13 = new ProductModel(13,Constants.DELPAZIR,Constants.SAUCE, "سس مایونز کم چرب دلپذیر- 460 گرم", 12300, 4000, "980705", 500, "1400/5/5","1400/8/5", imageResDelpazirKamcharb,false,0,0,0,3,6,0,290,"دلپذیر",1);
+        ProductModel kalaModel14 = new ProductModel(14,Constants.DELPAZIR,Constants.CANNED, "خیارشور ویژه دلپذیر - 650 گرم", 12400, 5100, "980706", 500, "1400/5/5","1400/8/5", imageResDelpazirKhiarShour,false,0,0,0,3,6,0,290,"دلپذیر",1);
+        ProductModel kalaModel2 = new ProductModel(2,Constants.MIHAN,Constants.ICE_CREAM, "بستنی سالار", 12400, 10200, "980707", 600,"1400/5/5", "1400/8/5", imageResDelpazir, true,0,0,0,6,12,0,290,"میهن",2);
+        ProductModel kalaModel3 = new ProductModel(3,Constants.MIHAN,Constants.ICE_CREAM, "بستنی زعفرانی", 11000, 8300, "980708", 600,"1400/5/5", "1400/8/5", imageResZaferani, false,0,0,0,2,6,0,250,"میهن",2);
+        ProductModel kalaModel15 = new ProductModel(15,Constants.MIHAN,Constants.ICE_CREAM, "بستنی چوبی پریما دبل میکس بری میهن - 60 گرم", 13000, 8560, "980709", 600,"1400/5/5", "1400/8/5", imageResBerry, false,0,0,0,2,6,0,250,"میهن",2);
+        ProductModel kalaModel16 = new ProductModel(16,Constants.MIHAN,Constants.ICE_CREAM, "بستنی چوبی وانیلا پریما میهن - 80 گرم", 13000, 8100, "980712", 600,"1400/5/5", "1400/8/5", imageResPrima, false,0,0,0,2,6,0,250,"میهن",2);
+        ProductModel kalaModel17 = new ProductModel(17,Constants.MIHAN,Constants.ICE_CREAM, "بستنی موزی میرکس میهن - 85 گرم", 13000, 8040, "980722", 600,"1400/5/5", "1400/8/5", imageResMiracs, false,0,0,0,2,6,0,250,"میهن",2);
+        ProductModel kalaModel18 = new ProductModel(18,Constants.MIHAN,Constants.ICE_CREAM, "بستنی قیفی سوپر کارنیلو میهن - 100 گرم", 13000, 5000, "980732", 600,"1400/5/5", "1400/8/5", imageResQifi, false,0,0,0,2,6,0,250,"میهن",2);
+        ProductModel kalaModel4 = new ProductModel(4,Constants.MAHRAM,Constants.PASTE, "رب مهرام", 19000, 12000, "980742", 600, "1400/5/5","1400/2/5", imageResMahram, false,0,0,0,3,6,0,250,"مهرام",3);
+        ProductModel kalaModel20 = new ProductModel(4,Constants.TAVAKOLLI,Constants.MATCH, "کبریت توکلی", 19000, 12000, "980742", 600, "1400/5/5","1400/2/5", imageResTavakoli, false,0,0,0,3,6,0,250,"توکلی",1);
+
+        ProductModel kalaModel5 = new ProductModel(5,Constants.MIHAN,Constants.ICE_CREAM, "بستنی دبل چاکلت", 14000, 7000, "980752", 600,"1400/5/5", "1400/1/5", imageResDoubleChocolate, false,0,0,0,3,6,0,250,"میهن",2);
+        ProductModel kalaModel6 = new ProductModel(6,Constants.DELPAZIR, Constants.SAUCE,"مایونز دلپذیر", 18300, 9000, "980762", 500,"1400/5/5", "1400/8/5", imageResMayonese, true,0,0,0,2,6,0,0,"دلپذیر",1);
 //        ProductModel kalaModel7 = new ProductModel(7, "خیارشور دلپذیر", 19000, 7000, "980702", 600,"1400/5/5", "1400/8/5", imageResKhiarShoor,false,0,0,0,3,6,0,250,"دلپذیر",1);
-        ProductModel kalaModel8 = new ProductModel(8,Constants.MIHAN,Constants.JUICE, "آب سیب", 11000, 9300, "980702", 300,"1400/5/5", "1400/5/5", imageResAppleJuice, false,0,0,0,3,6,0,0,"فروتلند",5);
-        ProductModel kalaModel9 = new ProductModel(9, Constants.MIHAN,Constants.JUICE,"آب هلو", 21000, 9200, "980702", 300, "1400/5/5","1400/7/5", imageResPeachJuice, false,0,0,0,4,6,0,0,"فروتلند",5);
-        ProductModel kalaModel10 = new ProductModel(10,Constants.MIHAN, Constants.JUICE,"آب انار", 12000, 9100, "980702", 300, "1400/5/5","1400/8/1", imageResPomegranate, false,0,0,0,2,6,0,0,"فروتلند",5);
+        ProductModel kalaModel8 = new ProductModel(8,Constants.MIHAN,Constants.JUICE, "آب سیب", 11000, 9300, "980772", 300,"1400/5/5", "1400/5/5", imageResAppleJuice, false,0,0,0,3,6,0,0,"فروتلند",5);
+        ProductModel kalaModel9 = new ProductModel(9, Constants.MIHAN,Constants.JUICE,"آب هلو", 21000, 9200, "980782", 300, "1400/5/5","1400/7/5", imageResPeachJuice, false,0,0,0,4,6,0,0,"فروتلند",5);
+        ProductModel kalaModel10 = new ProductModel(10,Constants.MIHAN, Constants.JUICE,"آب انار", 12000, 9100, "980792", 300, "1400/5/5","1400/8/1", imageResPomegranate, false,0,0,0,2,6,0,0,"فروتلند",5);
         productModelGlobal = new ArrayList<>();
         productModelGlobal.add(kalaModel);
         productModelGlobal.add(kalaModel2);
@@ -300,6 +311,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         productModelGlobal.add(kalaModel16);
         productModelGlobal.add(kalaModel17);
         productModelGlobal.add(kalaModel18);
+        productModelGlobal.add(kalaModel20);
     }
 
     private void setFilters() {
@@ -316,7 +328,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         FilterSortModel filterModelGorohKala = new FilterSortModel(200, 2, 3, "گروه کالا", 0, false,-1);
 
         FilterSortModel filterModel = new FilterSortModel(101, 2, 3, "دلپذیر", 100, false,BRAND);
-        FilterSortModel filterModel2 = new FilterSortModel(102, 2, 3, "مهرام", 100, false,BRAND);
+        FilterSortModel filterModel2 = new FilterSortModel(106, 2, 3, "توکلی", 100, false,BRAND);
         FilterSortModel filterModel3 = new FilterSortModel(103, 2, 3, "لینا", 100, false,BRAND);
         FilterSortModel filterModel4 = new FilterSortModel(104, 2, 3, "کاله", 100, false,BRAND);
 
@@ -327,12 +339,12 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         FilterSortModel filterModel9 = new FilterSortModel(5, 2, 3, "آبمیوه", 200, false,GOROH_KALA);
 //        FilterSortModel filterModel8 = new FilterSortModel(8, 2, 3, "کبریت", 200, false);
 
-        FilterSortModel filterModel10 = new FilterSortModel(Constants.CONSUMER_PRICE_TRACK, 2, 4, "بازه قیمت مصرف کننده", -1, false,CONSUMER_PRICE_TRACK);
+        FilterSortModel filterModel10 = new FilterSortModel(CONSUMER_PRICE_TRACK, 2, 4, "بازه قیمت مصرف کننده", -1, false,CONSUMER_PRICE_TRACK);
 //        FilterSortModel filterModel11 = new FilterSortModel(10, 2, 4, "موجودی", -1, false);
-        FilterSortModel filterModel12 = new FilterSortModel(Constants.SELL_PRICE_TRACK, 2, 4, " بازه قیمت فروش", -1, false,SELL_PRICE_TRACK);
+        FilterSortModel filterModel12 = new FilterSortModel(SELL_PRICE_TRACK, 2, 4, " بازه قیمت خرید", -1, false,SELL_PRICE_TRACK);
 
-        FilterSortModel filterGheymatForosh = new FilterSortModel(MAX_SELL_PRICE, 1, -1, "بیشترین قیمت فروش", 0, false,SORT);
-        FilterSortModel filterGheymatMasrafKonandeh = new FilterSortModel(MIN_SELL_PRICE, 1, -1, "کمترین قیمت فروش", 0, false,SORT);
+        FilterSortModel filterGheymatForosh = new FilterSortModel(MAX_SELL_PRICE, 1, -1, "بیشترین قیمت خرید", 0, false,SORT);
+        FilterSortModel filterGheymatMasrafKonandeh = new FilterSortModel(MIN_SELL_PRICE, 1, -1, "کمترین قیمت خرید", 0, false,SORT);
         FilterSortModel filterTarikh = new FilterSortModel(MAX_CONSUMER_PRICE, 1, -1, "بیشترین قیمت مصرف کننده", 0, false,SORT);
         FilterSortModel filterEngheza = new FilterSortModel(MIN_CONSUMER_PRICE, 1, -1, "کمترین قیمت مصرف کننده", 0, false,SORT);
         filterSortModels.add(filterModelBrand);
@@ -343,8 +355,8 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         filterSortModels.add(filterEngheza);
         filterSortModels.add(filterModel);
         filterSortModels.add(filterModel2);
-        filterSortModels.add(filterModel3);
-        filterSortModels.add(filterModel4);
+//        filterSortModels.add(filterModel3);
+//        filterSortModels.add(filterModel4);
         filterSortModels.add(filterModel5);
         filterSortModels.add(filterModel6);
         filterSortModels.add(filterModel7);
@@ -421,6 +433,15 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
 
     public void updateSortChoice(FilterSortModel model) {
         filterSortModels.get(filterSortModels.indexOf(model)).setEnabled(model.isEnabled());
+    }
+
+    public void removeSortFilters() {
+        Observable.fromIterable(filterSortModels).filter(filterSortModel -> {
+            if (filterSortModel.getFilterSortType() == SORT) {
+                filterSortModel.setEnabled(false);
+            }
+            return true;
+        }).blockingSubscribe();
     }
 
     public interface CartListener {

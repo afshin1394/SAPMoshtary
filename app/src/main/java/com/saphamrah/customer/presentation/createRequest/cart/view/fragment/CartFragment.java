@@ -504,7 +504,9 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
             @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void run() {
-                viewBinding.svDetails.smoothScrollTo(0,(int) viewBinding.tvDiscountTitle.getY());
+                viewBinding.svDetails.smoothScrollTo(0, (int) ScreenUtils.getViewLocationOnScreen(viewBinding.linBonusDiscount)[1]);
+
+//                viewBinding.svDetails.smoothScrollTo(0,(int) viewBinding.tvDiscountTitle.getY());
                 setBottomSheetOnState();
 //                viewBinding.svDetails.scrollTo(0, (int) ScreenUtils.getViewLocationOnScreen(viewBinding.tvDiscountTitle)[1]);
             }
@@ -543,28 +545,30 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
 
     private void setSelectableBonusRecycler() {
         if (activity.getJayezehEntekhabiMojodiModels() != null) {
-            viewBinding.linSelectableBonus.setVisibility(View.VISIBLE);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
-            selectableBonusCartAdapter = new SelectableBonusCartAdapter(context, activity.getJayezehEntekhabiMojodiModels(), new AdapterItemListener<JayezehEntekhabiMojodiModel>() {
-                @Override
-                public void onItemSelect(JayezehEntekhabiMojodiModel model, int position, AdapterAction Action) {
-                    switch (Action) {
-                        case ADD:
-                        case REMOVE:
-                            activity.getJayezehEntekhabiMojodiModels().get(position).setSelectedCount(activity.getJayezehEntekhabiMojodiModels().get(position).getSelectedCount() + 1);
-                            break;
+            if (activity.getJayezehEntekhabiMojodiModels().size() > 0) {
+                viewBinding.linSelectableBonus.setVisibility(View.VISIBLE);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
+                selectableBonusCartAdapter = new SelectableBonusCartAdapter(context, activity.getJayezehEntekhabiMojodiModels(), new AdapterItemListener<JayezehEntekhabiMojodiModel>() {
+                    @Override
+                    public void onItemSelect(JayezehEntekhabiMojodiModel model, int position, AdapterAction Action) {
+                        switch (Action) {
+                            case ADD:
+                            case REMOVE:
+                                activity.getJayezehEntekhabiMojodiModels().get(position).setSelectedCount(activity.getJayezehEntekhabiMojodiModels().get(position).getSelectedCount() + 1);
+                                break;
+                        }
                     }
-                }
-            });
-            viewBinding.RVSelectableBonus.setLayoutManager(linearLayoutManager);
-            viewBinding.RVSelectableBonus.setAdapter(selectableBonusCartAdapter);
-            viewBinding.svDetails.post(new Runnable() {
-                @RequiresApi(api = Build.VERSION_CODES.Q)
-                @Override
-                public void run() {
-                    viewBinding.svDetails.smoothScrollTo(0, (int) ScreenUtils.getViewLocationOnScreen(viewBinding.linSelectableBonus)[1]);
-                }
-            });
+                });
+                viewBinding.RVSelectableBonus.setLayoutManager(linearLayoutManager);
+                viewBinding.RVSelectableBonus.setAdapter(selectableBonusCartAdapter);
+                viewBinding.svDetails.post(new Runnable() {
+                    @RequiresApi(api = Build.VERSION_CODES.Q)
+                    @Override
+                    public void run() {
+                        viewBinding.svDetails.smoothScrollTo(0, (int) ScreenUtils.getViewLocationOnScreen(viewBinding.linSelectableBonus)[1]);
+                    }
+                });
+            }
         }
     }
 

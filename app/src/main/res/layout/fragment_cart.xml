@@ -169,7 +169,7 @@
                             android:layout_gravity="center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/address" />
+                            android:text="@string/addressTahvil" />
                         <View
                             style="@style/devider_gray"/>
                         <Spinner

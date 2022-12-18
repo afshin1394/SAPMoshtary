@@ -3,6 +3,7 @@ package com.saphamrah.customer.presentation.createRequest.filter.view.fragment;
 
 import static com.saphamrah.customer.utils.Constants.BRAND;
 import static com.saphamrah.customer.utils.Constants.CONSUMER_PRICE_TRACK;
+import static com.saphamrah.customer.utils.Constants.FILTER;
 import static com.saphamrah.customer.utils.Constants.GOROH_KALA;
 import static com.saphamrah.customer.utils.Constants.MAX_CONSUMER_PRICE;
 import static com.saphamrah.customer.utils.Constants.MAX_SELL_PRICE;
@@ -129,9 +130,13 @@ public class FilterFragment extends BaseBottomDialogFragment<CreateRequestActivi
 
                 if (sortFilterType == SORT)
                     activity.disableFilters();
+                if (sortFilterType == FILTER)
+                    activity.removeSortFilters();
                 selectedFilterSortModels.addAll(Observable.fromIterable(filterSortModels).filter(filterSortModel -> filterSortModel.isEnabled()).toList().blockingGet());
                 Set<FilterSortModel> filterSortModels = new HashSet<>(selectedFilterSortModels);
+                activity.removeSortFilters();
                 setFragmentResult("filters", filterSortModels);
+
 
                 NavHostFragment.findNavController(FilterFragment.this).navigateUp();
                 Log.i(TAG, "BTNConfirm:" + activity.getFilterSortModels());

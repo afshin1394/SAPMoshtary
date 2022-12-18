@@ -71,7 +71,7 @@ public class ReturnedAdapter extends RecyclerView.Adapter<ReturnedAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView nameCodeKala;
         private TextView shomarehBach;
-        private TextView mablaghForosh;
+        private TextView mablaghKharid;
         private TextView mablaghMarjoee;
         private LinearLayout addMarjoee;
         private LinearLayout addMarjoeeCount;
@@ -85,7 +85,7 @@ public class ReturnedAdapter extends RecyclerView.Adapter<ReturnedAdapter.ViewHo
             super(itemView);
             nameCodeKala = itemView.findViewById(R.id.tv_CodeNameKala);
             shomarehBach = itemView.findViewById(R.id.tv_ShomareBach);
-            mablaghForosh = itemView.findViewById(R.id.tv_MablaghForosh);
+            mablaghKharid = itemView.findViewById(R.id.tv_MablaghKharid);
             mablaghMarjoee = itemView.findViewById(R.id.tv_MablaghMarjoee);
             addMarjoee = itemView.findViewById(R.id.lin_addmarjoee);
             addMarjoeeCount = itemView.findViewById(R.id.lin_addmarjoee_count);
@@ -99,7 +99,7 @@ public class ReturnedAdapter extends RecyclerView.Adapter<ReturnedAdapter.ViewHo
         public void bind(ElamMarjoeeForoshandehModel elamMarjoeeForoshandehModel) {
             nameCodeKala.setText(String.format("%1$s - %2$s",elamMarjoeeForoshandehModel.getCodeKala(),elamMarjoeeForoshandehModel.getNameKala()));
             shomarehBach.setText(String.format("%1$s:%2$s",context.getString(R.string.shomareBach),elamMarjoeeForoshandehModel.getShomarehBach()));
-            mablaghForosh.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghForosh),elamMarjoeeForoshandehModel.getGheymatForosh(),context.getString(R.string.rial)));
+            mablaghKharid.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghKharid),elamMarjoeeForoshandehModel.getGheymatForosh(),context.getString(R.string.rial)));
             mablaghMarjoee.setText(String.format("%1$s:%2$s %3$s",context.getString(R.string.mablaghMarjoee),elamMarjoeeForoshandehModel.getGheymatForosh() * elamMarjoeeForoshandehModel.getTedad3(),context.getString(R.string.rial)));
             addMarjoee.setOnClickListener(view -> {
                 addMarjoeeCount.setVisibility(View.VISIBLE);

@@ -27,7 +27,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/Recycler_filter_sort_choice"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_250sdp"
+                android:layout_height="@dimen/_200sdp"
                 android:orientation="horizontal" />
 
             <LinearLayout

@@ -16,6 +16,7 @@ import static com.saphamrah.customer.utils.Constants.SORT;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
+import android.os.Handler;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -39,6 +41,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
@@ -73,6 +77,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -88,6 +93,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     public static final String TAG = ProductRequestFragment.class.getSimpleName();
     private FilterListAdapter filterAdapter;
     private ProductAdapter productAdapter;
+    LinearLayoutManager linearLayoutManagerProduct;
 
     private List<FilterSortModel> filterSortModels = new ArrayList<>();
     private List<ProductModel> productModels;
@@ -97,6 +103,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
     private BottomSheetBehavior bottomSheetBonusDiscount;
     private BottomSheetBehavior bottomSheetBoxPackNum;
     private ShimmerLoading shimmerLoading = new ShimmerLoading();
+    private int tempIndex;
 
 
     @Override
@@ -311,7 +318,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
 
             List<FilterSortModel> sellPriceTrackFilters = Observable.fromIterable(filterListObserver).filter(filterSortModel -> filterSortModel.getFilterSortType() == SELL_PRICE_TRACK).toList().blockingGet();
 
-            List<ProductModel> filteredBrandProducts = new ArrayList<>();
+            Set<ProductModel> filteredBrandProducts = new HashSet<>();
             for (FilterSortModel filterSortModel : brandFilters) {
                 filteredBrandProducts.addAll(checkForBrand(filterSortModel, filteredList));
             }
@@ -409,10 +416,16 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
             }
 
         });
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        viewBinding.RecyclerProduct.setLayoutManager(linearLayoutManager);
+        linearLayoutManagerProduct = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        viewBinding.RecyclerProduct.setLayoutManager(linearLayoutManagerProduct);
         viewBinding.RecyclerProduct.setAdapter(productAdapter);
         ((SimpleItemAnimator) viewBinding.RecyclerProduct.getItemAnimator()).setSupportsChangeAnimations(false);
+
+        if (!activity.isAdvertiseObserved) {
+            presenter.getProductAdvertise();
+            activity.isAdvertiseObserved = true;
+        }
+
     }
 
 
@@ -695,6 +708,49 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         setProductRecycler();
         setSearch();
         setViews();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onGetProductAdvertise(int position) {
+        for (int i = 0; i < productModels.size(); i++){
+            if (productModels.get(i).getCodeKala().contains(activity.codeKala)){
+                tempIndex = i;
+                viewBinding.RecyclerProduct.smoothScrollToPosition(i);
+                Typeface typeface = getResources().getFont(R.font.iransans);
+
+                new Handler().postDelayed(() -> {
+
+                    if (linearLayoutManagerProduct.findViewByPosition(tempIndex) != null) {
+                    TapTargetView.showFor(requireActivity(),                 // `this` is an Activity
+//                        TapTarget.forView(viewBinding.RecyclerProduct.findViewHolderForAdapterPosition(i).itemView, "This is a target", "We have the best targets, believe me")
+                            TapTarget.forView(Objects.requireNonNull(linearLayoutManagerProduct.findViewByPosition(tempIndex)), "محصول جدید دلپذیر", "با خرید این محصول از تخفبف ویژه برخوردار شوید")
+                                    // All options below are optional
+                                    .outerCircleAlpha(0.96f)
+                                    .outerCircleColor(R.color.colorRed) // Specify the alpha amount for the outer circle
+                                    .targetCircleColor(R.color.colorWhite)   // Specify a color for the target circle
+                                    .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                                    .titleTextColor(R.color.colorWhite)      // Specify the color of the title text
+                                    .descriptionTextSize(10)            // Specify the size (in sp) of the description text
+                                    .textColor(R.color.colorBlue50)            // Specify a color for both the title and description text
+                                    .textTypeface(typeface)  // Specify a typeface for the text
+                                    .dimColor(R.color.colorBlack)            // If set, will dim behind the view with 30% opacity of the given color
+                                    .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                    .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+                                    .tintTarget(false)                   // Whether to tint the target view's color
+                                    .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
+                                    .targetRadius(60),                  // Specify the target radius (in dp)
+                            new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                                @Override
+                                public void onTargetClick(TapTargetView view) {
+                                    super.onTargetClick(view);      // This call is optional
+                                }
+                            });
+                }
+
+                }, 1000);
+            }
+        }
     }
 
 

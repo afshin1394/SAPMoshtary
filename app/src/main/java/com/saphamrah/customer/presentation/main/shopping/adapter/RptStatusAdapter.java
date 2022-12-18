@@ -2,34 +2,41 @@ package com.saphamrah.customer.presentation.main.shopping.adapter;
 
 
 import static com.saphamrah.customer.utils.Constants.ADVERTISEMENT;
-import static com.saphamrah.customer.utils.Constants.FAILED;
+import static com.saphamrah.customer.utils.Constants.*;
 import static com.saphamrah.customer.utils.Constants.SELL;
-import static com.saphamrah.customer.utils.Constants.SUCCESSFUL;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.google.android.material.card.MaterialCardView;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.data.local.RptStatusModel;
+import com.saphamrah.customer.data.local.temp.FilterSortModel;
+import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
+import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RptStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    //    private final OnItemClickListener listener;
     private ArrayList<RptStatusModel> models;
+    private AdapterItemListener<RptStatusModel> listener;
 
-    public RptStatusAdapter(Context context, ArrayList<RptStatusModel> models) {
+    public RptStatusAdapter(Context context, ArrayList<RptStatusModel> models, AdapterItemListener<RptStatusModel> listener) {
         this.context = context;
-//        this.listener = listener;
         this.models = models;
+        this.listener = listener;
     }
 
     @NonNull
@@ -92,6 +99,7 @@ public class RptStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private TextView noePardakhtTV;
         private ImageView statusIV;
         private SeekBar seekBar;
+        private Button laqveDarkhastBtn;
 
         public ViewHolderSuccessful(View view) {
             super(view);
@@ -103,6 +111,7 @@ public class RptStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             noePardakhtTV = view.findViewById(R.id.textview_noe_pardakht);
             statusIV = view.findViewById(R.id.imageview_status);
             seekBar = view.findViewById(R.id.seekbar);
+            laqveDarkhastBtn = view.findViewById(R.id.btn_laqve_darkhast);
         }
 
 
@@ -118,18 +127,22 @@ public class RptStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                 case 1:
                     seekBar.setProgress(0);
+                    laqveDarkhastBtn.setVisibility(View.VISIBLE);
                     resId = R.drawable.first_confirm_rpt;
                     break;
                 case 2:
                     seekBar.setProgress(1);
+                    laqveDarkhastBtn.setVisibility(View.GONE);
                     resId = R.drawable.factor_rpt;
                     break;
                 case 3:
                     seekBar.setProgress(2);
+                    laqveDarkhastBtn.setVisibility(View.GONE);
                     resId = R.drawable.delivir_rpt;
                     break;
                 case 4:
                     seekBar.setProgress(3);
+                    laqveDarkhastBtn.setVisibility(View.GONE);
                     resId = R.drawable.final_confirm_rpt;
                     break;
 
@@ -140,6 +153,9 @@ public class RptStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     .into(statusIV);
 
             seekBar.setOnTouchListener((v, event) -> true);
+            laqveDarkhastBtn.setOnClickListener(view -> {
+                listener.onItemSelect(models.get(position),position, AdapterAction.REMOVE);
+            });
 
         }
     }
@@ -151,6 +167,7 @@ public class RptStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private TextView noePardakhtTV;
         private TextView elateAdamDarkhastTV;
         private SeekBar seekBar;
+        private MaterialCardView materialCardView;
 
         public ViewHolderFailed(View view) {
             super(view);
@@ -162,6 +179,7 @@ public class RptStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             noePardakhtTV = view.findViewById(R.id.textview_noe_pardakht);
             elateAdamDarkhastTV = view.findViewById(R.id.textview_elate_adamdarkhast);
             seekBar = view.findViewById(R.id.seekbar);
+            materialCardView = view.findViewById(R.id.material_cardview);
         }
 
         public void bind(int position){
@@ -172,8 +190,24 @@ public class RptStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             noePardakhtTV.setText(models.get(position).getNoePardakht());
             elateAdamDarkhastTV.setText(models.get(position).getElateAdamDarkhast());
 
+            switch (models.get(position).getStatusCode()){
+                case FAILED_FROM_SERVER:
+                    materialCardView.setStrokeColor(context.getResources().getColor(R.color.colorBadStatus));
+                    break;
+                case FAILED_BY_USER:
+                    materialCardView.setStrokeColor(context.getResources().getColor(R.color.colorOrange400));
+                    break;
+            }
+
             seekBar.setOnTouchListener((v, event) -> true);
 
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setDataChanged(ArrayList<RptStatusModel> models, AdapterItemListener<RptStatusModel> listener){
+        this.models = models;
+        this.listener = listener;
+        notifyDataSetChanged();
     }
 }

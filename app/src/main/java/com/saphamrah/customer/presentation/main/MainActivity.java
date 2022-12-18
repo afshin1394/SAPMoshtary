@@ -177,7 +177,10 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
         Bitmap bm = BitmapFactory.decodeResource(getResources(), (model.getImageRes()));
 //        Uri uri = ImageUtils.convertBitmapToUri(context,"sazmanIcon",bm);
 //        Log.i(TAG, "onItemSelect: "+uri);
-        startActivity(new Intent(MainActivity.this, CreateRequestActivity.class).putExtra("sazmanName",model.getName()).putExtra("ccSazmanForosh",Integer.parseInt(model.getType())));
+        Intent intent = new Intent(MainActivity.this, CreateRequestActivity.class);
+        intent.putExtra("sazmanName",model.getName()).putExtra("ccSazmanForosh",Integer.parseInt(model.getType()));
+        intent.putExtra("advertiseProductCodeKala","554893");
+        startActivity(intent);
         closeBottomSheetBehavior();
     }
 }

@@ -7,11 +7,17 @@ public class AdvertiseModel  implements Serializable {
     private String imageUrl;
     private String link;
     private String title;
+    private String codeKala;
+    private int ccSazmanforosh;
+    private String sazmanForosh;
 
-    public AdvertiseModel(String imageUrl, String link, String title) {
+    public AdvertiseModel(String imageUrl, String link, String title, String codeKala, int ccSazmanforosh, String sazmanForosh) {
         this.imageUrl = imageUrl;
         this.link = link;
         this.title = title;
+        this.codeKala = codeKala;
+        this.ccSazmanforosh = ccSazmanforosh;
+        this.sazmanForosh = sazmanForosh;
     }
 
     public String getImageUrl() {
@@ -36,5 +42,29 @@ public class AdvertiseModel  implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getCodeKala() {
+        return codeKala;
+    }
+
+    public void setCodeKala(String codeKala) {
+        this.codeKala = codeKala;
+    }
+
+    public int getCcSazmanforosh() {
+        return ccSazmanforosh;
+    }
+
+    public void setCcSazmanforosh(int ccSazmanforosh) {
+        this.ccSazmanforosh = ccSazmanforosh;
+    }
+
+    public String getSazmanForosh() {
+        return sazmanForosh;
+    }
+
+    public void setSazmanForosh(String sazmanForosh) {
+        this.sazmanForosh = sazmanForosh;
     }
 }

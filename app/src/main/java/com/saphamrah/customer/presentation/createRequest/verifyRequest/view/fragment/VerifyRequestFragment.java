@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseFragment;
 import com.saphamrah.customer.data.local.temp.BonusModel;
@@ -35,6 +37,7 @@ import com.saphamrah.customer.presentation.createRequest.verifyRequest.view.adap
 import com.saphamrah.customer.presentation.createRequest.verifyRequest.view.adapter.MarjoeePishFaktorAdapter;
 import com.saphamrah.customer.presentation.createRequest.verifyRequest.view.adapter.TakhfifPishFaktorAdatper;
 import com.saphamrah.customer.utils.Constants;
+import com.saphamrah.customer.utils.customViews.CustomSnackBar;
 import com.saphamrah.customer.utils.customViews.DrawingView;
 
 import java.io.File;
@@ -95,7 +98,14 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
 
 
         takeScreenshotOfFaktor(new Random().nextInt(1000));
+        CustomSnackBar.showSnack(requireContext(), getView(), getString(R.string.saveRequest), Snackbar.LENGTH_SHORT, "").show();
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                        activity.finish();
+            }
+        },1000);
 
 //        presenter.saveRequest(activity.getProductModelGlobal(),activity.getDiscountModelsGlobal(),activity.getBonusModelsGlobal(),activity.getJayezehEntekhabiMojodiModels(),activity.getElamMarjoeeForoshandehModelsGlobal());
 //        activity.finish();
@@ -151,16 +161,15 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
             mPath = mPath + typeStr + ccDarkhastFaktor + ".jpg";
 
 
-            Log.d("Printactivity","screen charkareh");
-            viewBinding.getRoot().setDrawingCacheEnabled(true);
+                Log.d("Printactivity","screen charkareh");
+            viewBinding.layMain.setDrawingCacheEnabled(true);
 
-            viewBinding.getRoot().measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+            viewBinding.layMain.getChildAt(1).measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
-            viewBinding.getRoot().layout(0, 0, viewBinding.getRoot().getMeasuredWidth(), viewBinding.getRoot().getMeasuredHeight());
-
-            DarkhastImage = getBitmapFromView(viewBinding.getRoot(), viewBinding.getRoot().getWidth(), viewBinding.getRoot().getHeight());
-            viewBinding.getRoot().setDrawingCacheEnabled(false);
+            viewBinding.layMain.layout(0, 0, viewBinding.layMain.getMeasuredWidth(), viewBinding.layMain.getMeasuredHeight() - viewBinding.btnApply.getMeasuredHeight() );
+            DarkhastImage = getBitmapFromView(viewBinding.layMain, viewBinding.layMain.getWidth(), viewBinding.layMain.getHeight() -viewBinding.btnApply.getHeight() );
+            viewBinding.layMain.setDrawingCacheEnabled(false);
 
             File imageFile = new File(mPath);
             Log.i(TAG, "takeScreenshotOfFaktor: "+mPath);
