@@ -115,22 +115,26 @@ public class FilterFragment extends BaseBottomDialogFragment<CreateRequestActivi
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
+                Log.i(TAG, "BTNConfirm:" + activity.getFilterSortModels());
                 if (sortFilterType == 1)
                     filterSortModels = new ArrayList<>(sortChoiceAdapter.getFilterSortList());
                 else
                     filterSortModels = new ArrayList<>(filterChoiceAdapter.getFilterSortList());
 
+                Log.i(TAG, "BTNConfirm:" + activity.getFilterSortModels());
                 FilterSortModel[] array = new FilterSortModel[filterSortModels.size()];
                 for (int i = 0; i < filterSortModels.size(); i++)
                     array[i] = filterSortModels.get(i);
 
-                Log.i(TAG, "onBackPressed222: " + selectedFilterSortModels);
+
                 if (sortFilterType == SORT)
                     activity.disableFilters();
                 selectedFilterSortModels.addAll(Observable.fromIterable(filterSortModels).filter(filterSortModel -> filterSortModel.isEnabled()).toList().blockingGet());
                 Set<FilterSortModel> filterSortModels = new HashSet<>(selectedFilterSortModels);
                 setFragmentResult("filters", filterSortModels);
+
                 NavHostFragment.findNavController(FilterFragment.this).navigateUp();
+                Log.i(TAG, "BTNConfirm:" + activity.getFilterSortModels());
             }
         });
 
@@ -148,6 +152,7 @@ public class FilterFragment extends BaseBottomDialogFragment<CreateRequestActivi
     private void setRecycler(int sortFilterType) {
 
         filterSortModels = activity.getFilterSortModels();
+        Log.i(TAG, "setRecycler: "+activity.getFilterSortModels());
         List<FilterSortModel> filterSortModelsTitle = filterSortModels.stream().filter(filterSortModel -> filterSortModel.getType() == 2 && filterSortModel.getFilterType() == 3 && filterSortModel.getParent_id() == 0).collect(Collectors.toList());
         List<FilterSortModel> sortList = Observable.fromIterable(filterSortModels).filter(new Predicate<FilterSortModel>() {
             @Override
@@ -165,7 +170,8 @@ public class FilterFragment extends BaseBottomDialogFragment<CreateRequestActivi
             sortChoiceAdapter = new SortChoiceAdapter(context, sortList, new AdapterItemListener<FilterSortModel>() {
                 @Override
                 public void onItemSelect(FilterSortModel model, int position, AdapterAction Action) {
-
+                    activity.updateSortChoice(model);
+                    Log.i(TAG, "setRecycler: "+activity.getFilterSortModels());
                     if (!selectedFilterSortModels.contains(model) && model.isEnabled())
                     {
                         for (int i = 0; i < selectedFilterSortModels.size(); i++) {
@@ -176,7 +182,7 @@ public class FilterFragment extends BaseBottomDialogFragment<CreateRequestActivi
                         }
                         selectedFilterSortModels.add(model);
                     }
-
+                    Log.i(TAG, "setRecycler: "+activity.getFilterSortModels());
                 }
             });
 

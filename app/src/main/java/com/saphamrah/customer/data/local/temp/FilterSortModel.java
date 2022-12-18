@@ -178,4 +178,20 @@ public class FilterSortModel implements Parcelable , Comparable<FilterSortModel>
         else
             return -1;
     }
+
+    @Override
+    public String toString() {
+        return "FilterSortModel{" +
+                "id=" + id +
+                ", type=" + type +
+                ", filterType=" + filterType +
+                ", name='" + name + '\'' +
+                ", parent_id=" + parent_id +
+                ", isEnabled=" + isEnabled +
+                ", isExpanded=" + isExpanded +
+                ", maxValue=" + maxValue +
+                ", minValue=" + minValue +
+                ", filterSortType=" + filterSortType +
+                '}';
+    }
 }

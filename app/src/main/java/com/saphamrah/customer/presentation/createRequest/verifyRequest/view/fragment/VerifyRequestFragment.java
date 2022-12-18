@@ -151,7 +151,7 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
             mPath = mPath + typeStr + ccDarkhastFaktor + ".jpg";
 
 
-                Log.d("Printactivity","screen charkareh");
+            Log.d("Printactivity","screen charkareh");
             viewBinding.getRoot().setDrawingCacheEnabled(true);
 
             viewBinding.getRoot().measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),

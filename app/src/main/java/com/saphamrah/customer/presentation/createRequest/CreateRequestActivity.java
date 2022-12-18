@@ -360,7 +360,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     }
 
     public void disableFilters(){
-        Observable.fromIterable(filterSortModels).filter(filterSortModel -> filterSortModel.getFilterType() != SORT).map(filterSortModel -> {
+        Observable.fromIterable(filterSortModels).filter(filterSortModel -> filterSortModel.getFilterSortType() != SORT).map(filterSortModel -> {
             filterSortModel.setEnabled(false);
             return filterSortModel;
         }).blockingSubscribe();
@@ -417,6 +417,10 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public void updateSortChoice(FilterSortModel model) {
+        filterSortModels.get(filterSortModels.indexOf(model)).setEnabled(model.isEnabled());
     }
 
     public interface CartListener {
