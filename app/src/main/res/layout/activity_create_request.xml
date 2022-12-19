@@ -13,10 +13,38 @@
      android:layout_width="match_parent"
      android:layout_height="match_parent"
      android:elevation="@dimen/_120sdp"
+
      >
+     <FrameLayout
+         android:id="@+id/frm_cart"
+         android:visibility="gone"
+         android:layout_width="wrap_content"
+         android:elevation="@dimen/_400sdp"
+         android:layout_height="wrap_content">
+     <RelativeLayout
+         android:id="@+id/rel_item"
+         android:layout_width="@dimen/_18sdp"
+         android:layout_height="@dimen/_18sdp"
+         android:background="@drawable/green_circle_two"
+         android:layout_marginLeft="@dimen/_34sdp"
+         android:elevation="@dimen/_49sdp"
+
+
+         >
+
+         <TextView
+             android:id="@+id/itemCount"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_centerInParent="true"
+             android:layout_marginBottom="-8dp"
+             android:gravity="center"
+
+
+             android:text="1000"
+             android:textSize="@dimen/_9ssp" />
+     </RelativeLayout>
     <LinearLayout
-        android:id="@+id/lin_cart"
-        android:visibility="gone"
         android:background="@drawable/quarter_circle"
         android:layout_width="wrap_content"
         android:layout_marginTop="-2dp"
@@ -35,6 +63,7 @@
             />
 
     </LinearLayout>
+     </FrameLayout>
          <androidx.fragment.app.FragmentContainerView
              android:name="androidx.navigation.fragment.NavHostFragment"
              app:navGraph="@navigation/nav_create_request"

@@ -103,7 +103,7 @@ public class CartFragment extends BaseFragment<CartInteractor.PresenterOps, Frag
     @Override
     protected void initViews() {
         check = 0;
-        activity.rootBinding.linCart.setVisibility(View.GONE);
+        activity.rootBinding.frmCart.setVisibility(View.GONE);
         productModels = Observable.fromIterable(activity.getProductModelGlobal()).filter(productModel -> productModel.getOrderCount() > 0).toList().blockingGet();
         setProductRecycler();
         if (!activity.setMarjoee)

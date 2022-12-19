@@ -86,7 +86,7 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
         initMarjoee();
         initJayezeh();
 
-        viewBinding.imgClearSign.setOnClickListener(v -> drawingView.clearCanvas());
+//        viewBinding.imgClearSign.setOnClickListener(v -> drawingView.clearCanvas());
         viewBinding.btnApply.setOnClickListener(v -> checkSaveSignPic());
 
     }
@@ -161,7 +161,7 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
             mPath = mPath + typeStr + ccDarkhastFaktor + ".jpg";
 
 
-                Log.d("Printactivity","screen charkareh");
+            Log.d("Printactivity","screen charkareh");
             viewBinding.layMain.setDrawingCacheEnabled(true);
 
             viewBinding.layMain.getChildAt(1).measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
@@ -187,21 +187,7 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
         }
     }
 
-    public static Bitmap saveBitmapFromView(Context context,int id,View v) {
-        Bitmap b = Bitmap.createBitmap(v.getWidth() , v.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(b);
-        v.draw(c);
-        Log.i(TAG, "loadBitmapFromView: "+context.getFilesDir());
-        File file = new File(context.getFilesDir(), "ScreenShot"+id+".jpg"); // the File to save , append increasing numeric counter to prevent files from getting overwritten.
 
-        try (FileOutputStream out = new FileOutputStream(file)) {
-            b.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return b;
-    }
 
     private void initJayezeh() {
         bonusModelsGlobal = activity.getBonusModelsGlobal();
@@ -321,6 +307,6 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(5);
         drawingView = new DrawingView(getContext(), mPaint);
-        viewBinding.laySign.addView(drawingView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//        viewBinding.laySign.addView(drawingView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     }
 }

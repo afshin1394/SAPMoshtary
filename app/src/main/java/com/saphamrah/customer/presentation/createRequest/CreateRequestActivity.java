@@ -15,10 +15,7 @@ import androidx.annotation.RequiresApi;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +25,6 @@ import com.saphamrah.customer.base.BaseActivity;
 import com.saphamrah.customer.base.BasePermissionModel;
 import com.saphamrah.customer.data.local.db.SapDatabase;
 import com.saphamrah.customer.data.local.temp.BonusModel;
-import com.saphamrah.customer.data.local.temp.DarkhastFaktorJayezehTakhfifModel;
 import com.saphamrah.customer.data.local.temp.DiscountModel;
 import com.saphamrah.customer.data.local.temp.ElamMarjoeeForoshandehModel;
 import com.saphamrah.customer.data.local.temp.FilterCategoryModel;
@@ -36,7 +32,6 @@ import com.saphamrah.customer.data.local.temp.FilterSortModel;
 import com.saphamrah.customer.data.local.temp.JayezehEntekhabiMojodiModel;
 import com.saphamrah.customer.data.local.temp.ProductModel;
 import com.saphamrah.customer.databinding.ActivityCreateRequestBinding;
-import com.saphamrah.customer.presentation.createRequest.filter.view.fragment.FilterFragment;
 import com.saphamrah.customer.utils.Constants;
 
 import java.util.ArrayList;
@@ -44,8 +39,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 
 public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.PresenterOps, ActivityCreateRequestBinding>   {
@@ -106,7 +99,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
 
     @Override
     public void onPermission(ArrayList<BasePermissionModel> basePermissionModels) {
-        viewBinding.linCart.setOnClickListener(new View.OnClickListener() {
+        viewBinding.frmCart.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
@@ -146,16 +139,17 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
     public void checkCart(boolean showCartIcon) {
 
         boolean stuffInCart = Observable.fromIterable(productModelGlobal).any(productModel -> productModel.getBoxCount()>0 || productModel.getPackCount()>0 || productModel.getNumCount()>0).blockingGet();
-
+        int itemsInCart = Observable.fromIterable(productModelGlobal).filter(productModel -> productModel.getBoxCount()>0 || productModel.getPackCount()>0 || productModel.getNumCount()>0).toList().blockingGet().size();
         Log.i(TAG, "checkCart: "+stuffInCart);
         if (stuffInCart) {
             if (showCartIcon) {
-                viewBinding.linCart.setVisibility(View.VISIBLE);
+                viewBinding.frmCart.setVisibility(View.VISIBLE);
+                viewBinding.itemCount.setText(String.valueOf(itemsInCart));
             } else {
-                viewBinding.linCart.setVisibility(View.GONE);
+                viewBinding.frmCart.setVisibility(View.GONE);
             }
         }else{
-            viewBinding.linCart.setVisibility(View.GONE);
+            viewBinding.frmCart.setVisibility(View.GONE);
         }
     }
 
@@ -337,6 +331,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         FilterSortModel filterModel7 = new FilterSortModel(2, 2, 3, "سس", 200, false,GOROH_KALA);
         FilterSortModel filterModel8 = new FilterSortModel(4, 2, 3, "بستنی", 200, false,GOROH_KALA);
         FilterSortModel filterModel9 = new FilterSortModel(5, 2, 3, "آبمیوه", 200, false,GOROH_KALA);
+        FilterSortModel filterModel19 = new FilterSortModel(6, 2, 3, "کبریت", 200, false,GOROH_KALA);
 //        FilterSortModel filterModel8 = new FilterSortModel(8, 2, 3, "کبریت", 200, false);
 
         FilterSortModel filterModel10 = new FilterSortModel(CONSUMER_PRICE_TRACK, 2, 4, "بازه قیمت مصرف کننده", -1, false,CONSUMER_PRICE_TRACK);
@@ -364,6 +359,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         filterSortModels.add(filterModel10);
 //        filterSortModels.add(filterModel11);
         filterSortModels.add(filterModel12);
+        filterSortModels.add(filterModel19);
 
     }
 
@@ -435,7 +431,7 @@ public class CreateRequestActivity extends BaseActivity<CreateRequestInteractor.
         filterSortModels.get(filterSortModels.indexOf(model)).setEnabled(model.isEnabled());
     }
 
-    public void removeSortFilters() {
+    public void disableSort() {
         Observable.fromIterable(filterSortModels).filter(filterSortModel -> {
             if (filterSortModel.getFilterSortType() == SORT) {
                 filterSortModel.setEnabled(false);

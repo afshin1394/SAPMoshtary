@@ -92,10 +92,12 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
     {
         if (productModel.getOrderCount() > 0) {
             viewBinding.btmShtPurchase.linPurchase.setVisibility(View.GONE);
+            viewBinding.btmShtPurchase.trashIv.setVisibility(View.VISIBLE);
             viewBinding.btmShtPurchase.linPurchaseCount.setVisibility(View.VISIBLE);
             openCartonBastehAdadBottomSheet(productModel);
         } else {
             viewBinding.btmShtPurchase.linPurchase.setVisibility(View.VISIBLE);
+            viewBinding.btmShtPurchase.trashIv.setVisibility(View.INVISIBLE);
             viewBinding.btmShtPurchase.linPurchaseCount.setVisibility(View.GONE);
             viewBinding.btmShtPurchase.cvTxtConsumerPrice.setVisibility(View.INVISIBLE);
         }
@@ -291,6 +293,11 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
                     }
                     viewBinding.btmShtPurchase.tvQuantityCarton.setText("");
                     viewBinding.btmShtPurchase.tvQuantityCarton.setHint(getString(R.string.carton));
+                    viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("مبلغ سفارش: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
+                    if (productModel.getOrderCount() == 0) {
+                        viewBinding.btmShtPurchase.cvTxtConsumerPrice.setVisibility(View.INVISIBLE);
+                        viewBinding.btmShtPurchase.trashIv.setVisibility(View.INVISIBLE);
+                    }
                 }
                 activity.checkCart(true);
 
@@ -316,6 +323,11 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
                     }
                     viewBinding.btmShtPurchase.tvQuantityBasteh.setText("");
                     viewBinding.btmShtPurchase.tvQuantityBasteh.setHint(getString(R.string.basteh));
+                    viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("مبلغ سفارش: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
+                    if (productModel.getOrderCount() == 0) {
+                        viewBinding.btmShtPurchase.cvTxtConsumerPrice.setVisibility(View.INVISIBLE);
+                        viewBinding.btmShtPurchase.trashIv.setVisibility(View.INVISIBLE);
+                    }
                 }
                 activity.checkCart(true);
 
@@ -341,6 +353,13 @@ public class AddItemToCartFragment extends BaseFragment<AddItemToCartInteractor.
                     }
                     viewBinding.btmShtPurchase.tvQuantityAdad.setText("");
                     viewBinding.btmShtPurchase.tvQuantityAdad.setHint(getString(R.string.adad));
+                    viewBinding.btmShtPurchase.txtConsumerPrice.setText(String.format("مبلغ سفارش: "+"%1$s %2$s", productModel.getSellPrice() * productModel.getOrderCount(), getString(R.string.rial)));
+                    if (productModel.getOrderCount() == 0) {
+                        viewBinding.btmShtPurchase.cvTxtConsumerPrice.setVisibility(View.INVISIBLE);
+                        viewBinding.btmShtPurchase.trashIv.setVisibility(View.INVISIBLE);
+                    }
+
+
                 }
                 activity.checkCart(true);
 

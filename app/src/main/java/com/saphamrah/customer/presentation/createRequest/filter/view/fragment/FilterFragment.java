@@ -1,16 +1,7 @@
 package com.saphamrah.customer.presentation.createRequest.filter.view.fragment;
 
 
-import static com.saphamrah.customer.utils.Constants.BRAND;
-import static com.saphamrah.customer.utils.Constants.CONSUMER_PRICE_TRACK;
 import static com.saphamrah.customer.utils.Constants.FILTER;
-import static com.saphamrah.customer.utils.Constants.GOROH_KALA;
-import static com.saphamrah.customer.utils.Constants.MAX_CONSUMER_PRICE;
-import static com.saphamrah.customer.utils.Constants.MAX_SELL_PRICE;
-import static com.saphamrah.customer.utils.Constants.MIN_CONSUMER_PRICE;
-import static com.saphamrah.customer.utils.Constants.MIN_SELL_PRICE;
-import static com.saphamrah.customer.utils.Constants.SELL;
-import static com.saphamrah.customer.utils.Constants.SELL_PRICE_TRACK;
 import static com.saphamrah.customer.utils.Constants.SORT;
 
 import android.content.Context;
@@ -31,7 +22,6 @@ import android.view.ViewGroup;
 
 import com.saphamrah.customer.R;
 import com.saphamrah.customer.base.BaseBottomDialogFragment;
-import com.saphamrah.customer.data.local.temp.FilterCategoryModel;
 import com.saphamrah.customer.data.local.temp.FilterSortModel;
 import com.saphamrah.customer.presentation.createRequest.CreateRequestActivity;
 import com.saphamrah.customer.presentation.createRequest.filter.interactor.FilterMVPInteractor;
@@ -41,7 +31,6 @@ import com.saphamrah.customer.presentation.createRequest.filter.view.adapter.Fil
 import com.saphamrah.customer.presentation.createRequest.filter.view.adapter.SortChoiceAdapter;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
-import com.saphamrah.customer.utils.Constants;
 
 
 import java.util.ArrayList;
@@ -51,7 +40,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import io.reactivex.Observable;
-import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 
 
@@ -131,10 +119,9 @@ public class FilterFragment extends BaseBottomDialogFragment<CreateRequestActivi
                 if (sortFilterType == SORT)
                     activity.disableFilters();
                 if (sortFilterType == FILTER)
-                    activity.removeSortFilters();
+                    activity.disableSort();
                 selectedFilterSortModels.addAll(Observable.fromIterable(filterSortModels).filter(filterSortModel -> filterSortModel.isEnabled()).toList().blockingGet());
                 Set<FilterSortModel> filterSortModels = new HashSet<>(selectedFilterSortModels);
-                activity.removeSortFilters();
                 setFragmentResult("filters", filterSortModels);
 
 

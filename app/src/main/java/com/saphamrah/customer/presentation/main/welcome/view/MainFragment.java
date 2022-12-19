@@ -228,10 +228,10 @@ public class MainFragment extends BaseFragment<MainPresenter, FragmentMainBindin
 //        advertiseModels.add(new AdvertiseModel("@drawable/bastani", "http://www.mihan-food.com/", "."));
 
 
-        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
+        baseSazmanForoshModels.add(new LocationDbModel("پخش پگاه","1",R.drawable.logo_pegah));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_domino));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
-        baseSazmanForoshModels.add(new LocationDbModel("مهرام","3",R.drawable.logo_mahram));
+        baseSazmanForoshModels.add(new LocationDbModel("پخش پرنیان","3",R.drawable.logo_parnian));
         baseSazmanForoshModels.add(new LocationDbModel("لینا","7",R.drawable.logo_lina));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
 //        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));

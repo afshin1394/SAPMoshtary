@@ -40,15 +40,15 @@
         android:gravity="center"
         android:background="@drawable/table_content_black_cell_bg" />
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:id="@+id/lblFee"
-        android:textStyle="bold"
-        android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_10ssp"
-        android:gravity="center"
-        android:background="@drawable/table_content_black_cell_bg" />
+<!--    <TextView-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_weight="2"-->
+<!--        android:id="@+id/lblFee"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textColor="@color/colorBlack"-->
+<!--        android:textSize="@dimen/_10ssp"-->
+<!--        android:gravity="center"-->
+<!--        android:background="@drawable/table_content_black_cell_bg" />-->
 
 </LinearLayout>

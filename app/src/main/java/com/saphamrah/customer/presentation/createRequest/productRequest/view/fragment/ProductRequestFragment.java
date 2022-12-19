@@ -703,6 +703,7 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
         productModels = activity.getProductModelGlobal();
         productModelsTemp = new ArrayList<>();
         filteredProductModelsTemp = new HashSet<>();
+        filteredProductModelsTemp.addAll(productModels);
         productModelsTemp.addAll(productModels);
         setFilterRecycler();
         setProductRecycler();
@@ -722,31 +723,31 @@ public class ProductRequestFragment extends BaseFragment<ProductRequestMVPPresen
                 new Handler().postDelayed(() -> {
 
                     if (linearLayoutManagerProduct.findViewByPosition(tempIndex) != null) {
-                    TapTargetView.showFor(requireActivity(),                 // `this` is an Activity
+                        TapTargetView.showFor(requireActivity(),                 // `this` is an Activity
 //                        TapTarget.forView(viewBinding.RecyclerProduct.findViewHolderForAdapterPosition(i).itemView, "This is a target", "We have the best targets, believe me")
-                            TapTarget.forView(Objects.requireNonNull(linearLayoutManagerProduct.findViewByPosition(tempIndex)), "محصول جدید دلپذیر", "با خرید این محصول از تخفبف ویژه برخوردار شوید")
-                                    // All options below are optional
-                                    .outerCircleAlpha(0.96f)
-                                    .outerCircleColor(R.color.colorRed) // Specify the alpha amount for the outer circle
-                                    .targetCircleColor(R.color.colorWhite)   // Specify a color for the target circle
-                                    .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                                    .titleTextColor(R.color.colorWhite)      // Specify the color of the title text
-                                    .descriptionTextSize(10)            // Specify the size (in sp) of the description text
-                                    .textColor(R.color.colorBlue50)            // Specify a color for both the title and description text
-                                    .textTypeface(typeface)  // Specify a typeface for the text
-                                    .dimColor(R.color.colorBlack)            // If set, will dim behind the view with 30% opacity of the given color
-                                    .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                    .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
-                                    .tintTarget(false)                   // Whether to tint the target view's color
-                                    .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
-                                    .targetRadius(60),                  // Specify the target radius (in dp)
-                            new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
-                                @Override
-                                public void onTargetClick(TapTargetView view) {
-                                    super.onTargetClick(view);      // This call is optional
-                                }
-                            });
-                }
+                                TapTarget.forView(Objects.requireNonNull(linearLayoutManagerProduct.findViewByPosition(tempIndex)), "محصول جدید دلپذیر", "با خرید این محصول از تخفبف ویژه برخوردار شوید")
+                                        // All options below are optional
+                                        .outerCircleAlpha(0.96f)
+                                        .outerCircleColor(R.color.colorRed) // Specify the alpha amount for the outer circle
+                                        .targetCircleColor(R.color.colorWhite)   // Specify a color for the target circle
+                                        .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                                        .titleTextColor(R.color.colorWhite)      // Specify the color of the title text
+                                        .descriptionTextSize(10)            // Specify the size (in sp) of the description text
+                                        .textColor(R.color.colorBlue50)            // Specify a color for both the title and description text
+                                        .textTypeface(typeface)  // Specify a typeface for the text
+                                        .dimColor(R.color.colorBlack)            // If set, will dim behind the view with 30% opacity of the given color
+                                        .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                        .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+                                        .tintTarget(false)                   // Whether to tint the target view's color
+                                        .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
+                                        .targetRadius(60),                  // Specify the target radius (in dp)
+                                new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                                    @Override
+                                    public void onTargetClick(TapTargetView view) {
+                                        super.onTargetClick(view);      // This call is optional
+                                    }
+                                });
+                    }
 
                 }, 1000);
             }

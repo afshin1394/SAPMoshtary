@@ -86,15 +86,17 @@ public class MainActivity extends BaseActivity<MainInteracts.PresenterOps, Activ
 
     private void makeSazmanForoshBottomSheet() {
         List<LocationDbModel> baseSazmanForoshModels = new ArrayList<>();
-        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
+
+        baseSazmanForoshModels.add(new LocationDbModel("پخش پگاه","1",R.drawable.logo_pegah));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_domino));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
-        baseSazmanForoshModels.add(new LocationDbModel("مهرام","3",R.drawable.logo_mahram));
+        baseSazmanForoshModels.add(new LocationDbModel("پخش پرنیان","3",R.drawable.logo_parnian));
         baseSazmanForoshModels.add(new LocationDbModel("لینا","7",R.drawable.logo_lina));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
 //        baseSazmanForoshModels.add(new LocationDbModel("دلپذیر","1",R.drawable.logo_delpazir));
         baseSazmanForoshModels.add(new LocationDbModel("کاله","8",R.drawable.logo_kalleh));
 //        baseSazmanForoshModels.add(new LocationDbModel("میهن","2",R.drawable.logo_mihan));
+
 
 
         divider =

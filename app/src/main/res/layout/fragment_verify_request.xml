@@ -616,17 +616,7 @@
                             android:textColor="@color/colorWhite"
                             android:textSize="@dimen/FontSize14" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="2"
-                            android:background="@drawable/table_header_cell_bg"
-                            android:gravity="center"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="5dp"
-                            android:text="@string/mablagh"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/FontSize14" />
+
                     </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -861,106 +851,10 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start|center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/lblSumMablaghPardakht"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:background="@drawable/table_content_black_cell_bg"
-                            android:fontFamily="@font/iransans"
-                            android:gravity="center"
-                            android:text="@string/sumPaid"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/_10ssp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/txtSumMablaghPardakht"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:background="@drawable/table_content_black_cell_bg"
-                            android:fontFamily="@font/iransans"
-                            android:gravity="center"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/_10ssp"
-                            android:textStyle="bold" />
 
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start|center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/lblSumMablaghMandehFaktor"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:background="@drawable/table_content_black_cell_bg"
-                            android:fontFamily="@font/iransans"
-                            android:gravity="center"
-                            android:text="@string/priceRemainRequest"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/_10ssp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/txtSumMablaghMandehFaktor"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:background="@drawable/table_content_black_cell_bg"
-                            android:fontFamily="@font/iransans"
-                            android:gravity="center"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/_10ssp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start|center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/lblSumMablaghMandehKol"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:background="@drawable/table_content_black_cell_bg"
-                            android:fontFamily="@font/iransans"
-                            android:gravity="center"
-                            android:text="@string/sumPriceRemain"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/_10ssp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/txtSumMablaghMandehKol"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:background="@drawable/table_content_black_cell_bg"
-                            android:fontFamily="@font/iransans"
-                            android:gravity="center"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/_10ssp"
-                            android:textStyle="bold" />
 
 
-                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -982,40 +876,7 @@
                 android:textSize="@dimen/fontSizeSelectBonus" />
 
 
-            <RelativeLayout
-                android:id="@+id/rlMoshtarySign"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical">
 
-                <TextView
-                    android:id="@+id/lblTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorListHeaderBackground"
-                    android:padding="@dimen/_3sdp"
-                    android:text="@string/emzaMoshtary"
-                    android:textColor="@color/colorTextPrimary"
-                    android:textSize="@dimen/FontSize16" />
-
-
-                <ImageView
-                    android:id="@+id/imgClearSign"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:padding="@dimen/_3sdp"
-                    android:src="@drawable/ic_erase" />
-
-            </RelativeLayout>
-
-
-            <LinearLayout
-                android:id="@+id/laySign"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_200sdp"
-                android:background="@color/colorWhite"
-                android:orientation="horizontal" />
 
             <LinearLayout
                 android:id="@+id/layNazar"
