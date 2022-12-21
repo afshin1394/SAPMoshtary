@@ -53,7 +53,7 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
     private List<BonusModel> bonusModelsGlobal;
     private List<DiscountModel> discountModelsGlobal;
     private List<ElamMarjoeeForoshandehModel> elamMarjoeeForoshandehModelsGlobal;
-
+    public static final String TAG = VerifyRequestFragment.class.getSimpleName();
 
     private DrawingView drawingView;
 
@@ -97,7 +97,7 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
         String description = viewBinding.txtDesc.getText().toString();
 
 
-        takeScreenshotOfFaktor(new Random().nextInt(1000));
+        takeScreenshotOfFaktor(320989);
         CustomSnackBar.showSnack(requireContext(), getView(), getString(R.string.saveRequest), Snackbar.LENGTH_SHORT, "").show();
 
         new Handler().postDelayed(new Runnable() {
@@ -161,7 +161,7 @@ public class VerifyRequestFragment extends BaseFragment<VerifyRequestInteractor.
             mPath = mPath + typeStr + ccDarkhastFaktor + ".jpg";
 
 
-            Log.d("Printactivity","screen charkareh");
+            Log.d(TAG,"screen path:"+mPath);
             viewBinding.layMain.setDrawingCacheEnabled(true);
 
             viewBinding.layMain.getChildAt(1).measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),

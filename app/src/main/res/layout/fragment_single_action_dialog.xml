@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:background="@drawable/rounded_corner_purchase_red_dark_gradiant"
+    >
+    <FrameLayout
+        android:layout_weight="10"
+        android:id="@+id/frm_title"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ScrollView
+            android:id="@+id/scroll_imgMain"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/logo_mihan"
+                android:id="@+id/img_main"
+                android:layout_margin="@dimen/_4sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </ScrollView>
+
+<RelativeLayout
+    android:visibility="gone"
+    android:id="@+id/rel_title"
+    android:layout_gravity="center"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_3sdp"
+        app:srcCompat="@drawable/ic_question" />
+
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_below="@id/img"
+        android:text="@string/exitOnCart"
+        android:layout_centerHorizontal="true"
+        style="@style/text_view_normal_right"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:textColor="@color/colorWhite"
+
+        />
+</RelativeLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:id="@+id/lin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_below="@+id/frm_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:minWidth="@dimen/_280sdp"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_8sdp"
+
+        >
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/BTN_Confirm"
+            android:elevation="@dimen/_20sdp"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_marginLeft="@dimen/_8sdp"
+            app:cardBackgroundColor="@color/colorPrimaryDark"
+            app:cardCornerRadius="@dimen/_15sdp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_3sdp"
+                android:gravity="center"
+                android:text="@string/mdtp_ok"
+                android:textAlignment="gravity"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/_11ssp" />
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+
+</LinearLayout>

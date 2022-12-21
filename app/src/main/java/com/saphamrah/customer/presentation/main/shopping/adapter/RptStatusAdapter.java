@@ -23,6 +23,7 @@ import com.saphamrah.customer.data.local.RptStatusModel;
 import com.saphamrah.customer.data.local.temp.FilterSortModel;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterAction;
 import com.saphamrah.customer.utils.AdapterUtil.AdapterItemListener;
+import com.saphamrah.customer.utils.customViews.OnSingleClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +101,7 @@ public class RptStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private ImageView statusIV;
         private SeekBar seekBar;
         private Button laqveDarkhastBtn;
+        private Button showRequest;
 
         public ViewHolderSuccessful(View view) {
             super(view);
@@ -112,6 +114,7 @@ public class RptStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             statusIV = view.findViewById(R.id.imageview_status);
             seekBar = view.findViewById(R.id.seekbar);
             laqveDarkhastBtn = view.findViewById(R.id.btn_laqve_darkhast);
+            showRequest = view.findViewById(R.id.btn_showRequest);
         }
 
 
@@ -156,6 +159,13 @@ public class RptStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             laqveDarkhastBtn.setOnClickListener(view -> {
                 listener.onItemSelect(models.get(position),position, AdapterAction.REMOVE);
             });
+            showRequest.setOnClickListener(new OnSingleClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    listener.onItemSelect(models.get(position),position,AdapterAction.DETAIL);
+                }
+            });
+
 
         }
     }
